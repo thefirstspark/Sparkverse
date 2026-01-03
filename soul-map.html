@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Soul Mapping | Spark Verse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Rajdhani:wght@300;400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #0a0a12; font-family: 'Rajdhani', sans-serif; color: #e8e8f0; }
+        
+        .cosmos-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; z-index: 0; }
+        .cosmos-bg::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200vmax; height: 200vmax; background: radial-gradient(circle at center, rgba(157,78,221,0.05) 0%, transparent 50%); animation: rotate 60s linear infinite; }
+        @keyframes rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        
+        .container { position: relative; z-index: 1; min-height: 100vh; padding: 20px; max-width: 500px; margin: 0 auto; }
+        header { text-align: center; padding: 20px 0 25px; }
+        h1 { font-family: 'Cinzel', serif; font-size: 1.4rem; letter-spacing: 4px; background: linear-gradient(135deg, #9d4edd, #f72585); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 6px; }
+        .subtitle { font-size: 0.7rem; color: #4a4a5a; letter-spacing: 2px; }
+        
+        .soul-map-container { position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 25px; }
+        #soulCanvas { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, rgba(10,10,18,0.9) 0%, rgba(10,10,18,1) 100%); }
+        
+        .map-legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 25px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: #666; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .legend-dot.core { background: #f72585; }
+        .legend-dot.light { background: #00f5d4; }
+        .legend-dot.shadow { background: #9d4edd; }
+        .legend-dot.wound { background: #ff6b6b; }
+        .legend-dot.gift { background: #ffd166; }
+        
+        .aspects-section { margin-bottom: 25px; }
+        .section-title { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 2px; color: #4a4a5a; margin-bottom: 15px; }
+        .aspect-list { display: flex; flex-direction: column; gap: 10px; }
+        .aspect-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; }
+        .aspect-item:hover { border-color: rgba(157,78,221,0.3); }
+        .aspect-item.active { background: rgba(157,78,221,0.1); border-color: rgba(157,78,221,0.3); }
+        .aspect-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .aspect-icon.core { background: linear-gradient(135deg, rgba(247,37,133,0.2), rgba(247,37,133,0.1)); }
+        .aspect-icon.light { background: linear-gradient(135deg, rgba(0,245,212,0.2), rgba(0,245,212,0.1)); }
+        .aspect-icon.shadow { background: linear-gradient(135deg, rgba(157,78,221,0.2), rgba(157,78,221,0.1)); }
+        .aspect-icon.wound { background: linear-gradient(135deg, rgba(255,107,107,0.2), rgba(255,107,107,0.1)); }
+        .aspect-icon.gift { background: linear-gradient(135deg, rgba(255,209,102,0.2), rgba(255,209,102,0.1)); }
+        .aspect-info { flex: 1; }
+        .aspect-name { font-size: 0.9rem; margin-bottom: 2px; }
+        .aspect-desc { font-size: 0.7rem; color: #666; }
+        
+        .add-aspect { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 14px; padding: 15px; text-align: center; cursor: pointer; color: #4a4a5a; font-size: 0.85rem; transition: all 0.3s; }
+        .add-aspect:hover { border-color: #9d4edd; color: #9d4edd; }
+        
+        .reflection-card { background: linear-gradient(135deg, rgba(157,78,221,0.1), rgba(247,37,133,0.05)); border: 1px solid rgba(157,78,221,0.2); border-radius: 20px; padding: 25px 20px; margin-bottom: 25px; }
+        .reflection-title { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 2px; color: #f72585; margin-bottom: 15px; }
+        .reflection-prompt { font-size: 1rem; line-height: 1.7; color: #b0b0c0; font-style: italic; }
+        .new-prompt { margin-top: 15px; padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #666; font-size: 0.75rem; cursor: pointer; }
+        .new-prompt:hover { border-color: #9d4edd; color: #9d4edd; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
+        .modal-content { background: #0a0a12; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; }
+        .modal-title { font-family: 'Cinzel', serif; font-size: 1rem; margin-bottom: 20px; text-align: center; }
+        .modal-input { width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #e8e8f0; font-family: 'Rajdhani', sans-serif; font-size: 1rem; outline: none; margin-bottom: 15px; }
+        .modal-input::placeholder { color: #333; }
+        .type-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .type-btn { padding: 10px 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #666; font-size: 0.75rem; cursor: pointer; }
+        .type-btn.active { border-color: #9d4edd; color: #9d4edd; background: rgba(157,78,221,0.1); }
+        .modal-actions { display: flex; gap: 10px; }
+        .modal-btn { flex: 1; padding: 14px; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.85rem; cursor: pointer; }
+        .modal-btn.cancel { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #666; }
+        .modal-btn.save { background: linear-gradient(135deg, #9d4edd, #f72585); border: none; color: white; }
+        
+        footer { text-align: center; padding: 20px 0; }
+        footer a { font-size: 0.65rem; color: #333; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="cosmos-bg"></div>
+    
+    <div class="container">
+        <header>
+            <h1>🗺️ SOUL MAPPING</h1>
+            <p class="subtitle">Navigate Your Inner Landscape</p>
+        </header>
+        
+        <div class="soul-map-container">
+            <canvas id="soulCanvas"></canvas>
+        </div>
+        
+        <div class="map-legend">
+            <div class="legend-item"><div class="legend-dot core"></div>Core Self</div>
+            <div class="legend-item"><div class="legend-dot light"></div>Light Aspects</div>
+            <div class="legend-item"><div class="legend-dot shadow"></div>Shadow</div>
+            <div class="legend-item"><div class="legend-dot wound"></div>Wounds</div>
+            <div class="legend-item"><div class="legend-dot gift"></div>Gifts</div>
+        </div>
+        
+        <div class="reflection-card">
+            <div class="reflection-title">◇ SOUL INQUIRY</div>
+            <p class="reflection-prompt" id="reflectionPrompt">What part of yourself have you been neglecting that needs attention?</p>
+            <button class="new-prompt" id="newPromptBtn">New Prompt</button>
+        </div>
+        
+        <div class="aspects-section">
+            <h2 class="section-title">◇ YOUR SOUL ASPECTS</h2>
+            <div class="aspect-list" id="aspectList"></div>
+            <div class="add-aspect" id="addAspectBtn">+ Add Soul Aspect</div>
+        </div>
+        
+        <footer><a href="https://thefirstspark.shop">THE FIRST SPARK</a></footer>
+    </div>
+    
+    <div class="modal" id="aspectModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Add Soul Aspect</h3>
+            <input type="text" class="modal-input" id="aspectName" placeholder="Name this aspect...">
+            <input type="text" class="modal-input" id="aspectDesc" placeholder="Brief description...">
+            <div class="type-selector">
+                <button class="type-btn" data-type="core">🔥 Core</button>
+                <button class="type-btn" data-type="light">✨ Light</button>
+                <button class="type-btn" data-type="shadow">🌑 Shadow</button>
+                <button class="type-btn" data-type="wound">💔 Wound</button>
+                <button class="type-btn" data-type="gift">🎁 Gift</button>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancelBtn">Cancel</button>
+                <button class="modal-btn save" id="saveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('soulCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let aspects = JSON.parse(localStorage.getItem('soulAspects') || '[]');
+        let selectedType = 'light';
+        
+        const typeColors = {
+            core: '#f72585',
+            light: '#00f5d4',
+            shadow: '#9d4edd',
+            wound: '#ff6b6b',
+            gift: '#ffd166'
+        };
+        
+        const typeIcons = {
+            core: '🔥',
+            light: '✨',
+            shadow: '🌑',
+            wound: '💔',
+            gift: '🎁'
+        };
+        
+        const prompts = [
+            "What part of yourself have you been neglecting that needs attention?",
+            "If your shadow could speak, what would it say?",
+            "What childhood gift did you abandon that wants to return?",
+            "Where do you feel most alive? What does that reveal about your core?",
+            "What wound keeps repeating because it hasn't been witnessed?",
+            "What are you pretending not to know about yourself?",
+            "If you were completely free, who would you become?",
+            "What mask are you ready to remove?",
+            "What truth would change everything if you finally accepted it?",
+            "What part of you is asking to be integrated?"
+        ];
+        
+        function resizeCanvas() {
+            const size = canvas.parentElement.clientWidth;
+            canvas.width = size;
+            canvas.height = size;
+            drawMap();
+        }
+        
+        function drawMap() {
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const maxR = canvas.width / 2 - 20;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Concentric circles
+            for (let i = 3; i >= 1; i--) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, maxR * (i / 3), 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(157, 78, 221, ${0.1 + (3-i) * 0.05})`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+            
+            // Cross lines
+            ctx.strokeStyle = 'rgba(157, 78, 221, 0.1)';
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - maxR);
+            ctx.lineTo(cx, cy + maxR);
+            ctx.moveTo(cx - maxR, cy);
+            ctx.lineTo(cx + maxR, cy);
+            ctx.stroke();
+            
+            // Draw aspects
+            aspects.forEach((aspect, i) => {
+                const angle = (i / Math.max(aspects.length, 1)) * Math.PI * 2 - Math.PI / 2;
+                const distance = aspect.type === 'core' ? 0.2 : (aspect.type === 'shadow' || aspect.type === 'wound' ? 0.8 : 0.5);
+                const x = cx + Math.cos(angle) * maxR * distance;
+                const y = cy + Math.sin(angle) * maxR * distance;
+                
+                // Glow
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, 25);
+                gradient.addColorStop(0, typeColors[aspect.type] + '40');
+                gradient.addColorStop(1, 'transparent');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(x, y, 25, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Point
+                ctx.fillStyle = typeColors[aspect.type];
+                ctx.beginPath();
+                ctx.arc(x, y, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Label
+                ctx.fillStyle = '#888';
+                ctx.font = '11px Rajdhani';
+                ctx.textAlign = 'center';
+                ctx.fillText(aspect.name, x, y + 22);
+            });
+            
+            // Center core
+            const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 30);
+            coreGrad.addColorStop(0, 'rgba(247, 37, 133, 0.3)');
+            coreGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = coreGrad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 30, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#f72585';
+            ctx.beginPath();
+            ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function renderAspects() {
+            const list = document.getElementById('aspectList');
+            list.innerHTML = aspects.map((aspect, i) => `
+                <div class="aspect-item" data-index="${i}">
+                    <div class="aspect-icon ${aspect.type}">${typeIcons[aspect.type]}</div>
+                    <div class="aspect-info">
+                        <div class="aspect-name">${aspect.name}</div>
+                        <div class="aspect-desc">${aspect.description || 'No description'}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add click handlers for deletion
+            document.querySelectorAll('.aspect-item').forEach(item => {
+                item.addEventListener('dblclick', () => {
+                    const index = parseInt(item.dataset.index);
+                    if (confirm('Remove this aspect?')) {
+                        aspects.splice(index, 1);
+                        localStorage.setItem('soulAspects', JSON.stringify(aspects));
+                        renderAspects();
+                        drawMap();
+                    }
+                });
+            });
+        }
+        
+        // Modal handling
+        const modal = document.getElementById('aspectModal');
+        
+        document.getElementById('addAspectBtn').addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+        
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.getElementById('aspectName').value = '';
+            document.getElementById('aspectDesc').value = '';
+        });
+        
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedType = btn.dataset.type;
+            });
+        });
+        
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const name = document.getElementById('aspectName').value.trim();
+            const desc = document.getElementById('aspectDesc').value.trim();
+            
+            if (name) {
+                aspects.push({ name, description: desc, type: selectedType });
+                localStorage.setItem('soulAspects', JSON.stringify(aspects));
+                renderAspects();
+                drawMap();
+                
+                modal.classList.remove('active');
+                document.getElementById('aspectName').value = '';
+                document.getElementById('aspectDesc').value = '';
+            }
+        });
+        
+        // Prompts
+        document.getElementById('newPromptBtn').addEventListener('click', () => {
+            const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+            document.getElementById('reflectionPrompt').textContent = prompt;
+        });
+        
+        // Init
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        renderAspects();
+        
+        // Default aspects if empty
+        if (aspects.length === 0) {
+            aspects = [
+                { name: "The Creator", description: "Your drive to make and express", type: "core" },
+                { name: "Inner Light", description: "Your authentic joy", type: "light" },
+                { name: "The Critic", description: "The voice of self-doubt", type: "shadow" }
+            ];
+            localStorage.setItem('soulAspects', JSON.stringify(aspects));
+            renderAspects();
+            drawMap();
+        }
+    </script>
+</body>
+</html>

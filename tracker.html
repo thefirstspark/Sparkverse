@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Consciousness Tracker | Spark Verse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Rajdhani:wght@300;400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #0a0a12; font-family: 'Rajdhani', sans-serif; color: #e8e8f0; }
+        .container { min-height: 100vh; padding: 20px; max-width: 500px; margin: 0 auto; }
+        header { text-align: center; padding: 20px 0 25px; }
+        h1 { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; letter-spacing: 3px; background: linear-gradient(135deg, #00f5d4, #9d4edd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 6px; }
+        .subtitle { font-size: 0.7rem; color: #4a4a5a; letter-spacing: 2px; }
+        
+        .current-state { background: linear-gradient(135deg, rgba(157,78,221,0.1), rgba(0,245,212,0.05)); border: 1px solid rgba(157,78,221,0.2); border-radius: 20px; padding: 25px 20px; margin-bottom: 25px; text-align: center; }
+        .state-label { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; letter-spacing: 2px; color: #4a4a5a; margin-bottom: 15px; }
+        .state-value { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: #00f5d4; margin-bottom: 5px; }
+        .state-description { font-size: 0.85rem; color: #888; }
+        
+        .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+        .metric-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 18px 15px; }
+        .metric-icon { font-size: 1.3rem; margin-bottom: 8px; }
+        .metric-label { font-size: 0.65rem; color: #4a4a5a; letter-spacing: 1px; margin-bottom: 5px; }
+        .metric-value { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: #e8e8f0; }
+        
+        .slider-section { margin-bottom: 25px; }
+        .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .slider-label { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 1px; color: #4a4a5a; }
+        .slider-value { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: #00f5d4; }
+        .slider-container { position: relative; height: 40px; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: linear-gradient(135deg, #9d4edd, #00f5d4); border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(157,78,221,0.5); }
+        .slider-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.65rem; color: #333; }
+        
+        .log-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #00f5d4, #9d4edd); border: none; border-radius: 14px; color: #0a0a12; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; cursor: pointer; margin-bottom: 25px; }
+        .log-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,245,212,0.3); }
+        
+        .tags-section { margin-bottom: 25px; }
+        .tags-label { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; margin-bottom: 12px; display: block; }
+        .tags-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 10px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.8rem; color: #666; cursor: pointer; transition: all 0.3s; }
+        .tag.active { background: rgba(0,245,212,0.1); border-color: rgba(0,245,212,0.3); color: #00f5d4; }
+        
+        .notes-input { width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #e8e8f0; font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; outline: none; resize: none; height: 80px; margin-bottom: 25px; }
+        .notes-input::placeholder { color: #333; }
+        
+        .history-section { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .history-title { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; }
+        .history-list { display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; }
+        .history-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; }
+        .history-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .history-level { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; }
+        .history-date { font-size: 0.7rem; color: #4a4a5a; }
+        .history-metrics { display: flex; gap: 15px; font-size: 0.75rem; color: #666; }
+        .history-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+        .history-tag { padding: 4px 10px; background: rgba(157,78,221,0.1); border-radius: 10px; font-size: 0.65rem; color: #9d4edd; }
+        
+        .streak-banner { background: linear-gradient(135deg, rgba(247,37,133,0.1), rgba(157,78,221,0.1)); border: 1px solid rgba(247,37,133,0.2); border-radius: 12px; padding: 15px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
+        .streak-icon { font-size: 1.5rem; }
+        .streak-info { flex: 1; }
+        .streak-count { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: #f72585; }
+        .streak-text { font-size: 0.75rem; color: #888; }
+        
+        footer { text-align: center; padding: 20px 0; }
+        footer a { font-size: 0.65rem; color: #333; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 CONSCIOUSNESS TRACKER</h1>
+            <p class="subtitle">Map Your States • See Your Patterns</p>
+        </header>
+        
+        <div class="streak-banner">
+            <span class="streak-icon">🔥</span>
+            <div class="streak-info">
+                <div class="streak-count" id="streakCount">0 Day Streak</div>
+                <div class="streak-text">Keep tracking to build your streak</div>
+            </div>
+        </div>
+        
+        <div class="current-state">
+            <div class="state-label">◇ CURRENT FREQUENCY</div>
+            <div class="state-value" id="frequencyValue">5.0</div>
+            <div class="state-description" id="frequencyDesc">Neutral / Baseline</div>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">⚡</div>
+                <div class="metric-label">ENERGY</div>
+                <div class="metric-value" id="energyDisplay">5</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">🎯</div>
+                <div class="metric-label">CLARITY</div>
+                <div class="metric-value" id="clarityDisplay">5</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">💫</div>
+                <div class="metric-label">ALIGNMENT</div>
+                <div class="metric-value" id="alignmentDisplay">5</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">🌊</div>
+                <div class="metric-label">FLOW</div>
+                <div class="metric-value" id="flowDisplay">5</div>
+            </div>
+        </div>
+        
+        <div class="slider-section">
+            <div class="slider-header">
+                <span class="slider-label">⚡ ENERGY LEVEL</span>
+                <span class="slider-value" id="energyValue">5</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="energySlider" min="1" max="10" value="5">
+                <div class="slider-labels"><span>Depleted</span><span>Overflowing</span></div>
+            </div>
+        </div>
+        
+        <div class="slider-section">
+            <div class="slider-header">
+                <span class="slider-label">🎯 MENTAL CLARITY</span>
+                <span class="slider-value" id="clarityValue">5</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="claritySlider" min="1" max="10" value="5">
+                <div class="slider-labels"><span>Foggy</span><span>Crystal Clear</span></div>
+            </div>
+        </div>
+        
+        <div class="slider-section">
+            <div class="slider-header">
+                <span class="slider-label">💫 SOUL ALIGNMENT</span>
+                <span class="slider-value" id="alignmentValue">5</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="alignmentSlider" min="1" max="10" value="5">
+                <div class="slider-labels"><span>Disconnected</span><span>In Purpose</span></div>
+            </div>
+        </div>
+        
+        <div class="slider-section">
+            <div class="slider-header">
+                <span class="slider-label">🌊 FLOW STATE</span>
+                <span class="slider-value" id="flowValue">5</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="flowSlider" min="1" max="10" value="5">
+                <div class="slider-labels"><span>Stuck</span><span>Deep Flow</span></div>
+            </div>
+        </div>
+        
+        <div class="tags-section">
+            <span class="tags-label">◇ CURRENT STATE TAGS</span>
+            <div class="tags-grid">
+                <div class="tag" data-tag="focused">🎯 Focused</div>
+                <div class="tag" data-tag="creative">🎨 Creative</div>
+                <div class="tag" data-tag="anxious">😰 Anxious</div>
+                <div class="tag" data-tag="peaceful">☮️ Peaceful</div>
+                <div class="tag" data-tag="motivated">🚀 Motivated</div>
+                <div class="tag" data-tag="tired">😴 Tired</div>
+                <div class="tag" data-tag="inspired">✨ Inspired</div>
+                <div class="tag" data-tag="stuck">🧱 Stuck</div>
+                <div class="tag" data-tag="grateful">🙏 Grateful</div>
+                <div class="tag" data-tag="overwhelmed">🌀 Overwhelmed</div>
+            </div>
+        </div>
+        
+        <textarea class="notes-input" id="notesInput" placeholder="Any insights or context for this moment..."></textarea>
+        
+        <button class="log-btn" id="logBtn">◇ LOG THIS STATE</button>
+        
+        <div class="history-section">
+            <div class="history-header">
+                <span class="history-title">◇ RECENT LOGS</span>
+            </div>
+            <div class="history-list" id="historyList"></div>
+        </div>
+        
+        <footer><a href="https://thefirstspark.shop">THE FIRST SPARK</a></footer>
+    </div>
+    
+    <script>
+        let logs = JSON.parse(localStorage.getItem('consciousnessLogs') || '[]');
+        let selectedTags = new Set();
+        
+        const frequencyDescriptions = {
+            1: "Deep Shadow / Crisis",
+            2: "Heavy / Struggling",
+            3: "Low / Depleted",
+            4: "Below Baseline",
+            5: "Neutral / Baseline",
+            6: "Above Average",
+            7: "Good / Elevated",
+            8: "High / Expanded",
+            9: "Peak / Flow State",
+            10: "Transcendent / Unity"
+        };
+        
+        const sliders = ['energy', 'clarity', 'alignment', 'flow'];
+        
+        sliders.forEach(name => {
+            const slider = document.getElementById(name + 'Slider');
+            const valueEl = document.getElementById(name + 'Value');
+            const displayEl = document.getElementById(name + 'Display');
+            
+            slider.addEventListener('input', () => {
+                valueEl.textContent = slider.value;
+                displayEl.textContent = slider.value;
+                updateFrequency();
+            });
+        });
+        
+        function updateFrequency() {
+            const values = sliders.map(name => parseInt(document.getElementById(name + 'Slider').value));
+            const avg = values.reduce((a, b) => a + b, 0) / values.length;
+            const rounded = Math.round(avg * 10) / 10;
+            
+            document.getElementById('frequencyValue').textContent = rounded.toFixed(1);
+            document.getElementById('frequencyDesc').textContent = frequencyDescriptions[Math.round(avg)];
+            
+            // Color based on level
+            const freqEl = document.getElementById('frequencyValue');
+            if (avg <= 3) freqEl.style.color = '#f72585';
+            else if (avg <= 5) freqEl.style.color = '#ffd166';
+            else if (avg <= 7) freqEl.style.color = '#00f5d4';
+            else freqEl.style.color = '#9d4edd';
+        }
+        
+        // Tags
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                const tagName = tag.dataset.tag;
+                if (selectedTags.has(tagName)) {
+                    selectedTags.delete(tagName);
+                    tag.classList.remove('active');
+                } else {
+                    selectedTags.add(tagName);
+                    tag.classList.add('active');
+                }
+            });
+        });
+        
+        // Log state
+        document.getElementById('logBtn').addEventListener('click', () => {
+            const entry = {
+                date: new Date().toISOString(),
+                energy: parseInt(document.getElementById('energySlider').value),
+                clarity: parseInt(document.getElementById('claritySlider').value),
+                alignment: parseInt(document.getElementById('alignmentSlider').value),
+                flow: parseInt(document.getElementById('flowSlider').value),
+                frequency: parseFloat(document.getElementById('frequencyValue').textContent),
+                tags: [...selectedTags],
+                notes: document.getElementById('notesInput').value
+            };
+            
+            logs.unshift(entry);
+            logs = logs.slice(0, 100);
+            localStorage.setItem('consciousnessLogs', JSON.stringify(logs));
+            
+            // Reset
+            selectedTags.clear();
+            document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+            document.getElementById('notesInput').value = '';
+            
+            renderHistory();
+            updateStreak();
+            
+            // Feedback
+            document.getElementById('logBtn').textContent = '✓ LOGGED';
+            setTimeout(() => document.getElementById('logBtn').textContent = '◇ LOG THIS STATE', 1500);
+        });
+        
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            list.innerHTML = logs.slice(0, 10).map(log => {
+                const date = new Date(log.date);
+                const timeStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+                
+                let levelColor = '#00f5d4';
+                if (log.frequency <= 3) levelColor = '#f72585';
+                else if (log.frequency <= 5) levelColor = '#ffd166';
+                else if (log.frequency > 7) levelColor = '#9d4edd';
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-top">
+                            <span class="history-level" style="color: ${levelColor}">${log.frequency.toFixed(1)}</span>
+                            <span class="history-date">${timeStr}</span>
+                        </div>
+                        <div class="history-metrics">
+                            <span>⚡${log.energy}</span>
+                            <span>🎯${log.clarity}</span>
+                            <span>💫${log.alignment}</span>
+                            <span>🌊${log.flow}</span>
+                        </div>
+                        ${log.tags.length ? `<div class="history-tags">${log.tags.map(t => `<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateStreak() {
+            if (logs.length === 0) {
+                document.getElementById('streakCount').textContent = '0 Day Streak';
+                return;
+            }
+            
+            let streak = 1;
+            const today = new Date().toDateString();
+            const lastLog = new Date(logs[0].date).toDateString();
+            
+            if (lastLog !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                if (lastLog !== yesterday.toDateString()) {
+                    streak = 0;
+                }
+            }
+            
+            if (streak > 0) {
+                for (let i = 1; i < logs.length; i++) {
+                    const curr = new Date(logs[i-1].date);
+                    const prev = new Date(logs[i].date);
+                    const diffDays = Math.floor((curr - prev) / (1000 * 60 * 60 * 24));
+                    if (diffDays <= 1) streak++;
+                    else break;
+                }
+            }
+            
+            document.getElementById('streakCount').textContent = `${streak} Day Streak`;
+        }
+        
+        renderHistory();
+        updateStreak();
+    </script>
+</body>
+</html>

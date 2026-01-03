@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sigil Generator | Spark Verse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Rajdhani:wght@300;400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #0a0a12; font-family: 'Rajdhani', sans-serif; color: #e8e8f0; }
+        .bg-grid { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(157, 78, 221, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(157, 78, 221, 0.03) 1px, transparent 1px); background-size: 30px 30px; z-index: 0; }
+        .container { position: relative; z-index: 1; min-height: 100vh; padding: 20px; max-width: 500px; margin: 0 auto; }
+        header { text-align: center; padding: 20px 0 30px; }
+        h1 { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; letter-spacing: 3px; background: linear-gradient(135deg, #f72585, #9d4edd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+        .subtitle { font-size: 0.7rem; color: #4a4a5a; letter-spacing: 2px; }
+        .input-label { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; margin-bottom: 10px; display: block; }
+        .intention-input { width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; color: #e8e8f0; font-family: 'Rajdhani', sans-serif; font-size: 1rem; outline: none; margin-bottom: 20px; }
+        .intention-input:focus { border-color: rgba(247,37,133,0.5); }
+        .intention-input::placeholder { color: #333; }
+        .method-selector { display: flex; gap: 10px; margin-bottom: 25px; }
+        .method-btn { flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #4a4a5a; font-family: 'Rajdhani', sans-serif; font-size: 0.75rem; cursor: pointer; transition: all 0.3s; }
+        .method-btn.active { background: linear-gradient(135deg, rgba(247,37,133,0.2), rgba(157,78,221,0.2)); border-color: rgba(247,37,133,0.4); color: #f72585; }
+        .canvas-container { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-bottom: 25px; }
+        .canvas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .canvas-title { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; }
+        .canvas-actions { display: flex; gap: 8px; }
+        .canvas-action { width: 32px; height: 32px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #4a4a5a; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .canvas-action:hover { border-color: #f72585; color: #f72585; }
+        #sigilCanvas { width: 100%; aspect-ratio: 1; background: radial-gradient(circle, rgba(157,78,221,0.05) 0%, transparent 70%); border-radius: 12px; display: block; }
+        .generate-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #f72585, #9d4edd); border: none; border-radius: 14px; color: white; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; letter-spacing: 2px; cursor: pointer; margin-bottom: 15px; }
+        .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(247,37,133,0.3); }
+        .secondary-actions { display: flex; gap: 10px; margin-bottom: 30px; }
+        .secondary-btn { flex: 1; padding: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #4a4a5a; font-size: 0.8rem; cursor: pointer; }
+        .secondary-btn:hover { border-color: #9d4edd; color: #9d4edd; }
+        .info-section { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 25px; }
+        .info-title { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 2px; color: #f72585; margin-bottom: 12px; }
+        .info-text { font-size: 0.85rem; line-height: 1.7; color: #888; }
+        .letters-display { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .letter-bubble { width: 36px; height: 36px; background: rgba(157,78,221,0.1); border: 1px solid rgba(157,78,221,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: #9d4edd; }
+        .letter-bubble.removed { background: transparent; border-color: rgba(255,255,255,0.1); color: #333; text-decoration: line-through; }
+        footer { text-align: center; padding: 20px 0; }
+        footer a { font-size: 0.65rem; color: #333; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="container">
+        <header>
+            <h1>⌬ SIGIL GENERATOR</h1>
+            <p class="subtitle">Transform Intention Into Symbol</p>
+        </header>
+        <label class="input-label">◇ YOUR INTENTION</label>
+        <input type="text" class="intention-input" id="intentionInput" placeholder="I am abundant and magnetic">
+        <div class="method-selector">
+            <button class="method-btn active" data-method="letter">Letter</button>
+            <button class="method-btn" data-method="geometric">Geometric</button>
+            <button class="method-btn" data-method="chaos">Chaos</button>
+        </div>
+        <div class="canvas-container">
+            <div class="canvas-header">
+                <span class="canvas-title">◇ YOUR SIGIL</span>
+                <div class="canvas-actions">
+                    <button class="canvas-action" id="clearBtn">🗑️</button>
+                    <button class="canvas-action" id="downloadBtn">💾</button>
+                </div>
+            </div>
+            <canvas id="sigilCanvas"></canvas>
+        </div>
+        <button class="generate-btn" id="generateBtn">⌬ GENERATE SIGIL</button>
+        <div class="secondary-actions">
+            <button class="secondary-btn" id="chargeBtn">⚡ Charge</button>
+            <button class="secondary-btn" id="saveBtn">📌 Save</button>
+            <button class="secondary-btn" id="shareBtn">📤 Share</button>
+        </div>
+        <div class="info-section">
+            <h3 class="info-title">◇ THE PROCESS</h3>
+            <p class="info-text">Your intention is distilled into its essential form. Vowels and repeating letters are removed, leaving the unique consonant skeleton. These letters become the bones of your sigil.</p>
+            <div class="letters-display" id="lettersDisplay"></div>
+        </div>
+        <footer><a href="https://thefirstspark.shop">THE FIRST SPARK</a></footer>
+    </div>
+    <script>
+        const canvas = document.getElementById('sigilCanvas');
+        const ctx = canvas.getContext('2d');
+        let currentMethod = 'letter';
+        
+        function resizeCanvas() {
+            const size = canvas.parentElement.clientWidth - 40;
+            canvas.width = size; canvas.height = size;
+            drawBase();
+        }
+        
+        function drawBase() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(157,78,221,0.1)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2 - 20, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        document.querySelectorAll('.method-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMethod = btn.dataset.method;
+            });
+        });
+        
+        function processIntention(text) {
+            const vowels = 'aeiouAEIOU';
+            let result = text.toUpperCase().replace(/[^A-Z]/g, '');
+            result = result.split('').filter(c => !vowels.includes(c)).join('');
+            return [...new Set(result)].join('');
+        }
+        
+        function displayLetters(original, processed) {
+            const display = document.getElementById('lettersDisplay');
+            const allLetters = original.toUpperCase().replace(/[^A-Z]/g, '').split('');
+            const kept = processed.split('');
+            const seen = new Set();
+            display.innerHTML = allLetters.map(letter => {
+                const isKept = kept.includes(letter) && !seen.has(letter);
+                if (isKept) seen.add(letter);
+                return `<div class="letter-bubble ${isKept ? '' : 'removed'}">${letter}</div>`;
+            }).join('');
+        }
+        
+        const letterPos = {};
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((l, i) => {
+            letterPos[l] = (i / 26) * Math.PI * 2 - Math.PI / 2;
+        });
+        
+        function generateSigil() {
+            const intention = document.getElementById('intentionInput').value;
+            if (!intention.trim()) return;
+            const letters = processIntention(intention);
+            displayLetters(intention, letters);
+            if (letters.length < 2) return;
+            drawBase();
+            const cx = canvas.width / 2, cy = canvas.height / 2, r = canvas.width / 2 - 40;
+            
+            if (currentMethod === 'letter') {
+                const points = letters.split('').map(l => ({ x: cx + Math.cos(letterPos[l]) * r * 0.8, y: cy + Math.sin(letterPos[l]) * r * 0.8 }));
+                ctx.strokeStyle = '#9d4edd'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
+                points.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+                ctx.stroke();
+                points.forEach((p, i) => {
+                    ctx.fillStyle = i === 0 ? '#00f5d4' : (i === points.length - 1 ? '#f72585' : '#9d4edd');
+                    ctx.beginPath(); ctx.arc(p.x, p.y, i === 0 || i === points.length - 1 ? 6 : 4, 0, Math.PI * 2); ctx.fill();
+                });
+            } else if (currentMethod === 'geometric') {
+                const n = Math.max(3, Math.min(letters.length + 2, 12));
+                const pts = Array.from({length: n}, (_, i) => {
+                    const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+                    return { x: cx + Math.cos(a) * r * 0.7, y: cy + Math.sin(a) * r * 0.7 };
+                });
+                ctx.strokeStyle = '#9d4edd'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)); ctx.closePath(); ctx.stroke();
+                ctx.strokeStyle = '#f72585';
+                letters.split('').forEach((l, i) => {
+                    ctx.beginPath(); ctx.moveTo(pts[i % n].x, pts[i % n].y); ctx.lineTo(pts[(l.charCodeAt(0) - 65) % n].x, pts[(l.charCodeAt(0) - 65) % n].y); ctx.stroke();
+                });
+                ctx.fillStyle = '#00f5d4'; ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2); ctx.fill();
+            } else {
+                const seed = letters.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+                let si = 1;
+                const rand = (min, max) => { const x = Math.sin(seed * si++) * 10000; return min + (x - Math.floor(x)) * (max - min); };
+                ctx.strokeStyle = '#9d4edd'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+                for (let s = 0; s < letters.length + 3; s++) {
+                    ctx.beginPath();
+                    let x = cx + rand(-r * 0.5, r * 0.5), y = cy + rand(-r * 0.5, r * 0.5);
+                    ctx.moveTo(x, y);
+                    for (let i = 0; i < rand(2, 5); i++) {
+                        const nx = cx + rand(-r * 0.6, r * 0.6), ny = cy + rand(-r * 0.6, r * 0.6);
+                        rand(0, 1) > 0.5 ? ctx.lineTo(nx, ny) : ctx.quadraticCurveTo((x + nx) / 2 + rand(-30, 30), (y + ny) / 2 + rand(-30, 30), nx, ny);
+                        x = nx; y = ny;
+                    }
+                    ctx.stroke();
+                }
+                ctx.fillStyle = '#f72585';
+                for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(cx + rand(-r * 0.4, r * 0.4), cy + rand(-r * 0.4, r * 0.4), rand(3, 6), 0, Math.PI * 2); ctx.fill(); }
+                ctx.strokeStyle = '#00f5d4'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.ellipse(cx, cy, 15, 10, 0, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#00f5d4'; ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        
+        document.getElementById('generateBtn').addEventListener('click', generateSigil);
+        document.getElementById('clearBtn').addEventListener('click', () => { drawBase(); document.getElementById('lettersDisplay').innerHTML = ''; });
+        document.getElementById('downloadBtn').addEventListener('click', () => { const a = document.createElement('a'); a.download = 'sigil.png'; a.href = canvas.toDataURL(); a.click(); });
+        document.getElementById('chargeBtn').addEventListener('click', () => { canvas.style.boxShadow = '0 0 50px rgba(247,37,133,0.8)'; setTimeout(() => canvas.style.boxShadow = 'none', 500); });
+        document.getElementById('intentionInput').addEventListener('keypress', e => { if (e.key === 'Enter') generateSigil(); });
+    </script>
+</body>
+</html>

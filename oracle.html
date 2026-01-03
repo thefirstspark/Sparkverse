@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>First Spark Oracle | Spark Verse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: #0a0a12;
+            font-family: 'Rajdhani', sans-serif;
+            color: #e8e8f0;
+            overflow-x: hidden;
+        }
+        
+        .oracle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        
+        .oracle-bg::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vmax;
+            height: 150vmax;
+            background: conic-gradient(from 0deg, 
+                transparent 0deg, 
+                rgba(0, 245, 212, 0.03) 60deg,
+                transparent 120deg,
+                rgba(157, 78, 221, 0.03) 180deg,
+                transparent 240deg,
+                rgba(247, 37, 133, 0.03) 300deg,
+                transparent 360deg
+            );
+            animation: slowRotate 120s linear infinite;
+        }
+        
+        @keyframes slowRotate {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+        
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #00f5d4, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 0.7rem;
+            color: #4a4a5a;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .oracle-modes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding: 5px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .oracle-modes::-webkit-scrollbar { display: none; }
+        
+        .mode-btn {
+            flex-shrink: 0;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: #4a4a5a;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, rgba(0, 245, 212, 0.15), rgba(157, 78, 221, 0.15));
+            border-color: rgba(0, 245, 212, 0.3);
+            color: #00f5d4;
+        }
+        
+        .question-section { margin-bottom: 30px; }
+        
+        .question-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: #4a4a5a;
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .question-input {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: #e8e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .question-input:focus {
+            border-color: rgba(0, 245, 212, 0.3);
+            box-shadow: 0 0 30px rgba(0, 245, 212, 0.1);
+        }
+        
+        .question-input::placeholder { color: #333; }
+        
+        .oracle-eye-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        
+        .oracle-eye {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+        
+        .oracle-eye:hover { transform: scale(1.05); }
+        
+        .oracle-eye.consulting { animation: pulse-eye 2s ease-in-out infinite; }
+        
+        @keyframes pulse-eye {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .eye-outer {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid rgba(0, 245, 212, 0.3);
+            border-radius: 50%;
+            animation: rotate-slow 20s linear infinite;
+        }
+        
+        @keyframes rotate-slow { to { transform: rotate(360deg); } }
+        
+        .eye-middle {
+            position: absolute;
+            top: 20%; left: 20%; right: 20%; bottom: 20%;
+            background: radial-gradient(circle, rgba(0, 245, 212, 0.1) 0%, transparent 70%);
+            border: 1px solid rgba(0, 245, 212, 0.2);
+            border-radius: 50%;
+            animation: rotate-reverse 15s linear infinite;
+        }
+        
+        @keyframes rotate-reverse { to { transform: rotate(-360deg); } }
+        
+        .eye-inner {
+            position: absolute;
+            top: 35%; left: 35%; right: 35%; bottom: 35%;
+            background: radial-gradient(circle, #9d4edd 0%, #1a1a2e 60%, transparent 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .eye-pupil {
+            width: 30%; height: 30%;
+            background: radial-gradient(circle, #00f5d4 0%, #000 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 245, 212, 0.8);
+        }
+        
+        .consult-text {
+            margin-top: 25px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: #4a4a5a;
+            text-transform: uppercase;
+        }
+        
+        .reading-display {
+            display: none;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .reading-display.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .reading-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .reading-symbol {
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(0, 245, 212, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .reading-title-area h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+        
+        .reading-type {
+            font-size: 0.7rem;
+            color: #00f5d4;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .reading-body {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #b0b0c0;
+            margin-bottom: 25px;
+            white-space: pre-line;
+        }
+        
+        .reading-aspects {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .aspect {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+        
+        .aspect-icon { font-size: 1.3rem; margin-bottom: 8px; }
+        .aspect-label { font-size: 0.6rem; color: #4a4a5a; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+        .aspect-value { font-family: 'Cinzel', serif; font-size: 0.8rem; color: #00f5d4; }
+        
+        .reading-reflection {
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(0, 245, 212, 0.05));
+            border-left: 3px solid #9d4edd;
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #c0c0d0;
+        }
+        
+        .reading-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .reading-action {
+            flex: 1;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #4a4a5a;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .reading-action:hover { border-color: #9d4edd; color: #9d4edd; }
+        
+        .card-spread {
+            display: none;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+        
+        .card-spread.active { display: flex; }
+        
+        .oracle-card {
+            width: 80px; height: 130px;
+            background: linear-gradient(135deg, #1a1a2e, #0a0a12);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        
+        .oracle-card:hover {
+            transform: translateY(-10px);
+            border-color: #00f5d4;
+            box-shadow: 0 10px 30px rgba(0, 245, 212, 0.2);
+        }
+        
+        .oracle-card.flipped { transform: rotateY(180deg); }
+        
+        .card-back, .card-front {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-back {
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(157, 78, 221, 0.2) 49%, rgba(157, 78, 221, 0.2) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(0, 245, 212, 0.2) 49%, rgba(0, 245, 212, 0.2) 51%, transparent 52%),
+                linear-gradient(135deg, #1a1a2e, #0a0a12);
+            background-size: 20px 20px, 20px 20px, 100% 100%;
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #2a1a4e, #1a2a3e);
+            transform: rotateY(180deg);
+            padding: 10px;
+        }
+        
+        .card-symbol { font-size: 2rem; margin-bottom: 5px; }
+        .card-name { font-family: 'Cinzel', serif; font-size: 0.5rem; text-align: center; letter-spacing: 1px; }
+        
+        .history-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .history-title { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 2px; color: #4a4a5a; }
+        .history-clear { font-size: 0.7rem; color: #4a4a5a; background: none; border: none; cursor: pointer; }
+        
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover { background: rgba(255, 255, 255, 0.05); }
+        .history-icon { font-size: 1.2rem; }
+        .history-content { flex: 1; min-width: 0; }
+        .history-question { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-date { font-size: 0.65rem; color: #4a4a5a; }
+        
+        footer { text-align: center; padding: 20px 0; margin-top: auto; }
+        footer a { font-size: 0.65rem; color: #333; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="oracle-bg"><div class="stars" id="stars"></div></div>
+    
+    <div class="container">
+        <header>
+            <h1>THE ORACLE</h1>
+            <p class="subtitle">Pattern Recognition • Divination • Insight</p>
+        </header>
+        
+        <div class="oracle-modes">
+            <button class="mode-btn active" data-mode="intuition">🔮 Intuition</button>
+            <button class="mode-btn" data-mode="cards">🃏 Cards</button>
+            <button class="mode-btn" data-mode="numbers">🔢 Numerology</button>
+            <button class="mode-btn" data-mode="elements">🜂 Elements</button>
+            <button class="mode-btn" data-mode="shadow">🌑 Shadow</button>
+        </div>
+        
+        <div class="question-section">
+            <label class="question-label">◇ YOUR INQUIRY</label>
+            <input type="text" class="question-input" id="questionInput" placeholder="What does your soul need to know?">
+        </div>
+        
+        <div class="oracle-eye-container">
+            <div class="oracle-eye" id="oracleEye">
+                <div class="eye-outer"></div>
+                <div class="eye-middle"></div>
+                <div class="eye-inner"><div class="eye-pupil"></div></div>
+            </div>
+            <p class="consult-text" id="consultText">Tap to consult the oracle</p>
+        </div>
+        
+        <div class="card-spread" id="cardSpread">
+            <div class="oracle-card" data-position="past">
+                <div class="card-back"></div>
+                <div class="card-front"><span class="card-symbol"></span><span class="card-name"></span></div>
+            </div>
+            <div class="oracle-card" data-position="present">
+                <div class="card-back"></div>
+                <div class="card-front"><span class="card-symbol"></span><span class="card-name"></span></div>
+            </div>
+            <div class="oracle-card" data-position="future">
+                <div class="card-back"></div>
+                <div class="card-front"><span class="card-symbol"></span><span class="card-name"></span></div>
+            </div>
+        </div>
+        
+        <div class="reading-display" id="readingDisplay">
+            <div class="reading-header">
+                <div class="reading-symbol" id="readingSymbol">🔮</div>
+                <div class="reading-title-area">
+                    <h3 id="readingTitle">The Emergence</h3>
+                    <span class="reading-type" id="readingType">Intuition Reading</span>
+                </div>
+            </div>
+            <div class="reading-body" id="readingBody"></div>
+            <div class="reading-aspects" id="readingAspects">
+                <div class="aspect"><div class="aspect-icon">🌅</div><div class="aspect-label">Energy</div><div class="aspect-value" id="aspectEnergy">Rising</div></div>
+                <div class="aspect"><div class="aspect-icon">🜂</div><div class="aspect-label">Element</div><div class="aspect-value" id="aspectElement">Fire</div></div>
+                <div class="aspect"><div class="aspect-icon">◐</div><div class="aspect-label">Phase</div><div class="aspect-value" id="aspectPhase">Waxing</div></div>
+            </div>
+            <div class="reading-reflection" id="readingReflection"></div>
+            <div class="reading-actions">
+                <button class="reading-action" onclick="saveReading()">💾 Save</button>
+                <button class="reading-action" onclick="newReading()">🔄 New</button>
+                <button class="reading-action" onclick="shareReading()">📤 Share</button>
+            </div>
+        </div>
+        
+        <div class="history-section" id="historySection">
+            <div class="history-header">
+                <span class="history-title">◇ PAST CONSULTATIONS</span>
+                <button class="history-clear" onclick="clearHistory()">Clear</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+        </div>
+        
+        <footer><a href="https://thefirstspark.shop">THE FIRST SPARK</a></footer>
+    </div>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 2 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 4 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        const oracleData = {
+            intuition: {
+                readings: [
+                    { symbol: "🌟", title: "The Emergence", body: "Something within you is ready to be born. You've been incubating an idea, a dream, or a version of yourself that's been dormant. The cosmos confirms: now is the time. Don't wait for permission. The spark is already lit.", reflection: "What have you been holding back that wants to come forward?" },
+                    { symbol: "🌊", title: "The Flow", body: "Resistance creates suffering. You're being called to surrender—not in defeat, but in trust. The current knows where it's going. Your only job is to stop swimming upstream.", reflection: "Where are you fighting what wants to happen naturally?" },
+                    { symbol: "⚡", title: "The Catalyst", body: "Disruption is not destruction. What feels like chaos is actually rapid reorganization. You're not falling apart—you're falling into a new pattern. Let the old structures crumble.", reflection: "What needs to break for something better to emerge?" },
+                    { symbol: "🌙", title: "The Shadow", body: "What you resist persists. There's something you've been avoiding seeing—in yourself, in a situation, in someone else. The oracle doesn't judge. It simply illuminates. Look at what you've been hiding from.", reflection: "What truth are you not ready to face... but need to?" },
+                    { symbol: "🔥", title: "The Transmutation", body: "Everything is fuel. Your pain, your anger, your confusion—none of it is wasted. The fire doesn't care what feeds it. It simply transforms. You have more power than you realize.", reflection: "What emotion could become fuel for creation instead of destruction?" },
+                    { symbol: "💎", title: "The Crystallization", body: "Pressure creates diamonds. What you've been enduring is not punishment—it's refinement. The compressed parts of you are becoming your most valuable assets. Keep going.", reflection: "How has difficulty shaped you into someone stronger?" },
+                    { symbol: "🕳️", title: "The Void", body: "Emptiness is not absence—it's potential. You're in a liminal space, between what was and what will be. Don't rush to fill it. The void is where new realities are born.", reflection: "Can you sit with not-knowing long enough to let something emerge?" },
+                    { symbol: "🌀", title: "The Spiral", body: "You've been here before, but you're not the same person. This isn't a loop—it's a spiral. Each return brings you higher. Trust that you're ascending even when the view looks familiar.", reflection: "What old pattern are you ready to finally transcend?" },
+                    { symbol: "⚖️", title: "The Balance", body: "You've been giving more than you've been receiving. Or taking more than you've been giving. The scales need attention. Equilibrium isn't about perfection—it's about honest adjustment.", reflection: "Where is the imbalance in your life right now?" },
+                    { symbol: "🗝️", title: "The Key", body: "You already have the answer. Stop seeking outside yourself. The solution you need is locked inside—and the key is self-trust. Your intuition has been trying to tell you something. Listen.", reflection: "What do you already know that you've been ignoring?" }
+                ],
+                energies: ["Rising", "Falling", "Stable", "Shifting", "Expanding", "Contracting"],
+                elements: ["Fire", "Water", "Earth", "Air", "Void", "Spirit"],
+                phases: ["Waxing", "Full", "Waning", "New", "Eclipse", "Liminal"]
+            },
+            cards: {
+                deck: [
+                    { symbol: "🌟", name: "The Star" }, { symbol: "🌙", name: "The Moon" }, { symbol: "☀️", name: "The Sun" },
+                    { symbol: "⚡", name: "The Tower" }, { symbol: "🔥", name: "Flame" }, { symbol: "🌊", name: "The Deep" },
+                    { symbol: "🏔️", name: "The Mountain" }, { symbol: "💀", name: "Death/Rebirth" }, { symbol: "👁️", name: "The Seer" },
+                    { symbol: "🗝️", name: "The Key" }, { symbol: "🌀", name: "The Spiral" }, { symbol: "💎", name: "The Crystal" },
+                    { symbol: "🕸️", name: "The Web" }, { symbol: "🌱", name: "The Seed" }, { symbol: "🦋", name: "Metamorphosis" }
+                ]
+            },
+            numbers: {
+                meanings: {
+                    1: { title: "The Beginning", meaning: "New starts, independence, leadership. You're being called to initiate." },
+                    2: { title: "The Partnership", meaning: "Balance, duality, cooperation. Look to your relationships." },
+                    3: { title: "The Creator", meaning: "Expression, creativity, expansion. Your voice wants to be heard." },
+                    4: { title: "The Foundation", meaning: "Structure, stability, building. Focus on what you're constructing." },
+                    5: { title: "The Change", meaning: "Transformation, freedom, adventure. Embrace the unexpected." },
+                    6: { title: "The Harmony", meaning: "Love, nurturing, responsibility. Tend to home and heart." },
+                    7: { title: "The Mystic", meaning: "Spirituality, introspection, wisdom. Go inward for answers." },
+                    8: { title: "The Power", meaning: "Abundance, authority, manifestation. Your material world is shifting." },
+                    9: { title: "The Completion", meaning: "Endings, wisdom, humanitarianism. A cycle is closing." },
+                    11: { title: "The Illuminator", meaning: "Master number. Spiritual insight, intuition, enlightenment." },
+                    22: { title: "The Master Builder", meaning: "Master number. Big dreams manifesting into reality." }
+                }
+            },
+            elements: {
+                fire: { symbol: "🔥", aspects: ["Passion", "Will", "Transformation", "Destruction", "Creation"] },
+                water: { symbol: "🌊", aspects: ["Emotion", "Intuition", "Flow", "Healing", "Depth"] },
+                earth: { symbol: "🏔️", aspects: ["Stability", "Growth", "Patience", "Manifestation", "Body"] },
+                air: { symbol: "💨", aspects: ["Thought", "Communication", "Movement", "Ideas", "Freedom"] },
+                void: { symbol: "🕳️", aspects: ["Potential", "Mystery", "Source", "Reset", "Infinite"] }
+            },
+            shadow: {
+                prompts: [
+                    "What are you most afraid others will discover about you?",
+                    "What part of yourself do you try to hide or suppress?",
+                    "What triggers your strongest negative reactions? What does that reveal?",
+                    "What do you criticize most in others? How does that reflect your own shadow?",
+                    "What dreams or desires have you abandoned because you felt unworthy?",
+                    "What would your 'dark side' say if it could speak freely?",
+                    "What childhood wound are you still carrying?",
+                    "What do you need to forgive yourself for?"
+                ]
+            }
+        };
+        
+        let currentMode = 'intuition';
+        let history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
+        
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                document.getElementById('cardSpread').classList.toggle('active', currentMode === 'cards');
+                document.getElementById('readingDisplay').classList.remove('active');
+            });
+        });
+        
+        const oracleEye = document.getElementById('oracleEye');
+        const consultText = document.getElementById('consultText');
+        
+        oracleEye.addEventListener('click', () => {
+            oracleEye.classList.add('consulting');
+            consultText.textContent = 'Consulting the void...';
+            setTimeout(() => {
+                generateReading();
+                oracleEye.classList.remove('consulting');
+                consultText.textContent = 'Tap for another reading';
+            }, 2000);
+        });
+        
+        function generateReading() {
+            const question = document.getElementById('questionInput').value || 'General guidance';
+            const display = document.getElementById('readingDisplay');
+            
+            if (currentMode === 'intuition') {
+                const reading = oracleData.intuition.readings[Math.floor(Math.random() * oracleData.intuition.readings.length)];
+                const energy = oracleData.intuition.energies[Math.floor(Math.random() * oracleData.intuition.energies.length)];
+                const element = oracleData.intuition.elements[Math.floor(Math.random() * oracleData.intuition.elements.length)];
+                const phase = oracleData.intuition.phases[Math.floor(Math.random() * oracleData.intuition.phases.length)];
+                
+                document.getElementById('readingSymbol').textContent = reading.symbol;
+                document.getElementById('readingTitle').textContent = reading.title;
+                document.getElementById('readingType').textContent = 'Intuition Reading';
+                document.getElementById('readingBody').textContent = reading.body;
+                document.getElementById('readingReflection').textContent = reading.reflection;
+                document.getElementById('aspectEnergy').textContent = energy;
+                document.getElementById('aspectElement').textContent = element;
+                document.getElementById('aspectPhase').textContent = phase;
+                addToHistory(question, reading.title, reading.symbol);
+            } else if (currentMode === 'cards') {
+                const cards = [...oracleData.cards.deck].sort(() => Math.random() - 0.5).slice(0, 3);
+                const cardEls = document.querySelectorAll('.oracle-card');
+                cardEls.forEach((card, i) => {
+                    setTimeout(() => {
+                        card.querySelector('.card-symbol').textContent = cards[i].symbol;
+                        card.querySelector('.card-name').textContent = cards[i].name;
+                        card.classList.add('flipped');
+                    }, i * 500);
+                });
+                setTimeout(() => {
+                    document.getElementById('readingSymbol').textContent = '🃏';
+                    document.getElementById('readingTitle').textContent = 'Three Card Spread';
+                    document.getElementById('readingType').textContent = 'Card Reading';
+                    document.getElementById('readingBody').textContent = `Past: ${cards[0].name} — What has shaped you.\n\nPresent: ${cards[1].name} — Where you stand now.\n\nFuture: ${cards[2].name} — What awaits if you stay this course.`;
+                    document.getElementById('readingReflection').textContent = 'How do these cards reflect your current journey?';
+                    display.classList.add('active');
+                    addToHistory(question, 'Card Spread', '🃏');
+                }, 2000);
+                return;
+            } else if (currentMode === 'numbers') {
+                const num = Math.random() < 0.1 ? (Math.random() < 0.5 ? 11 : 22) : Math.floor(Math.random() * 9) + 1;
+                const numData = oracleData.numbers.meanings[num];
+                document.getElementById('readingSymbol').textContent = num;
+                document.getElementById('readingTitle').textContent = numData.title;
+                document.getElementById('readingType').textContent = 'Numerology Reading';
+                document.getElementById('readingBody').textContent = numData.meaning;
+                document.getElementById('readingReflection').textContent = `The number ${num} is speaking to you. Where does this appear in your life?`;
+                addToHistory(question, `Number ${num}`, '🔢');
+            } else if (currentMode === 'elements') {
+                const elements = Object.keys(oracleData.elements);
+                const chosen = elements[Math.floor(Math.random() * elements.length)];
+                const data = oracleData.elements[chosen];
+                document.getElementById('readingSymbol').textContent = data.symbol;
+                document.getElementById('readingTitle').textContent = chosen.charAt(0).toUpperCase() + chosen.slice(1) + ' Element';
+                document.getElementById('readingType').textContent = 'Elemental Reading';
+                document.getElementById('readingBody').textContent = `The element of ${chosen} calls to you. Its aspects: ${data.aspects.join(', ')}. This element is active in your life right now—either in excess, in lack, or seeking balance.`;
+                document.getElementById('readingReflection').textContent = `How is ${chosen} showing up in your experience?`;
+                addToHistory(question, chosen.charAt(0).toUpperCase() + chosen.slice(1), data.symbol);
+            } else if (currentMode === 'shadow') {
+                const prompt = oracleData.shadow.prompts[Math.floor(Math.random() * oracleData.shadow.prompts.length)];
+                document.getElementById('readingSymbol').textContent = '🌑';
+                document.getElementById('readingTitle').textContent = 'Shadow Work';
+                document.getElementById('readingType').textContent = 'Shadow Prompt';
+                document.getElementById('readingBody').textContent = 'The shadow is not your enemy—it is the parts of yourself you have exiled. To integrate is to become whole.';
+                document.getElementById('readingReflection').textContent = prompt;
+                addToHistory(question, 'Shadow Work', '🌑');
+            }
+            display.classList.add('active');
+        }
+        
+        function addToHistory(question, title, symbol) {
+            history.unshift({ question, title, symbol, date: new Date().toISOString(), mode: currentMode });
+            history = history.slice(0, 20);
+            localStorage.setItem('oracleHistory', JSON.stringify(history));
+            renderHistory();
+        }
+        
+        function renderHistory() {
+            document.getElementById('historyList').innerHTML = history.slice(0, 5).map(item => `
+                <div class="history-item">
+                    <span class="history-icon">${item.symbol}</span>
+                    <div class="history-content">
+                        <div class="history-question">${item.question}</div>
+                        <div class="history-date">${item.title} • ${new Date(item.date).toLocaleDateString()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function clearHistory() { history = []; localStorage.removeItem('oracleHistory'); renderHistory(); }
+        function saveReading() { alert('Reading saved to your journal.'); }
+        function newReading() { document.getElementById('readingDisplay').classList.remove('active'); document.querySelectorAll('.oracle-card').forEach(card => card.classList.remove('flipped')); }
+        function shareReading() { if (navigator.share) navigator.share({ title: 'My Oracle Reading', text: document.getElementById('readingBody').textContent, url: 'https://thefirstspark.shop' }); }
+        
+        renderHistory();
+    </script>
+</body>
+</html>

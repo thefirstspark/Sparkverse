@@ -1,0 +1,42 @@
+{
+    "name": "Spark Verse",
+    "short_name": "SparkVerse",
+    "description": "The First Spark - Consciousness Technology Platform",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#0a0a12",
+    "theme_color": "#0a0a12",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["lifestyle", "productivity", "self-improvement"],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Void Portal",
+            "short_name": "Void",
+            "description": "Release to the void",
+            "url": "/index.html?tool=void",
+            "icons": [{"src": "icon-void.png", "sizes": "96x96"}]
+        },
+        {
+            "name": "Oracle",
+            "short_name": "Oracle",
+            "description": "Consult the oracle",
+            "url": "/index.html?tool=oracle",
+            "icons": [{"src": "icon-oracle.png", "sizes": "96x96"}]
+        }
+    ]
+}

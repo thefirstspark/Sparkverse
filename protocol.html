@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Spark Protocol | The First Spark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #0a0a12; font-family: 'Rajdhani', sans-serif; color: #e8e8f0; }
+        
+        .container { min-height: 100vh; padding: 20px; max-width: 500px; margin: 0 auto; }
+        
+        header { text-align: center; padding: 15px 0 20px; }
+        .logo-icon { font-size: 2rem; margin-bottom: 8px; }
+        h1 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; letter-spacing: 4px; background: linear-gradient(135deg, #00f5d4, #9d4edd, #f72585); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .tagline { font-size: 0.65rem; color: #4a4a5a; letter-spacing: 3px; margin-top: 5px; }
+        
+        .frequency-display { background: linear-gradient(135deg, rgba(0,245,212,0.05), rgba(157,78,221,0.05)); border: 1px solid rgba(0,245,212,0.2); border-radius: 24px; padding: 30px 20px; text-align: center; margin-bottom: 20px; }
+        .freq-label { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; letter-spacing: 3px; color: #4a4a5a; margin-bottom: 10px; }
+        .freq-value { font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 700; color: #00f5d4; line-height: 1; }
+        .freq-desc { font-size: 0.85rem; color: #888; margin-top: 8px; }
+        .freq-trend { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; padding: 6px 14px; background: rgba(0,245,212,0.1); border-radius: 20px; font-size: 0.75rem; color: #00f5d4; }
+        
+        .quick-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 15px 10px; text-align: center; }
+        .stat-icon { font-size: 1.2rem; margin-bottom: 5px; }
+        .stat-value { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: #e8e8f0; }
+        .stat-label { font-size: 0.55rem; color: #4a4a5a; letter-spacing: 1px; margin-top: 3px; }
+        
+        .daily-mission { background: linear-gradient(135deg, rgba(247,37,133,0.1), rgba(157,78,221,0.05)); border: 1px solid rgba(247,37,133,0.2); border-radius: 18px; padding: 20px; margin-bottom: 20px; }
+        .mission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .mission-title { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: #f72585; }
+        .mission-refresh { background: none; border: none; color: #4a4a5a; cursor: pointer; font-size: 1rem; }
+        .mission-text { font-size: 1rem; line-height: 1.6; color: #c0c0d0; }
+        .mission-action { margin-top: 15px; padding: 12px; background: rgba(247,37,133,0.1); border: 1px solid rgba(247,37,133,0.2); border-radius: 10px; color: #f72585; font-size: 0.8rem; text-align: center; cursor: pointer; }
+        .mission-action:hover { background: rgba(247,37,133,0.2); }
+        
+        .rituals-section { margin-bottom: 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; }
+        .ritual-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .ritual-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 15px; cursor: pointer; transition: all 0.3s; }
+        .ritual-card:hover { border-color: rgba(157,78,221,0.3); }
+        .ritual-card.completed { background: rgba(0,245,212,0.05); border-color: rgba(0,245,212,0.2); }
+        .ritual-icon { font-size: 1.3rem; margin-bottom: 8px; }
+        .ritual-name { font-size: 0.85rem; margin-bottom: 3px; }
+        .ritual-time { font-size: 0.65rem; color: #4a4a5a; }
+        .ritual-check { float: right; color: #00f5d4; }
+        
+        .affirmation-card { background: rgba(157,78,221,0.05); border: 1px solid rgba(157,78,221,0.15); border-radius: 18px; padding: 25px 20px; margin-bottom: 20px; text-align: center; }
+        .affirmation-label { font-family: 'Orbitron', sans-serif; font-size: 0.6rem; letter-spacing: 2px; color: #9d4edd; margin-bottom: 12px; }
+        .affirmation-text { font-size: 1.15rem; line-height: 1.6; color: #d0d0e0; font-style: italic; }
+        
+        .journal-prompt { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .prompt-header { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; margin-bottom: 12px; }
+        .prompt-text { font-size: 0.95rem; color: #888; margin-bottom: 15px; line-height: 1.5; }
+        .journal-input { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; color: #e8e8f0; font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; resize: none; height: 100px; outline: none; }
+        .journal-input:focus { border-color: rgba(157,78,221,0.3); }
+        .journal-input::placeholder { color: #333; }
+        .journal-save { margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #9d4edd, #00f5d4); border: none; border-radius: 10px; color: #0a0a12; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; width: 100%; }
+        
+        .streak-bar { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 15px 18px; margin-bottom: 20px; }
+        .streak-fire { font-size: 1.5rem; }
+        .streak-info { flex: 1; }
+        .streak-count { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: #f72585; }
+        .streak-label { font-size: 0.7rem; color: #666; }
+        .streak-progress { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+        .streak-fill { height: 100%; background: linear-gradient(90deg, #f72585, #9d4edd); border-radius: 3px; transition: width 0.5s; }
+        
+        .cta-upgrade { background: linear-gradient(135deg, rgba(0,245,212,0.1), rgba(157,78,221,0.1)); border: 1px solid rgba(0,245,212,0.2); border-radius: 18px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .cta-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; margin-bottom: 8px; }
+        .cta-desc { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
+        .cta-btn { display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #00f5d4, #9d4edd); border-radius: 25px; color: #0a0a12; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-decoration: none; }
+        
+        footer { text-align: center; padding: 20px 0; }
+        footer a { font-size: 0.65rem; color: #333; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-icon">⌬</div>
+            <h1>SPARK PROTOCOL</h1>
+            <p class="tagline">CONSCIOUSNESS TECHNOLOGY</p>
+        </header>
+        
+        <div class="frequency-display">
+            <div class="freq-label">◇ CURRENT FREQUENCY</div>
+            <div class="freq-value" id="freqValue">7.2</div>
+            <div class="freq-desc" id="freqDesc">Elevated • Expanding</div>
+            <div class="freq-trend" id="freqTrend">↑ +0.8 from yesterday</div>
+        </div>
+        
+        <div class="quick-stats">
+            <div class="stat-box">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" id="streakStat">7</div>
+                <div class="stat-label">STREAK</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="logsStat">23</div>
+                <div class="stat-label">LOGS</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">🔮</div>
+                <div class="stat-value" id="oracleStat">12</div>
+                <div class="stat-label">READINGS</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">⌬</div>
+                <div class="stat-value" id="sigilStat">5</div>
+                <div class="stat-label">SIGILS</div>
+            </div>
+        </div>
+        
+        <div class="daily-mission">
+            <div class="mission-header">
+                <span class="mission-title">◇ TODAY'S MISSION</span>
+                <button class="mission-refresh" onclick="newMission()">🔄</button>
+            </div>
+            <p class="mission-text" id="missionText">Identify one limiting belief you've been carrying. Write it down, then write the opposite as an affirmation. Repeat the affirmation 10 times with feeling.</p>
+            <div class="mission-action" onclick="completeMission()">✓ Mark Complete</div>
+        </div>
+        
+        <div class="rituals-section">
+            <div class="section-header">
+                <span class="section-title">◇ DAILY RITUALS</span>
+            </div>
+            <div class="ritual-grid">
+                <div class="ritual-card" data-ritual="morning" onclick="toggleRitual(this)">
+                    <div class="ritual-icon">🌅</div>
+                    <div class="ritual-name">Morning Spark</div>
+                    <div class="ritual-time">5-10 min</div>
+                </div>
+                <div class="ritual-card" data-ritual="breathwork" onclick="toggleRitual(this)">
+                    <div class="ritual-icon">🌬️</div>
+                    <div class="ritual-name">Breathwork</div>
+                    <div class="ritual-time">3-5 min</div>
+                </div>
+                <div class="ritual-card" data-ritual="gratitude" onclick="toggleRitual(this)">
+                    <div class="ritual-icon">🙏</div>
+                    <div class="ritual-name">Gratitude</div>
+                    <div class="ritual-time">2-3 min</div>
+                </div>
+                <div class="ritual-card" data-ritual="evening" onclick="toggleRitual(this)">
+                    <div class="ritual-icon">🌙</div>
+                    <div class="ritual-name">Evening Review</div>
+                    <div class="ritual-time">5-10 min</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="affirmation-card">
+            <div class="affirmation-label">◇ TODAY'S AFFIRMATION</div>
+            <p class="affirmation-text" id="affirmationText">"I am the code, not just running it. Reality bends to my conscious intention."</p>
+        </div>
+        
+        <div class="journal-prompt">
+            <div class="prompt-header">◇ REFLECTION PROMPT</div>
+            <p class="prompt-text" id="promptText">What pattern keeps showing up in your life? What is it trying to teach you?</p>
+            <textarea class="journal-input" id="journalInput" placeholder="Write your reflection..."></textarea>
+            <button class="journal-save" onclick="saveJournal()">SAVE REFLECTION</button>
+        </div>
+        
+        <div class="streak-bar">
+            <span class="streak-fire">🔥</span>
+            <div class="streak-info">
+                <div class="streak-count" id="streakCount">7 Day Streak</div>
+                <div class="streak-label">3 more days to unlock Shadow Work module</div>
+                <div class="streak-progress">
+                    <div class="streak-fill" id="streakFill" style="width: 70%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-upgrade">
+            <div class="cta-title">✨ Unlock Full Protocol</div>
+            <div class="cta-desc">Advanced rituals, shadow work, and personalized guidance</div>
+            <a href="https://thefirstspark.shop" class="cta-btn">UPGRADE NOW</a>
+        </div>
+        
+        <footer><a href="https://thefirstspark.shop">THE FIRST SPARK</a></footer>
+    </div>
+    
+    <script>
+        const missions = [
+            "Identify one limiting belief you've been carrying. Write it down, then write the opposite as an affirmation. Repeat the affirmation 10 times with feeling.",
+            "Find something beautiful that you normally ignore. Spend 2 minutes in complete appreciation of it.",
+            "Send a message of genuine gratitude to someone who doesn't expect it.",
+            "Do one thing today that scares you slightly. Notice how you feel after.",
+            "Spend 10 minutes in complete silence. No phone, no music, just you and your thoughts.",
+            "Write down 3 things you're proud of yourself for. Read them out loud.",
+            "Forgive yourself for one thing you've been holding against yourself.",
+            "Ask yourself: What would I do today if I fully trusted myself?",
+            "Notice every time you say 'should' today. Replace it with 'could' or 'choose to'.",
+            "Do something kind for yourself that you usually deny yourself."
+        ];
+        
+        const affirmations = [
+            "I am the code, not just running it. Reality bends to my conscious intention.",
+            "My consciousness is the most powerful technology I possess.",
+            "I release what no longer serves my highest evolution.",
+            "Every challenge is a catalyst for my transformation.",
+            "I am aligned with the frequency of abundance and possibility.",
+            "My shadows are not my enemies—they are unintegrated power.",
+            "I trust the timing of my becoming.",
+            "I am both the observer and the observed, the dreamer and the dream.",
+            "My authenticity is my greatest contribution to the world.",
+            "I am worthy of the life I'm creating."
+        ];
+        
+        const prompts = [
+            "What pattern keeps showing up in your life? What is it trying to teach you?",
+            "If fear wasn't a factor, what would you do differently?",
+            "What part of yourself have you abandoned that wants to return?",
+            "Where are you playing small? What would playing big look like?",
+            "What are you pretending not to know?",
+            "If today was your last, what would you regret not saying or doing?",
+            "What would your highest self advise you right now?",
+            "What mask are you wearing that's ready to come off?"
+        ];
+        
+        // Load data
+        function loadStats() {
+            const logs = JSON.parse(localStorage.getItem('consciousnessLogs') || '[]');
+            const oracleHistory = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
+            const savedSigils = JSON.parse(localStorage.getItem('savedSigils') || '[]');
+            
+            document.getElementById('logsStat').textContent = logs.length;
+            document.getElementById('oracleStat').textContent = oracleHistory.length;
+            document.getElementById('sigilStat').textContent = savedSigils.length;
+            
+            // Calculate frequency from recent logs
+            if (logs.length > 0) {
+                const recent = logs.slice(0, 5);
+                const avgFreq = recent.reduce((a, l) => a + l.frequency, 0) / recent.length;
+                document.getElementById('freqValue').textContent = avgFreq.toFixed(1);
+                
+                const descriptions = {
+                    1: "Deep Shadow", 2: "Struggling", 3: "Low", 4: "Below Baseline",
+                    5: "Neutral", 6: "Rising", 7: "Elevated", 8: "High",
+                    9: "Peak State", 10: "Transcendent"
+                };
+                document.getElementById('freqDesc').textContent = descriptions[Math.round(avgFreq)] + ' • ' + (avgFreq > 5 ? 'Expanding' : 'Contracting');
+                
+                // Calculate trend
+                if (logs.length > 1) {
+                    const yesterday = logs.slice(1, 6);
+                    const yesterdayAvg = yesterday.reduce((a, l) => a + l.frequency, 0) / yesterday.length;
+                    const diff = avgFreq - yesterdayAvg;
+                    document.getElementById('freqTrend').innerHTML = `${diff >= 0 ? '↑' : '↓'} ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} from previous`;
+                }
+            }
+            
+            // Streak
+            let streak = calculateStreak(logs);
+            document.getElementById('streakStat').textContent = streak;
+            document.getElementById('streakCount').textContent = streak + ' Day Streak';
+            document.getElementById('streakFill').style.width = Math.min(streak * 10, 100) + '%';
+        }
+        
+        function calculateStreak(logs) {
+            if (logs.length === 0) return 0;
+            let streak = 1;
+            const today = new Date().toDateString();
+            const lastLog = new Date(logs[0].date).toDateString();
+            if (lastLog !== today) {
+                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                if (lastLog !== yesterday.toDateString()) return 0;
+            }
+            for (let i = 1; i < logs.length && streak < 100; i++) {
+                const curr = new Date(logs[i-1].date);
+                const prev = new Date(logs[i].date);
+                if (Math.floor((curr - prev) / 86400000) <= 1) streak++;
+                else break;
+            }
+            return streak;
+        }
+        
+        // Daily content based on date
+        function setDailyContent() {
+            const today = new Date();
+            const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            
+            document.getElementById('missionText').textContent = missions[seed % missions.length];
+            document.getElementById('affirmationText').textContent = '"' + affirmations[seed % affirmations.length] + '"';
+            document.getElementById('promptText').textContent = prompts[seed % prompts.length];
+        }
+        
+        function newMission() {
+            document.getElementById('missionText').textContent = missions[Math.floor(Math.random() * missions.length)];
+        }
+        
+        function completeMission() {
+            event.target.textContent = '✓ Completed!';
+            event.target.style.background = 'rgba(0,245,212,0.2)';
+            event.target.style.borderColor = 'rgba(0,245,212,0.3)';
+            event.target.style.color = '#00f5d4';
+        }
+        
+        function toggleRitual(el) {
+            el.classList.toggle('completed');
+            if (el.classList.contains('completed')) {
+                el.innerHTML += '<span class="ritual-check">✓</span>';
+            } else {
+                const check = el.querySelector('.ritual-check');
+                if (check) check.remove();
+            }
+        }
+        
+        function saveJournal() {
+            const text = document.getElementById('journalInput').value;
+            if (text.trim()) {
+                let journals = JSON.parse(localStorage.getItem('sparkJournals') || '[]');
+                journals.unshift({ text, date: new Date().toISOString(), prompt: document.getElementById('promptText').textContent });
+                localStorage.setItem('sparkJournals', JSON.stringify(journals.slice(0, 100)));
+                document.getElementById('journalInput').value = '';
+                alert('Reflection saved ✓');
+            }
+        }
+        
+        loadStats();
+        setDailyContent();
+    </script>
+</body>
+</html>

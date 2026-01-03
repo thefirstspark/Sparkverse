@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Void Portal | First Spark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #0a0a12 0%, #000000 100%);
+            font-family: 'Space Mono', monospace;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #9d4edd, #00f5d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 0.75rem;
+            color: #666;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .portal-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .recipient-field {
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+        }
+        
+        .recipient-field label {
+            display: block;
+            font-size: 0.7rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .recipient-field input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #9d4edd;
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .recipient-field input::placeholder {
+            color: #444;
+        }
+        
+        .message-area {
+            flex: 1;
+            min-height: 250px;
+            position: relative;
+        }
+        
+        .void-portal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at center, rgba(157, 78, 221, 0.1) 0%, transparent 70%),
+                rgba(10, 10, 18, 0.9);
+            border: 1px solid #222;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .void-portal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+        }
+        
+        textarea {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: #e0e0e0;
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            padding: 25px;
+            resize: none;
+            outline: none;
+        }
+        
+        textarea::placeholder {
+            color: #444;
+        }
+        
+        .emotion-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .emotion-tag {
+            padding: 8px 16px;
+            background: rgba(30, 30, 40, 0.8);
+            border: 1px solid #333;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .emotion-tag:hover {
+            border-color: #9d4edd;
+        }
+        
+        .emotion-tag.active {
+            background: rgba(157, 78, 221, 0.3);
+            border-color: #9d4edd;
+            color: #00f5d4;
+        }
+        
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .release-btn {
+            padding: 18px 30px;
+            background: linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .release-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(157, 78, 221, 0.4);
+        }
+        
+        .release-btn:active {
+            transform: translateY(0);
+        }
+        
+        .release-btn.releasing {
+            background: linear-gradient(135deg, #00f5d4 0%, #9d4edd 100%);
+        }
+        
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .option-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #666;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            border-color: #9d4edd;
+            color: #9d4edd;
+        }
+        
+        /* Release Animation Overlay */
+        .release-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .release-overlay.active {
+            display: flex;
+        }
+        
+        .portal-animation {
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+        
+        .portal-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #9d4edd;
+            border-radius: 50%;
+            animation: portalExpand 2s ease-out forwards;
+        }
+        
+        @keyframes portalExpand {
+            0% { width: 10px; height: 10px; opacity: 1; }
+            100% { width: 400px; height: 400px; opacity: 0; }
+        }
+        
+        .release-text {
+            margin-top: 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: #00f5d4;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .reflection-text {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+            max-width: 300px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2.5s forwards;
+        }
+        
+        .close-overlay {
+            margin-top: 40px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #666;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 3s forwards;
+            transition: all 0.3s ease;
+        }
+        
+        .close-overlay:hover {
+            border-color: #00f5d4;
+            color: #00f5d4;
+        }
+        
+        /* Floating particles during release */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #9d4edd;
+            border-radius: 50%;
+            animation: float 2s ease-out forwards;
+        }
+        
+        @keyframes float {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+        }
+        
+        /* Vault section */
+        .vault-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+        
+        .vault-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .vault-title {
+            font-size: 0.75rem;
+            color: #666;
+            letter-spacing: 1px;
+        }
+        
+        .vault-toggle {
+            font-size: 0.7rem;
+            color: #9d4edd;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .vault-entries {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .vault-entries.visible {
+            display: flex;
+        }
+        
+        .vault-entry {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .vault-entry-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.65rem;
+            color: #666;
+        }
+        
+        .vault-entry-preview {
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.65rem;
+            color: #333;
+        }
+        
+        footer a {
+            color: #9d4edd;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header>
+            <h1>⌬ THE VOID PORTAL</h1>
+            <p class="subtitle">Release to the Spark Verse</p>
+        </header>
+        
+        <div class="portal-container">
+            <div class="recipient-field">
+                <label>Instead of sending to...</label>
+                <input type="text" id="recipient" placeholder="who would've gotten this">
+            </div>
+            
+            <div class="message-area">
+                <div class="void-portal">
+                    <textarea id="message" placeholder="let it flow...
+
+the void is listening.
+it holds no judgment.
+it transmutes everything."></textarea>
+                </div>
+            </div>
+            
+            <div class="emotion-tags">
+                <span class="emotion-tag" data-emotion="rage">🔥 rage</span>
+                <span class="emotion-tag" data-emotion="hurt">💔 hurt</span>
+                <span class="emotion-tag" data-emotion="frustration">⚡ frustration</span>
+                <span class="emotion-tag" data-emotion="grief">🌙 grief</span>
+                <span class="emotion-tag" data-emotion="anxiety">🌀 anxiety</span>
+                <span class="emotion-tag" data-emotion="release">✨ release</span>
+            </div>
+            
+            <div class="actions">
+                <button class="release-btn" id="releaseBtn">⌬ RELEASE TO THE VOID</button>
+                <div class="options">
+                    <button class="option-btn" id="saveToVault">save to vault</button>
+                    <button class="option-btn" id="trueVoid">true void (no trace)</button>
+                </div>
+            </div>
+            
+            <div class="vault-section">
+                <div class="vault-header">
+                    <span class="vault-title">◇ THE VAULT</span>
+                    <button class="vault-toggle" id="vaultToggle">show / hide</button>
+                </div>
+                <div class="vault-entries" id="vaultEntries">
+                    <!-- Entries populate here -->
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <a href="https://thefirstspark.shop">THE FIRST SPARK</a> | transmute everything
+        </footer>
+    </div>
+    
+    <div class="release-overlay" id="releaseOverlay">
+        <div class="portal-animation" id="portalAnimation"></div>
+        <div class="release-text" id="releaseText">RELEASED</div>
+        <div class="reflection-text" id="reflectionText"></div>
+        <button class="close-overlay" id="closeOverlay">return</button>
+    </div>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 2 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Emotion tags
+        const emotionTags = document.querySelectorAll('.emotion-tag');
+        let selectedEmotion = null;
+        
+        emotionTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                emotionTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                selectedEmotion = tag.dataset.emotion;
+            });
+        });
+        
+        // Reflections based on emotion
+        const reflections = {
+            rage: [
+                "The fire has been witnessed. Let it become light.",
+                "What burned has been released. You chose not to spread the flames.",
+                "Anger acknowledged. Damage prevented. Power reclaimed."
+            ],
+            hurt: [
+                "Your pain was heard by the cosmos. It holds space for you.",
+                "The wound was witnessed. Now let it breathe.",
+                "Hurt released. Healing can begin."
+            ],
+            frustration: [
+                "The pressure has been vented. Clarity follows.",
+                "Sometimes the void is the only one who needs to hear it.",
+                "Released. Not suppressed. There's a difference."
+            ],
+            grief: [
+                "The void holds all losses gently. Nothing is truly gone.",
+                "Your grief is sacred. It has been received.",
+                "Let the cosmos carry what you cannot."
+            ],
+            anxiety: [
+                "The spiral has been unwound into infinite space.",
+                "What felt endless now dissolves into possibility.",
+                "Breathe. The void absorbed the weight."
+            ],
+            release: [
+                "Transmutation complete. You are lighter now.",
+                "What was stuck now flows. Trust the process.",
+                "Released. Reset. Ready."
+            ],
+            default: [
+                "The void has received your transmission.",
+                "Released into the infinite. No return address needed.",
+                "What wasn't meant for them has been returned to source.",
+                "The cosmos absorbs all. Nothing wasted. Nothing weaponized."
+            ]
+        };
+        
+        function getReflection() {
+            const pool = reflections[selectedEmotion] || reflections.default;
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+        
+        // Vault functionality
+        let vault = JSON.parse(localStorage.getItem('voidVault') || '[]');
+        const vaultEntries = document.getElementById('vaultEntries');
+        const vaultToggle = document.getElementById('vaultToggle');
+        
+        function renderVault() {
+            vaultEntries.innerHTML = vault.slice(-10).reverse().map(entry => `
+                <div class="vault-entry">
+                    <div class="vault-entry-header">
+                        <span>${entry.to ? 'to: ' + entry.to : 'to: the void'}</span>
+                        <span>${new Date(entry.date).toLocaleDateString()}</span>
+                    </div>
+                    <div class="vault-entry-preview">${entry.preview}</div>
+                </div>
+            `).join('');
+        }
+        
+        renderVault();
+        
+        vaultToggle.addEventListener('click', () => {
+            vaultEntries.classList.toggle('visible');
+        });
+        
+        // Save to vault option
+        let saveToVaultMode = false;
+        document.getElementById('saveToVault').addEventListener('click', function() {
+            saveToVaultMode = !saveToVaultMode;
+            this.style.borderColor = saveToVaultMode ? '#00f5d4' : '#333';
+            this.style.color = saveToVaultMode ? '#00f5d4' : '#666';
+        });
+        
+        // True void option
+        let trueVoidMode = false;
+        document.getElementById('trueVoid').addEventListener('click', function() {
+            trueVoidMode = !trueVoidMode;
+            saveToVaultMode = false;
+            document.getElementById('saveToVault').style.borderColor = '#333';
+            document.getElementById('saveToVault').style.color = '#666';
+            this.style.borderColor = trueVoidMode ? '#9d4edd' : '#333';
+            this.style.color = trueVoidMode ? '#9d4edd' : '#666';
+        });
+        
+        // Release functionality
+        const releaseBtn = document.getElementById('releaseBtn');
+        const releaseOverlay = document.getElementById('releaseOverlay');
+        const portalAnimation = document.getElementById('portalAnimation');
+        const messageArea = document.getElementById('message');
+        const recipientInput = document.getElementById('recipient');
+        
+        releaseBtn.addEventListener('click', () => {
+            const message = messageArea.value.trim();
+            if (!message) return;
+            
+            // Save if enabled
+            if (saveToVaultMode && !trueVoidMode) {
+                vault.push({
+                    to: recipientInput.value,
+                    preview: message.substring(0, 100),
+                    emotion: selectedEmotion,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('voidVault', JSON.stringify(vault));
+                renderVault();
+            }
+            
+            // Show overlay
+            releaseOverlay.classList.add('active');
+            
+            // Create portal rings
+            portalAnimation.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const ring = document.createElement('div');
+                    ring.className = 'portal-ring';
+                    portalAnimation.appendChild(ring);
+                }, i * 300);
+            }
+            
+            // Create particles
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = '50%';
+                    particle.style.top = '50%';
+                    particle.style.setProperty('--tx', (Math.random() - 0.5) * 300 + 'px');
+                    particle.style.setProperty('--ty', (Math.random() - 0.5) * 300 + 'px');
+                    particle.style.background = Math.random() > 0.5 ? '#9d4edd' : '#00f5d4';
+                    portalAnimation.appendChild(particle);
+                }, Math.random() * 1000);
+            }
+            
+            // Set reflection
+            document.getElementById('reflectionText').textContent = getReflection();
+            
+            // Clear form
+            messageArea.value = '';
+            recipientInput.value = '';
+            emotionTags.forEach(t => t.classList.remove('active'));
+            selectedEmotion = null;
+        });
+        
+        document.getElementById('closeOverlay').addEventListener('click', () => {
+            releaseOverlay.classList.remove('active');
+            // Reset animations
+            document.getElementById('releaseText').style.animation = 'none';
+            document.getElementById('reflectionText').style.animation = 'none';
+            document.getElementById('closeOverlay').style.animation = 'none';
+            setTimeout(() => {
+                document.getElementById('releaseText').style.animation = '';
+                document.getElementById('reflectionText').style.animation = '';
+                document.getElementById('closeOverlay').style.animation = '';
+            }, 10);
+        });
+    </script>
+</body>
+</html>

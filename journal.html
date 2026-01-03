@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Spark Journal | Spark Verse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Rajdhani:wght@300;400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #0a0a12; font-family: 'Rajdhani', sans-serif; color: #e8e8f0; }
+        
+        .container { min-height: 100vh; padding: 20px; max-width: 500px; margin: 0 auto; }
+        
+        header { text-align: center; padding: 20px 0 25px; }
+        h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; letter-spacing: 2px; color: #e8e8f0; margin-bottom: 5px; }
+        .subtitle { font-size: 0.7rem; color: #4a4a5a; letter-spacing: 2px; }
+        
+        .date-display { text-align: center; margin-bottom: 25px; }
+        .current-date { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #888; }
+        .moon-phase { font-size: 1.5rem; margin-top: 8px; }
+        
+        .prompt-card { background: linear-gradient(135deg, rgba(157,78,221,0.08), rgba(0,245,212,0.03)); border: 1px solid rgba(157,78,221,0.15); border-radius: 18px; padding: 25px 20px; margin-bottom: 25px; }
+        .prompt-label { font-size: 0.65rem; letter-spacing: 2px; color: #9d4edd; margin-bottom: 12px; }
+        .prompt-text { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; line-height: 1.6; color: #c0c0d0; }
+        .new-prompt-btn { margin-top: 15px; padding: 8px 16px; background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; color: #666; font-size: 0.7rem; cursor: pointer; }
+        .new-prompt-btn:hover { border-color: #9d4edd; color: #9d4edd; }
+        
+        .entry-area { margin-bottom: 25px; }
+        .entry-label { font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; margin-bottom: 10px; display: block; }
+        .entry-input { width: 100%; min-height: 200px; padding: 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; color: #e8e8f0; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; line-height: 1.8; resize: none; outline: none; }
+        .entry-input:focus { border-color: rgba(157,78,221,0.3); }
+        .entry-input::placeholder { color: #333; font-style: italic; }
+        
+        .mood-section { margin-bottom: 25px; }
+        .mood-label { font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; margin-bottom: 12px; display: block; }
+        .mood-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+        .mood-btn { padding: 10px 18px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 25px; color: #666; font-size: 0.85rem; cursor: pointer; transition: all 0.3s; }
+        .mood-btn.active { background: rgba(0,245,212,0.1); border-color: rgba(0,245,212,0.3); color: #00f5d4; }
+        
+        .tags-section { margin-bottom: 25px; }
+        .tags-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 8px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; font-size: 0.75rem; color: #666; cursor: pointer; }
+        .tag.active { background: rgba(157,78,221,0.1); border-color: rgba(157,78,221,0.3); color: #9d4edd; }
+        
+        .save-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #9d4edd, #00f5d4); border: none; border-radius: 14px; color: #0a0a12; font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: 2px; cursor: pointer; margin-bottom: 25px; }
+        .save-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(157,78,221,0.3); }
+        
+        .past-entries { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px; }
+        .past-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .past-title { font-size: 0.65rem; letter-spacing: 2px; color: #4a4a5a; }
+        .entries-list { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; }
+        .entry-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 18px; cursor: pointer; transition: all 0.3s; }
+        .entry-card:hover { border-color: rgba(157,78,221,0.2); }
+        .entry-date { font-size: 0.7rem; color: #9d4edd; margin-bottom: 8px; }
+        .entry-preview { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #888; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .entry-mood { margin-top: 10px; font-size: 1rem; }
+        
+        .empty-state { text-align: center; padding: 40px 20px; color: #444; }
+        .empty-icon { font-size: 2rem; margin-bottom: 10px; opacity: 0.5; }
+        .empty-text { font-size: 0.85rem; }
+        
+        footer { text-align: center; padding: 20px 0; }
+        footer a { font-size: 0.65rem; color: #333; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📓 Spark Journal</h1>
+            <p class="subtitle">Document Your Becoming</p>
+        </header>
+        
+        <div class="date-display">
+            <div class="current-date" id="currentDate"></div>
+            <div class="moon-phase" id="moonPhase"></div>
+        </div>
+        
+        <div class="prompt-card">
+            <div class="prompt-label">◇ TODAY'S REFLECTION</div>
+            <p class="prompt-text" id="promptText">What truth are you finally ready to accept about yourself?</p>
+            <button class="new-prompt-btn" onclick="newPrompt()">New Prompt</button>
+        </div>
+        
+        <div class="entry-area">
+            <label class="entry-label">◇ YOUR ENTRY</label>
+            <textarea class="entry-input" id="entryInput" placeholder="Begin writing..."></textarea>
+        </div>
+        
+        <div class="mood-section">
+            <span class="mood-label">◇ CURRENT MOOD</span>
+            <div class="mood-grid">
+                <button class="mood-btn" data-mood="✨">✨ Inspired</button>
+                <button class="mood-btn" data-mood="☀️">☀️ Joyful</button>
+                <button class="mood-btn" data-mood="🌊">🌊 Flowing</button>
+                <button class="mood-btn" data-mood="🤔">🤔 Reflective</button>
+                <button class="mood-btn" data-mood="😔">😔 Heavy</button>
+                <button class="mood-btn" data-mood="🔥">🔥 Fired Up</button>
+                <button class="mood-btn" data-mood="🌙">🌙 Introspective</button>
+                <button class="mood-btn" data-mood="💫">💫 Transforming</button>
+            </div>
+        </div>
+        
+        <div class="tags-section">
+            <span class="mood-label">◇ THEMES</span>
+            <div class="tags-grid">
+                <span class="tag" data-tag="growth">Growth</span>
+                <span class="tag" data-tag="shadow">Shadow Work</span>
+                <span class="tag" data-tag="gratitude">Gratitude</span>
+                <span class="tag" data-tag="dreams">Dreams</span>
+                <span class="tag" data-tag="relationships">Relationships</span>
+                <span class="tag" data-tag="purpose">Purpose</span>
+                <span class="tag" data-tag="healing">Healing</span>
+                <span class="tag" data-tag="insight">Insight</span>
+            </div>
+        </div>
+        
+        <button class="save-btn" onclick="saveEntry()">SAVE ENTRY</button>
+        
+        <div class="past-entries">
+            <div class="past-header">
+                <span class="past-title">◇ PAST ENTRIES</span>
+            </div>
+            <div class="entries-list" id="entriesList"></div>
+        </div>
+        
+        <footer><a href="https://thefirstspark.shop">THE FIRST SPARK</a></footer>
+    </div>
+    
+    <script>
+        const prompts = [
+            "What truth are you finally ready to accept about yourself?",
+            "What would you do today if you knew you couldn't fail?",
+            "What's one thing you need to release to move forward?",
+            "Where is fear disguising itself as logic in your life?",
+            "What does your highest self want you to know right now?",
+            "What pattern from your past is ready to be broken?",
+            "If your future self could send you a message, what would it say?",
+            "What are you grateful for that you usually overlook?",
+            "What part of your story are you ready to rewrite?",
+            "What would radical self-acceptance look like for you today?",
+            "Where are you being called to grow that you've been resisting?",
+            "What does your heart know that your mind is ignoring?"
+        ];
+        
+        let entries = JSON.parse(localStorage.getItem('sparkJournalEntries') || '[]');
+        let selectedMood = null;
+        let selectedTags = new Set();
+        
+        // Set date
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+        
+        // Moon phase (simplified)
+        function getMoonPhase() {
+            const phases = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+            const dayOfMonth = now.getDate();
+            return phases[Math.floor((dayOfMonth % 30) / 4)];
+        }
+        document.getElementById('moonPhase').textContent = getMoonPhase();
+        
+        // Daily prompt
+        const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+        document.getElementById('promptText').textContent = prompts[seed % prompts.length];
+        
+        function newPrompt() {
+            document.getElementById('promptText').textContent = prompts[Math.floor(Math.random() * prompts.length)];
+        }
+        
+        // Mood selection
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedMood = btn.dataset.mood;
+            });
+        });
+        
+        // Tag selection
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                tag.classList.toggle('active');
+                const tagName = tag.dataset.tag;
+                if (selectedTags.has(tagName)) selectedTags.delete(tagName);
+                else selectedTags.add(tagName);
+            });
+        });
+        
+        // Save entry
+        function saveEntry() {
+            const text = document.getElementById('entryInput').value.trim();
+            if (!text) return alert('Write something first!');
+            
+            const entry = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                text,
+                mood: selectedMood,
+                tags: [...selectedTags],
+                prompt: document.getElementById('promptText').textContent
+            };
+            
+            entries.unshift(entry);
+            localStorage.setItem('sparkJournalEntries', JSON.stringify(entries));
+            
+            // Reset
+            document.getElementById('entryInput').value = '';
+            selectedMood = null;
+            selectedTags.clear();
+            document.querySelectorAll('.mood-btn, .tag').forEach(el => el.classList.remove('active'));
+            
+            renderEntries();
+            alert('Entry saved ✓');
+        }
+        
+        // Render entries
+        function renderEntries() {
+            const list = document.getElementById('entriesList');
+            
+            if (entries.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <div class="empty-text">Your journal awaits its first entry</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = entries.slice(0, 20).map(entry => {
+                const date = new Date(entry.date);
+                const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                return `
+                    <div class="entry-card" onclick="viewEntry(${entry.id})">
+                        <div class="entry-date">${dateStr}</div>
+                        <div class="entry-preview">${entry.text}</div>
+                        ${entry.mood ? `<div class="entry-mood">${entry.mood}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function viewEntry(id) {
+            const entry = entries.find(e => e.id === id);
+            if (entry) {
+                document.getElementById('entryInput').value = entry.text;
+                if (entry.mood) {
+                    document.querySelectorAll('.mood-btn').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.mood === entry.mood);
+                    });
+                    selectedMood = entry.mood;
+                }
+            }
+        }
+        
+        renderEntries();
+    </script>
+</body>
+</html>

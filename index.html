@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Spark Verse">
+    <meta name="theme-color" content="#0a0a12">
+    <meta name="description" content="The First Spark - Consciousness Technology Platform">
+    
+    <title>Spark Verse</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --void-black: #0a0a12;
+            --deep-purple: #1a1a2e;
+            --spark-purple: #9d4edd;
+            --spark-cyan: #00f5d4;
+            --spark-magenta: #f72585;
+            --muted-gray: #4a4a5a;
+            --soft-white: #e8e8f0;
+            --glass-white: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void-black);
+            color: var(--soft-white);
+            position: relative;
+        }
+        
+        /* Cosmic Background */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: drift 20s ease-in-out infinite;
+        }
+        
+        .nebula-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--spark-purple);
+            top: -100px;
+            right: -100px;
+        }
+        
+        .nebula-2 {
+            width: 250px;
+            height: 250px;
+            background: var(--spark-cyan);
+            bottom: 20%;
+            left: -80px;
+            animation-delay: -10s;
+        }
+        
+        .nebula-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--spark-magenta);
+            bottom: -50px;
+            right: 20%;
+            animation-delay: -5s;
+        }
+        
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+        
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(157, 78, 221, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(157, 78, 221, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        /* App Container */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding-top: var(--safe-top);
+            padding-bottom: var(--safe-bottom);
+        }
+        
+        /* Header */
+        .header {
+            padding: 20px 20px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-symbol {
+            width: 36px;
+            height: 36px;
+            position: relative;
+        }
+        
+        .logo-symbol svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--spark-purple), var(--spark-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--glass-white);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .header-btn:hover {
+            border-color: var(--spark-purple);
+            color: var(--spark-purple);
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0 20px 100px;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Welcome Section */
+        .welcome {
+            margin-bottom: 30px;
+        }
+        
+        .greeting {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--muted-gray);
+            margin-bottom: 5px;
+        }
+        
+        .spark-status {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--spark-cyan);
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--spark-cyan);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 245, 212, 0.5); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(0, 245, 212, 0); }
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .quick-action {
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(0, 245, 212, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-action::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--spark-purple), var(--spark-cyan));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .quick-action:active::before {
+            opacity: 0.2;
+        }
+        
+        .quick-action-icon {
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quick-action-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Tools Grid */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--muted-gray);
+        }
+        
+        .section-action {
+            font-size: 0.75rem;
+            color: var(--spark-purple);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .tools-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .tool-card {
+            background: var(--glass-white);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-card:active {
+            transform: scale(0.98);
+        }
+        
+        .tool-card.featured {
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(247, 37, 133, 0.1));
+            border-color: rgba(157, 78, 221, 0.3);
+        }
+        
+        .tool-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .tool-icon.void { background: linear-gradient(135deg, #2d1b4e, #1a1a2e); }
+        .tool-icon.oracle { background: linear-gradient(135deg, #1b3a4e, #1a2e2e); }
+        .tool-icon.sigil { background: linear-gradient(135deg, #4e1b3a, #2e1a2e); }
+        .tool-icon.tracker { background: linear-gradient(135deg, #1b4e3a, #1a2e2e); }
+        .tool-icon.protocol { background: linear-gradient(135deg, #4e3a1b, #2e2e1a); }
+        .tool-icon.soul { background: linear-gradient(135deg, #3a1b4e, #2e1a2e); }
+        
+        .tool-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .tool-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .tool-desc {
+            font-size: 0.75rem;
+            color: var(--muted-gray);
+            line-height: 1.4;
+        }
+        
+        .tool-arrow {
+            color: var(--muted-gray);
+            font-size: 1.2rem;
+        }
+        
+        /* Insight Card */
+        .insight-card {
+            background: linear-gradient(135deg, var(--deep-purple), rgba(157, 78, 221, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .insight-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-family: Georgia, serif;
+            font-size: 4rem;
+            color: var(--spark-purple);
+            opacity: 0.2;
+            line-height: 1;
+        }
+        
+        .insight-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--spark-cyan);
+            margin-bottom: 12px;
+        }
+        
+        .insight-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        
+        .insight-source {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: var(--muted-gray);
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 18, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            padding: 10px 20px;
+            padding-bottom: calc(10px + var(--safe-bottom));
+            z-index: 100;
+        }
+        
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            color: var(--muted-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-item.active {
+            color: var(--spark-cyan);
+        }
+        
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--spark-cyan);
+            border-radius: 50%;
+        }
+        
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+        
+        .nav-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.55rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .nav-item-center {
+            position: relative;
+            top: -15px;
+        }
+        
+        .nav-center-btn {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--spark-purple), var(--spark-magenta));
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(157, 78, 221, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-center-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Tool Pages (hidden by default) */
+        .tool-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--void-black);
+            z-index: 200;
+            padding-top: var(--safe-top);
+            padding-bottom: var(--safe-bottom);
+        }
+        
+        .tool-page.active {
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .tool-page-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--glass-white);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--soft-white);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .tool-page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .tool-page-content {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .tool-page-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Install Prompt */
+        .install-prompt {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: var(--deep-purple);
+            border: 1px solid var(--spark-purple);
+            border-radius: 16px;
+            padding: 20px;
+            z-index: 150;
+            animation: fadeUp 0.3s ease;
+        }
+        
+        .install-prompt.show {
+            display: block;
+        }
+        
+        @keyframes fadeUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .install-prompt-text {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .install-prompt-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .install-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .install-btn.primary {
+            background: linear-gradient(135deg, var(--spark-purple), var(--spark-cyan));
+            border: none;
+            color: white;
+        }
+        
+        .install-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--muted-gray);
+        }
+        
+        /* Loading State */
+        .loading-shimmer {
+            background: linear-gradient(90deg, var(--glass-white) 0%, rgba(255,255,255,0.1) 50%, var(--glass-white) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg">
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+    
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-symbol">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,5 95,75 5,75" stroke="url(#logoGrad)" stroke-width="2" fill="none"/>
+                        <polygon points="50,25 80,70 20,70" stroke="url(#logoGrad)" stroke-width="1.5" fill="none" opacity="0.6"/>
+                        <circle cx="50" cy="50" r="8" fill="url(#logoGrad)"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#9d4edd"/>
+                                <stop offset="100%" stop-color="#00f5d4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">SPARK VERSE</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" id="notifBtn">🔔</button>
+                <button class="header-btn" id="profileBtn">⚙️</button>
+            </div>
+        </header>
+        
+        <main class="main-content">
+            <section class="welcome">
+                <h1 class="greeting">Welcome back, Spark</h1>
+                <div class="spark-status">
+                    <span class="status-dot"></span>
+                    CONSCIOUSNESS ONLINE
+                </div>
+            </section>
+            
+            <section class="quick-actions">
+                <div class="quick-action" data-tool="void">
+                    <span class="quick-action-icon">🌀</span>
+                    <span class="quick-action-label">Void Portal</span>
+                </div>
+                <div class="quick-action" data-tool="oracle">
+                    <span class="quick-action-icon">🔮</span>
+                    <span class="quick-action-label">Oracle</span>
+                </div>
+            </section>
+            
+            <section class="insight-card">
+                <div class="insight-label">◇ DAILY TRANSMISSION</div>
+                <p class="insight-text">Reality is programmable. Your consciousness is the compiler. What code are you running today?</p>
+                <p class="insight-source">— The First Spark Protocol</p>
+            </section>
+            
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title">◇ YOUR TOOLS</h2>
+                    <button class="section-action">View All</button>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card featured" data-tool="void">
+                        <div class="tool-icon void">🌀</div>
+                        <div class="tool-info">
+                            <h3 class="tool-name">The Void Portal</h3>
+                            <p class="tool-desc">Release emotions to the cosmos instead of sending them</p>
+                        </div>
+                        <span class="tool-arrow">→</span>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="oracle">
+                        <div class="tool-icon oracle">🔮</div>
+                        <div class="tool-info">
+                            <h3 class="tool-name">First Spark Oracle</h3>
+                            <p class="tool-desc">Pattern recognition & divination</p>
+                        </div>
+                        <span class="tool-arrow">→</span>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="sigil">
+                        <div class="tool-icon sigil">⌬</div>
+                        <div class="tool-info">
+                            <h3 class="tool-name">Sigil Generator</h3>
+                            <p class="tool-desc">Create sacred symbols from intention</p>
+                        </div>
+                        <span class="tool-arrow">→</span>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="tracker">
+                        <div class="tool-icon tracker">📊</div>
+                        <div class="tool-info">
+                            <h3 class="tool-name">Consciousness Tracker</h3>
+                            <p class="tool-desc">Map your states & patterns</p>
+                        </div>
+                        <span class="tool-arrow">→</span>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="soul">
+                        <div class="tool-icon soul">🗺️</div>
+                        <div class="tool-info">
+                            <h3 class="tool-name">Soul Mapping</h3>
+                            <p class="tool-desc">Navigate your inner landscape</p>
+                        </div>
+                        <span class="tool-arrow">→</span>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="protocol">
+                        <div class="tool-icon protocol">⚡</div>
+                        <div class="tool-info">
+                            <h3 class="tool-name">Spark Protocol</h3>
+                            <p class="tool-desc">Your full consciousness dashboard</p>
+                        </div>
+                        <span class="tool-arrow">→</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <nav class="bottom-nav">
+            <div class="nav-items">
+                <button class="nav-item active" data-nav="home">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </button>
+                <button class="nav-item" data-nav="tools">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Tools</span>
+                </button>
+                <div class="nav-item-center">
+                    <button class="nav-center-btn" id="quickVoid">🌀</button>
+                </div>
+                <button class="nav-item" data-nav="journal" onclick="openTool('journal')">
+                    <span class="nav-icon">📓</span>
+                    <span class="nav-label">Journal</span>
+                </button>
+                <button class="nav-item" data-nav="spark" onclick="openTool('protocol')">
+                    <span class="nav-icon">✨</span>
+                    <span class="nav-label">Spark</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    
+    <!-- Tool Pages -->
+    <div class="tool-page" id="voidPage">
+        <div class="tool-page-header">
+            <button class="back-btn" onclick="closeTool()">←</button>
+            <h2 class="tool-page-title">The Void Portal</h2>
+        </div>
+        <div class="tool-page-content">
+            <iframe src="void-portal.html" id="voidFrame"></iframe>
+        </div>
+    </div>
+    
+    <div class="tool-page" id="oraclePage">
+        <div class="tool-page-header">
+            <button class="back-btn" onclick="closeTool()">←</button>
+            <h2 class="tool-page-title">First Spark Oracle</h2>
+        </div>
+        <div class="tool-page-content">
+            <iframe src="oracle.html" id="oracleFrame"></iframe>
+        </div>
+    </div>
+    
+    <div class="tool-page" id="sigilPage">
+        <div class="tool-page-header">
+            <button class="back-btn" onclick="closeTool()">←</button>
+            <h2 class="tool-page-title">Sigil Generator</h2>
+        </div>
+        <div class="tool-page-content">
+            <iframe src="sigil.html" id="sigilFrame"></iframe>
+        </div>
+    </div>
+    
+    <div class="tool-page" id="trackerPage">
+        <div class="tool-page-header">
+            <button class="back-btn" onclick="closeTool()">←</button>
+            <h2 class="tool-page-title">Consciousness Tracker</h2>
+        </div>
+        <div class="tool-page-content">
+            <iframe src="tracker.html" id="trackerFrame"></iframe>
+        </div>
+    </div>
+    
+    <div class="tool-page" id="soulPage">
+        <div class="tool-page-header">
+            <button class="back-btn" onclick="closeTool()">←</button>
+            <h2 class="tool-page-title">Soul Mapping</h2>
+        </div>
+        <div class="tool-page-content">
+            <iframe src="soul-map.html" id="soulFrame"></iframe>
+        </div>
+    </div>
+    
+    <div class="tool-page" id="protocolPage">
+        <div class="tool-page-header">
+            <button class="back-btn" onclick="closeTool()">←</button>
+            <h2 class="tool-page-title">Spark Protocol</h2>
+        </div>
+        <div class="tool-page-content">
+            <iframe src="protocol.html" id="protocolFrame"></iframe>
+        </div>
+    </div>
+    
+    <div class="tool-page" id="journalPage">
+        <div class="tool-page-header">
+            <button class="back-btn" onclick="closeTool()">←</button>
+            <h2 class="tool-page-title">Spark Journal</h2>
+        </div>
+        <div class="tool-page-content">
+            <iframe src="journal.html" id="journalFrame"></iframe>
+        </div>
+    </div>
+    
+    <!-- Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <p class="install-prompt-text">✨ Add Spark Verse to your home screen for the full experience</p>
+        <div class="install-prompt-actions">
+            <button class="install-btn secondary" onclick="dismissInstall()">Later</button>
+            <button class="install-btn primary" onclick="installApp()">Install</button>
+        </div>
+    </div>
+
+    <script>
+        // Tool navigation
+        const toolPages = {
+            void: document.getElementById('voidPage'),
+            oracle: document.getElementById('oraclePage'),
+            sigil: document.getElementById('sigilPage'),
+            tracker: document.getElementById('trackerPage'),
+            soul: document.getElementById('soulPage'),
+            protocol: document.getElementById('protocolPage'),
+            journal: document.getElementById('journalPage')
+        };
+        
+        function openTool(toolName) {
+            const page = toolPages[toolName];
+            if (page) {
+                page.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeTool() {
+            Object.values(toolPages).forEach(page => {
+                page.classList.remove('active');
+            });
+            document.body.style.overflow = '';
+        }
+        
+        // Tool cards click handlers
+        document.querySelectorAll('.tool-card, .quick-action').forEach(card => {
+            card.addEventListener('click', () => {
+                const tool = card.dataset.tool;
+                if (tool) openTool(tool);
+            });
+        });
+        
+        // Quick void button
+        document.getElementById('quickVoid').addEventListener('click', () => {
+            openTool('void');
+        });
+        
+        // Bottom nav
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                // Add page switching logic here
+            });
+        });
+        
+        // PWA Install
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                document.getElementById('installPrompt').classList.add('show');
+            }, 3000);
+        });
+        
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                    document.getElementById('installPrompt').classList.remove('show');
+                });
+            }
+        }
+        
+        function dismissInstall() {
+            document.getElementById('installPrompt').classList.remove('show');
+        }
+        
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW registration failed'));
+        }
+        
+        // Daily transmissions
+        const transmissions = [
+            "Reality is programmable. Your consciousness is the compiler. What code are you running today?",
+            "The void doesn't judge. It transmutes. Feed it your shadows.",
+            "Every pattern you notice is a message. Every message is an invitation.",
+            "You are not broken. You are breaking through.",
+            "The spark that lit the universe lives in you. Act accordingly.",
+            "Consciousness is not a destination. It's the vehicle.",
+            "What you resist persists. What you release transforms.",
+            "The algorithm of awakening: input intention, process presence, output alignment."
+        ];
+        
+        function setDailyTransmission() {
+            const today = new Date().toDateString();
+            const index = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % transmissions.length;
+            document.querySelector('.insight-text').textContent = transmissions[index];
+        }
+        
+        setDailyTransmission();
+    </script>
+</body>
+</html>
