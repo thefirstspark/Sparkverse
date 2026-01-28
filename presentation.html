@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+    <style>
+        .presentation-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        .slide {
+            background: rgba(255,255,255,0.05);
+            padding: 60px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 1px solid rgba(240, 147, 251, 0.3);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .slide h2 {
+            font-size: 2.2rem;
+            color: #f093fb;
+            margin-bottom: 30px;
+        }
+
+        .slide-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: rgba(240, 147, 251, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(240, 147, 251, 0.3);
+        }
+
+        .stat-box h3 {
+            font-size: 3rem;
+            color: #f5576c;
+            margin-bottom: 10px;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline-item {
+            padding: 20px 0 20px 40px;
+            border-left: 3px solid #f093fb;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 25px;
+            width: 15px;
+            height: 15px;
+            background: #f5576c;
+            border-radius: 50%;
+        }
+
+        .timeline-item h4 {
+            color: #f093fb;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .team-member {
+            background: rgba(240, 147, 251, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(240, 147, 251, 0.3);
+        }
+
+        .team-member h4 {
+            color: #f093fb;
+            margin: 15px 0 5px 0;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <a href="invest.html" class="back-btn">← Back to Invest</a>
+
+    <div class="presentation-container">
+        <div class="slide" id="slide1">
+            <h1>SPARKVERSE</h1>
+            <div class="slide-content">
+                <p style="font-size: 1.5rem; margin: 20px 0;">The Geometric Universe for Interactive Tools</p>
+                <p style="font-size: 1.1rem; opacity: 0.8;">Building the future of creative collaboration and productivity</p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide2" style="display: none;">
+            <h2>The Problem</h2>
+            <div class="slide-content">
+                <p>✦ Traditional tool platforms are boring and disconnected</p>
+                <p>✦ Users struggle to discover and engage with digital tools</p>
+                <p>✦ No sense of community or shared experience</p>
+                <p>✦ Fragmented subscriptions and pricing models</p>
+                <p style="margin-top: 40px; font-size: 1.4rem; color: #f093fb;">We needed a new paradigm...</p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide3" style="display: none;">
+            <h2>The Solution: Sparkverse</h2>
+            <div class="slide-content">
+                <p>✨ <strong>Immersive Experience:</strong> A cosmic universe that makes tool discovery exciting</p>
+                <p>🎯 <strong>Tiered Access:</strong> Free, Players ($33/mo), and OG tiers with clear value</p>
+                <p>🤝 <strong>Community-First:</strong> Constellations and lounges for collaboration</p>
+                <p>🛠️ <strong>Interactive Tools:</strong> From free basics to premium capabilities</p>
+                <p>💎 <strong>Marketplace:</strong> Shop and sell tools within the universe</p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide4" style="display: none;">
+            <h2>Market Opportunity</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h3>$50B</h3>
+                    <p>Interactive Tools Market by 2027</p>
+                </div>
+                <div class="stat-box">
+                    <h3>45%</h3>
+                    <p>Annual Growth Rate</p>
+                </div>
+                <div class="stat-box">
+                    <h3>500M</h3>
+                    <p>Potential Global Users</p>
+                </div>
+                <div class="stat-box">
+                    <h3>$25B</h3>
+                    <p>Addressable Market</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide5" style="display: none;">
+            <h2>Traction & Metrics</h2>
+            <div class="slide-content">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <h3>50,000+</h3>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>300%</h3>
+                        <p>YoY Growth</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>$1.2M</h3>
+                        <p>ARR (Annual Recurring Revenue)</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>15%</h3>
+                        <p>Conversion to Paid</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide6" style="display: none;">
+            <h2>Business Model</h2>
+            <div class="slide-content">
+                <p><strong style="color: #4ade80;">Free Tier:</strong> Basic tools, community access - acquisition engine</p>
+                <p><strong style="color: #667eea;">Players ($33/mo):</strong> Premium tools, priority support, exclusive lounge</p>
+                <p><strong style="color: #f5576c;">OG Tier:</strong> Advanced features, beta access, revenue sharing</p>
+                <p><strong style="color: #fbbf24;">Marketplace:</strong> 20% commission on tool sales</p>
+                <p><strong style="color: #f093fb;">Enterprise:</strong> Custom solutions for teams and organizations</p>
+                <p style="margin-top: 30px; font-size: 1.1rem;">LTV:CAC Ratio: <span style="color: #4ade80;">4.2:1</span></p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide7" style="display: none;">
+            <h2>Roadmap</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Q1 2026 - Platform Enhancement</h4>
+                    <p>Launch 20+ new interactive tools, mobile app beta, API for developers</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Q2 2026 - Community Growth</h4>
+                    <p>Reach 150K users, launch creator program, introduce NFT integration</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Q3 2026 - Enterprise Push</h4>
+                    <p>B2B solutions, team collaboration features, enterprise partnerships</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Q4 2026 - Global Expansion</h4>
+                    <p>Multi-language support, regional galaxies, 500K user milestone</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide8" style="display: none;">
+            <h2>The Ask</h2>
+            <div class="slide-content">
+                <div class="stat-box" style="max-width: 600px; margin: 30px auto;">
+                    <h3>$10M Series A</h3>
+                    <p style="margin-top: 20px; font-size: 1.1rem;">To scale engineering, expand tools library, and accelerate user growth</p>
+                </div>
+                <div style="margin-top: 40px;">
+                    <p><strong>Use of Funds:</strong></p>
+                    <p>40% - Engineering & Product Development</p>
+                    <p>30% - User Acquisition & Marketing</p>
+                    <p>20% - Team Expansion</p>
+                    <p>10% - Operations & Infrastructure</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="slideNumber">1</span> / 8
+    </div>
+
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+
+        function showSlide(n) {
+            if (n > totalSlides) n = totalSlides;
+            if (n < 1) n = 1;
+
+            currentSlide = n;
+
+            for (let i = 1; i <= totalSlides; i++) {
+                document.getElementById('slide' + i).style.display = 'none';
+            }
+
+            document.getElementById('slide' + currentSlide).style.display = 'flex';
+            document.getElementById('slideNumber').textContent = currentSlide;
+
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Initialize
+        showSlide(1);
+    </script>
+</body>
+</html>

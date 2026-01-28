@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graffiti Wall - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+    <style>
+        .graffiti-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .graffiti-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .graffiti-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        .post-form {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .post-form input, .post-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .post-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .post-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .post-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .wall-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .graffiti-post {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 107, 107, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graffiti-post:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #ff6b6b);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .graffiti-post:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b6b;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .post-author {
+            font-weight: bold;
+            color: #feca57;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-left: auto;
+        }
+
+        .post-content {
+            margin: 15px 0;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .post-reactions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .reaction-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .reaction-btn:hover {
+            background: rgba(255,107,107,0.2);
+            border-color: #ff6b6b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            opacity: 0.6;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <a href="index.html" class="back-btn">← Back to Universe</a>
+
+    <div class="graffiti-container">
+        <div class="graffiti-header">
+            <h1>GRAFFITI WALL</h1>
+            <p>Leave your mark in the Sparkverse</p>
+        </div>
+
+        <div class="post-form">
+            <h3>Share Your Message</h3>
+            <input type="text" id="authorName" placeholder="Your name (anonymous if empty)">
+            <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+            <button class="post-btn" onclick="createPost()">Post to Wall</button>
+        </div>
+
+        <div id="wallGrid" class="wall-grid">
+            <!-- Sample posts -->
+            <div class="graffiti-post">
+                <div class="post-author">
+                    <span>CosmicTraveler</span>
+                    <span class="post-date">2 hours ago</span>
+                </div>
+                <div class="post-content">
+                    Just discovered the Sparkverse and I'm blown away! This is exactly what I needed. 🌌✨
+                </div>
+                <div class="post-reactions">
+                    <button class="reaction-btn">⭐ 12</button>
+                    <button class="reaction-btn">🔥 5</button>
+                    <button class="reaction-btn">💫 8</button>
+                </div>
+            </div>
+
+            <div class="graffiti-post">
+                <div class="post-author">
+                    <span>StarSeeker</span>
+                    <span class="post-date">5 hours ago</span>
+                </div>
+                <div class="post-content">
+                    The Players Lounge is incredible! Best $33 I've spent this month. Worth every penny for the tools alone.
+                </div>
+                <div class="post-reactions">
+                    <button class="reaction-btn">⭐ 24</button>
+                    <button class="reaction-btn">🔥 15</button>
+                    <button class="reaction-btn">💫 10</button>
+                </div>
+            </div>
+
+            <div class="graffiti-post">
+                <div class="post-author">
+                    <span>NebulaArtist</span>
+                    <span class="post-date">1 day ago</span>
+                </div>
+                <div class="post-content">
+                    Just finished my Soul Mapping Session. Life changing experience. Thank you Sparkverse team! 🙏
+                </div>
+                <div class="post-reactions">
+                    <button class="reaction-btn">⭐ 35</button>
+                    <button class="reaction-btn">🔥 20</button>
+                    <button class="reaction-btn">💫 18</button>
+                </div>
+            </div>
+
+            <div class="graffiti-post">
+                <div class="post-author">
+                    <span>QuantumDreamer</span>
+                    <span class="post-date">1 day ago</span>
+                </div>
+                <div class="post-content">
+                    The sigil I commissioned is absolutely beautiful. It's hanging on my wall and I feel its energy every day.
+                </div>
+                <div class="post-reactions">
+                    <button class="reaction-btn">⭐ 28</button>
+                    <button class="reaction-btn">🔥 12</button>
+                    <button class="reaction-btn">💫 15</button>
+                </div>
+            </div>
+
+            <div class="graffiti-post">
+                <div class="post-author">
+                    <span>VoidWalker</span>
+                    <span class="post-date">2 days ago</span>
+                </div>
+                <div class="post-content">
+                    New to the Sparkverse and already feeling the good vibes. This community is special. 💜
+                </div>
+                <div class="post-reactions">
+                    <button class="reaction-btn">⭐ 19</button>
+                    <button class="reaction-btn">🔥 8</button>
+                    <button class="reaction-btn">💫 11</button>
+                </div>
+            </div>
+
+            <div class="graffiti-post">
+                <div class="post-author">
+                    <span>GalacticSeeker</span>
+                    <span class="post-date">3 days ago</span>
+                </div>
+                <div class="post-content">
+                    Went OG and never looked back. Lifetime access is the way to go if you're serious about this journey!
+                </div>
+                <div class="post-reactions">
+                    <button class="reaction-btn">⭐ 42</button>
+                    <button class="reaction-btn">🔥 25</button>
+                    <button class="reaction-btn">💫 20</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createPost() {
+            const author = document.getElementById('authorName').value || 'Anonymous';
+            const content = document.getElementById('postContent').value;
+
+            if (!content.trim()) {
+                alert('Please write something before posting!');
+                return;
+            }
+
+            const wallGrid = document.getElementById('wallGrid');
+            const newPost = document.createElement('div');
+            newPost.className = 'graffiti-post';
+            newPost.style.animation = 'fadeIn 0.5s ease';
+
+            newPost.innerHTML = `
+                <div class="post-author">
+                    <span>${author}</span>
+                    <span class="post-date">Just now</span>
+                </div>
+                <div class="post-content">
+                    ${content}
+                </div>
+                <div class="post-reactions">
+                    <button class="reaction-btn" onclick="react(this)">⭐ 0</button>
+                    <button class="reaction-btn" onclick="react(this)">🔥 0</button>
+                    <button class="reaction-btn" onclick="react(this)">💫 0</button>
+                </div>
+            `;
+
+            // Add to top of grid
+            wallGrid.insertBefore(newPost, wallGrid.firstChild);
+
+            // Clear form
+            document.getElementById('authorName').value = '';
+            document.getElementById('postContent').value = '';
+
+            // Show success message
+            alert('Posted to the wall! 🎉');
+        }
+
+        function react(button) {
+            const parts = button.textContent.trim().split(' ');
+            const emoji = parts[0];
+            const count = parseInt(parts[1]) + 1;
+            button.textContent = `${emoji} ${count}`;
+            button.style.background = 'rgba(255,107,107,0.3)';
+            setTimeout(() => {
+                button.style.background = 'rgba(255,255,255,0.1)';
+            }, 300);
+        }
+
+        // Add CSS for fade in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

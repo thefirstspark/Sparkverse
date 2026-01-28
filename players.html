@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players Lounge - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+    <style>
+        .lounge-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .lounge-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .lounge-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 126, 234, 0.8);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .subscribe-box {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: 20px;
+            border: 2px solid #667eea;
+        }
+
+        .subscribe-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .subscribe-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <a href="index.html" class="back-btn">← Back to Universe</a>
+
+    <div class="lounge-container">
+        <div class="lounge-header">
+            <h1>PLAYERS LOUNGE</h1>
+            <p>Premium access for $33/month</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🎮 Exclusive Tools</h3>
+                <p>Access premium interactive tools and features not available to free members. Unlock advanced capabilities to enhance your experience.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>⚡ Priority Support</h3>
+                <p>Get faster response times and dedicated support from our team. Your questions and issues are handled with top priority.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>🌟 Community Access</h3>
+                <p>Join an exclusive community of players. Network, collaborate, and share ideas with other premium members.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>🚀 Early Access</h3>
+                <p>Be the first to try new features and tools before they're released to the public. Shape the future of Sparkverse.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>💎 Premium Content</h3>
+                <p>Access exclusive tutorials, guides, and resources designed specifically for players who want to level up.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>🎁 Monthly Bonuses</h3>
+                <p>Receive special perks, credits, and surprises every month as a thank you for being a valued player.</p>
+            </div>
+        </div>
+
+        <div class="subscribe-box">
+            <h2>Ready to Join the Players?</h2>
+            <p>Unlock all premium features for just $33/month</p>
+            <button class="subscribe-btn" onclick="subscribe()">Subscribe Now</button>
+        </div>
+    </div>
+
+    <script>
+        function subscribe() {
+            window.location.href = 'https://whop.com/sparkverse-511c/the-players-lounge/';
+        }
+    </script>
+</body>
+</html>

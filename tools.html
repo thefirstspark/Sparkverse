@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools Galaxy - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+    <style>
+        .tools-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .tools-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .tools-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 12px 30px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .filter-tab:hover, .filter-tab.active {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.2);
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .tool-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, transparent, transparent);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .tool-card.free:before { background: linear-gradient(135deg, #4ade80, #22c55e); }
+        .tool-card.player:before { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .tool-card.og:before { background: linear-gradient(135deg, #f5576c, #f093fb); }
+        .tool-card.shop:before { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-card:hover:before {
+            opacity: 1;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .tool-badge.free { background: #4ade80; color: #000; }
+        .tool-badge.player { background: #667eea; color: #fff; }
+        .tool-badge.og { background: #f5576c; color: #fff; }
+        .tool-badge.shop { background: #fbbf24; color: #000; }
+
+        .tool-card h3 {
+            margin: 15px 0;
+            font-size: 1.5rem;
+        }
+
+        .tool-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .tool-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #fbbf24;
+        }
+
+        .tool-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .tool-btn.free { background: #4ade80; color: #000; }
+        .tool-btn.player { background: #667eea; color: #fff; }
+        .tool-btn.og { background: #f5576c; color: #fff; }
+        .tool-btn.shop { background: #fbbf24; color: #000; }
+
+        .tool-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <a href="index.html" class="back-btn">← Back to Universe</a>
+
+    <div class="tools-container">
+        <div class="tools-header">
+            <h1>TOOLS GALAXY</h1>
+            <p>Explore our universe of interactive tools</p>
+        </div>
+
+        <div class="filter-tabs">
+            <div class="filter-tab active" onclick="filterTools('all')">All Tools</div>
+            <div class="filter-tab" onclick="filterTools('free')">Free</div>
+            <div class="filter-tab" onclick="filterTools('player')">Players</div>
+            <div class="filter-tab" onclick="filterTools('og')">OG</div>
+            <div class="filter-tab" onclick="filterTools('shop')">Shop</div>
+        </div>
+
+        <div class="tools-grid" id="toolsGrid">
+            <!-- Player Tools -->
+            <div class="tool-card player" data-tier="player">
+                <span class="tool-badge player">PLAYERS</span>
+                <h3>The Player's Guide to Self</h3>
+                <p>Comprehensive guide to self-discovery and personal mastery. Navigate your inner universe with cosmic wisdom.</p>
+                <button class="tool-btn player" onclick="window.location.href='https://whop.com/sparkverse-511c/the-player-s-guide-to-self/'">Access Guide</button>
+            </div>
+
+            <div class="tool-card player" data-tier="player">
+                <span class="tool-badge player">PLAYERS</span>
+                <h3>The Five Paths Explorer</h3>
+                <p>Explore the five fundamental paths of transformation and growth. Interactive journey through cosmic principles.</p>
+                <button class="tool-btn player" onclick="window.location.href='https://whop.com/sparkverse-511c/the-five-paths-explorer/'">Begin Journey</button>
+            </div>
+
+            <!-- Shop Tools & Services -->
+            <div class="tool-card shop" data-tier="shop">
+                <span class="tool-badge shop">SHOP</span>
+                <h3>Spark Sigil Commission</h3>
+                <p>Custom sigil creation designed specifically for you. Harness cosmic energy through personalized sacred geometry.</p>
+                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/sparkverse-511c/spark-sigil-commission/'">Commission Now</button>
+            </div>
+
+            <div class="tool-card shop" data-tier="shop">
+                <span class="tool-badge shop">SHOP</span>
+                <h3>SigilCraft: The Art of Symbols</h3>
+                <p>Master the ancient art of sigil creation. Learn to craft your own powerful symbols and sacred designs.</p>
+                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/sparkverse-511c/sigilcraft-the-art-of-symbols/'">Learn More</button>
+            </div>
+
+            <div class="tool-card shop" data-tier="shop">
+                <span class="tool-badge shop">SHOP</span>
+                <h3>Soul Mapping Session</h3>
+                <p>One-on-one guided session to map your soul's journey. Discover your cosmic blueprint and life purpose.</p>
+                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/sparkverse-511c/soul-mapping-session/'">Book Session</button>
+            </div>
+
+            <!-- Membership Upgrades -->
+            <div class="tool-card player" data-tier="player">
+                <span class="tool-badge player">PLAYERS</span>
+                <h3>Join Players Lounge</h3>
+                <p>Unlock exclusive access to premium tools, priority support, and the Players community for $33/month.</p>
+                <button class="tool-btn player" onclick="window.location.href='https://whop.com/sparkverse-511c/the-players-lounge/'">Become a Player</button>
+            </div>
+
+            <div class="tool-card og" data-tier="og">
+                <span class="tool-badge og">OG EXCLUSIVE</span>
+                <h3>OG Spark - Lifetime Access</h3>
+                <p>Ultimate lifetime membership. Get permanent access to everything in the Sparkverse, including future releases.</p>
+                <button class="tool-btn og" onclick="window.location.href='https://whop.com/sparkverse-511c/og-spark-lifetime-access/'">Go OG</button>
+            </div>
+
+            <div class="tool-card free" data-tier="free">
+                <span class="tool-badge free">FREE</span>
+                <h3>The Sparkverse Lobby</h3>
+                <p>Start your journey in the Sparkverse. Free access to the community and foundational tools.</p>
+                <button class="tool-btn free" onclick="window.location.href='https://whop.com/sparkverse-511c/the-sparkverse-lobby/'">Join Free</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterTools(tier) {
+            const cards = document.querySelectorAll('.tool-card');
+            const tabs = document.querySelectorAll('.filter-tab');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                if (tier === 'all' || card.dataset.tier === tier) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invest - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+    <style>
+        .invest-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .invest-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .invest-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        .presentation-link {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .presentation-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+        }
+
+        .invest-content {
+            background: rgba(255,255,255,0.05);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(240, 147, 251, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 30px;
+            background: rgba(240, 147, 251, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(240, 147, 251, 0.2);
+        }
+
+        .metric h3 {
+            font-size: 2.5rem;
+            color: #f093fb;
+            margin-bottom: 10px;
+        }
+
+        .metric p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .benefits {
+            margin: 40px 0;
+        }
+
+        .benefits h2 {
+            color: #f5576c;
+            margin-bottom: 25px;
+            font-size: 2rem;
+        }
+
+        .benefit-item {
+            padding: 20px;
+            margin: 15px 0;
+            background: rgba(245, 87, 108, 0.1);
+            border-left: 4px solid #f5576c;
+            border-radius: 8px;
+        }
+
+        .benefit-item h4 {
+            color: #f093fb;
+            margin-bottom: 10px;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(245, 87, 108, 0.2));
+            border-radius: 20px;
+            border: 2px solid #f093fb;
+        }
+
+        .cta-btn {
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.6);
+        }
+
+        .contact-form {
+            margin-top: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        ::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <a href="index.html" class="back-btn">← Back to Universe</a>
+    <a href="presentation.html" class="presentation-link">View Presentation →</a>
+
+    <div class="invest-container">
+        <div class="invest-header">
+            <h1>INVESTOR ZONE</h1>
+            <p>Join us in shaping the future of the Sparkverse</p>
+        </div>
+
+        <div class="invest-content">
+            <div class="metric-grid">
+                <div class="metric">
+                    <h3>$10M</h3>
+                    <p>Funding Goal</p>
+                </div>
+                <div class="metric">
+                    <h3>50K+</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="metric">
+                    <h3>300%</h3>
+                    <p>YoY Growth</p>
+                </div>
+                <div class="metric">
+                    <h3>25+</h3>
+                    <p>Team Members</p>
+                </div>
+            </div>
+
+            <div class="benefits">
+                <h2>Why Invest in Sparkverse?</h2>
+
+                <div class="benefit-item">
+                    <h4>🚀 Rapid Market Growth</h4>
+                    <p>The interactive tools and cosmic experience market is projected to reach $50B by 2027. Sparkverse is positioned at the intersection of technology, creativity, and community.</p>
+                </div>
+
+                <div class="benefit-item">
+                    <h4>💡 Unique Value Proposition</h4>
+                    <p>We've created a first-of-its-kind geometric universe platform that combines SaaS tools with an immersive experience, setting us apart from traditional tool marketplaces.</p>
+                </div>
+
+                <div class="benefit-item">
+                    <h4>📈 Proven Traction</h4>
+                    <p>With 50,000+ active users and 300% year-over-year growth, we've validated product-market fit and demonstrated sustainable scaling potential.</p>
+                </div>
+
+                <div class="benefit-item">
+                    <h4>🎯 Clear Monetization</h4>
+                    <p>Multi-tier subscription model ($33/month Players), tool marketplace, and enterprise solutions provide diverse revenue streams with strong unit economics.</p>
+                </div>
+
+                <div class="benefit-item">
+                    <h4>🌟 Experienced Team</h4>
+                    <p>Our founding team brings expertise from leading tech companies, with a proven track record of building and scaling successful platforms.</p>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2>Ready to Invest?</h2>
+                <p>Get in touch with our investor relations team</p>
+
+                <div class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" id="investorName">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address" id="investorEmail">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Company / Fund" id="investorCompany">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Tell us about your investment interests..." id="investorMessage"></textarea>
+                    </div>
+                    <button class="cta-btn" onclick="submitInvestorForm()">Submit Inquiry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitInvestorForm() {
+            const name = document.getElementById('investorName').value;
+            const email = document.getElementById('investorEmail').value;
+
+            if (!name || !email) {
+                alert('Please fill in your name and email');
+                return;
+            }
+
+            alert('Thank you for your interest! Our team will reach out within 24 hours.');
+            // In production, this would submit to your backend
+        }
+    </script>
+</body>
+</html>

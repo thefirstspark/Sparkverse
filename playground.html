@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Playground - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+    <style>
+        .playground-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .playground-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .playground-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        .canvas-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 30px 0;
+            border: 2px solid rgba(168, 237, 234, 0.3);
+        }
+
+        #drawingCanvas {
+            width: 100%;
+            height: 500px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .tools-panel {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tool-btn {
+            padding: 12px 24px;
+            border: 2px solid rgba(168, 237, 234, 0.5);
+            border-radius: 10px;
+            background: rgba(168, 237, 234, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tool-btn:hover, .tool-btn.active {
+            background: rgba(168, 237, 234, 0.3);
+            border-color: #a8edea;
+            box-shadow: 0 0 20px rgba(168, 237, 234, 0.4);
+        }
+
+        .color-picker {
+            padding: 5px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(168, 237, 234, 0.5);
+            border-radius: 10px;
+            cursor: pointer;
+            width: 60px;
+            height: 45px;
+        }
+
+        .size-slider {
+            width: 150px;
+            padding: 10px;
+        }
+
+        .experiences-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .experience-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(168, 237, 234, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-5px);
+            border-color: #a8edea;
+            box-shadow: 0 10px 30px rgba(168, 237, 234, 0.3);
+        }
+
+        .experience-card h3 {
+            color: #a8edea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <a href="index.html" class="back-btn">← Back to Universe</a>
+
+    <div class="playground-container">
+        <div class="playground-header">
+            <h1>COSMIC PLAYGROUND</h1>
+            <p>Create, explore, and play in the universe</p>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="drawingCanvas"></canvas>
+            <div class="tools-panel">
+                <button class="tool-btn active" id="drawBtn" onclick="setTool('draw')">✏️ Draw</button>
+                <button class="tool-btn" id="eraseBtn" onclick="setTool('erase')">🧹 Erase</button>
+                <input type="color" id="colorPicker" class="color-picker" value="#a8edea">
+                <input type="range" id="sizeSlider" class="size-slider" min="1" max="20" value="5">
+                <button class="tool-btn" onclick="clearCanvas()">🗑️ Clear</button>
+                <button class="tool-btn" onclick="saveDrawing()">💾 Save</button>
+            </div>
+        </div>
+
+        <div class="experiences-grid">
+            <div class="experience-card" onclick="alert('Coming soon: Interactive particle sandbox!')">
+                <h3>🌌 Particle Sandbox</h3>
+                <p>Create mesmerizing particle effects and cosmic simulations with interactive physics.</p>
+            </div>
+
+            <div class="experience-card" onclick="alert('Coming soon: 3D constellation builder!')">
+                <h3>⭐ Constellation Builder</h3>
+                <p>Connect the stars and create your own constellations in 3D space.</p>
+            </div>
+
+            <div class="experience-card" onclick="alert('Coming soon: Fractal explorer!')">
+                <h3>🔮 Fractal Explorer</h3>
+                <p>Dive into infinite mathematical beauty with the interactive fractal generator.</p>
+            </div>
+
+            <div class="experience-card" onclick="alert('Coming soon: Sound visualizer!')">
+                <h3>🎵 Sound Visualizer</h3>
+                <p>Turn your music into cosmic visuals with real-time audio analysis.</p>
+            </div>
+
+            <div class="experience-card" onclick="alert('Coming soon: Gravity simulator!')">
+                <h3>🪐 Gravity Simulator</h3>
+                <p>Create planetary systems and watch gravity in action with orbital mechanics.</p>
+            </div>
+
+            <div class="experience-card" onclick="alert('Coming soon: Cosmic garden!')">
+                <h3>🌱 Cosmic Garden</h3>
+                <p>Grow strange alien plants and watch them evolve in zero gravity.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let isDrawing = false;
+        let currentTool = 'draw';
+        let currentColor = '#a8edea';
+        let currentSize = 5;
+
+        // Update color and size
+        document.getElementById('colorPicker').addEventListener('change', (e) => {
+            currentColor = e.target.value;
+        });
+
+        document.getElementById('sizeSlider').addEventListener('input', (e) => {
+            currentSize = e.target.value;
+        });
+
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            if (tool === 'draw') {
+                document.getElementById('drawBtn').classList.add('active');
+            } else if (tool === 'erase') {
+                document.getElementById('eraseBtn').classList.add('active');
+            }
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.lineWidth = currentSize;
+            ctx.lineCap = 'round';
+
+            if (currentTool === 'draw') {
+                ctx.strokeStyle = currentColor;
+                ctx.globalCompositeOperation = 'source-over';
+            } else if (currentTool === 'erase') {
+                ctx.globalCompositeOperation = 'destination-out';
+            }
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        // Touch support
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup', {});
+            canvas.dispatchEvent(mouseEvent);
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveDrawing() {
+            const link = document.createElement('a');
+            link.download = 'cosmic-creation.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>

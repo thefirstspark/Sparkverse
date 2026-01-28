@@ -3,352 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPARKVERSE | The First Spark Command Center</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <title>Sparkverse - The Geometric Universe</title>
+    <link rel="stylesheet" href="style.css">
 
-        body {
-            background: #000;
-            color: #fff;
-            font-family: 'Courier New', monospace;
-            overflow-x: hidden;
-        }
-
-        .grid-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent),
-                linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
-            background-size: 50px 50px;
-            z-index: 0;
-        }
-
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(255, 255, 255, 0.02) 51%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 1;
-            animation: scanline 8s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100%); }
-        }
-
-        .container {
-            position: relative;
-            z-index: 2;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            padding: 40px 20px;
-            border: 2px solid #00ff00;
-            background: rgba(0, 255, 0, 0.05);
-            position: relative;
-        }
-
-        .header::before,
-        .header::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #00ff00;
-        }
-
-        .header::before {
-            top: -2px;
-            left: -2px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .header::after {
-            bottom: -2px;
-            right: -2px;
-            border-left: none;
-            border-top: none;
-        }
-
-        h1 {
-            font-size: 4rem;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00;
-            margin-bottom: 10px;
-            letter-spacing: 8px;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #00ffff;
-            letter-spacing: 4px;
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .status-item {
-            color: #00ff00;
-            font-size: 0.9rem;
-        }
-
-        .status-item::before {
-            content: '▸ ';
-            color: #00ffff;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .module {
-            border: 2px solid #00ff00;
-            padding: 30px;
-            background: rgba(0, 0, 0, 0.8);
-            position: relative;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .module:hover {
-            background: rgba(0, 255, 0, 0.1);
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
-            transform: translateY(-5px);
-        }
-
-        .module-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #00ff00;
-        }
-
-        .module-icon {
-            font-size: 2rem;
-        }
-
-        .module-title {
-            font-size: 1.4rem;
-            color: #00ff00;
-            letter-spacing: 2px;
-        }
-
-        .module-description {
-            color: #0ff;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .module-status {
-            font-size: 0.85rem;
-            color: #00ff00;
-            text-transform: uppercase;
-        }
-
-        .coming-soon {
-            opacity: 0.6;
-        }
-
-        .coming-soon .module-title {
-            color: #666;
-        }
-
-        .coming-soon .module-description {
-            color: #444;
-        }
-
-        .coming-soon .module-status {
-            color: #ff9900;
-        }
-
-        .updates-feed {
-            margin-top: 60px;
-            border: 2px solid #00ffff;
-            padding: 30px;
-            background: rgba(0, 255, 255, 0.05);
-        }
-
-        .updates-header {
-            color: #00ffff;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
-        }
-
-        .update-item {
-            padding: 15px;
-            margin: 10px 0;
-            border-left: 3px solid #00ff00;
-            background: rgba(0, 255, 0, 0.05);
-        }
-
-        .update-date {
-            color: #00ff00;
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-        }
-
-        .update-text {
-            color: #0ff;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-                letter-spacing: 4px;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
 </head>
 <body>
-    <div class="grid-bg"></div>
-    <div class="scanline"></div>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
 
-    <div class="container">
-        <div class="header">
-            <h1>SPARKVERSE</h1>
-            <div class="subtitle">COMMAND CENTER // MEMBER ACCESS</div>
-            <div class="status-bar">
-                <div class="status-item">SYSTEM ONLINE</div>
-                <div class="status-item">CONNECTIONS ACTIVE</div>
-                <div class="status-item">REALITY PROGRAMMABLE</div>
+    <div class="universe-container">
+        <!-- Central Spark (Sun) -->
+        <div class="spark-sun">
+            <div class="sun-core"></div>
+            <div class="sun-glow"></div>
+            <div class="sun-text">
+                <h1>SPARKVERSE</h1>
+                <p>Enter the Geometric Universe</p>
+                <button class="join-free-btn" onclick="showMembershipModal()">Join Free</button>
             </div>
         </div>
 
-        <div class="grid">
-            <div class="module" onclick="window.location.href='https://thefirstspark.shop'">
-                <div class="module-header">
-                    <div class="module-icon">🏠</div>
-                    <div class="module-title">MAIN HUB</div>
+        <!-- Constellation 1: Players Lounge -->
+        <div class="constellation constellation-1" data-name="Players Lounge">
+            <div class="constellation-node" onclick="navigateTo('players')">
+                <div class="node-glow"></div>
+                <div class="node-core"></div>
+                <div class="node-label">
+                    <span class="label-title">PLAYERS LOUNGE</span>
+                    <span class="label-price">$33/month</span>
                 </div>
-                <div class="module-description">
-                    Return to The First Spark homepage. Access core philosophy, membership options, and foundational teachings.
-                </div>
-                <div class="module-status">▸ ACTIVE</div>
             </div>
+            <div class="constellation-lines"></div>
+        </div>
 
-            <div class="module coming-soon">
-                <div class="module-header">
-                    <div class="module-icon">🛠️</div>
-                    <div class="module-title">TOOL VAULT</div>
+        <!-- Constellation 2: Investor Zone -->
+        <div class="constellation constellation-2" data-name="Investor Zone">
+            <div class="constellation-node" onclick="navigateTo('invest')">
+                <div class="node-glow investor-glow"></div>
+                <div class="node-core investor-core"></div>
+                <div class="node-label">
+                    <span class="label-title">INVESTOR ZONE</span>
+                    <span class="label-subtitle">Exclusive Access</span>
                 </div>
-                <div class="module-description">
-                    Interactive consciousness tools, sigil generators, soul mapping systems, and ritual frameworks. Your personal reality programming toolkit.
-                </div>
-                <div class="module-status">▸ LAUNCHING SOON</div>
             </div>
-
-            <div class="module coming-soon">
-                <div class="module-header">
-                    <div class="module-icon">👥</div>
-                    <div class="module-title">PLAYERS LOUNGE</div>
+            <div class="sub-nodes">
+                <div class="sub-node" onclick="window.location.href='invest.html'">
+                    <span>Invest</span>
                 </div>
-                <div class="module-description">
-                    Exclusive member area. Access premium content, community features, and advanced consciousness programming resources.
+                <div class="sub-node" onclick="window.location.href='presentation.html'">
+                    <span>Presentation</span>
                 </div>
-                <div class="module-status">▸ LAUNCHING SOON</div>
-            </div>
-
-            <div class="module coming-soon">
-                <div class="module-header">
-                    <div class="module-icon">📚</div>
-                    <div class="module-title">KNOWLEDGE BASE</div>
-                </div>
-                <div class="module-description">
-                    Deep dives into First Spark philosophy, sacred geometry, simulation theory, and consciousness architecture. Learn the code of reality.
-                </div>
-                <div class="module-status">▸ LAUNCHING SOON</div>
-            </div>
-
-            <div class="module coming-soon">
-                <div class="module-header">
-                    <div class="module-icon">🎯</div>
-                    <div class="module-title">SOUL MAPPING</div>
-                </div>
-                <div class="module-description">
-                    Custom soul map services, archetypal analysis, and personalized consciousness blueprints. Book your session and decode your pattern.
-                </div>
-                <div class="module-status">▸ LAUNCHING SOON</div>
-            </div>
-
-            <div class="module coming-soon">
-                <div class="module-header">
-                    <div class="module-icon">⚡</div>
-                    <div class="module-title">OG SPARK VAULT</div>
-                </div>
-                <div class="module-description">
-                    Lifetime members only. The deepest access, unreleased tools, direct mentorship opportunities, and behind-the-scenes development.
-                </div>
-                <div class="module-status">▸ LAUNCHING SOON</div>
             </div>
         </div>
 
-        <div class="updates-feed">
-            <div class="updates-header">⟨ RECENT TRANSMISSIONS ⟩</div>
-            
-            <div class="update-item">
-                <div class="update-date">[2025.01.27]</div>
-                <div class="update-text">
-                    SPARKVERSE COMMAND CENTER initialized. Grand Central Station for all consciousness tools and member resources now operational.
+        <!-- Galaxy 3: Interactive Tools -->
+        <div class="constellation constellation-3" data-name="Tools Galaxy">
+            <div class="constellation-node galaxy-node" onclick="navigateTo('tools')">
+                <div class="node-glow tools-glow"></div>
+                <div class="node-core tools-core"></div>
+                <div class="node-label">
+                    <span class="label-title">TOOLS GALAXY</span>
+                    <span class="label-subtitle">Interactive Universe</span>
                 </div>
             </div>
-
-            <div class="update-item">
-                <div class="update-date">[2025.01.27]</div>
-                <div class="update-text">
-                    Infrastructure development in progress. Tool Vault, Players Lounge, and Knowledge Base modules entering final configuration phase.
+            <div class="tool-orbits">
+                <div class="orbit orbit-1">
+                    <div class="tool-dot free-tool" data-tooltip="Free Tools"></div>
+                </div>
+                <div class="orbit orbit-2">
+                    <div class="tool-dot player-tool" data-tooltip="Player Tools"></div>
+                </div>
+                <div class="orbit orbit-3">
+                    <div class="tool-dot og-tool" data-tooltip="OG Tools"></div>
+                </div>
+                <div class="orbit orbit-4">
+                    <div class="tool-dot shop-tool" data-tooltip="Shop"></div>
                 </div>
             </div>
+        </div>
 
-            <div class="update-item">
-                <div class="update-date">[ONGOING]</div>
-                <div class="update-text">
-                    Reality remains programmable. Consciousness is the interface. The First Spark continues to illuminate the code beneath the surface.
+        <!-- Constellation 4: Cosmic Playground -->
+        <div class="constellation constellation-4" data-name="Cosmic Playground">
+            <div class="constellation-node playground-node" onclick="navigateTo('playground')">
+                <div class="node-glow playground-glow"></div>
+                <div class="node-core playground-core"></div>
+                <div class="node-label">
+                    <span class="label-title">COSMIC PLAYGROUND</span>
+                    <span class="label-subtitle">Create & Explore</span>
+                </div>
+            </div>
+            <div class="constellation-lines"></div>
+        </div>
+
+        <!-- Constellation 5: Graffiti Wall -->
+        <div class="constellation constellation-5" data-name="Graffiti Wall">
+            <div class="constellation-node graffiti-node" onclick="navigateTo('graffiti')">
+                <div class="node-glow graffiti-glow"></div>
+                <div class="node-core graffiti-core"></div>
+                <div class="node-label">
+                    <span class="label-title">GRAFFITI WALL</span>
+                    <span class="label-subtitle">Leave Your Mark</span>
+                </div>
+            </div>
+            <div class="constellation-lines"></div>
+        </div>
+
+        <!-- Navigation Help -->
+        <div class="nav-help">
+            <div class="help-icon" onclick="toggleHelp()">?</div>
+            <div class="help-panel" id="helpPanel">
+                <h3>Navigate the Sparkverse</h3>
+                <p><span class="help-dot free"></span> Free Access</p>
+                <p><span class="help-dot player"></span> Players ($33/mo)</p>
+                <p><span class="help-dot og"></span> OG Members</p>
+                <p><span class="help-dot investor"></span> Investors</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Membership Modal -->
+    <div class="modal" id="membershipModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeMembershipModal()">&times;</span>
+            <h2>Join the Sparkverse</h2>
+            <div class="membership-options">
+                <div class="membership-card">
+                    <h3>Free Member</h3>
+                    <p class="price">$0</p>
+                    <ul>
+                        <li>Access to Sparkverse</li>
+                        <li>Free Tools</li>
+                        <li>Community Access</li>
+                    </ul>
+                    <button onclick="signup('free')">Join Free</button>
+                </div>
+                <div class="membership-card featured">
+                    <h3>Player</h3>
+                    <p class="price">$33<span>/month</span></p>
+                    <ul>
+                        <li>Everything in Free</li>
+                        <li>Players Lounge Access</li>
+                        <li>Premium Tools</li>
+                        <li>Priority Support</li>
+                    </ul>
+                    <button onclick="signup('player')">Become a Player</button>
+                </div>
+                <div class="membership-card">
+                    <h3>OG Spark</h3>
+                    <p class="price">Lifetime</p>
+                    <ul>
+                        <li>Everything in Players</li>
+                        <li>Lifetime Access</li>
+                        <li>Exclusive OG Tools</li>
+                        <li>Beta Access</li>
+                    </ul>
+                    <button onclick="signup('og')">Go OG</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
