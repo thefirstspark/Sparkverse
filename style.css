@@ -55,6 +55,12 @@ body {
     width: 300px;
     height: 300px;
     z-index: 10;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.spark-sun:hover {
+    transform: translate(-50%, -50%) scale(1.05);
 }
 
 .sun-core {
@@ -108,58 +114,24 @@ body {
 .sun-text p {
     font-size: 1rem;
     opacity: 0.9;
-    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.join-free-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.join-free-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-/* Constellations */
+/* Constellations / Planets */
 .constellation {
     position: absolute;
     transition: all 0.3s ease;
 }
 
-.constellation-1 {
-    top: 15%;
-    right: 20%;
-}
-
-.constellation-2 {
-    bottom: 20%;
-    left: 15%;
-}
-
-.constellation-3 {
-    top: 20%;
-    left: 10%;
-}
-
-.constellation-4 {
-    bottom: 15%;
-    right: 15%;
-}
-
-.constellation-5 {
-    top: 50%;
-    right: 10%;
-    transform: translateY(-50%);
-}
+/* 7 Planet Positions in circular orbit */
+.constellation-1 { top: 10%; left: 50%; transform: translateX(-50%); }
+.constellation-2 { top: 25%; right: 15%; }
+.constellation-3 { top: 50%; right: 10%; transform: translateY(-50%); }
+.constellation-4 { bottom: 25%; right: 15%; }
+.constellation-5 { bottom: 10%; left: 50%; transform: translateX(-50%); }
+.constellation-6 { bottom: 25%; left: 15%; }
+.constellation-7 { top: 50%; left: 10%; transform: translateY(-50%); }
 
 .constellation-node {
     position: relative;
@@ -170,7 +142,7 @@ body {
 }
 
 .constellation-node:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 
 .node-core {
@@ -204,41 +176,38 @@ body {
     50% { opacity: 1; }
 }
 
-.investor-core {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    box-shadow: 0 0 30px rgba(245, 87, 108, 0.6);
+/* Planet Icons */
+.planet-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    z-index: 5;
+    pointer-events: none;
 }
 
-.investor-glow {
-    background: radial-gradient(circle, rgba(245, 87, 108, 0.3), transparent 60%);
-}
+/* Unique colors for each planet */
+.nft-core { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); box-shadow: 0 0 30px rgba(245, 87, 108, 0.6); }
+.nft-glow { background: radial-gradient(circle, rgba(245, 87, 108, 0.3), transparent 60%); }
 
-.tools-core {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
-}
+.links-core { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); box-shadow: 0 0 30px rgba(0, 242, 254, 0.6); }
+.links-glow { background: radial-gradient(circle, rgba(0, 242, 254, 0.3), transparent 60%); }
 
-.tools-glow {
-    background: radial-gradient(circle, rgba(0, 242, 254, 0.3), transparent 60%);
-}
+.station-core { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); box-shadow: 0 0 30px rgba(168, 237, 234, 0.6); }
+.station-glow { background: radial-gradient(circle, rgba(168, 237, 234, 0.3), transparent 60%); }
 
-.playground-core {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    box-shadow: 0 0 30px rgba(168, 237, 234, 0.6);
-}
+.investor-core { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+.investor-glow { background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent 60%); }
 
-.playground-glow {
-    background: radial-gradient(circle, rgba(168, 237, 234, 0.3), transparent 60%);
-}
+.tools-core { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 0 30px rgba(102, 126, 234, 0.6); }
+.tools-glow { background: radial-gradient(circle, rgba(102, 126, 234, 0.3), transparent 60%); }
 
-.graffiti-core {
-    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
-    box-shadow: 0 0 30px rgba(255, 107, 107, 0.6);
-}
+.free-core { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); box-shadow: 0 0 30px rgba(74, 222, 128, 0.6); }
+.free-glow { background: radial-gradient(circle, rgba(74, 222, 128, 0.3), transparent 60%); }
 
-.graffiti-glow {
-    background: radial-gradient(circle, rgba(255, 107, 107, 0.3), transparent 60%);
-}
+.news-core { background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%); box-shadow: 0 0 30px rgba(255, 107, 107, 0.6); }
+.news-glow { background: radial-gradient(circle, rgba(255, 107, 107, 0.3), transparent 60%); }
 
 .node-label {
     position: absolute;
@@ -253,94 +222,9 @@ body {
 .label-title {
     display: block;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     letter-spacing: 2px;
-    margin-bottom: 5px;
 }
-
-.label-price, .label-subtitle {
-    display: block;
-    font-size: 0.8rem;
-    opacity: 0.8;
-}
-
-/* Sub Nodes */
-.sub-nodes {
-    position: absolute;
-    top: -40px;
-    left: 140px;
-    display: flex;
-    gap: 15px;
-}
-
-.sub-node {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, rgba(245, 87, 108, 0.8), rgba(240, 147, 251, 0.8));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 0.7rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(245, 87, 108, 0.4);
-}
-
-.sub-node:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 25px rgba(245, 87, 108, 0.8);
-}
-
-/* Tool Orbits */
-.tool-orbits {
-    position: absolute;
-    top: -100px;
-    left: -100px;
-    width: 320px;
-    height: 320px;
-}
-
-.orbit {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.orbit-1 { width: 180px; height: 180px; animation: rotate-orbit 10s linear infinite; }
-.orbit-2 { width: 220px; height: 220px; animation: rotate-orbit 15s linear infinite reverse; }
-.orbit-3 { width: 260px; height: 260px; animation: rotate-orbit 20s linear infinite; }
-.orbit-4 { width: 300px; height: 300px; animation: rotate-orbit 25s linear infinite reverse; }
-
-@keyframes rotate-orbit {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-.tool-dot {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.tool-dot:hover {
-    transform: translateX(-50%) scale(1.5);
-}
-
-.free-tool { background: #4ade80; box-shadow: 0 0 10px #4ade80; }
-.player-tool { background: #667eea; box-shadow: 0 0 10px #667eea; }
-.og-tool { background: #f5576c; box-shadow: 0 0 10px #f5576c; }
-.shop-tool { background: #fbbf24; box-shadow: 0 0 10px #fbbf24; }
 
 /* Navigation Help */
 .nav-help {
@@ -376,7 +260,7 @@ body {
     background: rgba(20, 20, 40, 0.95);
     padding: 20px;
     border-radius: 10px;
-    min-width: 200px;
+    min-width: 250px;
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s ease;
@@ -396,23 +280,9 @@ body {
 
 .help-panel p {
     margin: 10px 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
     font-size: 0.9rem;
+    line-height: 1.6;
 }
-
-.help-dot {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.help-dot.free { background: #4ade80; }
-.help-dot.player { background: #667eea; }
-.help-dot.og { background: #f5576c; }
-.help-dot.investor { background: #f093fb; }
 
 /* Modal */
 .modal {
@@ -423,8 +293,9 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -435,7 +306,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     width: 90%;
-    max-width: 1100px;
+    max-width: 1200px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
@@ -448,6 +319,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.3s ease;
+    z-index: 10;
 }
 
 .close-modal:hover {
@@ -456,107 +328,111 @@ body {
 
 .modal-content h2 {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    letter-spacing: 3px;
 }
 
-.membership-options {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
+.navigation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
 }
 
-.membership-card {
+.nav-card {
     background: rgba(255, 255, 255, 0.05);
-    padding: 25px;
+    padding: 30px;
     border-radius: 15px;
-    flex: 1;
-    min-width: 250px;
-    max-width: 300px;
     border: 2px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    color: #fff;
     transition: all 0.3s ease;
+    text-align: center;
+    cursor: pointer;
 }
 
-.membership-card:hover {
+.nav-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(102, 126, 234, 0.5);
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
 }
 
-.membership-card.featured {
-    border-color: #667eea;
-    box-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
-}
-
-.membership-card h3 {
-    font-size: 1.5rem;
+.nav-icon {
+    font-size: 3rem;
     margin-bottom: 15px;
 }
 
-.membership-card .price {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 20px 0;
-    color: #667eea;
+.nav-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
 }
 
-.membership-card .price span {
-    font-size: 1rem;
-    opacity: 0.7;
+.nav-card p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    line-height: 1.5;
 }
 
-.membership-card ul {
-    list-style: none;
-    margin: 20px 0;
-}
+/* Unique hover colors for nav cards */
+.nft-card:hover { border-color: #f5576c; }
+.links-card:hover { border-color: #00f2fe; }
+.station-card:hover { border-color: #fed6e3; }
+.investor-card:hover { border-color: #FFD700; }
+.tools-card:hover { border-color: #667eea; }
+.free-card:hover { border-color: #4ade80; }
+.news-card:hover { border-color: #ff6b6b; }
 
-.membership-card li {
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.membership-card li:before {
-    content: "✓ ";
-    color: #4ade80;
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.membership-card button {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    border-radius: 25px;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 20px;
-}
-
-.membership-card button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
+/* Mobile Responsive */
 @media (max-width: 768px) {
-    .membership-options {
-        flex-direction: column;
-        align-items: center;
+    .constellation {
+        transform: scale(0.7) !important;
     }
 
-    .constellation {
-        transform: scale(0.8);
-    }
+    .constellation-1 { top: 5%; left: 50%; }
+    .constellation-2 { top: 20%; right: 5%; }
+    .constellation-3 { top: 35%; right: 0%; }
+    .constellation-4 { bottom: 35%; right: 5%; }
+    .constellation-5 { bottom: 20%; left: 50%; }
+    .constellation-6 { bottom: 35%; left: 0%; }
+    .constellation-7 { top: 35%; left: 0%; }
 
     .sun-text h1 {
         font-size: 1.8rem;
+    }
+
+    .sun-text p {
+        font-size: 0.8rem;
+    }
+
+    .spark-sun {
+        width: 200px;
+        height: 200px;
+    }
+
+    .modal-content {
+        padding: 20px;
+        margin: 10% auto;
+    }
+
+    .modal-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .navigation-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Drops - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { overflow-y: auto; }
+
+        .free-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            min-height: 100vh;
+        }
+
+        .free-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .free-header h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .free-header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .drops-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .drop-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(74, 222, 128, 0.2);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .drop-card:hover {
+            transform: translateY(-8px);
+            border-color: #4ade80;
+            box-shadow: 0 15px 40px rgba(74, 222, 128, 0.3);
+        }
+
+        .drop-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .drop-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #4ade80;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .drop-card p {
+            line-height: 1.7;
+            opacity: 0.8;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .drop-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            border: none;
+            border-radius: 30px;
+            color: #0a0a0f;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .drop-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .coming-soon {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .coming-soon .drop-button {
+            background: rgba(100, 100, 100, 0.3);
+            color: #666;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .badge.free { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+        .badge.new { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
+        .badge.soon { background: rgba(150, 150, 150, 0.2); color: #999; }
+
+        .newsletter-section {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(34, 197, 94, 0.1));
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .newsletter-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: #4ade80;
+        }
+
+        .newsletter-section p {
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+
+        .newsletter-form button {
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            border: none;
+            border-radius: 30px;
+            color: #0a0a0f;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 40px auto 0;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: block;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .free-header h1 { font-size: 2.5rem; }
+            .drops-grid { grid-template-columns: 1fr; }
+            .newsletter-form { flex-direction: column; }
+            .newsletter-form input { min-width: 100%; }
+        }
+    </style>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <div class="free-container">
+        <div class="free-header">
+            <h1>FREE DROPS</h1>
+            <p>Consciousness tools, sacred geometry guides, and simulation theory resources—freely available for all sparks.</p>
+        </div>
+
+        <div class="drops-grid">
+            <div class="drop-card">
+                <div class="drop-icon">📖</div>
+                <span class="badge free">FREE</span>
+                <h3>THE FIRST SPARK MANIFESTO</h3>
+                <p>The foundational text. Understand the geometric universe, simulation theory, and consciousness awakening in 50 pages.</p>
+                <a href="#" class="drop-button" onclick="alert('Download link coming soon! Check back or join the newsletter.'); return false;">Download PDF</a>
+            </div>
+
+            <div class="drop-card">
+                <div class="drop-icon">🔮</div>
+                <span class="badge free">FREE</span>
+                <h3>SACRED GEOMETRY 101</h3>
+                <p>Beginner's guide to geometric consciousness. Learn the patterns that construct reality.</p>
+                <a href="#" class="drop-button" onclick="alert('Download link coming soon! Check back or join the newsletter.'); return false;">Download PDF</a>
+            </div>
+
+            <div class="drop-card">
+                <div class="drop-icon">✨</div>
+                <span class="badge free">FREE</span>
+                <h3>SIMULATION STARTER PACK</h3>
+                <p>Essential reading list, video resources, and consciousness exercises to begin your awakening journey.</p>
+                <a href="#" class="drop-button" onclick="alert('Download link coming soon! Check back or join the newsletter.'); return false;">Download PDF</a>
+            </div>
+
+            <div class="drop-card coming-soon">
+                <div class="drop-icon">🎨</div>
+                <span class="badge soon">COMING SOON</span>
+                <h3>CONSCIOUSNESS COLORING BOOK</h3>
+                <p>Printable sacred geometry designs for meditative coloring and consciousness activation.</p>
+                <button class="drop-button">Coming Soon</button>
+            </div>
+
+            <div class="drop-card coming-soon">
+                <div class="drop-icon">🎵</div>
+                <span class="badge soon">COMING SOON</span>
+                <h3>FREQUENCY MEDITATION PACK</h3>
+                <p>Guided audio meditations with sacred geometry visualizations and consciousness-expanding frequencies.</p>
+                <button class="drop-button">Coming Soon</button>
+            </div>
+
+            <div class="drop-card coming-soon">
+                <div class="drop-icon">🗂️</div>
+                <span class="badge soon">COMING SOON</span>
+                <h3>REALITY MAPPING TEMPLATES</h3>
+                <p>Printable templates for tracking synchronicities, documenting patterns, and mapping your awakening journey.</p>
+                <button class="drop-button">Coming Soon</button>
+            </div>
+        </div>
+
+        <div class="newsletter-section">
+            <h2>Get Notified of New Drops</h2>
+            <p>Join the newsletter and never miss a consciousness download. New guides, tools, and resources delivered to your inbox.</p>
+            <form class="newsletter-form" onsubmit="alert('Newsletter signup coming soon! For now, follow us on social media for updates.'); return false;">
+                <input type="email" placeholder="your@email.com" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+        <a href="index.html" class="back-button">← Back to Sparkverse</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -20,100 +20,98 @@
     <div class="twinkling"></div>
 
     <div class="universe-container">
-        <!-- Central Spark (Sun) -->
-        <div class="spark-sun">
+        <!-- Central Spark Hub -->
+        <div class="spark-sun" onclick="showNavigationModal()">
             <div class="sun-core"></div>
             <div class="sun-glow"></div>
             <div class="sun-text">
                 <h1>SPARKVERSE</h1>
-                <p>Enter the Geometric Universe</p>
-                <button class="join-free-btn" onclick="showMembershipModal()">Join Free</button>
+                <p>All Sparks</p>
             </div>
         </div>
 
-        <!-- Constellation 1: Players Lounge -->
-        <div class="constellation constellation-1" data-name="Players Lounge">
-            <div class="constellation-node" onclick="navigateTo('players')">
-                <div class="node-glow"></div>
-                <div class="node-core"></div>
+        <!-- Planet 1: NFT Vault -->
+        <div class="constellation constellation-1" data-name="NFT Vault">
+            <div class="constellation-node" onclick="navigateToPlanet('nft')">
+                <div class="node-glow nft-glow"></div>
+                <div class="node-core nft-core"></div>
+                <div class="planet-icon">🎨</div>
                 <div class="node-label">
-                    <span class="label-title">PLAYERS LOUNGE</span>
-                    <span class="label-price">$33/month</span>
+                    <span class="label-title">NFT VAULT</span>
                 </div>
             </div>
-            <div class="constellation-lines"></div>
         </div>
 
-        <!-- Constellation 2: Investor Zone -->
-        <div class="constellation constellation-2" data-name="Investor Zone">
-            <div class="constellation-node" onclick="navigateTo('invest')">
+        <!-- Planet 2: Signal Links -->
+        <div class="constellation constellation-2" data-name="Signal Links">
+            <div class="constellation-node" onclick="navigateToPlanet('links')">
+                <div class="node-glow links-glow"></div>
+                <div class="node-core links-core"></div>
+                <div class="planet-icon">📡</div>
+                <div class="node-label">
+                    <span class="label-title">SIGNAL LINKS</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Planet 3: Spark Station -->
+        <div class="constellation constellation-3" data-name="Spark Station">
+            <div class="constellation-node" onclick="navigateToPlanet('station')">
+                <div class="node-glow station-glow"></div>
+                <div class="node-core station-core"></div>
+                <div class="planet-icon">🚀</div>
+                <div class="node-label">
+                    <span class="label-title">SPARK STATION</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Planet 4: Investor Gate -->
+        <div class="constellation constellation-4" data-name="Investor Gate">
+            <div class="constellation-node" onclick="navigateToPlanet('invest')">
                 <div class="node-glow investor-glow"></div>
                 <div class="node-core investor-core"></div>
+                <div class="planet-icon">💎</div>
                 <div class="node-label">
-                    <span class="label-title">INVESTOR ZONE</span>
-                    <span class="label-subtitle">Exclusive Access</span>
-                </div>
-            </div>
-            <div class="sub-nodes">
-                <div class="sub-node" onclick="window.location.href='invest.html'">
-                    <span>Invest</span>
-                </div>
-                <div class="sub-node" onclick="window.location.href='presentation.html'">
-                    <span>Presentation</span>
+                    <span class="label-title">INVESTOR GATE</span>
                 </div>
             </div>
         </div>
 
-        <!-- Galaxy 3: Interactive Tools -->
-        <div class="constellation constellation-3" data-name="Tools Galaxy">
-            <div class="constellation-node galaxy-node" onclick="navigateTo('tools')">
+        <!-- Planet 5: Tools Market -->
+        <div class="constellation constellation-5" data-name="Tools Market">
+            <div class="constellation-node" onclick="navigateToPlanet('tools')">
                 <div class="node-glow tools-glow"></div>
                 <div class="node-core tools-core"></div>
+                <div class="planet-icon">🛠️</div>
                 <div class="node-label">
-                    <span class="label-title">TOOLS GALAXY</span>
-                    <span class="label-subtitle">Interactive Universe</span>
-                </div>
-            </div>
-            <div class="tool-orbits">
-                <div class="orbit orbit-1">
-                    <div class="tool-dot free-tool" data-tooltip="Free Tools"></div>
-                </div>
-                <div class="orbit orbit-2">
-                    <div class="tool-dot player-tool" data-tooltip="Player Tools"></div>
-                </div>
-                <div class="orbit orbit-3">
-                    <div class="tool-dot og-tool" data-tooltip="OG Tools"></div>
-                </div>
-                <div class="orbit orbit-4">
-                    <div class="tool-dot shop-tool" data-tooltip="Shop"></div>
+                    <span class="label-title">TOOLS MARKET</span>
                 </div>
             </div>
         </div>
 
-        <!-- Constellation 4: Cosmic Playground -->
-        <div class="constellation constellation-4" data-name="Cosmic Playground">
-            <div class="constellation-node playground-node" onclick="navigateTo('playground')">
-                <div class="node-glow playground-glow"></div>
-                <div class="node-core playground-core"></div>
+        <!-- Planet 6: Free Drops -->
+        <div class="constellation constellation-6" data-name="Free Drops">
+            <div class="constellation-node" onclick="navigateToPlanet('free')">
+                <div class="node-glow free-glow"></div>
+                <div class="node-core free-core"></div>
+                <div class="planet-icon">🎁</div>
                 <div class="node-label">
-                    <span class="label-title">COSMIC PLAYGROUND</span>
-                    <span class="label-subtitle">Create & Explore</span>
+                    <span class="label-title">FREE DROPS</span>
                 </div>
             </div>
-            <div class="constellation-lines"></div>
         </div>
 
-        <!-- Constellation 5: Graffiti Wall -->
-        <div class="constellation constellation-5" data-name="Graffiti Wall">
-            <div class="constellation-node graffiti-node" onclick="navigateTo('graffiti')">
-                <div class="node-glow graffiti-glow"></div>
-                <div class="node-core graffiti-core"></div>
+        <!-- Planet 7: Newsfeed -->
+        <div class="constellation constellation-7" data-name="Newsfeed">
+            <div class="constellation-node" onclick="navigateToPlanet('news')">
+                <div class="node-glow news-glow"></div>
+                <div class="node-core news-core"></div>
+                <div class="planet-icon">📰</div>
                 <div class="node-label">
-                    <span class="label-title">GRAFFITI WALL</span>
-                    <span class="label-subtitle">Leave Your Mark</span>
+                    <span class="label-title">NEWSFEED</span>
                 </div>
             </div>
-            <div class="constellation-lines"></div>
         </div>
 
         <!-- Navigation Help -->
@@ -121,52 +119,53 @@
             <div class="help-icon" onclick="toggleHelp()">?</div>
             <div class="help-panel" id="helpPanel">
                 <h3>Navigate the Sparkverse</h3>
-                <p><span class="help-dot free"></span> Free Access</p>
-                <p><span class="help-dot player"></span> Players ($33/mo)</p>
-                <p><span class="help-dot og"></span> OG Members</p>
-                <p><span class="help-dot investor"></span> Investors</p>
+                <p>Click any planet to explore</p>
+                <p>Click the center to see all destinations</p>
             </div>
         </div>
     </div>
 
-    <!-- Membership Modal -->
-    <div class="modal" id="membershipModal">
+    <!-- Navigation Modal -->
+    <div class="modal" id="navigationModal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeMembershipModal()">&times;</span>
-            <h2>Join the Sparkverse</h2>
-            <div class="membership-options">
-                <div class="membership-card">
-                    <h3>Free Member</h3>
-                    <p class="price">$0</p>
-                    <ul>
-                        <li>Access to Sparkverse</li>
-                        <li>Free Tools</li>
-                        <li>Community Access</li>
-                    </ul>
-                    <button onclick="signup('free')">Join Free</button>
-                </div>
-                <div class="membership-card featured">
-                    <h3>Player</h3>
-                    <p class="price">$33<span>/month</span></p>
-                    <ul>
-                        <li>Everything in Free</li>
-                        <li>Players Lounge Access</li>
-                        <li>Premium Tools</li>
-                        <li>Priority Support</li>
-                    </ul>
-                    <button onclick="signup('player')">Become a Player</button>
-                </div>
-                <div class="membership-card">
-                    <h3>OG Spark</h3>
-                    <p class="price">Lifetime</p>
-                    <ul>
-                        <li>Everything in Players</li>
-                        <li>Lifetime Access</li>
-                        <li>Exclusive OG Tools</li>
-                        <li>Beta Access</li>
-                    </ul>
-                    <button onclick="signup('og')">Go OG</button>
-                </div>
+            <span class="close-modal" onclick="closeNavigationModal()">&times;</span>
+            <h2>Navigate the Sparkverse</h2>
+            <div class="navigation-grid">
+                <a href="https://opensea.io/" target="_blank" class="nav-card nft-card">
+                    <div class="nav-icon">🎨</div>
+                    <h3>NFT Vault</h3>
+                    <p>Explore geometric consciousness NFTs</p>
+                </a>
+                <a href="links.html" class="nav-card links-card">
+                    <div class="nav-icon">📡</div>
+                    <h3>Signal Links</h3>
+                    <p>Connect across all channels</p>
+                </a>
+                <a href="spark-station.html" class="nav-card station-card">
+                    <div class="nav-icon">🚀</div>
+                    <h3>Spark Station</h3>
+                    <p>Mobile consciousness hub</p>
+                </a>
+                <a href="invest.html" class="nav-card investor-card">
+                    <div class="nav-icon">💎</div>
+                    <h3>Investor Gate</h3>
+                    <p>Join the consciousness revolution</p>
+                </a>
+                <a href="https://whop.com/discover/sparkverse-511c/" target="_blank" class="nav-card tools-card">
+                    <div class="nav-icon">🛠️</div>
+                    <h3>Tools Market</h3>
+                    <p>Access consciousness tools & memberships</p>
+                </a>
+                <a href="free.html" class="nav-card free-card">
+                    <div class="nav-icon">🎁</div>
+                    <h3>Free Drops</h3>
+                    <p>Guides, ebooks & consciousness tools</p>
+                </a>
+                <a href="news.html" class="nav-card news-card">
+                    <div class="nav-icon">📰</div>
+                    <h3>Newsfeed</h3>
+                    <p>Updates, dev logs & product drops</p>
+                </a>
             </div>
         </div>
     </div>

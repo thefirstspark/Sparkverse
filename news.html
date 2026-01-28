@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsfeed - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { overflow-y: auto; }
+
+        .news-container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            min-height: 100vh;
+        }
+
+        .news-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .news-header h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .news-header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .news-filter {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .news-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .news-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 107, 107, 0.2);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .news-item:hover {
+            transform: translateX(10px);
+            border-color: #ff6b6b;
+            box-shadow: 0 10px 40px rgba(255, 107, 107, 0.2);
+        }
+
+        .news-meta {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .news-date {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        .news-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .category-update { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+        .category-dev { background: rgba(156, 39, 176, 0.2); color: #9c27b0; }
+        .category-product { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
+        .category-community { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+
+        .news-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+            letter-spacing: 1px;
+        }
+
+        .news-item p {
+            line-height: 1.8;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .news-item ul {
+            list-style: none;
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .news-item li {
+            position: relative;
+            padding: 8px 0;
+            padding-left: 20px;
+        }
+
+        .news-item li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .read-more {
+            color: #feca57;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: #ff6b6b;
+        }
+
+        .subscribe-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(254, 202, 87, 0.1));
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .subscribe-box h3 {
+            font-size: 2rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .subscribe-box p {
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .subscribe-form {
+            display: flex;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .subscribe-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .subscribe-form input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .subscribe-form button {
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            border: none;
+            border-radius: 30px;
+            color: #0a0a0f;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subscribe-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 40px auto 0;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: block;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .news-header h1 { font-size: 2.5rem; }
+            .subscribe-form { flex-direction: column; }
+            .subscribe-form input { min-width: 100%; }
+        }
+    </style>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <div class="news-container">
+        <div class="news-header">
+            <h1>NEWSFEED</h1>
+            <p>Updates, dev logs, and product drops from the Sparkverse</p>
+        </div>
+
+        <div class="news-filter">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Updates</button>
+            <button class="filter-btn">Dev Logs</button>
+            <button class="filter-btn">Products</button>
+            <button class="filter-btn">Community</button>
+        </div>
+
+        <div class="news-feed">
+            <div class="news-item">
+                <div class="news-meta">
+                    <span class="news-date">January 28, 2026</span>
+                    <span class="news-category category-update">PLATFORM UPDATE</span>
+                </div>
+                <h3>Sparkverse 2.0 Launch</h3>
+                <p>The new Sparkverse is live! We've completely redesigned the cosmic interface with a beautiful solar system navigation, featuring 7 dedicated planets for different aspects of the consciousness ecosystem.</p>
+                <ul>
+                    <li>New geometric space theme with animated starfield</li>
+                    <li>7 navigable planets: NFT Vault, Signal Links, Spark Station, Investor Gate, Tools Market, Free Drops, and Newsfeed</li>
+                    <li>Improved mobile responsiveness</li>
+                    <li>Enhanced accessibility features</li>
+                </ul>
+                <p>Explore the new universe and let us know what you think!</p>
+            </div>
+
+            <div class="news-item">
+                <div class="news-meta">
+                    <span class="news-date">January 15, 2026</span>
+                    <span class="news-category category-dev">DEV LOG</span>
+                </div>
+                <h3>Spark Station Development Begins</h3>
+                <p>We've officially kicked off development on Spark Station—the mobile consciousness companion app. This has been the most requested feature from the community, and we're thrilled to bring it to life.</p>
+                <p>The app will feature sacred geometry generators, AR reality scanning, daily consciousness prompts, and offline access to all tools. Beta testing signup opens Q2 2026 for OG Spark members.</p>
+            </div>
+
+            <div class="news-item">
+                <div class="news-meta">
+                    <span class="news-date">January 1, 2026</span>
+                    <span class="news-category category-product">PRODUCT DROP</span>
+                </div>
+                <h3>Free Drops Portal Now Live</h3>
+                <p>Access consciousness tools, sacred geometry guides, and simulation theory resources—all completely free. Check out the Free Drops page for:</p>
+                <ul>
+                    <li>The First Spark Manifesto PDF</li>
+                    <li>Sacred Geometry 101 Guide</li>
+                    <li>Simulation Starter Pack</li>
+                </ul>
+                <p>More drops coming throughout 2026. Subscribe to the newsletter to get notified.</p>
+            </div>
+
+            <div class="news-item">
+                <div class="news-meta">
+                    <span class="news-date">December 20, 2025</span>
+                    <span class="news-category category-community">COMMUNITY</span>
+                </div>
+                <h3>Players Lounge Hits 500 Members</h3>
+                <p>The Players Lounge community has grown to over 500 active members! Thank you to every spark who's joined the journey. The energy in the community is incredible, and we're seeing some amazing consciousness activations happening.</p>
+                <p>If you're not in the Lounge yet, now's the perfect time to join. Access premium tools, weekly live sessions, and connect with fellow awakened sparks.</p>
+            </div>
+
+            <div class="news-item">
+                <div class="news-meta">
+                    <span class="news-date">December 1, 2025</span>
+                    <span class="news-category category-update">MAJOR UPDATE</span>
+                </div>
+                <h3>NFT Collection Coming Soon</h3>
+                <p>We're preparing to launch The First Spark NFT collection—geometric consciousness art that doubles as utility tokens for the Sparkverse ecosystem. Each NFT will grant access to exclusive tools, events, and community areas.</p>
+                <p>More details coming in Q1 2026. OG Spark members will get first access to the mint.</p>
+            </div>
+        </div>
+
+        <div class="subscribe-box">
+            <h3>Stay in the Loop</h3>
+            <p>Subscribe to get the latest updates, dev logs, and product drops delivered to your inbox.</p>
+            <form class="subscribe-form" onsubmit="alert('Newsletter signup coming soon! For now, follow us on social media for all updates.'); return false;">
+                <input type="email" placeholder="your@email.com" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+        <a href="index.html" class="back-button">← Back to Sparkverse</a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Simple filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // In a real implementation, this would filter the news items
+            });
+        });
+    </script>
+</body>
+</html>
