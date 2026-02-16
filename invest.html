@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invest - Sparkverse</title>
+    <title>Investor Gate - The First Spark</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,179 +13,49 @@
         gtag('config', 'G-P8B1ERP8ML');
     </script>
     <style>
-        .invest-container {
-            position: relative;
-            z-index: 10;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 50px 20px;
-        }
-
-        .invest-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .invest-header h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-        }
-
-        .back-btn {
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 25px;
-            color: white;
-            text-decoration: none;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .back-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateX(-5px);
-        }
-
-        .presentation-link {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 25px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .presentation-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
-        }
-
-        .invest-content {
-            background: rgba(255,255,255,0.05);
-            padding: 50px;
-            border-radius: 20px;
-            border: 1px solid rgba(240, 147, 251, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .metric {
-            text-align: center;
-            padding: 30px;
-            background: rgba(240, 147, 251, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(240, 147, 251, 0.2);
-        }
-
-        .metric h3 {
-            font-size: 2.5rem;
-            color: #f093fb;
-            margin-bottom: 10px;
-        }
-
-        .metric p {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-
-        .benefits {
-            margin: 40px 0;
-        }
-
-        .benefits h2 {
-            color: #f5576c;
-            margin-bottom: 25px;
-            font-size: 2rem;
-        }
-
-        .benefit-item {
-            padding: 20px;
-            margin: 15px 0;
-            background: rgba(245, 87, 108, 0.1);
-            border-left: 4px solid #f5576c;
-            border-radius: 8px;
-        }
-
-        .benefit-item h4 {
-            color: #f093fb;
-            margin-bottom: 10px;
-        }
-
-        .cta-section {
-            text-align: center;
-            margin-top: 60px;
-            padding: 40px;
-            background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(245, 87, 108, 0.2));
-            border-radius: 20px;
-            border: 2px solid #f093fb;
-        }
-
-        .cta-btn {
-            padding: 18px 50px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border: none;
-            border-radius: 30px;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.6);
-        }
-
-        .contact-form {
-            margin-top: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .form-group {
-            margin: 20px 0;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        ::placeholder {
-            color: rgba(255,255,255,0.5);
+        body { overflow-y: auto; }
+        .invest-container { position: relative; z-index: 10; max-width: 900px; margin: 0 auto; padding: 60px 20px; min-height: 100vh; }
+        .invest-header { text-align: center; margin-bottom: 60px; }
+        .invest-header h1 { font-size: 3.5rem; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px; letter-spacing: 3px; }
+        .invest-header .tagline { font-size: 1.4rem; opacity: 0.9; margin-bottom: 15px; color: #f093fb; }
+        .invest-header p { font-size: 1rem; opacity: 0.7; line-height: 1.7; max-width: 700px; margin: 0 auto; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 40px 0; }
+        .metric { text-align: center; padding: 25px 15px; background: rgba(240, 147, 251, 0.08); border-radius: 15px; border: 1px solid rgba(240, 147, 251, 0.2); }
+        .metric h3 { font-size: 2rem; color: #f093fb; margin-bottom: 8px; }
+        .metric p { opacity: 0.7; font-size: 0.85rem; }
+        .section { background: rgba(255,255,255,0.04); border: 2px solid rgba(240,147,251,0.15); border-radius: 20px; padding: 40px; margin: 30px 0; backdrop-filter: blur(10px); }
+        .section h2 { font-size: 2rem; margin-bottom: 20px; color: #f5576c; letter-spacing: 2px; }
+        .section p, .section li { line-height: 1.8; opacity: 0.85; margin-bottom: 12px; }
+        .section ul { list-style: none; padding: 0; }
+        .section li { padding: 10px 0 10px 25px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .section li:before { content: "⚡"; position: absolute; left: 0; }
+        .highlight { color: #f093fb; font-weight: bold; }
+        .founder-quote { font-style: italic; font-size: 1.15rem; color: #fed6e3; border-left: 3px solid #f093fb; padding-left: 20px; margin: 25px 0; opacity: 0.9; }
+        .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin: 30px 0; }
+        .tier-card { background: rgba(240,147,251,0.06); border: 2px solid rgba(240,147,251,0.2); border-radius: 15px; padding: 30px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .tier-card:hover { transform: translateY(-5px); border-color: #f093fb; box-shadow: 0 10px 30px rgba(240,147,251,0.2); }
+        .tier-card.featured { border-color: #f5576c; }
+        .tier-card.featured::before { content: "MOST POPULAR"; position: absolute; top: 15px; right: -30px; background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 4px 40px; font-size: 0.7rem; font-weight: bold; transform: rotate(45deg); letter-spacing: 1px; }
+        .tier-card h3 { color: #f093fb; font-size: 1.2rem; margin-bottom: 5px; letter-spacing: 2px; }
+        .tier-card .price { font-size: 2.2rem; font-weight: bold; color: #fff; margin: 12px 0 5px; }
+        .tier-card .price-sub { font-size: 0.85rem; opacity: 0.5; margin-bottom: 15px; }
+        .tier-card .features { text-align: left; margin: 20px 0; font-size: 0.9rem; }
+        .tier-card .features div { padding: 6px 0; opacity: 0.8; }
+        .tier-card .features div::before { content: "✓ "; color: #4ade80; }
+        .tier-btn { display: inline-block; padding: 14px 35px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 25px; color: white; text-decoration: none; font-weight: bold; font-size: 1rem; transition: all 0.3s ease; border: none; cursor: pointer; }
+        .tier-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245,87,108,0.5); }
+        .tier-btn.outline { background: transparent; border: 2px solid #f093fb; color: #f093fb; }
+        .tier-btn.outline:hover { background: rgba(240,147,251,0.1); }
+        .cta-section { text-align: center; margin: 50px 0; padding: 50px 30px; background: linear-gradient(135deg, rgba(240,147,251,0.1), rgba(245,87,108,0.1)); border-radius: 20px; border: 2px solid rgba(240,147,251,0.3); }
+        .cta-section h2 { font-size: 2.5rem; margin-bottom: 15px; color: #f093fb; }
+        .cta-section p { opacity: 0.8; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .back-button { display: block; max-width: 200px; margin: 40px auto 0; padding: 15px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 25px; color: white; text-decoration: none; font-size: 1rem; font-weight: bold; transition: all 0.3s ease; text-align: center; }
+        .back-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.6); }
+        @media (max-width: 768px) {
+            .invest-header h1 { font-size: 2.5rem; }
+            .tier-grid { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -195,100 +63,139 @@
     <div class="stars"></div>
     <div class="twinkling"></div>
 
-    <a href="index.html" class="back-btn">← Back to Universe</a>
-    <a href="presentation.html" class="presentation-link">View Presentation →</a>
-
     <div class="invest-container">
         <div class="invest-header">
-            <h1>INVESTOR ZONE</h1>
-            <p>Join us in shaping the future of the Sparkverse</p>
+            <h1>INVESTOR GATE</h1>
+            <p class="tagline">Consciousness Technology. Real Vision. Real Numbers.</p>
+            <p>The First Spark is building the infrastructure for the consciousness technology movement — tools, community, and a philosophy that treats awakening like software you can actually run.</p>
         </div>
 
-        <div class="invest-content">
-            <div class="metric-grid">
-                <div class="metric">
-                    <h3>$10M</h3>
-                    <p>Funding Goal</p>
-                </div>
-                <div class="metric">
-                    <h3>50K+</h3>
-                    <p>Active Users</p>
-                </div>
-                <div class="metric">
-                    <h3>300%</h3>
-                    <p>YoY Growth</p>
-                </div>
-                <div class="metric">
-                    <h3>25+</h3>
-                    <p>Team Members</p>
-                </div>
+        <div class="metric-grid">
+            <div class="metric">
+                <h3>$200K</h3>
+                <p>Seed Raise for 20% Equity</p>
             </div>
-
-            <div class="benefits">
-                <h2>Why Invest in Sparkverse?</h2>
-
-                <div class="benefit-item">
-                    <h4>🚀 Rapid Market Growth</h4>
-                    <p>The interactive tools and cosmic experience market is projected to reach $50B by 2027. Sparkverse is positioned at the intersection of technology, creativity, and community.</p>
-                </div>
-
-                <div class="benefit-item">
-                    <h4>💡 Unique Value Proposition</h4>
-                    <p>We've created a first-of-its-kind geometric universe platform that combines SaaS tools with an immersive experience, setting us apart from traditional tool marketplaces.</p>
-                </div>
-
-                <div class="benefit-item">
-                    <h4>📈 Proven Traction</h4>
-                    <p>With 50,000+ active users and 300% year-over-year growth, we've validated product-market fit and demonstrated sustainable scaling potential.</p>
-                </div>
-
-                <div class="benefit-item">
-                    <h4>🎯 Clear Monetization</h4>
-                    <p>Multi-tier subscription model ($33/month Players), tool marketplace, and enterprise solutions provide diverse revenue streams with strong unit economics.</p>
-                </div>
-
-                <div class="benefit-item">
-                    <h4>🌟 Experienced Team</h4>
-                    <p>Our founding team brings expertise from leading tech companies, with a proven track record of building and scaling successful platforms.</p>
-                </div>
+            <div class="metric">
+                <h3>50+</h3>
+                <p>Interactive Tools Built</p>
             </div>
+            <div class="metric">
+                <h3>5</h3>
+                <p>Revenue Streams Active</p>
+            </div>
+            <div class="metric">
+                <h3>$0</h3>
+                <p>External Debt</p>
+            </div>
+        </div>
 
-            <div class="cta-section">
-                <h2>Ready to Invest?</h2>
-                <p>Get in touch with our investor relations team</p>
+        <div class="section">
+            <h2>THE VISION</h2>
+            <p>The consciousness and spiritual wellness market is projected to exceed <span class="highlight">$450 billion by 2028</span>. But most of the space is stuck in 2012 — crystals, guru culture, and zero technology. The First Spark is different.</p>
+            <p>We treat consciousness like code. Awakening like debugging. Sacred geometry like UI design. This isn't woo-woo — it's a technology platform for people who've seen through the simulation and want <span class="highlight">real tools</span> to navigate it.</p>
+            <div class="founder-quote">"Reality is programmable. I didn't read that in a book — I experienced it on a pool raft in Summer 2025. Everything I've built since is proof of concept."<br>— Kate Puzakulics, Founder & CEO</div>
+        </div>
 
-                <div class="contact-form">
-                    <div class="form-group">
-                        <input type="text" placeholder="Your Name" id="investorName">
+        <div class="section">
+            <h2>WHAT WE'VE BUILT (bootstrapped, solo)</h2>
+            <ul>
+                <li><span class="highlight">50+ interactive HTML consciousness tools</span> — sigil generators, soul mappers, frequency trackers, sacred geometry engines</li>
+                <li><span class="highlight">Full digital storefront</span> on Whop with tiered memberships and digital products</li>
+                <li><span class="highlight">The Sparkverse</span> — an immersive cosmic web experience (you're in it right now)</li>
+                <li><span class="highlight">Soul Mapping services</span> at $111/session — personalized consciousness architecture</li>
+                <li><span class="highlight">Book Zero</span> in development — founder memoir from trauma to tech to awakening</li>
+                <li><span class="highlight">Mobile Spark Station concept</span> — a converted van for traveling consciousness workshops</li>
+                <li><span class="highlight">Obitura</span> — AI-powered obituary service (parallel revenue stream)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>REVENUE MODEL</h2>
+            <p>Multiple revenue streams designed around <span class="highlight">reciprocity, not extraction</span>:</p>
+
+            <div class="tier-grid">
+                <div class="tier-card">
+                    <h3>STARTER SPARK</h3>
+                    <div class="price">FREE</div>
+                    <div class="price-sub">Entry to the Sparkverse</div>
+                    <div class="features">
+                        <div>Access to free consciousness tools</div>
+                        <div>Sparkverse Lobby community</div>
+                        <div>Sacred geometry downloads</div>
                     </div>
-                    <div class="form-group">
-                        <input type="email" placeholder="Email Address" id="investorEmail">
+                    <a href="https://whop.com/sparkverse-0d79/starter-spark-0c/" target="_blank" class="tier-btn outline">Enter Free</a>
+                </div>
+
+                <div class="tier-card">
+                    <h3>POWER PACK</h3>
+                    <div class="price">$33</div>
+                    <div class="price-sub">one-time</div>
+                    <div class="features">
+                        <div>Premium tool collection</div>
+                        <div>Exclusive consciousness guides</div>
+                        <div>Digital product bundle</div>
                     </div>
-                    <div class="form-group">
-                        <input type="text" placeholder="Company / Fund" id="investorCompany">
+                    <a href="https://whop.com/sparkverse-0d79/power-pack-copy/" target="_blank" class="tier-btn outline">Get Power Pack</a>
+                </div>
+
+                <div class="tier-card featured">
+                    <h3>PLAYER PACK</h3>
+                    <div class="price">$33/mo</div>
+                    <div class="price-sub">Players Lounge access</div>
+                    <div class="features">
+                        <div>Full tool vault access</div>
+                        <div>Weekly live sessions</div>
+                        <div>Community + private channels</div>
+                        <div>Priority soul mapping booking</div>
                     </div>
-                    <div class="form-group">
-                        <textarea placeholder="Tell us about your investment interests..." id="investorMessage"></textarea>
+                    <a href="https://whop.com/sparkverse-0d79/player-pack-copy/" target="_blank" class="tier-btn">Join Players</a>
+                </div>
+
+                <div class="tier-card">
+                    <h3>OG SPARK</h3>
+                    <div class="price">$519</div>
+                    <div class="price-sub">lifetime access</div>
+                    <div class="features">
+                        <div>Everything in Player Pack — forever</div>
+                        <div>Founding member recognition</div>
+                        <div>Early access to all future drops</div>
+                        <div>Direct founder access</div>
                     </div>
-                    <button class="cta-btn" onclick="submitInvestorForm()">Submit Inquiry</button>
+                    <a href="https://whop.com/sparkverse-0d79/og-player-pack-copy/" target="_blank" class="tier-btn">Go OG</a>
                 </div>
             </div>
         </div>
+
+        <div class="section">
+            <h2>USE OF FUNDS — $200K RAISE</h2>
+            <ul>
+                <li><span class="highlight">Mobile Spark Station ($40K)</span> — Van conversion for traveling consciousness workshops across the US</li>
+                <li><span class="highlight">Platform Development ($50K)</span> — Custom AI fine-tuned on First Spark content, app development, infrastructure scaling</li>
+                <li><span class="highlight">Content Production ($30K)</span> — Book Zero publishing, video content, TikTok/YouTube growth strategy</li>
+                <li><span class="highlight">Marketing & Community ($40K)</span> — Paid acquisition, influencer partnerships, event sponsorships</li>
+                <li><span class="highlight">Operations ($40K)</span> — 12 months runway for founder to go full-time on The First Spark</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>WHY NOW. WHY THIS.</h2>
+            <p>The spiritual wellness space is <span class="highlight">ripe for disruption</span>. Gen Z and Millennials are leaving organized religion but still searching for meaning. They want tools, not temples. Code, not commandments. Interactive experiences, not passive consumption.</p>
+            <p>The First Spark sits at the exact intersection of <span class="highlight">technology × spirituality × community</span> that the market is starving for. And it's built by someone who lived the transformation — not someone who studied it from a distance.</p>
+            <p>Current valuation range: <span class="highlight">$1M – $2M</span> based on assets built, IP created, and market positioning.</p>
+        </div>
+
+        <div class="cta-section">
+            <h2>Let's Talk</h2>
+            <p>Serious inquiries from angels, VCs, and aligned partners who see what consciousness technology can become.</p>
+            <div class="cta-buttons">
+                <a href="mailto:kate@thefirstspark.shop?subject=Investment%20Inquiry%20-%20The%20First%20Spark" class="tier-btn">Email Kate Directly</a>
+                <a href="presentation.html" class="tier-btn outline">View Pitch Deck</a>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-button">← Back to Sparkverse</a>
     </div>
 
-    <script>
-        function submitInvestorForm() {
-            const name = document.getElementById('investorName').value;
-            const email = document.getElementById('investorEmail').value;
-
-            if (!name || !email) {
-                alert('Please fill in your name and email');
-                return;
-            }
-
-            alert('Thank you for your interest! Our team will reach out within 24 hours.');
-            // In production, this would submit to your backend
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

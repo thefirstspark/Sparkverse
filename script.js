@@ -1,11 +1,11 @@
 // ====== NAVIGATION CONFIG ======
 // Easy-to-edit configuration for all planet destinations
 const PLANET_LINKS = {
-    'nft': 'https://opensea.io/',  // Update with your collection URL
+    'nft': 'https://whop.com/sparkverse-0d79/',  // Sparkverse Shop
     'links': 'links.html',
     'station': 'spark-station.html',
     'invest': 'invest.html',
-    'tools': 'https://whop.com/discover/sparkverse-511c/',
+    'tools': 'https://whop.com/sparkverse-0d79/',
     'free': 'free.html',
     'news': 'news.html'
 };
