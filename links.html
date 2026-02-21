@@ -3,101 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signal Links - Sparkverse</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { overflow-y: auto; }
-
-        .links-container {
-            position: relative;
-            z-index: 10;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            min-height: 100vh;
-        }
-
-        .links-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .links-header h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 15px;
-            letter-spacing: 3px;
-        }
-
-        .links-header p {
-            font-size: 1.1rem;
-            opacity: 0.8;
-        }
-
-        .link-button {
-            display: block;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(79, 172, 254, 0.3);
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 15px;
-            text-decoration: none;
-            color: #fff;
-            text-align: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .link-button:hover {
-            transform: translateY(-5px);
-            border-color: #00f2fe;
-            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
-            background: rgba(79, 172, 254, 0.1);
-        }
-
-        .link-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .link-button h3 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
-        }
-
-        .link-button p {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        .back-button {
-            display: inline-block;
-            margin: 40px auto 0;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-align: center;
-            display: block;
-            max-width: 200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-    </style>
+    <title>Signal Links | The First Spark</title>
+    <meta name="description" content="Connect with The First Spark across all dimensions. Social links and contact portals.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
@@ -109,61 +20,118 @@
     </script>
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="twinkling"></div>
+    <!-- Starfield Canvas -->
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    
+    <!-- Ambient Glow -->
+    <div class="ambient-glow" aria-hidden="true"></div>
+    
+    <!-- Main Header -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">◇</span>
+            <span class="logo-text">THE FIRST SPARK</span>
+        </a>
+    </header>
 
-    <div class="links-container">
-        <div class="links-header">
-            <h1>SIGNAL LINKS</h1>
-            <p>Connect across all channels</p>
+    <main class="page-container">
+        <a href="index.html" class="back-link">← Back to SPARKVERSE</a>
+        
+        <header class="page-header">
+            <span class="page-icon">⟁</span>
+            <h1 class="page-title">SIGNAL LINKS</h1>
+            <p class="page-subtitle">Connect with the consciousness grid. Find us across dimensions.</p>
+        </header>
+
+        <div class="page-content">
+            <nav class="link-buttons" aria-label="Social media links">
+                <!-- Instagram -->
+                <a href="https://instagram.com/thefirstspark" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <span class="link-btn-icon">◎</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">INSTAGRAM</span>
+                        <span class="link-btn-desc">Visual transmissions & daily sparks</span>
+                    </div>
+                </a>
+
+                <!-- TikTok -->
+                <a href="https://tiktok.com/@thefirstspark" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <span class="link-btn-icon">▶</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">TIKTOK</span>
+                        <span class="link-btn-desc">Short-form consciousness downloads</span>
+                    </div>
+                </a>
+
+                <!-- YouTube -->
+                <a href="https://youtube.com/@thefirstspark" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <span class="link-btn-icon">▷</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">YOUTUBE</span>
+                        <span class="link-btn-desc">Long-form explorations & tutorials</span>
+                    </div>
+                </a>
+
+                <!-- Twitter/X -->
+                <a href="https://twitter.com/thefirstspark" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <span class="link-btn-icon">✕</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">X (TWITTER)</span>
+                        <span class="link-btn-desc">Real-time signal broadcasts</span>
+                    </div>
+                </a>
+
+                <!-- Discord -->
+                <a href="https://discord.gg/thefirstspark" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <span class="link-btn-icon">◈</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">DISCORD</span>
+                        <span class="link-btn-desc">Join the SPARKVERSE community</span>
+                    </div>
+                </a>
+
+                <!-- Whop -->
+                <a href="https://whop.com/discover/sparkverse-511c/" class="link-btn" target="_blank" rel="noopener noreferrer">
+                    <span class="link-btn-icon">⚙</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">WHOP MEMBERSHIP</span>
+                        <span class="link-btn-desc">Premium tools & exclusive content</span>
+                    </div>
+                </a>
+
+                <!-- Email -->
+                <a href="mailto:kate@thefirstspark.shop" class="link-btn">
+                    <span class="link-btn-icon">✉</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">EMAIL</span>
+                        <span class="link-btn-desc">kate@thefirstspark.shop</span>
+                    </div>
+                </a>
+
+                <!-- Main Website -->
+                <a href="https://thefirstspark.shop" class="link-btn">
+                    <span class="link-btn-icon">◇</span>
+                    <div class="link-btn-text">
+                        <span class="link-btn-title">MAIN PORTAL</span>
+                        <span class="link-btn-desc">thefirstspark.shop</span>
+                    </div>
+                </a>
+            </nav>
+
+            <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                <p style="color: var(--muted-silver); font-size: 0.85rem; margin-bottom: 1rem;">Consciousness technology for reality architects.</p>
+                <a href="index.html" class="cta-btn-secondary cta-btn">
+                    ← Return to SPARKVERSE
+                </a>
+            </div>
         </div>
+    </main>
 
-        <a href="https://x.com/thefirstspark" target="_blank" class="link-button">
-            <div class="link-icon">𝕏</div>
-            <h3>X / TWITTER</h3>
-            <p>Follow the spark on X</p>
-        </a>
+    <!-- Footer -->
+    <footer class="site-footer" style="position: relative;">
+        <p class="tagline">Reality is programmable. You are the coder.</p>
+    </footer>
 
-        <a href="https://instagram.com/thefirstspark" target="_blank" class="link-button">
-            <div class="link-icon">📸</div>
-            <h3>INSTAGRAM</h3>
-            <p>Visual consciousness feed</p>
-        </a>
-
-        <a href="https://youtube.com/@thefirstspark" target="_blank" class="link-button">
-            <div class="link-icon">📺</div>
-            <h3>YOUTUBE</h3>
-            <p>Video content & deep dives</p>
-        </a>
-
-        <a href="https://discord.gg/thefirstspark" target="_blank" class="link-button">
-            <div class="link-icon">💬</div>
-            <h3>DISCORD</h3>
-            <p>Join the community</p>
-        </a>
-
-        <a href="https://t.me/thefirstspark" target="_blank" class="link-button">
-            <div class="link-icon">✈️</div>
-            <h3>TELEGRAM</h3>
-            <p>Instant updates & signals</p>
-        </a>
-
-        <a href="https://github.com/thefirstspark" target="_blank" class="link-button">
-            <div class="link-icon">🔧</div>
-            <h3>GITHUB</h3>
-            <p>Open source consciousness tools</p>
-        </a>
-
-        <a href="mailto:contact@thefirstspark.shop" class="link-button">
-            <div class="link-icon">📧</div>
-            <h3>EMAIL</h3>
-            <p>Direct contact</p>
-        </a>
-
-        <a href="index.html" class="back-button">← Back to Sparkverse</a>
-    </div>
-
-    <script src="script.js"></script>
-    <script src="cosmic.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

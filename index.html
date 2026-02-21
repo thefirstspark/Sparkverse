@@ -3,1411 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPARKVERSE | The First Spark</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --void: #050508;
-            --nebula-purple: #8b5cf6;
-            --spark-gold: #fbbf24;
-            --cosmic-cyan: #22d3d3;
-            --blood-orange: #f97316;
-            --hot-pink: #ec4899;
-            --electric-blue: #3b82f6;
-            --acid-green: #84cc16;
-            --ghost-white: rgba(255,255,255,0.9);
-            --dim: rgba(255,255,255,0.4);
-        }
-
-        body {
-            background: var(--void);
-            min-height: 100vh;
-            font-family: 'Space Mono', monospace;
-            color: var(--ghost-white);
-            overflow-x: hidden;
-            cursor: crosshair;
-        }
-
-        /* ===== MULTICOLOR GRADIENT TEXT ===== */
-        .gradient-text {
-            background: linear-gradient(
-                135deg,
-                var(--hot-pink),
-                var(--nebula-purple),
-                var(--cosmic-cyan),
-                var(--acid-green),
-                var(--spark-gold),
-                var(--blood-orange),
-                var(--hot-pink)
-            );
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 8s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* ===== COSMIC BACKGROUND LAYERS ===== */
-        .cosmic-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        /* Deep space gradient */
-        .deep-space {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 10% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 45%),
-                radial-gradient(ellipse at 50% 50%, rgba(34, 211, 211, 0.08) 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 20%, rgba(249, 115, 22, 0.1) 0%, transparent 40%),
-                radial-gradient(ellipse at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 45%),
-                linear-gradient(180deg, #050508 0%, #0a0a12 50%, #050510 100%);
-        }
-
-        /* Constellation Canvas */
-        .constellation-canvas {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        /* Starfield layers */
-        .starfield {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite;
-        }
-
-        .star.colored {
-            box-shadow: 0 0 6px var(--color);
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: var(--base-opacity); transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        /* Shooting Stars */
-        .shooting-star {
-            position: absolute;
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, white, transparent);
-            border-radius: 50%;
-            animation: shoot var(--duration) linear infinite;
-            opacity: 0;
-        }
-
-        @keyframes shoot {
-            0% {
-                transform: translateX(0) translateY(0);
-                opacity: 1;
-            }
-            70% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(500px) translateY(300px);
-                opacity: 0;
-            }
-        }
-
-        /* Floating Cosmic Particles */
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            animation: float var(--duration) ease-in-out infinite;
-            opacity: 0.6;
-        }
-
-        @keyframes float {
-            0%, 100% { 
-                transform: translateY(0) translateX(0) rotate(0deg); 
-                opacity: 0.4;
-            }
-            25% { 
-                transform: translateY(-20px) translateX(10px) rotate(90deg); 
-                opacity: 0.8;
-            }
-            50% { 
-                transform: translateY(-10px) translateX(-10px) rotate(180deg); 
-                opacity: 0.6;
-            }
-            75% { 
-                transform: translateY(-30px) translateX(5px) rotate(270deg); 
-                opacity: 0.9;
-            }
-        }
-
-        /* Nebula Clouds */
-        .nebula-cloud {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.3;
-            animation: nebulaPulse 15s ease-in-out infinite;
-        }
-
-        @keyframes nebulaPulse {
-            0%, 100% { transform: scale(1); opacity: 0.2; }
-            50% { transform: scale(1.2); opacity: 0.4; }
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to bottom, rgba(5,5,8,0.98), transparent);
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1.5rem;
-            letter-spacing: 0.2em;
-        }
-
-        .token-display {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .token-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--spark-gold), var(--blood-orange), var(--hot-pink));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--void);
-            animation: tokenGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes tokenGlow {
-            0%, 100% { box-shadow: 0 0 10px var(--spark-gold); }
-            50% { box-shadow: 0 0 20px var(--hot-pink); }
-        }
-
-        .token-amount {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .token-label {
-            font-size: 0.65rem;
-            color: var(--dim);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        /* ===== MAIN GALAXY ===== */
-        .galaxy-container {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 6rem 2rem 2rem;
-        }
-
-        .galaxy-title {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .galaxy-title h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2.5rem, 10vw, 5rem);
-            font-weight: 900;
-            letter-spacing: 0.4em;
-            margin-bottom: 0.5rem;
-            text-shadow: 
-                0 0 30px rgba(139, 92, 246, 0.5),
-                0 0 60px rgba(236, 72, 153, 0.3),
-                0 0 90px rgba(34, 211, 211, 0.2);
-        }
-
-        .galaxy-subtitle {
-            font-size: 1rem;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, var(--cosmic-cyan), var(--nebula-purple), var(--hot-pink));
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 5s ease infinite;
-        }
-
-        /* ===== SOLAR SYSTEM ===== */
-        .solar-system {
-            position: relative;
-            width: min(900px, 90vw);
-            height: min(900px, 90vw);
-            margin: 2rem auto;
-        }
-
-        /* Orbit Rings with gradient */
-        .orbit {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .orbit-1 { 
-            width: 280px; 
-            height: 280px; 
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
-        }
-        .orbit-2 { 
-            width: 440px; 
-            height: 440px; 
-            border: 1px solid rgba(236, 72, 153, 0.15);
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.08);
-        }
-        .orbit-3 { 
-            width: 600px; 
-            height: 600px; 
-            border: 1px solid rgba(34, 211, 211, 0.12);
-            box-shadow: 0 0 40px rgba(34, 211, 211, 0.06);
-        }
-        .orbit-4 { 
-            width: 760px; 
-            height: 760px; 
-            border: 1px solid rgba(251, 191, 36, 0.1);
-            box-shadow: 0 0 50px rgba(251, 191, 36, 0.05);
-        }
-
-        /* Central Sun */
-        .sun {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 130px;
-            height: 130px;
-            background: 
-                radial-gradient(circle at 30% 30%, #fff, var(--spark-gold), var(--blood-orange), var(--hot-pink), #7c2d12);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: sunPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes sunPulse {
-            0%, 100% { 
-                box-shadow: 
-                    0 0 60px var(--spark-gold),
-                    0 0 120px rgba(251, 191, 36, 0.5),
-                    0 0 180px rgba(249, 115, 22, 0.3),
-                    0 0 240px rgba(236, 72, 153, 0.2),
-                    inset -10px -10px 30px rgba(0,0,0,0.3);
-            }
-            50% { 
-                box-shadow: 
-                    0 0 80px var(--spark-gold),
-                    0 0 160px rgba(251, 191, 36, 0.6),
-                    0 0 240px rgba(249, 115, 22, 0.4),
-                    0 0 320px rgba(236, 72, 153, 0.3),
-                    inset -10px -10px 30px rgba(0,0,0,0.3);
-            }
-        }
-
-        .sun:hover {
-            transform: translate(-50%, -50%) scale(1.15);
-        }
-
-        .sun-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--void);
-            text-align: center;
-            letter-spacing: 0.1em;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-
-        /* Solar Flares */
-        .sun::before,
-        .sun::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: inherit;
-            opacity: 0.3;
-            animation: flare 3s ease-in-out infinite;
-        }
-
-        .sun::after {
-            animation-delay: 1.5s;
-        }
-
-        @keyframes flare {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.3); opacity: 0; }
-        }
-
-        /* ===== PLANETS ===== */
-        .planet {
-            position: absolute;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            z-index: 15;
-        }
-
-        .planet:hover {
-            transform: scale(1.25);
-            z-index: 25;
-        }
-
-        .planet-body {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .planet-ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotateX(75deg);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .planet-info {
-            position: absolute;
-            bottom: -55px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .planet:hover .planet-info {
-            opacity: 1;
-        }
-
-        .planet-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.25rem;
-        }
-
-        .planet-cost {
-            font-size: 0.65rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            justify-content: center;
-        }
-
-        /* Individual Planets */
-        .planet-lumina {
-            width: 55px;
-            height: 55px;
-            top: calc(50% - 140px - 27px);
-            left: calc(50% - 27px);
-            animation: orbitFloat 20s ease-in-out infinite;
-        }
-
-        .planet-lumina .planet-body {
-            background: radial-gradient(circle at 25% 25%, #fff, var(--cosmic-cyan), #0d9488, #064e3b);
-            box-shadow: 
-                0 0 30px var(--cosmic-cyan),
-                0 0 60px rgba(34, 211, 211, 0.4),
-                inset -5px -5px 15px rgba(0,0,0,0.3);
-        }
-
-        .planet-lumina .planet-name { color: var(--cosmic-cyan); }
-        .planet-lumina .planet-cost { color: var(--cosmic-cyan); }
-
-        .planet-nexus {
-            width: 70px;
-            height: 70px;
-            top: calc(50% + 180px);
-            left: calc(50% - 130px);
-            animation: orbitFloat 25s ease-in-out infinite reverse;
-        }
-
-        .planet-nexus .planet-body {
-            background: radial-gradient(circle at 25% 25%, #e9d5ff, var(--nebula-purple), #6d28d9, #4c1d95);
-            box-shadow: 
-                0 0 40px var(--nebula-purple),
-                0 0 80px rgba(139, 92, 246, 0.4),
-                inset -6px -6px 18px rgba(0,0,0,0.3);
-        }
-
-        .planet-nexus .planet-ring {
-            width: 110px;
-            height: 110px;
-            border-color: rgba(139, 92, 246, 0.4);
-        }
-
-        .planet-nexus .planet-name { color: var(--nebula-purple); }
-        .planet-nexus .planet-cost { color: var(--spark-gold); }
-
-        .planet-void {
-            width: 60px;
-            height: 60px;
-            top: calc(50% - 90px);
-            left: calc(50% + 270px);
-            animation: orbitFloat 30s ease-in-out infinite;
-        }
-
-        .planet-void .planet-body {
-            background: radial-gradient(circle at 25% 25%, #374151, #111827, #000);
-            box-shadow: 
-                0 0 30px rgba(255,255,255,0.1),
-                0 0 60px rgba(139, 92, 246, 0.2),
-                inset -5px -5px 15px rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .planet-void .planet-name { color: #9ca3af; }
-        .planet-void .planet-cost { color: var(--spark-gold); }
-
-        .planet-forge {
-            width: 75px;
-            height: 75px;
-            top: calc(50% + 40px);
-            left: calc(50% - 340px);
-            animation: orbitFloat 22s ease-in-out infinite reverse;
-        }
-
-        .planet-forge .planet-body {
-            background: radial-gradient(circle at 25% 25%, #fef3c7, var(--spark-gold), var(--blood-orange), #9a3412);
-            box-shadow: 
-                0 0 50px var(--blood-orange),
-                0 0 100px rgba(249, 115, 22, 0.5),
-                inset -7px -7px 20px rgba(0,0,0,0.3);
-            animation: forgeGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes forgeGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
-        }
-
-        .planet-forge .planet-name { color: var(--blood-orange); }
-        .planet-forge .planet-cost { color: var(--spark-gold); }
-
-        .planet-archive {
-            width: 48px;
-            height: 48px;
-            top: calc(50% - 260px);
-            left: calc(50% - 180px);
-            animation: orbitFloat 35s ease-in-out infinite;
-        }
-
-        .planet-archive .planet-body {
-            background: radial-gradient(circle at 25% 25%, #f3f4f6, #9ca3af, #4b5563, #1f2937);
-            box-shadow: 
-                0 0 25px rgba(156, 163, 175, 0.5),
-                inset -4px -4px 12px rgba(0,0,0,0.2);
-        }
-
-        .planet-archive .planet-name { color: #d1d5db; }
-        .planet-archive .planet-cost { color: var(--spark-gold); }
-
-        .planet-echo {
-            width: 45px;
-            height: 45px;
-            top: calc(50% + 310px);
-            left: calc(50% + 120px);
-            animation: orbitFloat 28s ease-in-out infinite reverse;
-        }
-
-        .planet-echo .planet-body {
-            background: radial-gradient(circle at 25% 25%, #a5f3fc, #06b6d4, #0891b2, #155e75);
-            box-shadow: 
-                0 0 30px rgba(6, 182, 212, 0.6),
-                0 0 60px rgba(6, 182, 212, 0.3),
-                inset -4px -4px 10px rgba(0,0,0,0.2);
-        }
-
-        .planet-echo .planet-name { color: #22d3ee; }
-        .planet-echo .planet-cost { color: var(--acid-green); }
-
-        .planet-genesis {
-            width: 52px;
-            height: 52px;
-            top: calc(50% + 100px);
-            left: calc(50% + 250px);
-            animation: orbitFloat 32s ease-in-out infinite;
-        }
-
-        .planet-genesis .planet-body {
-            background: radial-gradient(circle at 25% 25%, #fce7f3, var(--hot-pink), #be185d, #831843);
-            box-shadow: 
-                0 0 35px var(--hot-pink),
-                0 0 70px rgba(236, 72, 153, 0.4),
-                inset -5px -5px 14px rgba(0,0,0,0.2);
-        }
-
-        .planet-genesis .planet-name { color: var(--hot-pink); }
-        .planet-genesis .planet-cost { color: var(--spark-gold); }
-
-        @keyframes orbitFloat {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            25% { transform: translateY(-8px) translateX(4px); }
-            50% { transform: translateY(0) translateX(8px); }
-            75% { transform: translateY(8px) translateX(4px); }
-        }
-
-        /* ===== MODAL ===== */
-        .planet-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(5, 5, 8, 0.97);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .planet-modal.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            max-width: 600px;
-            width: 100%;
-            background: linear-gradient(135deg, rgba(20,20,30,0.95), rgba(30,30,45,0.95));
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 1.5rem;
-            padding: 2.5rem;
-            position: relative;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 60px rgba(139, 92, 246, 0.2), 0 0 120px rgba(236, 72, 153, 0.1);
-        }
-
-        .planet-modal.active .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1.25rem;
-            right: 1.25rem;
-            background: none;
-            border: none;
-            color: var(--dim);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: color 0.2s ease, transform 0.2s ease;
-        }
-
-        .modal-close:hover {
-            color: var(--hot-pink);
-            transform: rotate(90deg);
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-planet-icon {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            animation: modalPlanetGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes modalPlanetGlow {
-            0%, 100% { box-shadow: 0 0 30px currentColor; }
-            50% { box-shadow: 0 0 50px currentColor; }
-        }
-
-        .modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-subtitle {
-            font-size: 0.9rem;
-            background: linear-gradient(90deg, var(--cosmic-cyan), var(--nebula-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .modal-description {
-            color: var(--dim);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-
-        .modal-tools {
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-tools h4 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 0.25em;
-            margin-bottom: 0.75rem;
-        }
-
-        .tool-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tool-tag {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .tool-tag:hover {
-            border-color: var(--nebula-purple);
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .tool-cost {
-            font-weight: 700;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 0.875rem 1.5rem;
-            border-radius: 0.75rem;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--spark-gold), var(--blood-orange), var(--hot-pink));
-            background-size: 200% 200%;
-            border: none;
-            color: var(--void);
-            animation: btnGradient 3s ease infinite;
-        }
-
-        @keyframes btnGradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4), 0 5px 15px rgba(236, 72, 153, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: var(--ghost-white);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: var(--cosmic-cyan);
-            color: var(--cosmic-cyan);
-        }
-
-        /* ===== BOTTOM NAV ===== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1rem 2rem 1.5rem;
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            background: linear-gradient(to top, rgba(5,5,8,0.98), transparent);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.4rem;
-            color: var(--dim);
-            text-decoration: none;
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            color: var(--ghost-white);
-        }
-
-        .nav-item.active .nav-icon {
-            background: linear-gradient(135deg, var(--spark-gold), var(--hot-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-icon {
-            font-size: 1.4rem;
-        }
-
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: rgba(20,20,30,0.95);
-            border: 1px solid var(--spark-gold);
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 500;
-            pointer-events: none;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .solar-system {
-                width: 100vw;
-                height: 100vw;
-            }
-
-            .orbit-1 { width: 180px; height: 180px; }
-            .orbit-2 { width: 280px; height: 280px; }
-            .orbit-3 { width: 380px; height: 380px; }
-            .orbit-4 { width: 480px; height: 480px; }
-
-            .sun { width: 90px; height: 90px; }
-
-            .planet-lumina { width: 38px; height: 38px; top: calc(50% - 90px - 19px); }
-            .planet-nexus { width: 48px; height: 48px; top: calc(50% + 110px); left: calc(50% - 80px); }
-            .planet-void { width: 42px; height: 42px; top: calc(50% - 55px); left: calc(50% + 160px); }
-            .planet-forge { width: 52px; height: 52px; top: calc(50% + 25px); left: calc(50% - 200px); }
-            .planet-archive { width: 34px; height: 34px; top: calc(50% - 155px); left: calc(50% - 110px); }
-            .planet-echo { width: 30px; height: 30px; top: calc(50% + 190px); left: calc(50% + 70px); }
-            .planet-genesis { width: 36px; height: 36px; top: calc(50% + 60px); left: calc(50% + 150px); }
-
-            .header { padding: 1rem; }
-            .logo { font-size: 1.1rem; letter-spacing: 0.15em; }
-            .galaxy-title h1 { letter-spacing: 0.2em; }
-            .bottom-nav { gap: 1.5rem; }
-        }
-    </style>
+    <title>The First Spark | Enter the SPARKVERSE</title>
+    <meta name="description" content="Consciousness technology for reality architects. Navigate the SPARKVERSE portal.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
+    </script>
 </head>
 <body>
-    <!-- Cosmic Background -->
-    <div class="cosmic-bg">
-        <div class="deep-space"></div>
-        <canvas class="constellation-canvas" id="constellationCanvas"></canvas>
-        <div class="starfield" id="starfield"></div>
-        <div id="shootingStars"></div>
-        <div id="particles"></div>
-        <div id="nebulaClouds"></div>
-    </div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="logo gradient-text">SPARKVERSE</div>
-        <div class="token-display">
-            <div class="token-icon">◆</div>
-            <div>
-                <div class="token-amount gradient-text" id="tokenBalance">500</div>
-                <div class="token-label">$SPRK</div>
-            </div>
+    <!-- Starfield Canvas -->
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    
+    <!-- Ambient Glow -->
+    <div class="ambient-glow" aria-hidden="true"></div>
+    
+    <!-- Main Header -->
+    <header class="site-header">
+        <div class="logo">
+            <span class="logo-icon">◇</span>
+            <span class="logo-text">THE FIRST SPARK</span>
         </div>
     </header>
 
-    <!-- Galaxy Container -->
-    <main class="galaxy-container">
-        <div class="galaxy-title">
-            <h1 class="gradient-text">SPARKVERSE</h1>
-            <p class="galaxy-subtitle">Navigate the Cosmos of Consciousness</p>
+    <!-- Solar System Container -->
+    <main class="solar-system-container" role="navigation" aria-label="SPARKVERSE Navigation">
+        <h1 class="sr-only">Navigate the SPARKVERSE</h1>
+        
+        <!-- Orbit Rings (decorative) -->
+        <div class="orbit-rings" aria-hidden="true">
+            <div class="orbit-ring orbit-ring-1"></div>
+            <div class="orbit-ring orbit-ring-2"></div>
+            <div class="orbit-ring orbit-ring-3"></div>
         </div>
 
-        <div class="solar-system">
-            <div class="orbit orbit-1"></div>
-            <div class="orbit orbit-2"></div>
-            <div class="orbit orbit-3"></div>
-            <div class="orbit orbit-4"></div>
-
-            <div class="sun" onclick="openModal('core')">
-                <span class="sun-label">CORE<br>SPARK</span>
-            </div>
-
-            <div class="planet planet-lumina" onclick="openModal('lumina')">
-                <div class="planet-body"></div>
-                <div class="planet-info">
-                    <div class="planet-name">LUMINA</div>
-                    <div class="planet-cost">✦ FREE ZONE</div>
+        <!-- Center Planet - SPARKVERSE -->
+        <button 
+            class="planet planet-center" 
+            id="center-planet"
+            aria-label="SPARKVERSE - All Sparks - Open navigation menu"
+            aria-haspopup="dialog"
+        >
+            <div class="planet-core">
+                <div class="planet-glow"></div>
+                <div class="planet-surface">
+                    <span class="planet-icon">✦</span>
                 </div>
             </div>
-
-            <div class="planet planet-nexus" onclick="openModal('nexus')">
-                <div class="planet-body"></div>
-                <div class="planet-ring"></div>
-                <div class="planet-info">
-                    <div class="planet-name">NEXUS</div>
-                    <div class="planet-cost">◆ 5-50 $SPRK</div>
-                </div>
+            <div class="planet-label">
+                <span class="planet-name">SPARKVERSE</span>
+                <span class="planet-subtitle">All Sparks</span>
             </div>
+        </button>
 
-            <div class="planet planet-void" onclick="openModal('void')">
-                <div class="planet-body"></div>
-                <div class="planet-info">
-                    <div class="planet-name">VOID STATION</div>
-                    <div class="planet-cost">◆ 100 $SPRK</div>
+        <!-- Orbiting Planets -->
+        <div class="orbit-container" id="orbit-container">
+            <!-- Planet 1: NFT Vault -->
+            <a href="https://opensea.io/" class="planet planet-orbit" data-orbit="1" aria-label="NFT Vault - Digital collectibles" target="_blank" rel="noopener">
+                <div class="planet-core">
+                    <div class="planet-glow"></div>
+                    <div class="planet-surface planet-nft">
+                        <span class="planet-icon">◈</span>
+                    </div>
                 </div>
-            </div>
+                <div class="planet-label">
+                    <span class="planet-name">NFT VAULT</span>
+                </div>
+            </a>
 
-            <div class="planet planet-forge" onclick="openModal('forge')">
-                <div class="planet-body"></div>
-                <div class="planet-info">
-                    <div class="planet-name">THE FORGE</div>
-                    <div class="planet-cost">◆ VARIABLE</div>
+            <!-- Planet 2: Signal Links -->
+            <a href="links.html" class="planet planet-orbit" data-orbit="2" aria-label="Signal Links - Connect with us">
+                <div class="planet-core">
+                    <div class="planet-glow"></div>
+                    <div class="planet-surface planet-links">
+                        <span class="planet-icon">⟁</span>
+                    </div>
                 </div>
-            </div>
+                <div class="planet-label">
+                    <span class="planet-name">SIGNAL LINKS</span>
+                </div>
+            </a>
 
-            <div class="planet planet-archive" onclick="openModal('archive')">
-                <div class="planet-body"></div>
-                <div class="planet-info">
-                    <div class="planet-name">ARCHIVE MOONS</div>
-                    <div class="planet-cost">◆ TIERED</div>
+            <!-- Planet 3: Spark Station -->
+            <a href="spark-station.html" class="planet planet-orbit" data-orbit="3" aria-label="Spark Station - Mobile consciousness portal">
+                <div class="planet-core">
+                    <div class="planet-glow"></div>
+                    <div class="planet-surface planet-station">
+                        <span class="planet-icon">⬡</span>
+                    </div>
                 </div>
-            </div>
+                <div class="planet-label">
+                    <span class="planet-name">SPARK STATION</span>
+                </div>
+            </a>
 
-            <div class="planet planet-echo" onclick="openModal('echo')">
-                <div class="planet-body"></div>
-                <div class="planet-info">
-                    <div class="planet-name">ECHO CHAMBER</div>
-                    <div class="planet-cost">✦ EARN HERE</div>
+            <!-- Planet 4: Investor Gate -->
+            <a href="invest.html" class="planet planet-orbit" data-orbit="4" aria-label="Investor Gate - Investment portal">
+                <div class="planet-core">
+                    <div class="planet-glow"></div>
+                    <div class="planet-surface planet-invest">
+                        <span class="planet-icon">⟐</span>
+                    </div>
                 </div>
-            </div>
+                <div class="planet-label">
+                    <span class="planet-name">INVESTOR GATE</span>
+                </div>
+            </a>
 
-            <div class="planet planet-genesis" onclick="openModal('genesis')">
-                <div class="planet-body"></div>
-                <div class="planet-info">
-                    <div class="planet-name">GENESIS</div>
-                    <div class="planet-cost">◆ NFT ZONE</div>
+            <!-- Planet 5: Tools Market -->
+            <a href="tools.html" class="planet planet-orbit" data-orbit="5" aria-label="Tools Market - 50+ consciousness tools">
+                <div class="planet-core">
+                    <div class="planet-glow"></div>
+                    <div class="planet-surface planet-tools">
+                        <span class="planet-icon">⚙</span>
+                    </div>
                 </div>
-            </div>
+                <div class="planet-label">
+                    <span class="planet-name">TOOLS MARKET</span>
+                </div>
+            </a>
+
+            <!-- Planet 6: Free Drops -->
+            <a href="free.html" class="planet planet-orbit" data-orbit="6" aria-label="Free Drops - Free resources and downloads">
+                <div class="planet-core">
+                    <div class="planet-glow"></div>
+                    <div class="planet-surface planet-free">
+                        <span class="planet-icon">⟡</span>
+                    </div>
+                </div>
+                <div class="planet-label">
+                    <span class="planet-name">FREE DROPS</span>
+                </div>
+            </a>
+
+            <!-- Planet 7: Newsfeed -->
+            <a href="news.html" class="planet planet-orbit" data-orbit="7" aria-label="Newsfeed - Updates and announcements">
+                <div class="planet-core">
+                    <div class="planet-glow"></div>
+                    <div class="planet-surface planet-news">
+                        <span class="planet-icon">◉</span>
+                    </div>
+                </div>
+                <div class="planet-label">
+                    <span class="planet-name">NEWSFEED</span>
+                </div>
+            </a>
         </div>
+
+        <!-- Mobile Planet List -->
+        <nav class="mobile-planet-list" aria-label="Navigation links">
+            <a href="https://opensea.io/" class="mobile-planet-btn" target="_blank" rel="noopener">
+                <span class="mobile-planet-icon">◈</span>
+                <span>NFT VAULT</span>
+            </a>
+            <a href="links.html" class="mobile-planet-btn">
+                <span class="mobile-planet-icon">⟁</span>
+                <span>SIGNAL LINKS</span>
+            </a>
+            <a href="spark-station.html" class="mobile-planet-btn">
+                <span class="mobile-planet-icon">⬡</span>
+                <span>SPARK STATION</span>
+            </a>
+            <a href="invest.html" class="mobile-planet-btn">
+                <span class="mobile-planet-icon">⟐</span>
+                <span>INVESTOR GATE</span>
+            </a>
+            <a href="tools.html" class="mobile-planet-btn">
+                <span class="mobile-planet-icon">⚙</span>
+                <span>TOOLS MARKET</span>
+            </a>
+            <a href="free.html" class="mobile-planet-btn">
+                <span class="mobile-planet-icon">⟡</span>
+                <span>FREE DROPS</span>
+            </a>
+            <a href="news.html" class="mobile-planet-btn">
+                <span class="mobile-planet-icon">◉</span>
+                <span>NEWSFEED</span>
+            </a>
+        </nav>
     </main>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active">
-            <span class="nav-icon">◉</span>
-            <span>Galaxy</span>
-        </a>
-        <a href="#" class="nav-item">
-            <span class="nav-icon">◆</span>
-            <span>Wallet</span>
-        </a>
-        <a href="#" class="nav-item">
-            <span class="nav-icon">☰</span>
-            <span>Inventory</span>
-        </a>
-        <a href="#" class="nav-item">
-            <span class="nav-icon">◈</span>
-            <span>Profile</span>
-        </a>
-    </nav>
-
-    <!-- Planet Modal -->
-    <div class="planet-modal" id="planetModal">
+    <!-- Navigation Modal -->
+    <div class="modal-overlay" id="nav-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
         <div class="modal-content">
-            <span class="close-modal" onclick="closeNavigationModal()">&times;</span>
-            <h2>Navigate the Sparkverse</h2>
-            <div class="navigation-grid">
-                <a href="https://whop.com/sparkverse-0d79/" target="_blank" class="nav-card nft-card">
-                    <div class="nav-icon">🎨</div>
-                    <h3>NFT Vault</h3>
-                    <p>Explore geometric consciousness NFTs</p>
+            <button class="modal-close" aria-label="Close navigation menu">&times;</button>
+            <h2 id="modal-title" class="modal-title">Navigate the Sparkverse</h2>
+            <p class="modal-subtitle">Choose your destination</p>
+            <nav class="modal-nav" aria-label="Full navigation">
+                <a href="https://opensea.io/" class="modal-link" target="_blank" rel="noopener">
+                    <span class="modal-link-icon">◈</span>
+                    <span class="modal-link-text">NFT Vault</span>
+                    <span class="modal-link-arrow">→</span>
                 </a>
-                <a href="links.html" class="nav-card links-card">
-                    <div class="nav-icon">📡</div>
-                    <h3>Signal Links</h3>
-                    <p>Connect across all channels</p>
+                <a href="links.html" class="modal-link">
+                    <span class="modal-link-icon">⟁</span>
+                    <span class="modal-link-text">Signal Links</span>
+                    <span class="modal-link-arrow">→</span>
                 </a>
-                <a href="spark-station.html" class="nav-card station-card">
-                    <div class="nav-icon">🚀</div>
-                    <h3>Spark Station</h3>
-                    <p>Mobile consciousness hub</p>
+                <a href="spark-station.html" class="modal-link">
+                    <span class="modal-link-icon">⬡</span>
+                    <span class="modal-link-text">Spark Station</span>
+                    <span class="modal-link-arrow">→</span>
                 </a>
-                <a href="invest.html" class="nav-card investor-card">
-                    <div class="nav-icon">💎</div>
-                    <h3>Investor Gate</h3>
-                    <p>Join the consciousness revolution</p>
+                <a href="invest.html" class="modal-link">
+                    <span class="modal-link-icon">⟐</span>
+                    <span class="modal-link-text">Investor Gate</span>
+                    <span class="modal-link-arrow">→</span>
                 </a>
-                <a href="https://whop.com/sparkverse-0d79/" target="_blank" class="nav-card tools-card">
-                    <div class="nav-icon">🛠️</div>
-                    <h3>Tools Market</h3>
-                    <p>Access consciousness tools & memberships</p>
+                <a href="tools.html" class="modal-link">
+                    <span class="modal-link-icon">⚙</span>
+                    <span class="modal-link-text">Tools Market</span>
+                    <span class="modal-link-arrow">→</span>
                 </a>
-                <a href="free.html" class="nav-card free-card">
-                    <div class="nav-icon">🎁</div>
-                    <h3>Free Drops</h3>
-                    <p>Guides, ebooks & consciousness tools</p>
+                <a href="free.html" class="modal-link">
+                    <span class="modal-link-icon">⟡</span>
+                    <span class="modal-link-text">Free Drops</span>
+                    <span class="modal-link-arrow">→</span>
                 </a>
-                <a href="news.html" class="nav-card news-card">
-                    <div class="nav-icon">📰</div>
-                    <h3>Newsfeed</h3>
-                    <p>Updates, dev logs & product drops</p>
+                <a href="news.html" class="modal-link">
+                    <span class="modal-link-icon">◉</span>
+                    <span class="modal-link-text">Newsfeed</span>
+                    <span class="modal-link-arrow">→</span>
                 </a>
-            </div>
+            </nav>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
+    <!-- Footer Tagline -->
+    <footer class="site-footer">
+        <p class="tagline">Reality is programmable. You are the coder.</p>
+    </footer>
 
-    <script>
-        // ===== CONSTELLATION GENERATOR =====
-        const canvas = document.getElementById('constellationCanvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            drawConstellations();
-        }
-
-        function drawConstellations() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const constellations = [
-                { x: 0.1, y: 0.15, stars: [[0,0], [30,5], [60,0], [90,10], [100,40], [85,70], [110,90]] },
-                { x: 0.75, y: 0.2, stars: [[0,0], [40,20], [20,50], [40,80], [60,50], [80,20], [40,50]] },
-                { x: 0.5, y: 0.7, stars: [[0,30], [40,0], [80,30], [0,30]] },
-                { x: 0.2, y: 0.6, stars: [[0,0], [20,30], [40,10], [60,40], [80,20]] },
-                { x: 0.85, y: 0.65, stars: [[30,0], [30,60], [0,30], [60,30]] },
-                { x: 0.4, y: 0.25, stars: [[0,0], [25,15], [50,5], [35,35]] },
-                { x: 0.6, y: 0.85, stars: [[0,0], [30,20], [60,10], [45,40], [15,35]] },
-                { x: 0.15, y: 0.4, stars: [[0,20], [25,0], [50,20], [25,40]] },
-            ];
-
-            constellations.forEach(constellation => {
-                const baseX = constellation.x * canvas.width;
-                const baseY = constellation.y * canvas.height;
-                
-                // Draw lines
-                ctx.strokeStyle = 'rgba(139, 92, 246, 0.2)';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                
-                constellation.stars.forEach((star, i) => {
-                    const x = baseX + star[0];
-                    const y = baseY + star[1];
-                    
-                    if (i === 0) {
-                        ctx.moveTo(x, y);
-                    } else {
-                        ctx.lineTo(x, y);
-                    }
-                });
-                ctx.stroke();
-                
-                // Draw star points
-                constellation.stars.forEach((star) => {
-                    const x = baseX + star[0];
-                    const y = baseY + star[1];
-                    
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                    ctx.beginPath();
-                    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Glow
-                    ctx.fillStyle = 'rgba(139, 92, 246, 0.3)';
-                    ctx.beginPath();
-                    ctx.arc(x, y, 5, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-            });
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // ===== STARFIELD GENERATOR =====
-        const starfield = document.getElementById('starfield');
-        const starColors = ['#ffffff', '#8b5cf6', '#22d3d3', '#ec4899', '#fbbf24', '#3b82f6', '#84cc16'];
-
-        for (let i = 0; i < 350; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            
-            if (Math.random() > 0.6) {
-                star.classList.add('colored');
-                const color = starColors[Math.floor(Math.random() * starColors.length)];
-                star.style.setProperty('--color', color);
-                star.style.background = color;
-            }
-            
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            const size = Math.random() * 3 + 0.5;
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-            star.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
-            star.style.setProperty('--base-opacity', Math.random() * 0.5 + 0.3);
-            star.style.animationDelay = Math.random() * 5 + 's';
-            starfield.appendChild(star);
-        }
-
-        // ===== SHOOTING STARS =====
-        const shootingStarsContainer = document.getElementById('shootingStars');
-
-        function createShootingStar() {
-            const star = document.createElement('div');
-            star.className = 'shooting-star';
-            star.style.left = Math.random() * 70 + '%';
-            star.style.top = Math.random() * 50 + '%';
-            star.style.setProperty('--duration', (Math.random() * 2 + 1) + 's');
-            star.style.transform = `rotate(${Math.random() * 30 + 30}deg)`;
-            
-            const colors = ['white', '#8b5cf6', '#22d3d3', '#ec4899'];
-            star.style.background = `linear-gradient(90deg, ${colors[Math.floor(Math.random() * colors.length)]}, transparent)`;
-            
-            shootingStarsContainer.appendChild(star);
-            setTimeout(() => star.remove(), 3000);
-        }
-
-        setInterval(createShootingStar, 2500);
-        setTimeout(createShootingStar, 500);
-        setTimeout(createShootingStar, 1200);
-
-        // ===== FLOATING PARTICLES =====
-        const particlesContainer = document.getElementById('particles');
-        const particleColors = ['#8b5cf6', '#ec4899', '#22d3d3', '#fbbf24', '#84cc16'];
-
-        for (let i = 0; i < 40; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            const size = Math.random() * 5 + 2;
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.background = particleColors[Math.floor(Math.random() * particleColors.length)];
-            particle.style.setProperty('--duration', (Math.random() * 15 + 10) + 's');
-            particle.style.animationDelay = Math.random() * 10 + 's';
-            particlesContainer.appendChild(particle);
-        }
-
-        // ===== NEBULA CLOUDS =====
-        const nebulaContainer = document.getElementById('nebulaClouds');
-        const nebulaColors = [
-            'rgba(139, 92, 246, 0.4)',
-            'rgba(236, 72, 153, 0.3)',
-            'rgba(34, 211, 211, 0.25)',
-            'rgba(249, 115, 22, 0.25)',
-            'rgba(132, 204, 22, 0.2)'
-        ];
-
-        for (let i = 0; i < 7; i++) {
-            const cloud = document.createElement('div');
-            cloud.className = 'nebula-cloud';
-            cloud.style.left = Math.random() * 100 + '%';
-            cloud.style.top = Math.random() * 100 + '%';
-            const size = Math.random() * 400 + 200;
-            cloud.style.width = size + 'px';
-            cloud.style.height = size + 'px';
-            cloud.style.background = nebulaColors[Math.floor(Math.random() * nebulaColors.length)];
-            cloud.style.animationDelay = Math.random() * 10 + 's';
-            nebulaContainer.appendChild(cloud);
-        }
-
-        // ===== PLANET DATA =====
-        const planets = {
-            core: {
-                name: 'CORE SPARK',
-                subtitle: 'The Origin Point',
-                icon: 'radial-gradient(circle at 30% 30%, #fff, #fbbf24, #f97316, #ec4899, #7c2d12)',
-                description: 'The central hub of the Sparkverse. Your journey begins and returns here. Access your soul map, track your evolution, and sync your consciousness data across all dimensions.',
-                tools: [
-                    { name: 'Soul Map Viewer', cost: 'FREE' },
-                    { name: 'Evolution Timeline', cost: 'FREE' },
-                    { name: 'Spark Sync', cost: 'FREE' },
-                    { name: 'Dimension Portal', cost: 'FREE' }
-                ],
-                action: 'ENTER CORE',
-                cost: 0
-            },
-            lumina: {
-                name: 'LUMINA',
-                subtitle: 'Beginner Consciousness',
-                icon: 'radial-gradient(circle at 25% 25%, #fff, #22d3d3, #0d9488, #064e3b)',
-                description: 'The gateway planet. Free to explore, Lumina contains foundational teachings on consciousness, reality programming basics, and introductory tools for awakening minds.',
-                tools: [
-                    { name: 'Reality 101 Course', cost: 'FREE' },
-                    { name: 'Breath Tracker', cost: 'FREE' },
-                    { name: 'Daily Spark Journal', cost: 'FREE' },
-                    { name: 'Basic Sigil Generator', cost: 'FREE' }
-                ],
-                action: 'LAND FREE',
-                cost: 0
-            },
-            nexus: {
-                name: 'NEXUS',
-                subtitle: 'Interactive Tools Hub',
-                icon: 'radial-gradient(circle at 25% 25%, #e9d5ff, #8b5cf6, #6d28d9, #4c1d95)',
-                description: 'The workshop of consciousness. Every tool here transforms energy. Soul mapping, sigil creation, frequency alignment — each activation costs $SPRK to power.',
-                tools: [
-                    { name: 'Advanced Soul Map', cost: '25' },
-                    { name: 'Sigil Forge', cost: '15' },
-                    { name: 'Frequency Scanner', cost: '10' },
-                    { name: 'Pattern Decoder', cost: '50' }
-                ],
-                action: 'LAND (25 $SPRK)',
-                cost: 25
-            },
-            void: {
-                name: 'VOID STATION',
-                subtitle: 'Shadow Work & Deep Processing',
-                icon: 'radial-gradient(circle at 25% 25%, #374151, #111827, #000)',
-                description: 'Not for the faint of heart. The Void Station holds tools for shadow integration, trauma processing, and deep consciousness work. High value, high intensity.',
-                tools: [
-                    { name: 'Shadow Mirror', cost: '100' },
-                    { name: 'Wound Mapping', cost: '75' },
-                    { name: 'Ancestor Trace', cost: '150' },
-                    { name: 'Ego Death Simulation', cost: '200' }
-                ],
-                action: 'ENTER VOID (100 $SPRK)',
-                cost: 100
-            },
-            forge: {
-                name: 'THE FORGE',
-                subtitle: 'Reality Creation Tools',
-                icon: 'radial-gradient(circle at 25% 25%, #fef3c7, #fbbf24, #f97316, #9a3412)',
-                description: 'Where consciousness becomes creation. Build your reality with programmable intention tools. Variable burn rate based on manifestation complexity.',
-                tools: [
-                    { name: 'Reality Script Editor', cost: 'VAR' },
-                    { name: 'Manifestation Compiler', cost: 'VAR' },
-                    { name: 'Timeline Brancher', cost: 'VAR' },
-                    { name: 'Probability Engine', cost: 'VAR' }
-                ],
-                action: 'ENTER FORGE',
-                cost: 'variable'
-            },
-            archive: {
-                name: 'ARCHIVE MOONS',
-                subtitle: "Kate's Origin Stories",
-                icon: 'radial-gradient(circle at 25% 25%, #f3f4f6, #9ca3af, #4b5563, #1f2937)',
-                description: 'Orbital libraries containing Book Zero chapters, origin stories, and the documented journey from trauma to awakening. Unlock tiers to dive deeper into the source.',
-                tools: [
-                    { name: 'Book Zero: Ch 1-3', cost: 'FREE' },
-                    { name: 'Book Zero: Ch 4-7', cost: '50' },
-                    { name: 'Book Zero: Complete', cost: '200' },
-                    { name: 'Private Archives', cost: 'OG ONLY' }
-                ],
-                action: 'ORBIT ARCHIVES',
-                cost: 0
-            },
-            echo: {
-                name: 'ECHO CHAMBER',
-                subtitle: 'Earn & Amplify',
-                icon: 'radial-gradient(circle at 25% 25%, #a5f3fc, #06b6d4, #0891b2, #155e75)',
-                description: 'The earning zone. Complete challenges, share insights, bring others into the Sparkverse. Your participation generates $SPRK and amplifies your presence.',
-                tools: [
-                    { name: 'Daily Challenge', cost: 'EARN 5' },
-                    { name: 'Share Portal', cost: 'EARN 10' },
-                    { name: 'Referral Beacon', cost: 'EARN 25' },
-                    { name: 'Creation Contest', cost: 'EARN 100' }
-                ],
-                action: 'START EARNING',
-                cost: 0
-            },
-            genesis: {
-                name: 'GENESIS',
-                subtitle: 'NFT & Soul Artifacts',
-                icon: 'radial-gradient(circle at 25% 25%, #fce7f3, #ec4899, #be185d, #831843)',
-                description: 'Where soul maps become permanent artifacts. Mint your consciousness evolution on-chain. Your transformation has receipts that live forever in the Sparkverse.',
-                tools: [
-                    { name: 'Soul Map NFT Mint', cost: '50' },
-                    { name: 'Evolution Series', cost: '100' },
-                    { name: 'Genesis Collection', cost: 'AUCTION' },
-                    { name: 'Artifact Forge', cost: 'VAR' }
-                ],
-                action: 'ENTER GENESIS',
-                cost: 50
-            }
-        };
-
-        let tokenBalance = 500;
-
-        function openModal(planetId) {
-            const planet = planets[planetId];
-            const modal = document.getElementById('planetModal');
-            
-            document.getElementById('modalIcon').style.background = planet.icon;
-            document.getElementById('modalTitle').textContent = planet.name;
-            document.getElementById('modalSubtitle').textContent = planet.subtitle;
-            document.getElementById('modalDescription').textContent = planet.description;
-            document.getElementById('modalAction').textContent = planet.action;
-            
-            const toolsContainer = document.getElementById('modalTools');
-            toolsContainer.innerHTML = '';
-            planet.tools.forEach(tool => {
-                const tag = document.createElement('div');
-                tag.className = 'tool-tag';
-                const costDisplay = tool.cost === 'FREE' || tool.cost.includes('EARN') || tool.cost === 'VAR' || tool.cost === 'AUCTION' || tool.cost === 'OG ONLY'
-                    ? tool.cost 
-                    : '◆' + tool.cost;
-                const costColor = tool.cost.includes('EARN') ? 'color: #84cc16' : 
-                                  tool.cost === 'FREE' ? 'color: #22d3d3' : 
-                                  'color: #fbbf24';
-                tag.innerHTML = `${tool.name} <span class="tool-cost" style="${costColor}">${costDisplay}</span>`;
-                toolsContainer.appendChild(tag);
-            });
-            
-            document.getElementById('modalAction').onclick = () => landOnPlanet(planetId);
-            modal.classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('planetModal').classList.remove('active');
-        }
-
-        function landOnPlanet(planetId) {
-            const planet = planets[planetId];
-            
-            if (typeof planet.cost === 'number' && planet.cost > 0) {
-                if (tokenBalance >= planet.cost) {
-                    tokenBalance -= planet.cost;
-                    document.getElementById('tokenBalance').textContent = tokenBalance;
-                    showToast(`✦ Landed on ${planet.name}! -${planet.cost} $SPRK`);
-                    closeModal();
-                } else {
-                    showToast('⚠ Insufficient $SPRK! Earn more in the Echo Chamber.');
-                }
-            } else {
-                showToast(`✦ Welcome to ${planet.name}!`);
-                closeModal();
-            }
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        document.getElementById('planetModal').addEventListener('click', (e) => {
-            if (e.target.id === 'planetModal') closeModal();
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>

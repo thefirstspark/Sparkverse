@@ -3,228 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spark Station - Choose Your Spark</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { overflow-y: auto; }
-        .station-container {
-            position: relative; z-index: 10;
-            max-width: 1100px; margin: 0 auto;
-            padding: 60px 20px; min-height: 100vh;
-        }
-        .station-header { text-align: center; margin-bottom: 60px; }
-        .station-header h1 {
-            font-size: 3.5rem;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; margin-bottom: 15px; letter-spacing: 3px;
-        }
-        .station-header .tagline { font-size: 1.4rem; opacity: 0.9; margin-bottom: 10px; color: #fed6e3; }
-        .station-header p { font-size: 1rem; opacity: 0.6; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+    <title>Spark Station | The First Spark</title>
+    <meta name="description" content="The Mobile Spark Station - Bringing immersive consciousness technology experiences to communities everywhere.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        /* Tier Cards Grid */
-        .tiers-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px; margin-bottom: 60px;
-        }
-        .tier-card {
-            background: rgba(255,255,255,0.04);
-            border: 2px solid rgba(168,237,234,0.15);
-            border-radius: 24px; padding: 35px 30px;
-            backdrop-filter: blur(12px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative; overflow: hidden;
-            display: flex; flex-direction: column;
-        }
-        .tier-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0;
-            height: 4px; border-radius: 24px 24px 0 0;
-        }
-        .tier-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(168,237,234,0.4);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(168,237,234,0.1);
-        }
-        .tier-card .tier-emoji { font-size: 2.5rem; margin-bottom: 15px; }
-        .tier-card .tier-name {
-            font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px;
-        }
-        .tier-card .tier-price {
-            font-size: 1.1rem; opacity: 0.7; margin-bottom: 20px; font-weight: 600;
-        }
-        .tier-card .tier-desc {
-            font-size: 0.95rem; opacity: 0.65; line-height: 1.7; margin-bottom: 25px; flex-grow: 1;
-        }
-        .tier-card .tier-features { list-style: none; margin: 0 0 25px; padding: 0; }
-        .tier-card .tier-features li {
-            padding: 8px 0; padding-left: 25px; position: relative;
-            font-size: 0.9rem; opacity: 0.75; border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .tier-card .tier-features li::before {
-            content: "✦"; position: absolute; left: 0; color: #a8edea;
-        }
-
-        .tier-cta {
-            display: block; text-align: center; padding: 16px 30px;
-            border-radius: 16px; text-decoration: none;
-            font-weight: 800; font-size: 1rem; letter-spacing: 1px;
-            transition: all 0.3s ease; border: 2px solid transparent;
-        }
-        /* Tier-specific colors */
-        .tier-starter::before { background: linear-gradient(90deg, #4facfe, #00f2fe); }
-        .tier-starter .tier-name { color: #4facfe; }
-        .tier-starter .tier-cta { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #0a0a0f; }
-        .tier-starter .tier-cta:hover { box-shadow: 0 8px 30px rgba(79,172,254,0.4); transform: translateY(-2px); }
-
-        .tier-starter-plus::before { background: linear-gradient(90deg, #667eea, #764ba2); }
-        .tier-starter-plus .tier-name { color: #667eea; }
-        .tier-starter-plus .tier-cta { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        .tier-starter-plus .tier-cta:hover { box-shadow: 0 8px 30px rgba(102,126,234,0.4); transform: translateY(-2px); }
-
-        .tier-power::before { background: linear-gradient(90deg, #f093fb, #f5576c); }
-        .tier-power .tier-name { color: #f093fb; }
-        .tier-power .tier-cta { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
-        .tier-power .tier-cta:hover { box-shadow: 0 8px 30px rgba(240,147,251,0.4); transform: translateY(-2px); }
-
-        .tier-player::before { background: linear-gradient(90deg, #ffecd2, #fcb69f); }
-        .tier-player .tier-name { color: #ffecd2; }
-        .tier-player .tier-cta { background: linear-gradient(135deg, #ffecd2, #fcb69f); color: #0a0a0f; }
-        .tier-player .tier-cta:hover { box-shadow: 0 8px 30px rgba(252,182,159,0.4); transform: translateY(-2px); }
-
-        .tier-og::before { background: linear-gradient(90deg, #ffd700, #ff8c00); }
-        .tier-og .tier-name { color: #ffd700; }
-        .tier-og .tier-features li::before { color: #ffd700; }
-        .tier-og .tier-cta { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #0a0a0f; }
-        .tier-og .tier-cta:hover { box-shadow: 0 8px 30px rgba(255,215,0,0.4); transform: translateY(-2px); }
-        .tier-og { border-color: rgba(255,215,0,0.3); }
-
-        .popular-badge {
-            position: absolute; top: 15px; right: 15px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #0a0a0f; padding: 5px 14px; border-radius: 20px;
-            font-size: 0.7rem; font-weight: 900; letter-spacing: 1px;
-        }
-        .back-button {
-            display: block; max-width: 200px; margin: 40px auto 0;
-            padding: 15px 30px; background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none; border-radius: 25px; color: white; text-decoration: none;
-            font-size: 1rem; font-weight: bold; text-align: center;
-            transition: all 0.3s ease;
-        }
-        .back-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.6); }
-        @media (max-width: 768px) {
-            .station-header h1 { font-size: 2.5rem; }
-            .tiers-grid { grid-template-columns: 1fr; }
-        }
-    </style>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date()); gtag('config', 'G-P8B1ERP8ML');
+        gtag('js', new Date());
+        gtag('config', 'G-P8B1ERP8ML');
     </script>
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="twinkling"></div>
+    <!-- Starfield Canvas -->
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    
+    <!-- Ambient Glow -->
+    <div class="ambient-glow" aria-hidden="true"></div>
+    
+    <!-- Main Header -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">◇</span>
+            <span class="logo-text">THE FIRST SPARK</span>
+        </a>
+    </header>
 
-    <div class="station-container">
-        <div class="station-header">
-            <h1>⚡ SPARK STATION</h1>
-            <p class="tagline">Choose Your Spark. Enter the Game.</p>
-            <p>Every spark is a key to consciousness tools, community access, and the geometric universe. Pick the tier that matches your frequency.</p>
+    <main class="page-container">
+        <a href="index.html" class="back-link">← Back to SPARKVERSE</a>
+        
+        <header class="page-header">
+            <span class="page-icon">⬡</span>
+            <h1 class="page-title">SPARK STATION</h1>
+            <p class="page-subtitle">A mobile portal for consciousness activation. Coming to your community.</p>
+        </header>
+
+        <div class="page-content">
+            <h2>THE VISION</h2>
+            <p>
+                The Mobile Spark Station is a converted van transformed into an immersive consciousness technology experience. Part meditation pod, part interactive art installation, part reality hacking lab—it brings the tools of awakening directly to communities that need them most.
+            </p>
+            <p>
+                Imagine stepping into a portable sacred space: LED-lit sacred geometry, binaural soundscapes, interactive soul-mapping tools, and guided consciousness protocols. The Spark Station is where ancient wisdom meets cutting-edge tech, wrapped in a vehicle that goes where the sparks are needed.
+            </p>
+
+            <h2>WHY IT MATTERS</h2>
+            <p>
+                Consciousness technology shouldn't be locked behind expensive retreats or exclusive spiritual centers. The Spark Station democratizes access to transformative experiences—popping up at festivals, community events, schools, and underserved neighborhoods.
+            </p>
+            <ul>
+                <li>Immersive experiences without the travel costs</li>
+                <li>Accessible awakening tools for all communities</li>
+                <li>Bridge between digital tools and embodied practice</li>
+                <li>Mobile workshop space for consciousness education</li>
+                <li>Proof of concept for scalable consciousness tech deployment</li>
+            </ul>
+
+            <h2>INSIDE THE STATION</h2>
+            <ul>
+                <li><strong>Sensory Chamber:</strong> Custom LED panels displaying sacred geometry and responsive visuals</li>
+                <li><strong>Sound System:</strong> Spatial audio for binaural beats, frequencies, and guided meditations</li>
+                <li><strong>Interactive Terminals:</strong> Touchscreen access to soul mapping, sigil generation, and consciousness tracking tools</li>
+                <li><strong>Ritual Space:</strong> Comfortable seating for guided protocols and group experiences</li>
+                <li><strong>Resource Station:</strong> Free downloads, printed materials, and connection to the SPARKVERSE</li>
+            </ul>
+
+            <h2>ROADMAP</h2>
+            <div class="roadmap">
+                <div class="roadmap-item">
+                    <span class="roadmap-phase">PHASE 1 — FOUNDATION</span>
+                    <h3 class="roadmap-title">Vehicle Acquisition & Base Build</h3>
+                    <p class="roadmap-desc">Secure funding for a suitable van (Sprinter or similar). Complete basic conversion: insulation, flooring, electrical system, and structural framework.</p>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-phase">PHASE 2 — TECH INTEGRATION</span>
+                    <h3 class="roadmap-title">Consciousness Tech Installation</h3>
+                    <p class="roadmap-desc">Install custom LED matrix, sound system, and interactive terminals. Integrate SPARKVERSE tools with offline capability. Create the immersive environment.</p>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-phase">PHASE 3 — PILOT PROGRAM</span>
+                    <h3 class="roadmap-title">Community Testing</h3>
+                    <p class="roadmap-desc">Launch pilot events in the Ohio/Midwest region. Gather feedback, refine experiences, and document impact. Build case studies and testimonials.</p>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-phase">PHASE 4 — EXPANSION</span>
+                    <h3 class="roadmap-title">Scale & Replicate</h3>
+                    <p class="roadmap-desc">Develop playbook for additional Spark Stations. Partner with aligned organizations. Create licensing model for communities to deploy their own stations.</p>
+                </div>
+            </div>
+
+            <h2>SUPPORT THE MISSION</h2>
+            <p>
+                The Mobile Spark Station needs sparks like you to become reality. Whether you're an investor, sponsor, or community member—there's a way to help bring consciousness technology to the streets.
+            </p>
+            
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
+                <a href="invest.html" class="cta-btn">
+                    Become an Investor →
+                </a>
+                <a href="mailto:kate@thefirstspark.shop?subject=Spark%20Station%20Sponsorship" class="cta-btn cta-btn-secondary">
+                    Sponsor Inquiry
+                </a>
+            </div>
+
+            <div style="margin-top: 3rem; padding: 2rem; background: rgba(212, 165, 116, 0.05); border-radius: 16px; border: 1px solid rgba(212, 165, 116, 0.1);">
+                <h3 style="font-family: var(--font-display); font-size: 0.9rem; color: var(--spark-gold); margin-bottom: 0.5rem;">ESTIMATED FUNDING GOAL</h3>
+                <p style="font-size: 2rem; font-family: var(--font-display); font-weight: 900; margin-bottom: 0.5rem;">$200,000</p>
+                <p style="color: var(--muted-silver); font-size: 0.85rem;">Covers vehicle, conversion, technology, initial operating costs, and pilot program execution.</p>
+            </div>
         </div>
+    </main>
 
-        <div class="tiers-grid">
-            <!-- Tier 1: Starter Spark -->
-            <div class="tier-card tier-starter">
-                <div class="tier-emoji">🌱</div>
-                <div class="tier-name">STARTER SPARK</div>
-                <div class="tier-price">Free / Entry Level</div>
-                <div class="tier-desc">Your first step into the Sparkverse. Get access to foundational consciousness tools and see what the geometric universe is all about.</div>
-                <ul class="tier-features">
-                    <li>Access to free consciousness tools</li>
-                    <li>Sparkverse community entry</li>
-                    <li>Basic geometric resources</li>
-                    <li>Welcome to the simulation</li>
-                </ul>
-                <a href="https://whop.com/sparkverse-0d79/starter-spark-0c/" target="_blank" class="tier-cta">GET STARTED →</a>
-            </div>
+    <!-- Footer -->
+    <footer class="site-footer" style="position: relative;">
+        <p class="tagline">Reality is programmable. You are the coder.</p>
+    </footer>
 
-            <!-- Tier 2: Starter Spark+ -->
-            <div class="tier-card tier-starter-plus">
-                <div class="tier-emoji">✨</div>
-                <div class="tier-name">STARTER SPARK+</div>
-                <div class="tier-price">Upgraded Access</div>
-                <div class="tier-desc">Ready for more? Level up your starter experience with expanded tools and deeper access to consciousness technology.</div>
-                <ul class="tier-features">
-                    <li>Everything in Starter Spark</li>
-                    <li>Expanded tool library</li>
-                    <li>Priority consciousness prompts</li>
-                    <li>Enhanced geometric generators</li>
-                </ul>
-                <a href="https://whop.com/sparkverse-0d79/starter-spark-copy/" target="_blank" class="tier-cta">UPGRADE →</a>
-            </div>
-
-            <!-- Tier 3: Power Pack -->
-            <div class="tier-card tier-power">
-                <span class="popular-badge">POPULAR</span>
-                <div class="tier-emoji">⚡</div>
-                <div class="tier-name">POWER PACK</div>
-                <div class="tier-price">Full Power Access</div>
-                <div class="tier-desc">Unlock the full arsenal of consciousness tools. Sigil generators, soul mapping, reality trackers — the works.</div>
-                <ul class="tier-features">
-                    <li>Full consciousness tool suite</li>
-                    <li>Soul Mapping access</li>
-                    <li>Sigil & sacred geometry engines</li>
-                    <li>Reality tracking systems</li>
-                    <li>Priority support</li>
-                </ul>
-                <a href="https://whop.com/sparkverse-0d79/power-pack-copy/" target="_blank" class="tier-cta">POWER UP →</a>
-            </div>
-
-            <!-- Tier 4: Player Pack -->
-            <div class="tier-card tier-player">
-                <div class="tier-emoji">🎮</div>
-                <div class="tier-name">PLAYER PACK</div>
-                <div class="tier-price">Players Lounge Access</div>
-                <div class="tier-desc">Enter the Players Lounge. Monthly community access, exclusive drops, live consciousness sessions, and direct connection to the Spark creator.</div>
-                <ul class="tier-features">
-                    <li>Everything in Power Pack</li>
-                    <li>Players Lounge membership</li>
-                    <li>Exclusive monthly drops</li>
-                    <li>Live consciousness sessions</li>
-                    <li>Direct creator access</li>
-                    <li>Early feature previews</li>
-                </ul>
-                <a href="https://whop.com/sparkverse-0d79/player-pack-copy/" target="_blank" class="tier-cta">JOIN THE GAME →</a>
-            </div>
-
-            <!-- Tier 5: OG Player Pack -->
-            <div class="tier-card tier-og">
-                <span class="popular-badge">👑 LIFETIME</span>
-                <div class="tier-emoji">👑</div>
-                <div class="tier-name">OG PLAYER PACK</div>
-                <div class="tier-price">Lifetime • Founding Member</div>
-                <div class="tier-desc">The ultimate commitment. Lifetime access to everything in the Sparkverse — forever. Your name goes in the code. You become part of the origin story.</div>
-                <ul class="tier-features">
-                    <li>LIFETIME access to all tools</li>
-                    <li>Permanent Players Lounge membership</li>
-                    <li>Founding member recognition</li>
-                    <li>All future products included</li>
-                    <li>Name in the source code</li>
-                    <li>Direct line to the founder</li>
-                    <li>OG Genesis NFT (when available)</li>
-                </ul>
-                <a href="https://whop.com/sparkverse-0d79/og-player-pack-copy/" target="_blank" class="tier-cta">CLAIM YOUR OG SPARK →</a>
-            </div>
-        </div>
-
-        <a href="index.html" class="back-button">← Back to Sparkverse</a>
-    </div>
-
-    <script src="script.js"></script>
-    <script src="cosmic.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
