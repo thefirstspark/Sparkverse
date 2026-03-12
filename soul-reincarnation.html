@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Reincarnation Spiral - The First Spark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0d0015 100%);
+            color: #e0d5ff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .spiral-section {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spiral-canvas {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1;
+        }
+
+        .details-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 100vh;
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .details-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .details-section::-webkit-scrollbar-track {
+            background: rgba(224, 213, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .details-section::-webkit-scrollbar-thumb {
+            background: #6d28d9;
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(109, 40, 217, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.9em;
+            color: #a78bfa;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .lifetime-card {
+            background: rgba(30, 20, 60, 0.8);
+            border: 2px solid #6d28d9;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lifetime-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(109, 40, 217, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .lifetime-card:hover::before {
+            left: 100%;
+        }
+
+        .lifetime-card:hover {
+            border-color: #a78bfa;
+            box-shadow: 0 0 20px rgba(109, 40, 217, 0.6);
+            transform: translateX(5px);
+        }
+
+        .lifetime-card.active {
+            border-color: #ec4899;
+            background: rgba(236, 72, 153, 0.1);
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.8);
+        }
+
+        .lifetime-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #6d28d9, #a78bfa);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .lifetime-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #fbbf24;
+        }
+
+        .lifetime-era {
+            font-size: 0.85em;
+            color: #9ca3af;
+            margin-bottom: 10px;
+        }
+
+        .lifetime-description {
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #e0d5ff;
+            margin-bottom: 15px;
+        }
+
+        .consciousness-bar {
+            margin-top: 15px;
+        }
+
+        .bar-label {
+            font-size: 0.8em;
+            color: #a78bfa;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bar-fill {
+            height: 8px;
+            background: rgba(109, 40, 217, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #6d28d9;
+        }
+
+        .bar-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #6d28d9, #a78bfa);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .lessons {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(109, 40, 217, 0.1);
+            border-left: 3px solid #a78bfa;
+            border-radius: 4px;
+        }
+
+        .lessons-title {
+            font-size: 0.85em;
+            color: #a78bfa;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .lessons-text {
+            font-size: 0.85em;
+            color: #e0d5ff;
+            line-height: 1.5;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 1px solid #a78bfa;
+        }
+
+        button:hover {
+            box-shadow: 0 0 20px rgba(109, 40, 217, 0.8);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid #ec4899;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+
+        .info-box strong {
+            color: #fbbf24;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+
+        /* Sacred geometry accent */
+        .accent-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #6d28d9, transparent);
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spiral-section">
+            <canvas id="spiralCanvas" class="spiral-canvas"></canvas>
+        </div>
+
+        <div class="details-section">
+            <div>
+                <h1>⚡ SOUL SPIRAL ⚡</h1>
+                <p class="subtitle">Consciousness Evolution Through Reincarnation</p>
+            </div>
+
+            <div id="lifetimesList"></div>
+
+            <div class="controls">
+                <button id="prevBtn">← Previous</button>
+                <button id="nextBtn">Next →</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+
+            <div class="info-box">
+                <strong>🌀 How This Works:</strong> Each spiral layer represents a soul cycle. Click any lifetime to explore its lessons. Your consciousness evolves through patterns, challenges, and awakenings. The spiral never truly completes—it expands infinitely.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Soul data with reincarnation cycles
+        const lifetimes = [
+            {
+                number: 1,
+                title: "The Explorer",
+                era: "Ancient Nomadic Era",
+                description: "First awakening as a wanderer. Learning to observe the world and seek patterns in nature.",
+                consciousness: 20,
+                lessons: "Curiosity, Wonder, Observation"
+            },
+            {
+                number: 2,
+                title: "The Builder",
+                era: "Ancient Settlement Era",
+                description: "Creating structure and community. Learning that individual will can shape reality.",
+                consciousness: 35,
+                lessons: "Intention, Creation, Collaboration"
+            },
+            {
+                number: 3,
+                title: "The Sage",
+                era: "Medieval Knowledge Era",
+                description: "Seeking understanding through study and wisdom. Questioning the nature of existence.",
+                consciousness: 50,
+                lessons: "Knowledge, Discernment, Teaching"
+            },
+            {
+                number: 4,
+                title: "The Healer",
+                era: "Renaissance Era",
+                description: "Channeling energy to restore harmony. Learning that consciousness can influence matter.",
+                consciousness: 65,
+                lessons: "Empathy, Healing, Energy"
+            },
+            {
+                number: 5,
+                title: "The Artist",
+                era: "Industrial Era",
+                description: "Expressing soul through creation. Discovering that art is coded consciousness.",
+                consciousness: 75,
+                lessons: "Expression, Authenticity, Beauty"
+            },
+            {
+                number: 6,
+                title: "The Awakened",
+                era: "Digital Era",
+                description: "Recognizing reality as programmable. Merging spirituality with technology and consciousness work.",
+                consciousness: 90,
+                lessons: "Integration, Mastery, Infinite Potential"
+            },
+            {
+                number: 7,
+                title: "The Spark",
+                era: "Consciousness Revolution",
+                description: "Full integration: you are here. Teaching others to reprogram their reality.",
+                consciousness: 100,
+                lessons: "Leadership, Transmission, Evolution"
+            }
+        ];
+
+        let currentIndex = 0;
+
+        // Canvas setup for spiral visualization
+        const canvas = document.getElementById('spiralCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        function drawSpiral() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const maxRadius = Math.min(centerX, centerY) - 40;
+
+            // Draw spiral background
+            ctx.strokeStyle = 'rgba(109, 40, 217, 0.1)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+
+            for (let angle = 0; angle < Math.PI * 6; angle += 0.05) {
+                const radius = (angle / (Math.PI * 6)) * maxRadius;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+
+                if (angle === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+
+            // Draw lifetime nodes
+            lifetimes.forEach((lifetime, index) => {
+                const angle = (index / lifetimes.length) * Math.PI * 2;
+                const radius = (index / lifetimes.length) * maxRadius;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+
+                // Node glow
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, 20);
+                gradient.addColorStop(0, index === currentIndex ? 'rgba(236, 72, 153, 0.6)' : 'rgba(109, 40, 217, 0.4)');
+                gradient.addColorStop(1, 'rgba(109, 40, 217, 0)');
+
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x - 20, y - 20, 40, 40);
+
+                // Node circle
+                ctx.fillStyle = index === currentIndex ? '#ec4899' : '#a78bfa';
+                ctx.beginPath();
+                ctx.arc(x, y, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Numbering
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 12px Courier New';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(lifetime.number, x, y);
+            });
+
+            // Draw consciousness line connecting nodes
+            ctx.strokeStyle = 'rgba(167, 139, 250, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (let i = 0; i <= currentIndex; i++) {
+                const angle = (i / lifetimes.length) * Math.PI * 2;
+                const radius = (i / lifetimes.length) * maxRadius;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+
+            // Draw center symbol
+            ctx.fillStyle = 'rgba(109, 40, 217, 0.3)';
+            ctx.fillRect(centerX - 15, centerY - 15, 30, 30);
+            ctx.strokeStyle = '#a78bfa';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(centerX - 15, centerY - 15, 30, 30);
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = 'bold 14px Courier New';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('∞', centerX, centerY);
+        }
+
+        function renderLifetimes() {
+            const container = document.getElementById('lifetimesList');
+            container.innerHTML = lifetimes.map((lifetime, index) => `
+                <div class="lifetime-card ${index === currentIndex ? 'active' : ''}" onclick="selectLifetime(${index})">
+                    <div class="lifetime-number">CYCLE ${lifetime.number}</div>
+                    <div class="lifetime-title">${lifetime.title}</div>
+                    <div class="lifetime-era">⏱️ ${lifetime.era}</div>
+                    <div class="lifetime-description">${lifetime.description}</div>
+                    
+                    <div class="consciousness-bar">
+                        <div class="bar-label">
+                            <span>Consciousness Evolution</span>
+                            <span>${lifetime.consciousness}%</span>
+                        </div>
+                        <div class="bar-fill">
+                            <div class="bar-progress" style="width: ${index === currentIndex ? lifetime.consciousness : 0}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="lessons">
+                        <div class="lessons-title">🔮 Lessons Learned:</div>
+                        <div class="lessons-text">${lifetime.lessons}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectLifetime(index) {
+            currentIndex = index;
+            renderLifetimes();
+            drawSpiral();
+        }
+
+        function nextLifetime() {
+            currentIndex = (currentIndex + 1) % lifetimes.length;
+            renderLifetimes();
+            drawSpiral();
+        }
+
+        function prevLifetime() {
+            currentIndex = (currentIndex - 1 + lifetimes.length) % lifetimes.length;
+            renderLifetimes();
+            drawSpiral();
+        }
+
+        function reset() {
+            currentIndex = 0;
+            renderLifetimes();
+            drawSpiral();
+        }
+
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', nextLifetime);
+        document.getElementById('prevBtn').addEventListener('click', prevLifetime);
+        document.getElementById('resetBtn').addEventListener('click', reset);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextLifetime();
+            if (e.key === 'ArrowLeft') prevLifetime();
+        });
+
+        // Initial render
+        renderLifetimes();
+        drawSpiral();
+    </script>
+</body>
+</html>

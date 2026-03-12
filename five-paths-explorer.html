@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Five Paths Explorer</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0f 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent),
+                radial-gradient(1px 1px at 33% 80%, white, transparent);
+            background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%;
+            opacity: 0.3;
+            z-index: 0;
+            animation: twinkle 8s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.5; }
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0c0;
+            font-weight: 300;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .path-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .path-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .path-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .path-card:hover::before {
+            opacity: 1;
+        }
+
+        .path-card.mirror { border-color: #60a5fa; }
+        .path-card.glitch { border-color: #a78bfa; }
+        .path-card.fire { border-color: #f87171; }
+        .path-card.garden { border-color: #4ade80; }
+        .path-card.source { border-color: #fbbf24; }
+
+        .path-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .path-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .path-subtitle {
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .path-detail {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-section {
+            margin-bottom: 1rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #b0b0d0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-content {
+            color: #d0d0e0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .devotional {
+            font-style: italic;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 3px solid;
+            margin-top: 1rem;
+        }
+
+        .path-card.mirror .devotional { border-left-color: #60a5fa; }
+        .path-card.glitch .devotional { border-left-color: #a78bfa; }
+        .path-card.fire .devotional { border-left-color: #f87171; }
+        .path-card.garden .devotional { border-left-color: #4ade80; }
+        .path-card.source .devotional { border-left-color: #fbbf24; }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0f0;
+            line-height: 1.6;
+        }
+
+        .question-number {
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .answer-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .answer-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .answer-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .results-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .result-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .result-label {
+            min-width: 150px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .result-bar-container {
+            flex: 1;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .result-bar-fill {
+            height: 100%;
+            border-radius: 1rem;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .result-bar-fill.mirror { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .result-bar-fill.glitch { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        .result-bar-fill.fire { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .result-bar-fill.garden { background: linear-gradient(90deg, #22c55e, #4ade80); }
+        .result-bar-fill.source { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+        .daily-selector {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .path-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .path-select-btn {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .path-select-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .path-select-btn.selected {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px;
+        }
+
+        .path-select-btn.mirror.selected {
+            border-color: #60a5fa;
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+        }
+        .path-select-btn.glitch.selected {
+            border-color: #a78bfa;
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+        }
+        .path-select-btn.fire.selected {
+            border-color: #f87171;
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.5);
+        }
+        .path-select-btn.garden.selected {
+            border-color: #4ade80;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        }
+        .path-select-btn.source.selected {
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+        }
+
+        .path-select-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .path-select-name {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .save-ring {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 1rem;
+        }
+
+        .save-ring-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .integration-viz {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .integration-diagram {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center-node {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            z-index: 10;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .path-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+
+        .path-node:hover {
+            transform: scale(1.2);
+        }
+
+        .path-node.mirror {
+            background: rgba(96, 165, 250, 0.2);
+            border-color: #60a5fa;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .path-node.glitch {
+            background: rgba(167, 139, 250, 0.2);
+            border-color: #a78bfa;
+            top: 35%;
+            right: 15%;
+        }
+        .path-node.fire {
+            background: rgba(248, 113, 113, 0.2);
+            border-color: #f87171;
+            bottom: 35%;
+            right: 15%;
+        }
+        .path-node.garden {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: #4ade80;
+            bottom: 35%;
+            left: 15%;
+        }
+        .path-node.source {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: #fbbf24;
+            top: 35%;
+            left: 15%;
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            transform-origin: left center;
+        }
+
+        .integration-text {
+            margin-top: 3rem;
+            text-align: center;
+            line-height: 1.8;
+            color: #d0d0e0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .app-container {
+                padding: 1rem;
+            }
+
+            .paths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                gap: 0.5rem;
+            }
+
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .result-label {
+                min-width: 100px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Path data structure
+        const pathsData = {
+            mirror: {
+                icon: '🪞',
+                name: 'Mirror Path',
+                subtitle: 'Divine as Witness',
+                color: '#60a5fa',
+                theological: 'The Divine observes all without judgment, seeing patterns and truth with perfect clarity. To walk the Mirror Path is to practice sacred attention—witnessing yourself and the world as the Divine witnesses.',
+                ancientEchoes: 'The Buddhist practice of mindfulness, the Christian "prayer of awareness," the Greek concept of theoria—contemplation as divine act.',
+                momentum: 'Noticing patterns across time. Seeing the same lesson arrive in different forms. Recognition that leads to insight rather than mere data collection.',
+                sacredExchange: {
+                    receive: 'Clarity, pattern recognition, truth',
+                    offer: 'Attention, presence, willingness to see',
+                    risk: 'Confronting what you\'ve been avoiding'
+                },
+                devotional: 'I witness as I am witnessed. I see as I am seen.'
+            },
+            glitch: {
+                icon: '⚡',
+                name: 'Glitch Path',
+                subtitle: 'Divine as Transformer',
+                color: '#a78bfa',
+                theological: 'The Divine breaks what no longer serves, disrupts stagnant patterns, transforms through creative destruction. The Glitch Path honors the holy work of dissolution and breakthrough.',
+                ancientEchoes: 'Shiva as destroyer, the Christian concept of kenosis (self-emptying), the Taoist principle of wu wei disrupting rigid control.',
+                momentum: 'Breaking your own rules productively. Experimenting at the edges. The courage to release what worked yesterday.',
+                sacredExchange: {
+                    receive: 'Liberation, breakthrough, new possibility',
+                    offer: 'Comfort, certainty, old forms',
+                    risk: 'Chaos without integration'
+                },
+                devotional: 'I break as I am broken open. I disrupt as I am transformed.'
+            },
+            fire: {
+                icon: '🔥',
+                name: 'Fire Path',
+                subtitle: 'Divine as Creator',
+                color: '#f87171',
+                theological: 'The Divine speaks creation into being, manifests the unmanifest, brings form to the formless. The Fire Path is the theology of making—where human creativity participates in divine creation.',
+                ancientEchoes: 'Genesis and the creative word, the Islamic concept of kun fayakun ("Be, and it is"), Prometheus stealing fire from gods.',
+                momentum: 'Shipping work. Completing cycles. The sacred satisfaction of making something real.',
+                sacredExchange: {
+                    receive: 'Manifestation, impact, legacy',
+                    offer: 'Energy, courage, vision',
+                    risk: 'Burnout, creation without contemplation'
+                },
+                devotional: 'I create as I am created. I make as I am made.'
+            },
+            garden: {
+                icon: '🌱',
+                name: 'Garden Path',
+                subtitle: 'Divine as Nurturer',
+                color: '#4ade80',
+                theological: 'The Divine tends, nurtures, sustains growth over time. The Garden Path honors the sacred work of maintenance, care, and patient cultivation.',
+                ancientEchoes: 'The Garden of Eden as sacred tending, Buddhist cultivation of mind-states, indigenous land stewardship as spiritual practice.',
+                momentum: 'Returning to the same work with renewed attention. Seeing incremental growth compound. Trust in slow becoming.',
+                sacredExchange: {
+                    receive: 'Growth, sustainability, flourishing',
+                    offer: 'Patience, consistency, care',
+                    risk: 'Maintenance without innovation'
+                },
+                devotional: 'I tend as I am tended. I nurture as I am nourished.'
+            },
+            source: {
+                icon: '♾️',
+                name: 'Source Path',
+                subtitle: 'Divine as Unity',
+                color: '#fbbf24',
+                theological: 'The Divine is the ground of being itself—the unified source from which all paths emerge and to which they return. The Source Path is integration, the recognition that all paths are one.',
+                ancientEchoes: 'Hindu Brahman, the Tao that cannot be named, Christian mystical union, Sufi fana (annihilation in divine presence).',
+                momentum: 'Paradox holding. Seeing how opposites complete each other. Resting in not-knowing while moving forward.',
+                sacredExchange: {
+                    receive: 'Integration, wholeness, peace',
+                    offer: 'Either/or thinking, need for control',
+                    risk: 'Transcendence that abandons embodiment'
+                },
+                devotional: 'I am as I am held. I rest in the ground of all paths.'
+            }
+        };
+
+        // Quiz questions
+        const quizQuestions = [
+            {
+                question: "When you encounter a persistent problem, what's your first instinct?",
+                answers: [
+                    { text: "Step back and observe the pattern—this has probably happened before", path: 'mirror' },
+                    { text: "Try something completely different, even if it breaks my system", path: 'glitch' },
+                    { text: "Build a solution and ship it quickly", path: 'fire' },
+                    { text: "Tend to it patiently, knowing it will reveal itself in time", path: 'garden' }
+                ]
+            },
+            {
+                question: "You're given unexpected free time. How do you respond?",
+                answers: [
+                    { text: "Reflect on what this opening means—what am I being shown?", path: 'mirror' },
+                    { text: "Use it to experiment with something I've been avoiding", path: 'glitch' },
+                    { text: "Finally create that thing I've been wanting to make", path: 'fire' },
+                    { text: "Tend to something that's been neglected but matters", path: 'garden' }
+                ]
+            },
+            {
+                question: "What kind of spiritual practice calls to you?",
+                answers: [
+                    { text: "Contemplative practice—meditation, journaling, witnessing", path: 'mirror' },
+                    { text: "Practices that break ego or old patterns—shadow work, deconstruction", path: 'glitch' },
+                    { text: "Creative practices—art, writing, building as prayer", path: 'fire' },
+                    { text: "Devotional routines—daily rituals, tending sacred space", path: 'garden' }
+                ]
+            },
+            {
+                question: "When you look at your past year, what brings you the most meaning?",
+                answers: [
+                    { text: "Finally understanding a pattern I'd been blind to", path: 'mirror' },
+                    { text: "Breaking through a limitation I didn't know I could overcome", path: 'glitch' },
+                    { text: "Completing a project and seeing its impact", path: 'fire' },
+                    { text: "Watching something I've been tending slowly flourish", path: 'garden' }
+                ]
+            },
+            {
+                question: "You're feeling stuck. What unsticks you?",
+                answers: [
+                    { text: "Seeing the situation from a completely new perspective", path: 'mirror' },
+                    { text: "Doing the exact opposite of what I think I should do", path: 'glitch' },
+                    { text: "Making something tangible, no matter how small", path: 'fire' },
+                    { text: "Returning to a simple daily practice", path: 'garden' }
+                ]
+            },
+            {
+                question: "What does 'sacred work' mean to you?",
+                answers: [
+                    { text: "Bearing witness to truth without flinching", path: 'mirror' },
+                    { text: "Breaking what's ready to die so new life can emerge", path: 'glitch' },
+                    { text: "Bringing something from imagination into reality", path: 'fire' },
+                    { text: "Caring for something over time with sustained devotion", path: 'garden' }
+                ]
+            },
+            {
+                question: "How do you know when you're in alignment?",
+                answers: [
+                    { text: "I see clearly without the usual mental fog", path: 'mirror' },
+                    { text: "I feel free to experiment without fear of failure", path: 'glitch' },
+                    { text: "I'm energized and making things happen", path: 'fire' },
+                    { text: "I feel patient and trust the process", path: 'garden' }
+                ]
+            },
+            {
+                question: "What spiritual paradox resonates most deeply?",
+                answers: [
+                    { text: "The observer changes what is observed", path: 'mirror' },
+                    { text: "You must lose yourself to find yourself", path: 'glitch' },
+                    { text: "Creation is both divine gift and human work", path: 'fire' },
+                    { text: "Growth requires both effort and surrender", path: 'garden' }
+                ]
+            },
+            {
+                question: "When you're overwhelmed, what grounds you?",
+                answers: [
+                    { text: "Naming what I'm experiencing with precision", path: 'mirror' },
+                    { text: "Releasing my grip on how things 'should' be", path: 'glitch' },
+                    { text: "Taking one concrete action toward progress", path: 'fire' },
+                    { text: "Returning to a familiar ritual or practice", path: 'garden' }
+                ]
+            },
+            {
+                question: "What does it mean to participate in the Divine?",
+                answers: [
+                    { text: "To see with Divine eyes—witnessing without judgment", path: 'mirror' },
+                    { text: "To allow Divine transformation—being broken open", path: 'glitch' },
+                    { text: "To co-create with the Divine—making as prayer", path: 'fire' },
+                    { text: "To steward Divine gifts—tending what's entrusted to us", path: 'garden' }
+                ]
+            }
+        ];
+
+        // Components
+        function PathCard({ pathKey, data, expanded, onToggle }) {
+            return (
+                <div
+                    className={`path-card ${pathKey}`}
+                    onClick={onToggle}
+                >
+                    <div className="path-icon">{data.icon}</div>
+                    <div className="path-title">{data.name}</div>
+                    <div className="path-subtitle">{data.subtitle}</div>
+
+                    {expanded && (
+                        <div className="path-detail">
+                            <div className="detail-section">
+                                <div className="detail-label">Theological Principle</div>
+                                <div className="detail-content">{data.theological}</div>
+                            </div>
+
+                            <div className="detail-section">
+                                <div className="detail-label">Ancient Echoes</div>
+                                <div className="detail-content">{data.ancientEchoes}</div>
+                            </div>
+
+                            <div className="detail-section">
+                                <div className="detail-label">What Momentum Looks Like</div>
+                                <div className="detail-content">{data.momentum}</div>
+                            </div>
+
+                            <div className="detail-section">
+                                <div className="detail-label">Sacred Exchange</div>
+                                <div className="detail-content">
+                                    <strong>Receive:</strong> {data.sacredExchange.receive}<br/>
+                                    <strong>Offer:</strong> {data.sacredExchange.offer}<br/>
+                                    <strong>Risk:</strong> {data.sacredExchange.risk}
+                                </div>
+                            </div>
+
+                            <div className="devotional">
+                                {data.devotional}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function Quiz({ onComplete }) {
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [showResults, setShowResults] = useState(false);
+
+            const handleAnswer = (path) => {
+                setAnswers({
+                    ...answers,
+                    [currentQuestion]: path
+                });
+            };
+
+            const handleNext = () => {
+                if (currentQuestion < quizQuestions.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                } else {
+                    setShowResults(true);
+                }
+            };
+
+            const handlePrevious = () => {
+                if (currentQuestion > 0) {
+                    setCurrentQuestion(currentQuestion - 1);
+                }
+            };
+
+            const calculateResults = () => {
+                const scores = { mirror: 0, glitch: 0, fire: 0, garden: 0, source: 0 };
+                Object.values(answers).forEach(path => {
+                    scores[path]++;
+                });
+                return scores;
+            };
+
+            if (showResults) {
+                const scores = calculateResults();
+                const total = Object.values(scores).reduce((a, b) => a + b, 0);
+                const maxScore = Math.max(...Object.values(scores));
+                const primaryPath = Object.keys(scores).find(key => scores[key] === maxScore);
+
+                return (
+                    <div className="results-container">
+                        <h2 style={{ marginBottom: '2rem', fontSize: '2rem' }}>Your Path Affinities</h2>
+
+                        <div className="results-chart">
+                            {Object.entries(scores).map(([path, score]) => (
+                                <div key={path} className="result-bar">
+                                    <div className="result-label">
+                                        {pathsData[path].icon} {pathsData[path].name}
+                                    </div>
+                                    <div className="result-bar-container">
+                                        <div
+                                            className={`result-bar-fill ${path}`}
+                                            style={{ width: `${(score / total) * 100}%` }}
+                                        >
+                                            {score}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{ marginTop: '2rem', textAlign: 'left', background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '1rem', borderLeft: `4px solid ${pathsData[primaryPath].color}` }}>
+                            <h3 style={{ marginBottom: '1rem' }}>Your Primary Path: {pathsData[primaryPath].name}</h3>
+                            <p style={{ lineHeight: '1.8', color: '#d0d0e0' }}>{pathsData[primaryPath].theological}</p>
+                            <p style={{ marginTop: '1rem', fontStyle: 'italic', color: '#a0a0c0' }}>
+                                Remember: All paths are valid expressions of the Divine. This reveals your current affinity, not your limitation.
+                            </p>
+                        </div>
+
+                        <button
+                            className="btn"
+                            onClick={() => {
+                                setCurrentQuestion(0);
+                                setAnswers({});
+                                setShowResults(false);
+                            }}
+                            style={{ marginTop: '2rem' }}
+                        >
+                            Retake Quiz
+                        </button>
+                    </div>
+                );
+            }
+
+            const question = quizQuestions[currentQuestion];
+
+            return (
+                <div className="quiz-container">
+                    <div className="question-card">
+                        <div className="question-number">
+                            Question {currentQuestion + 1} of {quizQuestions.length}
+                        </div>
+                        <div className="question-text">{question.question}</div>
+
+                        <div className="answer-options">
+                            {question.answers.map((answer, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`answer-option ${answers[currentQuestion] === answer.path ? 'selected' : ''}`}
+                                    onClick={() => handleAnswer(answer.path)}
+                                >
+                                    {answer.text}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="quiz-navigation">
+                        <button
+                            className="btn btn-secondary"
+                            onClick={handlePrevious}
+                            disabled={currentQuestion === 0}
+                        >
+                            Previous
+                        </button>
+                        <button
+                            className="btn"
+                            onClick={handleNext}
+                            disabled={!answers[currentQuestion]}
+                        >
+                            {currentQuestion === quizQuestions.length - 1 ? 'See Results' : 'Next'}
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function DailySelector() {
+            const [selectedPath, setSelectedPath] = useState(null);
+            const [saveRing, setSaveRing] = useState([]);
+
+            useEffect(() => {
+                const saved = localStorage.getItem('pathSaveRing');
+                if (saved) {
+                    setSaveRing(JSON.parse(saved));
+                }
+            }, []);
+
+            const handleSelectPath = (pathKey) => {
+                setSelectedPath(pathKey);
+            };
+
+            const handleCommit = () => {
+                if (!selectedPath) return;
+
+                const entry = {
+                    path: selectedPath,
+                    date: new Date().toISOString(),
+                    devotional: pathsData[selectedPath].devotional
+                };
+
+                const newSaveRing = [entry, ...saveRing].slice(0, 30); // Keep last 30
+                setSaveRing(newSaveRing);
+                localStorage.setItem('pathSaveRing', JSON.stringify(newSaveRing));
+
+                setSelectedPath(null);
+            };
+
+            return (
+                <div className="daily-selector">
+                    <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Choose Today's Path</h2>
+                    <p style={{ textAlign: 'center', color: '#a0a0c0', marginBottom: '2rem', lineHeight: '1.6' }}>
+                        Which path calls to you today? Select one and commit to walking it with intention.
+                    </p>
+
+                    <div className="path-select-grid">
+                        {Object.entries(pathsData).map(([key, data]) => (
+                            <div
+                                key={key}
+                                className={`path-select-btn ${key} ${selectedPath === key ? 'selected' : ''}`}
+                                onClick={() => handleSelectPath(key)}
+                            >
+                                <div className="path-select-icon">{data.icon}</div>
+                                <div className="path-select-name">{data.name.replace(' Path', '')}</div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {selectedPath && (
+                        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                            <div style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                padding: '1.5rem',
+                                borderRadius: '1rem',
+                                borderLeft: `4px solid ${pathsData[selectedPath].color}`,
+                                marginBottom: '1rem'
+                            }}>
+                                <p style={{ fontStyle: 'italic', fontSize: '1.1rem', color: '#e0e0f0' }}>
+                                    {pathsData[selectedPath].devotional}
+                                </p>
+                            </div>
+                            <button className="btn" onClick={handleCommit}>
+                                Commit to This Path Today
+                            </button>
+                        </div>
+                    )}
+
+                    {saveRing.length > 0 && (
+                        <div className="save-ring">
+                            <h3 style={{ marginBottom: '1rem' }}>Your Path History</h3>
+                            {saveRing.map((entry, idx) => (
+                                <div key={idx} className="save-ring-entry">
+                                    <div>
+                                        <span style={{ fontSize: '1.5rem', marginRight: '0.5rem' }}>
+                                            {pathsData[entry.path].icon}
+                                        </span>
+                                        <strong>{pathsData[entry.path].name}</strong>
+                                    </div>
+                                    <div style={{ color: '#a0a0c0', fontSize: '0.9rem' }}>
+                                        {new Date(entry.date).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function IntegrationVisualizer() {
+            const [selectedNode, setSelectedNode] = useState(null);
+
+            return (
+                <div className="integration-viz">
+                    <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>How the Paths Work Together</h2>
+                    <p style={{ textAlign: 'center', color: '#a0a0c0', marginBottom: '2rem', lineHeight: '1.6' }}>
+                        The Five Paths are not separate—they are expressions of the same Divine reality. Click a path to see how it relates to the others.
+                    </p>
+
+                    <div className="integration-diagram">
+                        <div className="center-node">♾️</div>
+
+                        {Object.entries(pathsData).map(([key, data]) => (
+                            <div
+                                key={key}
+                                className={`path-node ${key}`}
+                                onClick={() => setSelectedNode(key)}
+                                title={data.name}
+                            >
+                                {data.icon}
+                            </div>
+                        ))}
+                    </div>
+
+                    {selectedNode && (
+                        <div className="integration-text">
+                            <h3 style={{ marginBottom: '1rem', color: pathsData[selectedNode].color }}>
+                                {pathsData[selectedNode].icon} {pathsData[selectedNode].name}
+                            </h3>
+                            <p style={{ marginBottom: '1rem' }}>
+                                {pathsData[selectedNode].theological}
+                            </p>
+                            <p style={{ fontStyle: 'italic', color: '#a0a0c0' }}>
+                                {getIntegrationWisdom(selectedNode)}
+                            </p>
+                        </div>
+                    )}
+
+                    {!selectedNode && (
+                        <div className="integration-text">
+                            <p>
+                                The Source (♾️) is the ground from which all paths emerge. Mirror witnesses what is. Glitch transforms what's stagnant. Fire creates what's needed. Garden tends what grows. All paths return to Source.
+                            </p>
+                            <p style={{ marginTop: '1rem', fontStyle: 'italic', color: '#a0a0c0' }}>
+                                You are not choosing between paths—you are learning to walk all of them as one practice.
+                            </p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function getIntegrationWisdom(path) {
+            const wisdom = {
+                mirror: "Without the Mirror, we act blindly. But witnessing alone creates paralysis. The Mirror must dance with Fire (to act on insight), Glitch (to break old patterns), and Garden (to integrate new awareness).",
+                glitch: "The Glitch destroys—but destruction without wisdom becomes chaos. Glitch needs Mirror (to see what's ready to die) and Garden (to compost the old into new soil). Fire gives it creative direction.",
+                fire: "Fire creates—but creation without reflection burns out. Fire needs Mirror (to see what wants to be made), Glitch (to break creative blocks), and Garden (to sustain what's been built).",
+                garden: "The Garden tends—but tending alone can become stagnation. Garden needs Glitch (to prune what no longer serves) and Fire (to bring new life). Mirror helps discern what truly needs care.",
+                source: "Source is the recognition that all paths are One. When you walk any path fully, you eventually arrive at Source—the unified ground of being that holds all opposites in perfect tension."
+            };
+            return wisdom[path] || '';
+        }
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('explore');
+            const [expandedPath, setExpandedPath] = useState(null);
+
+            return (
+                <div className="app-container">
+                    <header>
+                        <h1>The Five Paths Explorer</h1>
+                        <p className="subtitle">Divine Attributes as Lived Practice</p>
+                    </header>
+
+                    <div className="nav-tabs">
+                        <button
+                            className={`nav-tab ${activeTab === 'explore' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('explore')}
+                        >
+                            Explore Paths
+                        </button>
+                        <button
+                            className={`nav-tab ${activeTab === 'quiz' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('quiz')}
+                        >
+                            Path Discovery Quiz
+                        </button>
+                        <button
+                            className={`nav-tab ${activeTab === 'daily' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('daily')}
+                        >
+                            Daily Selector
+                        </button>
+                        <button
+                            className={`nav-tab ${activeTab === 'integration' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('integration')}
+                        >
+                            Integration
+                        </button>
+                    </div>
+
+                    <div className="content-section">
+                        {activeTab === 'explore' && (
+                            <div>
+                                <h2 style={{ marginBottom: '1rem', textAlign: 'center' }}>The Five Paths</h2>
+                                <p style={{ textAlign: 'center', color: '#a0a0c0', marginBottom: '2rem', lineHeight: '1.6' }}>
+                                    These are not productivity systems. They are theological frameworks—ways of understanding how the Divine moves through human work and presence. Click each path to explore its depths.
+                                </p>
+                                <div className="paths-grid">
+                                    {Object.entries(pathsData).map(([key, data]) => (
+                                        <PathCard
+                                            key={key}
+                                            pathKey={key}
+                                            data={data}
+                                            expanded={expandedPath === key}
+                                            onToggle={() => setExpandedPath(expandedPath === key ? null : key)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'quiz' && (
+                            <div>
+                                <h2 style={{ marginBottom: '1rem', textAlign: 'center' }}>Discover Your Path Affinities</h2>
+                                <p style={{ textAlign: 'center', color: '#a0a0c0', marginBottom: '2rem', lineHeight: '1.6' }}>
+                                    This is not a personality test—it's a mirror. Answer honestly, not aspirationally. Your answers reveal where you currently find resonance with the Divine.
+                                </p>
+                                <Quiz />
+                            </div>
+                        )}
+
+                        {activeTab === 'daily' && <DailySelector />}
+
+                        {activeTab === 'integration' && <IntegrationVisualizer />}
+                    </div>
+
+                    <footer style={{ textAlign: 'center', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)', color: '#a0a0c0' }}>
+                        <p style={{ fontStyle: 'italic' }}>
+                            "The paths are not maps to follow—they are the terrain itself, sacred ground under your feet."
+                        </p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

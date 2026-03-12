@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>The First Spark | Katelin</title>
+    <meta name="description" content="Consciousness technology for the awakening generation.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✧</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(145deg, #050508 0%, #0a0a15 50%, #0d0d1a 100%);
+            color: #f0f2f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 380px;
+            background: linear-gradient(165deg, rgba(20,20,30,0.95) 0%, rgba(10,10,18,0.98) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.5),
+                0 0 100px rgba(212, 175, 55, 0.05),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .spark-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3)); }
+            50% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+        }
+
+        .name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #8892a8;
+            margin-bottom: 25px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: #c4c9d4;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .tagline span {
+            color: #d4af37;
+        }
+
+        .qr-section {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 15px;
+            margin: 25px auto;
+            width: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .qr-section img {
+            display: block;
+            width: 140px;
+            height: 140px;
+        }
+
+        .scan-label {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8892a8;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .url {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: #d4af37;
+            margin-bottom: 25px;
+        }
+
+        .links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .link-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .link-btn:hover, .link-btn:active {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.02);
+        }
+
+        .link-btn.primary {
+            background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
+            color: #050508;
+            border: none;
+            font-weight: 500;
+        }
+
+        .contact-row {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .contact-link {
+            display: block;
+            color: #8892a8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 8px 0;
+            transition: color 0.3s;
+        }
+
+        .contact-link:hover, .contact-link:active {
+            color: #d4af37;
+        }
+
+        .footer-tag {
+            margin-top: 25px;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <span class="spark-icon">✧</span>
+        
+        <h1 class="name">KATELIN</h1>
+        <p class="title">Founder · The First Spark</p>
+        
+        <p class="tagline"><span>Reality is programmable.</span><br>Tools for the awakening generation.</p>
+
+        <div class="qr-section">
+            <!-- QR Code pointing to thefirstspark.shop -->
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://thefirstspark.shop&bgcolor=ffffff&color=050508&format=svg" alt="Scan to visit">
+        </div>
+        
+        <p class="scan-label">Scan · Tap · Explore</p>
+        
+        <p class="url">thefirstspark.shop</p>
+
+        <div class="links">
+            <a href="https://thefirstspark.shop" class="link-btn primary">Visit Site</a>
+            <a href="https://thefirstspark.shop/invest" class="link-btn">Invest</a>
+        </div>
+
+        <div class="contact-row">
+            <a href="tel:+13308075509" class="contact-link">📞 (330) 807-5509</a>
+            <a href="mailto:kjpthefirstspark@gmail.com" class="contact-link">✉️ kjpthefirstspark@gmail.com</a>
+        </div>
+
+        <p class="footer-tag">Consciousness Technology</p>
+    </div>
+</body>
+</html>

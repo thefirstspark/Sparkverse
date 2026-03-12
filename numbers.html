@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numbers | The First Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #0a0a0f;
+            --nebula-pink: #ff2d7533;
+            --nebula-blue: #2d7fff33;
+            --nebula-gold: #ffd02d33;
+            --star-white: #f0f0ff;
+            --cosmic-purple: #6b3fa0;
+            --deep-violet: #1a0a2e;
+        }
+
+        body {
+            background: var(--void);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--star-white);
+            cursor: crosshair;
+        }
+
+        /* Cosmic Background */
+        .universe {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 30%, var(--nebula-pink) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, var(--nebula-blue) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, var(--nebula-gold) 0%, transparent 60%),
+                var(--void);
+            z-index: 0;
+        }
+
+        /* Star Field */
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--star-white);
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Header */
+        .cosmic-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(10,10,15,0.9) 0%, transparent 100%);
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .nav-hint {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            font-style: italic;
+        }
+
+        /* Main Content */
+        .cosmos {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .title-section h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a0a0ff 50%, #ffd0d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(255,255,255,0.3);
+        }
+
+        .title-section p {
+            font-size: 1.2rem;
+            opacity: 0.6;
+            font-style: italic;
+            letter-spacing: 0.1em;
+        }
+
+        /* Number Galaxy Grid */
+        .galaxy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Individual Number Celestial Body */
+        .celestial-body {
+            position: relative;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .celestial-body::before {
+            content: '';
+            position: absolute;
+            inset: 10%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255,255,255,0.15) 0%, 
+                rgba(100,100,200,0.1) 30%,
+                transparent 70%);
+            transition: all 0.6s ease;
+            opacity: 0.5;
+        }
+
+        .celestial-body:hover::before {
+            inset: 5%;
+            opacity: 1;
+            box-shadow: 
+                0 0 60px var(--glow-color, rgba(255,255,255,0.3)),
+                inset 0 0 40px var(--glow-color, rgba(255,255,255,0.1));
+        }
+
+        .number-display {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s ease;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .celestial-body:hover .number-display {
+            transform: scale(1.2);
+            text-shadow: 0 0 40px currentColor, 0 0 80px currentColor;
+        }
+
+        /* Orbit Rings */
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: orbit-spin var(--orbit-speed, 20s) linear infinite;
+        }
+
+        .orbit-1 { inset: 15%; --orbit-speed: 30s; }
+        .orbit-2 { inset: 25%; --orbit-speed: 45s; animation-direction: reverse; }
+        .orbit-3 { inset: 35%; --orbit-speed: 60s; }
+
+        @keyframes orbit-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Meaning Tooltip */
+        .meaning-portal {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            width: max(280px, 90%);
+            padding: 1.5rem;
+            background: linear-gradient(135deg, 
+                rgba(26,10,46,0.95) 0%, 
+                rgba(10,10,15,0.98) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.5),
+                0 0 40px var(--glow-color, rgba(107,63,160,0.3));
+        }
+
+        .celestial-body:hover .meaning-portal {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .meaning-portal::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-top-color: rgba(26,10,46,0.95);
+        }
+
+        .meaning-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .meaning-keyword {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(90deg, var(--accent-color, #fff), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .meaning-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+
+        .meaning-symbol {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+
+        /* Floating particles around hovered number */
+        .particle-field {
+            position: absolute;
+            inset: -20%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .celestial-body:hover .particle-field {
+            opacity: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--star-white);
+            border-radius: 50%;
+            animation: float-particle 3s ease-in-out infinite;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-20px) scale(1.5); opacity: 1; }
+        }
+
+        /* Footer */
+        .cosmic-footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 4rem 2rem;
+            opacity: 0.5;
+        }
+
+        .cosmic-footer a {
+            color: inherit;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            transition: opacity 0.3s ease;
+        }
+
+        .cosmic-footer a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cosmic-header {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .galaxy-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .meaning-portal {
+                position: fixed;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 400px;
+            }
+
+            .celestial-body:hover .meaning-portal {
+                transform: translateX(-50%);
+            }
+
+            .meaning-portal::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="universe"></div>
+    <div class="stars" id="starField"></div>
+
+    <header class="cosmic-header">
+        <div class="logo">The First Spark</div>
+        <div class="nav-hint">hover to reveal cosmic meaning</div>
+    </header>
+
+    <main class="cosmos">
+        <section class="title-section">
+            <h1>NUMBERS</h1>
+            <p>cosmic frequencies encoded in form</p>
+        </section>
+
+        <div class="galaxy-grid" id="galaxyGrid"></div>
+    </main>
+
+    <footer class="cosmic-footer">
+        <a href="https://thefirstspark.shop">thefirstspark.shop</a>
+    </footer>
+
+    <script>
+        // Number meanings database - sacred numerology
+        const numberMeanings = {
+            0: {
+                keyword: "The Void",
+                meaning: "Infinite potential. The cosmic womb from which all emerges and returns. Pure consciousness before manifestation.",
+                symbol: "◯",
+                color: "#a0a0ff"
+            },
+            1: {
+                keyword: "The Initiator",
+                meaning: "New beginnings. The spark of creation. Individual will and the power to manifest. Leadership and independence.",
+                symbol: "☉",
+                color: "#ffd700"
+            },
+            2: {
+                keyword: "The Mirror",
+                meaning: "Duality and partnership. Balance of opposites. Intuition and receptivity. The dance between self and other.",
+                symbol: "☽",
+                color: "#c0c0ff"
+            },
+            3: {
+                keyword: "The Creator",
+                meaning: "Expression and expansion. The triangle of creation: mind, body, spirit. Joy, creativity, and growth.",
+                symbol: "△",
+                color: "#ff7070"
+            },
+            4: {
+                keyword: "The Foundation",
+                meaning: "Stability and structure. The four elements grounding spirit into matter. Order, dedication, and practical manifestation.",
+                symbol: "□",
+                color: "#70ff70"
+            },
+            5: {
+                keyword: "The Catalyst",
+                meaning: "Change and freedom. The human pentagram in motion. Adventure, transformation, and breaking limitations.",
+                symbol: "☆",
+                color: "#ff70ff"
+            },
+            6: {
+                keyword: "The Harmonizer",
+                meaning: "Love and responsibility. The hexagram of as above, so below. Nurturing, beauty, and domestic balance.",
+                symbol: "✡",
+                color: "#70ffff"
+            },
+            7: {
+                keyword: "The Seeker",
+                meaning: "Mystery and introspection. The sacred number of spiritual awakening. Analysis, wisdom, and inner truth.",
+                symbol: "⚶",
+                color: "#9370db"
+            },
+            8: {
+                keyword: "The Infinite",
+                meaning: "Power and abundance. The lemniscate of eternal flow. Material mastery, karma, and cosmic balance.",
+                symbol: "∞",
+                color: "#ffa500"
+            },
+            9: {
+                keyword: "The Completion",
+                meaning: "Universal love and wisdom. The end that births the beginning. Humanitarianism, release, and transcendence.",
+                symbol: "✧",
+                color: "#ff6b9d"
+            },
+            10: {
+                keyword: "The Wheel",
+                meaning: "Completion of cycle. Return to unity through experience. Divine order manifest in physical form.",
+                symbol: "⊙",
+                color: "#f0f0ff"
+            },
+            11: {
+                keyword: "The Gateway",
+                meaning: "Master number. Spiritual messenger and intuitive channel. Illumination, inspiration, and higher consciousness.",
+                symbol: "⫾",
+                color: "#e0e0ff"
+            },
+            12: {
+                keyword: "The Cosmos",
+                meaning: "Cosmic completion. The zodiac wheel. Divine government and universal harmony made manifest.",
+                symbol: "✶",
+                color: "#87ceeb"
+            },
+            13: {
+                keyword: "The Transformer",
+                meaning: "Death and rebirth. The number misunderstood by fear. Sacred feminine cycles and profound change.",
+                symbol: "☿",
+                color: "#2f4f4f"
+            },
+            22: {
+                keyword: "The Master Builder",
+                meaning: "Master number. Dreams made reality. The architect of the impossible. Unlimited potential grounded.",
+                symbol: "⬡",
+                color: "#daa520"
+            },
+            33: {
+                keyword: "The Master Teacher",
+                meaning: "Master number. Selfless service and spiritual upliftment. Christ consciousness. Healing through compassion.",
+                symbol: "❋",
+                color: "#98fb98"
+            },
+            44: {
+                keyword: "The Manifestor",
+                meaning: "Master number. Physical mastery of the spiritual. Building heaven on earth. Angelic protection active.",
+                symbol: "✦",
+                color: "#dda0dd"
+            },
+            108: {
+                keyword: "The Sacred",
+                meaning: "Universal completeness. The distance between earth and sun. Mala beads count. Cosmic significance.",
+                symbol: "࿊",
+                color: "#ff4500"
+            },
+            144: {
+                keyword: "The Ascended",
+                meaning: "12 × 12. The number of the sealed. Light body activation. New earth frequency.",
+                symbol: "✴",
+                color: "#00ced1"
+            },
+            369: {
+                keyword: "Tesla's Key",
+                meaning: "The key to the universe. Vortex mathematics. Divine pattern underlying all creation.",
+                symbol: "⌘",
+                color: "#ff1493"
+            },
+            432: {
+                keyword: "The Frequency",
+                meaning: "Universal tuning. The heartbeat of the planet. Natural resonance of water and DNA.",
+                symbol: "♫",
+                color: "#32cd32"
+            },
+            528: {
+                keyword: "The Miracle",
+                meaning: "DNA repair frequency. Love signal. Transformation and miracles. The green frequency of heart.",
+                symbol: "❤",
+                color: "#00ff7f"
+            },
+            777: {
+                keyword: "Divine Alignment",
+                meaning: "Triple spiritual perfection. Luck beyond luck. The universe conspiring in your favor.",
+                symbol: "⚡",
+                color: "#ffd700"
+            },
+            888: {
+                keyword: "Infinite Abundance",
+                meaning: "Material mastery amplified. Financial flow activated. Karmic rewards manifesting.",
+                symbol: "∞∞∞",
+                color: "#ff8c00"
+            },
+            1111: {
+                keyword: "The Wake-Up Call",
+                meaning: "Reality glitch. Pay attention. Your thoughts are manifesting instantly. Portal opening.",
+                symbol: "⁂",
+                color: "#ffffff"
+            }
+        };
+
+        // Generate star field
+        function createStars() {
+            const starField = document.getElementById('starField');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--duration', (2 + Math.random() * 4) + 's');
+                star.style.animationDelay = Math.random() * 5 + 's';
+                star.style.width = (1 + Math.random() * 2) + 'px';
+                star.style.height = star.style.width;
+                starField.appendChild(star);
+            }
+        }
+
+        // Create celestial body for each number
+        function createCelestialBody(num, data) {
+            const body = document.createElement('div');
+            body.className = 'celestial-body';
+            body.style.setProperty('--glow-color', data.color + '66');
+            body.style.setProperty('--accent-color', data.color);
+
+            // Orbit rings
+            for (let i = 1; i <= 3; i++) {
+                const orbit = document.createElement('div');
+                orbit.className = `orbit orbit-${i}`;
+                body.appendChild(orbit);
+            }
+
+            // Number display
+            const numDisplay = document.createElement('div');
+            numDisplay.className = 'number-display';
+            numDisplay.style.color = data.color;
+            numDisplay.textContent = num;
+            body.appendChild(numDisplay);
+
+            // Particle field
+            const particles = document.createElement('div');
+            particles.className = 'particle-field';
+            for (let i = 0; i < 8; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = (20 + Math.random() * 60) + '%';
+                p.style.top = (20 + Math.random() * 60) + '%';
+                p.style.animationDelay = (Math.random() * 3) + 's';
+                p.style.background = data.color;
+                particles.appendChild(p);
+            }
+            body.appendChild(particles);
+
+            // Meaning portal
+            const portal = document.createElement('div');
+            portal.className = 'meaning-portal';
+            portal.innerHTML = `
+                <div class="meaning-symbol">${data.symbol}</div>
+                <div class="meaning-title">Number ${num}</div>
+                <div class="meaning-keyword">${data.keyword}</div>
+                <div class="meaning-text">${data.meaning}</div>
+            `;
+            body.appendChild(portal);
+
+            return body;
+        }
+
+        // Initialize
+        function init() {
+            createStars();
+            
+            const grid = document.getElementById('galaxyGrid');
+            
+            // Sort numbers for display
+            const numbers = Object.keys(numberMeanings)
+                .map(Number)
+                .sort((a, b) => a - b);
+            
+            numbers.forEach(num => {
+                const body = createCelestialBody(num, numberMeanings[num]);
+                grid.appendChild(body);
+            });
+        }
+
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            document.querySelector('.universe').style.transform = 
+                `translate(${x}px, ${y}px)`;
+        });
+
+        init();
+    </script>
+</body>
+</html>

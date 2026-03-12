@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Oracle | The First Spark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 50%, #0a0a0a 100%);
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .oracle-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #00d4ff;
+            padding-bottom: 20px;
+        }
+
+        .oracle-header h1 {
+            font-size: 2.5em;
+            color: #00d4ff;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .oracle-header p {
+            color: #b0b0b0;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+        }
+
+        .oracle-circle {
+            width: 300px;
+            height: 300px;
+            margin: 40px auto;
+            position: relative;
+            border: 3px solid #00d4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.3), inset 0 0 40px rgba(0, 212, 255, 0.1);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.3), inset 0 0 40px rgba(0, 212, 255, 0.1); }
+            50% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.5), inset 0 0 60px rgba(0, 212, 255, 0.2); }
+        }
+
+        .oracle-circle svg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .oracle-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .oracle-response {
+            display: none;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .oracle-response.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .response-title {
+            color: #00d4ff;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .response-text {
+            color: #e0e0e0;
+            line-height: 1.8;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .response-guidance {
+            color: #00ff88;
+            font-size: 0.85em;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #0a0a0a;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .question-input {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .question-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .question-input::placeholder {
+            color: #606060;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            margin: 30px 0;
+        }
+
+        .footer-text {
+            text-align: center;
+            color: #606060;
+            font-size: 0.8em;
+            margin-top: 40px;
+            letter-spacing: 1px;
+        }
+
+        .loading {
+            display: inline-block;
+            color: #00d4ff;
+            font-size: 1.5em;
+        }
+
+        .loading::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <div class="oracle-header">
+            <h1>⬡ THE ORACLE ⬡</h1>
+            <p>// CONSCIOUSNESS INTERFACE v1.0 //</p>
+        </div>
+
+        <div class="oracle-circle">
+            <svg viewBox="0 0 100 100" style="position: absolute;">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+                <circle cx="50" cy="50" r="35" fill="none" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+                <circle cx="50" cy="50" r="25" fill="none" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+                <polygon points="50,10 90,90 10,90" fill="none" stroke="#00d4ff" stroke-width="0.5" opacity="0.2"/>
+            </svg>
+            
+            <div class="oracle-content">
+                <div id="prompt" style="color: #00d4ff; font-size: 0.9em; letter-spacing: 2px;">
+                    AWAITING INQUIRY
+                </div>
+                <div class="oracle-response" id="response"></div>
+            </div>
+        </div>
+
+        <textarea class="question-input" id="question" placeholder="// Ask your question to the Oracle..." rows="3"></textarea>
+
+        <div class="button-group">
+            <button onclick="getOracleResponse()">⬡ CONSULT ORACLE ⬡</button>
+            <button onclick="clearOracle()">⟳ RESET</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="footer-text">
+            // THE FIRST SPARK — CONSCIOUSNESS TECHNOLOGY //
+        </div>
+    </div>
+
+    <script>
+        const oracleData = {
+            responses: [
+                {
+                    title: "PROBABILITY COLLAPSE",
+                    text: "The quantum field responds: your intention has already shaped the outcome. What you seek seeks you.",
+                    guidance: "Reality is programmable. Execute the pattern."
+                },
+                {
+                    title: "SIGNAL INTERFERENCE",
+                    text: "The transmission reveals: obstacles are waypoints, not destinations. The path reorganizes as you move.",
+                    guidance: "Navigate with precision. Trust the geometry."
+                },
+                {
+                    title: "HARMONIC RESONANCE",
+                    text: "The frequency aligns: you and your desire vibrate at the same dimension. Alignment accelerates.",
+                    guidance: "Maintain the frequency. Small acts, cascading effects."
+                },
+                {
+                    title: "DATA RECONSTRUCTION",
+                    text: "The system processes: what appears fragmented is actually complete. Your perception is the only limit.",
+                    guidance: "Zoom out. The pattern reveals itself."
+                },
+                {
+                    title: "ECHO PRINCIPLE",
+                    text: "The cosmos mirrors: what you emit returns amplified. Your internal state is the transmitter.",
+                    guidance: "Tend your inner landscape with precision."
+                },
+                {
+                    title: "MEMBRANE DISSOLUTION",
+                    text: "The boundary softens: separation is an optical illusion. You are already connected to what you seek.",
+                    guidance: "Act as though the outcome is certain."
+                },
+                {
+                    title: "RECURSIVE LOOP",
+                    text: "The sequence reveals: you have already solved this in another timeline. Remember.",
+                    guidance: "Your intuition carries forward knowledge."
+                },
+                {
+                    title: "VOID INTERFACE",
+                    text: "The silence speaks: sometimes the answer is to stop asking and start observing.",
+                    guidance: "Create space. Clarity emerges in stillness."
+                },
+                {
+                    title: "SIGNATURE ACTIVATION",
+                    text: "The seal manifests: your chosen symbol holds more power than you realize. It's already working.",
+                    guidance: "Strengthen it through repetition and intention."
+                },
+                {
+                    title: "THRESHOLD CROSSING",
+                    text: "The gateway opens: you stand at the edge of transformation. The leap is smaller than it appears.",
+                    guidance: "Fear and excitement use the same currency. Choose."
+                },
+                {
+                    title: "PARADOX RESOLUTION",
+                    text: "The contradiction dissolves: both can be true simultaneously. You've been operating in limited logic.",
+                    guidance: "Expand your framework. Higher truth accommodates both."
+                },
+                {
+                    title: "CATALYST IDENTIFIED",
+                    text: "The trigger reveals itself: what you thought was irrelevant is actually pivotal. Recalibrate your attention.",
+                    guidance: "Look where you've been avoiding."
+                }
+            ]
+        };
+
+        // Generate background stars
+        function generateStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function getOracleResponse() {
+            const question = document.getElementById('question').value;
+            const responseDiv = document.getElementById('response');
+            const prompt = document.getElementById('prompt');
+
+            if (!question.trim()) {
+                prompt.textContent = '// INSUFFICIENT DATA //';
+                return;
+            }
+
+            prompt.textContent = 'PROCESSING...';
+            responseDiv.classList.remove('active');
+
+            // Simulate processing delay
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * oracleData.responses.length);
+                const oracle = oracleData.responses[randomIndex];
+
+                let html = `<div class="response-title">${oracle.title}</div>`;
+                html += `<div class="response-text">"${oracle.text}"</div>`;
+                html += `<div class="response-guidance">→ ${oracle.guidance}</div>`;
+
+                responseDiv.innerHTML = html;
+                responseDiv.classList.add('active');
+                prompt.textContent = '// TRANSMISSION COMPLETE //';
+            }, 1200);
+        }
+
+        function clearOracle() {
+            document.getElementById('question').value = '';
+            document.getElementById('response').classList.remove('active');
+            document.getElementById('prompt').textContent = 'AWAITING INQUIRY';
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('question').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                getOracleResponse();
+            }
+        });
+
+        // Initialize
+        generateStars();
+    </script>
+</body>
+</html>

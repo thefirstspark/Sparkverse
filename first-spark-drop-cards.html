@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The First Spark - Drop Cards</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @page {
+            size: letter;
+            margin: 0.25in;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #fff;
+            color: #000;
+        }
+        
+        .print-page {
+            width: 8in;
+            min-height: 10.5in;
+            margin: 0 auto;
+            padding: 0.25in;
+            page-break-after: always;
+        }
+        
+        .page-title {
+            text-align: center;
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0;
+        }
+        
+        .card {
+            width: 3.5in;
+            height: 2.5in;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* DARK CARDS - Mysterious */
+        .card.dark {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: #fff;
+        }
+        
+        .card.dark .qr-section {
+            width: 1.3in;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card.dark .qr-code {
+            width: 1.1in;
+            height: 1.1in;
+            background: #fff;
+            padding: 5px;
+            border-radius: 8px;
+        }
+        
+        .card.dark .qr-code img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .card.dark .content-section {
+            flex: 1;
+            padding-left: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card.dark .hook {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ff2d7a, #00f0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card.dark .subtext {
+            font-size: 9px;
+            color: #a0a0b0;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        
+        .card.dark .brand {
+            font-size: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #ff2d7a;
+            letter-spacing: 1px;
+        }
+        
+        .card.dark .spark-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #ff2d7a;
+        }
+        
+        /* LIGHT CARDS - Direct Pitch */
+        .card.light {
+            background: #fff;
+            color: #0a0a0f;
+            border: 2px solid #0a0a0f;
+        }
+        
+        .card.light .qr-section {
+            width: 1.3in;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card.light .qr-code {
+            width: 1.1in;
+            height: 1.1in;
+            padding: 5px;
+            border: 2px solid #0a0a0f;
+            border-radius: 8px;
+        }
+        
+        .card.light .qr-code img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .card.light .content-section {
+            flex: 1;
+            padding-left: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card.light .hook {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        
+        .card.light .subtext {
+            font-size: 9px;
+            color: #555;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        
+        .card.light .brand {
+            font-size: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #ff2d7a;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .card.light .spark-icon {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 14px;
+        }
+        
+        /* INVESTOR SPECIFIC */
+        .card.investor {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%);
+            color: #fff;
+            border: 2px solid #ffd700;
+        }
+        
+        .card.investor .hook {
+            color: #ffd700;
+            -webkit-text-fill-color: #ffd700;
+        }
+        
+        .card.investor .brand {
+            color: #ffd700;
+        }
+        
+        .card.investor .spark-icon {
+            color: #ffd700;
+        }
+        
+        /* MINI CARDS - More per page */
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+        }
+        
+        .card.mini {
+            width: 2.5in;
+            height: 2.5in;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .card.mini .qr-code {
+            width: 1.2in;
+            height: 1.2in;
+            margin-bottom: 8px;
+        }
+        
+        .card.mini .hook {
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+        
+        .card.mini .subtext {
+            font-size: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .card.mini .brand {
+            font-size: 7px;
+        }
+        
+        /* Print optimization */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .card.dark {
+                background: #0a0a0f !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .card.investor {
+                background: #0a0a0f !important;
+            }
+            
+            .no-print {
+                display: none;
+            }
+        }
+        
+        .instructions {
+            max-width: 8in;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="instructions no-print">
+        <h3>✂️ PRINT & CUT INSTRUCTIONS</h3>
+        <ul>
+            <li>Print on cardstock (110lb recommended) for durability</li>
+            <li>Cut along dashed lines</li>
+            <li>Page 1: Mysterious/Curiosity cards (dark)</li>
+            <li>Page 2: Direct investor pitch cards (gold border)</li>
+            <li>Page 3: Mini square cards (9 per page) - perfect for tips, receipts, bar tops</li>
+            <li>QR codes link to: thefirstspark.shop</li>
+        </ul>
+    </div>
+
+    <!-- PAGE 1: MYSTERIOUS DARK CARDS -->
+    <div class="print-page">
+        <div class="page-title">PAGE 1 — CURIOSITY HOOKS — CUT ALONG DASHED LINES</div>
+        <div class="cards-grid">
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">Reality is programmable.<br>You're the glitch.</div>
+                    <div class="subtext">Consciousness technology for people who know the game is rigged — and want to rewrite the code.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">This isn't spirituality.<br>This is source code.</div>
+                    <div class="subtext">Tools for the spiritually homeless. No gurus. No gatekeepers. Just the raw architecture of awakening.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">You found this card.<br>That's not an accident.</div>
+                    <div class="subtext">Some call it synchronicity. We call it the algorithm working. Scan to remember what you already know.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">The simulation has<br>a back door.</div>
+                    <div class="subtext">Soul mapping. Sigil technology. Consciousness tools built by someone who broke through.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">You're not broken.<br>You're buffering.</div>
+                    <div class="subtext">Free tools to reset your reality. No subscription required to remember who you are.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">What if your trauma<br>was an installation?</div>
+                    <div class="subtext">And what if you could uninstall it? Consciousness technology from someone who did.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">They told you to<br>find yourself.<br>We'll help you<br>remember yourself.</div>
+                    <div class="subtext">Soul maps. Sigils. Source code.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark">
+                <span class="spark-icon">✦</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">Press Start.</div>
+                    <div class="subtext">The game isn't happening to you. You're the one who wrote the code. Time to play like you remember.</div>
+                    <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- PAGE 2: INVESTOR CARDS -->
+    <div class="print-page">
+        <div class="page-title">PAGE 2 — INVESTOR / FOUNDING MEMBER CARDS — CUT ALONG DASHED LINES</div>
+        <div class="cards-grid">
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">Seeking $200K<br>for 20% equity.</div>
+                    <div class="subtext">Consciousness technology startup. 30+ tools built. Revenue-ready. Looking for founding investors who see what's coming.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">100M+ Americans<br>are "spiritual but<br>not religious."</div>
+                    <div class="subtext">They have nowhere to go. We built the infrastructure. Now we need fuel.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">First 100 investors<br>get OG status.</div>
+                    <div class="subtext">$519.88 lifetime access. Founding member perks. Your name in the credits when this thing goes cosmic.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">Built by a painter<br>who taught herself<br>to code.</div>
+                    <div class="subtext">Single mom. Cold case solver. Reality hacker. 30+ consciousness tools live. Looking for believers.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">Wellness is a<br>$5.6T industry.</div>
+                    <div class="subtext">We're not selling candles. We're selling consciousness infrastructure for the post-collapse generation.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">Anti-extraction<br>by design.</div>
+                    <div class="subtext">Transparency. Proximity. Reciprocity. A business model that can't be faked. Scan to see the Reciprocity Protocol.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">What if you could<br>invest in someone's<br>awakening?</div>
+                    <div class="subtext">Not a guru. Not a course. A whole ecosystem of tools for people ready to remember.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+            <div class="card dark investor">
+                <span class="spark-icon">◆</span>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="hook">The First Spark<br>is looking for<br>founding players.</div>
+                    <div class="subtext">$200K raise. Mobile Spark Station. Book Zero memoir. Custom AI. Scan to see the vision.</div>
+                    <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- PAGE 3: MINI SQUARE CARDS -->
+    <div class="print-page">
+        <div class="page-title">PAGE 3 — MINI DROP CARDS (TIPS, RECEIPTS, BAR TOPS) — CUT ALONG DASHED LINES</div>
+        <div class="mini-grid">
+            
+            <div class="card dark mini">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">Reality is programmable.</div>
+                <div class="subtext">Scan to remember.</div>
+                <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">You found this.<br>That's not random.</div>
+                <div class="subtext">Consciousness tools inside.</div>
+                <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">Press Start.</div>
+                <div class="subtext">Free soul mapping tools.</div>
+                <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">The glitch is you.</div>
+                <div class="subtext">Time to remember.</div>
+                <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini investor">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">$200K for 20%</div>
+                <div class="subtext">Consciousness tech startup.</div>
+                <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">You're not broken.<br>You're buffering.</div>
+                <div class="subtext">Reset inside.</div>
+                <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">This isn't spirituality.</div>
+                <div class="subtext">This is source code.</div>
+                <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini investor">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">First 100 get<br>OG status.</div>
+                <div class="subtext">Founding member inside.</div>
+                <div class="brand">◆ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+            <div class="card dark mini">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&bgcolor=ffffff&color=0a0a0f" alt="QR">
+                </div>
+                <div class="hook">Scan if you're<br>ready to wake up.</div>
+                <div class="subtext">No gurus. Just tools.</div>
+                <div class="brand">✦ THEFIRSTSPARK.SHOP</div>
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>

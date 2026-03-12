@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Integration Architecture | The First Spark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #c9a227;
+            margin-bottom: 40px;
+        }
+
+        .brand {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00ffff, #ffffff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #c9a227;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #c9a227;
+            box-shadow: 0 0 30px rgba(201, 162, 39, 0.1);
+        }
+
+        .card h2 {
+            color: #c9a227;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.3rem;
+        }
+
+        /* Emergency Toggle */
+        .emergency-btn {
+            width: 100%;
+            padding: 25px;
+            background: linear-gradient(135deg, #1a0a0a, #2a1515);
+            border: 2px solid #ff4444;
+            border-radius: 10px;
+            color: #ff6666;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .emergency-btn:hover {
+            background: #ff4444;
+            color: #000;
+            box-shadow: 0 0 40px rgba(255, 68, 68, 0.4);
+        }
+
+        .emergency-btn.activated {
+            animation: pulse-red 1s ease-in-out 3;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 60px rgba(255, 68, 68, 0.8); }
+        }
+
+        .emergency-message {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            display: none;
+            color: #ffaaaa;
+            line-height: 1.6;
+        }
+
+        .emergency-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Peak Logger */
+        .peak-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            color: #e0e0e0;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: none;
+            min-height: 100px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        .peak-input:focus {
+            outline: none;
+            border-color: #c9a227;
+        }
+
+        .peak-input::placeholder {
+            color: #555;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid #c9a227;
+            color: #c9a227;
+            padding: 12px 25px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .btn:hover {
+            background: #c9a227;
+            color: #0a0a0f;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.75rem;
+        }
+
+        .peak-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .peak-item {
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 3px solid #00ffff;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9rem;
+        }
+
+        .peak-item .timestamp {
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        /* Integration Stages */
+        .stages {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stage {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .stage:hover {
+            background: rgba(201, 162, 39, 0.1);
+        }
+
+        .stage.active {
+            border-color: #c9a227;
+            background: rgba(201, 162, 39, 0.15);
+        }
+
+        .stage.completed {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .stage-number {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .stage.active .stage-number {
+            border-color: #c9a227;
+            color: #c9a227;
+        }
+
+        .stage.completed .stage-number {
+            border-color: #00ff88;
+            background: #00ff88;
+            color: #000;
+        }
+
+        .stage-info h3 {
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+
+        .stage-info p {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* Streak Counter */
+        .streak-display {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .streak-number {
+            font-size: 4rem;
+            font-weight: 200;
+            color: #c9a227;
+            line-height: 1;
+        }
+
+        .streak-label {
+            font-size: 0.8rem;
+            color: #888;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .streak-btn {
+            margin-top: 25px;
+            width: 100%;
+        }
+
+        /* Pattern Recognition */
+        .pattern-output {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 120px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        .pattern-output.has-content {
+            color: #00ffff;
+        }
+
+        /* Stakes Designer */
+        .stakes-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            color: #e0e0e0;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: none;
+            min-height: 80px;
+            margin-bottom: 15px;
+        }
+
+        .stakes-input:focus {
+            outline: none;
+            border-color: #ff4444;
+        }
+
+        .stakes-output {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 3px solid #ff4444;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .stakes-output.show {
+            display: block;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #c9a227;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        /* Export Button */
+        .export-section {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid #333;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #444;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        .footer a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #c9a227;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c9a227;
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">The First Spark</div>
+            <h1>THE INTEGRATION ARCHITECTURE</h1>
+            <p class="subtitle">Your Personal Consciousness Operating System</p>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value" id="totalPeaks">0</div>
+                <div class="stat-label">PEAK EXPERIENCES</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="completedCycles">0</div>
+                <div class="stat-label">COMPLETED CYCLES</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="currentStreak">0</div>
+                <div class="stat-label">DAY STREAK</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="totalStakes">0</div>
+                <div class="stat-label">STAKES DESIGNED</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Emergency Toggle -->
+            <div class="card">
+                <h2><span class="icon">⚡</span> EMERGENCY TOGGLE</h2>
+                <button class="emergency-btn" id="emergencyBtn" onclick="emergencyToggle()">
+                    COLLAPSE OBSERVER MODE
+                </button>
+                <div class="emergency-message" id="emergencyMessage">
+                    <strong>OBSERVER COLLAPSED.</strong><br><br>
+                    You are not watching yourself read this.<br>
+                    You ARE the reading.<br><br>
+                    Feel your hands. Feel the weight of your body. Feel the breath that's already breathing you.<br><br>
+                    The one who was stuck in observation isn't here anymore.<br>
+                    Only presence remains.
+                </div>
+            </div>
+
+            <!-- Peak Experience Logger -->
+            <div class="card">
+                <h2><span class="icon">△</span> PEAK EXPERIENCE LOGGER</h2>
+                <textarea class="peak-input" id="peakInput" placeholder="What collapsed? What opened? What did you see? Capture the insight before the observer returns to make sense of it..."></textarea>
+                <button class="btn" onclick="logPeak()">Log Peak Experience</button>
+                <div class="peak-list" id="peakList"></div>
+            </div>
+
+            <!-- 4-Stage Integration -->
+            <div class="card">
+                <h2><span class="icon">◇</span> 4-STAGE INTEGRATION</h2>
+                <div class="stages">
+                    <div class="stage active" id="stage1" onclick="setStage(1)">
+                        <div class="stage-number">1</div>
+                        <div class="stage-info">
+                            <h3>PEAK</h3>
+                            <p>Observer collapse, direct experience</p>
+                        </div>
+                    </div>
+                    <div class="stage" id="stage2" onclick="setStage(2)">
+                        <div class="stage-number">2</div>
+                        <div class="stage-info">
+                            <h3>RETURN</h3>
+                            <p>Observer returns to map what happened</p>
+                        </div>
+                    </div>
+                    <div class="stage" id="stage3" onclick="setStage(3)">
+                        <div class="stage-number">3</div>
+                        <div class="stage-info">
+                            <h3>REWIRE</h3>
+                            <p>Encode new behaviors through practice</p>
+                        </div>
+                    </div>
+                    <div class="stage" id="stage4" onclick="setStage(4)">
+                        <div class="stage-number">4</div>
+                        <div class="stage-info">
+                            <h3>REPEAT</h3>
+                            <p>Escalate stakes, test at higher levels</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-small" style="margin-top: 20px; width: 100%;" onclick="completeCycle()">Complete Cycle & Reset</button>
+            </div>
+
+            <!-- Toggle Training Streak -->
+            <div class="card">
+                <h2><span class="icon">∿</span> TOGGLE TRAINING</h2>
+                <div class="streak-display">
+                    <div class="streak-number" id="streakDisplay">0</div>
+                    <div class="streak-label">DAY STREAK</div>
+                </div>
+                <button class="btn streak-btn" onclick="logPractice()">Log Today's Practice</button>
+                <p style="text-align: center; margin-top: 15px; font-size: 0.75rem; color: #666;" id="lastPractice"></p>
+            </div>
+
+            <!-- Pattern Recognition -->
+            <div class="card">
+                <h2><span class="icon">○</span> PATTERN RECOGNITION</h2>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 15px;">After logging 3+ peak experiences, analyze for recurring themes.</p>
+                <button class="btn" onclick="analyzePatterns()">Analyze Patterns</button>
+                <div class="pattern-output" id="patternOutput">
+                    Patterns will emerge from your logged experiences...
+                </div>
+            </div>
+
+            <!-- Stakes Designer -->
+            <div class="card">
+                <h2><span class="icon">✦</span> STAKES ESCALATION</h2>
+                <textarea class="stakes-input" id="stakesInput" placeholder="What are you avoiding? What needs real consequences? Describe the edge you're not approaching..."></textarea>
+                <button class="btn" onclick="designStakes()">Design Next-Level Stakes</button>
+                <div class="stakes-output" id="stakesOutput"></div>
+            </div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="export-section">
+            <button class="btn" onclick="exportData()">↓ Export Your Data (JSON)</button>
+            <p style="margin-top: 15px; font-size: 0.75rem; color: #555;">Your data stays in your browser. Export anytime to backup.</p>
+        </div>
+
+        <footer class="footer">
+            <p>✦ THE FIRST SPARK ✦</p>
+            <p style="margin-top: 10px;"><a href="https://thefirstspark.shop" target="_blank">thefirstspark.shop</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // State
+        let state = {
+            peaks: [],
+            currentStage: 1,
+            completedCycles: 0,
+            streak: 0,
+            lastPractice: null,
+            stakes: [],
+            totalStakes: 0
+        };
+
+        // Load from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('integrationArchitecture');
+            if (saved) {
+                state = JSON.parse(saved);
+                updateUI();
+            }
+        }
+
+        // Save to localStorage
+        function saveState() {
+            localStorage.setItem('integrationArchitecture', JSON.stringify(state));
+            updateUI();
+        }
+
+        // Update all UI elements
+        function updateUI() {
+            // Stats
+            document.getElementById('totalPeaks').textContent = state.peaks.length;
+            document.getElementById('completedCycles').textContent = state.completedCycles;
+            document.getElementById('currentStreak').textContent = state.streak;
+            document.getElementById('streakDisplay').textContent = state.streak;
+            document.getElementById('totalStakes').textContent = state.totalStakes;
+
+            // Stages
+            for (let i = 1; i <= 4; i++) {
+                const stage = document.getElementById('stage' + i);
+                stage.classList.remove('active', 'completed');
+                if (i < state.currentStage) {
+                    stage.classList.add('completed');
+                } else if (i === state.currentStage) {
+                    stage.classList.add('active');
+                }
+            }
+
+            // Peak list
+            const peakList = document.getElementById('peakList');
+            peakList.innerHTML = state.peaks.slice(-5).reverse().map(p => `
+                <div class="peak-item">
+                    <div class="timestamp">${new Date(p.timestamp).toLocaleString()}</div>
+                    ${p.text}
+                </div>
+            `).join('');
+
+            // Last practice
+            if (state.lastPractice) {
+                document.getElementById('lastPractice').textContent = 
+                    'Last: ' + new Date(state.lastPractice).toLocaleDateString();
+            }
+        }
+
+        // Emergency Toggle
+        function emergencyToggle() {
+            const btn = document.getElementById('emergencyBtn');
+            const msg = document.getElementById('emergencyMessage');
+            
+            btn.classList.add('activated');
+            msg.classList.add('show');
+            
+            setTimeout(() => {
+                btn.classList.remove('activated');
+            }, 3000);
+        }
+
+        // Log Peak Experience
+        function logPeak() {
+            const input = document.getElementById('peakInput');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            state.peaks.push({
+                text: text,
+                timestamp: new Date().toISOString()
+            });
+            
+            input.value = '';
+            saveState();
+        }
+
+        // Set Integration Stage
+        function setStage(num) {
+            state.currentStage = num;
+            saveState();
+        }
+
+        // Complete Integration Cycle
+        function completeCycle() {
+            if (state.currentStage === 4) {
+                state.completedCycles++;
+                state.currentStage = 1;
+                saveState();
+                alert('Cycle complete! Integration logged. Starting fresh cycle.');
+            } else {
+                alert('Complete all 4 stages before resetting.');
+            }
+        }
+
+        // Log Daily Practice
+        function logPractice() {
+            const today = new Date().toDateString();
+            const lastDate = state.lastPractice ? new Date(state.lastPractice).toDateString() : null;
+            
+            if (lastDate === today) {
+                alert('Already logged today. Come back tomorrow!');
+                return;
+            }
+            
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (lastDate === yesterday.toDateString()) {
+                state.streak++;
+            } else if (lastDate !== today) {
+                state.streak = 1;
+            }
+            
+            state.lastPractice = new Date().toISOString();
+            saveState();
+            alert('Practice logged! Streak: ' + state.streak + ' days');
+        }
+
+        // Analyze Patterns
+        function analyzePatterns() {
+            const output = document.getElementById('patternOutput');
+            
+            if (state.peaks.length < 3) {
+                output.textContent = 'Log at least 3 peak experiences to analyze patterns.';
+                output.classList.remove('has-content');
+                return;
+            }
+            
+            // Simple keyword extraction
+            const allText = state.peaks.map(p => p.text.toLowerCase()).join(' ');
+            const words = allText.split(/\s+/);
+            const frequency = {};
+            
+            const stopWords = ['the', 'a', 'an', 'is', 'was', 'were', 'been', 'be', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'must', 'shall', 'can', 'need', 'dare', 'ought', 'used', 'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'between', 'under', 'again', 'further', 'then', 'once', 'and', 'but', 'or', 'nor', 'so', 'yet', 'both', 'either', 'neither', 'not', 'only', 'own', 'same', 'than', 'too', 'very', 'just', 'i', 'me', 'my', 'myself', 'we', 'our', 'it', 'its', 'that', 'this', 'what', 'which', 'who', 'whom', 'these', 'those', 'am', 'are', 'being', 'if', 'because', 'until', 'while', 'about', 'against', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'any', 'all', 'when', 'where', 'why', 'how'];
+            
+            words.forEach(word => {
+                const clean = word.replace(/[^a-z]/g, '');
+                if (clean.length > 3 && !stopWords.includes(clean)) {
+                    frequency[clean] = (frequency[clean] || 0) + 1;
+                }
+            });
+            
+            const sorted = Object.entries(frequency)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+            
+            if (sorted.length === 0) {
+                output.textContent = 'Not enough unique content to detect patterns yet. Keep logging.';
+                return;
+            }
+            
+            const themes = sorted.map(([word, count]) => word).join(', ');
+            
+            output.innerHTML = `
+                <strong>EMERGING THEMES:</strong><br><br>
+                ${themes}<br><br>
+                <strong>PATTERN INSIGHT:</strong><br>
+                Your peak experiences cluster around these concepts. 
+                Notice which ones appear together. That intersection 
+                is where your next breakthrough lives.
+            `;
+            output.classList.add('has-content');
+        }
+
+        // Design Stakes
+        function designStakes() {
+            const input = document.getElementById('stakesInput');
+            const output = document.getElementById('stakesOutput');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            const stakes = [
+                "Make it public. Tell someone who will hold you accountable.",
+                "Set a deadline. Write it down where you'll see it daily.",
+                "Attach a consequence. Something you'll actually feel.",
+                "Raise the visibility. What if everyone could see your progress?",
+                "Increase the frequency. Do it daily instead of weekly.",
+                "Add money. Pay someone if you don't follow through.",
+                "Create witnesses. Invite others into your commitment.",
+                "Burn the boats. Remove the option to retreat."
+            ];
+            
+            const randomStakes = stakes.sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            output.innerHTML = `
+                <strong>YOUR STAKES PROTOCOL:</strong><br><br>
+                Based on: "${text.substring(0, 50)}${text.length > 50 ? '...' : ''}"<br><br>
+                <strong>1.</strong> ${randomStakes[0]}<br><br>
+                <strong>2.</strong> ${randomStakes[1]}<br><br>
+                <strong>3.</strong> ${randomStakes[2]}<br><br>
+                <em style="color: #888;">The edge you described is where growth lives. These stakes make avoidance more painful than action.</em>
+            `;
+            output.classList.add('show');
+            
+            state.stakes.push({
+                input: text,
+                timestamp: new Date().toISOString()
+            });
+            state.totalStakes++;
+            saveState();
+            
+            input.value = '';
+        }
+
+        // Export Data
+        function exportData() {
+            const dataStr = JSON.stringify(state, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'integration-architecture-' + new Date().toISOString().split('T')[0] + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize
+        loadState();
+    </script>
+</body>
+</html>

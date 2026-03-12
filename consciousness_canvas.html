@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consciousness Canvas - Interactive Background</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #0a0a0a;
+            font-family: 'Space Mono', monospace;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            color: #00ff88;
+            font-size: 12px;
+            z-index: 10;
+            max-width: 250px;
+        }
+
+        .control-group {
+            margin-bottom: 12px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        button {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: rgba(0, 255, 136, 0.4);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            color: #00ffff;
+            font-size: 13px;
+            z-index: 10;
+            max-width: 280px;
+        }
+
+        .info h3 {
+            color: #00ff88;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .hidden-controls {
+            display: none;
+        }
+
+        .hidden-controls.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="info">
+        <h3>CONSCIOUSNESS CANVAS</h3>
+        <p>Interactive sacred geometry background. Click to spawn nodes. Move mouse to influence flow.</p>
+        <p style="margin-top: 8px; font-size: 11px; color: #888;">Press 'C' for controls | 'R' to reset</p>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Mode</label>
+            <select id="modeSelect" style="width: 100%; padding: 4px; border-radius: 4px; border: 1px solid #00ff88; background: rgba(0, 0, 0, 0.8); color: #00ff88;">
+                <option value="particles">Particle Flow</option>
+                <option value="geometric">Sacred Geometry</option>
+                <option value="neural">Neural Network</option>
+                <option value="cosmic">Cosmic Dust</option>
+                <option value="mandala">Mandala</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Particle Count: <span id="particleVal">100</span></label>
+            <input type="range" id="particleCount" min="20" max="300" value="100">
+        </div>
+
+        <div class="control-group">
+            <label>Speed: <span id="speedVal">1.0</span>x</label>
+            <input type="range" id="speed" min="0.2" max="3" step="0.1" value="1">
+        </div>
+
+        <div class="control-group">
+            <label>Glow Intensity: <span id="glowVal">0.8</span></label>
+            <input type="range" id="glowIntensity" min="0" max="1" step="0.1" value="0.8">
+        </div>
+
+        <div class="control-group">
+            <label>Hue Shift: <span id="hueVal">0</span>°</label>
+            <input type="range" id="hueShift" min="0" max="360" step="1" value="0">
+        </div>
+
+        <button onclick="resetCanvas()">Reset</button>
+        <button onclick="downloadSettings()">Save Settings</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        let nodes = [];
+        let settings = {
+            mode: 'particles',
+            particleCount: 100,
+            speed: 1,
+            glowIntensity: 0.8,
+            hueShift: 0,
+            mouseX: canvas.width / 2,
+            mouseY: canvas.height / 2
+        };
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 2 * settings.speed;
+                this.vy = (Math.random() - 0.5) * 2 * settings.speed;
+                this.size = Math.random() * 2 + 0.5;
+                this.life = 1;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += this.vx * settings.speed;
+                this.y += this.vy * settings.speed;
+
+                const dx = settings.mouseX - this.x;
+                const dy = settings.mouseY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 200) {
+                    const angle = Math.atan2(dy, dx);
+                    this.vx += Math.cos(angle) * 0.1;
+                    this.vy += Math.sin(angle) * 0.1;
+                }
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const hue = (Math.atan2(this.vy, this.vx) * 180 / Math.PI + settings.hueShift) % 360;
+                ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${0.5 * settings.glowIntensity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.shadowBlur = 10 * settings.glowIntensity;
+                ctx.shadowColor = `hsl(${hue}, 100%, 50%)`;
+            }
+        }
+
+        class SacredGeometryNode {
+            constructor(x, y, generation = 0) {
+                this.x = x;
+                this.y = y;
+                this.size = 3 - generation * 0.5;
+                this.generation = generation;
+                this.pulsePhase = Math.random() * Math.PI * 2;
+                this.children = [];
+                this.angle = Math.random() * Math.PI * 2;
+            }
+
+            draw() {
+                const pulse = Math.sin(this.pulsePhase + Date.now() * 0.001) * 0.5 + 0.5;
+                const hue = (this.generation * 60 + settings.hueShift) % 360;
+
+                ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${pulse * 0.8 * settings.glowIntensity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * pulse, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = `hsla(${hue}, 100%, 50%, ${0.3 * settings.glowIntensity})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.shadowBlur = 15 * settings.glowIntensity;
+                ctx.shadowColor = `hsl(${hue}, 100%, 50%)`;
+            }
+
+            generateChildren(distance = 60) {
+                if (this.generation > 3) return;
+
+                for (let i = 0; i < 6; i++) {
+                    const angle = (Math.PI * 2 / 6) * i + this.angle;
+                    const x = this.x + Math.cos(angle) * distance;
+                    const y = this.y + Math.sin(angle) * distance;
+                    const child = new SacredGeometryNode(x, y, this.generation + 1);
+                    this.children.push(child);
+
+                    ctx.strokeStyle = `hsla(${(this.generation * 60 + settings.hueShift) % 360}, 100%, 50%, ${0.2 * settings.glowIntensity})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+
+                    child.generateChildren(distance * 0.7);
+                }
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < settings.particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function drawParticleMode() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            ctx.shadowBlur = 0;
+        }
+
+        function drawGeometricMode() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (nodes.length === 0) {
+                const centerNode = new SacredGeometryNode(canvas.width / 2, canvas.height / 2);
+                centerNode.generateChildren(80);
+                nodes.push(centerNode);
+            }
+
+            nodes.forEach(node => {
+                node.draw();
+                node.children.forEach(child => {
+                    child.draw();
+                    child.children.forEach(grandchild => {
+                        grandchild.draw();
+                        grandchild.children.forEach(ggc => ggc.draw());
+                    });
+                });
+            });
+
+            ctx.shadowBlur = 0;
+        }
+
+        function drawNeuralMode() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.15)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (particles.length < settings.particleCount) {
+                initParticles();
+            }
+
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+
+                particles.slice(i + 1, Math.min(i + 4, particles.length)).forEach(other => {
+                    const dx = p.x - other.x;
+                    const dy = p.y - other.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 100) {
+                        const hue = (Math.atan2(p.vy, p.vx) * 180 / Math.PI + settings.hueShift) % 360;
+                        ctx.strokeStyle = `hsla(${hue}, 100%, 50%, ${(1 - dist / 100) * 0.3 * settings.glowIntensity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(other.x, other.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            ctx.shadowBlur = 0;
+        }
+
+        function drawCosmicMode() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (particles.length < settings.particleCount) {
+                initParticles();
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.size = Math.random() * 3 + 1;
+                
+                const hue = (Math.atan2(p.vy, p.vx) * 180 / Math.PI + settings.hueShift) % 360;
+                ctx.fillStyle = `hsla(${hue}, 100%, 70%, ${0.6 * settings.glowIntensity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.shadowBlur = 20 * settings.glowIntensity;
+                ctx.shadowColor = `hsl(${hue}, 100%, 50%)`;
+            });
+
+            ctx.shadowBlur = 0;
+        }
+
+        function drawMandalaMode() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const time = Date.now() * 0.0005;
+            const layers = 6;
+
+            for (let layer = 0; layer < layers; layer++) {
+                const radius = 30 + layer * 35;
+                const points = 12 + layer * 4;
+
+                for (let i = 0; i < points; i++) {
+                    const angle = (Math.PI * 2 / points) * i + time * (layer % 2 ? 1 : -1);
+                    const x = centerX + Math.cos(angle) * radius;
+                    const y = centerY + Math.sin(angle) * radius;
+
+                    const hue = (angle * 180 / Math.PI + settings.hueShift) % 360;
+                    ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${0.7 * settings.glowIntensity})`;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 2 + Math.sin(time * 2) * 1, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (i > 0) {
+                        const prevAngle = (Math.PI * 2 / points) * (i - 1) + time * (layer % 2 ? 1 : -1);
+                        const prevX = centerX + Math.cos(prevAngle) * radius;
+                        const prevY = centerY + Math.sin(prevAngle) * radius;
+
+                        ctx.strokeStyle = `hsla(${hue}, 100%, 50%, ${0.3 * settings.glowIntensity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(prevX, prevY);
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                    }
+
+                    ctx.shadowBlur = 12 * settings.glowIntensity;
+                    ctx.shadowColor = `hsl(${hue}, 100%, 50%)`;
+                }
+            }
+
+            ctx.shadowBlur = 0;
+        }
+
+        function animate() {
+            ctx.shadowBlur = 0;
+
+            switch (settings.mode) {
+                case 'particles':
+                    drawParticleMode();
+                    break;
+                case 'geometric':
+                    drawGeometricMode();
+                    break;
+                case 'neural':
+                    drawNeuralMode();
+                    break;
+                case 'cosmic':
+                    drawCosmicMode();
+                    break;
+                case 'mandala':
+                    drawMandalaMode();
+                    break;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            settings.mouseX = e.clientX;
+            settings.mouseY = e.clientY;
+        });
+
+        canvas.addEventListener('click', (e) => {
+            if (settings.mode === 'geometric') {
+                const node = new SacredGeometryNode(e.clientX, e.clientY);
+                node.generateChildren(60);
+                nodes.push(node);
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'c' || e.key === 'C') {
+                document.querySelector('.controls').classList.toggle('hidden-controls');
+            }
+            if (e.key === 'r' || e.key === 'R') {
+                resetCanvas();
+            }
+        });
+
+        document.getElementById('modeSelect').addEventListener('change', (e) => {
+            settings.mode = e.target.value;
+            nodes = [];
+            particles = [];
+            if (e.target.value !== 'geometric') {
+                initParticles();
+            }
+        });
+
+        document.getElementById('particleCount').addEventListener('input', (e) => {
+            settings.particleCount = parseInt(e.target.value);
+            document.getElementById('particleVal').textContent = e.target.value;
+            initParticles();
+        });
+
+        document.getElementById('speed').addEventListener('input', (e) => {
+            settings.speed = parseFloat(e.target.value);
+            document.getElementById('speedVal').textContent = e.target.value;
+        });
+
+        document.getElementById('glowIntensity').addEventListener('input', (e) => {
+            settings.glowIntensity = parseFloat(e.target.value);
+            document.getElementById('glowVal').textContent = e.target.value;
+        });
+
+        document.getElementById('hueShift').addEventListener('input', (e) => {
+            settings.hueShift = parseInt(e.target.value);
+            document.getElementById('hueVal').textContent = e.target.value;
+        });
+
+        function resetCanvas() {
+            particles = [];
+            nodes = [];
+            settings.hueShift = 0;
+            document.getElementById('hueShift').value = 0;
+            initParticles();
+        }
+
+        function downloadSettings() {
+            const settingsData = {
+                mode: settings.mode,
+                particleCount: settings.particleCount,
+                speed: settings.speed,
+                glowIntensity: settings.glowIntensity,
+                hueShift: settings.hueShift,
+                timestamp: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(settingsData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `consciousness-canvas-settings-${Date.now()}.json`;
+            link.click();
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>

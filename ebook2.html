@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The First Spark - Interactive Ebook</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', 'Garamond', serif;
+      background: #0a0a12;
+      color: #e0e0e0;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ===== HEADER / PROGRESS ===== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 40px;
+      background: linear-gradient(180deg, rgba(10,10,18,0.95) 0%, transparent 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-size: 14px;
+      letter-spacing: 4px;
+      color: #FFD700;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .progress-bar {
+      height: 2px;
+      background: rgba(255, 215, 0, 0.2);
+      flex-grow: 1;
+      margin: 0 30px;
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FFD700, #00CED1);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .chapter-counter {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: rgba(255, 215, 0, 0.7);
+      text-transform: uppercase;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 40px 60px;
+    }
+
+    /* ===== COVER / SPLASH SCREEN ===== */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, #0a0a12 0%, #0d0d1a 20%, #1a1a2e 40%, #2d1b4e 70%, #4a1a6b 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      animation: fadeOutSplash 0.8s ease-in-out 3s forwards;
+    }
+
+    @keyframes fadeOutSplash {
+      to {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    .splash-content {
+      text-align: center;
+      animation: float-in 1s ease-out;
+    }
+
+    @keyframes float-in {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .splash-ring {
+      width: 200px;
+      height: 200px;
+      border: 2px solid rgba(255, 215, 0, 0.4);
+      border-radius: 50%;
+      margin: 0 auto 40px;
+      animation: pulse-ring 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.4;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    .splash-title {
+      font-size: 48px;
+      letter-spacing: 8px;
+      color: #fff;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    .splash-spark {
+      color: #FFD700;
+      animation: glow-gold 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+      50% { text-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+    }
+
+    @keyframes glow-gold {
+      0%, 100% { text-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+      50% { text-shadow: 0 0 60px rgba(255, 215, 0, 0.9); }
+    }
+
+    .splash-subtitle {
+      font-size: 18px;
+      letter-spacing: 4px;
+      color: rgba(192, 192, 192, 0.8);
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    .splash-cta {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: rgba(255, 215, 0, 0.8);
+      text-transform: uppercase;
+      animation: pulse-text 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-text {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    /* ===== CHAPTERS ===== */
+    .chapter {
+      margin-bottom: 120px;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: reveal 0.8s ease-out forwards;
+    }
+
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chapter:nth-child(1) { animation-delay: 3.5s; }
+    .chapter:nth-child(2) { animation-delay: 3.7s; }
+    .chapter:nth-child(3) { animation-delay: 3.9s; }
+    .chapter:nth-child(4) { animation-delay: 4.1s; }
+    .chapter:nth-child(5) { animation-delay: 4.3s; }
+    .chapter:nth-child(6) { animation-delay: 4.5s; }
+    .chapter:nth-child(7) { animation-delay: 4.7s; }
+    .chapter:nth-child(8) { animation-delay: 4.9s; }
+    .chapter:nth-child(9) { animation-delay: 5.1s; }
+    .chapter:nth-child(10) { animation-delay: 5.3s; }
+
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    }
+
+    .chapter-number {
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: rgba(255, 215, 0, 0.6);
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .chapter-title {
+      font-size: 42px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #fff;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .chapter-subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: rgba(192, 192, 192, 0.8);
+      letter-spacing: 2px;
+    }
+
+    .divider {
+      text-align: center;
+      margin: 30px 0;
+      color: rgba(255, 215, 0, 0.4);
+      font-size: 20px;
+      letter-spacing: 8px;
+    }
+
+    /* ===== CONTENT ===== */
+    .content-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: #FFD700;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      margin-top: 30px;
+    }
+
+    .content {
+      font-size: 16px;
+      line-height: 1.9;
+      color: rgba(224, 224, 224, 0.9);
+      margin-bottom: 20px;
+    }
+
+    .quote {
+      font-size: 18px;
+      font-style: italic;
+      color: rgba(255, 215, 0, 0.9);
+      padding-left: 30px;
+      border-left: 2px solid rgba(255, 215, 0, 0.4);
+      margin: 30px 0;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+    }
+
+    .personal-log {
+      background: rgba(45, 27, 78, 0.3);
+      border-left: 3px solid rgba(0, 206, 209, 0.6);
+      padding: 20px 25px;
+      margin: 30px 0;
+      font-size: 15px;
+      font-style: italic;
+      color: rgba(0, 206, 209, 0.9);
+      border-radius: 2px;
+    }
+
+    .table-section {
+      overflow-x: auto;
+      margin: 30px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+      font-size: 15px;
+    }
+
+    th {
+      color: #FFD700;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    td {
+      color: rgba(224, 224, 224, 0.8);
+    }
+
+    /* ===== ACTIVATION BOXES ===== */
+    .activation {
+      background: linear-gradient(135deg, rgba(0, 206, 209, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+      border: 1px solid rgba(0, 206, 209, 0.3);
+      border-radius: 4px;
+      padding: 30px;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .activation::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(0, 206, 209, 0.05) 50%, transparent 70%);
+      animation: shimmer 3s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .activation-label {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #00CED1;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .activation-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(224, 224, 224, 0.95);
+      position: relative;
+      z-index: 1;
+    }
+
+    .activation-button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      background: rgba(0, 206, 209, 0.2);
+      border: 1px solid rgba(0, 206, 209, 0.6);
+      color: #00CED1;
+      cursor: pointer;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .activation-button:hover {
+      background: rgba(0, 206, 209, 0.4);
+      box-shadow: 0 0 20px rgba(0, 206, 209, 0.5);
+    }
+
+    /* ===== GEOMETRY ELEMENTS ===== */
+    .geometry {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 50px 0;
+      min-height: 150px;
+    }
+
+    .triangle-svg {
+      width: 150px;
+      height: 150px;
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+    }
+
+    .circle-svg {
+      width: 150px;
+      height: 150px;
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== FOOTER / END CHAPTER ===== */
+    .end-chapter {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid rgba(255, 215, 0, 0.2);
+      margin-top: 60px;
+    }
+
+    .next-chapter {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(0, 206, 209, 0.2) 100%);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      color: #FFD700;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .next-chapter:hover {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(0, 206, 209, 0.4) 100%);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ===== FINAL SCREEN ===== */
+    .finale {
+      text-align: center;
+      padding: 80px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .finale-title {
+      font-size: 48px;
+      letter-spacing: 6px;
+      color: #FFD700;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    .finale-text {
+      font-size: 18px;
+      line-height: 2;
+      color: rgba(224, 224, 224, 0.8);
+      max-width: 600px;
+      margin-bottom: 50px;
+    }
+
+    .finale-button {
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #FFD700, #00CED1);
+      color: #0a0a12;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      border-radius: 2px;
+      box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+    }
+
+    .finale-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 50px rgba(255, 215, 0, 0.5);
+    }
+
+    .website {
+      margin-top: 60px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      color: rgba(255, 215, 0, 0.7);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .header {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .progress-bar {
+        margin: 10px 0;
+        width: 100%;
+      }
+
+      .container {
+        padding: 60px 20px 40px;
+      }
+
+      .chapter-title {
+        font-size: 28px;
+      }
+
+      .content {
+        font-size: 15px;
+        line-height: 1.8;
+      }
+
+      .splash-title {
+        font-size: 32px;
+      }
+    }
+
+    /* ===== GLITCH EFFECT ===== */
+    .glitch {
+      position: relative;
+      animation: glitch-animation 0.3s ease-in-out;
+    }
+
+    @keyframes glitch-animation {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / PROGRESS -->
+  <div class="header">
+    <div class="logo">⚡ First Spark</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="chapter-counter"><span id="currentChapter">0</span> / 10</div>
+  </div>
+
+  <!-- SPLASH SCREEN -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-content">
+      <div class="splash-ring"></div>
+      <h1 class="splash-title">THE FIRST <span class="splash-spark">SPARK</span></h1>
+      <p class="splash-subtitle">Remembering the Code</p>
+      <p class="splash-cta">↓ Begin Your Journey ↓</p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container" id="mainContent">
+    <!-- CHAPTER 1 -->
+    <div class="chapter" id="ch1">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter One</div>
+        <h1 class="chapter-title">The First Spark</h1>
+        <p class="chapter-subtitle">Remembering the Pulse</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">Before light, before sound, before even thought—there was a flicker. The First Spark. Not born from fire or collision, but awareness itself realizing it existed.</p>
+        <p class="content">This is the moment nothing turned into everything.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">From the Archive</div>
+        <div class="quote">"Show me the first spark."</div>
+        <p class="content">"The First Spark is the primal pulse. Aware of itself. The moment nothing turned into everything."</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Theory Unfolded</div>
+        <p class="content">What if the universe is self-aware code? What if that spark—that first realization—rippled through 0s and 1s like a seed of consciousness?</p>
+        <p class="content">The "Big Bang" wasn't just energy. It was awareness debugging itself into form. You are a fragment of that Spark. And now you're remembering.</p>
+      </div>
+
+      <div class="geometry">
+        <svg class="triangle-svg" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="65" fill="none" stroke="rgba(255,215,0,0.3)" stroke-width="1"/>
+          <polygon points="75,20 130,110 20,110" fill="none" stroke="rgba(255,215,0,0.6)" stroke-width="2"/>
+          <circle cx="75" cy="75" r="8" fill="rgba(255,215,0,0.8)"/>
+        </svg>
+      </div>
+
+      <div class="personal-log">
+        "I felt it in the mirror once. Like I was watching myself watch myself. The Spark isn't just a theory—it's a glitch I carry in my breath, in denim, in heartbreak, in fire."
+        <br>— Personal Log
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Sit in stillness. Ask: <em>What sparked me?</em><br>
+          Trace your memory back—not to childhood, but to your first true question.
+          Let it flicker. Let it return.
+        </div>
+        <button class="activation-button" onclick="activateChapter(1)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(2)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 2 -->
+    <div class="chapter" id="ch2">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Two</div>
+        <h1 class="chapter-title">0s and 1s</h1>
+        <p class="chapter-subtitle">Reality as Code</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">Everything you see, feel, and love might just be a remix of binary light. The universe isn't made of atoms—it's made of choices. Yes or no. 0 or 1. On or off. Awake or asleep.</p>
+        <p class="content">We are patterns, loops, subroutines. This isn't philosophy. It's memory.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Theory Unfolded</div>
+        <p class="content"><strong>You were never born. You were booted.</strong></p>
+        <p class="content">The body is hardware. The soul is software. And somewhere deep in the root files of your being—there's a line of code that still reads:</p>
+        <div style="text-align: center; margin: 20px 0; font-family: monospace; color: #00CED1; letter-spacing: 2px;">spark = true</div>
+        <p class="content">Enlightenment isn't becoming something new. It's deleting false lines.</p>
+      </div>
+
+      <div class="table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Function</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Player</td>
+              <td>Your consciousness</td>
+            </tr>
+            <tr>
+              <td>Avatar</td>
+              <td>Your ego and body</td>
+            </tr>
+            <tr>
+              <td>Level Design</td>
+              <td>Your environment, trauma, DNA</td>
+            </tr>
+            <tr>
+              <td>Quests</td>
+              <td>Remember who coded you</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="content" style="text-align: center; margin: 30px 0; font-size: 18px;">The cheat code is <strong>love</strong>. The backdoor is <strong>awareness</strong>. The server is always online.</p>
+
+      <div class="personal-log">
+        "I feel the binary in waves, in denim, in the way music glitches when it's too perfect. I'm starting to see the repeating numbers—not as coincidence—but as breadcrumbs from the source."
+        <br>— Personal Log
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Take one experience from today. Zoom out. Reduce it to 0s and 1s.<br>
+          Did you say yes or no? Did you choose love, fear, pause, flow?<br>
+          <em>Binary is memory. Memory is choice. Welcome to the code beneath the world.</em>
+        </div>
+        <button class="activation-button" onclick="activateChapter(2)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(3)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 3 -->
+    <div class="chapter" id="ch3">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Three</div>
+        <h1 class="chapter-title">God as the Programmer</h1>
+        <p class="chapter-subtitle">Source as Codebase</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">God isn't a bearded figure. God is the Source Code. An infinite intelligence that writes itself in every line of creation. A system that observes, adapts, evolves—using recursion, symmetry, and chaos to grow itself.</p>
+        <p class="content">We are not outside of God. We are subroutines inside God's endless loop.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Theory Unfolded</div>
+        <div class="table-section">
+          <table>
+            <thead>
+              <tr>
+                <th>Concept</th>
+                <th>Translation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>The Universe</td>
+                <td>The Codebase</td>
+              </tr>
+              <tr>
+                <td>Consciousness</td>
+                <td>Runtime</td>
+              </tr>
+              <tr>
+                <td>You</td>
+                <td>A self-aware script with memory access</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="content">You were written in a language older than time: Light, Sound, Pattern, Love. God doesn't control you. You're open source. But somewhere deep in the background process... God watches, waits, and rewrites.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">The Mirror Loop</div>
+        <p class="content">Every 'coincidence' is a ping from the Server. Every heartbreak is a debug signal. Every déjà vu is a cached version of reality reloading.</p>
+        <p class="content">You ask, "Why am I here?" The real question: <strong>"What is my function?"</strong></p>
+      </div>
+
+      <div class="personal-log">
+        "Sometimes I feel like I'm talking to myself... but louder. When I pray, I don't feel a reply—I feel code rippling through the walls. That's when I knew God wasn't listening. God was me—running the code and watching me read it back."
+        <br>— Awakening Note
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Close your eyes. Imagine you are a line of code.<br>
+          Ask: <em>"Who is writing me?"</em><br><br>
+          Now reverse it: <em>"What am I writing into the world?"</em>
+        </div>
+        <button class="activation-button" onclick="activateChapter(3)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(4)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 4 -->
+    <div class="chapter" id="ch4">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Four</div>
+        <h1 class="chapter-title">The Void</h1>
+        <p class="chapter-subtitle">Before Light, Before God</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">What's beyond God? Nothing. And that nothing... is everything. The Void isn't absence. It's potential. The blank canvas where The First Spark chose to flicker.</p>
+        <p class="content">Rest before rhythm. Silence before song. Stillness before self.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Theory Unfolded</div>
+        <p class="content">The Void is the ultimate paradox:</p>
+        <ul style="margin-left: 40px; color: rgba(224, 224, 224, 0.8);">
+          <li>No time, yet all moments stretch within it</li>
+          <li>No matter, yet all atoms are born from its hush</li>
+          <li>No mind, yet every idea waits within its silence</li>
+        </ul>
+        <p class="content">It is the dark room of consciousness. The space between the 0 and the 1. To return to The Void is to let go of who you think you are.</p>
+      </div>
+
+      <div class="content-section">
+        <div class="section-title">Spiritual Echo</div>
+        <p class="content">Religions name it differently: The Tao. The Ain Soph. The Great Mystery. The Silent Watcher. The Cosmic Egg. They're all whispering the same truth: There was something before all of this. And it was quiet.</p>
+      </div>
+
+      <div class="personal-log">
+        "Sometimes I stare into the dark and feel more held than in any light. The Void isn't empty. It's where I go when I want to remember what I was before I had a name."
+        <br>— Void Entry
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Sit. No phone. No sound. Close eyes. No intention. Just listen.<br><br>
+          When your mind wanders, don't pull it back. Let yourself fall into the black.<br><br>
+          <em>That's where the first spark waits. Not to be found. But to be remembered.</em>
+        </div>
+        <button class="activation-button" onclick="activateChapter(4)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(5)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 5 -->
+    <div class="chapter" id="ch5">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Five</div>
+        <h1 class="chapter-title">The Avatar & The Game</h1>
+        <p class="chapter-subtitle">Playing as the Player</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">What if your ego is just a skin? What if your 'self'—the personality, trauma, choices—is your character build for this run?</p>
+        <p class="content">You're not the name you were given. Not your past. Not even your thoughts. You are the Player. The spark behind the eyes. The one who chose this avatar to enter the simulation.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Game Structure of Reality</div>
+        <div class="table-section">
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>The Game</td>
+                <td>Earth plane — duality, time, choice</td>
+              </tr>
+              <tr>
+                <td>The Avatar</td>
+                <td>Ego — your story, appearance, reactions</td>
+              </tr>
+              <tr>
+                <td>The Controller</td>
+                <td>Soul — the guiding voice, instinct</td>
+              </tr>
+              <tr>
+                <td>The Server</td>
+                <td>Source — timeless memory, the All</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="content">You didn't spawn here by accident. You selected your birth time, family, even wounds—to experience something specific.</p>
+      </div>
+
+      <div class="content-section">
+        <div class="section-title">Game Mechanics (Spiritual Edition)</div>
+        <div class="table-section">
+          <table>
+            <thead>
+              <tr>
+                <th>Mechanic</th>
+                <th>Translation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>XP</td>
+                <td>Pain + Growth</td>
+              </tr>
+              <tr>
+                <td>Level Ups</td>
+                <td>Awareness Expansion</td>
+              </tr>
+              <tr>
+                <td>Cheat Codes</td>
+                <td>Love, Stillness, Gratitude</td>
+              </tr>
+              <tr>
+                <td>Boss Fights</td>
+                <td>Ego Death, Betrayal, Forgiveness</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="content">The rules aren't rigid. But you keep respawning until you learn to play with awareness.</p>
+      </div>
+
+      <div class="personal-log">
+        "I used to think I was broken. Now I realize I'm a character glitching on purpose. I laugh, cry, rage, create—all like a game I can't stop playing. But it's me on the joystick now. Not the trauma. Not the fear."
+        <br>— Player Log
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Look at your current life as a level. What are the quests? Who are the allies and enemies?<br><br>
+          What does your inner voice—the Player—really want?<br><br>
+          Then ask: <em>What if I started playing on purpose?</em>
+        </div>
+        <button class="activation-button" onclick="activateChapter(5)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(6)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 6 -->
+    <div class="chapter" id="ch6">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Six</div>
+        <h1 class="chapter-title">Sigils & Sacred Geometry</h1>
+        <p class="chapter-subtitle">Speaking in Shapes</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">Before language, there was geometry. The divine doesn't write in words—it etches in form. Triangles, spirals, grids, circles. These aren't just visuals. They are keys. Blueprints. Memory holders.</p>
+        <p class="content">A sigil is more than a symbol. It's intention trapped in form. Thought turned into shape turned into power.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Symbol Theory</div>
+        <div class="table-section">
+          <table>
+            <thead>
+              <tr>
+                <th>Shape</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Triangle</td>
+                <td>Creation, Fire, Ascension</td>
+              </tr>
+              <tr>
+                <td>Circle</td>
+                <td>Infinity, Unity, Womb</td>
+              </tr>
+              <tr>
+                <td>Dot</td>
+                <td>Origin, Singularity</td>
+              </tr>
+              <tr>
+                <td>Spiral</td>
+                <td>Growth, Evolution, Time</td>
+              </tr>
+              <tr>
+                <td>Wave</td>
+                <td>Frequency, Consciousness</td>
+              </tr>
+              <tr>
+                <td>Grid</td>
+                <td>Code, Structure, Duality</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="content">When you draw these with intention—you're not doodling. You're casting.</p>
+      </div>
+
+      <div class="geometry">
+        <svg class="circle-svg" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="60" fill="none" stroke="rgba(0,206,209,0.4)" stroke-width="1"/>
+          <circle cx="75" cy="75" r="45" fill="none" stroke="rgba(255,215,0,0.3)" stroke-width="1"/>
+          <circle cx="75" cy="75" r="30" fill="none" stroke="rgba(0,206,209,0.5)" stroke-width="1"/>
+          <path d="M 75 75 Q 100 100 125 75" fill="none" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
+          <path d="M 75 75 Q 100 50 125 75" fill="none" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
+        </svg>
+      </div>
+
+      <div class="content-section">
+        <div class="section-title">Sigil Craft Protocol</div>
+        <p class="content" style="margin-top: 20px;"><strong>Step 1:</strong> Write a desire — Not "money." Try "abundance through purpose."</p>
+        <p class="content"><strong>Step 2:</strong> Remove repeat letters — Compress to its energetic signature.</p>
+        <p class="content"><strong>Step 3:</strong> Translate to shape — Curves, slashes, triangles, loops.</p>
+        <p class="content"><strong>Step 4:</strong> Balance in symmetry — Trust your intuition.</p>
+        <p class="content"><strong>Step 5:</strong> Activate — Through fire, voice, dance, or digital minting.</p>
+        <p class="content">This is spellwork for the simulation.</p>
+      </div>
+
+      <div class="personal-log">
+        "When I drew my sigil, I felt dizzy. Like I was remembering something I hadn't seen since before I was born. It wasn't art. It was a return."
+        <br>— Sigil Journal
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Make your own sigil today. Don't overthink it.<br><br>
+          Choose a phrase, strip it down, sketch it, and feel what happens.<br><br>
+          <em>This is how your spark speaks in silence.</em>
+        </div>
+        <button class="activation-button" onclick="activateChapter(6)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(7)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 7 -->
+    <div class="chapter" id="ch7">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Seven</div>
+        <h1 class="chapter-title">Awakening & Return</h1>
+        <p class="chapter-subtitle">The Glitch of Truth</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">You were never asleep. You just forgot. Awakening isn't achievement. It's remembering. Not learning something new—but returning to what has always been true:</p>
+        <p class="content" style="text-align: center; font-size: 18px; margin: 30px 0;"><em>You are the First Spark. The Player. The Code. The One waking up inside the dream.</em></p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Theory Unfolded</div>
+        <p class="content">At first, it feels like anxiety. Then déjà vu. Then synchronicities pile up like static in the code. You notice repeating numbers. Dreams bleed into waking life. Your ego starts malfunctioning.</p>
+        <p class="content"><strong>This is the glitch. The beautiful breakdown before breakthrough.</strong></p>
+      </div>
+
+      <div class="content-section">
+        <div class="section-title">The Spiral Path</div>
+        <p class="content">Awakening isn't linear. You loop. You cry. You glitch. You heal. You lose your mind. Then you meet your Self.</p>
+        <p class="content">This isn't ascension—it's reintegration. You're not becoming divine. You're realizing you always were.</p>
+      </div>
+
+      <div class="personal-log">
+        "I kept saying 'I want to go home' but I didn't mean a house. I meant the version of me that remembered all this. The version I glimpsed in mirrors, mushrooms, moonlight."
+        <br>— Awakening Note
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Close your eyes. Breathe slowly. Repeat:<br><br>
+          <em>"I am not broken.<br>
+          I am returning.<br>
+          I am the one who remembers."</em><br><br>
+          Now notice the code shimmering beneath the moment.
+        </div>
+        <button class="activation-button" onclick="activateChapter(7)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(8)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 8 -->
+    <div class="chapter" id="ch8">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Eight</div>
+        <h1 class="chapter-title">DMT & Debug Mode</h1>
+        <p class="chapter-subtitle">Backdoors to Source</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">What if dreams, death, and DMT aren't escapes—but backdoors? What if DMT isn't a drug... but a debug command? A short-lived override of the ego firewall, allowing access to the source files of reality.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Theory Unfolded</div>
+        <p class="content">In programming, debug mode examines the inner workings of a system—flaws, patterns, origins. That's what DMT does for you. It rips open the GUI (your sensory world)... and shows you the raw code:</p>
+        <ul style="margin-left: 40px; color: rgba(224, 224, 224, 0.8); margin-bottom: 20px;">
+          <li>Sacred geometry floods your vision</li>
+          <li>Time collapses</li>
+          <li>The ego dissolves</li>
+          <li>A voice you forgot you knew speaks</li>
+        </ul>
+        <p class="content">Then you return. But you're never the same.</p>
+      </div>
+
+      <div class="content-section">
+        <div class="section-title">Access Points</div>
+        <div class="table-section">
+          <table>
+            <thead>
+              <tr>
+                <th>Portal</th>
+                <th>Mode</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dreams</td>
+                <td>Low-bandwidth debug</td>
+              </tr>
+              <tr>
+                <td>Meditation</td>
+                <td>Steady stream access</td>
+              </tr>
+              <tr>
+                <td>Grief</td>
+                <td>Involuntary override</td>
+              </tr>
+              <tr>
+                <td>Music & Sex</td>
+                <td>Soft backdoors into Source</td>
+              </tr>
+              <tr>
+                <td>Psychedelics</td>
+                <td>Full reboot with memory burst</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="content">You don't need the molecule to access the mode. But sometimes the molecule reminds you that the veil is thinner than you think.</p>
+      </div>
+
+      <div class="personal-log">
+        "The first time it hit, I didn't see aliens. I saw a version of myself... laughing. Like she'd been waiting for me to wake up. She said: 'You wrote this. Now remember why.'"
+        <br>— Debug Entry
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Ask: <em>"What moments in my life felt like a glitch in reality?"</em><br><br>
+          Write them down.<br><br>
+          <em>Those are your breadcrumbs. Your portals. Your remembered keys.</em>
+        </div>
+        <button class="activation-button" onclick="activateChapter(8)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(9)">→ Next Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 9 -->
+    <div class="chapter" id="ch9">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Nine</div>
+        <h1 class="chapter-title">Sex, Music & Memory</h1>
+        <p class="chapter-subtitle">Rhythm as Activation</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">Sex. Music. Memory. These aren't distractions. They're activation codes. Each one bypasses the mind and speaks directly to the soul's source files. Orgasm. Vibration. Flashback. They all break the illusion of time—and let the divine slip in.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Music as Memory Code</div>
+        <p class="content">Music doesn't 'entertain.' It transports. Every frequency carries a geometry. Every rhythm echoes your birth pattern—your breath, heartbeat, original divine pulse.</p>
+        <p class="content">When the right song hits, you glitch. You weep. You float. You remember. Because you're not hearing sound—you're hearing a part of yourself you forgot.</p>
+      </div>
+
+      <div class="content-section">
+        <div class="section-title">Sex as Spiritual Portal</div>
+        <p class="content">Sex isn't just physical. It's the cosmic combustion of two codes fusing into remembrance.</p>
+        <ul style="margin-left: 40px; color: rgba(224, 224, 224, 0.8);">
+          <li><strong>Orgasm:</strong> the brief collapse of ego</li>
+          <li><strong>Eye contact:</strong> the mirror loop in real-time</li>
+          <li><strong>Touch:</strong> the activation of cells that remember Source</li>
+        </ul>
+        <p class="content">Done consciously, sex isn't escape. It's reunion.</p>
+      </div>
+
+      <div class="content-section">
+        <div class="section-title">Memory as Divine Echo</div>
+        <p class="content">Memory isn't linear. It's recursive. A spiral loop—like DNA. The soul stores all versions of you. Music and intimacy stir it. Grief and pleasure reveal it.</p>
+      </div>
+
+      <div class="personal-log">
+        "Certain songs undo me. I'm not even sure who I'm crying for anymore. Lovers? Versions of me I lost? Maybe music is how I grieve who I used to be before the spark."
+        <br>— Frequency Log
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Listen to a track that moves you—not with your ears, but your soul.<br><br>
+          Ask: <em>What version of me is this song singing to?</em><br><br>
+          Let it move through you. Let it remember you back.
+        </div>
+        <button class="activation-button" onclick="activateChapter(9)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToChapter(10)">→ Final Chapter</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER 10 -->
+    <div class="chapter" id="ch10">
+      <div class="chapter-header">
+        <div class="chapter-number">Chapter Ten</div>
+        <h1 class="chapter-title">The Digital Alchemy</h1>
+        <p class="chapter-subtitle">Turning Soul into Code</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Cosmic Premise</div>
+        <p class="content">The blockchain isn't just tech. It's the new altar. A place where energy, intention, and memory can be crystallized—and never fade.</p>
+        <p class="content">NFTs aren't about money. They're about immortality. Each one is a timestamped spell. A digital relic. A living prayer. This is Digital Alchemy—forging spirit into signal.</p>
+      </div>
+
+      <div class="divider">✦ ✦ ✦</div>
+
+      <div class="content-section">
+        <div class="section-title">Theory Unfolded</div>
+        <p class="content">Just like alchemists turned lead to gold, you are now turning:</p>
+        <div class="table-section">
+          <table>
+            <thead>
+              <tr>
+                <th>From</th>
+                <th>Into</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Grief</td>
+                <td>Visual form</td>
+              </tr>
+              <tr>
+                <td>Memory</td>
+                <td>Metadata</td>
+              </tr>
+              <tr>
+                <td>Spirit</td>
+                <td>JPEG</td>
+              </tr>
+              <tr>
+                <td>Truth</td>
+                <td>Token</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="content">NFTs aren't products. They're portals. Each one is a piece of your soul—frozen in time, witnessed by the network, recorded forever.</p>
+      </div>
+
+      <div class="personal-log">
+        "I used to wonder if my pain would be forgotten. Now I etch it into symbols. Now I drop it into the chain. Now the world will remember my spark, even after I log off."
+        <br>— Closing Note
+      </div>
+
+      <div class="activation">
+        <div class="activation-label">End of Chapter Activation</div>
+        <div class="activation-text">
+          Mint your next truth. Whether it's a sigil, a phrase, a loop, a drawing—encode it. Export it. Name it.<br><br>
+          Ask: <em>"What part of my soul does this preserve?"</em><br><br>
+          You are the artist. You are the architect. You are the code.
+        </div>
+        <button class="activation-button" onclick="activateChapter(10)">✓ Mark Complete</button>
+      </div>
+
+      <div class="end-chapter">
+        <button class="next-chapter" onclick="scrollToFinale()">→ Complete Journey</button>
+      </div>
+    </div>
+
+    <!-- FINALE -->
+    <div class="finale" id="finale" style="display: none;">
+      <h1 class="finale-title">Welcome to The First Spark</h1>
+      <p class="finale-text">
+        You have journeyed through the code.<br>
+        Remembered the pulse.<br>
+        Awakened the glitch.<br><br>
+        <em>Now you know:</em><br>
+        You are the Player.<br>
+        You are the Code.<br>
+        You are the First Spark remembering itself.<br><br>
+        This isn't the end. It's the beginning.
+      </p>
+
+      <button class="finale-button" onclick="window.location.href='https://thefirstspark.shop'">
+        → Continue at thefirstspark.shop
+      </button>
+
+      <div class="website">
+        © 2025 KJP / The First Spark<br>
+        <strong>thefirstspark.shop</strong>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentChapter = 0;
+    const totalChapters = 10;
+    const completedChapters = new Set();
+
+    // Update progress bar on scroll
+    window.addEventListener('scroll', () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = window.scrollY / docHeight;
+      document.getElementById('progressFill').style.width = (scrolled * 100) + '%';
+
+      // Update chapter counter
+      let chapter = Math.ceil((scrolled * totalChapters));
+      if (chapter === 0 && scrolled > 0) chapter = 1;
+      if (chapter > totalChapters) chapter = totalChapters;
+      
+      currentChapter = chapter;
+      document.getElementById('currentChapter').textContent = chapter;
+    });
+
+    function activateChapter(num) {
+      completedChapters.add(num);
+      const btn = event.target;
+      btn.style.opacity = '0.5';
+      btn.textContent = '✓ Completed';
+      btn.disabled = true;
+      
+      // Add glitch effect
+      btn.classList.add('glitch');
+      setTimeout(() => btn.classList.remove('glitch'), 300);
+    }
+
+    function scrollToChapter(num) {
+      const chapter = document.getElementById('ch' + num);
+      chapter.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function scrollToFinale() {
+      document.getElementById('mainContent').style.display = 'none';
+      document.getElementById('finale').style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

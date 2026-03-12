@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genesis | The Legacy Project</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Raleway:wght@200;300;400&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at center, #0a0a12 0%, #050508 100%);
+      font-family: 'Raleway', sans-serif;
+      color: rgba(255, 255, 255, 0.85);
+      overflow-x: hidden;
+    }
+    
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: softTwinkle var(--duration) ease-in-out infinite;
+    }
+    
+    @keyframes softTwinkle {
+      0%, 100% { opacity: 0.1; }
+      50% { opacity: 0.4; }
+    }
+    
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .project-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(200, 180, 150, 0.4);
+      margin-bottom: 0.5rem;
+    }
+    
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: rgba(255, 250, 240, 0.9);
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(200, 180, 150, 0.6);
+    }
+    
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200, 180, 150, 0.4), transparent);
+      margin: 2rem auto;
+    }
+    
+    /* The Genesis Map */
+    .genesis-map {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      margin: 2rem auto 3rem;
+      aspect-ratio: 1;
+    }
+    
+    .map-svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Energy flow lines */
+    .energy-line {
+      stroke-dasharray: 4 4;
+      animation: flowDash 20s linear infinite;
+    }
+    
+    @keyframes flowDash {
+      to { stroke-dashoffset: -100; }
+    }
+    
+    /* Node pulses */
+    .node-glow {
+      animation: nodePulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes nodePulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+    
+    /* Phoenix flame flicker */
+    .phoenix-flame {
+      animation: flameFlicker 2s ease-in-out infinite alternate;
+      transform-origin: center bottom;
+    }
+    
+    @keyframes flameFlicker {
+      0% { transform: scaleY(1) scaleX(1); opacity: 0.8; }
+      100% { transform: scaleY(1.1) scaleX(0.95); opacity: 1; }
+    }
+    
+    /* Guardian shield pulse */
+    .guardian-shield {
+      animation: shieldPulse 5s ease-in-out infinite;
+    }
+    
+    @keyframes shieldPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 0.9; }
+    }
+    
+    /* Axis rotation */
+    .axis-ring {
+      animation: axisRotate 30s linear infinite;
+      transform-origin: center;
+    }
+    
+    @keyframes axisRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Vector arrows */
+    .vector-arrow {
+      animation: vectorPulse 3s ease-in-out infinite;
+    }
+    
+    .vector-arrow.v1 { animation-delay: 0s; }
+    .vector-arrow.v2 { animation-delay: 1.5s; }
+    
+    @keyframes vectorPulse {
+      0%, 100% { opacity: 0.5; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-3px); }
+    }
+    
+    /* Legend */
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem auto;
+      max-width: 700px;
+    }
+    
+    .legend-item {
+      padding: 1.25rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .legend-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .legend-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .legend-symbol {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    
+    .legend-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: rgba(255, 250, 240, 0.9);
+    }
+    
+    .legend-name {
+      font-size: 0.8rem;
+      color: rgba(200, 180, 150, 0.6);
+      margin-bottom: 0.5rem;
+    }
+    
+    .legend-desc {
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .phoenix-color { color: #ff8c66; }
+    .guardian-color { color: #7799cc; }
+    .axis-color { color: #d4af37; }
+    .vector-color { color: #88cc99; }
+    .anchor-color { color: #b4a0c8; }
+    .twins-color { color: #96b4c8; }
+    
+    /* The Question */
+    .question-section {
+      text-align: center;
+      margin: 3rem auto;
+      padding: 2rem;
+      max-width: 500px;
+    }
+    
+    .question {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      color: rgba(255, 250, 240, 0.7);
+      line-height: 1.8;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 0 2rem;
+    }
+    
+    .footer-text {
+      font-size: 0.75rem;
+      color: rgba(200, 180, 150, 0.3);
+      letter-spacing: 0.1em;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: rgba(200, 180, 150, 0.4);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: rgba(200, 180, 150, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  
+  <div class="container">
+    <header>
+      <p class="project-label">The Legacy Project</p>
+      <h1>Genesis</h1>
+      <p class="subtitle">The Lineage Layer — What moved through us</p>
+    </header>
+    
+    <div class="divider"></div>
+    
+    <!-- The Genesis Map SVG -->
+    <div class="genesis-map">
+      <svg class="map-svg" viewBox="0 0 450 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Gradients -->
+          <radialGradient id="phoenixGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#ff8c66;stop-opacity:0.8"/>
+            <stop offset="100%" style="stop-color:#ff8c66;stop-opacity:0"/>
+          </radialGradient>
+          <radialGradient id="guardianGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#7799cc;stop-opacity:0.6"/>
+            <stop offset="100%" style="stop-color:#7799cc;stop-opacity:0"/>
+          </radialGradient>
+          <radialGradient id="axisGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#d4af37;stop-opacity:0.7"/>
+            <stop offset="100%" style="stop-color:#d4af37;stop-opacity:0"/>
+          </radialGradient>
+          <linearGradient id="vectorGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#88cc99;stop-opacity:0.3"/>
+            <stop offset="100%" style="stop-color:#88cc99;stop-opacity:0.8"/>
+          </linearGradient>
+        </defs>
+        
+        <!-- Energy Flow Lines (triangulated, not hierarchical) -->
+        <g class="energy-lines" opacity="0.4">
+          <!-- Phoenix to Axis -->
+          <line x1="120" y1="100" x2="200" y2="200" 
+                stroke="#ff8c66" stroke-width="1" class="energy-line"/>
+          <!-- Guardian to Axis -->
+          <line x1="280" y1="100" x2="200" y2="200" 
+                stroke="#7799cc" stroke-width="1" class="energy-line"/>
+          <!-- Phoenix to Guardian (the original bond) -->
+          <line x1="120" y1="100" x2="280" y2="100" 
+                stroke="rgba(200,180,150,0.3)" stroke-width="0.5" class="energy-line"/>
+          <!-- Axis to Vectors -->
+          <line x1="200" y1="200" x2="140" y2="320" 
+                stroke="#88cc99" stroke-width="1" class="energy-line"/>
+          <line x1="200" y1="200" x2="260" y2="320" 
+                stroke="#88cc99" stroke-width="1" class="energy-line"/>
+        </g>
+        
+        <!-- Central Field Circle -->
+        <circle cx="200" cy="180" r="120" fill="none" 
+                stroke="rgba(200,180,150,0.1)" stroke-width="0.5"/>
+        
+        <!-- PHOENIX NODE (Top Left) - Rachael -->
+        <g class="phoenix-node" transform="translate(120, 100)">
+          <circle r="35" fill="url(#phoenixGlow)" class="node-glow"/>
+          <circle r="15" fill="none" stroke="#ff8c66" stroke-width="1" opacity="0.6"/>
+          <!-- Flame symbol -->
+          <g class="phoenix-flame">
+            <path d="M0,-8 Q4,-4 2,2 Q0,-2 -2,2 Q-4,-4 0,-8" 
+                  fill="#ff8c66" opacity="0.9"/>
+            <path d="M0,-5 Q2,-2 1,1 Q0,-1 -1,1 Q-2,-2 0,-5" 
+                  fill="#ffcc99" opacity="0.8"/>
+          </g>
+          <text y="35" text-anchor="middle" 
+                font-family="Cormorant Garamond, serif" font-size="11" 
+                fill="rgba(255,140,102,0.8)">Phoenix</text>
+          <text y="48" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(255,140,102,0.5)">Rachael</text>
+        </g>
+        
+        <!-- GUARDIAN NODE (Top Right) - Thomas -->
+        <g class="guardian-node" transform="translate(280, 100)">
+          <circle r="35" fill="url(#guardianGlow)" class="node-glow"/>
+          <circle r="15" fill="none" stroke="#7799cc" stroke-width="1" opacity="0.6"/>
+          <!-- Shield symbol -->
+          <g class="guardian-shield">
+            <path d="M0,-7 L6,0 L4,7 L0,9 L-4,7 L-6,0 Z" 
+                  fill="none" stroke="#7799cc" stroke-width="1.5" opacity="0.8"/>
+            <line x1="0" y1="-4" x2="0" y2="5" stroke="#7799cc" stroke-width="1" opacity="0.5"/>
+          </g>
+          <text y="35" text-anchor="middle" 
+                font-family="Cormorant Garamond, serif" font-size="11" 
+                fill="rgba(119,153,204,0.8)">Guardian</text>
+          <text y="48" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(119,153,204,0.5)">Thomas</text>
+        </g>
+        
+        <!-- ANCHOR NODE (Far Right) - Dawn -->
+        <g class="anchor-node" transform="translate(360, 180)">
+          <circle r="28" fill="none" stroke="rgba(180,160,200,0.2)" stroke-width="0.5"/>
+          <circle r="10" fill="none" stroke="rgba(180,160,200,0.5)" stroke-width="1"/>
+          <!-- Anchor/root symbol -->
+          <circle r="3" fill="rgba(180,160,200,0.7)"/>
+          <text y="28" text-anchor="middle" 
+                font-family="Cormorant Garamond, serif" font-size="10" 
+                fill="rgba(180,160,200,0.7)">The Anchor</text>
+          <text y="40" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(180,160,200,0.5)">Dawn</text>
+        </g>
+        
+        <!-- Connection: Thomas to Dawn -->
+        <line x1="295" y1="115" x2="345" y2="165" 
+              stroke="rgba(180,160,200,0.25)" stroke-width="0.5" stroke-dasharray="3 3"/>
+        
+        <!-- AXIS NODE (Center) - Katelin / The Hinge -->
+        <g class="axis-node" transform="translate(200, 200)">
+          <circle r="45" fill="url(#axisGlow)" class="node-glow"/>
+          <g class="axis-ring">
+            <circle r="20" fill="none" stroke="#d4af37" stroke-width="1.5" opacity="0.7"/>
+            <circle r="25" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.4"/>
+          </g>
+          <!-- Axis/hinge symbol -->
+          <circle r="5" fill="#d4af37" opacity="0.9"/>
+          <circle r="2" fill="#fffaf0" opacity="1"/>
+          <!-- Cross lines showing the fold point -->
+          <line x1="-12" y1="0" x2="12" y2="0" stroke="#d4af37" stroke-width="1" opacity="0.5"/>
+          <line x1="0" y1="-12" x2="0" y2="12" stroke="#d4af37" stroke-width="1" opacity="0.5"/>
+          <text y="45" text-anchor="middle" 
+                font-family="Cormorant Garamond, serif" font-size="12" 
+                fill="rgba(212,175,55,0.9)">The Axis</text>
+          <text y="58" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(212,175,55,0.6)">Where it folds</text>
+        </g>
+        
+        <!-- VECTOR 1 (Bottom Left) - Devon -->
+        <g class="vector-node" transform="translate(140, 320)">
+          <circle r="25" fill="none" stroke="#88cc99" stroke-width="0.5" opacity="0.3"/>
+          <!-- Upward arrow -->
+          <g class="vector-arrow v1">
+            <path d="M0,8 L0,-8 M-5,-3 L0,-8 L5,-3" 
+                  fill="none" stroke="#88cc99" stroke-width="1.5" opacity="0.8"/>
+          </g>
+          <text y="35" text-anchor="middle" 
+                font-family="Cormorant Garamond, serif" font-size="10" 
+                fill="rgba(136,204,153,0.8)">Vector One</text>
+          <text y="47" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(136,204,153,0.5)">Devon</text>
+        </g>
+        
+        <!-- VECTOR 2 (Bottom Right) - Mason -->
+        <g class="vector-node" transform="translate(260, 320)">
+          <circle r="25" fill="none" stroke="#88cc99" stroke-width="0.5" opacity="0.3"/>
+          <!-- Upward arrow -->
+          <g class="vector-arrow v2">
+            <path d="M0,8 L0,-8 M-5,-3 L0,-8 L5,-3" 
+                  fill="none" stroke="#88cc99" stroke-width="1.5" opacity="0.8"/>
+          </g>
+          <text y="35" text-anchor="middle" 
+                font-family="Cormorant Garamond, serif" font-size="10" 
+                fill="rgba(136,204,153,0.8)">Vector Two</text>
+          <text y="47" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(136,204,153,0.5)">Mason</text>
+        </g>
+        
+        <!-- THE TWIN VECTORS (Right Branch) - Joshua & Jacob -->
+        <!-- Connection from Dawn to Twins -->
+        <line x1="360" y1="205" x2="340" y2="280" 
+              stroke="rgba(150,180,200,0.3)" stroke-width="0.5" stroke-dasharray="3 3" class="energy-line"/>
+        <line x1="360" y1="205" x2="380" y2="280" 
+              stroke="rgba(150,180,200,0.3)" stroke-width="0.5" stroke-dasharray="3 3" class="energy-line"/>
+        
+        <!-- Joshua -->
+        <g class="vector-node" transform="translate(340, 305)">
+          <circle r="20" fill="none" stroke="rgba(150,180,200,0.4)" stroke-width="0.5" opacity="0.3"/>
+          <g class="vector-arrow" style="animation-delay: 0.5s;">
+            <path d="M0,6 L0,-6 M-4,-2 L0,-6 L4,-2" 
+                  fill="none" stroke="rgba(150,180,200,0.7)" stroke-width="1.2" opacity="0.8"/>
+          </g>
+          <text y="28" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(150,180,200,0.6)">Joshua</text>
+        </g>
+        
+        <!-- Jacob -->
+        <g class="vector-node" transform="translate(380, 305)">
+          <circle r="20" fill="none" stroke="rgba(150,180,200,0.4)" stroke-width="0.5" opacity="0.3"/>
+          <g class="vector-arrow" style="animation-delay: 0.75s;">
+            <path d="M0,6 L0,-6 M-4,-2 L0,-6 L4,-2" 
+                  fill="none" stroke="rgba(150,180,200,0.7)" stroke-width="1.2" opacity="0.8"/>
+          </g>
+          <text y="28" text-anchor="middle" 
+                font-family="Raleway, sans-serif" font-size="8" font-weight="300"
+                fill="rgba(150,180,200,0.6)">Jacob</text>
+        </g>
+        
+        <!-- Twin bond line -->
+        <line x1="340" y1="305" x2="380" y2="305" 
+              stroke="rgba(150,180,200,0.2)" stroke-width="0.5"/>
+        
+        <!-- Twins label -->
+        <text x="360" y="345" text-anchor="middle" 
+              font-family="Cormorant Garamond, serif" font-size="9" font-style="italic"
+              fill="rgba(150,180,200,0.5)">The Twins</text>
+        <text x="360" y="356" text-anchor="middle" 
+              font-family="Raleway, sans-serif" font-size="7" font-weight="200"
+              fill="rgba(150,180,200,0.35)">10.26.2000</text>
+        
+        <!-- Field label -->
+        <text x="200" y="385" text-anchor="middle" 
+              font-family="Raleway, sans-serif" font-size="8" font-weight="200"
+              letter-spacing="0.2em" fill="rgba(200,180,150,0.3)">
+          THE FIELD
+        </text>
+      </svg>
+    </div>
+    
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-header">
+          <span class="legend-symbol phoenix-color">🔥</span>
+          <span class="legend-title phoenix-color">Phoenix</span>
+        </div>
+        <p class="legend-name">Rachael</p>
+        <p class="legend-desc">Cyclical. Combustible. Transformative. Burned so others could see.</p>
+      </div>
+      
+      <div class="legend-item">
+        <div class="legend-header">
+          <span class="legend-symbol guardian-color">🛡</span>
+          <span class="legend-title guardian-color">Guardian</span>
+        </div>
+        <p class="legend-name">Thomas</p>
+        <p class="legend-desc">Stabilizing. Protective. Duty-bound. Held the line, then built again.</p>
+      </div>
+      
+      <div class="legend-item">
+        <div class="legend-header">
+          <span class="legend-symbol axis-color">⚬</span>
+          <span class="legend-title axis-color">The Axis</span>
+        </div>
+        <p class="legend-name">Katelin</p>
+        <p class="legend-desc">The hinge where time folded. Where the pattern finally chose different.</p>
+      </div>
+      
+      <div class="legend-item">
+        <div class="legend-header">
+          <span class="legend-symbol vector-color">↑</span>
+          <span class="legend-title vector-color">The Vectors</span>
+        </div>
+        <p class="legend-name">Devon & Mason</p>
+        <p class="legend-desc">Not continuations. Resolutions. Proof the loop wanted to loosen.</p>
+      </div>
+      
+      <div class="legend-item">
+        <div class="legend-header">
+          <span class="legend-symbol anchor-color">⚓</span>
+          <span class="legend-title anchor-color">The Anchor</span>
+        </div>
+        <p class="legend-name">Dawn</p>
+        <p class="legend-desc">The second chapter. Stability after storm. A different kind of holding.</p>
+      </div>
+      
+      <div class="legend-item">
+        <div class="legend-header">
+          <span class="legend-symbol twins-color">⚯</span>
+          <span class="legend-title twins-color">The Twins</span>
+        </div>
+        <p class="legend-name">Joshua & Jacob</p>
+        <p class="legend-desc">Born together. A parallel branch. The Guardian's second gift forward.</p>
+      </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- The Question -->
+    <div class="question-section">
+      <p class="question">
+        "What moved through us—<br>
+        and what stops here?"
+      </p>
+    </div>
+    
+    <footer>
+      <p class="footer-text">The Legacy Project — Lineage Layer</p>
+      <a href="/bridge" class="back-link">Continue to The Bridge →</a>
+    </footer>
+  </div>
+  
+  <script>
+    // Create stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 60; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.width = star.style.height = (Math.random() * 1.5 + 0.5) + 'px';
+      star.style.setProperty('--duration', (Math.random() * 5 + 4) + 's');
+      starsContainer.appendChild(star);
+    }
+  </script>
+</body>
+</html>

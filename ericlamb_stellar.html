@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Garden Note</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a12 0%, #12101f 50%, #0a0815 100%);
+            color: #e8e8e8;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            overflow-x: hidden;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 680px;
+            width: 100%;
+            position: relative;
+        }
+
+        .flower-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .flower {
+            font-size: 4rem;
+            display: inline-block;
+            animation: wilt 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(168, 100, 120, 0.5));
+        }
+
+        @keyframes wilt {
+            0%, 100% { 
+                transform: rotate(-5deg) scale(1);
+                opacity: 0.9;
+            }
+            50% { 
+                transform: rotate(5deg) scale(0.95);
+                opacity: 0.6;
+            }
+        }
+
+        .letter {
+            background: rgba(10, 10, 20, 0.85);
+            border: 1px solid rgba(168, 139, 182, 0.2);
+            border-radius: 8px;
+            padding: 3rem 2.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 0 60px rgba(168, 100, 150, 0.1),
+                inset 0 0 60px rgba(168, 139, 182, 0.03);
+        }
+
+        .opening {
+            font-style: italic;
+            font-size: 1.3rem;
+            color: #d4a5b9;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            text-shadow: 0 0 30px rgba(212, 165, 185, 0.3);
+        }
+
+        .body p {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            color: #d4d4d4;
+        }
+
+        .truth {
+            background: linear-gradient(90deg, rgba(168, 139, 182, 0.15), transparent);
+            border-left: 2px solid #c77daa;
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            box-shadow: 0 0 30px rgba(199, 125, 170, 0.1);
+        }
+
+        .metaphor {
+            text-align: center;
+            margin: 2.5rem 0;
+            font-size: 1.2rem;
+            color: #c9b8d4;
+        }
+
+        .metaphor .highlight {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f0d4e8;
+            margin-top: 0.5rem;
+            text-shadow: 0 0 40px rgba(240, 212, 232, 0.4);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 40px rgba(240, 212, 232, 0.4); }
+            50% { text-shadow: 0 0 60px rgba(240, 212, 232, 0.6), 0 0 80px rgba(199, 125, 170, 0.3); }
+        }
+
+        .closing {
+            margin-top: 2.5rem;
+            font-style: italic;
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .signature {
+            margin-top: 2rem;
+            text-align: right;
+            font-size: 1.8rem;
+            color: #c77daa;
+            font-weight: 600;
+            text-shadow: 0 0 30px rgba(199, 125, 170, 0.5);
+        }
+
+        .subtle-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(199, 125, 170, 0.4), transparent);
+            margin: 2rem 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: #666;
+            letter-spacing: 0.1em;
+        }
+
+        footer a {
+            color: #9b7a8e;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #c77daa;
+            text-shadow: 0 0 20px rgba(199, 125, 170, 0.5);
+        }
+
+        /* Cupid that appears occasionally */
+        .cupid {
+            position: fixed;
+            font-size: 2rem;
+            z-index: 2;
+            animation: cupid-fly 4s linear forwards;
+            filter: grayscale(50%) opacity(0.7);
+        }
+
+        @keyframes cupid-fly {
+            0% { transform: translateX(-100px) rotate(-10deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateX(calc(100vw + 100px)) rotate(10deg); opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .letter {
+                padding: 2rem 1.5rem;
+            }
+            .opening {
+                font-size: 1.1rem;
+            }
+            .body p {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas-bg"></canvas>
+    
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="flower-container">
+                <span class="flower">🥀</span>
+            </div>
+            
+            <div class="letter">
+                <p class="opening">To the man who kept picking flowers instead of planting them—</p>
+                
+                <div class="body">
+                    <p>I was solid. I was loyal. I showed up with both hands open while you kept one behind your back.</p>
+                    
+                    <p>I shared everything. You took what you wanted and called it love.</p>
+                    
+                    <p>You searched my phone like a detective while building your own escape routes. You called it protection. I called it what it was.</p>
+                    
+                    <p>Every time we ended, you sprinted toward the first warmth that would have you—not because you wanted her, but because you couldn't stand to feel the cold alone.</p>
+                </div>
+
+                <div class="subtle-line"></div>
+
+                <div class="truth">
+                    You're not broken. You're not stupid. You're not the version of yourself that the meth wants you to be.
+                </div>
+
+                <div class="body">
+                    <p>But you are afraid. And that fear makes you a thief—of trust, of time, of women who deserved better than to be your proof that you're still wanted.</p>
+                </div>
+
+                <div class="metaphor">
+                    Any man can pick a flower.
+                    <span class="highlight">A real one stays to water it.</span>
+                    Watches it bloom. Gets his hands dirty in the waiting.
+                </div>
+
+                <p class="closing">I wanted to be your garden. You wanted a bouquet.</p>
+                <p class="closing">I hope you learn the difference before it's too late.</p>
+
+                <div class="signature">— K</div>
+            </div>
+
+            <footer>
+                <a href="https://thefirstspark.shop">THE FIRST SPARK</a>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // === CANVAS SETUP ===
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // === PARTICLE CLASSES ===
+        
+        // Arrows that miss
+        class Arrow {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = -50;
+                this.y = Math.random() * canvas.height * 0.7 + canvas.height * 0.15;
+                this.targetY = this.y + (Math.random() - 0.5) * 300; // Misses by going off target
+                this.speed = 4 + Math.random() * 3;
+                this.wobble = Math.random() * 0.05;
+                this.wobbleOffset = Math.random() * Math.PI * 2;
+                this.rotation = Math.random() * 0.3 - 0.15;
+                this.opacity = 0.6 + Math.random() * 0.4;
+                this.missed = false;
+                this.missPoint = canvas.width * (0.3 + Math.random() * 0.4);
+            }
+            
+            update() {
+                this.x += this.speed;
+                
+                // Wobble effect - arrow is unsteady
+                this.y += Math.sin(this.x * this.wobble + this.wobbleOffset) * 2;
+                
+                // After miss point, arrow veers off
+                if (this.x > this.missPoint && !this.missed) {
+                    this.missed = true;
+                    this.rotation = (Math.random() - 0.5) * 0.8;
+                }
+                
+                if (this.missed) {
+                    this.y += this.rotation * 5;
+                    this.rotation += 0.01;
+                    this.opacity -= 0.008;
+                }
+                
+                if (this.x > canvas.width + 100 || this.opacity <= 0) {
+                    this.reset();
+                }
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+                
+                // Arrow shaft
+                ctx.strokeStyle = '#c77daa';
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#c77daa';
+                
+                ctx.beginPath();
+                ctx.moveTo(-20, 0);
+                ctx.lineTo(20, 0);
+                ctx.stroke();
+                
+                // Arrow head (heart shape)
+                ctx.fillStyle = '#e8a0c0';
+                ctx.beginPath();
+                ctx.moveTo(25, 0);
+                ctx.bezierCurveTo(25, -3, 20, -6, 15, -6);
+                ctx.bezierCurveTo(10, -6, 10, 0, 10, 0);
+                ctx.bezierCurveTo(10, 0, 10, 6, 15, 6);
+                ctx.bezierCurveTo(20, 6, 25, 3, 25, 0);
+                ctx.fill();
+                
+                // Feathers
+                ctx.fillStyle = '#8b6b80';
+                ctx.beginPath();
+                ctx.moveTo(-20, 0);
+                ctx.lineTo(-30, -5);
+                ctx.lineTo(-25, 0);
+                ctx.lineTo(-30, 5);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+
+        // Breaking hearts
+        class BreakingHeart {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -30;
+                this.size = 15 + Math.random() * 15;
+                this.speedY = 0.5 + Math.random() * 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+                this.opacity = 0.7 + Math.random() * 0.3;
+                this.breaking = false;
+                this.breakProgress = 0;
+                this.crackPoint = canvas.height * (0.3 + Math.random() * 0.4);
+                this.pieces = [];
+            }
+            
+            update() {
+                if (!this.breaking) {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    this.rotation += this.rotationSpeed;
+                    
+                    if (this.y > this.crackPoint) {
+                        this.breaking = true;
+                        // Create pieces
+                        for (let i = 0; i < 6; i++) {
+                            this.pieces.push({
+                                x: this.x,
+                                y: this.y,
+                                vx: (Math.random() - 0.5) * 4,
+                                vy: (Math.random() - 0.5) * 4,
+                                rotation: Math.random() * Math.PI * 2,
+                                rotationSpeed: (Math.random() - 0.5) * 0.2,
+                                size: this.size * (0.2 + Math.random() * 0.3),
+                                opacity: this.opacity
+                            });
+                        }
+                    }
+                } else {
+                    this.breakProgress += 0.02;
+                    this.pieces.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += 0.1; // Gravity
+                        p.rotation += p.rotationSpeed;
+                        p.opacity -= 0.015;
+                    });
+                }
+                
+                if (this.y > canvas.height + 50 || this.breakProgress > 1) {
+                    this.reset();
+                }
+            }
+            
+            draw() {
+                if (!this.breaking) {
+                    this.drawHeart(this.x, this.y, this.size, this.rotation, this.opacity);
+                } else {
+                    // Draw crack effect
+                    this.pieces.forEach(p => {
+                        if (p.opacity > 0) {
+                            this.drawHeartPiece(p);
+                        }
+                    });
+                }
+            }
+            
+            drawHeart(x, y, size, rotation, opacity) {
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(rotation);
+                ctx.globalAlpha = opacity;
+                ctx.fillStyle = '#c77daa';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#c77daa';
+                
+                ctx.beginPath();
+                ctx.moveTo(0, size * 0.3);
+                ctx.bezierCurveTo(-size * 0.5, -size * 0.3, -size, size * 0.3, 0, size);
+                ctx.bezierCurveTo(size, size * 0.3, size * 0.5, -size * 0.3, 0, size * 0.3);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+            
+            drawHeartPiece(p) {
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.globalAlpha = p.opacity;
+                ctx.fillStyle = '#a05070';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#c77daa';
+                
+                // Random shard shape
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(p.size, p.size * 0.5);
+                ctx.lineTo(p.size * 0.5, p.size);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+
+        // Floating dust/sparkles
+        class Sparkle {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.pulse = Math.random() * Math.PI * 2;
+                this.pulseSpeed = 0.02 + Math.random() * 0.03;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.pulse += this.pulseSpeed;
+                
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            
+            draw() {
+                const currentOpacity = this.opacity * (0.5 + Math.sin(this.pulse) * 0.5);
+                ctx.save();
+                ctx.globalAlpha = currentOpacity;
+                ctx.fillStyle = '#d4a5c0';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#c77daa';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // === CREATE PARTICLES ===
+        const arrows = [];
+        const hearts = [];
+        const sparkles = [];
+        
+        for (let i = 0; i < 3; i++) {
+            const arrow = new Arrow();
+            arrow.x = Math.random() * canvas.width; // Stagger starting positions
+            arrows.push(arrow);
+        }
+        
+        for (let i = 0; i < 5; i++) {
+            const heart = new BreakingHeart();
+            heart.y = Math.random() * canvas.height; // Stagger
+            hearts.push(heart);
+        }
+        
+        for (let i = 0; i < 50; i++) {
+            sparkles.push(new Sparkle());
+        }
+
+        // === ANIMATION LOOP ===
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw sparkles first (background)
+            sparkles.forEach(s => {
+                s.update();
+                s.draw();
+            });
+            
+            // Draw hearts
+            hearts.forEach(h => {
+                h.update();
+                h.draw();
+            });
+            
+            // Draw arrows
+            arrows.forEach(a => {
+                a.update();
+                a.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+
+        // === OCCASIONAL CUPID ===
+        function spawnCupid() {
+            const cupid = document.createElement('div');
+            cupid.className = 'cupid';
+            cupid.innerHTML = '👼🏹';
+            cupid.style.top = (Math.random() * 60 + 10) + '%';
+            cupid.style.left = '-100px';
+            document.body.appendChild(cupid);
+            
+            setTimeout(() => cupid.remove(), 4000);
+        }
+        
+        // Spawn cupid occasionally
+        setInterval(spawnCupid, 8000);
+        setTimeout(spawnCupid, 2000); // First one appears after 2 seconds
+
+        // === MOUSE INTERACTION ===
+        canvas.style.pointerEvents = 'auto';
+        document.addEventListener('mousemove', (e) => {
+            // Spawn a small heart at cursor occasionally
+            if (Math.random() < 0.03) {
+                const heart = new BreakingHeart();
+                heart.x = e.clientX;
+                heart.y = e.clientY;
+                heart.size = 8;
+                heart.crackPoint = e.clientY + 50;
+                hearts.push(heart);
+                
+                // Remove extra hearts to prevent slowdown
+                if (hearts.length > 15) {
+                    hearts.shift();
+                }
+            }
+        });
+
+        // === CLICK TO SHOOT ARROW ===
+        document.addEventListener('click', (e) => {
+            const arrow = new Arrow();
+            arrow.y = e.clientY;
+            arrow.x = 0;
+            arrow.speed = 8;
+            arrows.push(arrow);
+            
+            if (arrows.length > 8) {
+                arrows.shift();
+            }
+        });
+    </script>
+</body>
+</html>

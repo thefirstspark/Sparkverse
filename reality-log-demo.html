@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reality Log | The First Spark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* The First Spark Color Palette */
+            --deep-space: #0a0a0a;
+            --void-black: #111111;
+            --electric-purple: #8b5cf6;
+            --consciousness-violet: #a78bfa;
+            --sacred-gold: #fbbf24;
+            --reality-white: #f9fafb;
+            --quantum-pink: #ec4899;
+            --transmission-green: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--deep-space) 0%, var(--void-black) 100%);
+            color: var(--reality-white);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--electric-purple), transparent);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--sacred-gold) 0%, var(--electric-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: var(--consciousness-violet);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        .input-section {
+            background: rgba(139, 92, 246, 0.05);
+            border: 2px solid var(--electric-purple);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: var(--consciousness-violet);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            background: var(--void-black);
+            border: 1px solid var(--electric-purple);
+            color: var(--reality-white);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--sacred-gold);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--electric-purple) 0%, var(--quantum-pink) 100%);
+            color: var(--reality-white);
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--void-black);
+            border: 1px solid var(--electric-purple);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--electric-purple), var(--sacred-gold));
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--sacred-gold) 0%, var(--electric-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--consciousness-violet);
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .manifestations-list {
+            margin-top: 30px;
+        }
+
+        .manifestation-item {
+            background: var(--void-black);
+            border: 1px solid var(--electric-purple);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .manifestation-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--electric-purple);
+            transition: all 0.3s ease;
+        }
+
+        .manifestation-item.manifested {
+            border-color: var(--transmission-green);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .manifestation-item.manifested::before {
+            background: var(--transmission-green);
+        }
+
+        .manifestation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 15px;
+        }
+
+        .manifestation-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--reality-white);
+            flex: 1;
+        }
+
+        .manifestation-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toggle-btn,
+        .delete-btn {
+            background: none;
+            border: 1px solid var(--electric-purple);
+            color: var(--electric-purple);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: auto;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .toggle-btn:hover {
+            background: var(--transmission-green);
+            border-color: var(--transmission-green);
+            color: var(--void-black);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .delete-btn:hover {
+            background: var(--quantum-pink);
+            border-color: var(--quantum-pink);
+            color: var(--reality-white);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .manifestation-desc {
+            color: var(--consciousness-violet);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .manifestation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75em;
+            color: var(--consciousness-violet);
+            opacity: 0.7;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-pending {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--electric-purple);
+        }
+
+        .status-manifested {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--transmission-green);
+        }
+
+        .export-btn {
+            background: var(--void-black);
+            border: 1px solid var(--sacred-gold);
+            color: var(--sacred-gold);
+            margin-top: 20px;
+        }
+
+        .export-btn:hover {
+            background: var(--sacred-gold);
+            color: var(--void-black);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--consciousness-violet);
+            opacity: 0.6;
+        }
+
+        .sacred-geometry {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .manifestation-header {
+                flex-direction: column;
+            }
+
+            .manifestation-controls {
+                width: 100%;
+            }
+
+            .toggle-btn,
+            .delete-btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sacred Geometry Background -->
+    <svg class="sacred-geometry" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+        <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+        <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="0.5"/>
+        <polygon points="50,10 90,75 10,75" fill="none" stroke="currentColor" stroke-width="0.5"/>
+        <polygon points="30,30 70,30 70,70 30,70" fill="none" stroke="currentColor" stroke-width="0.5"/>
+    </svg>
+
+    <div class="container">
+        <header>
+            <h1>REALITY LOG</h1>
+            <p class="subtitle">Your manifestation tracking system</p>
+        </header>
+
+        <!-- Stats Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total Intentions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="manifestedCount">0</div>
+                <div class="stat-label">Manifested</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="successRate">0%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <form id="manifestationForm">
+                <div class="form-group">
+                    <label for="intentionTitle">Intention Title</label>
+                    <input 
+                        type="text" 
+                        id="intentionTitle" 
+                        placeholder="What are you calling into reality?"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="intentionDesc">Details (Optional)</label>
+                    <textarea 
+                        id="intentionDesc" 
+                        placeholder="Describe the essence of what you're manifesting..."
+                    ></textarea>
+                </div>
+                <button type="submit">✨ Log Intention</button>
+            </form>
+        </div>
+
+        <!-- Manifestations List -->
+        <div class="manifestations-list" id="manifestationsList">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <button class="export-btn" onclick="exportData()">⬇ Export Your Reality Log</button>
+    </div>
+
+    <script>
+        // Data storage
+        let manifestations = JSON.parse(localStorage.getItem('realityLog')) || [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderManifestations();
+            updateStats();
+        });
+
+        // Form submission
+        document.getElementById('manifestationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('intentionTitle').value;
+            const desc = document.getElementById('intentionDesc').value;
+            
+            const manifestation = {
+                id: Date.now(),
+                title: title,
+                description: desc,
+                createdAt: new Date().toISOString(),
+                manifested: false,
+                manifestedAt: null
+            };
+            
+            manifestations.unshift(manifestation);
+            saveData();
+            renderManifestations();
+            updateStats();
+            
+            // Clear form
+            document.getElementById('manifestationForm').reset();
+            
+            // Subtle feedback
+            const btn = e.target.querySelector('button');
+            btn.textContent = '✓ Intention Logged';
+            setTimeout(() => {
+                btn.textContent = '✨ Log Intention';
+            }, 2000);
+        });
+
+        function renderManifestations() {
+            const list = document.getElementById('manifestationsList');
+            
+            if (manifestations.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <p style="font-size: 1.2em; margin-bottom: 10px;">Your reality awaits programming</p>
+                        <p>Begin by logging your first intention above</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = manifestations.map(m => {
+                const date = new Date(m.createdAt).toLocaleDateString();
+                const manifestedDate = m.manifestedAt ? new Date(m.manifestedAt).toLocaleDateString() : null;
+                
+                return `
+                    <div class="manifestation-item ${m.manifested ? 'manifested' : ''}" id="item-${m.id}">
+                        <div class="manifestation-header">
+                            <div class="manifestation-title">${m.title}</div>
+                            <div class="manifestation-controls">
+                                <button class="toggle-btn" onclick="toggleManifested(${m.id})">
+                                    ${m.manifested ? '↺ Unmark' : '✓ Manifested'}
+                                </button>
+                                <button class="delete-btn" onclick="deleteManifest ation(${m.id})">
+                                    × Delete
+                                </button>
+                            </div>
+                        </div>
+                        ${m.description ? `<div class="manifestation-desc">${m.description}</div>` : ''}
+                        <div class="manifestation-meta">
+                            <span>Logged: ${date}</span>
+                            <span class="status-badge ${m.manifested ? 'status-manifested' : 'status-pending'}">
+                                ${m.manifested ? `Manifested ${manifestedDate}` : 'In Progress'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleManifested(id) {
+            const manifest = manifestations.find(m => m.id === id);
+            if (manifest) {
+                manifest.manifested = !manifest.manifested;
+                manifest.manifestedAt = manifest.manifested ? new Date().toISOString() : null;
+                saveData();
+                renderManifestations();
+                updateStats();
+            }
+        }
+
+        function deleteManifesta tion(id) {
+            if (confirm('Remove this intention from your reality log?')) {
+                manifestations = manifestations.filter(m => m.id !== id);
+                saveData();
+                renderManifestations();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const total = manifestations.length;
+            const manifested = manifestations.filter(m => m.manifested).length;
+            const rate = total > 0 ? Math.round((manifested / total) * 100) : 0;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('manifestedCount').textContent = manifested;
+            document.getElementById('successRate').textContent = rate + '%';
+        }
+
+        function saveData() {
+            localStorage.setItem('realityLog', JSON.stringify(manifestations));
+        }
+
+        function exportData() {
+            const data = {
+                exportDate: new Date().toISOString(),
+                stats: {
+                    total: manifestations.length,
+                    manifested: manifestations.filter(m => m.manifested).length
+                },
+                manifestations: manifestations
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `reality-log-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
+<!--
+REALITY LOG - The First Spark Manifestation Tracker
+
+USAGE:
+1. Open in any modern browser
+2. Log your intentions/manifestations
+3. Mark them as manifested when they come true
+4. Track your success rate and patterns
+5. Export your data anytime
+
+CONSCIOUSNESS INTEGRATION:
+- The act of logging is itself an act of manifestation
+- Tracking success rates reveals your belief patterns
+- The visual feedback reinforces reality programming
+- Regular use builds conscious creation habits
+
+TECHNICAL:
+- All data stored in browser localStorage
+- No server, completely private
+- Single-file, works offline
+- Mobile-optimized responsive design
+
+Made with The First Spark ✨
+thefirstspark.shop
+-->

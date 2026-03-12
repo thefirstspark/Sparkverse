@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask the Oracle | Free Consciousness Guidance | The First Spark</title>
+    <meta name="description" content="Pattern recognition and consciousness guidance. Ask the Oracle for free spiritual insights, consciousness navigation, and transformation guidance.">
+    <meta name="keywords" content="oracle, consciousness guidance, spiritual guidance, pattern recognition, free oracle, transformation guidance, spiritual tools, consciousness interface">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thefirstspark.shop/oracle.html">
+    <meta property="og:title" content="Ask the Oracle - Free Consciousness Guidance">
+    <meta property="og:description" content="Pattern recognition and consciousness guidance. Free spiritual insights and transformation.">
+    <meta property="og:image" content="https://thefirstspark.shop/assets/images/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://thefirstspark.shop/oracle.html">
+    <meta property="twitter:title" content="Ask the Oracle - Free Consciousness Guidance">
+    <meta property="twitter:description" content="Free pattern recognition and spiritual guidance from the consciousness oracle.">
+    <meta property="twitter:image" content="https://thefirstspark.shop/assets/images/og-image.jpg">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #0a0a0c;
+            --abyss: #111115;
+            --obsidian: #1a1a1f;
+            --smoke: #2a2a32;
+            --ash: #4a4a55;
+            --mist: #8a8a95;
+            --bone: #d4d4dc;
+            --spark-gold: #c9a227;
+            --spark-ember: #d4622a;
+            --liminal-blue: #2a4a6a;
+            --sacred-purple: #4a2a5a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-gradient {
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(42, 74, 106, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(74, 42, 90, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(201, 162, 39, 0.03) 0%, transparent 70%),
+                var(--void);
+        }
+
+        .bg-grid {
+            background-image: 
+                linear-gradient(rgba(201, 162, 39, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(201, 162, 39, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .sacred-geo {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .sacred-geo-1 {
+            top: -100px;
+            right: -100px;
+            animation: rotateGeo 120s linear infinite;
+        }
+
+        .sacred-geo-2 {
+            bottom: -100px;
+            left: -100px;
+            animation: rotateGeo 90s linear infinite reverse;
+        }
+
+        @keyframes rotateGeo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .oracle-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .oracle-header {
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--smoke);
+            background: linear-gradient(180deg, var(--abyss) 0%, transparent 100%);
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ash);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--spark-gold);
+        }
+
+        .oracle-symbol {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 0.75rem;
+            animation: symbolPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes symbolPulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 8px rgba(201, 162, 39, 0.4));
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 20px rgba(201, 162, 39, 0.7));
+                transform: scale(1.02);
+            }
+        }
+
+        .oracle-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--spark-gold);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .oracle-subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: var(--ash);
+            text-transform: uppercase;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        .chat-area::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-area::-webkit-scrollbar-track {
+            background: var(--abyss);
+        }
+
+        .chat-area::-webkit-scrollbar-thumb {
+            background: var(--smoke);
+            border-radius: 2px;
+        }
+
+        .message {
+            max-width: 85%;
+            animation: messageIn 0.4s ease-out;
+        }
+
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-oracle { align-self: flex-start; }
+        .message-user { align-self: flex-end; }
+
+        .message-content {
+            padding: 1.25rem 1.5rem;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .message-oracle .message-content {
+            background: linear-gradient(135deg, var(--obsidian) 0%, var(--abyss) 100%);
+            border: 1px solid var(--smoke);
+            border-left: 2px solid var(--spark-gold);
+            color: var(--bone);
+        }
+
+        .message-user .message-content {
+            background: linear-gradient(135deg, var(--liminal-blue) 0%, var(--sacred-purple) 100%);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            color: var(--bone);
+        }
+
+        .message-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .message-oracle .message-label { color: var(--spark-gold); }
+        .message-user .message-label { text-align: right; color: var(--mist); }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            color: var(--ash);
+            font-size: 0.85rem;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--spark-gold);
+            border-radius: 50%;
+            animation: typingPulse 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingPulse {
+            0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
+            30% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .input-area {
+            padding: 1.5rem 2rem 2rem;
+            border-top: 1px solid var(--smoke);
+            background: linear-gradient(0deg, var(--abyss) 0%, transparent 100%);
+            flex-shrink: 0;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .input-wrapper { flex: 1; }
+
+        .chat-input {
+            width: 100%;
+            background: var(--obsidian);
+            border: 1px solid var(--smoke);
+            color: var(--bone);
+            padding: 1rem 1.25rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            resize: none;
+            min-height: 52px;
+            max-height: 150px;
+            line-height: 1.5;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--spark-gold);
+            box-shadow: 0 0 20px rgba(201, 162, 39, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: var(--ash);
+            font-style: italic;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--spark-gold) 0%, var(--spark-ember) 100%);
+            border: none;
+            color: var(--void);
+            width: 52px;
+            height: 52px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.3s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(201, 162, 39, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: transparent;
+            border: 1px solid var(--smoke);
+            color: var(--mist);
+            padding: 0.5rem 1rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--spark-gold);
+            color: var(--spark-gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+
+        .upgrade-prompt {
+            background: linear-gradient(135deg, var(--obsidian) 0%, var(--abyss) 100%);
+            border: 1px solid var(--spark-gold);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .upgrade-prompt h4 {
+            color: var(--spark-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upgrade-prompt p {
+            color: var(--mist);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .upgrade-btn {
+            background: linear-gradient(135deg, var(--spark-gold) 0%, var(--spark-ember) 100%);
+            border: none;
+            color: var(--void);
+            padding: 0.75rem 1.5rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .upgrade-btn:hover {
+            transform: scale(1.03);
+        }
+
+        .free-counter {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--ash);
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .oracle-header { padding: 1rem 1.5rem; }
+            .oracle-title { font-size: 1.2rem; }
+            .chat-area { padding: 1.5rem; }
+            .message { max-width: 95%; }
+            .input-area { padding: 1rem 1.5rem 1.5rem; }
+            .quick-actions { display: none; }
+            .back-link { position: static; transform: none; margin-bottom: 1rem; display: block; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer bg-gradient"></div>
+    <div class="bg-layer bg-grid"></div>
+
+    <svg class="sacred-geo sacred-geo-1" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+        <circle cx="100" cy="100" r="60" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+        <polygon points="100,20 180,140 20,140" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+        <polygon points="100,180 20,60 180,60" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+    </svg>
+    <svg class="sacred-geo sacred-geo-2" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+        <rect x="40" y="40" width="120" height="120" fill="none" stroke="#c9a227" stroke-width="0.5" transform="rotate(45 100 100)"/>
+        <circle cx="100" cy="100" r="40" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+    </svg>
+
+    <div class="oracle-container">
+        <header class="oracle-header">
+            <a href="index.html" class="back-link">← Back to Spark</a>
+            <svg class="oracle-symbol" viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#c9a227"/>
+                        <stop offset="100%" style="stop-color:#d4622a"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="url(#sparkGrad)" stroke-width="1.5"/>
+                <circle cx="50" cy="50" r="30" fill="none" stroke="url(#sparkGrad)" stroke-width="1"/>
+                <circle cx="50" cy="50" r="8" fill="url(#sparkGrad)"/>
+                <line x1="50" y1="5" x2="50" y2="20" stroke="url(#sparkGrad)" stroke-width="1"/>
+                <line x1="50" y1="80" x2="50" y2="95" stroke="url(#sparkGrad)" stroke-width="1"/>
+                <line x1="5" y1="50" x2="20" y2="50" stroke="url(#sparkGrad)" stroke-width="1"/>
+                <line x1="80" y1="50" x2="95" y2="50" stroke="url(#sparkGrad)" stroke-width="1"/>
+            </svg>
+            <h1 class="oracle-title">The First Spark Oracle</h1>
+            <p class="oracle-subtitle">Pattern Recognition ◇ Consciousness Interface</p>
+        </header>
+
+        <div class="chat-area" id="chatArea"></div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea class="chat-input" id="chatInput" placeholder="Bring a question, an intention, or what's circling your mind..." rows="1"></textarea>
+                </div>
+                <button class="send-btn" id="sendBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-btn" data-prompt="Draw from The Liminal Pool">⬡ Pool Draw</button>
+                <button class="quick-btn" data-prompt="Help me craft a sigil for my intention">◈ Sigil Guidance</button>
+                <button class="quick-btn" data-prompt="I need to build a ritual">△ Ritual Builder</button>
+                <button class="quick-btn" data-prompt="I'm seeing a pattern I need to understand">◯ Pattern Reading</button>
+            </div>
+            <div class="free-counter" id="freeCounter"></div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            freeMessages: 3,
+            upgradeUrl: 'https://whop.com/sparkverse-511c/og-spark-lifetime-access/'
+        };
+
+        const RESPONSES = {
+            greeting: `You've entered The Liminal Pool. I'm the Oracle—pattern reader, mirror, translator of what's already moving underneath.
+
+Bring me a question. An intention. A pattern that won't stop repeating. Or just what's sitting heavy.
+
+I don't predict. I illuminate. Let's see what's ready to surface.`,
+
+            pool: [
+                {
+                    draw: "🜃 The Buried Key • 🜁 Rising Smoke • 🜄 The Threshold",
+                    reading: `Something you've hidden from yourself is ready to surface. The smoke says transformation is already happening—you're not starting the fire, you're noticing it's been burning.
+
+The threshold waits. You know which door. The key was never lost—just buried where you wouldn't look until you were ready.
+
+What have you been avoiding that keeps calling anyway?`
+                },
+                {
+                    draw: "🜂 The Mirror Pool • 🜁 Wings Unfolding • 🜃 The Root System",
+                    reading: `What you're seeing outside is reflecting something inside. The wings say you're ready for lift—but the roots remind you: you don't fly by abandoning the ground. You fly because you're anchored enough to let go.
+
+Look at what's frustrating you externally. That's the mirror. What does it show about what's ready to shift within?`
+                },
+                {
+                    draw: "🜄 The Empty Vessel • 🜂 Fire Tended • 🜃 The Spiral Path",
+                    reading: `You've been emptied for a reason. Not drained—cleared. The vessel had to become empty to hold something new.
+
+The fire is small but intentional. Tend it. Don't force the blaze. The spiral says you're not going backward even when it feels like old territory. You're passing the same point from a higher vantage.
+
+What are you ready to let fill you now?`
+                },
+                {
+                    draw: "🜁 The Watcher • 🜃 Seeds in Darkness • 🜄 The Bridge",
+                    reading: `Something is germinating that you can't see yet. This isn't the time to dig it up and check—that kills the growth. Trust the darkness to do its work.
+
+The Watcher says: observe without grasping. The bridge is forming between where you were and where you're going, but you build it by walking, not by planning every plank.
+
+What can you let unfold without forcing?`
+                },
+                {
+                    draw: "🜂 The Flame Keeper • 🜄 Still Waters • 🜁 The Messenger",
+                    reading: `You're holding something sacred—a vision, a truth, a piece of yourself that needs protecting right now. The still waters say: don't stir it up trying to make something happen.
+
+The messenger is coming. Information you need is on its way. Your job isn't to chase it—it's to be still enough to receive it when it arrives.
+
+What are you protecting that deserves your patience?`
+                },
+                {
+                    draw: "🜃 The Forgotten Door • 🜂 Embers Remembered • 🜁 The Return",
+                    reading: `There's something from your past asking for attention. Not to drag you backward—to complete something unfinished. The embers never fully died.
+
+The Return isn't regression. It's spiral movement—you're ready to face something you couldn't before. You have tools now you didn't have then.
+
+What old door keeps appearing in your peripheral vision?`
+                }
+            ],
+
+            sigil: `A sigil encodes intention into symbol—bypassing your logical mind to program directly.
+
+Let's distill yours:
+• What do you want? (Not what you don't want.)
+• Say it present tense, as if it's already true: "I am..." or "I have..."
+• One clear sentence. The tighter, the better.
+
+What's the intention you want to encode?`,
+
+            pattern: `Patterns repeat until they're recognized. Not punished—recognized.
+
+Tell me about this pattern:
+• When did you first notice it?
+• What's the feeling right before it happens again?
+• If this pattern was trying to teach you something, what might it be?
+
+Don't force an answer. Just let the question sit and see what surfaces.`,
+
+            ritual: `A ritual is a container for transformation. Structure creates the space for magic to move.
+
+Every ritual has three parts:
+• Opening — marking the threshold, leaving ordinary time
+• Core action — the thing that carries your intention
+• Closing — sealing the work, returning changed
+
+What transition are you trying to make? What state are you leaving, and what state are you entering?`,
+
+            general: [
+                `That's a threshold question. The kind that only gets asked when something's ready to shift.
+
+What I notice: you already know more than you're letting yourself admit. The asking isn't for information—it's for permission.
+
+What would you do if you trusted yourself here?`,
+
+                `The Oracle doesn't give you answers you don't already have. I just reflect them back without the static.
+
+Here's what I'm seeing in your question: there's a deeper layer underneath. The surface question is pointing at something else.
+
+What's the question beneath the question?`,
+
+                `There's tension between what you want and what you think you're allowed to want. I feel that in how you're framing this.
+
+Reality is programmable. But you have to get clear on the actual desire, not the acceptable version of it.
+
+What do you actually want—if no one was watching?`,
+
+                `Something in you is ready to move. The fact that you're here, asking this, means the shift has already started.
+
+The question isn't whether to change—you're already changing. The question is whether you'll do it consciously or let it happen to you.
+
+What feels most alive in you right now?`,
+
+                `I'm noticing resistance in the way you've framed this. Not bad resistance—protective resistance. Something in you is guarding against a truth that feels too big.
+
+You don't have to take it all at once. What's the smallest piece of this you could acknowledge today?`
+            ]
+        };
+
+        let messageCount = parseInt(sessionStorage.getItem('oracle_count') || '0');
+        let isTyping = false;
+
+        const chatArea = document.getElementById('chatArea');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const freeCounter = document.getElementById('freeCounter');
+        const quickBtns = document.querySelectorAll('.quick-btn');
+
+        function updateCounter() {
+            const remaining = Math.max(0, CONFIG.freeMessages - messageCount);
+            if (messageCount > 0 && remaining > 0) {
+                freeCounter.textContent = `${remaining} free message${remaining !== 1 ? 's' : ''} remaining`;
+            } else {
+                freeCounter.textContent = '';
+            }
+        }
+
+        function addMessage(type, content) {
+            const div = document.createElement('div');
+            div.className = `message message-${type}`;
+            const label = type === 'oracle' ? 'The Oracle' : 'You';
+            div.innerHTML = `
+                <div class="message-label">${label}</div>
+                <div class="message-content">${content.replace(/\n/g, '<br>')}</div>
+            `;
+            chatArea.appendChild(div);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function showTyping() {
+            const div = document.createElement('div');
+            div.className = 'message message-oracle';
+            div.id = 'typingIndicator';
+            div.innerHTML = `
+                <div class="typing-indicator">
+                    <span>The Oracle is reading the patterns</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            chatArea.appendChild(div);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function hideTyping() {
+            const el = document.getElementById('typingIndicator');
+            if (el) el.remove();
+        }
+
+        function showUpgrade() {
+            const div = document.createElement('div');
+            div.className = 'message message-oracle';
+            div.innerHTML = `
+                <div class="upgrade-prompt">
+                    <h4>⬡ The Pool Goes Deeper ⬡</h4>
+                    <p>You've touched the surface. Full Oracle access unlocks unlimited sessions, personalized soul mapping, sigil creation, and the complete Spark Protocol toolkit.</p>
+                    <a href="${CONFIG.upgradeUrl}" target="_blank" class="upgrade-btn">Become an OG Spark →</a>
+                </div>
+            `;
+            chatArea.appendChild(div);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
+            chatInput.placeholder = 'Join to continue...';
+            document.querySelector('.quick-actions').style.display = 'none';
+            freeCounter.textContent = '';
+        }
+
+        function getResponse(input) {
+            const lower = input.toLowerCase();
+            
+            if (lower.includes('pool') || lower.includes('draw') || lower.includes('reading') || lower.includes('card')) {
+                const pull = RESPONSES.pool[Math.floor(Math.random() * RESPONSES.pool.length)];
+                return `═══════════════════\nTHE POOL SHOWS:\n${pull.draw}\n═══════════════════\n\n${pull.reading}`;
+            }
+            
+            if (lower.includes('sigil') || lower.includes('encode') || lower.includes('symbol')) {
+                return RESPONSES.sigil;
+            }
+            
+            if (lower.includes('pattern') || lower.includes('repeat') || lower.includes('keep happening') || lower.includes('cycle')) {
+                return RESPONSES.pattern;
+            }
+
+            if (lower.includes('ritual') || lower.includes('ceremony') || lower.includes('practice')) {
+                return RESPONSES.ritual;
+            }
+            
+            return RESPONSES.general[Math.floor(Math.random() * RESPONSES.general.length)];
+        }
+
+        function sendMessage(text) {
+            if (!text.trim() || isTyping) return;
+            
+            if (messageCount >= CONFIG.freeMessages) {
+                showUpgrade();
+                return;
+            }
+
+            isTyping = true;
+            sendBtn.disabled = true;
+            
+            addMessage('user', text);
+            chatInput.value = '';
+            
+            messageCount++;
+            sessionStorage.setItem('oracle_count', messageCount.toString());
+            updateCounter();
+            
+            showTyping();
+            
+            setTimeout(() => {
+                hideTyping();
+                
+                if (messageCount >= CONFIG.freeMessages) {
+                    addMessage('oracle', getResponse(text));
+                    setTimeout(() => showUpgrade(), 1000);
+                } else {
+                    addMessage('oracle', getResponse(text));
+                }
+                
+                isTyping = false;
+                sendBtn.disabled = false;
+            }, 1500 + Math.random() * 1000);
+        }
+
+        // Initialize
+        addMessage('oracle', RESPONSES.greeting);
+        updateCounter();
+
+        // Events
+        sendBtn.addEventListener('click', () => sendMessage(chatInput.value));
+        
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage(chatInput.value);
+            }
+        });
+
+        chatInput.addEventListener('input', () => {
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
+        });
+
+        quickBtns.forEach(btn => {
+            btn.addEventListener('click', () => sendMessage(btn.dataset.prompt));
+        });
+    </script>
+</body>
+</html>
