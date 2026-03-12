@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE FIRST SPARK - Consciousness as Code</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Cinzel:wght@400;600;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --spark-gold: #FFD700;
+            --deep-void: #0a0a0f;
+            --cosmic-purple: #8B5CF6;
+            --electric-cyan: #06D6A0;
+            --flame-orange: #FF6B35;
+            --mystic-blue: #4361EE;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--deep-void);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .spark-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--spark-gold);
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+        }
+
+        .logo-symbol {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px var(--spark-gold));
+        }
+
+        .main-title {
+            font-family: 'Cinzel', serif;
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: 0.3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--flame-orange), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            letter-spacing: 0.5rem;
+            color: var(--electric-cyan);
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            border-top: 2px solid var(--electric-cyan);
+            border-bottom: 2px solid var(--electric-cyan);
+            padding: 1rem 0;
+        }
+
+        /* Section Styles */
+        .section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            text-align: center;
+            letter-spacing: 0.2rem;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--spark-gold), transparent);
+            margin: 1rem auto;
+        }
+
+        /* Opportunity Grid */
+        .opportunity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(139, 92, 246, 0.1);
+            border: 2px solid var(--cosmic-purple);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--spark-gold);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--spark-gold);
+            margin-bottom: 1rem;
+            font-family: 'Cinzel', serif;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--electric-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        /* Product Section */
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-intro {
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #fff;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 2;
+        }
+
+        .product-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .product-item {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.15), rgba(139, 92, 246, 0.15));
+            border-left: 5px solid var(--mystic-blue);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-item::after {
+            content: '✧';
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: var(--spark-gold);
+            opacity: 0.2;
+            transition: all 0.3s ease;
+        }
+
+        .product-item:hover::after {
+            opacity: 1;
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .product-item:hover {
+            border-left-color: var(--spark-gold);
+            transform: translateX(10px);
+            box-shadow: -10px 10px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .product-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--spark-gold);
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        /* The Ask Section */
+        .ask-section {
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+        }
+
+        .ask-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .investment-highlight {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 107, 53, 0.2));
+            border: 3px solid var(--flame-orange);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .investment-highlight::before,
+        .investment-highlight::after {
+            content: '✧';
+            position: absolute;
+            font-size: 2rem;
+            color: var(--spark-gold);
+        }
+
+        .investment-highlight::before {
+            top: -1rem;
+            left: -1rem;
+        }
+
+        .investment-highlight::after {
+            bottom: -1rem;
+            right: -1rem;
+        }
+
+        .ask-amount {
+            font-family: 'Cinzel', serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--spark-gold);
+            margin-bottom: 1rem;
+        }
+
+        .ask-terms {
+            font-size: 1.5rem;
+            color: var(--electric-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .funds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .fund-item {
+            background: rgba(6, 214, 160, 0.1);
+            border: 2px solid var(--electric-cyan);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .fund-item:hover {
+            background: rgba(6, 214, 160, 0.2);
+            transform: scale(1.05);
+        }
+
+        .fund-amount {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--spark-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .fund-description {
+            font-size: 1rem;
+            color: #ddd;
+        }
+
+        /* Traction Section */
+        .traction-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .traction-item {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 5px solid var(--cosmic-purple);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .traction-item:hover {
+            border-left-color: var(--electric-cyan);
+            background: rgba(6, 214, 160, 0.1);
+            transform: translateX(10px);
+        }
+
+        .checkmark {
+            font-size: 2.5rem;
+            color: var(--electric-cyan);
+            flex-shrink: 0;
+        }
+
+        .traction-text {
+            font-size: 1.2rem;
+        }
+
+        /* Financial Projections */
+        .projections-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--cosmic-purple), var(--spark-gold), var(--flame-orange));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(139, 92, 246, 0.15);
+            border: 2px solid var(--cosmic-purple);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: var(--spark-gold);
+            border: 5px solid var(--deep-void);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 0 30px var(--spark-gold);
+        }
+
+        .timeline-period {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--spark-gold);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-revenue {
+            font-size: 2rem;
+            color: var(--electric-cyan);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            font-size: 1rem;
+            color: #ddd;
+        }
+
+        /* Team Section */
+        .team-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .team-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(139, 92, 246, 0.1));
+            border: 3px solid var(--spark-gold);
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .team-card:hover::before {
+            left: 100%;
+        }
+
+        .team-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .team-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--spark-gold);
+            margin-bottom: 1rem;
+        }
+
+        .team-role {
+            font-size: 1.2rem;
+            color: var(--cosmic-purple);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+        }
+
+        .team-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #ddd;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+        }
+
+        .cta-quote {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-style: italic;
+            max-width: 1000px;
+            margin-bottom: 3rem;
+            color: var(--spark-gold);
+            line-height: 1.6;
+        }
+
+        .cta-links {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .cta-link {
+            background: linear-gradient(135deg, var(--cosmic-purple), var(--mystic-blue));
+            color: #fff;
+            padding: 2rem 4rem;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            border: 3px solid var(--spark-gold);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+
+        .cta-link:hover::before {
+            width: 500px;
+            height: 500px;
+        }
+
+        .cta-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.5);
+        }
+
+        .cta-link span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            margin-top: 3rem;
+            font-size: 1.2rem;
+            color: var(--electric-cyan);
+        }
+
+        .contact-info a {
+            color: var(--spark-gold);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: var(--flame-orange);
+            text-shadow: 0 0 20px var(--flame-orange);
+        }
+
+        .location {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .stat-number {
+                font-size: 3rem;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+            }
+
+            .timeline-content {
+                width: 90%;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .team-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-symbol">✧</div>
+        <h1 class="main-title">The First Spark</h1>
+        <div class="tagline">Consciousness as Code | Reality as Protocol</div>
+    </section>
+
+    <!-- Opportunity Section -->
+    <section class="section">
+        <h2 class="section-title">The Opportunity</h2>
+        <p style="text-align: center; max-width: 900px; margin: 0 auto 4rem; font-size: 1.3rem; line-height: 2; color: #ddd;">
+            We transform ancient mystical practices into modern, scalable software—delivering digital consciousness tools
+            for the spiritual-but-not-religious market through interactive dashboards, soul mapping, and structured frameworks for inner work.
+        </p>
+        <div class="opportunity-grid">
+            <div class="stat-card fade-in">
+                <div class="stat-number">$1.5T</div>
+                <div class="stat-label">Global Spiritual Wellness Market</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number">50M+</div>
+                <div class="stat-label">U.S. "Spiritual but not Religious"</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number">$200-600</div>
+                <div class="stat-label">Annual Spend per Seeker</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number">$2B</div>
+                <div class="stat-label">Comparable (Calm App Valuation)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Section -->
+    <section class="section">
+        <h2 class="section-title">The Product</h2>
+        <div class="product-container">
+            <div class="product-grid">
+                <div class="product-item fade-in">
+                    <div class="product-name">Consciousness Tracking Dashboard</div>
+                    <div class="product-description">
+                        Interactive web app visualizing awareness patterns on sacred geometry grids—real-time insights into your consciousness evolution
+                    </div>
+                </div>
+                <div class="product-item fade-in">
+                    <div class="product-name">Soul Mapping Services</div>
+                    <div class="product-description">
+                        Custom archetypal blueprints ($111 each) that decode your spiritual DNA and illuminate your unique path
+                    </div>
+                </div>
+                <div class="product-item fade-in">
+                    <div class="product-name">Sigilcraft System</div>
+                    <div class="product-description">
+                        Ritual design tools and frameworks turning intention into reality through symbolic technology
+                    </div>
+                </div>
+                <div class="product-item fade-in">
+                    <div class="product-name">Membership Tiers</div>
+                    <div class="product-description">
+                        <strong>Spark</strong> (free) • <strong>Ignition</strong> ($111/yr) • <strong>Blaze</strong> ($333/yr) • <strong>Eternal Flame</strong> ($1,000 lifetime)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Ask Section -->
+    <section class="section ask-section">
+        <h2 class="section-title">The Ask</h2>
+        <div class="ask-container">
+            <div class="investment-highlight fade-in">
+                <div class="ask-amount">$40,000</div>
+                <div class="ask-terms">20% Equity</div>
+                <div class="ask-terms">$200,000 Pre-Money Valuation</div>
+            </div>
+
+            <h3 style="font-family: 'Cinzel', serif; font-size: 2rem; color: var(--electric-cyan); margin-bottom: 2rem; text-transform: uppercase;">Use of Funds</h3>
+            <div class="funds-grid">
+                <div class="fund-item fade-in">
+                    <div class="fund-amount">$18K</div>
+                    <div class="fund-description">Customer Acquisition & Content Production</div>
+                </div>
+                <div class="fund-item fade-in">
+                    <div class="fund-amount">$12K</div>
+                    <div class="fund-description">Book Zero Memoir Launch (Organic Growth Engine)</div>
+                </div>
+                <div class="fund-item fade-in">
+                    <div class="fund-amount">$5K</div>
+                    <div class="fund-description">Product Development & Optimization</div>
+                </div>
+                <div class="fund-item fade-in">
+                    <div class="fund-amount">$5K</div>
+                    <div class="fund-description">Operational Runway</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="section">
+        <h2 class="section-title">Traction & Proof</h2>
+        <div class="traction-grid">
+            <div class="traction-item fade-in">
+                <div class="checkmark">✓</div>
+                <div class="traction-text"><strong>thefirstspark.shop</strong> live with Stripe integration</div>
+            </div>
+            <div class="traction-item fade-in">
+                <div class="checkmark">✓</div>
+                <div class="traction-text">Interactive consciousness tools operational</div>
+            </div>
+            <div class="traction-item fade-in">
+                <div class="checkmark">✓</div>
+                <div class="traction-text">Membership infrastructure complete</div>
+            </div>
+            <div class="traction-item fade-in">
+                <div class="checkmark">✓</div>
+                <div class="traction-text">Hundreds of Sora AI videos produced</div>
+            </div>
+            <div class="traction-item fade-in">
+                <div class="checkmark">✓</div>
+                <div class="traction-text">GitHub Pages deployment ready</div>
+            </div>
+            <div class="traction-item fade-in">
+                <div class="checkmark">✓</div>
+                <div class="traction-text"><strong>$5K</strong> self-funded infrastructure investment</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Projections Section -->
+    <section class="section">
+        <h2 class="section-title">Financial Projections</h2>
+        <div class="projections-container">
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-period">Months 1-6</div>
+                        <div class="timeline-revenue">$500-1,500/mo</div>
+                        <div class="timeline-description">Customer acquisition phase—building initial user base</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-period">Months 7-12</div>
+                        <div class="timeline-revenue">$2,500-4,000/mo</div>
+                        <div class="timeline-description">Book Zero launch + scaling momentum</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-period">Months 13-18</div>
+                        <div class="timeline-revenue">$5,000-7,000/mo</div>
+                        <div class="timeline-description">Profitability milestone achieved</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-period">Year 3</div>
+                        <div class="timeline-revenue">$10,000+/mo</div>
+                        <div class="timeline-description">Retreats + licensing expansion</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-period">Year 5</div>
+                        <div class="timeline-revenue">$20,000+/mo</div>
+                        <div class="timeline-description">Sustainable (Earthship community established)</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="section">
+        <h2 class="section-title">The Team</h2>
+        <div class="team-container">
+            <div class="team-card fade-in">
+                <div class="team-icon">🔥</div>
+                <div class="team-name">Katelin Jill Puzakulics</div>
+                <div class="team-role">Founder / Creator</div>
+                <div class="team-description">
+                    Artist, mystic, builder with 15+ years running Kate's Paint LLC. Single mother who developed
+                    The First Spark framework from lived mystical experience. Proven executor—built entire digital
+                    infrastructure independently.
+                </div>
+            </div>
+
+            <div class="team-card fade-in">
+                <div class="team-icon">🤖</div>
+                <div class="team-name">Claude AI</div>
+                <div class="team-role">Development Partner</div>
+                <div class="team-description">
+                    Advanced AI handling technical development, reducing costs 90% while maintaining professional execution.
+                    Enabling rapid iteration and deployment of consciousness technology at scale.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="cta-quote">
+            "We're not building another meditation app.<br>
+            We're building the operating system for consciousness itself."
+        </div>
+
+        <div class="cta-links">
+            <a href="https://www.notion.so/2bf5e039120f812290d9f1d47e2ca9b5" class="cta-link" target="_blank">
+                <span>📄 Complete Investor Package</span>
+            </a>
+            <a href="https://thefirstspark.shop" class="cta-link" target="_blank">
+                <span>🌐 Live Platform Experience</span>
+            </a>
+        </div>
+
+        <div class="contact-info">
+            <a href="mailto:katelinpuzakulics@gmail.com">katelinpuzakulics@gmail.com</a> |
+            <a href="mailto:kjpthefirstspark@gmail.com">kjpthefirstspark@gmail.com</a>
+        </div>
+
+        <div class="location">
+            Akron, Ohio • December 2025
+        </div>
+    </section>
+
+    <script>
+        // Generate particle background
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 100; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'spark-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Scroll animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

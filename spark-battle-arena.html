@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark Battle Arena | The First Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --core-black: #0B0B0C;
+            --spark-white: #F7F8FA;
+            --ember-orange: #FF6A3D;
+            --signal-gold: #F3B23A;
+            --mystic-violet: #6B4DF2;
+            --glitch-cyan: #26E4D8;
+            --garden-green: #69C27D;
+            --ash-gray: #22252A;
+            --deep-shadow: #151518;
+            --blood-red: #E63946;
+            
+            --mystic: #6B4DF2;
+            --rebel: #FF6A3D;
+            --builder: #26E4D8;
+            --bridgewalker: #F3B23A;
+            --keeper: #69C27D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--core-black);
+            color: var(--spark-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-brand {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--signal-gold);
+            margin-bottom: 10px;
+        }
+
+        .header-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--ember-orange) 0%, var(--signal-gold) 50%, var(--glitch-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(255, 106, 61, 0.3);
+        }
+
+        .header-sub {
+            font-size: 1rem;
+            color: rgba(247, 248, 250, 0.5);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /* Phase indicator */
+        .phase-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .phase-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--ash-gray);
+            transition: all 0.3s ease;
+        }
+
+        .phase-dot.active {
+            background: var(--signal-gold);
+            box-shadow: 0 0 15px var(--signal-gold);
+        }
+
+        .phase-dot.complete {
+            background: var(--garden-green);
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            animation: screenFade 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes screenFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Entry Screen */
+        .entry-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .entry-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .vs-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 100px;
+        }
+
+        .vs-text {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ember-orange);
+            text-shadow: 0 0 30px var(--ember-orange);
+            animation: vsPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes vsPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @media (max-width: 900px) {
+            .vs-divider {
+                padding: 20px 0;
+            }
+        }
+
+        .card-entry {
+            background: var(--deep-shadow);
+            border: 1px solid var(--ash-gray);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .card-entry-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .player-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--glitch-cyan);
+            margin-bottom: 5px;
+        }
+
+        .player-label.p2 {
+            color: var(--ember-orange);
+        }
+
+        .entry-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--signal-gold);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            color: rgba(247, 248, 250, 0.7);
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--core-black);
+            border: 1px solid var(--ash-gray);
+            border-radius: 4px;
+            color: var(--spark-white);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--mystic-violet);
+            box-shadow: 0 0 15px rgba(107, 77, 242, 0.2);
+        }
+
+        select.text-input {
+            cursor: pointer;
+        }
+
+        /* Stat inputs */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .stat-input-group {
+            text-align: center;
+        }
+
+        .stat-input-group label {
+            display: block;
+            font-size: 0.65rem;
+            color: rgba(247, 248, 250, 0.5);
+            margin-bottom: 4px;
+            letter-spacing: 0.1em;
+        }
+
+        .stat-input {
+            width: 100%;
+            padding: 8px 4px;
+            background: var(--core-black);
+            border: 1px solid var(--ash-gray);
+            border-radius: 4px;
+            color: var(--glitch-cyan);
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .stat-input:focus {
+            outline: none;
+            border-color: var(--glitch-cyan);
+        }
+
+        /* Quick fill buttons */
+        .quick-fill {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--ash-gray);
+            border-radius: 4px;
+            color: rgba(247, 248, 250, 0.6);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--signal-gold);
+            color: var(--signal-gold);
+        }
+
+        /* Battle button */
+        .battle-btn-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .battle-btn {
+            padding: 20px 60px;
+            background: linear-gradient(135deg, var(--ember-orange), var(--blood-red));
+            border: none;
+            border-radius: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--spark-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .battle-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: btnShine 3s infinite;
+        }
+
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .battle-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(230, 57, 70, 0.4);
+        }
+
+        .battle-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Stance Selection Screen */
+        .stance-screen {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stance-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stance-player {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: var(--glitch-cyan);
+        }
+
+        .stance-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--signal-gold);
+            margin: 10px 0;
+        }
+
+        .stance-prompt {
+            color: rgba(247, 248, 250, 0.6);
+            font-size: 1rem;
+        }
+
+        .stance-section {
+            background: var(--deep-shadow);
+            border: 1px solid var(--ash-gray);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .stance-section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--ember-orange);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stance-section-title.defend {
+            color: var(--glitch-cyan);
+        }
+
+        .stat-choice-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .stat-choice {
+            padding: 15px 10px;
+            background: var(--core-black);
+            border: 2px solid var(--ash-gray);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stat-choice:hover {
+            border-color: var(--mystic-violet);
+            background: rgba(107, 77, 242, 0.1);
+        }
+
+        .stat-choice.selected {
+            border-color: var(--signal-gold);
+            background: rgba(243, 178, 58, 0.15);
+        }
+
+        .stat-choice.attack.selected {
+            border-color: var(--ember-orange);
+            background: rgba(255, 106, 61, 0.15);
+        }
+
+        .stat-choice.defend.selected {
+            border-color: var(--glitch-cyan);
+            background: rgba(38, 228, 216, 0.15);
+        }
+
+        .stat-choice-name {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            color: rgba(247, 248, 250, 0.6);
+            margin-bottom: 5px;
+        }
+
+        .stat-choice-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.3rem;
+            color: var(--spark-white);
+        }
+
+        .confirm-stance-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--mystic-violet), var(--glitch-cyan));
+            border: none;
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--core-black);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .confirm-stance-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 77, 242, 0.3);
+        }
+
+        .confirm-stance-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Collision Screen */
+        .collision-screen {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .collision-animation {
+            position: relative;
+            height: 200px;
+            margin-bottom: 40px;
+        }
+
+        .collision-card {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 160px;
+            background: var(--deep-shadow);
+            border: 2px solid var(--signal-gold);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .collision-card.left {
+            left: 20%;
+            animation: collideLeft 2s ease-in-out infinite;
+        }
+
+        .collision-card.right {
+            right: 20%;
+            animation: collideRight 2s ease-in-out infinite;
+        }
+
+        @keyframes collideLeft {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(50px); }
+        }
+
+        @keyframes collideRight {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-50px); }
+        }
+
+        .collision-spark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            animation: sparkCollide 1s ease-in-out infinite;
+        }
+
+        @keyframes sparkCollide {
+            0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .collision-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--signal-gold);
+            letter-spacing: 0.2em;
+            animation: textPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Results Screen */
+        .results-screen {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.4em;
+            color: var(--glitch-cyan);
+            margin-bottom: 10px;
+        }
+
+        .result-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 10px;
+        }
+
+        .result-title.victory {
+            color: var(--signal-gold);
+            text-shadow: 0 0 30px var(--signal-gold);
+        }
+
+        .result-title.defeat {
+            color: var(--ember-orange);
+        }
+
+        .result-title.draw {
+            color: var(--mystic-violet);
+        }
+
+        .result-winner {
+            font-size: 1.2rem;
+            color: rgba(247, 248, 250, 0.7);
+        }
+
+        /* Battle breakdown */
+        .battle-breakdown {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            background: var(--deep-shadow);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .battle-breakdown {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .breakdown-card {
+            text-align: center;
+        }
+
+        .breakdown-sigil {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .breakdown-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--spark-white);
+            margin-bottom: 5px;
+        }
+
+        .breakdown-archetype {
+            font-size: 0.8rem;
+            color: var(--signal-gold);
+            letter-spacing: 0.15em;
+            margin-bottom: 15px;
+        }
+
+        .breakdown-action {
+            padding: 10px 15px;
+            background: var(--core-black);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .action-label {
+            font-size: 0.65rem;
+            color: rgba(247, 248, 250, 0.5);
+            letter-spacing: 0.1em;
+        }
+
+        .action-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: var(--glitch-cyan);
+        }
+
+        .action-value.attack { color: var(--ember-orange); }
+        .action-value.defend { color: var(--glitch-cyan); }
+
+        .breakdown-vs {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--ember-orange);
+        }
+
+        /* Narrative */
+        .narrative-box {
+            background: linear-gradient(135deg, var(--deep-shadow), var(--core-black));
+            border: 1px solid var(--ash-gray);
+            border-left: 3px solid var(--mystic-violet);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .narrative-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--mystic-violet);
+            margin-bottom: 15px;
+        }
+
+        .narrative-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(247, 248, 250, 0.85);
+            font-style: italic;
+        }
+
+        /* Artifact earned */
+        .artifact-box {
+            background: linear-gradient(135deg, rgba(243, 178, 58, 0.1), rgba(107, 77, 242, 0.1));
+            border: 1px solid var(--signal-gold);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .artifact-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(243, 178, 58, 0.1) 0%, transparent 70%);
+            animation: artifactGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes artifactGlow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .artifact-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--signal-gold);
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .artifact-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .artifact-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--spark-white);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .artifact-desc {
+            font-size: 0.95rem;
+            color: rgba(247, 248, 250, 0.6);
+            font-style: italic;
+            position: relative;
+        }
+
+        /* Reflection prompts */
+        .reflection-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .reflection-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reflection-card {
+            background: var(--deep-shadow);
+            border: 1px solid var(--ash-gray);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .reflection-player {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--glitch-cyan);
+            margin-bottom: 10px;
+        }
+
+        .reflection-prompt {
+            font-size: 0.95rem;
+            color: rgba(247, 248, 250, 0.7);
+            line-height: 1.6;
+        }
+
+        /* XP display */
+        .xp-display {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .xp-card {
+            text-align: center;
+            padding: 20px 30px;
+            background: var(--deep-shadow);
+            border-radius: 8px;
+        }
+
+        .xp-name {
+            font-size: 0.85rem;
+            color: rgba(247, 248, 250, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .xp-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            color: var(--garden-green);
+        }
+
+        .xp-label {
+            font-size: 0.7rem;
+            color: var(--garden-green);
+            letter-spacing: 0.1em;
+        }
+
+        /* Action buttons */
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .result-btn {
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .result-btn.primary {
+            background: linear-gradient(135deg, var(--ember-orange), var(--signal-gold));
+            border: none;
+            color: var(--core-black);
+        }
+
+        .result-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--mystic-violet);
+            color: var(--mystic-violet);
+        }
+
+        .result-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* CTA box */
+        .cta-box {
+            background: var(--deep-shadow);
+            border: 1px solid var(--ash-gray);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .cta-box h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--signal-gold);
+            margin-bottom: 10px;
+        }
+
+        .cta-box p {
+            color: rgba(247, 248, 250, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .cta-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--mystic-violet);
+            color: var(--spark-white);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-link:hover {
+            background: #7B5DF2;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .stat-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .stat-choice-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .collision-card {
+                width: 80px;
+                height: 110px;
+                font-size: 2rem;
+            }
+
+            .collision-card.left { left: 10%; }
+            .collision-card.right { right: 10%; }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="bg-canvas" id="bgCanvas"></canvas>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">✦ THE FIRST SPARK ✦</div>
+            <h1 class="header-title">Battle Arena</h1>
+            <p class="header-sub">Two Cards Enter. Neither Leaves Unchanged.</p>
+        </header>
+
+        <!-- Phase indicator -->
+        <div class="phase-indicator">
+            <div class="phase-dot active" id="phase1"></div>
+            <div class="phase-dot" id="phase2"></div>
+            <div class="phase-dot" id="phase3"></div>
+            <div class="phase-dot" id="phase4"></div>
+        </div>
+
+        <!-- Screen 1: Card Entry -->
+        <div class="screen active" id="entryScreen">
+            <div class="entry-grid">
+                <!-- Player 1 -->
+                <div class="card-entry">
+                    <div class="card-entry-header">
+                        <div class="player-label">PLAYER ONE</div>
+                        <h2 class="entry-title">Enter Your Card</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Spark Name</label>
+                        <input type="text" class="text-input" id="p1Name" placeholder="Your soul name...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Archetype</label>
+                        <select class="text-input" id="p1Archetype">
+                            <option value="mystic">Mystic</option>
+                            <option value="rebel">Rebel</option>
+                            <option value="builder">Builder</option>
+                            <option value="bridgewalker">Bridgewalker</option>
+                            <option value="keeper">Keeper</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Stats (1-10)</label>
+                        <div class="stat-grid">
+                            <div class="stat-input-group">
+                                <label>INS</label>
+                                <input type="number" class="stat-input" id="p1Insight" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>GRT</label>
+                                <input type="number" class="stat-input" id="p1Grit" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>FLW</label>
+                                <input type="number" class="stat-input" id="p1Flow" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>SHD</label>
+                                <input type="number" class="stat-input" id="p1Shadow" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>LGT</label>
+                                <input type="number" class="stat-input" id="p1Light" min="1" max="10" value="5">
+                            </div>
+                        </div>
+                        <div class="quick-fill">
+                            <button class="quick-btn" onclick="randomStats('p1')">Random</button>
+                            <button class="quick-btn" onclick="balancedStats('p1')">Balanced</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VS -->
+                <div class="vs-divider">
+                    <span class="vs-text">VS</span>
+                </div>
+
+                <!-- Player 2 -->
+                <div class="card-entry">
+                    <div class="card-entry-header">
+                        <div class="player-label p2">PLAYER TWO</div>
+                        <h2 class="entry-title">Enter Opponent</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Spark Name</label>
+                        <input type="text" class="text-input" id="p2Name" placeholder="Opponent's soul name...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Archetype</label>
+                        <select class="text-input" id="p2Archetype">
+                            <option value="rebel">Rebel</option>
+                            <option value="mystic">Mystic</option>
+                            <option value="builder">Builder</option>
+                            <option value="bridgewalker">Bridgewalker</option>
+                            <option value="keeper">Keeper</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Stats (1-10)</label>
+                        <div class="stat-grid">
+                            <div class="stat-input-group">
+                                <label>INS</label>
+                                <input type="number" class="stat-input" id="p2Insight" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>GRT</label>
+                                <input type="number" class="stat-input" id="p2Grit" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>FLW</label>
+                                <input type="number" class="stat-input" id="p2Flow" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>SHD</label>
+                                <input type="number" class="stat-input" id="p2Shadow" min="1" max="10" value="5">
+                            </div>
+                            <div class="stat-input-group">
+                                <label>LGT</label>
+                                <input type="number" class="stat-input" id="p2Light" min="1" max="10" value="5">
+                            </div>
+                        </div>
+                        <div class="quick-fill">
+                            <button class="quick-btn" onclick="randomStats('p2')">Random</button>
+                            <button class="quick-btn" onclick="balancedStats('p2')">Balanced</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="battle-btn-container">
+                <button class="battle-btn" onclick="startBattle()">⚔️ Enter the Arena ⚔️</button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Player 1 Stance -->
+        <div class="screen" id="stance1Screen">
+            <div class="stance-screen">
+                <div class="stance-header">
+                    <div class="stance-player">PLAYER ONE</div>
+                    <h2 class="stance-name" id="stance1Name">Choose Your Stance</h2>
+                    <p class="stance-prompt">Select which stat to attack with, and which to defend with.</p>
+                </div>
+
+                <div class="stance-section">
+                    <div class="stance-section-title">⚔️ ATTACK WITH</div>
+                    <div class="stat-choice-grid" id="p1AttackChoice">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <div class="stance-section">
+                    <div class="stance-section-title defend">🛡️ DEFEND WITH</div>
+                    <div class="stat-choice-grid" id="p1DefendChoice">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <button class="confirm-stance-btn" id="confirmP1Stance" onclick="confirmStance(1)" disabled>Lock In Stance</button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Player 2 Stance -->
+        <div class="screen" id="stance2Screen">
+            <div class="stance-screen">
+                <div class="stance-header">
+                    <div class="stance-player" style="color: var(--ember-orange)">PLAYER TWO</div>
+                    <h2 class="stance-name" id="stance2Name">Choose Your Stance</h2>
+                    <p class="stance-prompt">Select which stat to attack with, and which to defend with.</p>
+                </div>
+
+                <div class="stance-section">
+                    <div class="stance-section-title">⚔️ ATTACK WITH</div>
+                    <div class="stat-choice-grid" id="p2AttackChoice">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <div class="stance-section">
+                    <div class="stance-section-title defend">🛡️ DEFEND WITH</div>
+                    <div class="stat-choice-grid" id="p2DefendChoice">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <button class="confirm-stance-btn" id="confirmP2Stance" onclick="confirmStance(2)" disabled>Lock In Stance</button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Collision Animation -->
+        <div class="screen" id="collisionScreen">
+            <div class="collision-screen">
+                <div class="collision-animation">
+                    <div class="collision-card left" id="collisionLeft">👁</div>
+                    <div class="collision-spark">✦</div>
+                    <div class="collision-card right" id="collisionRight">🔥</div>
+                </div>
+                <p class="collision-text">Souls Colliding...</p>
+            </div>
+        </div>
+
+        <!-- Screen 5: Results -->
+        <div class="screen" id="resultsScreen">
+            <div class="results-screen">
+                <div class="results-header">
+                    <div class="result-label">BATTLE COMPLETE</div>
+                    <h2 class="result-title" id="resultTitle">Victory</h2>
+                    <p class="result-winner" id="resultWinner">The Mystic stands triumphant</p>
+                </div>
+
+                <div class="battle-breakdown">
+                    <div class="breakdown-card">
+                        <div class="breakdown-sigil" id="breakdownSigil1">👁</div>
+                        <div class="breakdown-name" id="breakdownName1">Player 1</div>
+                        <div class="breakdown-archetype" id="breakdownArch1">The Mystic</div>
+                        <div class="breakdown-action">
+                            <div class="action-label">ATTACKED WITH</div>
+                            <div class="action-value attack" id="breakdownAtk1">Insight (8)</div>
+                        </div>
+                        <div class="breakdown-action">
+                            <div class="action-label">DEFENDED WITH</div>
+                            <div class="action-value defend" id="breakdownDef1">Grit (6)</div>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-vs">⚔️</div>
+
+                    <div class="breakdown-card">
+                        <div class="breakdown-sigil" id="breakdownSigil2">🔥</div>
+                        <div class="breakdown-name" id="breakdownName2">Player 2</div>
+                        <div class="breakdown-archetype" id="breakdownArch2">The Rebel</div>
+                        <div class="breakdown-action">
+                            <div class="action-label">ATTACKED WITH</div>
+                            <div class="action-value attack" id="breakdownAtk2">Shadow (7)</div>
+                        </div>
+                        <div class="breakdown-action">
+                            <div class="action-label">DEFENDED WITH</div>
+                            <div class="action-value defend" id="breakdownDef2">Flow (5)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="narrative-box">
+                    <div class="narrative-label">THE COLLISION</div>
+                    <p class="narrative-text" id="narrativeText">
+                        The battle narrative will appear here...
+                    </p>
+                </div>
+
+                <div class="artifact-box">
+                    <div class="artifact-label">✦ COLLISION ARTIFACT EARNED ✦</div>
+                    <div class="artifact-icon" id="artifactIcon">🔮</div>
+                    <div class="artifact-name" id="artifactName">The Cracked Mirror</div>
+                    <div class="artifact-desc" id="artifactDesc">"Truth told to someone who didn't ask"</div>
+                </div>
+
+                <div class="reflection-box">
+                    <div class="reflection-card">
+                        <div class="reflection-player">REFLECTION FOR <span id="reflect1Name">PLAYER 1</span></div>
+                        <p class="reflection-prompt" id="reflect1Text">Your reflection prompt will appear here...</p>
+                    </div>
+                    <div class="reflection-card">
+                        <div class="reflection-player" style="color: var(--ember-orange)">REFLECTION FOR <span id="reflect2Name">PLAYER 2</span></div>
+                        <p class="reflection-prompt" id="reflect2Text">Your reflection prompt will appear here...</p>
+                    </div>
+                </div>
+
+                <div class="xp-display">
+                    <div class="xp-card">
+                        <div class="xp-name" id="xp1Name">Player 1</div>
+                        <div class="xp-value" id="xp1Value">+25</div>
+                        <div class="xp-label">XP EARNED</div>
+                    </div>
+                    <div class="xp-card">
+                        <div class="xp-name" id="xp2Name">Player 2</div>
+                        <div class="xp-value" id="xp2Value">+15</div>
+                        <div class="xp-label">XP EARNED</div>
+                    </div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="result-btn primary" onclick="battleAgain()">Battle Again</button>
+                    <button class="result-btn secondary" onclick="shareResult()">Share Result</button>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Want Power-Up Cards?</h3>
+                    <p>Boost your stats, unlock special moves, and dominate the arena with collectible Power-Up cards.</p>
+                    <a href="https://thefirstspark.shop" class="cta-link" target="_blank">Visit the Forge →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Background animation
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Particle system
+        const particles = [];
+        for (let i = 0; i < 80; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.5,
+                speedY: (Math.random() - 0.5) * 0.5,
+                opacity: Math.random() * 0.4 + 0.1,
+                color: Math.random() > 0.5 ? '#FF6A3D' : '#F3B23A'
+            });
+        }
+
+        function animateBg() {
+            ctx.fillStyle = 'rgba(11, 11, 12, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color.replace(')', `, ${p.opacity})`).replace('rgb', 'rgba').replace('#FF6A3D', 'rgba(255,106,61').replace('#F3B23A', 'rgba(243,178,58');
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // Game state
+        let player1 = {};
+        let player2 = {};
+        let p1Stance = { attack: null, defend: null };
+        let p2Stance = { attack: null, defend: null };
+
+        const archetypeData = {
+            mystic: { sigil: '👁', title: 'The Mystic', color: '#6B4DF2' },
+            rebel: { sigil: '🔥', title: 'The Rebel', color: '#FF6A3D' },
+            builder: { sigil: '⚙️', title: 'The Builder', color: '#26E4D8' },
+            bridgewalker: { sigil: '🌉', title: 'The Bridgewalker', color: '#F3B23A' },
+            keeper: { sigil: '📜', title: 'The Keeper', color: '#69C27D' }
+        };
+
+        const statNames = {
+            insight: 'Insight',
+            grit: 'Grit',
+            flow: 'Flow',
+            shadow: 'Shadow',
+            light: 'Light'
+        };
+
+        // Helper functions
+        function randomStats(player) {
+            const stats = ['Insight', 'Grit', 'Flow', 'Shadow', 'Light'];
+            stats.forEach(stat => {
+                document.getElementById(`${player}${stat}`).value = Math.floor(Math.random() * 10) + 1;
+            });
+        }
+
+        function balancedStats(player) {
+            const stats = ['Insight', 'Grit', 'Flow', 'Shadow', 'Light'];
+            stats.forEach(stat => {
+                document.getElementById(`${player}${stat}`).value = 5;
+            });
+        }
+
+        function updatePhase(phase) {
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById(`phase${i}`);
+                dot.classList.remove('active', 'complete');
+                if (i < phase) dot.classList.add('complete');
+                if (i === phase) dot.classList.add('active');
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Start battle
+        function startBattle() {
+            // Collect player data
+            player1 = {
+                name: document.getElementById('p1Name').value || 'Unknown Spark',
+                archetype: document.getElementById('p1Archetype').value,
+                stats: {
+                    insight: parseInt(document.getElementById('p1Insight').value) || 5,
+                    grit: parseInt(document.getElementById('p1Grit').value) || 5,
+                    flow: parseInt(document.getElementById('p1Flow').value) || 5,
+                    shadow: parseInt(document.getElementById('p1Shadow').value) || 5,
+                    light: parseInt(document.getElementById('p1Light').value) || 5
+                }
+            };
+
+            player2 = {
+                name: document.getElementById('p2Name').value || 'Unknown Spark',
+                archetype: document.getElementById('p2Archetype').value,
+                stats: {
+                    insight: parseInt(document.getElementById('p2Insight').value) || 5,
+                    grit: parseInt(document.getElementById('p2Grit').value) || 5,
+                    flow: parseInt(document.getElementById('p2Flow').value) || 5,
+                    shadow: parseInt(document.getElementById('p2Shadow').value) || 5,
+                    light: parseInt(document.getElementById('p2Light').value) || 5
+                }
+            };
+
+            // Setup stance screens
+            setupStanceScreen(1, player1);
+            setupStanceScreen(2, player2);
+
+            updatePhase(2);
+            showScreen('stance1Screen');
+        }
+
+        function setupStanceScreen(playerNum, player) {
+            document.getElementById(`stance${playerNum}Name`).textContent = player.name;
+
+            const attackGrid = document.getElementById(`p${playerNum}AttackChoice`);
+            const defendGrid = document.getElementById(`p${playerNum}DefendChoice`);
+
+            attackGrid.innerHTML = '';
+            defendGrid.innerHTML = '';
+
+            Object.entries(player.stats).forEach(([stat, value]) => {
+                // Attack choice
+                const atkDiv = document.createElement('div');
+                atkDiv.className = 'stat-choice attack';
+                atkDiv.dataset.stat = stat;
+                atkDiv.innerHTML = `
+                    <div class="stat-choice-name">${statNames[stat]}</div>
+                    <div class="stat-choice-value">${value}</div>
+                `;
+                atkDiv.onclick = () => selectStat(playerNum, 'attack', stat, atkDiv);
+                attackGrid.appendChild(atkDiv);
+
+                // Defend choice
+                const defDiv = document.createElement('div');
+                defDiv.className = 'stat-choice defend';
+                defDiv.dataset.stat = stat;
+                defDiv.innerHTML = `
+                    <div class="stat-choice-name">${statNames[stat]}</div>
+                    <div class="stat-choice-value">${value}</div>
+                `;
+                defDiv.onclick = () => selectStat(playerNum, 'defend', stat, defDiv);
+                defendGrid.appendChild(defDiv);
+            });
+        }
+
+        function selectStat(playerNum, type, stat, element) {
+            const stance = playerNum === 1 ? p1Stance : p2Stance;
+            const gridId = `p${playerNum}${type.charAt(0).toUpperCase() + type.slice(1)}Choice`;
+
+            // Clear previous selection in this grid
+            document.querySelectorAll(`#${gridId} .stat-choice`).forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Select new
+            element.classList.add('selected');
+            stance[type] = stat;
+
+            // Check if both selected
+            const confirmBtn = document.getElementById(`confirmP${playerNum}Stance`);
+            if (stance.attack && stance.defend) {
+                confirmBtn.disabled = false;
+            }
+        }
+
+        function confirmStance(playerNum) {
+            if (playerNum === 1) {
+                updatePhase(3);
+                showScreen('stance2Screen');
+            } else {
+                updatePhase(4);
+                showScreen('collisionScreen');
+
+                // Update collision sigils
+                document.getElementById('collisionLeft').textContent = archetypeData[player1.archetype].sigil;
+                document.getElementById('collisionRight').textContent = archetypeData[player2.archetype].sigil;
+
+                // Run collision after animation
+                setTimeout(resolveCollision, 3000);
+            }
+        }
+
+        function resolveCollision() {
+            // Calculate battle outcome
+            const p1AtkPower = player1.stats[p1Stance.attack] + Math.floor(Math.random() * 3) + 1;
+            const p1DefPower = player1.stats[p1Stance.defend] + Math.floor(Math.random() * 3) + 1;
+            const p2AtkPower = player2.stats[p2Stance.attack] + Math.floor(Math.random() * 3) + 1;
+            const p2DefPower = player2.stats[p2Stance.defend] + Math.floor(Math.random() * 3) + 1;
+
+            // P1 attacks P2's defense, P2 attacks P1's defense
+            const p1Hit = p1AtkPower > p2DefPower;
+            const p2Hit = p2AtkPower > p1DefPower;
+
+            let winner, resultClass, resultText;
+            let p1XP, p2XP;
+
+            if (p1Hit && !p2Hit) {
+                winner = player1.name;
+                resultClass = 'victory';
+                resultText = `${player1.name} stands triumphant`;
+                p1XP = 25;
+                p2XP = 10;
+            } else if (p2Hit && !p1Hit) {
+                winner = player2.name;
+                resultClass = 'defeat';
+                resultText = `${player2.name} claims victory`;
+                p1XP = 10;
+                p2XP = 25;
+            } else if (p1Hit && p2Hit) {
+                winner = 'Both';
+                resultClass = 'draw';
+                resultText = 'Mutual destruction. Both struck true.';
+                p1XP = 20;
+                p2XP = 20;
+            } else {
+                winner = 'Neither';
+                resultClass = 'draw';
+                resultText = 'A stalemate. Both defenses held.';
+                p1XP = 15;
+                p2XP = 15;
+            }
+
+            // Generate narrative
+            const narrative = generateNarrative(player1, player2, p1Stance, p2Stance, p1Hit, p2Hit);
+
+            // Generate artifact
+            const artifact = generateArtifact(player1.archetype, player2.archetype);
+
+            // Generate reflections
+            const reflect1 = generateReflection(player1, p1Stance, p1Hit, p2Hit);
+            const reflect2 = generateReflection(player2, p2Stance, p2Hit, p1Hit);
+
+            // Populate results screen
+            document.getElementById('resultTitle').textContent = resultClass === 'victory' ? 'Victory' : resultClass === 'defeat' ? 'Defeat' : 'Draw';
+            document.getElementById('resultTitle').className = `result-title ${resultClass}`;
+            document.getElementById('resultWinner').textContent = resultText;
+
+            // Breakdown
+            document.getElementById('breakdownSigil1').textContent = archetypeData[player1.archetype].sigil;
+            document.getElementById('breakdownName1').textContent = player1.name;
+            document.getElementById('breakdownArch1').textContent = archetypeData[player1.archetype].title;
+            document.getElementById('breakdownAtk1').textContent = `${statNames[p1Stance.attack]} (${player1.stats[p1Stance.attack]})`;
+            document.getElementById('breakdownDef1').textContent = `${statNames[p1Stance.defend]} (${player1.stats[p1Stance.defend]})`;
+
+            document.getElementById('breakdownSigil2').textContent = archetypeData[player2.archetype].sigil;
+            document.getElementById('breakdownName2').textContent = player2.name;
+            document.getElementById('breakdownArch2').textContent = archetypeData[player2.archetype].title;
+            document.getElementById('breakdownAtk2').textContent = `${statNames[p2Stance.attack]} (${player2.stats[p2Stance.attack]})`;
+            document.getElementById('breakdownDef2').textContent = `${statNames[p2Stance.defend]} (${player2.stats[p2Stance.defend]})`;
+
+            // Narrative
+            document.getElementById('narrativeText').textContent = narrative;
+
+            // Artifact
+            document.getElementById('artifactIcon').textContent = artifact.icon;
+            document.getElementById('artifactName').textContent = artifact.name;
+            document.getElementById('artifactDesc').textContent = `"${artifact.desc}"`;
+
+            // Reflections
+            document.getElementById('reflect1Name').textContent = player1.name;
+            document.getElementById('reflect1Text').textContent = reflect1;
+            document.getElementById('reflect2Name').textContent = player2.name;
+            document.getElementById('reflect2Text').textContent = reflect2;
+
+            // XP
+            document.getElementById('xp1Name').textContent = player1.name;
+            document.getElementById('xp1Value').textContent = `+${p1XP}`;
+            document.getElementById('xp2Name').textContent = player2.name;
+            document.getElementById('xp2Value').textContent = `+${p2XP}`;
+
+            showScreen('resultsScreen');
+        }
+
+        function generateNarrative(p1, p2, s1, s2, p1Hit, p2Hit) {
+            const arch1 = archetypeData[p1.archetype].title;
+            const arch2 = archetypeData[p2.archetype].title;
+
+            const openings = [
+                `${arch1} and ${arch2} face each other across the void.`,
+                `The arena crackles as ${arch1} locks eyes with ${arch2}.`,
+                `Two sparks collide in the darkness.`
+            ];
+
+            const attacks = {
+                insight: ['pierced with clarity', 'saw through the veil', 'illuminated the hidden'],
+                grit: ['struck with raw endurance', 'hammered relentlessly', 'refused to yield'],
+                flow: ['moved like water around', 'danced through defenses', 'flowed past resistance'],
+                shadow: ['attacked from the darkness', 'struck at buried wounds', 'weaponized the unseen'],
+                light: ['blazed with pure intention', 'burned away pretense', 'shone too bright to face']
+            };
+
+            const defenses = {
+                insight: ['saw it coming', 'anticipated the strike', 'read the intent'],
+                grit: ['absorbed the blow', 'stood firm', 'endured the impact'],
+                flow: ['redirected the energy', 'bent but didn\'t break', 'let it pass through'],
+                shadow: ['hid in the darkness', 'disappeared from sight', 'became untouchable'],
+                light: ['reflected the attack', 'blazed too bright to hit', 'purified the strike']
+            };
+
+            let middle = '';
+            
+            if (p1Hit) {
+                middle += `${p1.name} ${attacks[s1.attack][Math.floor(Math.random() * 3)]}. `;
+                middle += `${p2.name}'s ${statNames[s2.defend]} couldn't hold. `;
+            } else {
+                middle += `${p1.name} struck with ${statNames[s1.attack]}, but ${p2.name} ${defenses[s2.defend][Math.floor(Math.random() * 3)]}. `;
+            }
+
+            if (p2Hit) {
+                middle += `${p2.name} ${attacks[s2.attack][Math.floor(Math.random() * 3)]}. `;
+                middle += `${p1.name}'s ${statNames[s1.defend]} faltered. `;
+            } else {
+                middle += `${p2.name}'s ${statNames[s2.attack]} attack met ${p1.name}'s ${statNames[s1.defend]}, which ${defenses[s1.defend][Math.floor(Math.random() * 3)]}. `;
+            }
+
+            const endings = {
+                p1Win: [`${p1.name} stands alone in the light.`, `The ${arch1} proved stronger today.`, `${p2.name} will remember this lesson.`],
+                p2Win: [`${p2.name} claims the victory.`, `The ${arch2} prevails.`, `${p1.name} retreats to recover.`],
+                draw: [`Neither could break the other.`, `Both walk away changed.`, `The arena remembers this collision.`]
+            };
+
+            let ending;
+            if (p1Hit && !p2Hit) ending = endings.p1Win[Math.floor(Math.random() * 3)];
+            else if (p2Hit && !p1Hit) ending = endings.p2Win[Math.floor(Math.random() * 3)];
+            else ending = endings.draw[Math.floor(Math.random() * 3)];
+
+            return `${openings[Math.floor(Math.random() * 3)]} ${middle}${ending}`;
+        }
+
+        function generateArtifact(arch1, arch2) {
+            const key = [arch1, arch2].sort().join('-');
+
+            const artifacts = {
+                'mystic-rebel': { icon: '🔮', name: 'The Cracked Mirror', desc: 'Truth told to someone who didn\'t ask' },
+                'mystic-builder': { icon: '📐', name: 'The Blueprint of Seeing', desc: 'Plans drawn from pure vision' },
+                'mystic-bridgewalker': { icon: '🌙', name: 'The Third Eye Bridge', desc: 'A path only the lost can walk' },
+                'mystic-keeper': { icon: '📖', name: 'The Book of Unwritten Truths', desc: 'Knowledge preserved before it was known' },
+                'rebel-builder': { icon: '🔨', name: 'The Forge of Destruction', desc: 'Breaking to rebuild stronger' },
+                'rebel-bridgewalker': { icon: '⚡', name: 'The Spark of Chaos', desc: 'Connection through disruption' },
+                'rebel-keeper': { icon: '🔥', name: 'The Burning Archive', desc: 'Some things must be destroyed to be remembered' },
+                'builder-bridgewalker': { icon: '🌉', name: 'The Impossible Bridge', desc: 'Structure that connects the unconnectable' },
+                'builder-keeper': { icon: '🏛️', name: 'The Eternal Foundation', desc: 'Built to outlast its builders' },
+                'bridgewalker-keeper': { icon: '🗝️', name: 'The Key Between Worlds', desc: 'Memory that opens doors' },
+                'mystic-mystic': { icon: '👁', name: 'The Doubled Vision', desc: 'When seers see each other' },
+                'rebel-rebel': { icon: '💥', name: 'The Matched Flame', desc: 'Destruction recognizing itself' },
+                'builder-builder': { icon: '⚙️', name: 'The Infinite Engine', desc: 'Creation that creates creators' },
+                'bridgewalker-bridgewalker': { icon: '∞', name: 'The Endless Loop', desc: 'Bridges that lead to more bridges' },
+                'keeper-keeper': { icon: '📜', name: 'The Memory of Memory', desc: 'Remembering what was forgotten' }
+            };
+
+            return artifacts[key] || { icon: '✦', name: 'The Unknown Artifact', desc: 'Born from an unexpected collision' };
+        }
+
+        function generateReflection(player, stance, theyHit, gotHit) {
+            const reflections = {
+                attackHit: {
+                    insight: 'Your clarity cut through. What truth did you reveal that needed seeing?',
+                    grit: 'Your endurance paid off. What helped you push through?',
+                    flow: 'Your adaptability won. Where else in life could you flow more?',
+                    shadow: 'Your darkness struck true. What shadow work remains?',
+                    light: 'Your light blazed through. What do you illuminate for others?'
+                },
+                attackMissed: {
+                    insight: 'Your vision was deflected. What are you not seeing clearly?',
+                    grit: 'Your strength wasn\'t enough. Where do you need to build resilience?',
+                    flow: 'Your movement was blocked. Where in life are you stuck?',
+                    shadow: 'Your shadow was exposed. What are you still hiding from?',
+                    light: 'Your light was dimmed. What dims your spark?'
+                },
+                defendHeld: {
+                    insight: 'You saw the attack coming. Trust your perception more.',
+                    grit: 'You stood firm. Your foundation is stronger than you think.',
+                    flow: 'You redirected the energy. Keep moving, keep adapting.',
+                    shadow: 'You hid well. But what are you hiding from yourself?',
+                    light: 'Your light protected you. Keep shining.'
+                },
+                defendBroke: {
+                    insight: 'You didn\'t see it coming. What blind spots need attention?',
+                    grit: 'You couldn\'t hold. Where do you need to strengthen?',
+                    flow: 'You couldn\'t adapt. What\'s making you rigid?',
+                    shadow: 'Your darkness betrayed you. Face what you\'ve been avoiding.',
+                    light: 'Your light flickered. What\'s draining your energy?'
+                }
+            };
+
+            let reflection = '';
+
+            if (theyHit) {
+                reflection += reflections.attackHit[stance.attack] + ' ';
+            } else {
+                reflection += reflections.attackMissed[stance.attack] + ' ';
+            }
+
+            if (!gotHit) {
+                reflection += reflections.defendHeld[stance.defend];
+            } else {
+                reflection += reflections.defendBroke[stance.defend];
+            }
+
+            return reflection;
+        }
+
+        function battleAgain() {
+            // Reset state
+            p1Stance = { attack: null, defend: null };
+            p2Stance = { attack: null, defend: null };
+
+            updatePhase(1);
+            showScreen('entryScreen');
+        }
+
+        function shareResult() {
+            const text = `⚔️ SPARK BATTLE RESULT ⚔️\n\n${player1.name} (${archetypeData[player1.archetype].title}) vs ${player2.name} (${archetypeData[player2.archetype].title})\n\nForge your Soul Card and enter the arena at thefirstspark.shop ✦`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Spark Battle Result',
+                    text: text,
+                    url: 'https://thefirstspark.shop'
+                });
+            } else {
+                navigator.clipboard.writeText(text);
+                alert('Result copied to clipboard!');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Navigator | The First Spark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+        
+        :root {
+            --void: #0a0a0f;
+            --deep: #12121a;
+            --surface: #1a1a24;
+            --elevated: #242430;
+            --border: #2a2a38;
+            --muted: #6b6b80;
+            --text: #e0e0ec;
+            --bright: #ffffff;
+            --spark: #f97316;
+            --quantum: #8b5cf6;
+            --quantum-glow: rgba(139, 92, 246, 0.3);
+            --timeline: #3b82f6;
+            --timeline-glow: rgba(59, 130, 246, 0.3);
+            --fold: #ec4899;
+            --fold-glow: rgba(236, 72, 153, 0.3);
+            --coherent: #10b981;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        .header { text-align: center; margin-bottom: 40px; }
+        
+        .header-icon { width: 80px; height: 80px; margin: 0 auto 24px; }
+        .header-icon svg { width: 100%; height: 100%; stroke: var(--timeline); stroke-width: 1.5; fill: none; }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--bright), var(--timeline));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p { color: var(--muted); font-size: 0.95rem; }
+        
+        .nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+        
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover { background: var(--elevated); color: var(--text); }
+        .nav-btn.active { background: var(--elevated); border-color: var(--timeline); color: var(--timeline); box-shadow: 0 0 20px var(--timeline-glow); }
+        
+        .panel { display: none; animation: fadeIn 0.3s ease; }
+        .panel.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+        .card-header { margin-bottom: 24px; }
+        .card-header h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--bright); }
+        .card-header p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+        
+        /* Timeline Visualization */
+        .timeline-viz {
+            background: var(--deep);
+            border-radius: 12px;
+            padding: 32px;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline-canvas {
+            width: 100%;
+            height: 250px;
+        }
+        
+        .branch-indicator {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 1px solid var(--timeline);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--timeline);
+        }
+        
+        /* Fold Point Logger */
+        .fold-form {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+        
+        .form-input, .form-textarea, .form-select {
+            padding: 14px 16px;
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--timeline);
+            box-shadow: 0 0 0 3px var(--timeline-glow);
+        }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        .form-select { cursor: pointer; }
+        
+        .intensity-slider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .intensity-slider input[type="range"] {
+            flex: 1;
+            height: 8px;
+            background: var(--deep);
+            border-radius: 4px;
+            -webkit-appearance: none;
+        }
+        
+        .intensity-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--fold);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .intensity-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--fold);
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            background: var(--timeline);
+            border: none;
+            border-radius: 8px;
+            color: var(--bright);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-fold { background: var(--fold); }
+        .btn-secondary { background: var(--elevated); border: 1px solid var(--border); }
+        
+        /* Fold Points List */
+        .fold-list { display: flex; flex-direction: column; gap: 16px; }
+        
+        .fold-item {
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .fold-item:hover { border-color: var(--fold); transform: translateX(4px); }
+        .fold-item.active { border-color: var(--fold); box-shadow: 0 0 20px var(--fold-glow); }
+        
+        .fold-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .fold-item-title { font-weight: 600; color: var(--bright); font-size: 1rem; }
+        .fold-item-date { font-size: 0.75rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+        .fold-item-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--surface);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: var(--fold);
+            margin-bottom: 8px;
+        }
+        .fold-item-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+        
+        .fold-intensity {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        /* Branch Selector */
+        .branch-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .branch-card {
+            background: var(--deep);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .branch-card:hover { border-color: var(--timeline); transform: translateY(-4px); }
+        .branch-card.selected { border-color: var(--coherent); background: rgba(16, 185, 129, 0.1); }
+        
+        .branch-card h4 { font-size: 1rem; color: var(--bright); margin-bottom: 8px; }
+        .branch-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+        .branch-card .branch-traits { display: flex; gap: 8px; flex-wrap: wrap; }
+        .branch-trait {
+            padding: 4px 10px;
+            background: var(--surface);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: var(--timeline);
+        }
+        
+        /* Probability Display */
+        .probability-bar {
+            height: 6px;
+            background: var(--surface);
+            border-radius: 3px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .probability-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--timeline), var(--coherent));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--timeline);
+        }
+        .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+        
+        .footer { text-align: center; padding: 48px 0 24px; color: var(--muted); font-size: 0.8rem; }
+        .footer a { color: var(--spark); text-decoration: none; }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+        .empty-state svg { width: 64px; height: 64px; stroke: var(--border); margin-bottom: 16px; }
+        
+        @media (max-width: 600px) {
+            .container { padding: 24px 16px; }
+            .card { padding: 24px 20px; }
+            .header h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-icon">
+                <svg viewBox="0 0 100 100">
+                    <path d="M10,50 Q30,30 50,50 T90,50" />
+                    <path d="M10,50 Q30,70 50,50 T90,50" />
+                    <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                    <circle cx="20" cy="50" r="4"/>
+                    <circle cx="80" cy="50" r="4"/>
+                </svg>
+            </div>
+            <h1>TIMELINE NAVIGATOR</h1>
+            <p>Chamber 3 — Branch Selection & Fold Point Mapping</p>
+        </header>
+
+        <nav class="nav">
+            <button class="nav-btn active" data-panel="map">Timeline Map</button>
+            <button class="nav-btn" data-panel="log">Log Fold Point</button>
+            <button class="nav-btn" data-panel="branch">Branch Selector</button>
+            <button class="nav-btn" data-panel="history">Fold History</button>
+        </nav>
+
+        <!-- Timeline Map -->
+        <div id="map-panel" class="panel active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Your Timeline Map</h2>
+                    <p>Visualize your branching paths. Each Fold Point is a moment where timelines converged and you made a branch selection—conscious or not.</p>
+                </div>
+                <div class="timeline-viz">
+                    <div class="branch-indicator">Branch: <span id="current-branch">ALPHA-7</span></div>
+                    <canvas class="timeline-canvas" id="timeline-canvas"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Fold Points</h2>
+                    <p>Moments where your timeline branched. Click to explore the roads not taken.</p>
+                </div>
+                <div class="fold-list" id="recent-folds"></div>
+            </div>
+        </div>
+
+        <!-- Log Fold Point -->
+        <div id="log-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Log a Fold Point</h2>
+                    <p>Record moments where you felt timelines converge—decisions that felt weighted, synchronicities that demanded attention, crossroads that changed trajectory.</p>
+                </div>
+                
+                <form class="fold-form" id="fold-form">
+                    <div class="form-group">
+                        <label>Fold Point Title</label>
+                        <input type="text" class="form-input" id="fold-title" placeholder="e.g., The job offer call" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Type of Fold</label>
+                        <select class="form-select" id="fold-type">
+                            <option value="decision">Decision Point — Active choice required</option>
+                            <option value="synchronicity">Synchronicity — Meaningful coincidence</option>
+                            <option value="encounter">Encounter — Person appeared at perfect timing</option>
+                            <option value="information">Information — Knowledge arrived when needed</option>
+                            <option value="obstacle">Obstacle — Forced redirection</option>
+                            <option value="intuition">Intuition — Strong inner knowing</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>What Happened</label>
+                        <textarea class="form-textarea" id="fold-description" placeholder="Describe the moment. What made it feel significant? What were the options?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Branch Taken</label>
+                        <input type="text" class="form-input" id="fold-branch-taken" placeholder="What did you choose/what happened?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Branch Not Taken</label>
+                        <input type="text" class="form-input" id="fold-branch-not-taken" placeholder="What was the alternative? The other path?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Intensity (How strongly did this feel like a convergence?)</label>
+                        <div class="intensity-slider">
+                            <input type="range" id="fold-intensity" min="1" max="10" value="5">
+                            <span class="intensity-value" id="intensity-display">5</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-fold">Log Fold Point</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Branch Selector -->
+        <div id="branch-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Branch Selection Protocol</h2>
+                    <p>At a Fold Point now? Use this to consciously select your branch. Define the timelines, feel into each, then collapse into your chosen path.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>What's the decision/crossroads?</label>
+                    <textarea class="form-textarea" id="branch-situation" placeholder="Describe what you're facing..."></textarea>
+                </div>
+                
+                <div class="branch-options" id="branch-options">
+                    <div class="branch-card" data-branch="A">
+                        <h4>Timeline A</h4>
+                        <input type="text" class="form-input" placeholder="Describe this path..." style="margin-bottom:12px">
+                        <p class="branch-feel">How does this timeline feel?</p>
+                        <textarea class="form-textarea" placeholder="Expansive? Contracting? Exciting? Heavy?" style="min-height:60px"></textarea>
+                        <div class="probability-bar"><div class="probability-fill" style="width: 50%"></div></div>
+                    </div>
+                    <div class="branch-card" data-branch="B">
+                        <h4>Timeline B</h4>
+                        <input type="text" class="form-input" placeholder="Describe this path..." style="margin-bottom:12px">
+                        <p class="branch-feel">How does this timeline feel?</p>
+                        <textarea class="form-textarea" placeholder="Expansive? Contracting? Exciting? Heavy?" style="min-height:60px"></textarea>
+                        <div class="probability-bar"><div class="probability-fill" style="width: 50%"></div></div>
+                    </div>
+                </div>
+                
+                <div style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
+                    <button class="btn btn-secondary" id="add-branch">+ Add Branch C</button>
+                    <button class="btn" id="select-branch">Select & Collapse</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Branch Selection Guidance</h2>
+                </div>
+                <div style="color: var(--muted); line-height: 1.8; font-size: 0.9rem;">
+                    <p><strong style="color: var(--timeline);">1. DEFINE</strong> — Write out each possible timeline clearly. Vague options collapse into vague outcomes.</p>
+                    <p style="margin-top:12px"><strong style="color: var(--timeline);">2. FEEL</strong> — Close eyes. Imagine living in Timeline A for 5 seconds. Notice body sensations. Repeat for B.</p>
+                    <p style="margin-top:12px"><strong style="color: var(--timeline);">3. NOTICE</strong> — Which timeline creates expansion in chest? Which creates contraction? Expansion = alignment.</p>
+                    <p style="margin-top:12px"><strong style="color: var(--timeline);">4. SELECT</strong> — Choose consciously. Speak it aloud: "I select Timeline [X]."</p>
+                    <p style="margin-top:12px"><strong style="color: var(--timeline);">5. RELEASE</strong> — Stop analyzing. Act as if selection is already manifest. Doubt reopens branches.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fold History -->
+        <div id="history-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Fold Point History</h2>
+                    <p>Your logged timeline convergences. Patterns in your Fold Points reveal how reality routes you.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-folds">0</div>
+                        <div class="stat-label">Total Fold Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avg-intensity">—</div>
+                        <div class="stat-label">Avg Intensity</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="most-common-type">—</div>
+                        <div class="stat-label">Most Common Type</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="this-month">0</div>
+                        <div class="stat-label">This Month</div>
+                    </div>
+                </div>
+                
+                <div class="fold-list" id="all-folds"></div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Timeline Navigator — Chamber 3 of Source Architecture<br>
+            Built for <a href="https://thefirstspark.shop" target="_blank">The First Spark</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const DataStore = {
+            folds: [],
+            load() { const s = localStorage.getItem('timeline-folds'); if (s) this.folds = JSON.parse(s); },
+            save() { localStorage.setItem('timeline-folds', JSON.stringify(this.folds)); },
+            addFold(fold) { fold.id = Date.now(); fold.date = new Date().toISOString(); this.folds.unshift(fold); this.save(); },
+            getFolds() { return this.folds; }
+        };
+
+        const UI = {
+            init() {
+                DataStore.load();
+                this.bindNavigation();
+                this.bindForm();
+                this.bindIntensitySlider();
+                this.bindBranchSelector();
+                this.renderFolds();
+                this.renderTimeline();
+                this.updateStats();
+            },
+            
+            bindNavigation() {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                        document.getElementById(btn.dataset.panel + '-panel').classList.add('active');
+                    });
+                });
+            },
+            
+            bindForm() {
+                document.getElementById('fold-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const fold = {
+                        title: document.getElementById('fold-title').value,
+                        type: document.getElementById('fold-type').value,
+                        description: document.getElementById('fold-description').value,
+                        branchTaken: document.getElementById('fold-branch-taken').value,
+                        branchNotTaken: document.getElementById('fold-branch-not-taken').value,
+                        intensity: parseInt(document.getElementById('fold-intensity').value)
+                    };
+                    DataStore.addFold(fold);
+                    e.target.reset();
+                    document.getElementById('intensity-display').textContent = '5';
+                    this.renderFolds();
+                    this.renderTimeline();
+                    this.updateStats();
+                    alert('Fold Point logged. Timeline updated.');
+                });
+            },
+            
+            bindIntensitySlider() {
+                const slider = document.getElementById('fold-intensity');
+                const display = document.getElementById('intensity-display');
+                slider.addEventListener('input', () => display.textContent = slider.value);
+            },
+            
+            bindBranchSelector() {
+                document.querySelectorAll('.branch-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.branch-card').forEach(c => c.classList.remove('selected'));
+                        card.classList.add('selected');
+                    });
+                });
+                
+                document.getElementById('select-branch').addEventListener('click', () => {
+                    const selected = document.querySelector('.branch-card.selected');
+                    if (!selected) { alert('Select a timeline first'); return; }
+                    const branch = selected.dataset.branch;
+                    alert(`Timeline ${branch} selected. Act as if it's already manifest. Doubt reopens branches.`);
+                });
+            },
+            
+            renderFolds() {
+                const folds = DataStore.getFolds();
+                const recentContainer = document.getElementById('recent-folds');
+                const allContainer = document.getElementById('all-folds');
+                
+                const renderFold = (fold) => {
+                    const intensity = fold.intensity || 5;
+                    const hue = 280 + (intensity * 8);
+                    return `
+                        <div class="fold-item" data-id="${fold.id}">
+                            <div class="fold-item-header">
+                                <div>
+                                    <div class="fold-item-title">${fold.title}</div>
+                                    <div class="fold-item-date">${new Date(fold.date).toLocaleDateString()}</div>
+                                </div>
+                            </div>
+                            <span class="fold-item-type">${fold.type.toUpperCase()}</span>
+                            <p class="fold-item-desc">${fold.description || 'No description'}</p>
+                            <div class="fold-intensity" style="background: hsla(${hue}, 70%, 50%, 0.2); color: hsl(${hue}, 70%, 60%)">${intensity}</div>
+                        </div>
+                    `;
+                };
+                
+                if (folds.length === 0) {
+                    const empty = `<div class="empty-state"><svg viewBox="0 0 100 100"><path d="M10,50 Q30,30 50,50 T90,50" fill="none"/><circle cx="50" cy="50" r="6"/></svg><p>No Fold Points logged yet.<br>Start mapping your timeline convergences.</p></div>`;
+                    recentContainer.innerHTML = empty;
+                    allContainer.innerHTML = empty;
+                    return;
+                }
+                
+                recentContainer.innerHTML = folds.slice(0, 3).map(renderFold).join('');
+                allContainer.innerHTML = folds.map(renderFold).join('');
+            },
+            
+            renderTimeline() {
+                const canvas = document.getElementById('timeline-canvas');
+                const ctx = canvas.getContext('2d');
+                const rect = canvas.parentElement.getBoundingClientRect();
+                canvas.width = rect.width - 64;
+                canvas.height = 250;
+                
+                const folds = DataStore.getFolds().slice(0, 10).reverse();
+                const w = canvas.width;
+                const h = canvas.height;
+                const midY = h / 2;
+                
+                ctx.clearRect(0, 0, w, h);
+                
+                // Main timeline
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(20, midY);
+                
+                if (folds.length === 0) {
+                    ctx.lineTo(w - 20, midY);
+                    ctx.stroke();
+                    ctx.fillStyle = '#6b6b80';
+                    ctx.font = '14px Space Grotesk';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Log Fold Points to see your timeline', w/2, midY + 40);
+                    return;
+                }
+                
+                const spacing = (w - 80) / Math.max(folds.length, 1);
+                let x = 40;
+                
+                folds.forEach((fold, i) => {
+                    const intensity = fold.intensity || 5;
+                    const yOffset = (Math.random() - 0.5) * 30;
+                    
+                    // Draw branch lines
+                    ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(x, midY);
+                    ctx.quadraticCurveTo(x + spacing/2, midY - 40 - intensity*3, x + spacing, midY + yOffset);
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x, midY);
+                    ctx.quadraticCurveTo(x + spacing/2, midY + 40 + intensity*3, x + spacing, midY - yOffset);
+                    ctx.stroke();
+                    
+                    // Fold point marker
+                    ctx.fillStyle = `hsl(${280 + intensity*8}, 70%, 50%)`;
+                    ctx.beginPath();
+                    ctx.arc(x, midY, 6 + intensity/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Glow
+                    ctx.fillStyle = `hsla(${280 + intensity*8}, 70%, 50%, 0.3)`;
+                    ctx.beginPath();
+                    ctx.arc(x, midY, 12 + intensity, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    x += spacing;
+                });
+                
+                // Current position
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.arc(x - spacing + 10, midY, 10, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#10b981';
+                ctx.font = 'bold 10px JetBrains Mono';
+                ctx.textAlign = 'center';
+                ctx.fillText('NOW', x - spacing + 10, midY + 25);
+            },
+            
+            updateStats() {
+                const folds = DataStore.getFolds();
+                document.getElementById('total-folds').textContent = folds.length;
+                
+                if (folds.length > 0) {
+                    const avgInt = folds.reduce((a, f) => a + (f.intensity || 5), 0) / folds.length;
+                    document.getElementById('avg-intensity').textContent = avgInt.toFixed(1);
+                    
+                    const types = {};
+                    folds.forEach(f => types[f.type] = (types[f.type] || 0) + 1);
+                    const mostCommon = Object.entries(types).sort((a,b) => b[1] - a[1])[0];
+                    document.getElementById('most-common-type').textContent = mostCommon ? mostCommon[0].slice(0,4).toUpperCase() : '—';
+                    
+                    const thisMonth = folds.filter(f => {
+                        const d = new Date(f.date);
+                        const now = new Date();
+                        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                    }).length;
+                    document.getElementById('this-month').textContent = thisMonth;
+                }
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+        window.addEventListener('resize', () => UI.renderTimeline());
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Spark Money Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #ffd700;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 12px;
+        }
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .input-row:last-child {
+            margin-bottom: 0;
+        }
+        label {
+            flex: 1;
+            font-size: 1rem;
+        }
+        input[type="number"] {
+            width: 120px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1.2rem;
+            text-align: right;
+        }
+        input[type="number"]:focus {
+            outline: 2px solid #ffd700;
+        }
+        .result-card {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #1a1a2e;
+        }
+        .result-card .card-title {
+            color: rgba(0,0,0,0.6);
+        }
+        .big-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .sub-text {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+        .runway-card {
+            background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+        }
+        .status {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        .status.good {
+            background: rgba(0,255,127,0.2);
+            color: #00ff7f;
+        }
+        .status.warning {
+            background: rgba(255,165,0,0.2);
+            color: #ffa500;
+        }
+        .status.danger {
+            background: rgba(255,69,0,0.2);
+            color: #ff4500;
+        }
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 15px 0;
+        }
+        .quick-calc {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .calc-box {
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .calc-box .num {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .calc-box .label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ First Spark Money Tracker</h1>
+        
+        <!-- INPUTS -->
+        <div class="card">
+            <div class="card-title">The Three Numbers</div>
+            
+            <div class="input-row">
+                <label>Monthly Members</label>
+                <input type="number" id="monthly" value="0" min="0" oninput="calculate()">
+            </div>
+            
+            <div class="input-row">
+                <label>Lifetime Sales (total ever)</label>
+                <input type="number" id="lifetime" value="0" min="0" oninput="calculate()">
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="input-row">
+                <label>Investor Money (bank)</label>
+                <input type="number" id="investor" value="0" min="0" oninput="calculate()">
+            </div>
+        </div>
+
+        <!-- MONTHLY INCOME RESULT -->
+        <div class="card result-card">
+            <div class="card-title">Your Monthly Income</div>
+            <div class="big-number">$<span id="monthlyIncome">0</span></div>
+            <div class="sub-text">from <span id="memberCount">0</span> members × $32/mo</div>
+        </div>
+
+        <!-- QUICK STATS -->
+        <div class="card">
+            <div class="card-title">Quick Stats</div>
+            <div class="quick-calc">
+                <div class="calc-box">
+                    <div class="num" id="lifetimeCash">$0</div>
+                    <div class="label">Lifetime Sales Cash</div>
+                </div>
+                <div class="calc-box">
+                    <div class="num" id="totalCustomerMoney">$0</div>
+                    <div class="label">Total Customer $</div>
+                </div>
+                <div class="calc-box">
+                    <div class="num" id="membersToFreedom">100</div>
+                    <div class="label">Members to Freedom</div>
+                </div>
+                <div class="calc-box">
+                    <div class="num" id="runway">--</div>
+                    <div class="label">Months Runway</div>
+                </div>
+            </div>
+            <div class="status" id="status">Enter your numbers above</div>
+        </div>
+
+        <footer>
+            thefirstspark.shop — Keep it simple, keep it flowing
+        </footer>
+    </div>
+
+    <script>
+        function calculate() {
+            const monthly = parseInt(document.getElementById('monthly').value) || 0;
+            const lifetime = parseInt(document.getElementById('lifetime').value) || 0;
+            const investor = parseInt(document.getElementById('investor').value) || 0;
+            
+            // Monthly income (keeping ~$32 after fees from $33)
+            const monthlyIncome = monthly * 32;
+            
+            // Lifetime cash (~$503 after fees from $519)
+            const lifetimeCash = lifetime * 503;
+            
+            // Total customer money (monthly recurring + one-time lifetime)
+            const totalCustomer = monthlyIncome + lifetimeCash;
+            
+            // Members needed to hit $3,200/mo (freedom number)
+            const freedomTarget = 100;
+            const membersToGo = Math.max(0, freedomTarget - monthly);
+            
+            // Runway = investor money / $3,400 burn rate
+            const burnRate = 3400;
+            const runway = investor > 0 ? (investor / burnRate).toFixed(1) : '--';
+            
+            // Update display
+            document.getElementById('monthlyIncome').textContent = monthlyIncome.toLocaleString();
+            document.getElementById('memberCount').textContent = monthly;
+            document.getElementById('lifetimeCash').textContent = '$' + lifetimeCash.toLocaleString();
+            document.getElementById('totalCustomerMoney').textContent = '$' + totalCustomer.toLocaleString();
+            document.getElementById('membersToFreedom').textContent = membersToGo;
+            document.getElementById('runway').textContent = runway;
+            
+            // Status message
+            const statusEl = document.getElementById('status');
+            if (monthly >= 100) {
+                statusEl.textContent = "🔥 FREEDOM MODE — You're self-sustaining";
+                statusEl.className = 'status good';
+            } else if (monthly >= 50) {
+                statusEl.textContent = "✨ Halfway there — Keep building";
+                statusEl.className = 'status good';
+            } else if (monthly >= 20) {
+                statusEl.textContent = "📈 Momentum building — Push to 50";
+                statusEl.className = 'status warning';
+            } else if (monthly > 0) {
+                statusEl.textContent = "🌱 Sprouting — Every member counts";
+                statusEl.className = 'status warning';
+            } else {
+                statusEl.textContent = "⏳ Enter your numbers above";
+                statusEl.className = 'status';
+            }
+        }
+        
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>

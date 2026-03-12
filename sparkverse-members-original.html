@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SparkedVerse - Member Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(255, 200, 87, 0.15) 0%, rgba(255, 200, 87, 0.05) 100%);
+            border: 2px solid rgba(255, 200, 87, 0.4);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            background: linear-gradient(135deg, #ffc857 0%, #ffb744 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 200, 87, 0.3);
+        }
+
+        .header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .member-badge {
+            display: inline-block;
+            background: #ffc857;
+            color: #1a1a2e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 200, 87, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            margin-bottom: -2px;
+        }
+
+        .tab-btn.active {
+            color: #ffc857;
+            border-bottom-color: #ffc857;
+        }
+
+        .tab-btn:hover {
+            color: #ffc857;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 200, 87, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 200, 87, 0.7);
+            transform: translateY(-8px);
+            background: rgba(255, 200, 87, 0.08);
+            box-shadow: 0 10px 30px rgba(255, 200, 87, 0.2);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #ffc857;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Files Section */
+        .file-upload {
+            background: rgba(255, 200, 87, 0.08);
+            border: 2px dashed rgba(255, 200, 87, 0.5);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .file-upload h3 {
+            color: #ffc857;
+            margin-bottom: 15px;
+        }
+
+        .file-list {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 200, 87, 0.1);
+            transition: all 0.3s;
+        }
+
+        .file-item:hover {
+            background: rgba(255, 200, 87, 0.08);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-grow: 1;
+        }
+
+        .file-icon {
+            font-size: 24px;
+        }
+
+        .file-name {
+            color: #ffc857;
+            font-weight: 500;
+        }
+
+        .file-size {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        .btn {
+            background: #ffc857;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #ffb744;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffc857;
+            border: 2px solid #ffc857;
+            padding: 8px 16px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 200, 87, 0.1);
+        }
+
+        /* NFT Gallery */
+        .nft-embed {
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 200, 87, 0.3);
+        }
+
+        /* Rituals Section */
+        .ritual-card {
+            background: linear-gradient(135deg, rgba(255, 200, 87, 0.15) 0%, rgba(255, 200, 87, 0.05) 100%);
+            border: 2px solid rgba(255, 200, 87, 0.4);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .ritual-title {
+            color: #ffc857;
+            font-size: 22px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ritual-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .ritual-time {
+            color: rgba(255, 200, 87, 0.8);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* Soul Map */
+        .soul-map-container {
+            background: rgba(255, 200, 87, 0.08);
+            border: 2px solid rgba(255, 200, 87, 0.4);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .soul-map-container h2 {
+            color: #ffc857;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffc857;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 200, 87, 0.5);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Icons */
+        .icon {
+            display: inline-block;
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nft-embed {
+                height: 400px;
+            }
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #ffc857;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 200, 87, 0.3);
+        }
+
+        .coming-soon {
+            background: rgba(255, 200, 87, 0.15);
+            border: 2px solid rgba(255, 200, 87, 0.4);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .coming-soon h3 {
+            color: #ffc857;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>✨ SparkedVerse</h1>
+            <p>Welcome to Your Sacred Digital Realm</p>
+            <div class="member-badge" id="member-tier">Premium Member</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('library')">📚 Content Library</button>
+            <button class="tab-btn" onclick="switchTab('nft')">🎨 NFT Collection</button>
+            <button class="tab-btn" onclick="switchTab('rituals')">✨ Sacred Rituals</button>
+            <button class="tab-btn" onclick="switchTab('soulmap')">🗺️ Soul Map</button>
+            <button class="tab-btn" onclick="switchTab('files')">📁 Files & Resources</button>
+        </div>
+
+        <!-- Content Library Tab -->
+        <div id="library" class="tab-content active">
+            <h2 class="section-title">📚 Content Library</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">📖</div>
+                    <h3>Sigilcraft Grimoire</h3>
+                    <p>Master the art of sigil magic and manifestation through sacred geometry and intentional design.</p>
+                    <button class="btn" style="margin-top: 15px;">Access Now</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌙</div>
+                    <h3>Lunar Cycles Guide</h3>
+                    <p>Navigate your life aligned with moon phases and cosmic timing for maximum manifestation power.</p>
+                    <button class="btn" style="margin-top: 15px;">Access Now</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔮</div>
+                    <h3>The Codes Decoded</h3>
+                    <p>Unlock the mystical codes of consciousness and reality itself through deep spiritual exploration.</p>
+                    <button class="btn" style="margin-top: 15px;">Access Now</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💫</div>
+                    <h3>Daily Rituals</h3>
+                    <p>Sacred practices to align your energy, ignite your spark, and live with intention every day.</p>
+                    <button class="btn" style="margin-top: 15px;">Access Now</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Manifestation Playbook</h3>
+                    <p>Step-by-step guide to manifesting your dreams using quantum principles and sacred magic.</p>
+                    <button class="btn" style="margin-top: 15px;">Access Now</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌟</div>
+                    <h3>Member Exclusive</h3>
+                    <p>Brand new content drops weekly. Stay tuned for your next spiritual breakthrough.</p>
+                    <button class="btn" style="margin-top: 15px;">What's New</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NFT Collection Tab -->
+        <div id="nft" class="tab-content hidden">
+            <h2 class="section-title">🎨 Your NFT Collection</h2>
+            <p style="margin-bottom: 20px; color: rgba(255, 255, 255, 0.8);">Your exclusive digital artifacts and soul portraits. Each one is a unique manifestation of your consciousness.</p>
+            
+            <!-- OpenSea Collection Embed -->
+            <iframe src="https://opensea.io/collection/the-first-spark-collection/assets" 
+                    class="nft-embed" 
+                    title="OpenSea Collection">
+            </iframe>
+            
+            <div style="margin-top: 30px; background: rgba(255, 200, 87, 0.08); border: 2px solid rgba(255, 200, 87, 0.4); border-radius: 12px; padding: 20px;">
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 15px;">Want to create your own Player Mirror Artifact NFT?</p>
+                <button class="btn">Mint Your Soul Portrait</button>
+            </div>
+        </div>
+
+        <!-- Sacred Rituals Tab -->
+        <div id="rituals" class="tab-content hidden">
+            <h2 class="section-title">✨ Sacred Rituals</h2>
+            
+            <div class="ritual-card">
+                <div class="ritual-title">
+                    <span>🔥</span> The Spark Ignition Ritual
+                </div>
+                <div class="ritual-time">⏱️ 21 minutes | Best performed at dawn</div>
+                <div class="ritual-description">
+                    Awaken your inner spark and align with your highest purpose. This powerful ritual combines sigil work, 
+                    breathwork, and intention setting to activate your manifestation power.
+                </div>
+                <button class="btn">Begin Ritual</button>
+            </div>
+
+            <div class="ritual-card">
+                <div class="ritual-title">
+                    <span>🌙</span> New Moon Manifestation
+                </div>
+                <div class="ritual-time">⏱️ 33 minutes | Perform on new moon night</div>
+                <div class="ritual-description">
+                    Plant the seeds of your desires during the dark moon. This ritual guides you through visualization, 
+                    journaling, and sacred sigil creation to amplify your intentions.
+                </div>
+                <button class="btn">Begin Ritual</button>
+            </div>
+
+            <div class="ritual-card">
+                <div class="ritual-title">
+                    <span>✨</span> Full Moon Release
+                </div>
+                <div class="ritual-time">⏱️ 27 minutes | Perform on full moon night</div>
+                <div class="ritual-description">
+                    Release what no longer serves you. Harness the full moon's illuminating power to shed old patterns 
+                    and make space for your desires to manifest.
+                </div>
+                <button class="btn">Begin Ritual</button>
+            </div>
+        </div>
+
+        <!-- Soul Map Tab -->
+        <div id="soulmap" class="tab-content hidden">
+            <h2 class="section-title">🗺️ Your Soul Map</h2>
+            <div class="soul-map-container">
+                <h2>Create Your Cosmic Blueprint</h2>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px;">Discover your astrological soul signature combining birth chart, Human Design, and numerology.</p>
+                
+                <form style="max-width: 500px; margin: 0 auto;">
+                    <div class="form-group">
+                        <label for="birthdate">Birth Date</label>
+                        <input type="date" id="birthdate" placeholder="YYYY-MM-DD">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthtime">Birth Time (if known)</label>
+                        <input type="time" id="birthtime">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthplace">Birth City</label>
+                        <input type="text" id="birthplace" placeholder="City, Country">
+                    </div>
+                    <button type="button" class="btn" style="width: 100%; margin-top: 20px;">Generate My Soul Map</button>
+                </form>
+
+                <div style="margin-top: 40px; padding-top: 40px; border-top: 2px solid rgba(255, 200, 87, 0.2);">
+                    <h3 style="color: #ffc857; margin-bottom: 20px;">Already have your soul map?</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">Access your complete astrological analysis with Human Design and numerology insights.</p>
+                    <button class="btn btn-secondary">View My Soul Map</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Files & Resources Tab -->
+        <div id="files" class="tab-content hidden">
+            <h2 class="section-title">📁 Files & Resources</h2>
+            
+            <div class="file-upload">
+                <h3>📥 Member Downloads</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">Access exclusive guides, workbooks, and digital tools.</p>
+            </div>
+
+            <div class="file-list">
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">📖</div>
+                        <div>
+                            <div class="file-name">Sigilcraft Master Guide.pdf</div>
+                            <div class="file-size">2.4 MB</div>
+                        </div>
+                    </div>
+                    <button class="btn">Download</button>
+                </div>
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">🎨</div>
+                        <div>
+                            <div class="file-name">Sacred Geometry Templates.zip</div>
+                            <div class="file-size">5.1 MB</div>
+                        </div>
+                    </div>
+                    <button class="btn">Download</button>
+                </div>
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">📝</div>
+                        <div>
+                            <div class="file-name">Manifestation Workbook.pdf</div>
+                            <div class="file-size">1.8 MB</div>
+                        </div>
+                    </div>
+                    <button class="btn">Download</button>
+                </div>
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">🎧</div>
+                        <div>
+                            <div class="file-name">Guided Meditation Series.zip</div>
+                            <div class="file-size">145 MB</div>
+                        </div>
+                    </div>
+                    <button class="btn">Download</button>
+                </div>
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">✨</div>
+                        <div>
+                            <div class="file-name">The First Spark Game Assets.zip</div>
+                            <div class="file-size">82 MB</div>
+                        </div>
+                    </div>
+                    <button class="btn">Download</button>
+                </div>
+            </div>
+
+            <div class="coming-soon" style="margin-top: 30px;">
+                <h3>🎁 New Resources Coming Weekly</h3>
+                <p>More exclusive content, tools, and community downloads being added regularly.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

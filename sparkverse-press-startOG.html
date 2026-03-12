@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARKVERSE | Press Start</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --void: #0a0a0f;
+            --cosmic-gold: #d4af37;
+            --star-white: #f0f0ff;
+            --nebula-purple: #6b3fa0;
+            --plasma-cyan: #00d4ff;
+            --ancient-amber: #ffb347;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void);
+            color: var(--star-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Cosmic Background */
+        .cosmos {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 100%);
+        }
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, var(--star-white), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, var(--star-white), transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 230px 80px, var(--star-white), transparent),
+                radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 370px 50px, var(--star-white), transparent),
+                radial-gradient(2px 2px at 450px 200px, rgba(255,255,255,0.8), transparent);
+            background-repeat: repeat;
+            background-size: 500px 500px;
+            animation: starFloat 120s linear infinite;
+        }
+        
+        @keyframes starFloat {
+            from { transform: translateY(0) rotate(0deg); }
+            to { transform: translateY(-500px) rotate(5deg); }
+        }
+        
+        /* Sacred Geometry Overlay */
+        .sacred-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vmax;
+            height: 150vmax;
+            opacity: 0.03;
+            pointer-events: none;
+            animation: sacredSpin 300s linear infinite;
+        }
+        
+        @keyframes sacredSpin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Main Container */
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        /* Press Start Screen */
+        .press-start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            animation: fadeIn 2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .title-container {
+            margin-bottom: 3rem;
+        }
+        
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            background: linear-gradient(135deg, var(--cosmic-gold) 0%, var(--ancient-amber) 50%, var(--plasma-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.5);
+            animation: titlePulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes titlePulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            letter-spacing: 0.5em;
+            color: var(--plasma-cyan);
+            margin-top: 1rem;
+            opacity: 0.8;
+        }
+        
+        .cosmic-truth {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(107, 63, 160, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 2px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(240, 240, 255, 0.8);
+        }
+        
+        .cosmic-truth span {
+            color: var(--cosmic-gold);
+            font-weight: 700;
+        }
+        
+        .press-start-btn {
+            margin-top: 3rem;
+            padding: 1.5rem 4rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--void);
+            background: linear-gradient(135deg, var(--cosmic-gold), var(--ancient-amber));
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: pressStartGlow 2s ease-in-out infinite;
+        }
+        
+        .press-start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            100% { left: 100%; }
+        }
+        
+        @keyframes pressStartGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.5), inset 0 0 20px rgba(255,255,255,0.2); }
+            50% { box-shadow: 0 0 60px rgba(212, 175, 55, 0.8), inset 0 0 30px rgba(255,255,255,0.3); }
+        }
+        
+        .press-start-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--ancient-amber), var(--plasma-cyan));
+        }
+        
+        /* Sparkverse Lobby */
+        .sparkverse-lobby {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .sparkverse-lobby.active {
+            display: block;
+        }
+        
+        .lobby-header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 3rem;
+        }
+        
+        .lobby-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--cosmic-gold);
+            letter-spacing: 0.2em;
+        }
+        
+        .lobby-subtitle {
+            color: rgba(240, 240, 255, 0.6);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .zone-card {
+            background: rgba(20, 20, 35, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .zone-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cosmic-gold), var(--plasma-cyan));
+        }
+        
+        .zone-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--cosmic-gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .zone-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .zone-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--cosmic-gold);
+            margin-bottom: 0.5rem;
+        }
+        
+        .zone-access {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--plasma-cyan);
+            margin-bottom: 1rem;
+        }
+        
+        .zone-access.premium {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--cosmic-gold);
+        }
+        
+        .zone-description {
+            color: rgba(240, 240, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .zone-btn {
+            width: 100%;
+            padding: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            background: transparent;
+            border: 1px solid var(--cosmic-gold);
+            color: var(--cosmic-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .zone-btn:hover {
+            background: var(--cosmic-gold);
+            color: var(--void);
+        }
+        
+        .zone-btn.locked {
+            border-color: rgba(212, 175, 55, 0.3);
+            color: rgba(212, 175, 55, 0.5);
+        }
+        
+        .zone-btn.locked:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--cosmic-gold);
+        }
+        
+        /* Players Lounge */
+        .players-lounge {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .players-lounge.active {
+            display: block;
+        }
+        
+        .lounge-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .lounge-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--cosmic-gold);
+            letter-spacing: 0.2em;
+        }
+        
+        .lounge-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--ancient-amber);
+            margin: 1rem 0;
+        }
+        
+        .lounge-price span {
+            font-size: 1rem;
+            color: rgba(240, 240, 255, 0.6);
+        }
+        
+        /* Family Crest Generator */
+        .crest-generator {
+            background: rgba(20, 20, 35, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .crest-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--plasma-cyan);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .crest-subtitle {
+            text-align: center;
+            color: rgba(240, 240, 255, 0.6);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        
+        .crest-display {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 2rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .crest-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .crest-form {
+            display: grid;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .crest-input {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--star-white);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .crest-input:focus {
+            outline: none;
+            border-color: var(--cosmic-gold);
+        }
+        
+        .crest-input::placeholder {
+            color: rgba(240, 240, 255, 0.4);
+        }
+        
+        .generate-crest-btn {
+            padding: 1rem 2rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, var(--nebula-purple), var(--plasma-cyan));
+            border: none;
+            color: var(--star-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .generate-crest-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(107, 63, 160, 0.4);
+        }
+        
+        /* Truth Revelation */
+        .truth-reveal {
+            background: rgba(107, 63, 160, 0.1);
+            border: 1px solid rgba(107, 63, 160, 0.3);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .truth-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--ancient-amber);
+            margin-bottom: 1rem;
+        }
+        
+        .truth-text {
+            color: rgba(240, 240, 255, 0.8);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .truth-text em {
+            color: var(--cosmic-gold);
+            font-style: normal;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-back {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--cosmic-gold);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .nav-back.visible {
+            opacity: 1;
+        }
+        
+        .nav-back:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Sky Viewer */
+        .sky-viewer {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .sky-viewer.active {
+            display: block;
+        }
+        
+        .sky-canvas {
+            width: 100%;
+            height: 500px;
+            background: radial-gradient(ellipse at center, #0d0d1a 0%, #000005 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .geometry-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        
+        .geometry-layer.revealed {
+            opacity: 0.6;
+        }
+        
+        .sky-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .reveal-btn {
+            padding: 1rem 2rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            background: transparent;
+            border: 1px solid var(--plasma-cyan);
+            color: var(--plasma-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .reveal-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .reveal-btn.active {
+            background: var(--plasma-cyan);
+            color: var(--void);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .zone-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-title {
+                letter-spacing: 0.1em;
+            }
+            
+            .nav-back {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmos">
+        <div class="stars"></div>
+    </div>
+    
+    <svg class="sacred-overlay" viewBox="0 0 400 400">
+        <defs>
+            <pattern id="sacredPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="0.5"/>
+                <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0,212,255,0.2)" stroke-width="0.5"/>
+                <polygon points="50,5 95,72.5 50,95 5,72.5" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="0.5"/>
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#sacredPattern)"/>
+    </svg>
+    
+    <button class="nav-back" id="navBack">← BACK</button>
+    
+    <div class="main-container">
+        <!-- Press Start Screen -->
+        <div class="press-start-screen" id="pressStartScreen">
+            <div class="title-container">
+                <h1 class="main-title">SPARKVERSE</h1>
+                <p class="subtitle">THE GAME OF LIFE</p>
+            </div>
+            
+            <div class="cosmic-truth">
+                The universe is so <span>perfectly balanced</span>—sacred geometry hiding in plain sight, 
+                written across our sky, embedded in our DNA, spinning in every atom. 
+                <br><br>
+                We were all <span>dinosaurs</span>. We are all <span>superhuman quantum stardust</span>. 
+                <br><br>
+                Why can't we see what's right there in our faces? Because we forgot. 
+                Your <span>family crest</span> is the key to remembering who you truly are.
+            </div>
+            
+            <button class="press-start-btn" id="pressStartBtn">
+                PRESS START
+            </button>
+        </div>
+        
+        <!-- Sparkverse Lobby -->
+        <div class="sparkverse-lobby" id="sparkverseLobby">
+            <div class="lobby-header">
+                <h2 class="lobby-title">✧ SPARKVERSE LOBBY ✧</h2>
+                <p class="lobby-subtitle">Welcome, Traveler. All are welcome here. Choose your path.</p>
+            </div>
+            
+            <div class="zone-grid">
+                <div class="zone-card">
+                    <div class="zone-icon">🌌</div>
+                    <h3 class="zone-title">THE COMMONS</h3>
+                    <span class="zone-access">FREE ACCESS</span>
+                    <p class="zone-description">
+                        Hang with fellow travelers. Share discoveries. Ask questions. 
+                        The Sparkverse is open to all who seek truth in the stars.
+                    </p>
+                    <button class="zone-btn" onclick="showSection('skyViewer')">ENTER COMMONS</button>
+                </div>
+                
+                <div class="zone-card">
+                    <div class="zone-icon">👁️</div>
+                    <h3 class="zone-title">SKY VIEWER</h3>
+                    <span class="zone-access">FREE ACCESS</span>
+                    <p class="zone-description">
+                        See a glimpse of the sacred geometry hidden in our sky. 
+                        The patterns are always there—we just need to look.
+                    </p>
+                    <button class="zone-btn" onclick="showSection('skyViewer')">LOOK UP</button>
+                </div>
+                
+                <div class="zone-card">
+                    <div class="zone-icon">🗝️</div>
+                    <h3 class="zone-title">PLAYERS LOUNGE</h3>
+                    <span class="zone-access premium">$33/MONTH</span>
+                    <p class="zone-description">
+                        The inner sanctum. Generate your Family Crest. Access the full game. 
+                        Unlock tools that help you remember who you are. Players pay to play.
+                    </p>
+                    <button class="zone-btn locked" onclick="showSection('playersLounge')">🔐 UNLOCK LOUNGE</button>
+                </div>
+                
+                <div class="zone-card">
+                    <div class="zone-icon">✨</div>
+                    <h3 class="zone-title">SOUL MAPPING</h3>
+                    <span class="zone-access premium">$33/MONTH</span>
+                    <p class="zone-description">
+                        Deep personal readings. Discover your quantum signature. 
+                        Map the geometry of your soul across lifetimes.
+                    </p>
+                    <button class="zone-btn locked" onclick="showSection('playersLounge')">🔐 UNLOCK MAPPING</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Players Lounge -->
+        <div class="players-lounge" id="playersLounge">
+            <div class="lounge-header">
+                <h2 class="lounge-title">🗝️ PLAYERS LOUNGE 🗝️</h2>
+                <div class="lounge-price">$33 <span>/ month</span></div>
+                <p style="color: rgba(240,240,255,0.6);">Players pay to play. This is the Game of Life.</p>
+            </div>
+            
+            <div class="crest-generator">
+                <h3 class="crest-title">⚜️ FAMILY CREST GENERATOR ⚜️</h3>
+                <p class="crest-subtitle">Your key to remembering who you are</p>
+                
+                <div class="crest-display">
+                    <svg class="crest-svg" viewBox="0 0 200 200" id="crestSvg">
+                        <defs>
+                            <linearGradient id="crestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#d4af37"/>
+                                <stop offset="100%" style="stop-color:#00d4ff"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Shield base -->
+                        <path d="M100 10 L180 50 L180 120 Q180 170 100 190 Q20 170 20 120 L20 50 Z" 
+                              fill="rgba(20,20,35,0.9)" stroke="url(#crestGrad)" stroke-width="2"/>
+                        <!-- Inner geometry placeholder -->
+                        <g id="crestGeometry">
+                            <text x="100" y="105" text-anchor="middle" fill="rgba(212,175,55,0.3)" 
+                                  font-family="Orbitron" font-size="12">ENTER NAME</text>
+                        </g>
+                    </svg>
+                </div>
+                
+                <div class="crest-form">
+                    <input type="text" class="crest-input" id="playerName" placeholder="Your Name (Key to Your Crest)">
+                    <input type="text" class="crest-input" id="birthDate" placeholder="Birth Date (MM/DD/YYYY)">
+                    <button class="generate-crest-btn" onclick="generateCrest()">
+                        ⚡ GENERATE YOUR CREST ⚡
+                    </button>
+                </div>
+            </div>
+            
+            <div class="truth-reveal">
+                <h3 class="truth-title">THE TRUTH YOU'VE ALWAYS KNOWN</h3>
+                <p class="truth-text">
+                    You are not just a person. You are <em>quantum stardust</em> with billions of years of memory encoded in your cells.
+                    <br><br>
+                    You were a dinosaur. A star. A void. A beginning.
+                    <br><br>
+                    The <em>sacred geometry</em> in our sky isn't hidden—it's <em>waiting for you to see it</em>. 
+                    The right mix of consciousness, intention, and surrender reveals what was always there.
+                    <br><br>
+                    Your Family Crest is your <em>key</em>. Press start. Remember who you are.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Sky Viewer -->
+        <div class="sky-viewer" id="skyViewer">
+            <h2 class="lobby-title" style="text-align: center; margin-bottom: 2rem;">✧ SKY VIEWER ✧</h2>
+            
+            <div class="sky-canvas" id="skyCanvas">
+                <!-- Stars will be generated here -->
+                <svg class="geometry-layer" id="geometryLayer" viewBox="0 0 400 400" width="400" height="400">
+                    <!-- Flower of Life -->
+                    <g class="flower-of-life" opacity="0.5">
+                        <circle cx="200" cy="200" r="50" fill="none" stroke="#d4af37" stroke-width="0.5"/>
+                        <circle cx="175" cy="156" r="50" fill="none" stroke="#d4af37" stroke-width="0.5"/>
+                        <circle cx="225" cy="156" r="50" fill="none" stroke="#d4af37" stroke-width="0.5"/>
+                        <circle cx="250" cy="200" r="50" fill="none" stroke="#d4af37" stroke-width="0.5"/>
+                        <circle cx="225" cy="244" r="50" fill="none" stroke="#d4af37" stroke-width="0.5"/>
+                        <circle cx="175" cy="244" r="50" fill="none" stroke="#d4af37" stroke-width="0.5"/>
+                        <circle cx="150" cy="200" r="50" fill="none" stroke="#d4af37" stroke-width="0.5"/>
+                    </g>
+                    <!-- Metatron's Cube -->
+                    <g class="metatrons-cube" opacity="0.3">
+                        <line x1="200" y1="100" x2="287" y2="150" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="287" y1="150" x2="287" y2="250" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="287" y1="250" x2="200" y2="300" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="200" y1="300" x2="113" y2="250" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="113" y1="250" x2="113" y2="150" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="113" y1="150" x2="200" y2="100" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="200" y1="100" x2="200" y2="300" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="113" y1="150" x2="287" y2="250" stroke="#00d4ff" stroke-width="0.5"/>
+                        <line x1="287" y1="150" x2="113" y2="250" stroke="#00d4ff" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+            
+            <div class="sky-controls">
+                <button class="reveal-btn" onclick="revealGeometry()">👁️ REVEAL THE GEOMETRY</button>
+                <button class="reveal-btn" onclick="hideGeometry()">🌑 HIDE PATTERNS</button>
+            </div>
+            
+            <div class="truth-reveal" style="margin-top: 2rem;">
+                <p class="truth-text">
+                    Look up. The <em>Flower of Life</em> spins in every constellation. 
+                    <em>Metatron's Cube</em> holds the blueprints of reality.
+                    <br><br>
+                    Given the right mix—consciousness aligned, heart open—you can see it with your own eyes.
+                    The universe is <em>perfectly balanced</em>. It always was.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'pressStartScreen';
+        
+        // Initialize stars in sky canvas
+        function initSkyCanvas() {
+            const canvas = document.getElementById('skyCanvas');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 3 + 1}px;
+                    height: ${Math.random() * 3 + 1}px;
+                    background: white;
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.8 + 0.2};
+                    animation: twinkle ${Math.random() * 3 + 2}s ease-in-out infinite;
+                `;
+                canvas.appendChild(star);
+            }
+        }
+        
+        // Add twinkle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes twinkle {
+                0%, 100% { opacity: 0.2; }
+                50% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.getElementById('pressStartBtn').addEventListener('click', () => {
+            showSection('sparkverseLobby');
+        });
+        
+        document.getElementById('navBack').addEventListener('click', () => {
+            if (currentSection === 'playersLounge' || currentSection === 'skyViewer') {
+                showSection('sparkverseLobby');
+            } else {
+                showSection('pressStartScreen');
+            }
+        });
+        
+        function showSection(sectionId) {
+            // Hide all sections
+            document.getElementById('pressStartScreen').style.display = 'none';
+            document.getElementById('sparkverseLobby').classList.remove('active');
+            document.getElementById('playersLounge').classList.remove('active');
+            document.getElementById('skyViewer').classList.remove('active');
+            
+            // Show requested section
+            if (sectionId === 'pressStartScreen') {
+                document.getElementById('pressStartScreen').style.display = 'flex';
+                document.getElementById('navBack').classList.remove('visible');
+            } else {
+                document.getElementById(sectionId).classList.add('active');
+                document.getElementById('navBack').classList.add('visible');
+                
+                if (sectionId === 'skyViewer') {
+                    initSkyCanvas();
+                }
+            }
+            
+            currentSection = sectionId;
+            window.scrollTo(0, 0);
+        }
+        
+        function revealGeometry() {
+            document.getElementById('geometryLayer').classList.add('revealed');
+        }
+        
+        function hideGeometry() {
+            document.getElementById('geometryLayer').classList.remove('revealed');
+        }
+        
+        function generateCrest() {
+            const name = document.getElementById('playerName').value || 'PLAYER';
+            const birthDate = document.getElementById('birthDate').value || '01/01/2000';
+            
+            // Generate unique geometry based on name
+            const nameHash = name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+            const colors = ['#d4af37', '#00d4ff', '#ffb347', '#6b3fa0', '#ff6b9d'];
+            const primaryColor = colors[nameHash % colors.length];
+            const secondaryColor = colors[(nameHash + 2) % colors.length];
+            
+            // Generate sacred geometry based on name numerology
+            const sides = (nameHash % 4) + 3; // 3-6 sides
+            const layers = (nameHash % 3) + 2; // 2-4 layers
+            
+            let geometryHTML = '';
+            
+            // Central symbol
+            const symbols = ['✧', '⚡', '☉', '⚜', '✺', '◈'];
+            const symbol = symbols[nameHash % symbols.length];
+            
+            // Generate layered geometry
+            for (let layer = layers; layer > 0; layer--) {
+                const radius = 30 + (layer * 20);
+                const rotation = (nameHash * layer * 15) % 360;
+                
+                // Polygon
+                const points = [];
+                for (let i = 0; i < sides; i++) {
+                    const angle = (i * 360 / sides + rotation) * Math.PI / 180;
+                    const x = 100 + Math.cos(angle) * radius;
+                    const y = 100 + Math.sin(angle) * radius;
+                    points.push(`${x},${y}`);
+                }
+                
+                geometryHTML += `
+                    <polygon points="${points.join(' ')}" 
+                             fill="none" 
+                             stroke="${layer % 2 === 0 ? primaryColor : secondaryColor}" 
+                             stroke-width="1.5"
+                             opacity="${0.4 + layer * 0.15}"/>
+                `;
+                
+                // Inner circles
+                geometryHTML += `
+                    <circle cx="100" cy="100" r="${radius - 10}" 
+                            fill="none" 
+                            stroke="${secondaryColor}" 
+                            stroke-width="0.5"
+                            opacity="0.3"/>
+                `;
+            }
+            
+            // Central circle with symbol
+            geometryHTML += `
+                <circle cx="100" cy="100" r="25" fill="rgba(212,175,55,0.1)" stroke="${primaryColor}" stroke-width="2"/>
+                <text x="100" y="105" text-anchor="middle" fill="${primaryColor}" 
+                      font-family="serif" font-size="20">${symbol}</text>
+            `;
+            
+            // Name banner
+            geometryHTML += `
+                <text x="100" y="175" text-anchor="middle" fill="${primaryColor}" 
+                      font-family="Orbitron" font-size="8" letter-spacing="2">${name.toUpperCase()}</text>
+            `;
+            
+            document.getElementById('crestGeometry').innerHTML = geometryHTML;
+        }
+        
+        // Initialize
+        initSkyCanvas();
+    </script>
+</body>
+</html>

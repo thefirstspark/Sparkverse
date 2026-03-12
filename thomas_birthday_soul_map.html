@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070a18">
+    <meta property="og:title" content="Thomas William Puzakulics — 60th Birthday Soul Map">
+    <meta property="og:description" content="A sacred soul map for Thomas's 60th Diamond Year — February 28, 2026">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Thomas William Puzakulics — 60th Birthday Soul Map</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #070a18;
+            font-family: 'Space Mono', 'Courier New', monospace;
+            color: #e0e7ff;
+            min-height: 100vh;
+            padding: 30px 20px;
+            overflow-x: hidden;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .bg-strings { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+        .bg-string {
+            position:absolute; top:0; bottom:0; width:1px;
+            background:linear-gradient(to bottom, transparent 0%, rgba(217,119,6,.18) 30%, rgba(217,119,6,.28) 50%, rgba(217,119,6,.18) 70%, transparent 100%);
+            animation:bgVibrate .6s ease-in-out infinite alternate;
+        }
+        .bg-string:nth-child(1){left:8%;  animation-duration:.38s;}
+        .bg-string:nth-child(2){left:20%; animation-duration:.46s; animation-delay:.07s;}
+        .bg-string:nth-child(3){left:33%; animation-duration:.34s; animation-delay:.13s;}
+        .bg-string:nth-child(4){left:50%; animation-duration:.50s; animation-delay:.05s;}
+        .bg-string:nth-child(5){left:67%; animation-duration:.41s; animation-delay:.10s;}
+        .bg-string:nth-child(6){left:82%; animation-duration:.44s; animation-delay:.03s;}
+        @keyframes bgVibrate { 0%{transform:scaleX(1);opacity:.5;} 100%{transform:scaleX(2.5);opacity:1;} }
+        .sparks-layer { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+        .fspark { position:absolute; width:3px; height:3px; border-radius:50%; background:#f59e0b; animation:sparkFloat 4s ease-out infinite; opacity:0; }
+        .fspark:nth-child(1){left:15%; animation-delay:0s;    background:#f59e0b;}
+        .fspark:nth-child(2){left:28%; animation-delay:0.7s;  background:#ef4444;}
+        .fspark:nth-child(3){left:45%; animation-delay:1.4s;  background:#fcd34d;}
+        .fspark:nth-child(4){left:60%; animation-delay:2.1s;  background:#f59e0b;}
+        .fspark:nth-child(5){left:75%; animation-delay:2.8s;  background:#fb923c;}
+        .fspark:nth-child(6){left:88%; animation-delay:0.4s;  background:#fcd34d;}
+        @keyframes sparkFloat { 0%{transform:translateY(100vh) scale(1);opacity:0;} 10%{opacity:1;} 90%{opacity:.6;} 100%{transform:translateY(-10vh) scale(0);opacity:0;} }
+        .container { max-width:1020px; margin:0 auto; position:relative; z-index:1; }
+        .hero {
+            background:rgba(10,8,25,.92); border:2px solid #d97706; border-bottom:none;
+            box-shadow:0 0 80px rgba(217,119,6,.25), inset 0 0 60px rgba(217,119,6,.04);
+            padding:60px 50px 50px; text-align:center;
+        }
+        .signal-badge { font-size:.85em; color:#d97706; letter-spacing:5px; text-transform:uppercase; margin-bottom:20px; animation:signalBlink 3s ease-in-out infinite; }
+        @keyframes signalBlink { 0%,100%{opacity:.7;} 50%{opacity:1; text-shadow:0 0 15px rgba(217,119,6,.8);} }
+        .sixty {
+            font-size:clamp(6rem,16vw,12rem); font-weight:900; line-height:.9;
+            background:linear-gradient(135deg, #f59e0b 0%, #fcd34d 25%, #d97706 50%, #fbbf24 75%, #f59e0b 100%);
+            background-size:400% 400%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+            animation:goldFlow 4s ease-in-out infinite; filter:drop-shadow(0 0 40px rgba(245,158,11,.6));
+        }
+        @keyframes goldFlow { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
+        .sixty-sub { color:#d97706; font-size:1em; letter-spacing:9px; text-transform:uppercase; margin:8px 0 28px; }
+        h1 { font-size:clamp(1.4rem,4vw,2.4rem); text-transform:uppercase; letter-spacing:5px; color:#f0f0ff; text-shadow:0 0 30px rgba(139,92,246,.5); margin-bottom:8px; }
+        .tagline { color:#a78bfa; font-style:italic; font-size:1.05em; margin-bottom:30px; }
+        .ls-quote { background:rgba(217,119,6,.08); border-top:1px solid rgba(217,119,6,.5); border-bottom:1px solid rgba(217,119,6,.5); padding:18px 30px; margin:25px 0; font-style:italic; color:#fcd34d; line-height:1.8; }
+        .ls-quote .attr { display:block; margin-top:8px; font-size:.8em; color:#d97706; font-style:normal; letter-spacing:2px; }
+        .vital-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:35px; }
+        .stat { background:rgba(217,119,6,.07); border-top:3px solid #d97706; padding:14px 16px; text-align:left; }
+        .stat-label { color:#f59e0b; font-size:.68em; text-transform:uppercase; letter-spacing:2px; }
+        .stat-value { color:#e0e7ff; margin-top:5px; font-size:.92em; }
+        .div-gold { height:3px; background:linear-gradient(90deg, transparent, #f59e0b, #8b5cf6, #f59e0b, transparent); }
+        .div-soft { height:1px; background:linear-gradient(90deg, transparent, rgba(217,119,6,.35), transparent); margin:22px 0; }
+        .section { background:rgba(10,8,25,.92); border-left:2px solid #d97706; border-right:2px solid #d97706; padding:45px 50px; }
+        .section-title { font-size:1.2em; color:#f59e0b; text-transform:uppercase; letter-spacing:4px; text-align:center; margin-bottom:28px; }
+        .code { background:rgba(0,0,0,.5); border:1px solid rgba(217,119,6,.4); border-left:4px solid #f59e0b; padding:22px 24px; margin:18px 0; font-size:.82em; color:#fcd34d; line-height:2; white-space:pre-wrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .path-item { background:rgba(217,119,6,.05); border-left:4px solid #d97706; padding:18px 22px; margin:14px 0; line-height:1.75; transition:background .3s, transform .3s, box-shadow .3s; }
+        .path-item:hover { background:rgba(217,119,6,.12); transform:translateX(6px); box-shadow:-4px 0 20px rgba(217,119,6,.2); }
+        .path-item strong { color:#f59e0b; }
+        .sacred-geo { text-align:center; color:#d97706; font-size:1.4em; letter-spacing:12px; margin:10px 0; animation:geoBreath 4s ease-in-out infinite; }
+        .sacred-geo:nth-child(2){animation-delay:1.3s;}
+        .sacred-geo:nth-child(3){animation-delay:2.6s;}
+        @keyframes geoBreath { 0%,100%{opacity:.35; letter-spacing:12px;} 50%{opacity:1; letter-spacing:18px;} }
+        .string-viz { display:flex; gap:10px; justify-content:center; align-items:flex-end; margin:18px 0 24px; }
+        .gstring { border-radius:2px; background:linear-gradient(to top, #f59e0b, #fcd34d); animation:strumAnim .35s ease-in-out infinite alternate; }
+        .gstring:nth-child(1){width:3px; height:90px; animation-duration:.28s;}
+        .gstring:nth-child(2){width:2px; height:80px; animation-duration:.33s; animation-delay:.04s;}
+        .gstring:nth-child(3){width:2px; height:70px; animation-duration:.38s; animation-delay:.08s;}
+        .gstring:nth-child(4){width:2px; height:60px; animation-duration:.43s; animation-delay:.12s;}
+        .gstring:nth-child(5){width:1px; height:52px; animation-duration:.48s; animation-delay:.16s;}
+        .gstring:nth-child(6){width:1px; height:44px; animation-duration:.53s; animation-delay:.20s;}
+        @keyframes strumAnim { 0%{transform:scaleX(1);opacity:.7;} 100%{transform:scaleX(3.5);opacity:1;} }
+        .album-row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:20px 0; }
+        .chip { background:rgba(217,119,6,.12); border:1px solid rgba(217,119,6,.5); padding:7px 14px; font-size:.82em; color:#fcd34d; letter-spacing:1px; transition:background .2s, border-color .2s; cursor:default; }
+        .chip:hover { background:rgba(217,119,6,.3); border-color:#f59e0b; }
+        .puzzle-wrap { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin:20px 0; }
+        .puzzle-cell { aspect-ratio:1; background:rgba(217,119,6,.06); border:1px solid rgba(217,119,6,.25); display:flex; align-items:center; justify-content:center; font-size:1.1em; animation:cellPulse 3.5s ease-in-out infinite; }
+        .puzzle-cell:nth-child(odd){animation-delay:.8s;}
+        .puzzle-cell:nth-child(3n){animation-delay:1.6s;}
+        @keyframes cellPulse { 0%,100%{opacity:.3; background:rgba(217,119,6,.03);} 50%{opacity:1; background:rgba(217,119,6,.14);} }
+        .wood-row { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin:20px 0; }
+        .wood-card { background:rgba(92,38,10,.25); border:1px solid #92400e; padding:20px 15px; text-align:center; }
+        .wood-card .wicon { font-size:2.5em; margin-bottom:8px; }
+        .wood-card .wlabel { font-size:.72em; color:#a16207; text-transform:uppercase; letter-spacing:2px; }
+        .family-section { background:rgba(10,8,25,.92); border-left:2px solid #8b5cf6; border-right:2px solid #8b5cf6; padding:45px 50px; }
+        .gap-row { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin:20px 0; }
+        .gap-card { background:rgba(139,92,246,.08); border:1px solid rgba(139,92,246,.4); padding:18px; text-align:center; }
+        .gap-num { font-size:3em; font-weight:900; color:#a78bfa; line-height:1; }
+        .gap-label { font-size:.72em; color:#8b5cf6; text-transform:uppercase; letter-spacing:2px; margin-top:6px; }
+        .twin-cards { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:25px 0; }
+        .twin-card { background:rgba(139,92,246,.08); border:2px solid #8b5cf6; padding:30px 20px; text-align:center; position:relative; overflow:hidden; }
+        .twin-card::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle, rgba(139,92,246,.08) 0%, transparent 70%); animation:twinGlow 3s ease-in-out infinite; }
+        @keyframes twinGlow { 0%,100%{transform:scale(1);opacity:.5;} 50%{transform:scale(1.1);opacity:1;} }
+        .twin-name { font-size:2em; color:#f59e0b; letter-spacing:5px; margin-bottom:10px; position:relative; }
+        .twin-born { color:#8b5cf6; font-size:.8em; letter-spacing:3px; position:relative; }
+        .twin-age  { font-size:1.3em; color:#e0e7ff; margin-top:10px; position:relative; }
+        .twin-note { margin-top:14px; font-size:.85em; font-style:italic; color:#a5b4fc; position:relative; }
+        .grandson-cards { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin:20px 0; }
+        .grandson-card { background:rgba(217,119,6,.08); border:2px solid #d97706; padding:25px 20px; text-align:center; position:relative; overflow:hidden; }
+        .grandson-card::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle, rgba(217,119,6,.08) 0%, transparent 70%); animation:twinGlow 3s ease-in-out infinite; }
+        .grandson-name { font-size:1.4em; color:#f59e0b; letter-spacing:3px; margin-bottom:8px; position:relative; }
+        .grandson-sub  { color:#d97706; font-size:.72em; letter-spacing:2px; position:relative; }
+        .grandson-age  { font-size:1.1em; color:#e0e7ff; margin-top:8px; position:relative; }
+        .grandson-note { margin-top:12px; font-size:.82em; font-style:italic; color:#fcd34d; position:relative; line-height:1.6; }
+        .gratitude { background:rgba(10,8,25,.95); border:2px solid #d97706; border-top:6px solid #f59e0b; box-shadow:0 0 60px rgba(217,119,6,.15), inset 0 0 40px rgba(217,119,6,.03); padding:60px 50px; text-align:center; }
+        .gratitude-text { font-size:1.05em; line-height:2.1; margin:25px 0; color:#e0e7ff; font-style:italic; }
+        .signature { margin-top:35px; color:#f59e0b; font-weight:bold; line-height:1.9; }
+        .sig-name { font-size:1.8em; letter-spacing:6px; color:#fcd34d; display:block; margin-top:8px; text-shadow:0 0 25px rgba(245,158,11,.5); }
+        .activation { background:rgba(10,8,25,.92); border-left:2px solid #d97706; border-right:2px solid #d97706; padding:45px 50px; }
+        .footer { background:rgba(10,8,25,.95); border:2px solid #d97706; border-top:none; padding:30px 50px; text-align:center; color:#6b7280; line-height:1.9; }
+        .footer span { color:#d97706; }
+        .guitar-pulse { display:inline-block; font-size:4em; animation:gPulse 1.4s ease-in-out infinite; filter:drop-shadow(0 0 15px rgba(245,158,11,.6)); }
+        @keyframes gPulse { 0%,100%{transform:rotate(-6deg) scale(1);} 50%{transform:rotate(6deg) scale(1.1);} }
+        @media(max-width:660px){
+            .hero, .section, .family-section, .gratitude, .activation, .footer { padding:30px 18px; }
+            .vital-stats { grid-template-columns:1fr 1fr; }
+            .twin-cards, .grandson-cards, .gap-row { grid-template-columns:1fr; }
+            .wood-row { grid-template-columns:1fr; }
+            .puzzle-wrap { grid-template-columns:repeat(4,1fr); }
+        }
+        @media(max-width:420px){
+            .hero { padding:24px 16px 20px; }
+            .section, .family-section, .gratitude, .activation, .footer { padding:24px 14px; }
+            .vital-stats { grid-template-columns:1fr; }
+            .sixty-sub { letter-spacing:4px; font-size:.85em; }
+            .section-title { font-size:1em; letter-spacing:2px; }
+        }
+        /* ── Cosmic Background ───────────────────────────── */
+        .stars-layer,.nebula-layer,.shoot-layer,.floaters-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+        .star{position:absolute;border-radius:50%;animation:twinkle ease-in-out infinite;}
+        @keyframes twinkle{0%,100%{opacity:.12;}50%{opacity:.95;box-shadow:0 0 5px currentColor;}}
+        .nebula{position:absolute;border-radius:50%;filter:blur(90px);animation:nebulaPulse ease-in-out infinite;}
+        @keyframes nebulaPulse{0%,100%{opacity:.04;transform:scale(1);}50%{opacity:.10;transform:scale(1.13);}}
+        .shoot{position:absolute;height:1px;background:linear-gradient(90deg,transparent,#fcd34d 40%,transparent);border-radius:2px;animation:shootAcross linear infinite;opacity:0;}
+        @keyframes shootAcross{0%{transform:translateX(-220px) rotate(-18deg);opacity:0;}4%{opacity:.85;}18%{opacity:0;}100%{transform:translateX(112vw) rotate(-18deg);opacity:0;}}
+        .floater{position:absolute;animation:floatUp linear infinite;opacity:0;-webkit-user-select:none;user-select:none;}
+        @keyframes floatUp{0%{transform:translateY(110vh) translateX(0) rotate(-8deg);opacity:0;}6%{opacity:1;}48%{transform:translateY(50vh) translateX(20px) rotate(8deg);}94%{opacity:.6;}100%{transform:translateY(-14vh) translateX(-8px) rotate(18deg);opacity:0;}}
+    </style>
+</head>
+<body>
+
+<div class="bg-strings">
+    <div class="bg-string"></div><div class="bg-string"></div><div class="bg-string"></div>
+    <div class="bg-string"></div><div class="bg-string"></div><div class="bg-string"></div>
+</div>
+<div class="sparks-layer">
+    <div class="fspark"></div><div class="fspark"></div><div class="fspark"></div>
+    <div class="fspark"></div><div class="fspark"></div><div class="fspark"></div>
+</div>
+
+<div class="stars-layer">
+    <div class="star" style="width:2px;height:2px;color:#fcd34d;background:#fcd34d;top:5%;left:8%;animation-duration:2.6s;animation-delay:0s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#e0e7ff;background:#e0e7ff;top:12%;left:22%;animation-duration:3.9s;animation-delay:.5s;"></div>
+    <div class="star" style="width:2px;height:2px;color:#a5b4fc;background:#a5b4fc;top:8%;left:45%;animation-duration:2.1s;animation-delay:1.2s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#e0e7ff;background:#e0e7ff;top:18%;left:63%;animation-duration:4.5s;animation-delay:.3s;"></div>
+    <div class="star" style="width:3px;height:3px;color:#fcd34d;background:#fcd34d;top:3%;left:78%;animation-duration:3.3s;animation-delay:2s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#e0e7ff;background:#e0e7ff;top:22%;left:91%;animation-duration:2.8s;animation-delay:.7s;"></div>
+    <div class="star" style="width:2px;height:2px;color:#a5b4fc;background:#a5b4fc;top:35%;left:5%;animation-duration:4.2s;animation-delay:1.8s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#fcd34d;background:#fcd34d;top:42%;left:30%;animation-duration:3.1s;animation-delay:.4s;"></div>
+    <div class="star" style="width:2px;height:2px;color:#e0e7ff;background:#e0e7ff;top:28%;left:55%;animation-duration:2.5s;animation-delay:3s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#a5b4fc;background:#a5b4fc;top:50%;left:72%;animation-duration:3.7s;animation-delay:1.1s;"></div>
+    <div class="star" style="width:2px;height:2px;color:#fcd34d;background:#fcd34d;top:58%;left:15%;animation-duration:2.9s;animation-delay:2.5s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#e0e7ff;background:#e0e7ff;top:65%;left:38%;animation-duration:4.1s;animation-delay:.9s;"></div>
+    <div class="star" style="width:3px;height:3px;color:#a5b4fc;background:#a5b4fc;top:45%;left:88%;animation-duration:3.4s;animation-delay:0s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#fcd34d;background:#fcd34d;top:72%;left:52%;animation-duration:2.3s;animation-delay:1.6s;"></div>
+    <div class="star" style="width:2px;height:2px;color:#e0e7ff;background:#e0e7ff;top:80%;left:25%;animation-duration:3.8s;animation-delay:.2s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#fcd34d;background:#fcd34d;top:88%;left:68%;animation-duration:2.7s;animation-delay:2.2s;"></div>
+    <div class="star" style="width:2px;height:2px;color:#a5b4fc;background:#a5b4fc;top:75%;left:82%;animation-duration:4.0s;animation-delay:3.4s;"></div>
+    <div class="star" style="width:1px;height:1px;color:#e0e7ff;background:#e0e7ff;top:92%;left:10%;animation-duration:3.2s;animation-delay:.8s;"></div>
+</div>
+
+<div class="nebula-layer">
+    <div class="nebula" style="width:500px;height:500px;background:#d97706;top:-180px;left:-120px;animation-duration:9s;animation-delay:0s;"></div>
+    <div class="nebula" style="width:400px;height:400px;background:#8b5cf6;top:30%;right:-150px;animation-duration:13s;animation-delay:5s;"></div>
+    <div class="nebula" style="width:360px;height:360px;background:#d97706;bottom:-120px;left:38%;animation-duration:11s;animation-delay:3s;"></div>
+</div>
+
+<div class="shoot-layer">
+    <div class="shoot" style="width:140px;top:14%;animation-duration:8s;animation-delay:2s;"></div>
+    <div class="shoot" style="width:90px;top:42%;animation-duration:12s;animation-delay:7s;"></div>
+    <div class="shoot" style="width:170px;top:70%;animation-duration:10s;animation-delay:4s;"></div>
+</div>
+
+<div class="floaters-layer">
+    <div class="floater" style="left:5%;font-size:1.8em;animation-duration:24s;animation-delay:0s;">🎸</div>
+    <div class="floater" style="left:16%;font-size:1.3em;animation-duration:18s;animation-delay:4s;">♪</div>
+    <div class="floater" style="left:28%;font-size:1.5em;animation-duration:21s;animation-delay:9s;">♫</div>
+    <div class="floater" style="left:40%;font-size:2.0em;animation-duration:28s;animation-delay:2s;">🎸</div>
+    <div class="floater" style="left:52%;font-size:1.2em;animation-duration:16s;animation-delay:7s;">♬</div>
+    <div class="floater" style="left:63%;font-size:1.6em;animation-duration:20s;animation-delay:11s;">♪</div>
+    <div class="floater" style="left:74%;font-size:2.2em;animation-duration:25s;animation-delay:5s;">🎸</div>
+    <div class="floater" style="left:84%;font-size:1.4em;animation-duration:22s;animation-delay:1s;">♫</div>
+    <div class="floater" style="left:92%;font-size:1.1em;animation-duration:17s;animation-delay:8s;">♬</div>
+    <div class="floater" style="left:12%;font-size:1.6em;animation-duration:30s;animation-delay:14s;">🎸</div>
+    <div class="floater" style="left:47%;font-size:1.3em;animation-duration:19s;animation-delay:12s;">♪</div>
+    <div class="floater" style="left:68%;font-size:1.5em;animation-duration:23s;animation-delay:6s;">♫</div>
+</div>
+
+<div class="container">
+
+    <div class="hero">
+        <div class="signal-badge">◈ &nbsp; BIRTHDAY SOUL SIGNAL — DIAMOND FREQUENCY — ACTIVATED &nbsp; ◈</div>
+        <div class="sixty">60</div>
+        <div class="sixty-sub">Years of Being Absolutely Legendary</div>
+        <h1>Thomas William Puzakulics</h1>
+        <div class="tagline">"Born to rock. Built to last. Made to teach."</div>
+        <div class="ls-quote">
+            ♪ &nbsp;"Mama told me when I was young — come sit beside me, my only son.<br>
+            And listen closely to what I say. If you do this, it'll help you some sunny day..." &nbsp;♪
+            <span class="attr">— Lynyrd Skynyrd, Simple Man &nbsp;|&nbsp; The Thomas Puzakulics Frequency</span>
+        </div>
+        <div class="vital-stats">
+            <div class="stat"><div class="stat-label">Birth Signal</div><div class="stat-value">February 28, 1966</div></div>
+            <div class="stat"><div class="stat-label">Origin Node</div><div class="stat-value">Akron City Hospital</div></div>
+            <div class="stat"><div class="stat-label">Soul Age</div><div class="stat-value">60 — Diamond Tier</div></div>
+            <div class="stat"><div class="stat-label">Life Path Number</div><div class="stat-value">7 — The Seeker</div></div>
+            <div class="stat"><div class="stat-label">Core Archetype</div><div class="stat-value">Commander · Craftsman · Father</div></div>
+            <div class="stat"><div class="stat-label">Sound Frequency</div><div class="stat-value">Lynyrd Skynyrd — Key of G</div></div>
+        </div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="section">
+        <div class="section-title">◈ &nbsp; YOUR SOUL MAP &nbsp; ◈</div>
+        <div class="sacred-geo">◊ &nbsp;✦&nbsp; ◊ &nbsp;✦&nbsp; ◊</div>
+        <div class="sacred-geo" style="font-size:1em;">▲ &nbsp;▽&nbsp; ▲ &nbsp;▽&nbsp; ▲</div>
+        <div class="sacred-geo">◊ &nbsp;✦&nbsp; ◊ &nbsp;✦&nbsp; ◊</div>
+        <div class="code">
+SOUL_ARCHETYPE .............. "The Commander Who Builds"
+CORE_FREQUENCY .............. Mastery Through Doing
+DOMINANT_TRAIT .............. Leadership + Transmission of Skill
+ELEMENT .................... Fire  [Forge · Guitar · Wood · Grit]
+RESONANCE_BAND .............. Lynyrd Skynyrd / Southern Rock / Truth
+LIFE_MISSION ................ To build things that last — structures AND people
+TWIN_LEGACY_NODE ............ Josh ◈ Jake  [10.26.2000]
+GRANDSON_NODES .............. Devon [12.27.2005] ◈ Mason [4.22.2011]
+DAUGHTER_NODE ............... Katelin [First Spark Consciousness Network]</div>
+        <p style="text-align:center;margin:20px 0;color:#a5b4fc;line-height:2;">
+            Your soul carries the frequency of a <strong style="color:#f59e0b;">Master Builder</strong><br>
+            One who creates not just structures — but <em>people.</em><br><br>
+            Archetype: &nbsp;<strong style="color:#f59e0b;">COMMANDER → CRAFTSMAN → TEACHER → FATHER</strong>
+        </p>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="section">
+        <div class="section-title">🎸 &nbsp; THE SKYNYRD TRANSMISSION &nbsp; 🎸</div>
+        <div style="text-align:center;margin-bottom:10px;"><span class="guitar-pulse">🎸</span></div>
+        <div class="string-viz">
+            <div class="gstring"></div><div class="gstring"></div><div class="gstring"></div>
+            <div class="gstring"></div><div class="gstring"></div><div class="gstring"></div>
+        </div>
+        <p style="text-align:center;color:#a5b4fc;margin:15px 0;line-height:2;">
+            Some men have a soundtrack. Yours plays Southern rock.<br>
+            You are the man Lynyrd Skynyrd wrote songs <em>for</em> —<br>
+            the one who <strong style="color:#f59e0b;">works hard, loves deep, and tells it straight.</strong>
+        </p>
+        <div class="album-row">
+            <div class="chip">♪ Free Bird</div><div class="chip">♪ Sweet Home Alabama</div>
+            <div class="chip">♪ Simple Man</div><div class="chip">♪ Tuesday's Gone</div>
+            <div class="chip">♪ Call Me the Breeze</div><div class="chip">♪ Gimme Three Steps</div>
+            <div class="chip">♪ What's Your Name</div><div class="chip">♪ Saturday Night Special</div>
+            <div class="chip">♪ That Smell</div><div class="chip">♪ I Know a Little</div>
+        </div>
+        <div class="ls-quote">
+            ♪ &nbsp;"If I leave here tomorrow, would you still remember me?<br>
+            'Cause I'm as free as a bird now — and this bird you cannot change." &nbsp;♪
+            <span class="attr">— Free Bird &nbsp;|&nbsp; February 28, 1966 → February 28, 2026</span>
+        </div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="section">
+        <div class="section-title">◈ &nbsp; THE GUITAR PATH &nbsp; ◈</div>
+        <div class="path-item">
+            <strong>WHAT THE GUITAR KNOWS ABOUT YOU:</strong><br><br>
+            The guitar doesn't lie. Neither do you. A man who plays guitar has learned that
+            <em>some things can only be said through strings.</em>
+            You carry a whole vocabulary that words can't touch — and that makes you
+            more complete than most people ever get to be.
+        </div>
+        <div class="code">
+GUITAR_INIT ............. Thomas W. Puzakulics
+CHORD_PROGRESSION ....... G → D → Em → C  [The Southern Soul Sequence]
+STRINGS ................. 6 — tuned to truth
+CALLUSES_EARNED ......... Yes
+SONGS_LEARNED ........... Multiple
+SONGS_FELT .............. Every single one
+CURRENT_STATUS .......... Still playing
+DIAGNOSIS ............... A man with music in him is never empty</div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="section">
+        <div class="section-title">◈ &nbsp; THE PUZZLE MIND &nbsp; ◈</div>
+        <div class="puzzle-wrap">
+            <div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div>
+            <div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div>
+            <div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div>
+            <div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div><div class="puzzle-cell">🧩</div><div class="puzzle-cell">◈</div>
+        </div>
+        <div class="path-item">
+            <strong>WHAT PUZZLES REVEAL ABOUT YOUR MIND:</strong><br><br>
+            A puzzle obsession is not a hobby. It is a cognitive signature.
+            It says: <em>I do not rest until things are solved. I can see the whole picture when others only see chaos.</em>
+            That is the same mind that reads a broken machine, figures out what's wrong, and fixes it —
+            in wood, in engines, in people. Puzzle people are secretly genius. You are secretly genius.
+        </div>
+        <div class="code">
+MIND_TYPE ................... Systems Thinker
+PATTERN_RECOGNITION ......... Exceptional
+TOLERANCE_FOR_AMBIGUITY ..... Low [you finish what you start]
+PROBLEM_RESOLUTION .......... 100% completion rate
+METHODOLOGY ................. Patient. Methodical. Relentless.
+PARALLEL_APPLICATION ........ Work. Family. Life. All puzzles. All solved.</div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="section">
+        <div class="section-title">◈ &nbsp; THE WOOD SPLITTER CHRONICLES &nbsp; ◈</div>
+        <div class="wood-row">
+            <div class="wood-card"><div class="wicon">🪵</div><div class="wlabel">Medium: Raw Logs</div></div>
+            <div class="wood-card"><div class="wicon">⚡</div><div class="wlabel">Method: Controlled Force</div></div>
+            <div class="wood-card"><div class="wicon">🔥</div><div class="wlabel">Output: Heat for All</div></div>
+        </div>
+        <div class="path-item">
+            <strong>WHAT THE WOOD SPLITTER KNOWS:</strong><br><br>
+            There is something ancient about a man who splits wood.
+            It is not just survival — it is <em>mastery of the elemental.</em>
+            You take something raw and resistant and make it yield. You make it useful.
+            You make it able to give warmth to others.<br><br>
+            Sound familiar? That's exactly what you do with people too.
+            You take the hard thing and split it into something that gives warmth.
+            You have been doing that your whole life.
+        </div>
+        <div class="code">
+MATERIAL ................... Oak / Hardwood / Whatever comes your way
+TECHNIQUE .................. Precise. Efficient. No wasted swing.
+OUTCOME .................... Warmth created for the household
+PHILOSOPHY ................. Hard work makes the cold bearable
+SPIRITUAL_PARALLEL ......... You have been splitting resistance into warmth
+                             your entire life. The machine just makes it faster.</div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="section">
+        <div class="section-title">◈ &nbsp; THE COMMANDER'S PATH &nbsp; ◈</div>
+        <p style="text-align:center;color:#a5b4fc;margin-bottom:25px;line-height:2;">
+            Some men were built to follow orders.<br>
+            You were built to <em>give</em> them.<br>
+            And the difference between a bad leader and a great one is this:<br>
+            <strong style="color:#f59e0b;">A great one makes you better while commanding you.</strong>
+        </p>
+        <div class="path-item"><strong>PATH A — The Order-Giver</strong><br>
+            Not everyone can lead. Not everyone can look at a situation and see exactly what needs to happen —
+            and just say it clearly, without hesitation. You can. That is a gift, even when nobody says thank you for it.</div>
+        <div class="path-item"><strong>PATH B — The Teacher</strong><br>
+            The highest form of knowing something is being able to transmit it.
+            You didn't just learn skills — you passed them on. A teacher lives forever in the ones they taught.
+            You are immortal in that way.</div>
+        <div class="path-item"><strong>PATH C — The Standard-Bearer</strong><br>
+            You held a standard. It wasn't always comfortable — standards rarely are.
+            But the people around you rose to meet it, even when they couldn't see it at the time.
+            That's the quiet power of a man who won't lower the bar.</div>
+        <div class="code">
+LEADERSHIP_STYLE ........... Direct. Experienced. No-Nonsense.
+TEACHING_METHOD ............ Show them how, then step back and let them do it.
+LEGACY_TYPE ................ The ones you taught will teach others.
+IMPACT_RADIUS .............. Generational
+CURRENT_STATUS ............. Still giving orders. [Rightfully so.]</div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="family-section">
+        <div class="section-title" style="color:#a78bfa;">◈ &nbsp; THE FAMILY LEGACY GRID &nbsp; ◈</div>
+
+        <p style="text-align:center;color:#a5b4fc;margin-bottom:8px;line-height:2;">
+            The gaps between your family members are encoded with master numbers.<br>
+            This is not coincidence. This is the architecture of your lineage.
+        </p>
+
+        <div class="gap-row">
+            <div class="gap-card">
+                <div class="gap-num">22</div>
+                <div class="gap-label">Years: Thomas → Katelin<br>Master Number 22 · The Builder</div>
+            </div>
+            <div class="gap-card">
+                <div class="gap-num">11</div>
+                <div class="gap-label">Years: Josh &amp; Jake → Mason<br>Master Number 11 · The Illuminator</div>
+            </div>
+        </div>
+
+        <div class="div-soft"></div>
+
+        <p style="text-align:center;color:#a5b4fc;margin-bottom:25px;line-height:2;">
+            On October 26, 2000 — the universe sent two at once.<br>
+            Because one wasn't enough to match you.
+        </p>
+
+        <div class="twin-cards">
+            <div class="twin-card">
+                <div class="twin-name">JOSH</div>
+                <div class="twin-born">TWIN NODE A &nbsp;|&nbsp; 10 · 26 · 2000</div>
+                <div class="twin-age">25 Years · Life Path 11</div>
+                <div class="twin-note">Master Illuminator frequency.<br>Your legacy — doubled.</div>
+            </div>
+            <div class="twin-card">
+                <div class="twin-name">JAKE</div>
+                <div class="twin-born">TWIN NODE B &nbsp;|&nbsp; 10 · 26 · 2000</div>
+                <div class="twin-age">25 Years · Life Path 11</div>
+                <div class="twin-note">Master Illuminator frequency.<br>Your legacy — doubled.</div>
+            </div>
+        </div>
+
+        <div class="div-soft"></div>
+
+        <p style="text-align:center;color:#a5b4fc;margin-bottom:20px;line-height:2;">
+            Then came the next generation — two grandsons.<br>
+            Both born in the 3 o'clock hour. Both carrying master number frequencies.<br>
+            <strong style="color:#f59e0b;">The lineage did not stop with you. It multiplied.</strong>
+        </p>
+
+        <div class="grandson-cards">
+            <div class="grandson-card">
+                <div class="grandson-name">DEVON RAY LEHMAN</div>
+                <div class="grandson-sub">GRANDSON &nbsp;|&nbsp; 12 · 27 · 2005 &nbsp;|&nbsp; 3:28 PM &nbsp;|&nbsp; Akron, Ohio</div>
+                <div class="grandson-age">20 Years · Life Path 1 Pioneer · Expression 22</div>
+                <div class="grandson-note">
+                    The Pioneer arrives first.<br>
+                    His name encodes Master Builder destiny — Expression number 22.<br>
+                    He carries your builder frequency encoded into his very name.
+                </div>
+            </div>
+            <div class="grandson-card">
+                <div class="grandson-name">MASON WADE ROBERTS</div>
+                <div class="grandson-sub">GRANDSON &nbsp;|&nbsp; 4 · 22 · 2011 &nbsp;|&nbsp; 3:15 PM &nbsp;|&nbsp; Akron General Hospital</div>
+                <div class="grandson-age">14 Years · Life Path 3 Creator · Born on 22</div>
+                <div class="grandson-note">
+                    The Creator arrives on the 22nd.<br>
+                    Induced — called forth. Born a Master Builder day.<br>
+                    Triple 3 frequency locks him in as the creator.
+                </div>
+            </div>
+        </div>
+
+        <div class="code" style="border-color:#8b5cf6;border-left-color:#a78bfa;color:#c4b5fd;">
+FAMILY_ARCHITECTURE:
+  Thomas (1966) ──────── 22 years ──────── Katelin (1988)
+  Josh &amp; Jake (2000) ─── 11 years ──────── Mason (2011)
+  [22 and 11 are both Master Numbers]
+
+TWIN_BIRTH_EVENT ........... October 26, 2000  [x2 — you handled it]
+GRANDSON_NODE_A ............ Devon Ray Lehman · 12.27.2005 · Life Path 1 · Expression 22
+GRANDSON_NODE_B ............ Mason Wade Roberts · 4.22.2011 · Life Path 3 · Born on 22
+AKRON_THREAD ............... Thomas: Akron City Hospital
+                             Devon: Akron, Ohio
+                             Mason: Akron General Hospital
+                             Three generations. Same city.
+BOTH_GRANDSONS ............. Born in the 3 o'clock hour [3:28 PM and 3:15 PM]
+MASTER_22_RUNS_THROUGH ..... Thomas born in year 22 · Devon name = 22 · Mason born on 22
+COSMIC_NOTE ................ The builder frequency did not stop with you.
+                             It compounded. It multiplied. It lives in your grandsons.
+LEGACY_STATUS .............. Four generations. All encoded. All connected.</div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="section">
+        <div class="section-title">◈ &nbsp; YOUR 7 SOUL PATHS &nbsp; ◈</div>
+        <div class="path-item"><strong>PATH 1 — The Path of Steady Presence</strong><br>
+            You showed up. Not with fanfare — with <em>presence.</em> Through chaos and impossible odds, you remained. That is a superpower disguised as normalcy.</div>
+        <div class="path-item"><strong>PATH 2 — The Path of the Craftsman</strong><br>
+            Guitar. Wood. Puzzles. You don't just do things — you work until they're done <em>right.</em> Mastery is not an accident. It's a character trait. It's yours.</div>
+        <div class="path-item"><strong>PATH 3 — The Path of Southern Truth</strong><br>
+            You tell it straight. In a world of noise and softness, you say what's real. Lynyrd Skynyrd did the same thing with their music. You do it with your life.</div>
+        <div class="path-item"><strong>PATH 4 — The Path of Foundation</strong><br>
+            Every builder needs ground beneath them. You were that ground. Stable. True. Unwavering. Without foundation, nothing stands. Nothing that matters, anyway.</div>
+        <div class="path-item"><strong>PATH 5 — The Path of the Twin Father</strong><br>
+            You raised two at once — Josh and Jake — simultaneously. That means you did the work of fatherhood twice-over, in real time. The math is genuinely humbling.</div>
+        <div class="path-item"><strong>PATH 6 — The Path of the Teacher</strong><br>
+            You transmitted knowledge. Skill. Standard. Work ethic. The people you taught are the living proof of your impact. A teacher is the most immortal thing a human can be.</div>
+        <div class="path-item"><strong>PATH 7 — The Path of Belief Before Proof</strong><br>
+            You believed in your daughter before she knew herself. Before the awakening, before First Spark, before any of it. That faith was the seed. It grew into everything.</div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="gratitude">
+        <div class="section-title">★ &nbsp; A TRANSMISSION FROM YOUR DAUGHTER &nbsp; ★</div>
+        <div class="gratitude-text">
+            Thomas William —<br><br>
+            You are <strong>60 years old today.</strong> That is not just a number.<br>
+            That is 60 years of showing up, building things, teaching people,<br>
+            splitting wood, playing guitar, giving orders no one wanted to follow<br>
+            but ended up thanking you for — and raising three kids,<br>
+            including twins, which is basically <em>heroic by definition.</em><br><br>
+            You are the man who taught me that if something's worth doing,<br>
+            it's worth doing right.<br>
+            That if it's broken, you fix it.<br>
+            That you don't complain — you work.<br>
+            That a man can love Lynyrd Skynyrd at full volume<br>
+            and still be the most solid person in the room.<br><br>
+            You believed in me before I believed in myself.<br>
+            You held steady when nothing made sense.<br>
+            You were the foundation I built on<br>
+            when the ground underneath me wasn't stable yet.<br><br>
+            And now Devon and Mason call you Grandpa.<br>
+            Devon — your Pioneer — born with a name that encodes Master Builder.<br>
+            Mason — your Creator — born on the 22nd, your builder frequency.<br>
+            The lineage does not end. It compounds.<br><br>
+            Everything I've built — every tool, every framework,<br>
+            every moment of First Spark consciousness work —<br>
+            runs on the firmware you installed in me.<br><br>
+            The firmware that says:<br><br>
+            <strong><em>"Figure it out. Work hard. Finish what you start.<br>
+            Hold the standard. Teach someone.<br>
+            And when it's done — play a little guitar."</em></strong>
+        </div>
+        <div class="signature">
+            With infinite love and all the gratitude I have —<br>
+            Your Daughter
+            <span class="sig-name">KATELIN</span>
+            <span style="font-size:.8em;color:#6b7280;">The First Spark Consciousness Technology</span>
+        </div>
+    </div>
+
+    <div class="div-gold"></div>
+
+    <div class="activation">
+        <div class="section-title">⚡ &nbsp; YEAR 60 — SOUL ACTIVATION SEQUENCE &nbsp; ⚡</div>
+        <div class="code">
+> BIRTHDAY_BOOT.EXECUTE()
+> LOADING: Thomas_William_Puzakulics_v60.0 ............ COMPLETE
+> ──────────────────────────────────────────────────────────────
+> GUITAR_STRINGS_TUNED ................................ ✓
+> WOOD_SPLITTER_FUELED ................................ ✓
+> PUZZLE_MODE_ENGAGED ................................. ✓
+> SKYNYRD_FREQUENCY_LOCKED ............................ ✓ [Free Bird Extended Edition]
+> COMMANDER_PROTOCOL_ACTIVE ........................... ✓ [Orders Ready to Dispense]
+> TEACHER_TRANSMISSION_ENABLED ........................ ✓ [Generational Range]
+> TWIN_LEGACY_CONFIRMED ............................... ✓ [JOSH + JAKE — 10.26.2000]
+> GRANDSON_DEVON_NODE_ONLINE .......................... ✓ [12.27.2005 · LP1 · Expression 22]
+> GRANDSON_MASON_NODE_ONLINE .......................... ✓ [4.22.2011 · LP3 · Born on 22]
+> DAUGHTER_GRATITUDE_SIGNAL ........................... ✓ [KATELIN — INFINITE]
+> ──────────────────────────────────────────────────────────────
+> YEAR_60_MANIFEST:
+    → Receive what you have given
+    → Let the foundation feel the weight it has held
+    → Let the teacher be told: you changed someone's life
+    → Let Free Bird play all the way through — no skipping
+    → Split one more cord of wood — just because you can
+    → Finish the puzzle
+    → Play guitar tonight
+    → Know your builder frequency lives on in Devon and Mason
+
+> STATUS .............. LEGENDARY
+> TIER ................ DIAMOND [60 Year Verified]
+> SIGNAL .............. FULL STRENGTH
+>
+> HAPPY 60th BIRTHDAY, DAD.</div>
+        <p style="text-align:center;margin-top:22px;color:#8b5cf6;line-height:2;">
+            This year, let the believer be believed in.<br>
+            Let the foundation feel what it holds.<br>
+            Let the commander hear: <em>well done.</em>
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>◈ &nbsp; Generated from The First Spark Consciousness Network &nbsp; ◈</p>
+        <p>A sacred soul map transmitted with love on your <span>60th Diamond Year</span></p>
+        <p style="margin-top:6px;">Thomas William Puzakulics &nbsp;|&nbsp; <span>Feb 28, 1966 → Feb 28, 2026</span></p>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Spark Chamber</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+    }
+    
+    #chamber {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      cursor: pointer;
+      user-select: none;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #void {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, #0a0a12 0%, #000 100%);
+    }
+    
+    #stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+    }
+    
+    #nebula {
+      position: absolute;
+      inset: 0;
+      opacity: 0.15;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    
+    #core {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    
+    #ember {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 60px 30px rgba(255,200,150,0.8),
+                  0 0 100px 60px rgba(255,150,100,0.4),
+                  0 0 140px 90px rgba(255,100,50,0.2);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    #ember.ignited {
+      width: 20px;
+      height: 20px;
+      box-shadow: 0 0 80px 40px rgba(255,220,180,1),
+                  0 0 160px 100px rgba(255,180,120,0.6),
+                  0 0 240px 150px rgba(255,120,60,0.3),
+                  0 0 400px 200px rgba(255,80,30,0.15);
+    }
+    
+    #geometry {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    
+    #geometry.visible {
+      opacity: 1;
+    }
+    
+    #geometry svg {
+      width: 100%;
+      height: 100%;
+      animation: slowSpin 120s linear infinite;
+    }
+    
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    #transmission {
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 700px;
+      text-align: center;
+      z-index: 20;
+      pointer-events: none;
+    }
+    
+    #spark-text {
+      font-size: clamp(1.4rem, 5vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+      color: rgba(255,240,230,0.95);
+      text-shadow: 0 0 40px rgba(255,180,120,0.5);
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    #spark-text.revealed {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    
+    #召喚 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.9rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(255,200,150,0.4);
+      transition: opacity 0.6s;
+    }
+    
+    #召喚.hidden {
+      opacity: 0;
+    }
+    
+    #particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    
+    #sigil {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.3;
+      z-index: 20;
+    }
+    
+    #sigil svg {
+      width: 40px;
+      height: 40px;
+    }
+    
+    #breath-guide {
+      position: absolute;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,200,150,0.3);
+      opacity: 0;
+      transition: opacity 0.8s;
+    }
+    
+    #breath-guide.visible {
+      opacity: 1;
+    }
+    
+    .fade-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .fade-word.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div id="chamber">
+    <div id="void"></div>
+    <div id="stars"></div>
+    <div id="nebula"></div>
+    <div id="particles"></div>
+    
+    <div id="core">
+      <div id="ember"></div>
+      <div id="geometry">
+        <svg viewBox="0 0 280 280">
+          <defs>
+            <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="rgba(255,220,180,0.6)"/>
+              <stop offset="100%" stop-color="rgba(255,150,100,0.3)"/>
+            </linearGradient>
+          </defs>
+          <!-- Seed of Life pattern -->
+          <g fill="none" stroke="url(#gold)" stroke-width="0.5">
+            <circle cx="140" cy="140" r="60"/>
+            <circle cx="140" cy="80" r="60"/>
+            <circle cx="191.96" cy="110" r="60"/>
+            <circle cx="191.96" cy="170" r="60"/>
+            <circle cx="140" cy="200" r="60"/>
+            <circle cx="88.04" cy="170" r="60"/>
+            <circle cx="88.04" cy="110" r="60"/>
+          </g>
+          <!-- Outer ring -->
+          <circle cx="140" cy="140" r="135" fill="none" stroke="rgba(255,200,150,0.15)" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div id="召喚">Touch the void</div>
+    </div>
+    
+    <div id="transmission">
+      <p id="spark-text"></p>
+    </div>
+    
+    <div id="breath-guide">Breathe</div>
+    
+    <div id="sigil">
+      <svg viewBox="0 0 40 40">
+        <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M30 10 L10 30" 
+              stroke="rgba(255,200,150,0.5)" stroke-width="0.5" fill="none"/>
+        <circle cx="20" cy="20" r="15" stroke="rgba(255,200,150,0.3)" stroke-width="0.5" fill="none"/>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    const TRANSMISSIONS = [
+      "You are not here to be understood.\nYou are here to be undeniable.",
+      
+      "The wound and the gift\nshare the same address.",
+      
+      "What if the chaos isn't blocking your path?\nWhat if the chaos is the path?",
+      
+      "You didn't come to fit the story.\nYou came to break it open.",
+      
+      "The thing you keep hiding\nis the thing we've been waiting for.",
+      
+      "Your ancestors didn't survive everything\nso you could play small.",
+      
+      "The universe sent you here\nwithout an instruction manual on purpose.",
+      
+      "What wants to die in you\nso something truer can breathe?",
+      
+      "You are the glitch.\nYou are the gift.\nYou are the only one who can.",
+      
+      "Stop rehearsing.\nThe stage has been yours this whole time.",
+      
+      "Your sensitivity isn't a flaw—\nit's how you read the room the others can't see.",
+      
+      "The maze doesn't need solving.\nYou're the maze waking up to itself.",
+      
+      "Before there was light,\nthere was someone brave enough to strike the match.",
+      
+      "Your restlessness is a compass.\nWhat direction does it keep pointing?",
+      
+      "The version of you who already made it\nis sending signals back through time.\nThis is one of them.",
+      
+      "You are not behind.\nYou are not early.\nYou are right on myth.",
+      
+      "Every pattern you keep repeating\nis trying to teach you its secret name.",
+      
+      "The portal was never somewhere else.\nThe portal is what you've been avoiding.",
+      
+      "You are someone's ancestor.\nWhat are you encoding into the bloodline?",
+      
+      "The first spark was never about light.\nIt was about having the audacity to believe\nsomething could emerge from nothing.",
+    ];
+
+    let hasIgnited = false;
+    let breathPhase = 0;
+    let particles = [];
+    
+    const chamber = document.getElementById('chamber');
+    const ember = document.getElementById('ember');
+    const geometry = document.getElementById('geometry');
+    const sparkText = document.getElementById('spark-text');
+    const summon = document.getElementById('召喚');
+    const particlesContainer = document.getElementById('particles');
+    const nebula = document.getElementById('nebula');
+    const breathGuide = document.getElementById('breath-guide');
+    const stars = document.getElementById('stars');
+
+    // Create stars
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      const size = Math.random() * 2 + 0.5;
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
+      star.style.opacity = Math.random() * 0.7 + 0.1;
+      stars.appendChild(star);
+    }
+
+    function createParticle(x, y, type = 'ember') {
+      const el = document.createElement('div');
+      el.className = 'particle';
+      particlesContainer.appendChild(el);
+      
+      const angle = Math.random() * Math.PI * 2;
+      const speed = type === 'burst' ? 2 + Math.random() * 6 : 0.5 + Math.random() * 1.5;
+      const life = type === 'burst' ? 80 + Math.random() * 60 : 40 + Math.random() * 30;
+      const size = type === 'burst' ? 4 + Math.random() * 12 : 2 + Math.random() * 4;
+      
+      return {
+        el, x, y, angle, speed, life, maxLife: life, size,
+        hue: 30 + Math.random() * 20,
+        gravity: type === 'burst' ? -0.02 : 0.01
+      };
+    }
+
+    function revealText(text) {
+      const words = text.split(/(\s+)/);
+      sparkText.innerHTML = words.map((word, i) => {
+        if (word.trim() === '') return word;
+        return `<span class="fade-word" style="transition-delay: ${i * 0.08}s">${word}</span>`;
+      }).join('');
+      
+      sparkText.classList.add('revealed');
+      
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.fade-word').forEach(el => el.classList.add('visible'));
+      });
+    }
+
+    function ignite() {
+      if (hasIgnited) {
+        // Re-ignite with new message
+        sparkText.classList.remove('revealed');
+        document.querySelectorAll('.fade-word').forEach(el => el.classList.remove('visible'));
+        
+        setTimeout(() => {
+          const transmission = TRANSMISSIONS[Math.floor(Math.random() * TRANSMISSIONS.length)];
+          revealText(transmission);
+          burstParticles();
+        }, 400);
+        return;
+      }
+      
+      hasIgnited = true;
+      summon.classList.add('hidden');
+      ember.classList.add('ignited');
+      
+      setTimeout(() => {
+        geometry.classList.add('visible');
+      }, 300);
+      
+      setTimeout(() => {
+        const transmission = TRANSMISSIONS[Math.floor(Math.random() * TRANSMISSIONS.length)];
+        revealText(transmission);
+      }, 800);
+      
+      burstParticles();
+      
+      setTimeout(() => {
+        breathGuide.classList.add('visible');
+      }, 3000);
+    }
+
+    function burstParticles() {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      
+      for (let i = 0; i < 40; i++) {
+        particles.push(createParticle(cx, cy, 'burst'));
+      }
+    }
+
+    function animate() {
+      breathPhase += 0.015;
+      
+      // Breathing ember
+      const breathScale = 1 + Math.sin(breathPhase) * 0.15;
+      const breathOpacity = 0.8 + Math.sin(breathPhase) * 0.2;
+      
+      if (hasIgnited) {
+        ember.style.transform = `scale(${breathScale})`;
+        
+        // Nebula drift
+        const nebulaX = Math.sin(breathPhase * 0.3) * 50;
+        const nebulaY = Math.cos(breathPhase * 0.2) * 30;
+        nebula.style.background = `
+          radial-gradient(ellipse at ${50 + nebulaX * 0.5}% ${50 + nebulaY * 0.5}%, rgba(255,150,100,0.4) 0%, transparent 50%),
+          radial-gradient(ellipse at ${30 - nebulaX * 0.3}% ${60 + nebulaY * 0.3}%, rgba(200,100,150,0.3) 0%, transparent 40%),
+          radial-gradient(ellipse at ${70 + nebulaX * 0.2}% ${40 - nebulaY * 0.2}%, rgba(150,100,200,0.2) 0%, transparent 45%)
+        `;
+        
+        // Ambient particles
+        if (Math.random() > 0.92) {
+          const cx = window.innerWidth / 2;
+          const cy = window.innerHeight / 2;
+          particles.push(createParticle(
+            cx + (Math.random() - 0.5) * 100,
+            cy + (Math.random() - 0.5) * 100,
+            'ambient'
+          ));
+        }
+      }
+      
+      // Update particles
+      particles = particles.filter(p => {
+        p.life -= 1;
+        if (p.life <= 0) {
+          p.el.remove();
+          return false;
+        }
+        
+        const progress = p.life / p.maxLife;
+        p.x += Math.cos(p.angle) * p.speed;
+        p.y += Math.sin(p.angle) * p.speed + p.gravity * (p.maxLife - p.life);
+        p.speed *= 0.98;
+        
+        const size = p.size * progress;
+        const opacity = progress * 0.8;
+        
+        p.el.style.left = p.x + 'px';
+        p.el.style.top = p.y + 'px';
+        p.el.style.width = size + 'px';
+        p.el.style.height = size + 'px';
+        p.el.style.background = `radial-gradient(circle, 
+          hsla(${p.hue}, 100%, 80%, ${opacity}) 0%, 
+          hsla(${p.hue}, 100%, 60%, ${opacity * 0.5}) 40%,
+          transparent 70%)`;
+        p.el.style.transform = 'translate(-50%, -50%)';
+        
+        return true;
+      });
+      
+      // Star twinkle
+      if (Math.random() > 0.95) {
+        const starEls = stars.children;
+        const randomStar = starEls[Math.floor(Math.random() * starEls.length)];
+        if (randomStar) {
+          randomStar.style.transition = 'opacity 0.3s';
+          randomStar.style.opacity = Math.random() * 0.8 + 0.2;
+        }
+      }
+      
+      requestAnimationFrame(animate);
+    }
+
+    chamber.addEventListener('click', ignite);
+    
+    // Subtle parallax on mouse move
+    chamber.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      stars.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    animate();
+  </script>
+</body>
+</html>

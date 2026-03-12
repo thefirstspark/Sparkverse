@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOU MADE ME WANT TO RAP. | SLUMERICAN × THE FIRST SPARK</title>
+    <meta name="description" content="A direct pitch from KJP to Yelawolf. Independent meets independent.">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --void: #050507;
+            --blood: #8B0000;
+            --blood-glow: #cc1100;
+            --rust: #6B2D2D;
+            --gold: #C9A227;
+            --gold-dim: #8B7320;
+            --bone: #E8E0D0;
+            --ghost: rgba(232,224,208,0.7);
+            --smoke: rgba(255,255,255,0.04);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--void);
+            color: var(--bone);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        canvas#bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .beat-btn {
+            position: fixed;
+            top: 1.5rem; right: 1.5rem;
+            z-index: 100;
+            background: transparent;
+            border: 1px solid var(--rust);
+            color: var(--gold);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+        .beat-btn:hover {
+            border-color: var(--gold);
+            background: rgba(139,0,0,0.15);
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+        .beat-btn.playing { border-color: var(--blood-glow); color: var(--blood-glow); }
+
+        .page { position: relative; z-index: 1; }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .collab-tag {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 8px;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+            color: var(--rust);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp 1s 0.3s forwards;
+        }
+        .collab-tag .x { color: var(--gold); margin: 0 0.5rem; }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            color: var(--bone);
+            line-height: 1.05;
+            max-width: 800px;
+            opacity: 0;
+            animation: fadeUp 1.2s 0.6s forwards;
+            text-shadow: 0 0 80px rgba(139,0,0,0.3);
+        }
+
+        .hero-sub {
+            max-width: 500px;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--ghost);
+            opacity: 0;
+            animation: fadeUp 1s 1s forwards;
+        }
+
+        .hero-sig {
+            margin-top: 2.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 4px;
+            font-size: 0.8rem;
+            color: var(--gold-dim);
+            opacity: 0;
+            animation: fadeUp 1s 1.3s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--rust);
+            opacity: 0;
+            animation: fadeUp 1s 2s forwards, pulse 3s 3s infinite;
+        }
+
+        /* NUMBERS */
+        .numbers {
+            padding: 6rem 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            border-top: 1px solid rgba(139,0,0,0.15);
+            border-bottom: 1px solid rgba(139,0,0,0.15);
+            background: linear-gradient(180deg, transparent, rgba(139,0,0,0.03), transparent);
+        }
+
+        .num-card {
+            text-align: center;
+            min-width: 140px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .num-card.visible { animation: fadeUp 0.8s forwards; }
+
+        .num-val {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            line-height: 1;
+        }
+        .num-val .unit { font-size: 0.5em; color: var(--gold-dim); }
+
+        .num-label {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--rust);
+            margin-top: 0.3rem;
+            text-transform: uppercase;
+        }
+
+        /* LETTER */
+        .letter {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .letter p {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--ghost);
+        }
+        .letter strong { color: var(--bone); }
+        .letter em { color: var(--gold); font-style: normal; }
+
+        .letter .highlight {
+            border-left: 2px solid var(--blood);
+            padding-left: 1.2rem;
+            margin: 2.5rem 0;
+            color: var(--bone);
+            font-size: 0.95rem;
+        }
+
+        /* ASSET PROOF */
+        .proof {
+            padding: 4rem 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .proof h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 6px;
+            font-size: 1.1rem;
+            color: var(--rust);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: rgba(139,0,0,0.1);
+            border: 1px solid rgba(139,0,0,0.1);
+        }
+
+        .asset-item {
+            background: var(--void);
+            padding: 1.2rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.75rem;
+        }
+        .asset-item .a-name { color: var(--ghost); }
+        .asset-item .a-val { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; }
+
+        /* OFFERS */
+        .offers {
+            padding: 6rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .offers h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 6px;
+            font-size: 1.1rem;
+            color: var(--rust);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .offer-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .offer-card {
+            border: 1px solid rgba(139,0,0,0.2);
+            padding: 2rem 1.5rem;
+            position: relative;
+            transition: all 0.5s ease;
+            cursor: default;
+            background: rgba(5,5,7,0.8);
+        }
+        .offer-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 40px rgba(139,0,0,0.15);
+            transform: translateY(-4px);
+        }
+
+        .offer-letter {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--blood);
+            line-height: 1;
+            margin-bottom: 0.8rem;
+        }
+
+        .offer-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 0.8rem;
+        }
+
+        .offer-desc {
+            font-size: 0.78rem;
+            color: var(--ghost);
+            line-height: 1.7;
+        }
+
+        /* DEAL TERMS */
+        .terms {
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            border-top: 1px solid rgba(139,0,0,0.1);
+        }
+
+        .terms h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 6px;
+            font-size: 1rem;
+            color: var(--rust);
+            margin-bottom: 2rem;
+        }
+
+        .term-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(139,0,0,0.07);
+            font-size: 0.8rem;
+        }
+        .term-row .t-key { color: var(--ghost); }
+        .term-row .t-val { color: var(--gold); font-weight: 700; }
+
+        /* CTA */
+        .cta {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .cta-line {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--bone);
+            margin-bottom: 3rem;
+        }
+
+        .links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .links a {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 3px;
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-decoration: none;
+            border: 1px solid var(--rust);
+            padding: 0.7rem 1.5rem;
+            transition: all 0.4s ease;
+        }
+        .links a:hover {
+            border-color: var(--gold);
+            background: rgba(201,162,39,0.08);
+            box-shadow: 0 0 30px rgba(139,0,0,0.2);
+        }
+
+        .contact {
+            padding: 3rem 2rem 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(139,0,0,0.08);
+        }
+
+        .contact-name {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            color: var(--gold-dim);
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-role {
+            font-size: 0.7rem;
+            color: var(--rust);
+            letter-spacing: 2px;
+            margin-bottom: 1.2rem;
+        }
+
+        .contact a {
+            color: var(--ghost);
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: color 0.3s;
+        }
+        .contact a:hover { color: var(--gold); }
+        .contact .sep { margin: 0 0.8rem; color: var(--rust); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .asset-grid { grid-template-columns: 1fr; }
+            .numbers { gap: 1.5rem; padding: 4rem 1.5rem; }
+            .letter { padding: 4rem 1.5rem; }
+            .offer-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<button class="beat-btn" id="beatBtn" onclick="toggleBeat()" aria-label="Toggle beat">▶ BEAT</button>
+
+<div class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="collab-tag">SLUMERICAN <span class="x">×</span> THE FIRST SPARK</div>
+        <h1>You Made Me Want&nbsp;to&nbsp;Rap.</h1>
+        <p class="hero-sub">I still know every word. I built something instead. I want you to see it.</p>
+        <div class="hero-sig">— KJP / AKRON, OHIO</div>
+        <div class="scroll-hint">↓ SCROLL</div>
+    </section>
+
+    <!-- REAL NUMBERS -->
+    <section class="numbers" id="numbers">
+        <div class="num-card" data-delay="0">
+            <div class="num-val">57<span class="unit">+</span></div>
+            <div class="num-label">Tools Built</div>
+        </div>
+        <div class="num-card" data-delay="100">
+            <div class="num-val"><span class="unit">$</span>0</div>
+            <div class="num-label">VC Taken</div>
+        </div>
+        <div class="num-card" data-delay="200">
+            <div class="num-val"><span class="unit">$</span>108K</div>
+            <div class="num-label">Verified Assets</div>
+        </div>
+        <div class="num-card" data-delay="300">
+            <div class="num-val">7</div>
+            <div class="num-label">Live Repos</div>
+        </div>
+        <div class="num-card" data-delay="400">
+            <div class="num-val"><span class="unit">$</span>200K</div>
+            <div class="num-label">Raise Open</div>
+        </div>
+        <div class="num-card" data-delay="500">
+            <div class="num-val"><span class="unit">$</span>2.4K</div>
+            <div class="num-label">Monthly Rev</div>
+        </div>
+    </section>
+
+    <!-- THE LETTER -->
+    <section class="letter">
+        <p>You built Slumerican with nothing but conviction and a fanbase that <em>felt it in their bones</em>. No permission. No machine. Just you.</p>
+
+        <p>I did the same thing — different medium, same frequency. <strong>57 interactive tools. 7 public repositories. A full membership platform. A consciousness technology ecosystem.</strong> All self-taught. All bootstrapped. All built while running a painting business and raising two boys as a single mom in Akron.</p>
+
+        <div class="highlight">
+            I'm not pitching you a product. I'm showing you a mirror. You built something for the kids who found themselves in Trunk Muzik at 2am. I built something for the ones who need to reprogram their reality at 3am.
+        </div>
+
+        <p>The First Spark is consciousness technology — soul mapping, sigil generators, pattern debuggers, identity architecture tools. No crystals. No fluff. <em>Code that helps people rebuild themselves.</em></p>
+
+        <p>My verified digital assets clock in at <strong>$108K replacement value</strong>. I'm raising <strong>$200K for 20% equity</strong> at a <strong>$1M post-money valuation</strong>. That's not startup math — that's every tool, every framework, every line of code I've written in the last two years, independently verified.</p>
+
+        <p>Your audience already believes in sovereignty. Mine gives them the tools to build it. Together, we reach the next generation before the extraction machine does.</p>
+    </section>
+
+    <!-- ASSET PROOF -->
+    <section class="proof">
+        <h2>VERIFIED ASSET BREAKDOWN</h2>
+        <div class="asset-grid">
+            <div class="asset-item">
+                <span class="a-name">Interactive HTML Tools (57+)</span>
+                <span class="a-val">$15–25K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Production Website (PWA)</span>
+                <span class="a-val">$8–13K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Notion Hub (200+ hrs)</span>
+                <span class="a-val">$8–15K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Brand & IP Portfolio</span>
+                <span class="a-val">$8–15K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">GitHub Repositories (7)</span>
+                <span class="a-val">$8–12K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Content Library + Book Zero</span>
+                <span class="a-val">$5–10K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Investor Materials</span>
+                <span class="a-val">$3–5K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Sigil IP Collection</span>
+                <span class="a-val">$3–6K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Membership Infra (Whop/Stripe)</span>
+                <span class="a-val">$2–3K</span>
+            </div>
+            <div class="asset-item">
+                <span class="a-name">Social Presence (5+ platforms)</span>
+                <span class="a-val">$2–4K</span>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:1.5rem;">
+            <span style="font-family:'Bebas Neue',sans-serif; letter-spacing:3px; color:var(--gold); font-size:1.3rem;">TOTAL: $62K – $108K</span>
+            <div style="font-size:0.65rem; color:var(--rust); letter-spacing:2px; margin-top:0.3rem;">REPLACEMENT VALUE · VERIFIED FEB 2026</div>
+        </div>
+    </section>
+
+    <!-- THE OFFER -->
+    <section class="offers">
+        <h2>THREE PATHS FORWARD</h2>
+        <div class="offer-row">
+            <div class="offer-card">
+                <div class="offer-letter">A</div>
+                <div class="offer-title">INVEST</div>
+                <div class="offer-desc">Early equity. Ground floor. $200K SAFE at $1M post-money. 20% for someone who understands building from nothing. You'd be the first outside investor.</div>
+            </div>
+            <div class="offer-card">
+                <div class="offer-letter">B</div>
+                <div class="offer-title">CO-BUILD</div>
+                <div class="offer-desc">Your world built into the platform. Slumerican-branded consciousness tools. Soul mapping for your audience. Your community gets the tech, we both own the upside.</div>
+            </div>
+            <div class="offer-card">
+                <div class="offer-letter">C</div>
+                <div class="offer-title">AMPLIFY</div>
+                <div class="offer-desc">Just say the word. Your voice reaches kids I can't reach alone. One story, one post, one co-sign — and we shift trajectory for a generation of outsiders.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEAL TERMS -->
+    <section class="terms">
+        <h2>THE DEAL</h2>
+        <div class="term-row"><span class="t-key">Raise Amount</span><span class="t-val">$200,000</span></div>
+        <div class="term-row"><span class="t-key">Equity Offered</span><span class="t-val">20%</span></div>
+        <div class="term-row"><span class="t-key">Valuation Cap</span><span class="t-val">$1,000,000</span></div>
+        <div class="term-row"><span class="t-key">Instrument</span><span class="t-val">SAFE Note</span></div>
+        <div class="term-row"><span class="t-key">Verified Asset Base</span><span class="t-val">$62K–$108K</span></div>
+        <div class="term-row"><span class="t-key">Monthly Revenue</span><span class="t-val">$2,400 (painting ops)</span></div>
+        <div class="term-row"><span class="t-key">Burn Rate</span><span class="t-val">Bootstrapped / $0 debt</span></div>
+        <div class="term-row"><span class="t-key">Status</span><span class="t-val">Open — Taking Meetings</span></div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-line">Independent meets independent.</div>
+        <div class="links">
+            <a href="trinity.html">ENTER THE TRINITY</a>
+            <a href="invest.html">SEE THE RAISE</a>
+            <a href="investor-deck-v2.html">INVESTOR DECK</a>
+            <a href="OGmap.html">SPARKVERSE MAP</a>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <footer class="contact">
+        <div class="contact-name">KATELIN J. PUZAKULICS</div>
+        <div class="contact-role">FOUNDER · THE FIRST SPARK</div>
+        <a href="mailto:kate@thefirstspark.shop">kate@thefirstspark.shop</a>
+        <span class="sep">·</span>
+        <a href="https://thefirstspark.shop">thefirstspark.shop</a>
+    </footer>
+
+</div>
+
+<script>
+const c = document.getElementById('bg');
+const ctx = c.getContext('2d');
+let W, H, particles = [];
+const mouse = { x: null, y: null };
+
+function resize() {
+    W = c.width = window.innerWidth;
+    H = c.height = window.innerHeight;
+    init();
+}
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.r = Math.random() * 1.5 + 0.3;
+        this.color = Math.random() > 0.7 ? 'rgba(139,0,0,0.6)' : 'rgba(201,162,39,0.25)';
+    }
+    update() {
+        if (mouse.x) {
+            const dx = mouse.x - this.x, dy = mouse.y - this.y;
+            const d = Math.sqrt(dx*dx + dy*dy);
+            if (d < 120) {
+                this.x -= dx * 0.008;
+                this.y -= dy * 0.008;
+            }
+        }
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < 0 || this.x > W) this.vx *= -1;
+        if (this.y < 0 || this.y > H) this.vy *= -1;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+}
+
+function init() {
+    particles = [];
+    const n = Math.min(80, Math.floor((W * H) / 18000));
+    for (let i = 0; i < n; i++) particles.push(new Particle());
+}
+
+function connect() {
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const d = Math.sqrt(dx*dx + dy*dy);
+            if (d < 90) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(139,0,0,${0.12 * (1 - d/90)})`;
+                ctx.lineWidth = 0.4;
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, W, H);
+    connect();
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+}
+
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+window.addEventListener('resize', resize);
+resize();
+animate();
+
+// SCROLL REVEAL FOR NUMBERS
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const cards = entry.target.querySelectorAll('.num-card');
+            cards.forEach(card => {
+                const delay = card.getAttribute('data-delay') || 0;
+                setTimeout(() => card.classList.add('visible'), parseInt(delay));
+            });
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.3 });
+const numSection = document.getElementById('numbers');
+if (numSection) observer.observe(numSection);
+
+// BEAT TOGGLE
+let playing = false;
+function toggleBeat() {
+    const btn = document.getElementById('beatBtn');
+    playing = !playing;
+    btn.textContent = playing ? '■ BEAT' : '▶ BEAT';
+    btn.classList.toggle('playing', playing);
+}
+</script>
+
+</body>
+</html>

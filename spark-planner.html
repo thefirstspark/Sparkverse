@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spark Protocol | Reality Architect</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --void: #0a0a0f;
+            --deep: #12121a;
+            --surface: #1a1a24;
+            --spark-gold: #ffd700;
+            --spark-amber: #ffaa00;
+            --cosmic-purple: #8b5cf6;
+            --liminal-cyan: #06b6d4;
+            --rose-quartz: #f472b6;
+            --text: #e4e4e7;
+            --text-dim: #71717a;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .cosmic-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .cosmic-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+            animation: cosmicDrift 60s linear infinite;
+        }
+        
+        @keyframes cosmicDrift {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Sacred Geometry Overlay */
+        .sacred-geometry {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='none' stroke='%23ffd700' stroke-width='0.5'/%3E%3Ccircle cx='50' cy='50' r='35' fill='none' stroke='%23ffd700' stroke-width='0.5'/%3E%3C/svg%3E");
+        }
+        
+        /* Main Container */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-amber), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+        
+        /* Energy Bar */
+        .energy-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .energy-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .energy-title {
+            font-family: 'Cinzel', serif;
+            color: var(--spark-gold);
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+        }
+        
+        .energy-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--spark-gold);
+        }
+        
+        .energy-bar {
+            height: 12px;
+            background: var(--void);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cosmic-purple), var(--liminal-cyan), var(--spark-gold));
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .energy-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .energy-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .energy-btn {
+            padding: 8px 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            background: transparent;
+            color: var(--text);
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .energy-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: var(--spark-gold);
+            color: var(--spark-gold);
+        }
+        
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        @media (min-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr 1.2fr 1fr;
+            }
+        }
+        
+        /* Cards */
+        .card {
+            background: linear-gradient(145deg, rgba(26, 26, 36, 0.9), rgba(18, 18, 26, 0.95));
+            border-radius: 24px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+        
+        .card:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(255, 215, 0, 0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .card-icon.gold { background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 170, 0, 0.1)); }
+        .card-icon.purple { background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1)); }
+        .card-icon.cyan { background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.1)); }
+        .card-icon.rose { background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(244, 114, 182, 0.1)); }
+        
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--spark-gold);
+            letter-spacing: 0.1em;
+        }
+        
+        /* Intention Input */
+        .intention-section {
+            grid-column: 1 / -1;
+        }
+        
+        .intention-input {
+            width: 100%;
+            padding: 20px;
+            background: var(--void);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            resize: none;
+            transition: all 0.3s ease;
+        }
+        
+        .intention-input:focus {
+            outline: none;
+            border-color: var(--spark-gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+        
+        .intention-input::placeholder {
+            color: var(--text-dim);
+        }
+        
+        /* Task List */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .task-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .task-list::-webkit-scrollbar-track {
+            background: var(--void);
+            border-radius: 2px;
+        }
+        
+        .task-list::-webkit-scrollbar-thumb {
+            background: var(--cosmic-purple);
+            border-radius: 2px;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: var(--void);
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .task-item:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        
+        .task-item.completed {
+            opacity: 0.5;
+        }
+        
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+        }
+        
+        .task-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--cosmic-purple);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .task-item.completed .task-checkbox {
+            background: var(--cosmic-purple);
+        }
+        
+        .task-checkbox::after {
+            content: '✓';
+            color: var(--void);
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .task-item.completed .task-checkbox::after {
+            opacity: 1;
+        }
+        
+        .task-content {
+            flex: 1;
+        }
+        
+        .task-text {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        
+        .task-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .task-priority {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .priority-high { background: rgba(244, 114, 182, 0.2); color: var(--rose-quartz); }
+        .priority-medium { background: rgba(255, 215, 0, 0.2); color: var(--spark-gold); }
+        .priority-low { background: rgba(6, 182, 212, 0.2); color: var(--liminal-cyan); }
+        
+        .task-delete {
+            opacity: 0;
+            padding: 5px;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .task-item:hover .task-delete {
+            opacity: 1;
+        }
+        
+        .task-delete:hover {
+            color: var(--rose-quartz);
+        }
+        
+        /* Add Task */
+        .add-task-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .add-task-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--void);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .add-task-input:focus {
+            outline: none;
+            border-color: var(--spark-gold);
+        }
+        
+        .add-task-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--cosmic-purple), var(--liminal-cyan));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-task-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        /* Time Blocks */
+        .time-blocks {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .time-block {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: var(--void);
+            border-radius: 10px;
+            border-left: 3px solid var(--cosmic-purple);
+            transition: all 0.3s ease;
+        }
+        
+        .time-block:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+        
+        .time-block.active {
+            border-left-color: var(--spark-gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+        
+        .block-time {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            min-width: 80px;
+        }
+        
+        .block-content {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+        
+        .block-content input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .block-content input:focus {
+            outline: none;
+        }
+        
+        .block-content input::placeholder {
+            color: var(--text-dim);
+        }
+        
+        /* Manifestation Tracker */
+        .manifestation-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        
+        .manifest-day {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            background: var(--void);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+        }
+        
+        .manifest-day:hover {
+            border-color: var(--spark-gold);
+        }
+        
+        .manifest-day.sparked {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 170, 0, 0.1));
+            border-color: var(--spark-gold);
+        }
+        
+        .manifest-day.sparked::after {
+            content: '✦';
+            color: var(--spark-gold);
+            font-size: 1rem;
+        }
+        
+        .day-label {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            margin-bottom: 2px;
+        }
+        
+        .day-num {
+            font-weight: 500;
+        }
+        
+        /* Moon Phase */
+        .moon-display {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .moon-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+        }
+        
+        .moon-phase {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--spark-gold);
+            margin-bottom: 5px;
+        }
+        
+        .moon-energy {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .quick-btn {
+            padding: 15px;
+            background: var(--void);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quick-btn:hover {
+            background: rgba(255, 215, 0, 0.05);
+            border-color: var(--spark-gold);
+            transform: translateY(-2px);
+        }
+        
+        .quick-btn span:first-child {
+            font-size: 1.3rem;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--void);
+            border-radius: 12px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--spark-gold), var(--cosmic-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 5px;
+        }
+        
+        /* Notes */
+        .notes-area {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            background: var(--void);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            resize: vertical;
+            line-height: 1.6;
+        }
+        
+        .notes-area:focus {
+            outline: none;
+            border-color: var(--liminal-cyan);
+        }
+        
+        /* Gratitude */
+        .gratitude-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Horoscope */
+        .sign-selector {
+            margin-bottom: 20px;
+        }
+        
+        .sign-selector select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--void);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f472b6' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+        
+        .sign-selector select:focus {
+            outline: none;
+            border-color: var(--rose-quartz);
+        }
+        
+        .sign-selector select option {
+            background: var(--deep);
+            color: var(--text);
+        }
+        
+        .horoscope-content {
+            padding: 20px;
+            background: var(--void);
+            border-radius: 12px;
+            border-left: 3px solid var(--rose-quartz);
+            min-height: 120px;
+        }
+        
+        .horoscope-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+        
+        .horoscope-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            color: var(--text-dim);
+        }
+        
+        .loading-sigil {
+            font-size: 2rem;
+            color: var(--rose-quartz);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .horoscope-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .meta-item {
+            padding: 8px 14px;
+            background: var(--void);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .meta-label {
+            color: var(--text-dim);
+            margin-right: 6px;
+        }
+        
+        .meta-value {
+            color: var(--spark-gold);
+        }
+        
+        .compatibility {
+            color: var(--rose-quartz);
+        }
+        
+        .lucky-num {
+            color: var(--liminal-cyan);
+        }
+        
+        .mood-val {
+            color: var(--cosmic-purple);
+        }
+        
+        /* Future Self Reminders */
+        .reminder-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .reminder-text-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--void);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .reminder-text-input:focus {
+            outline: none;
+            border-color: var(--liminal-cyan);
+        }
+        
+        .reminder-date-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .reminder-date-input {
+            flex: 1;
+            padding: 10px 14px;
+            background: var(--void);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            color-scheme: dark;
+        }
+        
+        .reminder-date-input:focus {
+            outline: none;
+            border-color: var(--liminal-cyan);
+        }
+        
+        .add-reminder-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--liminal-cyan), var(--cosmic-purple));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-reminder-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(6, 182, 212, 0.4);
+        }
+        
+        .reminders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .reminder-item {
+            padding: 14px;
+            background: var(--void);
+            border-radius: 10px;
+            border-left: 3px solid var(--liminal-cyan);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .reminder-item:hover {
+            background: rgba(6, 182, 212, 0.05);
+        }
+        
+        .reminder-item.due-today {
+            border-left-color: var(--spark-gold);
+            background: rgba(255, 215, 0, 0.05);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+        
+        .reminder-item.overdue {
+            border-left-color: var(--rose-quartz);
+            background: rgba(244, 114, 182, 0.05);
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
+            50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        }
+        
+        .reminder-message {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            padding-right: 25px;
+        }
+        
+        .reminder-date {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .reminder-date-icon {
+            color: var(--liminal-cyan);
+        }
+        
+        .reminder-status {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .status-today {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--spark-gold);
+        }
+        
+        .status-overdue {
+            background: rgba(244, 114, 182, 0.2);
+            color: var(--rose-quartz);
+        }
+        
+        .status-upcoming {
+            background: rgba(6, 182, 212, 0.2);
+            color: var(--liminal-cyan);
+        }
+        
+        .reminder-delete {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            opacity: 0;
+            padding: 4px;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .reminder-item:hover .reminder-delete {
+            opacity: 1;
+        }
+        
+        .reminder-delete:hover {
+            color: var(--rose-quartz);
+        }
+        
+        .reminder-complete {
+            position: absolute;
+            top: 12px;
+            right: 35px;
+            opacity: 0;
+            padding: 4px;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .reminder-item:hover .reminder-complete {
+            opacity: 1;
+        }
+        
+        .reminder-complete:hover {
+            color: var(--spark-gold);
+        }
+        
+        .no-reminders {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        
+        /* Sync Panel */
+        .sync-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+        
+        .sync-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, rgba(26, 26, 36, 0.95), rgba(18, 18, 26, 0.98));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .sync-toggle:hover {
+            border-color: var(--spark-gold);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.15);
+        }
+        
+        .sync-icon {
+            font-size: 1.1rem;
+        }
+        
+        .sync-status {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        
+        .sync-status.connected {
+            color: var(--spark-gold);
+        }
+        
+        .sync-content {
+            position: absolute;
+            bottom: 55px;
+            left: 0;
+            width: 320px;
+            background: linear-gradient(145deg, rgba(26, 26, 36, 0.98), rgba(18, 18, 26, 0.99));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            display: none;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .sync-content.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sync-header h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--spark-gold);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .sync-header p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+        
+        .setup-step {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        
+        .step-num {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--cosmic-purple), var(--liminal-cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content p {
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+        
+        .step-note {
+            color: var(--text-dim);
+            font-size: 0.75rem !important;
+        }
+        
+        .step-link {
+            color: var(--liminal-cyan);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        
+        .step-link:hover {
+            text-decoration: underline;
+        }
+        
+        .copy-script-btn {
+            padding: 8px 14px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--cosmic-purple);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .copy-script-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+        
+        .webhook-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--void);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .webhook-input:focus {
+            outline: none;
+            border-color: var(--liminal-cyan);
+        }
+        
+        .save-webhook-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--liminal-cyan), var(--cosmic-purple));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .save-webhook-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.3);
+        }
+        
+        .connected-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .connected-icon {
+            color: var(--spark-gold);
+            font-size: 1.2rem;
+        }
+        
+        .sync-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .sync-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--void);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .sync-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: var(--spark-gold);
+        }
+        
+        .sync-btn span {
+            font-size: 1rem;
+        }
+        
+        .last-sync {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .disconnect-btn {
+            width: 100%;
+            padding: 8px;
+            background: transparent;
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            border-radius: 6px;
+            color: var(--rose-quartz);
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .disconnect-btn:hover {
+            background: rgba(244, 114, 182, 0.1);
+        }
+        
+        /* Script Modal */
+        .script-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+        
+        .script-modal.show {
+            display: flex;
+        }
+        
+        .script-modal-content {
+            background: var(--deep);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .script-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .script-modal-header h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--spark-gold);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .close-modal:hover {
+            color: var(--text);
+        }
+        
+        .script-modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .script-modal-body p {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+        
+        .script-code {
+            background: var(--void);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            color: var(--liminal-cyan);
+        }
+        
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--cosmic-purple), var(--liminal-cyan));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .script-modal-footer {
+            padding: 20px;
+            background: var(--void);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .script-modal-footer p {
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        
+        .script-modal-footer ol {
+            padding-left: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        
+        .script-modal-footer li {
+            margin-bottom: 5px;
+        }
+        
+        .gratitude-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .gratitude-icon {
+            color: var(--spark-gold);
+        }
+        
+        .gratitude-input {
+            flex: 1;
+            padding: 10px 15px;
+            background: var(--void);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .gratitude-input:focus {
+            outline: none;
+            border-color: var(--spark-gold);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+        
+        .footer-text {
+            font-family: 'Cinzel', serif;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+        }
+        
+        .footer-spark {
+            color: var(--spark-gold);
+        }
+        
+        /* Floating Particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--spark-gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            animation: float 8s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-100vh) scale(1); }
+        }
+        
+        /* Save Indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(139, 92, 246, 0.9);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div>
+    <div class="sacred-geometry"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 1s;"></div>
+    
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">The Spark Protocol</h1>
+            <p class="tagline">Reality Architect Interface</p>
+        </header>
+        
+        <!-- Energy Bar -->
+        <div class="energy-container">
+            <div class="energy-label">
+                <span class="energy-title">Manifestation Energy</span>
+                <span class="energy-value" id="energyValue">75%</span>
+            </div>
+            <div class="energy-bar">
+                <div class="energy-fill" id="energyFill" style="width: 75%"></div>
+            </div>
+            <div class="energy-controls">
+                <button class="energy-btn" onclick="adjustEnergy(-10)">− Drain</button>
+                <button class="energy-btn" onclick="adjustEnergy(10)">+ Charge</button>
+                <button class="energy-btn" onclick="resetEnergy()">⟲ Reset</button>
+            </div>
+        </div>
+        
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Daily Intention -->
+            <div class="card intention-section">
+                <div class="card-header">
+                    <div class="card-icon gold">✦</div>
+                    <h2 class="card-title">Today's Intention</h2>
+                </div>
+                <textarea class="intention-input" id="dailyIntention" rows="2" placeholder="What reality are you architecting today?"></textarea>
+            </div>
+            
+            <!-- Task List -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon purple">◈</div>
+                    <h2 class="card-title">Reality Queue</h2>
+                </div>
+                <div class="task-list" id="taskList">
+                    <!-- Tasks populated by JS -->
+                </div>
+                <div class="add-task-container">
+                    <input type="text" class="add-task-input" id="newTaskInput" placeholder="Add new manifestation..." onkeypress="if(event.key==='Enter')addTask()">
+                    <button class="add-task-btn" onclick="addTask()">Add</button>
+                </div>
+            </div>
+            
+            <!-- Time Blocks -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon cyan">◐</div>
+                    <h2 class="card-title">Time Architecture</h2>
+                </div>
+                <div class="time-blocks" id="timeBlocks">
+                    <!-- Time blocks populated by JS -->
+                </div>
+            </div>
+            
+            <!-- Moon Phase -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon gold">☽</div>
+                    <h2 class="card-title">Lunar Guidance</h2>
+                </div>
+                <div class="moon-display">
+                    <div class="moon-icon" id="moonIcon">🌗</div>
+                    <div class="moon-phase" id="moonPhase">Third Quarter</div>
+                    <div class="moon-energy" id="moonEnergy">Time for release and reflection. Let go of what no longer serves your highest timeline.</div>
+                </div>
+            </div>
+            
+            <!-- Daily Horoscope -->
+            <div class="card horoscope-card">
+                <div class="card-header">
+                    <div class="card-icon rose">♈</div>
+                    <h2 class="card-title">Cosmic Transmission</h2>
+                </div>
+                <div class="sign-selector">
+                    <select id="zodiacSign" onchange="fetchHoroscope()">
+                        <option value="aries">♈ Aries</option>
+                        <option value="taurus" selected>♉ Taurus</option>
+                        <option value="gemini">♊ Gemini</option>
+                        <option value="cancer">♋ Cancer</option>
+                        <option value="leo">♌ Leo</option>
+                        <option value="virgo">♍ Virgo</option>
+                        <option value="libra">♎ Libra</option>
+                        <option value="scorpio">♏ Scorpio</option>
+                        <option value="sagittarius">♐ Sagittarius</option>
+                        <option value="capricorn">♑ Capricorn</option>
+                        <option value="aquarius">♒ Aquarius</option>
+                        <option value="pisces">♓ Pisces</option>
+                    </select>
+                </div>
+                <div class="horoscope-content" id="horoscopeContent">
+                    <div class="horoscope-loading">
+                        <div class="loading-sigil">✦</div>
+                        <span>Channeling cosmic frequencies...</span>
+                    </div>
+                </div>
+                <div class="horoscope-meta" id="horoscopeMeta"></div>
+            </div>
+            
+            <!-- Manifestation Tracker -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon rose">✧</div>
+                    <h2 class="card-title">Spark Streak</h2>
+                </div>
+                <div class="manifestation-grid" id="manifestGrid">
+                    <!-- Grid populated by JS -->
+                </div>
+                <div class="stats-grid" style="margin-top: 20px;">
+                    <div class="stat-item">
+                        <div class="stat-value" id="currentStreak">0</div>
+                        <div class="stat-label">Current Streak</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalSparks">0</div>
+                        <div class="stat-label">Total Sparks</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon purple">⚡</div>
+                    <h2 class="card-title">Quick Rituals</h2>
+                </div>
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="quickRitual('breathe')">
+                        <span>🌬️</span>
+                        <span>Breathwork</span>
+                    </button>
+                    <button class="quick-btn" onclick="quickRitual('ground')">
+                        <span>🌍</span>
+                        <span>Ground</span>
+                    </button>
+                    <button class="quick-btn" onclick="quickRitual('sigil')">
+                        <span>🔮</span>
+                        <span>Sigil Flash</span>
+                    </button>
+                    <button class="quick-btn" onclick="quickRitual('affirm')">
+                        <span>💫</span>
+                        <span>Affirm</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Future Self Reminders -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon cyan">⏳</div>
+                    <h2 class="card-title">Future Self Drops</h2>
+                </div>
+                <div class="reminder-input-container">
+                    <input type="text" class="reminder-text-input" id="newReminderText" placeholder="Message to future you...">
+                    <div class="reminder-date-row">
+                        <input type="date" class="reminder-date-input" id="newReminderDate">
+                        <button class="add-reminder-btn" onclick="addReminder()">Drop</button>
+                    </div>
+                </div>
+                <div class="reminders-list" id="remindersList">
+                    <!-- Reminders populated by JS -->
+                </div>
+            </div>
+            
+            <!-- Gratitude -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon gold">♡</div>
+                    <h2 class="card-title">Gratitude Anchors</h2>
+                </div>
+                <div class="gratitude-list">
+                    <div class="gratitude-item">
+                        <span class="gratitude-icon">✦</span>
+                        <input type="text" class="gratitude-input" id="gratitude1" placeholder="I am grateful for...">
+                    </div>
+                    <div class="gratitude-item">
+                        <span class="gratitude-icon">✦</span>
+                        <input type="text" class="gratitude-input" id="gratitude2" placeholder="I am grateful for...">
+                    </div>
+                    <div class="gratitude-item">
+                        <span class="gratitude-icon">✦</span>
+                        <input type="text" class="gratitude-input" id="gratitude3" placeholder="I am grateful for...">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Liminal Notes -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon cyan">〰️</div>
+                    <h2 class="card-title">Liminal Downloads</h2>
+                </div>
+                <textarea class="notes-area" id="liminalNotes" placeholder="Capture those in-between thoughts, synchronicities, and reality glitches..."></textarea>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">Consciousness is the <span class="footer-spark">interface</span> ✦ Reality is <span class="footer-spark">programmable</span></p>
+        </footer>
+        
+        <!-- Google Sheets Sync Panel -->
+        <div class="sync-panel" id="syncPanel">
+            <div class="sync-toggle" onclick="toggleSyncPanel()">
+                <span class="sync-icon">☁️</span>
+                <span class="sync-status" id="syncStatus">Setup Sync</span>
+            </div>
+            <div class="sync-content" id="syncContent">
+                <div class="sync-header">
+                    <h3>Google Sheets Sync</h3>
+                    <p>Save your data to a Google Sheet for cross-device access</p>
+                </div>
+                <div class="sync-setup" id="syncSetup">
+                    <div class="setup-step">
+                        <span class="step-num">1</span>
+                        <div class="step-content">
+                            <p>Create a new Google Sheet</p>
+                            <a href="https://sheets.new" target="_blank" class="step-link">Open Google Sheets →</a>
+                        </div>
+                    </div>
+                    <div class="setup-step">
+                        <span class="step-num">2</span>
+                        <div class="step-content">
+                            <p>Go to Extensions → Apps Script</p>
+                            <p class="step-note">Paste this code and deploy as web app:</p>
+                            <button class="copy-script-btn" onclick="copyAppsScript()">Copy Apps Script Code</button>
+                        </div>
+                    </div>
+                    <div class="setup-step">
+                        <span class="step-num">3</span>
+                        <div class="step-content">
+                            <p>Paste your Web App URL below:</p>
+                            <input type="text" class="webhook-input" id="webhookUrl" placeholder="https://script.google.com/macros/s/...">
+                            <button class="save-webhook-btn" onclick="saveWebhook()">Connect</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="sync-connected" id="syncConnected" style="display: none;">
+                    <div class="connected-status">
+                        <span class="connected-icon">✓</span>
+                        <span>Connected to Google Sheets</span>
+                    </div>
+                    <div class="sync-actions">
+                        <button class="sync-btn" onclick="syncToSheets()">
+                            <span>↑</span> Push to Sheets
+                        </button>
+                        <button class="sync-btn" onclick="loadFromSheets()">
+                            <span>↓</span> Pull from Sheets
+                        </button>
+                    </div>
+                    <div class="last-sync" id="lastSync"></div>
+                    <button class="disconnect-btn" onclick="disconnectSheets()">Disconnect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="save-indicator" id="saveIndicator">✓ Saved to local reality</div>
+    
+    <!-- Apps Script Modal -->
+    <div class="script-modal" id="scriptModal">
+        <div class="script-modal-content">
+            <div class="script-modal-header">
+                <h3>Google Apps Script Code</h3>
+                <button class="close-modal" onclick="closeScriptModal()">✕</button>
+            </div>
+            <div class="script-modal-body">
+                <p>Copy this entire code into your Google Apps Script editor:</p>
+                <pre class="script-code" id="scriptCode"></pre>
+                <button class="copy-btn" onclick="copyScriptToClipboard()">Copy to Clipboard</button>
+            </div>
+            <div class="script-modal-footer">
+                <p><strong>After pasting:</strong></p>
+                <ol>
+                    <li>Click "Deploy" → "New deployment"</li>
+                    <li>Select "Web app" as type</li>
+                    <li>Set "Who has access" to "Anyone"</li>
+                    <li>Click "Deploy" and copy the URL</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // State
+        let state = {
+            energy: 75,
+            tasks: [
+                { id: 1, text: 'Update Whop membership tiers', priority: 'high', completed: false, energy: 15 },
+                { id: 2, text: 'Create viral TikTok for Liminal Pool', priority: 'high', completed: false, energy: 20 },
+                { id: 3, text: 'Draft email sequence for new sparks', priority: 'medium', completed: false, energy: 10 },
+            ],
+            timeBlocks: [
+                { time: '6:00 AM', content: 'Morning ritual & intention setting' },
+                { time: '8:00 AM', content: '' },
+                { time: '10:00 AM', content: '' },
+                { time: '12:00 PM', content: '' },
+                { time: '2:00 PM', content: '' },
+                { time: '4:00 PM', content: '' },
+                { time: '6:00 PM', content: '' },
+                { time: '8:00 PM', content: 'Evening reflection' },
+            ],
+            sparkDays: [],
+            intention: '',
+            gratitude: ['', '', ''],
+            notes: '',
+            zodiacSign: 'taurus',
+            reminders: []
+        };
+        
+        // Load from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('sparkProtocolState');
+            if (saved) {
+                state = { ...state, ...JSON.parse(saved) };
+            }
+            // Restore zodiac selection
+            if (state.zodiacSign) {
+                document.getElementById('zodiacSign').value = state.zodiacSign;
+            }
+            render();
+        }
+        
+        // Save to localStorage
+        function saveState() {
+            localStorage.setItem('sparkProtocolState', JSON.stringify(state));
+            showSaveIndicator();
+        }
+        
+        // Show save indicator
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+        
+        // Energy functions
+        function adjustEnergy(amount) {
+            state.energy = Math.max(0, Math.min(100, state.energy + amount));
+            updateEnergyDisplay();
+            saveState();
+        }
+        
+        function resetEnergy() {
+            state.energy = 100;
+            updateEnergyDisplay();
+            saveState();
+        }
+        
+        function updateEnergyDisplay() {
+            document.getElementById('energyValue').textContent = state.energy + '%';
+            document.getElementById('energyFill').style.width = state.energy + '%';
+        }
+        
+        // Task functions
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            list.innerHTML = state.tasks.map(task => `
+                <div class="task-item ${task.completed ? 'completed' : ''}" onclick="toggleTask(${task.id})">
+                    <div class="task-checkbox"></div>
+                    <div class="task-content">
+                        <div class="task-text">${task.text}</div>
+                        <div class="task-meta">
+                            <span class="task-priority priority-${task.priority}">${task.priority}</span>
+                            <span>+${task.energy} energy</span>
+                        </div>
+                    </div>
+                    <div class="task-delete" onclick="event.stopPropagation(); deleteTask(${task.id})">✕</div>
+                </div>
+            `).join('');
+        }
+        
+        function toggleTask(id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                if (task.completed) {
+                    adjustEnergy(task.energy);
+                } else {
+                    adjustEnergy(-task.energy);
+                }
+                renderTasks();
+                saveState();
+            }
+        }
+        
+        function addTask() {
+            const input = document.getElementById('newTaskInput');
+            const text = input.value.trim();
+            if (text) {
+                state.tasks.push({
+                    id: Date.now(),
+                    text: text,
+                    priority: 'medium',
+                    completed: false,
+                    energy: 10
+                });
+                input.value = '';
+                renderTasks();
+                saveState();
+            }
+        }
+        
+        function deleteTask(id) {
+            state.tasks = state.tasks.filter(t => t.id !== id);
+            renderTasks();
+            saveState();
+        }
+        
+        // Time blocks
+        function renderTimeBlocks() {
+            const container = document.getElementById('timeBlocks');
+            const currentHour = new Date().getHours();
+            
+            container.innerHTML = state.timeBlocks.map((block, i) => {
+                const blockHour = parseInt(block.time);
+                const isActive = blockHour <= currentHour && (i === state.timeBlocks.length - 1 || parseInt(state.timeBlocks[i + 1].time) > currentHour);
+                return `
+                    <div class="time-block ${isActive ? 'active' : ''}">
+                        <span class="block-time">${block.time}</span>
+                        <div class="block-content">
+                            <input type="text" value="${block.content}" placeholder="Plan this block..." 
+                                   onchange="updateTimeBlock(${i}, this.value)">
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateTimeBlock(index, value) {
+            state.timeBlocks[index].content = value;
+            saveState();
+        }
+        
+        // Moon phase
+        function calculateMoonPhase() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            
+            // Simple moon phase calculation
+            const c = Math.floor(365.25 * year);
+            const e = Math.floor(30.6 * month);
+            const jd = c + e + day - 694039.09;
+            const phase = jd / 29.53;
+            const phaseIndex = Math.floor((phase - Math.floor(phase)) * 8);
+            
+            const phases = [
+                { icon: '🌑', name: 'New Moon', energy: 'Plant seeds of intention. Perfect for new beginnings and setting powerful manifestations.' },
+                { icon: '🌒', name: 'Waxing Crescent', energy: 'Your intentions are taking root. Take inspired action toward your desires.' },
+                { icon: '🌓', name: 'First Quarter', energy: 'Push through resistance. Make decisions and commit to your path.' },
+                { icon: '🌔', name: 'Waxing Gibbous', energy: 'Refine and adjust. Your manifestations are building momentum.' },
+                { icon: '🌕', name: 'Full Moon', energy: 'Maximum manifestation power. Celebrate wins and release what blocks you.' },
+                { icon: '🌖', name: 'Waning Gibbous', energy: 'Share your wisdom. Express gratitude for what has manifested.' },
+                { icon: '🌗', name: 'Third Quarter', energy: 'Time for release and reflection. Let go of what no longer serves your highest timeline.' },
+                { icon: '🌘', name: 'Waning Crescent', energy: 'Rest and restore. Prepare for the next cycle of creation.' }
+            ];
+            
+            const currentPhase = phases[phaseIndex];
+            document.getElementById('moonIcon').textContent = currentPhase.icon;
+            document.getElementById('moonPhase').textContent = currentPhase.name;
+            document.getElementById('moonEnergy').textContent = currentPhase.energy;
+        }
+        
+        // Spark streak / manifestation grid
+        function renderManifestGrid() {
+            const grid = document.getElementById('manifestGrid');
+            const today = new Date();
+            const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            
+            // Get the start of the current week
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            
+            // Generate 28 days (4 weeks)
+            let html = '';
+            for (let i = -21; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const isSparked = state.sparkDays.includes(dateStr);
+                const isToday = date.toDateString() === today.toDateString();
+                
+                html += `
+                    <div class="manifest-day ${isSparked ? 'sparked' : ''}" 
+                         onclick="toggleSparkDay('${dateStr}')"
+                         style="${isToday ? 'box-shadow: 0 0 10px rgba(255,215,0,0.5);' : ''}">
+                        ${!isSparked ? `<span class="day-num">${date.getDate()}</span>` : ''}
+                    </div>
+                `;
+            }
+            grid.innerHTML = html;
+            
+            // Calculate streak
+            let streak = 0;
+            let checkDate = new Date(today);
+            while (state.sparkDays.includes(checkDate.toISOString().split('T')[0])) {
+                streak++;
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+            
+            document.getElementById('currentStreak').textContent = streak;
+            document.getElementById('totalSparks').textContent = state.sparkDays.length;
+        }
+        
+        function toggleSparkDay(dateStr) {
+            const index = state.sparkDays.indexOf(dateStr);
+            if (index > -1) {
+                state.sparkDays.splice(index, 1);
+            } else {
+                state.sparkDays.push(dateStr);
+            }
+            renderManifestGrid();
+            saveState();
+        }
+        
+        // Quick rituals
+        function quickRitual(type) {
+            const rituals = {
+                breathe: { message: '🌬️ Take 3 deep breaths... Inhale creation, exhale limitation.', energy: 5 },
+                ground: { message: '🌍 Feel your connection to Earth. You are anchored in this reality.', energy: 5 },
+                sigil: { message: '🔮 Your intention is encoded. The universe is processing...', energy: 10 },
+                affirm: { message: '💫 I am the architect of my reality. My consciousness shapes my world.', energy: 5 }
+            };
+            
+            const ritual = rituals[type];
+            alert(ritual.message);
+            adjustEnergy(ritual.energy);
+        }
+        
+        // Input handlers
+        function setupInputHandlers() {
+            document.getElementById('dailyIntention').addEventListener('input', (e) => {
+                state.intention = e.target.value;
+                saveState();
+            });
+            
+            document.getElementById('liminalNotes').addEventListener('input', (e) => {
+                state.notes = e.target.value;
+                saveState();
+            });
+            
+            ['gratitude1', 'gratitude2', 'gratitude3'].forEach((id, i) => {
+                document.getElementById(id).addEventListener('input', (e) => {
+                    state.gratitude[i] = e.target.value;
+                    saveState();
+                });
+            });
+        }
+        
+        // Render all
+        function render() {
+            updateEnergyDisplay();
+            renderTasks();
+            renderTimeBlocks();
+            calculateMoonPhase();
+            renderManifestGrid();
+            renderReminders();
+            
+            // Restore values
+            document.getElementById('dailyIntention').value = state.intention;
+            document.getElementById('liminalNotes').value = state.notes;
+            state.gratitude.forEach((g, i) => {
+                document.getElementById(`gratitude${i + 1}`).value = g;
+            });
+        }
+        
+        // Initialize
+        loadState();
+        setupInputHandlers();
+        fetchHoroscope(); // Load horoscope on start
+        
+        // Auto-save every 30 seconds
+        setInterval(saveState, 30000);
+        
+        // Check sync status on load
+        checkSyncStatus();
+        
+        // Google Sheets Sync Functions
+        const APPS_SCRIPT_CODE = `// Spark Protocol - Google Sheets Backend
+// Paste this in Extensions > Apps Script
+
+function doGet(e) {
+  return handleRequest(e);
+}
+
+function doPost(e) {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const action = e.parameter.action;
+  
+  // Set CORS headers
+  const output = ContentService.createTextOutput();
+  output.setMimeType(ContentService.MimeType.JSON);
+  
+  try {
+    if (action === 'save') {
+      const data = e.parameter.data;
+      const timestamp = new Date().toISOString();
+      
+      // Clear and save new data
+      sheet.clear();
+      sheet.getRange('A1').setValue('SparkProtocolData');
+      sheet.getRange('A2').setValue(timestamp);
+      sheet.getRange('A3').setValue(data);
+      
+      return output.setContent(JSON.stringify({success: true, timestamp: timestamp}));
+    }
+    
+    if (action === 'load') {
+      const data = sheet.getRange('A3').getValue();
+      const timestamp = sheet.getRange('A2').getValue();
+      
+      if (!data) {
+        return output.setContent(JSON.stringify({success: false, error: 'No data found'}));
+      }
+      
+      return output.setContent(JSON.stringify({success: true, data: data, timestamp: timestamp}));
+    }
+    
+    return output.setContent(JSON.stringify({success: false, error: 'Invalid action'}));
+  } catch (err) {
+    return output.setContent(JSON.stringify({success: false, error: err.toString()}));
+  }
+}`;
+
+        function toggleSyncPanel() {
+            const content = document.getElementById('syncContent');
+            content.classList.toggle('show');
+        }
+        
+        function copyAppsScript() {
+            document.getElementById('scriptCode').textContent = APPS_SCRIPT_CODE;
+            document.getElementById('scriptModal').classList.add('show');
+        }
+        
+        function closeScriptModal() {
+            document.getElementById('scriptModal').classList.remove('show');
+        }
+        
+        function copyScriptToClipboard() {
+            navigator.clipboard.writeText(APPS_SCRIPT_CODE).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+            });
+        }
+        
+        function saveWebhook() {
+            const url = document.getElementById('webhookUrl').value.trim();
+            if (!url) return;
+            
+            localStorage.setItem('sparkProtocolWebhook', url);
+            checkSyncStatus();
+            
+            // Test connection with a save
+            syncToSheets();
+        }
+        
+        function checkSyncStatus() {
+            const webhook = localStorage.getItem('sparkProtocolWebhook');
+            const lastSync = localStorage.getItem('sparkProtocolLastSync');
+            
+            if (webhook) {
+                document.getElementById('syncSetup').style.display = 'none';
+                document.getElementById('syncConnected').style.display = 'block';
+                document.getElementById('syncStatus').textContent = 'Synced';
+                document.getElementById('syncStatus').classList.add('connected');
+                
+                if (lastSync) {
+                    const date = new Date(lastSync);
+                    document.getElementById('lastSync').textContent = `Last sync: ${date.toLocaleString()}`;
+                }
+            } else {
+                document.getElementById('syncSetup').style.display = 'block';
+                document.getElementById('syncConnected').style.display = 'none';
+                document.getElementById('syncStatus').textContent = 'Setup Sync';
+                document.getElementById('syncStatus').classList.remove('connected');
+            }
+        }
+        
+        async function syncToSheets() {
+            const webhook = localStorage.getItem('sparkProtocolWebhook');
+            if (!webhook) return;
+            
+            const syncBtn = document.querySelector('.sync-btn');
+            syncBtn.innerHTML = '<span>⟳</span> Syncing...';
+            
+            try {
+                const dataStr = encodeURIComponent(JSON.stringify(state));
+                const response = await fetch(`${webhook}?action=save&data=${dataStr}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    localStorage.setItem('sparkProtocolLastSync', result.timestamp);
+                    document.getElementById('lastSync').textContent = `Last sync: ${new Date(result.timestamp).toLocaleString()}`;
+                    showSyncSuccess('Pushed to Google Sheets ✓');
+                } else {
+                    showSyncError('Sync failed: ' + result.error);
+                }
+            } catch (err) {
+                showSyncError('Connection error');
+            }
+            
+            syncBtn.innerHTML = '<span>↑</span> Push to Sheets';
+        }
+        
+        async function loadFromSheets() {
+            const webhook = localStorage.getItem('sparkProtocolWebhook');
+            if (!webhook) return;
+            
+            const syncBtn = document.querySelectorAll('.sync-btn')[1];
+            syncBtn.innerHTML = '<span>⟳</span> Loading...';
+            
+            try {
+                const response = await fetch(`${webhook}?action=load`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    const loadedState = JSON.parse(result.data);
+                    state = { ...state, ...loadedState };
+                    saveState();
+                    render();
+                    
+                    // Restore form values
+                    document.getElementById('dailyIntention').value = state.intention || '';
+                    document.getElementById('liminalNotes').value = state.notes || '';
+                    if (state.zodiacSign) {
+                        document.getElementById('zodiacSign').value = state.zodiacSign;
+                    }
+                    state.gratitude.forEach((g, i) => {
+                        document.getElementById(`gratitude${i + 1}`).value = g || '';
+                    });
+                    
+                    showSyncSuccess('Pulled from Google Sheets ✓');
+                } else {
+                    showSyncError('No data found in sheet');
+                }
+            } catch (err) {
+                showSyncError('Connection error');
+            }
+            
+            syncBtn.innerHTML = '<span>↓</span> Pull from Sheets';
+        }
+        
+        function disconnectSheets() {
+            if (confirm('Disconnect from Google Sheets? Your local data will be preserved.')) {
+                localStorage.removeItem('sparkProtocolWebhook');
+                localStorage.removeItem('sparkProtocolLastSync');
+                document.getElementById('webhookUrl').value = '';
+                checkSyncStatus();
+            }
+        }
+        
+        function showSyncSuccess(msg) {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.textContent = msg;
+            indicator.style.background = 'rgba(139, 92, 246, 0.9)';
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 3000);
+        }
+        
+        function showSyncError(msg) {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.textContent = msg;
+            indicator.style.background = 'rgba(244, 114, 182, 0.9)';
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+                indicator.style.background = 'rgba(139, 92, 246, 0.9)';
+            }, 3000);
+        }
+        
+        // Horoscope functionality
+        async function fetchHoroscope() {
+            const sign = document.getElementById('zodiacSign').value;
+            const content = document.getElementById('horoscopeContent');
+            const meta = document.getElementById('horoscopeMeta');
+            
+            // Save selected sign
+            state.zodiacSign = sign;
+            saveState();
+            
+            // Show loading
+            content.innerHTML = `
+                <div class="horoscope-loading">
+                    <div class="loading-sigil">✦</div>
+                    <span>Channeling cosmic frequencies...</span>
+                </div>
+            `;
+            meta.innerHTML = '';
+            
+            try {
+                // Using a free horoscope API
+                const response = await fetch(`https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${sign}&day=TODAY`);
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    const horoscope = data.data;
+                    content.innerHTML = `<p class="horoscope-text">${horoscope.horoscope_data}</p>`;
+                    
+                    // Generate mystical additions based on sign
+                    const signData = getSignData(sign);
+                    
+                    meta.innerHTML = `
+                        <div class="meta-item">
+                            <span class="meta-label">Element:</span>
+                            <span class="meta-value">${signData.element}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Vibe:</span>
+                            <span class="meta-value compatibility">${signData.vibe}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Power:</span>
+                            <span class="meta-value lucky-num">${signData.power}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Focus:</span>
+                            <span class="meta-value mood-val">${signData.focus}</span>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('API returned no data');
+                }
+            } catch (error) {
+                // Fallback to generated horoscope
+                const fallback = generateFallbackHoroscope(sign);
+                content.innerHTML = `<p class="horoscope-text">${fallback.message}</p>`;
+                
+                const signData = getSignData(sign);
+                meta.innerHTML = `
+                    <div class="meta-item">
+                        <span class="meta-label">Element:</span>
+                        <span class="meta-value">${signData.element}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Vibe:</span>
+                        <span class="meta-value compatibility">${signData.vibe}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Power:</span>
+                        <span class="meta-value lucky-num">${signData.power}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Focus:</span>
+                        <span class="meta-value mood-val">${signData.focus}</span>
+                    </div>
+                `;
+            }
+        }
+        
+        function getSignData(sign) {
+            const data = {
+                aries: { element: '🔥 Fire', vibe: 'Bold Creation', power: 'Initiative', focus: 'New Beginnings' },
+                taurus: { element: '🌍 Earth', vibe: 'Grounded Luxury', power: 'Persistence', focus: 'Material Security' },
+                gemini: { element: '💨 Air', vibe: 'Curious Mind', power: 'Adaptation', focus: 'Communication' },
+                cancer: { element: '🌊 Water', vibe: 'Deep Feeling', power: 'Intuition', focus: 'Emotional Truth' },
+                leo: { element: '🔥 Fire', vibe: 'Radiant Self', power: 'Courage', focus: 'Creative Expression' },
+                virgo: { element: '🌍 Earth', vibe: 'Sacred Order', power: 'Analysis', focus: 'Service & Healing' },
+                libra: { element: '💨 Air', vibe: 'Harmonious', power: 'Balance', focus: 'Relationships' },
+                scorpio: { element: '🌊 Water', vibe: 'Transformative', power: 'Depth', focus: 'Shadow Work' },
+                sagittarius: { element: '🔥 Fire', vibe: 'Expansive', power: 'Wisdom', focus: 'Higher Truth' },
+                capricorn: { element: '🌍 Earth', vibe: 'Ambitious', power: 'Discipline', focus: 'Long-term Goals' },
+                aquarius: { element: '💨 Air', vibe: 'Revolutionary', power: 'Innovation', focus: 'Collective Vision' },
+                pisces: { element: '🌊 Water', vibe: 'Mystical', power: 'Compassion', focus: 'Spiritual Connection' }
+            };
+            return data[sign] || data.aries;
+        }
+        
+        function generateFallbackHoroscope(sign) {
+            const templates = [
+                `The cosmic frequencies are aligning in your favor today. Your ${sign} energy is particularly potent right now—use it to manifest what you've been envisioning. Trust the downloads you receive.`,
+                `The universe is whispering secrets meant only for you today. As a ${sign}, your intuition is heightened. Pay attention to synchronicities—they're breadcrumbs on your path.`,
+                `Reality is especially malleable for you today. Your ${sign} nature gives you unique access to the liminal spaces where transformation happens. What will you create?`,
+                `The stars are conspiring in your favor. Your ${sign} essence is being amplified by today's cosmic weather. This is a powerful time for intention-setting.`,
+                `Today's energy supports deep ${sign} magic. The veil between dimensions is thin—perfect for receiving guidance and planting seeds of manifestation.`
+            ];
+            
+            const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+            const index = dayOfYear % templates.length;
+            
+            return { message: templates[index].replace(/\${sign}/g, sign.charAt(0).toUpperCase() + sign.slice(1)) };
+        }
+        
+        // Reminder functions
+        function addReminder() {
+            const textInput = document.getElementById('newReminderText');
+            const dateInput = document.getElementById('newReminderDate');
+            
+            const text = textInput.value.trim();
+            const date = dateInput.value;
+            
+            if (!text) {
+                textInput.focus();
+                return;
+            }
+            
+            if (!date) {
+                dateInput.focus();
+                return;
+            }
+            
+            state.reminders.push({
+                id: Date.now(),
+                text: text,
+                date: date,
+                created: new Date().toISOString()
+            });
+            
+            // Sort by date
+            state.reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            textInput.value = '';
+            dateInput.value = '';
+            
+            renderReminders();
+            saveState();
+        }
+        
+        function deleteReminder(id) {
+            state.reminders = state.reminders.filter(r => r.id !== id);
+            renderReminders();
+            saveState();
+        }
+        
+        function completeReminder(id) {
+            const reminder = state.reminders.find(r => r.id === id);
+            if (reminder) {
+                // Add to completed tasks for energy boost
+                adjustEnergy(8);
+                deleteReminder(id);
+            }
+        }
+        
+        function renderReminders() {
+            const list = document.getElementById('remindersList');
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (state.reminders.length === 0) {
+                list.innerHTML = '<div class="no-reminders">No time drops yet. Send a message to your future self ✦</div>';
+                return;
+            }
+            
+            list.innerHTML = state.reminders.map(reminder => {
+                const reminderDate = new Date(reminder.date);
+                const todayDate = new Date(today);
+                
+                let statusClass = '';
+                let statusText = '';
+                
+                if (reminder.date === today) {
+                    statusClass = 'due-today';
+                    statusText = '<span class="reminder-status status-today">Today</span>';
+                } else if (reminderDate < todayDate) {
+                    statusClass = 'overdue';
+                    statusText = '<span class="reminder-status status-overdue">Past Due</span>';
+                } else {
+                    const daysUntil = Math.ceil((reminderDate - todayDate) / (1000 * 60 * 60 * 24));
+                    statusText = `<span class="reminder-status status-upcoming">${daysUntil} day${daysUntil > 1 ? 's' : ''}</span>`;
+                }
+                
+                const formattedDate = reminderDate.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                
+                return `
+                    <div class="reminder-item ${statusClass}">
+                        <div class="reminder-message">${reminder.text}</div>
+                        <div class="reminder-date">
+                            <span class="reminder-date-icon">◈</span>
+                            ${formattedDate}
+                            ${statusText}
+                        </div>
+                        <div class="reminder-complete" onclick="completeReminder(${reminder.id})" title="Complete">✓</div>
+                        <div class="reminder-delete" onclick="deleteReminder(${reminder.id})" title="Delete">✕</div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>

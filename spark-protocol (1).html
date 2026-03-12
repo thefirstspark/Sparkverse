@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spark Protocol | Consciousness Operating System</title>
+    <meta name="description" content="Program your reality. Track your awakening. Level up your consciousness.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✧</text></svg>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        spark: {
+                            purple: '#a855f7',
+                            pink: '#ec4899',
+                            cyan: '#22d3ee'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #030712;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.6); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+        .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        
+        .gradient-border {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(236, 72, 153, 0.3));
+            padding: 1px;
+            border-radius: 1rem;
+        }
+        
+        .gradient-border-inner {
+            background: rgba(3, 7, 18, 0.95);
+            border-radius: calc(1rem - 1px);
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        
+        input[type="range"]::-webkit-slider-track {
+            height: 6px;
+            background: #1f2937;
+            border-radius: 3px;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // ═══════════════════════════════════════════════════════════════════════════════
+        // THE SPARK PROTOCOL - Consciousness Operating System
+        // A premium interactive experience by The First Spark
+        // ═══════════════════════════════════════════════════════════════════════════════
+
+        const SparkProtocol = () => {
+            // ─────────────────────────────────────────────────────────────────────────────
+            // STATE MANAGEMENT
+            // ─────────────────────────────────────────────────────────────────────────────
+            
+            const [currentModule, setCurrentModule] = useState('gateway');
+            const [isInitialized, setIsInitialized] = useState(false);
+            const [showIntro, setShowIntro] = useState(true);
+            const [notification, setNotification] = useState(null);
+            
+            const [soulProfile, setSoulProfile] = useState({
+                soulName: '',
+                coreFrequency: null,
+                elementalAffinity: null,
+                awakenDate: null,
+                sparkLevel: 1,
+                totalXP: 0,
+                currentXP: 0,
+                xpToNext: 100,
+                streakDays: 0,
+                lastCalibration: null,
+                unlockedModules: ['dashboard', 'calibration'],
+                achievements: [],
+                sigils: [],
+                realityCodes: [],
+                geometryPatterns: [],
+                resonanceHistory: [],
+                oracleMessages: []
+            });
+
+            const [sessionData, setSessionData] = useState({
+                calibrationComplete: false,
+                todaysResonance: null,
+                activeIntention: null
+            });
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // PERSISTENCE
+            // ─────────────────────────────────────────────────────────────────────────────
+            
+            useEffect(() => {
+                const saved = localStorage.getItem('sparkProtocol_soulProfile');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    setSoulProfile(parsed);
+                    setIsInitialized(true);
+                    setShowIntro(false);
+                    setCurrentModule('dashboard');
+                }
+            }, []);
+
+            useEffect(() => {
+                if (isInitialized) {
+                    localStorage.setItem('sparkProtocol_soulProfile', JSON.stringify(soulProfile));
+                }
+            }, [soulProfile, isInitialized]);
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // NOTIFICATION SYSTEM
+            // ─────────────────────────────────────────────────────────────────────────────
+            
+            const showNotification = useCallback((message, type = 'success') => {
+                setNotification({ message, type });
+                setTimeout(() => setNotification(null), 3000);
+            }, []);
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // XP & LEVELING
+            // ─────────────────────────────────────────────────────────────────────────────
+            
+            const addXP = useCallback((amount, source) => {
+                setSoulProfile(prev => {
+                    let newXP = prev.currentXP + amount;
+                    let newLevel = prev.sparkLevel;
+                    let newXPToNext = prev.xpToNext;
+                    let newTotalXP = prev.totalXP + amount;
+                    let leveledUp = false;
+                    
+                    while (newXP >= newXPToNext) {
+                        newXP -= newXPToNext;
+                        newLevel++;
+                        newXPToNext = Math.floor(newXPToNext * 1.5);
+                        leveledUp = true;
+                    }
+                    
+                    if (leveledUp) {
+                        showNotification(`✧ LEVEL UP! You are now Spark Level ${newLevel} ✧`, 'levelup');
+                    } else {
+                        showNotification(`+${amount} XP`, 'xp');
+                    }
+                    
+                    return {
+                        ...prev,
+                        currentXP: newXP,
+                        sparkLevel: newLevel,
+                        xpToNext: newXPToNext,
+                        totalXP: newTotalXP
+                    };
+                });
+            }, [showNotification]);
+
+            const unlockAchievement = useCallback((achievementId, title, description, xpReward) => {
+                setSoulProfile(prev => {
+                    if (prev.achievements.find(a => a.id === achievementId)) return prev;
+                    showNotification(`★ Achievement Unlocked: ${title}`, 'achievement');
+                    return {
+                        ...prev,
+                        achievements: [...prev.achievements, { 
+                            id: achievementId, 
+                            title, 
+                            description, 
+                            unlockedAt: new Date().toISOString() 
+                        }]
+                    };
+                });
+                addXP(xpReward, 'achievement');
+            }, [addXP, showNotification]);
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // DATA
+            // ─────────────────────────────────────────────────────────────────────────────
+            
+            const frequencies = [
+                { id: 'seeker', name: 'The Seeker', hz: 396, color: '#FF6B6B', description: 'Liberating guilt and fear' },
+                { id: 'creator', name: 'The Creator', hz: 417, color: '#4ECDC4', description: 'Facilitating change' },
+                { id: 'transformer', name: 'The Transformer', hz: 528, color: '#45B7D1', description: 'Miracle tone of DNA repair' },
+                { id: 'connector', name: 'The Connector', hz: 639, color: '#96CEB4', description: 'Harmonizing relationships' },
+                { id: 'expresser', name: 'The Expresser', hz: 741, color: '#FFEAA7', description: 'Awakening intuition' },
+                { id: 'visionary', name: 'The Visionary', hz: 852, color: '#DDA0DD', description: 'Returning to spiritual order' },
+                { id: 'awakened', name: 'The Awakened', hz: 963, color: '#E8E8E8', description: 'Divine consciousness' }
+            ];
+
+            const elements = [
+                { id: 'fire', name: 'Fire', symbol: '🔥', traits: 'Passion, transformation, will' },
+                { id: 'water', name: 'Water', symbol: '💧', traits: 'Intuition, emotion, flow' },
+                { id: 'earth', name: 'Earth', symbol: '🌍', traits: 'Grounding, stability, manifestation' },
+                { id: 'air', name: 'Air', symbol: '💨', traits: 'Thought, communication, freedom' },
+                { id: 'aether', name: 'Aether', symbol: '✨', traits: 'Spirit, unity, transcendence' }
+            ];
+
+            // ─────────────────────────────────────────────────────────────────────────────
+            // GENERATORS
+            // ─────────────────────────────────────────────────────────────────────────────
+            
+            const generateSigil = useCallback((intention) => {
+                const cleanIntention = intention.toUpperCase().replace(/[AEIOU\s]/g, '');
+                const uniqueLetters = [...new Set(cleanIntention)];
+                
+                const letterPositions = {
+                    'B': [0, 0], 'C': [1, 0], 'D': [2, 0], 'F': [3, 0], 'G': [4, 0],
+                    'H': [0, 1], 'J': [1, 1], 'K': [2, 1], 'L': [3, 1], 'M': [4, 1],
+                    'N': [0, 2], 'P': [1, 2], 'Q': [2, 2], 'R': [3, 2], 'S': [4, 2],
+                    'T': [0, 3], 'V': [1, 3], 'W': [2, 3], 'X': [3, 3], 'Y': [4, 3], 'Z': [4, 3]
+                };
+
+                const points = uniqueLetters
+                    .filter(l => letterPositions[l])
+                    .map(l => ({
+                        x: 20 + letterPositions[l][0] * 15,
+                        y: 20 + letterPositions[l][1] * 15,
+                        letter: l
+                    }));
+
+                return {
+                    intention,
+                    points,
+                    created: new Date().toISOString(),
+                    charged: false,
+                    activations: 0
+                };
+            }, []);
+
+            const parseRealityCode = useCallback((code) => {
+                const lines = code.split('\n').filter(l => l.trim());
+                return lines.map(line => {
+                    if (line.startsWith('MANIFEST:')) return { type: 'manifest', value: line.slice(9).trim() };
+                    if (line.startsWith('RELEASE:')) return { type: 'release', value: line.slice(8).trim() };
+                    if (line.startsWith('ALIGN:')) return { type: 'align', value: line.slice(6).trim() };
+                    if (line.startsWith('RECEIVE:')) return { type: 'receive', value: line.slice(8).trim() };
+                    if (line.startsWith('TRANSMUTE:')) return { type: 'transmute', value: line.slice(10).trim() };
+                    if (line.startsWith('//')) return { type: 'comment', value: line.slice(2).trim() };
+                    return { type: 'intention', value: line.trim() };
+                });
+            }, []);
+
+            const oracleMessages = [
+                { trigger: 'morning', messages: ['The simulation reset overnight. What pattern do you choose today?', 'Your code compiled successfully. Time to run the program.', 'The field is responsive. Plant your intentions now.'] },
+                { trigger: 'struggle', messages: ['Resistance is the compiler checking your code. Refine and run again.', 'This is not a bug—it is a feature revealing where growth wants to happen.', 'The obstacle IS the path. Walk through, not around.'] },
+                { trigger: 'breakthrough', messages: ['You have accessed a new frequency. Integration in progress.', 'Level up detected. New abilities unlocking.', 'The code is working. Trust the execution.'] },
+                { trigger: 'doubt', messages: ['Doubt is just old code running. Overwrite it.', 'The simulation responds to certainty. Choose your truth.', 'You are the programmer, not the program.'] },
+                { trigger: 'general', messages: ['You are exactly where you need to be in the code.', 'Every choice creates a new timeline. Choose consciously.', 'The spark within you is the same spark that ignited the universe.', 'Reality bends to those who remember they are the benders.', 'Your consciousness is the cursor. Where will you click today?', 'The simulation rewards those who play consciously.', 'You are not in the matrix. You ARE the matrix.'] }
+            ];
+
+            const getOracleMessage = useCallback((trigger = 'general') => {
+                const category = oracleMessages.find(o => o.trigger === trigger) || oracleMessages.find(o => o.trigger === 'general');
+                return category.messages[Math.floor(Math.random() * category.messages.length)];
+            }, []);
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // NOTIFICATION COMPONENT
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const Notification = () => {
+                if (!notification) return null;
+                
+                const bgColor = {
+                    success: 'bg-green-500/20 border-green-500',
+                    xp: 'bg-purple-500/20 border-purple-500',
+                    levelup: 'bg-gradient-to-r from-purple-500/30 to-pink-500/30 border-purple-400',
+                    achievement: 'bg-yellow-500/20 border-yellow-500'
+                }[notification.type] || 'bg-purple-500/20 border-purple-500';
+
+                return (
+                    <div className="fixed top-6 right-6 z-50 animate-fadeIn">
+                        <div className={`px-6 py-3 rounded-lg border ${bgColor} backdrop-blur-sm`}>
+                            <span className="text-white">{notification.message}</span>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // STAR BACKGROUND
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const StarBackground = () => (
+                <div className="stars">
+                    {[...Array(100)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="star"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animationDelay: `${Math.random() * 3}s`,
+                                opacity: 0.1 + Math.random() * 0.5
+                            }}
+                        />
+                    ))}
+                </div>
+            );
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // INTRO SEQUENCE
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const IntroSequence = () => {
+                const [phase, setPhase] = useState(0);
+                
+                useEffect(() => {
+                    const timers = [
+                        setTimeout(() => setPhase(1), 800),
+                        setTimeout(() => setPhase(2), 2200),
+                        setTimeout(() => setPhase(3), 3600),
+                        setTimeout(() => setPhase(4), 5000)
+                    ];
+                    return () => timers.forEach(clearTimeout);
+                }, []);
+
+                return (
+                    <div className="fixed inset-0 bg-black flex items-center justify-center overflow-hidden">
+                        <StarBackground />
+                        
+                        <div className="relative text-center z-10">
+                            <div className={`transition-all duration-1000 ${phase >= 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+                                <div className="w-32 h-32 mx-auto mb-8 relative animate-float">
+                                    <div className="absolute inset-0 border-2 border-purple-500 rounded-full animate-spin" style={{ animationDuration: '8s' }} />
+                                    <div className="absolute inset-2 border border-cyan-400 rounded-full animate-spin" style={{ animationDuration: '6s', animationDirection: 'reverse' }} />
+                                    <div className="absolute inset-4 border border-pink-400 rounded-full animate-spin" style={{ animationDuration: '4s' }} />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <span className="text-5xl">✧</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h1 className={`text-4xl md:text-5xl font-thin tracking-[0.2em] md:tracking-[0.3em] text-white mb-4 transition-all duration-1000 ${phase >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                                THE SPARK PROTOCOL
+                            </h1>
+                            
+                            <p className={`text-purple-300 tracking-widest text-xs md:text-sm mb-12 transition-all duration-1000 ${phase >= 3 ? 'opacity-100' : 'opacity-0'}`}>
+                                CONSCIOUSNESS OPERATING SYSTEM v1.0
+                            </p>
+                            
+                            <button
+                                onClick={() => setShowIntro(false)}
+                                className={`px-8 py-3 border border-purple-500 text-purple-300 hover:bg-purple-500/20 transition-all duration-500 tracking-widest text-sm animate-pulse-glow ${phase >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                            >
+                                INITIALIZE
+                            </button>
+                            
+                            <p className={`text-gray-600 text-xs mt-8 transition-all duration-1000 ${phase >= 4 ? 'opacity-100' : 'opacity-0'}`}>
+                                by The First Spark
+                            </p>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // AWAKENING GATEWAY
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const AwakeningGateway = () => {
+                const [step, setStep] = useState(1);
+                const [tempProfile, setTempProfile] = useState({ soulName: '', frequency: null, element: null });
+
+                const completeGateway = () => {
+                    const freq = frequencies.find(f => f.id === tempProfile.frequency);
+                    const elem = elements.find(e => e.id === tempProfile.element);
+                    
+                    setSoulProfile(prev => ({
+                        ...prev,
+                        soulName: tempProfile.soulName,
+                        coreFrequency: freq,
+                        elementalAffinity: elem,
+                        awakenDate: new Date().toISOString(),
+                        unlockedModules: ['dashboard', 'calibration', 'sigil-forge', 'reality-code']
+                    }));
+                    setIsInitialized(true);
+                    unlockAchievement('first-spark', 'First Spark', 'Completed the Awakening Gateway', 50);
+                    setCurrentModule('dashboard');
+                };
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-2xl w-full relative z-10">
+                            <div className="text-center mb-8 md:mb-12">
+                                <div className="flex justify-center gap-2 mb-8">
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} className={`w-12 md:w-16 h-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-purple-500' : 'bg-gray-700'}`} />
+                                    ))}
+                                </div>
+                                <h2 className="text-2xl md:text-3xl font-thin text-white tracking-widest">AWAKENING GATEWAY</h2>
+                                <p className="text-purple-300/60 mt-2 text-sm">Calibrating your consciousness signature</p>
+                            </div>
+
+                            {step === 1 && (
+                                <div className="gradient-border animate-fadeIn">
+                                    <div className="gradient-border-inner p-6 md:p-8">
+                                        <h3 className="text-xl text-purple-300 mb-6">What name does your soul answer to?</h3>
+                                        <p className="text-gray-400 text-sm mb-6">This is your identifier within the protocol. It can be your name, a chosen identity, or a cosmic designation.</p>
+                                        <input
+                                            type="text"
+                                            value={tempProfile.soulName}
+                                            onChange={(e) => setTempProfile(p => ({ ...p, soulName: e.target.value }))}
+                                            placeholder="Enter your soul name..."
+                                            className="w-full bg-black/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-400 focus:outline-none focus:ring-1 focus:ring-purple-400/50"
+                                            autoFocus
+                                        />
+                                        <button
+                                            onClick={() => tempProfile.soulName && setStep(2)}
+                                            disabled={!tempProfile.soulName}
+                                            className="mt-6 w-full py-3 bg-purple-500/20 border border-purple-500 text-purple-300 rounded-lg hover:bg-purple-500/30 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                                        >
+                                            CONTINUE →
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {step === 2 && (
+                                <div className="gradient-border animate-fadeIn">
+                                    <div className="gradient-border-inner p-6 md:p-8">
+                                        <h3 className="text-xl text-purple-300 mb-6">Select your Core Frequency</h3>
+                                        <p className="text-gray-400 text-sm mb-6">Which resonance calls to you most strongly right now?</p>
+                                        <div className="grid gap-3 max-h-[50vh] overflow-y-auto pr-2">
+                                            {frequencies.map(freq => (
+                                                <button
+                                                    key={freq.id}
+                                                    onClick={() => setTempProfile(p => ({ ...p, frequency: freq.id }))}
+                                                    className={`p-4 rounded-lg border text-left transition-all ${
+                                                        tempProfile.frequency === freq.id 
+                                                            ? 'border-purple-400 bg-purple-500/20' 
+                                                            : 'border-gray-700 hover:border-purple-500/50'
+                                                    }`}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: freq.color }} />
+                                                        <span className="text-white">{freq.name}</span>
+                                                        <span className="text-gray-500 text-sm ml-auto">{freq.hz}Hz</span>
+                                                    </div>
+                                                    <p className="text-gray-400 text-sm mt-1 ml-7">{freq.description}</p>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <button
+                                            onClick={() => tempProfile.frequency && setStep(3)}
+                                            disabled={!tempProfile.frequency}
+                                            className="mt-6 w-full py-3 bg-purple-500/20 border border-purple-500 text-purple-300 rounded-lg hover:bg-purple-500/30 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                                        >
+                                            CONTINUE →
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {step === 3 && (
+                                <div className="gradient-border animate-fadeIn">
+                                    <div className="gradient-border-inner p-6 md:p-8">
+                                        <h3 className="text-xl text-purple-300 mb-6">Choose your Elemental Affinity</h3>
+                                        <p className="text-gray-400 text-sm mb-6">Which element flows through your being?</p>
+                                        <div className="grid grid-cols-5 gap-2 md:gap-3">
+                                            {elements.map(elem => (
+                                                <button
+                                                    key={elem.id}
+                                                    onClick={() => setTempProfile(p => ({ ...p, element: elem.id }))}
+                                                    className={`p-3 md:p-4 rounded-lg border text-center transition-all ${
+                                                        tempProfile.element === elem.id 
+                                                            ? 'border-purple-400 bg-purple-500/20' 
+                                                            : 'border-gray-700 hover:border-purple-500/50'
+                                                    }`}
+                                                >
+                                                    <div className="text-2xl md:text-3xl mb-2">{elem.symbol}</div>
+                                                    <div className="text-white text-xs md:text-sm">{elem.name}</div>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        {tempProfile.element && (
+                                            <p className="text-center text-gray-400 text-sm mt-4">
+                                                {elements.find(e => e.id === tempProfile.element)?.traits}
+                                            </p>
+                                        )}
+                                        <button
+                                            onClick={completeGateway}
+                                            disabled={!tempProfile.element}
+                                            className="mt-6 w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-medium"
+                                        >
+                                            ✧ COMPLETE INITIALIZATION ✧
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // MAIN DASHBOARD
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const Dashboard = () => {
+                const [oracleMsg, setOracleMsg] = useState(() => getOracleMessage('general'));
+                
+                const xpPercentage = (soulProfile.currentXP / soulProfile.xpToNext) * 100;
+                
+                const modules = [
+                    { id: 'calibration', name: 'Daily Calibration', icon: '◎', desc: 'Tune your resonance', unlocked: true },
+                    { id: 'sigil-forge', name: 'Sigil Forge', icon: '⬡', desc: 'Create power symbols', unlocked: soulProfile.sparkLevel >= 1 },
+                    { id: 'reality-code', name: 'Reality Code', icon: '⟁', desc: 'Program your reality', unlocked: soulProfile.sparkLevel >= 1 },
+                    { id: 'geometry-lab', name: 'Sacred Geometry', icon: '◇', desc: 'Generate patterns', unlocked: soulProfile.sparkLevel >= 2 },
+                    { id: 'oracle', name: 'Oracle Chamber', icon: '◈', desc: 'Receive guidance', unlocked: soulProfile.sparkLevel >= 2 },
+                    { id: 'achievements', name: 'Achievements', icon: '★', desc: 'View progress', unlocked: true }
+                ];
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/10 to-gray-950 p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-6xl mx-auto relative z-10">
+                            
+                            <header className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-8 gap-4">
+                                <div>
+                                    <h1 className="text-xl md:text-2xl font-thin text-white tracking-widest">SPARK PROTOCOL</h1>
+                                    <p className="text-purple-300/60 text-xs md:text-sm">Consciousness OS Active</p>
+                                </div>
+                                <div className="text-left md:text-right">
+                                    <div className="text-purple-300 text-base md:text-lg">{soulProfile.soulName}</div>
+                                    <div className="text-gray-500 text-xs md:text-sm">Level {soulProfile.sparkLevel} {soulProfile.coreFrequency?.name}</div>
+                                </div>
+                            </header>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+                                <div className="lg:col-span-2 gradient-border">
+                                    <div className="gradient-border-inner p-4 md:p-6">
+                                        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
+                                            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
+                                                <div className="absolute inset-0 border-2 rounded-full animate-spin" style={{ borderColor: soulProfile.coreFrequency?.color, animationDuration: '10s' }} />
+                                                <div className="absolute inset-2 border rounded-full animate-spin" style={{ borderColor: soulProfile.coreFrequency?.color, opacity: 0.5, animationDuration: '7s', animationDirection: 'reverse' }} />
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <span className="text-2xl md:text-3xl">{soulProfile.elementalAffinity?.symbol}</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 w-full">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-white">Spark Level {soulProfile.sparkLevel}</span>
+                                                    <span className="text-gray-400 text-sm">{soulProfile.currentXP} / {soulProfile.xpToNext} XP</span>
+                                                </div>
+                                                <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                                                    <div 
+                                                        className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                                                        style={{ width: `${xpPercentage}%` }}
+                                                    />
+                                                </div>
+                                                <div className="flex flex-wrap gap-3 md:gap-4 mt-3 text-xs md:text-sm">
+                                                    <span className="text-gray-400">🔥 {soulProfile.streakDays} day streak</span>
+                                                    <span className="text-gray-400">⬡ {soulProfile.sigils.length} sigils</span>
+                                                    <span className="text-gray-400">★ {soulProfile.achievements.length} achievements</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="border-t border-purple-500/20 pt-4">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <span className="text-purple-400 text-xs md:text-sm">◈ ORACLE MESSAGE</span>
+                                                <button 
+                                                    onClick={() => setOracleMsg(getOracleMessage('general'))}
+                                                    className="text-gray-500 hover:text-purple-300 text-xs"
+                                                >
+                                                    ↻
+                                                </button>
+                                            </div>
+                                            <p className="text-gray-300 italic text-sm md:text-base">"{oracleMsg}"</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="gradient-border">
+                                    <div className="gradient-border-inner p-4 md:p-6">
+                                        <h3 className="text-purple-300 text-xs md:text-sm tracking-widest mb-4">SOUL SIGNATURE</h3>
+                                        <div className="space-y-3 text-sm">
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-400">Frequency</span>
+                                                <span className="text-white">{soulProfile.coreFrequency?.hz}Hz</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-400">Archetype</span>
+                                                <span style={{ color: soulProfile.coreFrequency?.color }}>{soulProfile.coreFrequency?.name}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-400">Element</span>
+                                                <span className="text-white">{soulProfile.elementalAffinity?.name}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-400">Awakened</span>
+                                                <span className="text-white">{soulProfile.awakenDate ? new Date(soulProfile.awakenDate).toLocaleDateString() : '—'}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-400">Total XP</span>
+                                                <span className="text-purple-300">{soulProfile.totalXP.toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h2 className="text-purple-300 text-xs md:text-sm tracking-widest mb-4">PROTOCOL MODULES</h2>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+                                {modules.map(mod => (
+                                    <button
+                                        key={mod.id}
+                                        onClick={() => mod.unlocked && setCurrentModule(mod.id)}
+                                        disabled={!mod.unlocked}
+                                        className={`p-4 md:p-6 rounded-xl border text-center transition-all ${
+                                            mod.unlocked 
+                                                ? 'border-purple-500/30 hover:border-purple-400 hover:bg-purple-500/10 cursor-pointer' 
+                                                : 'border-gray-800 opacity-40 cursor-not-allowed'
+                                        }`}
+                                    >
+                                        <div className="text-2xl md:text-3xl mb-2 md:mb-3">{mod.icon}</div>
+                                        <div className="text-white text-xs md:text-sm mb-1">{mod.name}</div>
+                                        <div className="text-gray-500 text-xs">{mod.unlocked ? mod.desc : `Lvl ${mod.id === 'geometry-lab' || mod.id === 'oracle' ? 2 : 3}`}</div>
+                                    </button>
+                                ))}
+                            </div>
+                            
+                            <footer className="mt-12 text-center">
+                                <p className="text-gray-600 text-xs">The Spark Protocol by The First Spark</p>
+                                <p className="text-gray-700 text-xs mt-1">thefirstspark.shop</p>
+                            </footer>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // DAILY CALIBRATION
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const DailyCalibration = () => {
+                const [phase, setPhase] = useState('intro');
+                const [resonance, setResonance] = useState({ mental: 5, emotional: 5, physical: 5, spiritual: 5 });
+                const [intention, setIntention] = useState('');
+                const [breathCount, setBreathCount] = useState(0);
+
+                const completeCalibration = () => {
+                    const avgResonance = (resonance.mental + resonance.emotional + resonance.physical + resonance.spiritual) / 4;
+                    
+                    setSoulProfile(prev => ({
+                        ...prev,
+                        lastCalibration: new Date().toISOString(),
+                        resonanceHistory: [...prev.resonanceHistory, { date: new Date().toISOString(), ...resonance, avg: avgResonance }],
+                        streakDays: prev.streakDays + 1
+                    }));
+                    
+                    setSessionData(prev => ({ ...prev, calibrationComplete: true, todaysResonance: avgResonance, activeIntention: intention }));
+                    addXP(25, 'calibration');
+                    
+                    if (soulProfile.streakDays === 6) {
+                        unlockAchievement('week-warrior', 'Week Warrior', '7-day calibration streak', 100);
+                    }
+                    
+                    setPhase('complete');
+                };
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/10 to-gray-950 p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-2xl mx-auto relative z-10">
+                            <button onClick={() => setCurrentModule('dashboard')} className="text-purple-400 hover:text-purple-300 mb-6 md:mb-8 flex items-center gap-2 text-sm">
+                                ← Back to Dashboard
+                            </button>
+
+                            <div className="text-center mb-6 md:mb-8">
+                                <div className="text-3xl md:text-4xl mb-4 animate-pulse">◎</div>
+                                <h2 className="text-xl md:text-2xl font-thin text-white tracking-widest">DAILY CALIBRATION</h2>
+                                <p className="text-purple-300/60 mt-2 text-sm">Tune your consciousness for the day ahead</p>
+                            </div>
+
+                            {phase === 'intro' && (
+                                <div className="gradient-border animate-fadeIn">
+                                    <div className="gradient-border-inner p-6 md:p-8 text-center">
+                                        <p className="text-gray-300 mb-6">Take three conscious breaths before we begin...</p>
+                                        <div className="flex justify-center gap-4 mb-8">
+                                            {[1, 2, 3].map(i => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => setBreathCount(i)}
+                                                    className={`w-14 h-14 md:w-16 md:h-16 rounded-full border-2 transition-all ${
+                                                        breathCount >= i ? 'border-purple-400 bg-purple-500/20 animate-pulse-glow' : 'border-gray-700'
+                                                    }`}
+                                                >
+                                                    <span className="text-xl md:text-2xl">{breathCount >= i ? '●' : '○'}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <button
+                                            onClick={() => setPhase('resonance')}
+                                            disabled={breathCount < 3}
+                                            className="px-8 py-3 bg-purple-500/20 border border-purple-500 text-purple-300 rounded-lg disabled:opacity-30 transition-all"
+                                        >
+                                            Begin Calibration
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {phase === 'resonance' && (
+                                <div className="gradient-border animate-fadeIn">
+                                    <div className="gradient-border-inner p-6 md:p-8">
+                                        <h3 className="text-purple-300 text-center mb-6 md:mb-8">Rate your current resonance levels</h3>
+                                        
+                                        {Object.entries(resonance).map(([key, value]) => (
+                                            <div key={key} className="mb-6">
+                                                <div className="flex justify-between mb-2">
+                                                    <span className="text-white capitalize">{key}</span>
+                                                    <span className="text-purple-300">{value}/10</span>
+                                                </div>
+                                                <input
+                                                    type="range"
+                                                    min="1"
+                                                    max="10"
+                                                    value={value}
+                                                    onChange={(e) => setResonance(r => ({ ...r, [key]: parseInt(e.target.value) }))}
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                        ))}
+                                        
+                                        <button
+                                            onClick={() => setPhase('intention')}
+                                            className="w-full py-3 bg-purple-500/20 border border-purple-500 text-purple-300 rounded-lg hover:bg-purple-500/30 transition-all"
+                                        >
+                                            Continue →
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {phase === 'intention' && (
+                                <div className="gradient-border animate-fadeIn">
+                                    <div className="gradient-border-inner p-6 md:p-8">
+                                        <h3 className="text-purple-300 text-center mb-4">Set your intention for today</h3>
+                                        <p className="text-gray-400 text-sm text-center mb-6">What do you want to call into your reality?</p>
+                                        
+                                        <textarea
+                                            value={intention}
+                                            onChange={(e) => setIntention(e.target.value)}
+                                            placeholder="I am calling in..."
+                                            className="w-full h-28 md:h-32 bg-black/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-400 focus:outline-none resize-none"
+                                        />
+                                        
+                                        <button
+                                            onClick={completeCalibration}
+                                            disabled={!intention}
+                                            className="w-full mt-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg disabled:opacity-30 transition-all"
+                                        >
+                                            ✧ Complete Calibration ✧
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {phase === 'complete' && (
+                                <div className="gradient-border animate-fadeIn">
+                                    <div className="gradient-border-inner p-6 md:p-8 text-center">
+                                        <div className="text-5xl md:text-6xl mb-6 animate-float">✧</div>
+                                        <h3 className="text-xl md:text-2xl text-white mb-4">Calibration Complete</h3>
+                                        <p className="text-purple-300 mb-2">+25 XP earned</p>
+                                        <p className="text-gray-400 mb-6">🔥 {soulProfile.streakDays + 1} day streak</p>
+                                        
+                                        <div className="bg-black/30 rounded-lg p-4 mb-6">
+                                            <p className="text-gray-400 text-sm mb-2">Today's Intention:</p>
+                                            <p className="text-white italic">"{intention}"</p>
+                                        </div>
+                                        
+                                        <button
+                                            onClick={() => setCurrentModule('dashboard')}
+                                            className="px-8 py-3 border border-purple-500 text-purple-300 rounded-lg hover:bg-purple-500/20 transition-all"
+                                        >
+                                            Return to Dashboard
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // SIGIL FORGE
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const SigilForge = () => {
+                const [intention, setIntention] = useState('');
+                const [activeSigil, setActiveSigil] = useState(null);
+                const [view, setView] = useState('create');
+
+                const createSigil = () => {
+                    if (!intention.trim()) return;
+                    const sigil = generateSigil(intention);
+                    setSoulProfile(prev => ({
+                        ...prev,
+                        sigils: [...prev.sigils, sigil]
+                    }));
+                    setActiveSigil(sigil);
+                    addXP(15, 'sigil-creation');
+                    
+                    if (soulProfile.sigils.length === 9) {
+                        unlockAchievement('sigil-master', 'Sigil Master', 'Created 10 sigils', 75);
+                    }
+                    
+                    setIntention('');
+                };
+
+                const renderSigil = (sigil) => {
+                    if (!sigil?.points?.length) return null;
+                    
+                    const pathData = sigil.points.reduce((acc, point, i) => {
+                        return acc + (i === 0 ? `M ${point.x} ${point.y}` : ` L ${point.x} ${point.y}`);
+                    }, '') + ' Z';
+
+                    return (
+                        <svg viewBox="0 0 100 100" className="w-full h-full">
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <linearGradient id="sigilGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#a855f7" />
+                                    <stop offset="100%" stopColor="#ec4899" />
+                                </linearGradient>
+                            </defs>
+                            <path d={pathData} fill="none" stroke="url(#sigilGradient)" strokeWidth="1.5" filter="url(#glow)" />
+                            {sigil.points.map((point, i) => (
+                                <circle key={i} cx={point.x} cy={point.y} r="2" fill="#a855f7" />
+                            ))}
+                        </svg>
+                    );
+                };
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/10 to-gray-950 p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-4xl mx-auto relative z-10">
+                            <button onClick={() => setCurrentModule('dashboard')} className="text-purple-400 hover:text-purple-300 mb-6 md:mb-8 flex items-center gap-2 text-sm">
+                                ← Back to Dashboard
+                            </button>
+
+                            <div className="text-center mb-6 md:mb-8">
+                                <div className="text-3xl md:text-4xl mb-4">⬡</div>
+                                <h2 className="text-xl md:text-2xl font-thin text-white tracking-widest">SIGIL FORGE</h2>
+                                <p className="text-purple-300/60 mt-2 text-sm">Transform intentions into power symbols</p>
+                            </div>
+
+                            <div className="flex gap-3 justify-center mb-6 md:mb-8">
+                                <button
+                                    onClick={() => setView('create')}
+                                    className={`px-5 py-2 rounded-lg transition-all text-sm ${view === 'create' ? 'bg-purple-500/20 border border-purple-500' : 'border border-gray-700'} text-purple-300`}
+                                >
+                                    Create
+                                </button>
+                                <button
+                                    onClick={() => setView('library')}
+                                    className={`px-5 py-2 rounded-lg transition-all text-sm ${view === 'library' ? 'bg-purple-500/20 border border-purple-500' : 'border border-gray-700'} text-purple-300`}
+                                >
+                                    Library ({soulProfile.sigils.length})
+                                </button>
+                            </div>
+
+                            {view === 'create' && (
+                                <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                                    <div className="gradient-border">
+                                        <div className="gradient-border-inner p-4 md:p-6">
+                                            <h3 className="text-purple-300 mb-4">Intention Input</h3>
+                                            <textarea
+                                                value={intention}
+                                                onChange={(e) => setIntention(e.target.value)}
+                                                placeholder="Enter your intention... (e.g., 'I attract abundance')"
+                                                className="w-full h-28 md:h-32 bg-black/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-400 focus:outline-none resize-none mb-4"
+                                            />
+                                            <p className="text-gray-500 text-xs md:text-sm mb-4">The sigil is created by removing vowels and connecting unique consonants in a sacred pattern.</p>
+                                            <button
+                                                onClick={createSigil}
+                                                disabled={!intention.trim()}
+                                                className="w-full py-3 bg-purple-500/20 border border-purple-500 text-purple-300 rounded-lg hover:bg-purple-500/30 disabled:opacity-30 transition-all"
+                                            >
+                                                Forge Sigil ⬡
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="gradient-border">
+                                        <div className="gradient-border-inner p-4 md:p-6">
+                                            <h3 className="text-purple-300 mb-4">Sigil Preview</h3>
+                                            <div className="aspect-square bg-black/50 rounded-lg flex items-center justify-center">
+                                                {activeSigil ? (
+                                                    <div className="w-4/5 h-4/5">
+                                                        {renderSigil(activeSigil)}
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-gray-600 text-sm text-center px-4">Enter an intention to generate your sigil</p>
+                                                )}
+                                            </div>
+                                            {activeSigil && (
+                                                <p className="text-center text-gray-400 text-xs md:text-sm mt-4 italic">"{activeSigil.intention}"</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {view === 'library' && (
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                                    {soulProfile.sigils.length === 0 ? (
+                                        <div className="col-span-full text-center py-12 text-gray-500">
+                                            No sigils created yet. Visit the Create tab to forge your first sigil.
+                                        </div>
+                                    ) : (
+                                        soulProfile.sigils.map((sigil, i) => (
+                                            <div key={i} className="gradient-border cursor-pointer" onClick={() => { setActiveSigil(sigil); setView('create'); }}>
+                                                <div className="gradient-border-inner p-3 md:p-4 hover:bg-purple-500/5 transition-all">
+                                                    <div className="aspect-square mb-2 md:mb-3">
+                                                        {renderSigil(sigil)}
+                                                    </div>
+                                                    <p className="text-gray-400 text-xs truncate">{sigil.intention}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // REALITY CODE EDITOR
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const RealityCodeEditor = () => {
+                const [code, setCode] = useState(`// Reality Code v1.0
+// Program your reality with intention
+
+RELEASE: Fear of judgment
+RELEASE: Scarcity mindset
+
+ALIGN: Divine timing
+ALIGN: Highest self
+
+MANIFEST: Abundance flows easily
+MANIFEST: Perfect opportunities appear
+
+RECEIVE: All that is meant for me
+RECEIVE: Unexpected blessings
+
+TRANSMUTE: Challenges into growth
+
+// End of program`);
+                const [compiled, setCompiled] = useState(null);
+                const [saved, setSaved] = useState(false);
+
+                const compileCode = () => {
+                    const parsed = parseRealityCode(code);
+                    setCompiled(parsed);
+                    addXP(20, 'reality-code');
+                    setSaved(false);
+                };
+
+                const saveProgram = () => {
+                    setSoulProfile(prev => ({
+                        ...prev,
+                        realityCodes: [...prev.realityCodes, { code, compiled, savedAt: new Date().toISOString() }]
+                    }));
+                    setSaved(true);
+                    
+                    if (soulProfile.realityCodes.length === 4) {
+                        unlockAchievement('code-architect', 'Code Architect', 'Saved 5 reality programs', 100);
+                    }
+                };
+
+                const getTypeColor = (type) => {
+                    const colors = {
+                        manifest: 'text-green-400',
+                        release: 'text-red-400',
+                        align: 'text-blue-400',
+                        receive: 'text-yellow-400',
+                        transmute: 'text-purple-400',
+                        comment: 'text-gray-500',
+                        intention: 'text-white'
+                    };
+                    return colors[type] || 'text-white';
+                };
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/10 to-gray-950 p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-5xl mx-auto relative z-10">
+                            <button onClick={() => setCurrentModule('dashboard')} className="text-purple-400 hover:text-purple-300 mb-6 md:mb-8 flex items-center gap-2 text-sm">
+                                ← Back to Dashboard
+                            </button>
+
+                            <div className="text-center mb-6 md:mb-8">
+                                <div className="text-3xl md:text-4xl mb-4">⟁</div>
+                                <h2 className="text-xl md:text-2xl font-thin text-white tracking-widest">REALITY CODE EDITOR</h2>
+                                <p className="text-purple-300/60 mt-2 text-sm">Program your reality with conscious intention</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                                <div className="gradient-border">
+                                    <div className="gradient-border-inner p-4 md:p-6">
+                                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-2">
+                                            <h3 className="text-purple-300">Code Editor</h3>
+                                            <div className="text-xs text-gray-500 flex flex-wrap gap-1">
+                                                <span className="text-green-400">MANIFEST</span>·
+                                                <span className="text-red-400">RELEASE</span>·
+                                                <span className="text-blue-400">ALIGN</span>·
+                                                <span className="text-yellow-400">RECEIVE</span>·
+                                                <span className="text-purple-400">TRANSMUTE</span>
+                                            </div>
+                                        </div>
+                                        <textarea
+                                            value={code}
+                                            onChange={(e) => { setCode(e.target.value); setCompiled(null); }}
+                                            className="w-full h-72 md:h-96 bg-black font-mono text-xs md:text-sm text-green-400 border border-gray-700 rounded-lg px-3 md:px-4 py-3 focus:border-purple-400 focus:outline-none resize-none"
+                                            spellCheck={false}
+                                        />
+                                        <div className="flex gap-3 mt-4">
+                                            <button
+                                                onClick={compileCode}
+                                                className="flex-1 py-3 bg-purple-500/20 border border-purple-500 text-purple-300 rounded-lg hover:bg-purple-500/30 transition-all text-sm"
+                                            >
+                                                ▶ Compile
+                                            </button>
+                                            <button
+                                                onClick={saveProgram}
+                                                disabled={!compiled}
+                                                className="px-5 py-3 border border-gray-600 text-gray-400 rounded-lg hover:border-purple-500 hover:text-purple-300 disabled:opacity-30 transition-all text-sm"
+                                            >
+                                                {saved ? '✓' : 'Save'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="gradient-border">
+                                    <div className="gradient-border-inner p-4 md:p-6">
+                                        <h3 className="text-purple-300 mb-4">Compiled Output</h3>
+                                        <div className="bg-black rounded-lg p-3 md:p-4 h-72 md:h-96 overflow-y-auto font-mono text-xs md:text-sm">
+                                            {compiled ? (
+                                                <div className="space-y-2">
+                                                    {compiled.map((line, i) => (
+                                                        <div key={i} className="flex gap-2 md:gap-3">
+                                                            <span className="text-gray-600 w-6 md:w-8 flex-shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                                                            <span className={getTypeColor(line.type)}>
+                                                                {line.type !== 'comment' && line.type !== 'intention' && (
+                                                                    <span className="opacity-60">[{line.type.toUpperCase()}] </span>
+                                                                )}
+                                                                {line.type === 'comment' ? `// ${line.value}` : line.value}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                    <div className="mt-6 pt-4 border-t border-gray-800">
+                                                        <p className="text-green-400">✓ Program compiled successfully</p>
+                                                        <p className="text-gray-500 text-xs mt-1">
+                                                            {compiled.filter(l => l.type === 'manifest').length} manifestations · 
+                                                            {compiled.filter(l => l.type === 'release').length} releases · 
+                                                            {compiled.filter(l => l.type === 'align').length} alignments
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <p className="text-gray-600">Click "Compile" to process your reality code...</p>
+                                            )}
+                                        </div>
+                                        
+                                        {compiled && (
+                                            <div className="mt-4 p-3 md:p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                                                <p className="text-purple-300 text-xs md:text-sm">
+                                                    ✧ Your program is now running in the background of reality.
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // SACRED GEOMETRY LAB
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const GeometryLab = () => {
+                const [seed, setSeed] = useState(Date.now());
+                const [complexity, setComplexity] = useState(3);
+                const [rotation, setRotation] = useState(0);
+
+                useEffect(() => {
+                    const interval = setInterval(() => {
+                        setRotation(r => r + 0.5);
+                    }, 50);
+                    return () => clearInterval(interval);
+                }, []);
+
+                const regenerate = () => setSeed(Date.now());
+
+                const phi = 1.618033988749895;
+                const layers = complexity + 2;
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/10 to-gray-950 p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-4xl mx-auto relative z-10">
+                            <button onClick={() => setCurrentModule('dashboard')} className="text-purple-400 hover:text-purple-300 mb-6 md:mb-8 flex items-center gap-2 text-sm">
+                                ← Back to Dashboard
+                            </button>
+
+                            <div className="text-center mb-6 md:mb-8">
+                                <div className="text-3xl md:text-4xl mb-4">◇</div>
+                                <h2 className="text-xl md:text-2xl font-thin text-white tracking-widest">SACRED GEOMETRY LAB</h2>
+                                <p className="text-purple-300/60 mt-2 text-sm">Generate patterns aligned with your consciousness</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+                                <div className="md:col-span-2 gradient-border">
+                                    <div className="gradient-border-inner p-4 md:p-6">
+                                        <div className="aspect-square bg-black/50 rounded-lg relative overflow-hidden flex items-center justify-center">
+                                            <svg viewBox="-50 -50 100 100" className="w-full h-full">
+                                                <defs>
+                                                    <linearGradient id="geoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8"/>
+                                                        <stop offset="100%" stopColor="#ec4899" stopOpacity="0.4"/>
+                                                    </linearGradient>
+                                                    <linearGradient id="geoGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                                                        <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.6"/>
+                                                        <stop offset="100%" stopColor="#a855f7" stopOpacity="0.3"/>
+                                                    </linearGradient>
+                                                </defs>
+                                                
+                                                {[...Array(layers)].map((_, i) => {
+                                                    const radius = 10 + (i * phi * 5);
+                                                    const rot = rotation * (i % 2 === 0 ? 1 : -1) * (0.5 + i * 0.1);
+                                                    return (
+                                                        <g key={i} transform={`rotate(${rot})`}>
+                                                            <polygon
+                                                                points={[...Array(6)].map((_, j) => {
+                                                                    const angle = (j * 60 - 90) * Math.PI / 180;
+                                                                    return `${Math.cos(angle) * radius},${Math.sin(angle) * radius}`;
+                                                                }).join(' ')}
+                                                                fill="none"
+                                                                stroke={i % 2 === 0 ? "url(#geoGrad1)" : "url(#geoGrad2)"}
+                                                                strokeWidth="0.5"
+                                                                opacity={0.3 + (i * 0.1)}
+                                                            />
+                                                        </g>
+                                                    );
+                                                })}
+                                                
+                                                <circle cx="0" cy="0" r="2" fill="#a855f7" className="animate-pulse" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="gradient-border">
+                                        <div className="gradient-border-inner p-4 md:p-6">
+                                            <h3 className="text-purple-300 mb-4">Controls</h3>
+                                            
+                                            <div className="mb-6">
+                                                <label className="text-gray-400 text-sm block mb-2">Complexity: {complexity}</label>
+                                                <input
+                                                    type="range"
+                                                    min="1"
+                                                    max="7"
+                                                    value={complexity}
+                                                    onChange={(e) => setComplexity(parseInt(e.target.value))}
+                                                    className="w-full"
+                                                />
+                                            </div>
+
+                                            <button
+                                                onClick={regenerate}
+                                                className="w-full py-3 bg-purple-500/20 border border-purple-500 text-purple-300 rounded-lg hover:bg-purple-500/30 transition-all text-sm"
+                                            >
+                                                ↻ Regenerate
+                                            </button>
+
+                                            <button
+                                                onClick={() => {
+                                                    setSoulProfile(prev => ({
+                                                        ...prev,
+                                                        geometryPatterns: [...prev.geometryPatterns, { seed, complexity, created: new Date().toISOString() }]
+                                                    }));
+                                                    addXP(10, 'geometry');
+                                                }}
+                                                className="w-full mt-3 py-3 border border-gray-600 text-gray-400 rounded-lg hover:border-purple-500 hover:text-purple-300 transition-all text-sm"
+                                            >
+                                                Save Pattern
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="gradient-border">
+                                        <div className="gradient-border-inner p-4 md:p-6">
+                                            <h3 className="text-purple-300 mb-3 text-sm">Pattern Info</h3>
+                                            <p className="text-gray-400 text-xs">
+                                                Seed <span className="text-purple-300">#{seed.toString().slice(-6)}</span> aligned with {soulProfile.coreFrequency?.name} at {soulProfile.coreFrequency?.hz}Hz
+                                            </p>
+                                            <p className="text-gray-500 text-xs mt-2">
+                                                {soulProfile.geometryPatterns.length} patterns saved
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // ORACLE CHAMBER
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const OracleChamber = () => {
+                const [question, setQuestion] = useState('');
+                const [context, setContext] = useState('general');
+                const [message, setMessage] = useState(null);
+                const [isRevealing, setIsRevealing] = useState(false);
+
+                const consultOracle = () => {
+                    setIsRevealing(true);
+                    setTimeout(() => {
+                        const msg = getOracleMessage(context);
+                        setMessage(msg);
+                        setIsRevealing(false);
+                        addXP(10, 'oracle');
+                        setSoulProfile(prev => ({
+                            ...prev,
+                            oracleMessages: [...prev.oracleMessages, { question, context, message: msg, date: new Date().toISOString() }]
+                        }));
+                        
+                        if (soulProfile.oracleMessages.length === 9) {
+                            unlockAchievement('oracle-seeker', 'Oracle Seeker', 'Consulted the oracle 10 times', 75);
+                        }
+                    }, 2000);
+                };
+
+                const contexts = [
+                    { id: 'general', name: 'General' },
+                    { id: 'morning', name: 'Morning' },
+                    { id: 'struggle', name: 'Challenge' },
+                    { id: 'breakthrough', name: 'Growth' },
+                    { id: 'doubt', name: 'Doubt' }
+                ];
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/10 to-gray-950 p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-2xl mx-auto relative z-10">
+                            <button onClick={() => setCurrentModule('dashboard')} className="text-purple-400 hover:text-purple-300 mb-6 md:mb-8 flex items-center gap-2 text-sm">
+                                ← Back to Dashboard
+                            </button>
+
+                            <div className="text-center mb-6 md:mb-8">
+                                <div className="text-3xl md:text-4xl mb-4 animate-float">◈</div>
+                                <h2 className="text-xl md:text-2xl font-thin text-white tracking-widest">ORACLE CHAMBER</h2>
+                                <p className="text-purple-300/60 mt-2 text-sm">Receive guidance from the unified field</p>
+                            </div>
+
+                            <div className="gradient-border">
+                                <div className="gradient-border-inner p-6 md:p-8">
+                                    <div className="mb-6">
+                                        <label className="text-purple-300 text-sm block mb-3">What brings you here?</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {contexts.map(ctx => (
+                                                <button
+                                                    key={ctx.id}
+                                                    onClick={() => setContext(ctx.id)}
+                                                    className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm transition-all ${
+                                                        context === ctx.id 
+                                                            ? 'bg-purple-500/20 border border-purple-500 text-purple-300' 
+                                                            : 'border border-gray-700 text-gray-400 hover:border-purple-500/50'
+                                                    }`}
+                                                >
+                                                    {ctx.name}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-6">
+                                        <label className="text-purple-300 text-sm block mb-2">Your question (optional)</label>
+                                        <textarea
+                                            value={question}
+                                            onChange={(e) => setQuestion(e.target.value)}
+                                            placeholder="What would you like clarity on?"
+                                            className="w-full h-20 md:h-24 bg-black/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-400 focus:outline-none resize-none text-sm"
+                                        />
+                                    </div>
+
+                                    <button
+                                        onClick={consultOracle}
+                                        disabled={isRevealing}
+                                        className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium disabled:opacity-50 transition-all"
+                                    >
+                                        {isRevealing ? '✧ Receiving... ✧' : '✧ Consult the Oracle ✧'}
+                                    </button>
+
+                                    {message && !isRevealing && (
+                                        <div className="mt-8 p-5 md:p-6 bg-black/30 border border-purple-500/20 rounded-xl text-center animate-fadeIn">
+                                            <div className="text-purple-400 text-xs md:text-sm mb-3">THE ORACLE SPEAKS:</div>
+                                            <p className="text-white text-lg md:text-xl italic leading-relaxed">"{message}"</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {soulProfile.oracleMessages.length > 0 && (
+                                <div className="mt-6 md:mt-8">
+                                    <h3 className="text-purple-300 text-xs tracking-widest mb-4">RECENT TRANSMISSIONS</h3>
+                                    <div className="space-y-3">
+                                        {soulProfile.oracleMessages.slice(-3).reverse().map((msg, i) => (
+                                            <div key={i} className="bg-gray-900/30 border border-gray-800 rounded-lg p-4">
+                                                <p className="text-gray-400 text-sm italic">"{msg.message}"</p>
+                                                <p className="text-gray-600 text-xs mt-2">{new Date(msg.date).toLocaleDateString()}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // ACHIEVEMENTS
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            const Achievements = () => {
+                const allAchievements = [
+                    { id: 'first-spark', title: 'First Spark', description: 'Completed the Awakening Gateway', xp: 50 },
+                    { id: 'week-warrior', title: 'Week Warrior', description: '7-day calibration streak', xp: 100 },
+                    { id: 'sigil-master', title: 'Sigil Master', description: 'Created 10 sigils', xp: 75 },
+                    { id: 'code-architect', title: 'Code Architect', description: 'Saved 5 reality programs', xp: 100 },
+                    { id: 'geometry-savant', title: 'Geometry Savant', description: 'Generated 20 patterns', xp: 50 },
+                    { id: 'oracle-seeker', title: 'Oracle Seeker', description: 'Consulted the oracle 10 times', xp: 75 },
+                    { id: 'level-five', title: 'Rising Spark', description: 'Reached Level 5', xp: 150 },
+                    { id: 'level-ten', title: 'Awakening', description: 'Reached Level 10', xp: 300 }
+                ];
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/10 to-gray-950 p-4 md:p-6 relative">
+                        <StarBackground />
+                        <div className="max-w-4xl mx-auto relative z-10">
+                            <button onClick={() => setCurrentModule('dashboard')} className="text-purple-400 hover:text-purple-300 mb-6 md:mb-8 flex items-center gap-2 text-sm">
+                                ← Back to Dashboard
+                            </button>
+
+                            <div className="text-center mb-6 md:mb-8">
+                                <div className="text-3xl md:text-4xl mb-4">★</div>
+                                <h2 className="text-xl md:text-2xl font-thin text-white tracking-widest">ACHIEVEMENT MATRIX</h2>
+                                <p className="text-purple-300/60 mt-2 text-sm">{soulProfile.achievements.length} / {allAchievements.length} unlocked</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                                {allAchievements.map(achievement => {
+                                    const unlocked = soulProfile.achievements.find(a => a.id === achievement.id);
+                                    return (
+                                        <div
+                                            key={achievement.id}
+                                            className={`p-4 md:p-6 rounded-xl border transition-all ${
+                                                unlocked 
+                                                    ? 'bg-purple-500/10 border-purple-500/50' 
+                                                    : 'bg-gray-900/30 border-gray-800 opacity-50'
+                                            }`}
+                                        >
+                                            <div className="flex items-start gap-3 md:gap-4">
+                                                <div className={`text-2xl md:text-3xl ${unlocked ? '' : 'grayscale'}`}>
+                                                    {unlocked ? '★' : '☆'}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <h3 className="text-white font-medium text-sm md:text-base">{achievement.title}</h3>
+                                                    <p className="text-gray-400 text-xs md:text-sm mt-1">{achievement.description}</p>
+                                                    <p className="text-purple-400 text-xs md:text-sm mt-2">+{achievement.xp} XP</p>
+                                                </div>
+                                                {unlocked && (
+                                                    <div className="text-green-400 text-sm flex-shrink-0">✓</div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ═══════════════════════════════════════════════════════════════════════════════
+            // MAIN RENDER
+            // ═══════════════════════════════════════════════════════════════════════════════
+            
+            if (showIntro) return <IntroSequence />;
+            if (!isInitialized) return <AwakeningGateway />;
+
+            return (
+                <div className="min-h-screen bg-gray-950">
+                    <Notification />
+                    
+                    {currentModule === 'dashboard' && <Dashboard />}
+                    {currentModule === 'calibration' && <DailyCalibration />}
+                    {currentModule === 'sigil-forge' && <SigilForge />}
+                    {currentModule === 'reality-code' && <RealityCodeEditor />}
+                    {currentModule === 'geometry-lab' && <GeometryLab />}
+                    {currentModule === 'oracle' && <OracleChamber />}
+                    {currentModule === 'achievements' && <Achievements />}
+                </div>
+            );
+        };
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<SparkProtocol />);
+    </script>
+</body>
+</html>

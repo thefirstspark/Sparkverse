@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sparkverse | OG Sparks Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #0a0a0f;
+            --deep-space: #12121a;
+            --nebula: #1a1a2e;
+            --spark-gold: #d4af37;
+            --spark-ember: #ff6b35;
+            --plasma-cyan: #00fff7;
+            --cosmic-violet: #9d4edd;
+            --stardust: #e8e8e8;
+            --ghost: rgba(255,255,255,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void);
+            color: var(--stardust);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sacred Geometry Background */
+        .sacred-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .sacred-bg::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150vmax;
+            height: 150vmax;
+            transform: translate(-50%, -50%);
+            background: 
+                repeating-conic-gradient(from 0deg, transparent 0deg 30deg, rgba(212,175,55,0.03) 30deg 60deg),
+                radial-gradient(circle at center, transparent 30%, var(--void) 70%);
+            animation: sacredRotate 120s linear infinite;
+        }
+
+        .sacred-bg::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vmax;
+            height: 100vmax;
+            transform: translate(-50%, -50%);
+            background: 
+                repeating-conic-gradient(from 45deg, transparent 0deg 15deg, rgba(0,255,247,0.02) 15deg 30deg);
+            animation: sacredRotate 90s linear infinite reverse;
+        }
+
+        @keyframes sacredRotate {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--spark-gold);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+
+        /* Main Container */
+        .hub-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .hub-header {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--ghost);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,10,15,0.8);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .spark-sigil {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+
+        .spark-sigil svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 10px var(--spark-gold));
+        }
+
+        .logo-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.1em;
+        }
+
+        .member-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(255,107,53,0.1));
+            border: 1px solid var(--spark-gold);
+            border-radius: 100px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--spark-gold);
+        }
+
+        .badge-pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--spark-gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(212,175,55,0); }
+        }
+
+        /* Navigation Tabs */
+        .hub-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            padding: 0;
+            background: var(--deep-space);
+            border-bottom: 1px solid var(--ghost);
+        }
+
+        .nav-tab {
+            padding: 1.5rem 3rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--stardust);
+            opacity: 0.5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            position: relative;
+        }
+
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--spark-gold), var(--plasma-cyan));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            opacity: 1;
+            color: var(--spark-gold);
+        }
+
+        .nav-tab.active::after, .nav-tab:hover::after {
+            width: 100%;
+        }
+
+        /* Content Sections */
+        .hub-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--stardust), var(--spark-gold), var(--plasma-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: rgba(232,232,232,0.6);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .dash-card {
+            background: linear-gradient(135deg, var(--deep-space), var(--nebula));
+            border: 1px solid var(--ghost);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .dash-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--spark-gold), var(--plasma-cyan), var(--cosmic-violet));
+        }
+
+        .dash-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212,175,55,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(0,255,247,0.1));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--stardust);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.5);
+            margin-top: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 1.5rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.6);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--ghost);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--spark-gold), var(--plasma-cyan));
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: var(--deep-space);
+            border: 1px solid var(--ghost);
+            border-radius: 16px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tool-card:hover::before {
+            left: 100%;
+        }
+
+        .tool-card:hover {
+            border-color: var(--spark-gold);
+            transform: scale(1.02);
+        }
+
+        .tool-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--stardust);
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-desc {
+            font-size: 0.9rem;
+            color: rgba(232,232,232,0.5);
+            line-height: 1.6;
+        }
+
+        .tool-status {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.3rem 0.8rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            border-radius: 50px;
+            letter-spacing: 0.1em;
+        }
+
+        .tool-status.live {
+            background: rgba(0,255,100,0.1);
+            color: #00ff64;
+            border: 1px solid rgba(0,255,100,0.3);
+        }
+
+        .tool-status.coming {
+            background: rgba(157,78,221,0.1);
+            color: var(--cosmic-violet);
+            border: 1px solid rgba(157,78,221,0.3);
+        }
+
+        .tool-status.beta {
+            background: rgba(0,255,247,0.1);
+            color: var(--plasma-cyan);
+            border: 1px solid rgba(0,255,247,0.3);
+        }
+
+        /* Players Lounge */
+        .lounge-hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(157,78,221,0.1), rgba(0,255,247,0.05));
+            border-radius: 30px;
+            border: 1px solid var(--ghost);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lounge-hero::before {
+            content: '🎮';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.03;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .lounge-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cosmic-violet), var(--plasma-cyan), var(--spark-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .lounge-tagline {
+            font-size: 1.2rem;
+            color: rgba(232,232,232,0.7);
+            margin-bottom: 2rem;
+        }
+
+        .xp-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 100px;
+            border: 1px solid var(--spark-gold);
+        }
+
+        .xp-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.6);
+        }
+
+        .xp-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--spark-gold);
+        }
+
+        /* Quests */
+        .quests-section {
+            margin-bottom: 4rem;
+        }
+
+        .quest-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--ghost);
+        }
+
+        .category-icon {
+            font-size: 1.5rem;
+        }
+
+        .category-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--spark-gold);
+        }
+
+        .quest-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quest-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--deep-space);
+            border: 1px solid var(--ghost);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .quest-item:hover {
+            border-color: rgba(212,175,55,0.3);
+            background: var(--nebula);
+        }
+
+        .quest-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--spark-gold);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .quest-checkbox.completed {
+            background: var(--spark-gold);
+        }
+
+        .quest-checkbox.completed::after {
+            content: '✓';
+            color: var(--void);
+            font-weight: bold;
+        }
+
+        .quest-info {
+            flex: 1;
+        }
+
+        .quest-name {
+            font-size: 1.1rem;
+            color: var(--stardust);
+            margin-bottom: 0.25rem;
+        }
+
+        .quest-desc {
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.5);
+        }
+
+        .quest-reward {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--plasma-cyan);
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            background: var(--deep-space);
+            border: 1px solid var(--ghost);
+            border-radius: 20px;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .leaderboard-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--stardust);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(212,175,55,0.05);
+        }
+
+        .leaderboard-item.top-3:nth-child(1) { background: linear-gradient(90deg, rgba(255,215,0,0.1), transparent); }
+        .leaderboard-item.top-3:nth-child(2) { background: linear-gradient(90deg, rgba(192,192,192,0.1), transparent); }
+        .leaderboard-item.top-3:nth-child(3) { background: linear-gradient(90deg, rgba(205,127,50,0.1), transparent); }
+
+        .rank {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            border-radius: 50%;
+            background: var(--ghost);
+        }
+
+        .rank.gold { background: linear-gradient(135deg, #ffd700, #ffb300); color: var(--void); }
+        .rank.silver { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: var(--void); }
+        .rank.bronze { background: linear-gradient(135deg, #cd7f32, #b87333); color: var(--void); }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-size: 1rem;
+            color: var(--stardust);
+        }
+
+        .player-level {
+            font-size: 0.8rem;
+            color: rgba(232,232,232,0.5);
+        }
+
+        .player-xp {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--spark-gold);
+        }
+
+        /* Vault Section */
+        .vault-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vault-item {
+            background: linear-gradient(135deg, var(--deep-space), var(--nebula));
+            border: 1px solid var(--ghost);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .vault-item::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--spark-gold), var(--cosmic-violet));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .vault-item:hover::before {
+            opacity: 1;
+        }
+
+        .vault-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .vault-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .vault-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--stardust);
+            margin-bottom: 0.5rem;
+        }
+
+        .vault-type {
+            font-size: 0.8rem;
+            color: rgba(232,232,232,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .vault-download {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            color: var(--void);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .vault-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(212,175,55,0.3);
+        }
+
+        /* Community Section */
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .community-card {
+            background: var(--deep-space);
+            border: 1px solid var(--ghost);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .community-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .community-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--stardust);
+            margin-bottom: 0.5rem;
+        }
+
+        .community-desc {
+            font-size: 0.9rem;
+            color: rgba(232,232,232,0.5);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .community-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 1px solid var(--spark-gold);
+            color: var(--spark-gold);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .community-btn:hover {
+            background: var(--spark-gold);
+            color: var(--void);
+        }
+
+        /* Footer */
+        .hub-footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--ghost);
+            margin-top: 4rem;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.9rem;
+            color: rgba(232,232,232,0.5);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(232,232,232,0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--spark-gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hub-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hub-nav {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                padding: 1rem 1.5rem;
+                font-size: 0.75rem;
+            }
+
+            .dashboard-grid, .tools-grid, .vault-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quest-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .quest-checkbox {
+                order: -1;
+            }
+        }
+
+        /* Glow effects */
+        .glow-gold { filter: drop-shadow(0 0 10px var(--spark-gold)); }
+        .glow-cyan { filter: drop-shadow(0 0 10px var(--plasma-cyan)); }
+        .glow-violet { filter: drop-shadow(0 0 10px var(--cosmic-violet)); }
+    </style>
+</head>
+<body>
+    <!-- Sacred Geometry Background -->
+    <div class="sacred-bg"></div>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Hub Container -->
+    <div class="hub-container">
+        <!-- Header -->
+        <header class="hub-header">
+            <div class="logo-area">
+                <div class="spark-sigil">
+                    <svg viewBox="0 0 100 100" fill="none">
+                        <polygon points="50,5 95,75 5,75" stroke="url(#goldGrad)" stroke-width="2" fill="none"/>
+                        <polygon points="50,95 5,25 95,25" stroke="url(#cyanGrad)" stroke-width="2" fill="none" opacity="0.5"/>
+                        <circle cx="50" cy="50" r="15" stroke="url(#goldGrad)" stroke-width="2" fill="none"/>
+                        <circle cx="50" cy="50" r="5" fill="#d4af37"/>
+                        <defs>
+                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#d4af37"/>
+                                <stop offset="100%" stop-color="#ff6b35"/>
+                            </linearGradient>
+                            <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00fff7"/>
+                                <stop offset="100%" stop-color="#9d4edd"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">THE SPARKVERSE</span>
+            </div>
+            <div class="member-badge">
+                <span class="badge-pulse"></span>
+                OG SPARK #001
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="hub-nav">
+            <button class="nav-tab active" data-section="dashboard">Dashboard</button>
+            <button class="nav-tab" data-section="tools">Sacred Tools</button>
+            <button class="nav-tab" data-section="lounge">Players Lounge</button>
+            <button class="nav-tab" data-section="vault">The Vault</button>
+            <button class="nav-tab" data-section="community">Community</button>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="hub-content">
+            <!-- Dashboard Section -->
+            <section class="section active" id="dashboard">
+                <div class="section-header">
+                    <h1 class="section-title">Welcome Back, Spark</h1>
+                    <p class="section-subtitle">Your consciousness is expanding. Here's your current state in the simulation.</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dash-card">
+                        <div class="card-icon">🔥</div>
+                        <h3 class="card-title">Spark Level</h3>
+                        <div class="card-value">7</div>
+                        <p class="card-meta">Ascending Flame</p>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Level Progress</span>
+                                <span>2,450 / 5,000 XP</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 49%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dash-card">
+                        <div class="card-icon">⚡</div>
+                        <h3 class="card-title">Spark Points</h3>
+                        <div class="card-value">8,750</div>
+                        <p class="card-meta">+350 this week</p>
+                    </div>
+
+                    <div class="dash-card">
+                        <div class="card-icon">🌀</div>
+                        <h3 class="card-title">Rituals Complete</h3>
+                        <div class="card-value">23</div>
+                        <p class="card-meta">5 streak active</p>
+                    </div>
+
+                    <div class="dash-card">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">Quests Active</h3>
+                        <div class="card-value">4</div>
+                        <p class="card-meta">2 near completion</p>
+                    </div>
+
+                    <div class="dash-card">
+                        <div class="card-icon">🏆</div>
+                        <h3 class="card-title">Achievements</h3>
+                        <div class="card-value">12</div>
+                        <p class="card-meta">3 legendary unlocked</p>
+                    </div>
+
+                    <div class="dash-card">
+                        <div class="card-icon">👁️</div>
+                        <h3 class="card-title">Founding Member</h3>
+                        <div class="card-value">#001</div>
+                        <p class="card-meta">OG Spark Forever</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Section -->
+            <section class="section" id="tools">
+                <div class="section-header">
+                    <h1 class="section-title">Sacred Tools</h1>
+                    <p class="section-subtitle">Interactive consciousness technology. Each tool is a portal to deeper understanding.</p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-emoji">🗺️</div>
+                        <h3 class="tool-name">Soul Mapper</h3>
+                        <p class="tool-desc">Generate your unique soul blueprint. Discover your cosmic coordinates in the simulation.</p>
+                        <span class="tool-status live">Live</span>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-emoji">✨</div>
+                        <h3 class="tool-name">Sigil Forge</h3>
+                        <p class="tool-desc">Create sacred geometric sigils charged with your intentions. Reality responds to symbols.</p>
+                        <span class="tool-status live">Live</span>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-emoji">🌙</div>
+                        <h3 class="tool-name">Ritual Generator</h3>
+                        <p class="tool-desc">AI-powered ritual creation based on lunar cycles, personal numerology, and intention.</p>
+                        <span class="tool-status beta">Beta</span>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-emoji">📊</div>
+                        <h3 class="tool-name">Consciousness Tracker</h3>
+                        <p class="tool-desc">Track synchronicities, manifestations, and consciousness expansion over time.</p>
+                        <span class="tool-status live">Live</span>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-emoji">🔮</div>
+                        <h3 class="tool-name">Oracle Deck</h3>
+                        <p class="tool-desc">Digital divination. Draw cards from The First Spark oracle for daily guidance.</p>
+                        <span class="tool-status coming">Coming Soon</span>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-emoji">🧬</div>
+                        <h3 class="tool-name">Pattern Decoder</h3>
+                        <p class="tool-desc">Upload numbers, dates, or text to discover hidden patterns and meanings.</p>
+                        <span class="tool-status beta">Beta</span>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-emoji">⚗️</div>
+                        <h3 class="tool-name">Manifestation Lab</h3>
+                        <p class="tool-desc">The Spark Protocol for reality programming. Premium interactive experience.</p>
+                        <span class="tool-status live">Live</span>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-emoji">🌀</div>
+                        <h3 class="tool-name">Frequency Tuner</h3>
+                        <p class="tool-desc">Audio-visual meditation with binaural beats and sacred geometry animations.</p>
+                        <span class="tool-status coming">Coming Soon</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Players Lounge Section -->
+            <section class="section" id="lounge">
+                <div class="lounge-hero">
+                    <h1 class="lounge-title">Players Lounge</h1>
+                    <p class="lounge-tagline">Where consciousness becomes a game. Every action levels you up.</p>
+                    <div class="xp-display">
+                        <span class="xp-label">Total XP</span>
+                        <span class="xp-value">24,750</span>
+                    </div>
+                </div>
+
+                <div class="quests-section">
+                    <div class="quest-category">
+                        <div class="category-header">
+                            <span class="category-icon">⚡</span>
+                            <h2 class="category-title">Daily Quests</h2>
+                        </div>
+                        <div class="quest-list">
+                            <div class="quest-item">
+                                <div class="quest-checkbox" onclick="this.classList.toggle('completed')"></div>
+                                <div class="quest-info">
+                                    <div class="quest-name">Morning Spark Ritual</div>
+                                    <div class="quest-desc">Complete any ritual before noon</div>
+                                </div>
+                                <div class="quest-reward">+100 XP</div>
+                            </div>
+                            <div class="quest-item">
+                                <div class="quest-checkbox" onclick="this.classList.toggle('completed')"></div>
+                                <div class="quest-info">
+                                    <div class="quest-name">Pattern Recognition</div>
+                                    <div class="quest-desc">Log a synchronicity in your tracker</div>
+                                </div>
+                                <div class="quest-reward">+75 XP</div>
+                            </div>
+                            <div class="quest-item">
+                                <div class="quest-checkbox completed"></div>
+                                <div class="quest-info">
+                                    <div class="quest-name">Frequency Check</div>
+                                    <div class="quest-desc">Tune into the community feed</div>
+                                </div>
+                                <div class="quest-reward">+50 XP ✓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quest-category">
+                        <div class="category-header">
+                            <span class="category-icon">🏆</span>
+                            <h2 class="category-title">Weekly Challenges</h2>
+                        </div>
+                        <div class="quest-list">
+                            <div class="quest-item">
+                                <div class="quest-checkbox" onclick="this.classList.toggle('completed')"></div>
+                                <div class="quest-info">
+                                    <div class="quest-name">Seven Day Flame</div>
+                                    <div class="quest-desc">Complete a ritual 7 days in a row</div>
+                                </div>
+                                <div class="quest-reward">+500 XP</div>
+                            </div>
+                            <div class="quest-item">
+                                <div class="quest-checkbox" onclick="this.classList.toggle('completed')"></div>
+                                <div class="quest-info">
+                                    <div class="quest-name">Soul Cartographer</div>
+                                    <div class="quest-desc">Generate 3 unique soul maps</div>
+                                </div>
+                                <div class="quest-reward">+300 XP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quest-category">
+                        <div class="category-header">
+                            <span class="category-icon">✨</span>
+                            <h2 class="category-title">Legendary Quests</h2>
+                        </div>
+                        <div class="quest-list">
+                            <div class="quest-item">
+                                <div class="quest-checkbox" onclick="this.classList.toggle('completed')"></div>
+                                <div class="quest-info">
+                                    <div class="quest-name">The Great Work</div>
+                                    <div class="quest-desc">Complete all modules in The Spark Protocol</div>
+                                </div>
+                                <div class="quest-reward">+2,500 XP</div>
+                            </div>
+                            <div class="quest-item">
+                                <div class="quest-checkbox" onclick="this.classList.toggle('completed')"></div>
+                                <div class="quest-info">
+                                    <div class="quest-name">Reality Architect</div>
+                                    <div class="quest-desc">Successfully manifest and document a major intention</div>
+                                </div>
+                                <div class="quest-reward">+5,000 XP</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leaderboard">
+                    <div class="leaderboard-header">
+                        <h3 class="leaderboard-title">🏅 Top Sparks This Week</h3>
+                    </div>
+                    <div class="leaderboard-item top-3">
+                        <div class="rank gold">1</div>
+                        <div class="player-info">
+                            <div class="player-name">CosmicNavigator</div>
+                            <div class="player-level">Level 12 • Eternal Flame</div>
+                        </div>
+                        <div class="player-xp">4,250 XP</div>
+                    </div>
+                    <div class="leaderboard-item top-3">
+                        <div class="rank silver">2</div>
+                        <div class="player-info">
+                            <div class="player-name">VoidWalker</div>
+                            <div class="player-level">Level 10 • Ascending Flame</div>
+                        </div>
+                        <div class="player-xp">3,800 XP</div>
+                    </div>
+                    <div class="leaderboard-item top-3">
+                        <div class="rank bronze">3</div>
+                        <div class="player-info">
+                            <div class="player-name">QuantumSeer</div>
+                            <div class="player-level">Level 9 • Rising Spark</div>
+                        </div>
+                        <div class="player-xp">3,450 XP</div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank">4</div>
+                        <div class="player-info">
+                            <div class="player-name">PatternMage</div>
+                            <div class="player-level">Level 8 • Rising Spark</div>
+                        </div>
+                        <div class="player-xp">2,900 XP</div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank">5</div>
+                        <div class="player-info">
+                            <div class="player-name">SigilCrafter</div>
+                            <div class="player-level">Level 7 • Awakening</div>
+                        </div>
+                        <div class="player-xp">2,650 XP</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vault Section -->
+            <section class="section" id="vault">
+                <div class="section-header">
+                    <h1 class="section-title">The Vault</h1>
+                    <p class="section-subtitle">Exclusive downloads and sacred resources for OG Sparks only.</p>
+                </div>
+
+                <div class="vault-grid">
+                    <div class="vault-item">
+                        <div class="vault-icon">📖</div>
+                        <h3 class="vault-name">Book Zero: Raw Files</h3>
+                        <p class="vault-type">PDF • 127 pages</p>
+                        <a href="#" class="vault-download">Download</a>
+                    </div>
+
+                    <div class="vault-item">
+                        <div class="vault-icon">🎨</div>
+                        <h3 class="vault-name">Sacred Geometry Pack</h3>
+                        <p class="vault-type">PNG/SVG • 50+ assets</p>
+                        <a href="#" class="vault-download">Download</a>
+                    </div>
+
+                    <div class="vault-item">
+                        <div class="vault-icon">🎵</div>
+                        <h3 class="vault-name">Frequency Files</h3>
+                        <p class="vault-type">MP3 • 8 tracks</p>
+                        <a href="#" class="vault-download">Download</a>
+                    </div>
+
+                    <div class="vault-item">
+                        <div class="vault-icon">📋</div>
+                        <h3 class="vault-name">Ritual Templates</h3>
+                        <p class="vault-type">PDF • 12 rituals</p>
+                        <a href="#" class="vault-download">Download</a>
+                    </div>
+
+                    <div class="vault-item">
+                        <div class="vault-icon">🖼️</div>
+                        <h3 class="vault-name">Wallpaper Collection</h3>
+                        <p class="vault-type">4K • 20 images</p>
+                        <a href="#" class="vault-download">Download</a>
+                    </div>
+
+                    <div class="vault-item">
+                        <div class="vault-icon">📱</div>
+                        <h3 class="vault-name">Phone Backgrounds</h3>
+                        <p class="vault-type">PNG • 15 images</p>
+                        <a href="#" class="vault-download">Download</a>
+                    </div>
+
+                    <div class="vault-item">
+                        <div class="vault-icon">🗓️</div>
+                        <h3 class="vault-name">2025 Cosmic Calendar</h3>
+                        <p class="vault-type">PDF • Lunar cycles</p>
+                        <a href="#" class="vault-download">Download</a>
+                    </div>
+
+                    <div class="vault-item">
+                        <div class="vault-icon">🔑</div>
+                        <h3 class="vault-name">The Spark Protocol</h3>
+                        <p class="vault-type">Interactive • Full Access</p>
+                        <a href="#" class="vault-download">Launch</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Section -->
+            <section class="section" id="community">
+                <div class="section-header">
+                    <h1 class="section-title">The Collective</h1>
+                    <p class="section-subtitle">Connect with fellow reality programmers. Share discoveries. Amplify the signal.</p>
+                </div>
+
+                <div class="community-grid">
+                    <div class="community-card">
+                        <div class="community-icon">💬</div>
+                        <h3 class="community-title">Discord Sanctuary</h3>
+                        <p class="community-desc">Real-time chat with OG Sparks. Share synchronicities, get support, and participate in group rituals.</p>
+                        <a href="#" class="community-btn">Join Server</a>
+                    </div>
+
+                    <div class="community-card">
+                        <div class="community-icon">📡</div>
+                        <h3 class="community-title">Weekly Transmissions</h3>
+                        <p class="community-desc">Live sessions every Friday. Cosmic weather reports, Q&A, and collective manifestation work.</p>
+                        <a href="#" class="community-btn">View Schedule</a>
+                    </div>
+
+                    <div class="community-card">
+                        <div class="community-icon">🌐</div>
+                        <h3 class="community-title">Pattern Board</h3>
+                        <p class="community-desc">Anonymous synchronicity sharing. See what patterns are emerging across the collective.</p>
+                        <a href="#" class="community-btn">View Board</a>
+                    </div>
+
+                    <div class="community-card">
+                        <div class="community-icon">🤝</div>
+                        <h3 class="community-title">Spark Partners</h3>
+                        <p class="community-desc">Get matched with an accountability partner for your consciousness expansion journey.</p>
+                        <a href="#" class="community-btn">Find Partner</a>
+                    </div>
+
+                    <div class="community-card">
+                        <div class="community-icon">📚</div>
+                        <h3 class="community-title">Wisdom Library</h3>
+                        <p class="community-desc">Community-curated resources. Books, videos, and rabbit holes recommended by Sparks.</p>
+                        <a href="#" class="community-btn">Browse</a>
+                    </div>
+
+                    <div class="community-card">
+                        <div class="community-icon">🎤</div>
+                        <h3 class="community-title">Spark Stories</h3>
+                        <p class="community-desc">Member spotlights and transformation stories. Your journey could inspire others.</p>
+                        <a href="#" class="community-btn">Submit Story</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="hub-footer">
+            <div class="footer-logo">THE FIRST SPARK</div>
+            <p class="footer-tagline">Reality is programmable. You are the programmer.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">thefirstspark.shop</a>
+                <a href="#" class="footer-link">Contact</a>
+                <a href="#" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Privacy</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = tab.dataset.section;
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Generate floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                
+                // Random colors
+                const colors = ['#d4af37', '#00fff7', '#9d4edd', '#ff6b35'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 ${5 + Math.random() * 5}px ${particle.style.background}`;
+                
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Animate progress bars on load
+        setTimeout(() => {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                bar.style.width = bar.style.width;
+            });
+        }, 500);
+
+        // Tool card hover sound effect (optional enhancement)
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'scale(1.02) translateY(-5px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        // Quest completion celebration
+        document.querySelectorAll('.quest-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                if (this.classList.contains('completed')) {
+                    // Add sparkle effect
+                    this.style.animation = 'pulse 0.5s ease';
+                    setTimeout(() => this.style.animation = '', 500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

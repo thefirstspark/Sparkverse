@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sparkverse — Ecosystem Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Outfit:wght@200;300;400;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0a0a0f;
+    --deep: #111118;
+    --surface: #1a1a24;
+    --spark-gold: #f0c040;
+    --spark-amber: #e89020;
+    --spark-flame: #e05030;
+    --spark-violet: #9060e0;
+    --spark-cyan: #40d0d0;
+    --spark-rose: #e06080;
+    --muted: #555570;
+    --ghost: #33334a;
+    --text: #c8c8d8;
+    --bright: #eeeef4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    cursor: grab;
+  }
+  body.grabbing { cursor: grabbing; }
+
+  #canvas-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #map-canvas {
+    position: absolute;
+    width: 4000px;
+    height: 3000px;
+    transform-origin: 0 0;
+  }
+
+  /* SVG connection lines */
+  #connections {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #connections line {
+    stroke: var(--ghost);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 4;
+    opacity: 0.5;
+    animation: dashFlow 20s linear infinite;
+  }
+  @keyframes dashFlow {
+    to { stroke-dashoffset: -200; }
+  }
+
+  /* Background grid */
+  #map-canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 50% 40%, rgba(240,192,64,0.03) 0%, transparent 50%),
+      linear-gradient(var(--ghost) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ghost) 1px, transparent 1px);
+    background-size: 100% 100%, 60px 60px, 60px 60px;
+    opacity: 0.3;
+  }
+
+  /* Nodes */
+  .node {
+    position: absolute;
+    z-index: 10;
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), filter 0.3s;
+  }
+  .node:hover {
+    transform: scale(1.05);
+    z-index: 100;
+    filter: brightness(1.15);
+  }
+
+  .node-inner {
+    border-radius: 20px;
+    padding: 28px 32px;
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+  .node:hover .node-inner {
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  .node-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+    border-radius: 20px;
+  }
+  .node:hover .node-inner::before {
+    opacity: 1;
+  }
+
+  .node-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .node-desc {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--text);
+    opacity: 0.8;
+    max-width: 240px;
+  }
+
+  .node-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* CENTER HUB — The First Spark */
+  .node-core .node-inner {
+    background: radial-gradient(ellipse at 30% 30%, rgba(240,192,64,0.15), rgba(10,10,15,0.95));
+    box-shadow: 0 0 80px rgba(240,192,64,0.12), 0 0 200px rgba(240,192,64,0.04), inset 0 1px 0 rgba(255,255,255,0.06);
+    border-color: rgba(240,192,64,0.25);
+    text-align: center;
+    padding: 48px 44px;
+  }
+  .node-core .node-label {
+    font-size: 22px;
+    color: var(--spark-gold);
+    letter-spacing: 0.15em;
+  }
+  .node-core .node-desc {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .node-core:hover .node-inner {
+    box-shadow: 0 0 120px rgba(240,192,64,0.2), 0 0 300px rgba(240,192,64,0.06);
+  }
+
+  /* PRODUCT nodes — Amber */
+  .node-product .node-inner {
+    background: linear-gradient(135deg, rgba(232,144,32,0.08), rgba(10,10,15,0.95));
+    box-shadow: 0 4px 40px rgba(232,144,32,0.06);
+    border-color: rgba(232,144,32,0.15);
+  }
+  .node-product .node-label { color: var(--spark-amber); }
+  .node-product .node-tag { color: var(--spark-amber); border-color: rgba(232,144,32,0.2); }
+  .node-product .node-inner::before { background: radial-gradient(circle at 50% 0%, rgba(232,144,32,0.08), transparent 70%); }
+
+  /* TECH nodes — Cyan */
+  .node-tech .node-inner {
+    background: linear-gradient(135deg, rgba(64,208,208,0.08), rgba(10,10,15,0.95));
+    box-shadow: 0 4px 40px rgba(64,208,208,0.06);
+    border-color: rgba(64,208,208,0.15);
+  }
+  .node-tech .node-label { color: var(--spark-cyan); }
+  .node-tech .node-tag { color: var(--spark-cyan); border-color: rgba(64,208,208,0.2); }
+  .node-tech .node-inner::before { background: radial-gradient(circle at 50% 0%, rgba(64,208,208,0.08), transparent 70%); }
+
+  /* REVENUE nodes — Flame */
+  .node-revenue .node-inner {
+    background: linear-gradient(135deg, rgba(224,80,48,0.08), rgba(10,10,15,0.95));
+    box-shadow: 0 4px 40px rgba(224,80,48,0.06);
+    border-color: rgba(224,80,48,0.15);
+  }
+  .node-revenue .node-label { color: var(--spark-flame); }
+  .node-revenue .node-tag { color: var(--spark-flame); border-color: rgba(224,80,48,0.2); }
+  .node-revenue .node-inner::before { background: radial-gradient(circle at 50% 0%, rgba(224,80,48,0.08), transparent 70%); }
+
+  /* VISION nodes — Violet */
+  .node-vision .node-inner {
+    background: linear-gradient(135deg, rgba(144,96,224,0.08), rgba(10,10,15,0.95));
+    box-shadow: 0 4px 40px rgba(144,96,224,0.06);
+    border-color: rgba(144,96,224,0.15);
+  }
+  .node-vision .node-label { color: var(--spark-violet); }
+  .node-vision .node-tag { color: var(--spark-violet); border-color: rgba(144,96,224,0.2); }
+  .node-vision .node-inner::before { background: radial-gradient(circle at 50% 0%, rgba(144,96,224,0.08), transparent 70%); }
+
+  /* COMMUNITY nodes — Rose */
+  .node-community .node-inner {
+    background: linear-gradient(135deg, rgba(224,96,128,0.08), rgba(10,10,15,0.95));
+    box-shadow: 0 4px 40px rgba(224,96,128,0.06);
+    border-color: rgba(224,96,128,0.15);
+  }
+  .node-community .node-label { color: var(--spark-rose); }
+  .node-community .node-tag { color: var(--spark-rose); border-color: rgba(224,96,128,0.2); }
+  .node-community .node-inner::before { background: radial-gradient(circle at 50% 0%, rgba(224,96,128,0.08), transparent 70%); }
+
+  /* FOUNDER node — Gold */
+  .node-founder .node-inner {
+    background: linear-gradient(135deg, rgba(240,192,64,0.06), rgba(10,10,15,0.95));
+    box-shadow: 0 4px 40px rgba(240,192,64,0.06);
+    border-color: rgba(240,192,64,0.15);
+  }
+  .node-founder .node-label { color: var(--spark-gold); }
+  .node-founder .node-tag { color: var(--spark-gold); border-color: rgba(240,192,64,0.2); }
+
+  /* HUD overlay */
+  #hud {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 32px;
+    pointer-events: none;
+  }
+  #hud > * { pointer-events: auto; }
+
+  .hud-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--spark-gold);
+    text-shadow: 0 0 30px rgba(240,192,64,0.3);
+  }
+  .hud-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-top: 4px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Zoom controls */
+  #zoom-controls {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .zoom-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--surface);
+    border: 1px solid var(--ghost);
+    color: var(--text);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    font-family: 'Outfit', sans-serif;
+  }
+  .zoom-btn:first-child { border-radius: 10px 10px 0 0; }
+  .zoom-btn:last-child { border-radius: 0 0 10px 10px; }
+  .zoom-btn:hover { background: var(--ghost); color: var(--bright); }
+
+  /* Mini-map */
+  #minimap {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    width: 180px;
+    height: 135px;
+    background: rgba(26,26,36,0.9);
+    border: 1px solid var(--ghost);
+    border-radius: 12px;
+    z-index: 1000;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+  }
+  #minimap-viewport {
+    position: absolute;
+    border: 1.5px solid var(--spark-gold);
+    border-radius: 3px;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .minimap-dot {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+  }
+
+  /* Floating particles */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Detail panel */
+  #detail-panel {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    z-index: 1000;
+    background: rgba(20,20,30,0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 28px 36px;
+    max-width: 500px;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+    pointer-events: auto;
+  }
+  #detail-panel.visible {
+    transform: translateX(-50%) translateY(0);
+  }
+  #detail-panel .detail-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  #detail-panel .detail-body {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  #detail-panel .detail-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* Entrance animation */
+  .node {
+    opacity: 0;
+    animation: nodeIn 0.8s cubic-bezier(0.2, 0, 0, 1) forwards;
+  }
+  @keyframes nodeIn {
+    from { opacity: 0; transform: scale(0.9) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <div>
+    <div class="hud-title">✦ The Sparkverse</div>
+    <div class="hud-subtitle">Ecosystem Map v1.0 — Drag to pan · Scroll to zoom</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--spark-gold)"></div>Core</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--spark-amber)"></div>Products</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--spark-cyan)"></div>Technology</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--spark-flame)"></div>Revenue</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--spark-violet)"></div>Vision</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--spark-rose)"></div>Community</div>
+  </div>
+</div>
+
+<div id="canvas-container">
+  <div id="map-canvas">
+    <svg id="connections"></svg>
+    <!-- Nodes injected by JS -->
+  </div>
+</div>
+
+<div id="zoom-controls">
+  <button class="zoom-btn" onclick="zoomIn()">+</button>
+  <button class="zoom-btn" onclick="zoomOut()">−</button>
+</div>
+
+<div id="minimap">
+  <div id="minimap-viewport"></div>
+</div>
+
+<div id="detail-panel">
+  <button class="detail-close" onclick="closeDetail()">✕</button>
+  <div class="detail-title" id="detail-title"></div>
+  <div class="detail-body" id="detail-body"></div>
+</div>
+
+<script>
+const nodes = [
+  // === CORE HUB ===
+  {
+    id: 'core', type: 'core', x: 1800, y: 1300,
+    label: 'The First Spark',
+    desc: 'Consciousness technology platform. Reality is programmable — and this is the IDE.',
+    tag: 'thefirstspark.shop',
+    detail: 'The central hub of the Sparkverse. A platform hosting 50+ interactive consciousness tools — soul mapping generators, sigil creators, reality programming interfaces. Operating under Kate\'s Paint LLC as DBA. Philosophy: reciprocity, not extraction.'
+  },
+
+  // === PRODUCTS (Amber) ===
+  {
+    id: 'tools', type: 'product', x: 2300, y: 1000,
+    label: '50+ Interactive Tools',
+    desc: 'Soul mappers, sigil generators, reality programming interfaces',
+    tag: 'live · html tools',
+    detail: 'The beating heart of the platform — over 50 handcrafted interactive HTML tools for consciousness exploration. Each tool is a portal: soul mapping generators, sigil creators, sacred geometry builders, and reality programming interfaces. All self-built, all unique.',
+    connects: ['core']
+  },
+  {
+    id: 'obitura', type: 'product', x: 2400, y: 1400,
+    label: 'Obitura AI',
+    desc: 'AI-powered obituary service — honoring lives through intelligent storytelling',
+    tag: 'revenue stream',
+    detail: 'An AI obituary service that transforms the way we honor lives. Uses intelligent storytelling to create meaningful, personalized obituaries. Positioned as a standalone revenue stream feeding into the larger Sparkverse ecosystem.',
+    connects: ['core']
+  },
+  {
+    id: 'bookzero', type: 'product', x: 2350, y: 1700,
+    label: 'Book Zero',
+    desc: 'Memoir — from personal alchemy to building consciousness tech',
+    tag: 'in progress',
+    detail: 'The origin story. A memoir documenting the journey from childhood trauma, spiritual awakening on a pool raft, to building consciousness technology. Not just a book — it\'s the source code of the Sparkverse narrative.',
+    connects: ['core', 'founder']
+  },
+
+  // === TECHNOLOGY (Cyan) ===
+  {
+    id: 'sparkai', type: 'tech', x: 1250, y: 900,
+    label: 'Spark AI',
+    desc: 'Custom consciousness technology assistant — fine-tuned on First Spark content',
+    tag: 'post-funding',
+    detail: 'A standalone AI fine-tuned on all First Spark content — the consciousness frameworks, ritual guides, spiritual practices. Built on open-source models, trained to be the world\'s first consciousness-native AI assistant.',
+    connects: ['core']
+  },
+  {
+    id: 'platform', type: 'tech', x: 1200, y: 1300,
+    label: 'Platform Infra',
+    desc: 'Digital backbone — interactive tools, payment processing, content delivery',
+    tag: 'live · building',
+    detail: 'The technical infrastructure powering the Sparkverse. Interactive HTML tool hosting, Whop-integrated payment processing, content delivery systems. Self-taught programming meets consciousness architecture.',
+    connects: ['core', 'tools']
+  },
+  {
+    id: 'content', type: 'tech', x: 1300, y: 1650,
+    label: 'Content Engine',
+    desc: 'TikTok, Sora videos, ritual guides, consciousness frameworks',
+    tag: 'multi-platform',
+    detail: 'The storytelling arm. TikTok content, Sora-generated videos, ritual guides, sacred geometry tutorials, and consciousness framework documentation. Every piece of content is a portal into the Sparkverse.',
+    connects: ['core', 'community']
+  },
+
+  // === REVENUE (Flame) ===
+  {
+    id: 'whop', type: 'revenue', x: 2100, y: 550,
+    label: 'Whop Memberships',
+    desc: 'Free tier → $33/mo Players Lounge → $519 OG Spark Lifetime',
+    tag: 'monetization',
+    detail: 'Three-tier membership structure on Whop. Free tier for discovery, $33/month Players Lounge for active practitioners, and $519 lifetime OG Spark for founding members. Built on reciprocity — value first, extraction never.',
+    connects: ['core', 'tools']
+  },
+  {
+    id: 'painting', type: 'revenue', x: 1500, y: 550,
+    label: 'Kate\'s Paint LLC',
+    desc: '$2,400/mo baseline — the foundation that funds the future',
+    tag: 'active · stable',
+    detail: 'The painting business that keeps the lights on. $2,400 monthly baseline income. The stable revenue floor that allows the Sparkverse to be built without compromising its values. Practical magic.',
+    connects: ['core', 'founder']
+  },
+  {
+    id: 'funding', type: 'revenue', x: 1800, y: 450,
+    label: '$200K Seed Round',
+    desc: 'SAFE agreement · $2M cap · 20% discount',
+    tag: 'seeking',
+    detail: 'Actively seeking $200K in seed funding via SAFE agreement with $2M valuation cap and 20% discount. Raised from an initial $40K ask after expanding the vision. Investor materials, pitch decks, and financial projections ready.',
+    connects: ['core', 'sparkai', 'sparkstation']
+  },
+
+  // === VISION (Violet) ===
+  {
+    id: 'sparkstation', type: 'vision', x: 1100, y: 1950,
+    label: 'Mobile Spark Station',
+    desc: 'Converted van — traveling consciousness work, pop-up experiences',
+    tag: 'future',
+    detail: 'A converted van that brings the Sparkverse into physical space. Traveling consciousness work, pop-up experiences, community gatherings. The Sparkverse goes mobile — meeting people where they are.',
+    connects: ['core']
+  },
+  {
+    id: 'earthship', type: 'vision', x: 1500, y: 2100,
+    label: 'Earthship Community',
+    desc: 'Hocking Hills, Ohio — sustainable living meets consciousness tech',
+    tag: 'long-term vision',
+    detail: 'The ultimate destination. An Earthship community in Hocking Hills, Ohio where sustainable living meets consciousness technology. Physical space for the Sparkverse to take root in the earth itself.',
+    connects: ['core', 'sparkstation']
+  },
+  {
+    id: 'philosophy', type: 'vision', x: 2100, y: 2050,
+    label: 'Reciprocity OS',
+    desc: 'Anti-extraction platform model — consciousness as operating system',
+    tag: 'core philosophy',
+    detail: 'The philosophical backbone: reciprocity, not extraction. Reality is programmable code. Consciousness is an operating system. Sacred geometry, sigil magic, simulation theory — woven into a framework that treats users as co-creators, not products.',
+    connects: ['core', 'earthship']
+  },
+
+  // === COMMUNITY (Rose) ===
+  {
+    id: 'community', type: 'community', x: 2500, y: 750,
+    label: 'Spark Community',
+    desc: 'Players, practitioners, seekers — the living network',
+    tag: 'growing',
+    detail: 'The people who make the Sparkverse real. A growing community of consciousness explorers, spiritual practitioners, and reality programmers. Connected through Whop, social media, and shared practice.',
+    connects: ['core', 'whop']
+  },
+  {
+    id: 'socials', type: 'community', x: 2600, y: 1150,
+    label: 'Social Presence',
+    desc: 'TikTok, video content, ritual broadcasts',
+    tag: 'active',
+    detail: 'The Sparkverse\'s public face. TikTok content, Sora-generated videos, live ritual broadcasts. Each post is an invitation into consciousness exploration — breadcrumbs leading deeper into the Sparkverse.',
+    connects: ['community', 'content']
+  },
+
+  // === FOUNDER ===
+  {
+    id: 'founder', type: 'founder', x: 800, y: 1500,
+    label: 'Katelin Jill Puzakulics',
+    desc: 'Founder & CEO — painter, programmer, consciousness architect',
+    tag: 'the spark',
+    detail: 'Self-taught programmer. Single mother. Painter-turned-entrepreneur. The awakening came on a pool raft, Summer 2025: "Reality is programmable." Everything since has been building the tools to prove it.',
+    connects: ['core']
+  }
+];
+
+const canvas = document.getElementById('map-canvas');
+const container = document.getElementById('canvas-container');
+const svgConnections = document.getElementById('connections');
+const minimap = document.getElementById('minimap');
+const minimapViewport = document.getElementById('minimap-viewport');
+
+// State
+let scale = 0.55;
+let panX = -600;
+let panY = -400;
+let isDragging = false;
+let dragStartX, dragStartY;
+
+// Render nodes
+nodes.forEach((n, i) => {
+  const el = document.createElement('div');
+  el.className = `node node-${n.type}`;
+  el.id = `node-${n.id}`;
+  el.style.left = n.x + 'px';
+  el.style.top = n.y + 'px';
+  el.style.animationDelay = (i * 0.06) + 's';
+  el.innerHTML = `
+    <div class="node-inner">
+      <div class="node-label">${n.label}</div>
+      <div class="node-desc">${n.desc}</div>
+      <div class="node-tag">${n.tag}</div>
+    </div>
+  `;
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showDetail(n);
+  });
+  canvas.appendChild(el);
+
+  // Minimap dot
+  const dot = document.createElement('div');
+  dot.className = 'minimap-dot';
+  const colors = { core: '#f0c040', product: '#e89020', tech: '#40d0d0', revenue: '#e05030', vision: '#9060e0', community: '#e06080', founder: '#f0c040' };
+  dot.style.background = colors[n.type];
+  dot.style.left = (n.x / 4000 * 180) + 'px';
+  dot.style.top = (n.y / 3000 * 135) + 'px';
+  minimap.appendChild(dot);
+});
+
+// Render connections
+function renderConnections() {
+  svgConnections.innerHTML = '';
+  svgConnections.setAttribute('width', '4000');
+  svgConnections.setAttribute('height', '3000');
+  nodes.forEach(n => {
+    if (!n.connects) return;
+    const fromEl = document.getElementById(`node-${n.id}`);
+    const fromRect = { x: n.x + fromEl.offsetWidth / 2, y: n.y + fromEl.offsetHeight / 2 };
+    n.connects.forEach(targetId => {
+      const target = nodes.find(t => t.id === targetId);
+      if (!target) return;
+      const toEl = document.getElementById(`node-${target.id}`);
+      const toRect = { x: target.x + toEl.offsetWidth / 2, y: target.y + toEl.offsetHeight / 2 };
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', fromRect.x);
+      line.setAttribute('y1', fromRect.y);
+      line.setAttribute('x2', toRect.x);
+      line.setAttribute('y2', toRect.y);
+      svgConnections.appendChild(line);
+    });
+  });
+}
+setTimeout(renderConnections, 100);
+
+// Pan & Zoom
+function applyTransform() {
+  canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+  updateMinimap();
+}
+
+function updateMinimap() {
+  const vw = container.clientWidth;
+  const vh = container.clientHeight;
+  const mvpW = (vw / scale) / 4000 * 180;
+  const mvpH = (vh / scale) / 3000 * 135;
+  const mvpX = (-panX / scale) / 4000 * 180;
+  const mvpY = (-panY / scale) / 3000 * 135;
+  minimapViewport.style.width = mvpW + 'px';
+  minimapViewport.style.height = mvpH + 'px';
+  minimapViewport.style.left = mvpX + 'px';
+  minimapViewport.style.top = mvpY + 'px';
+}
+
+container.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  dragStartX = e.clientX - panX;
+  dragStartY = e.clientY - panY;
+  document.body.classList.add('grabbing');
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  panX = e.clientX - dragStartX;
+  panY = e.clientY - dragStartY;
+  applyTransform();
+});
+window.addEventListener('mouseup', () => {
+  isDragging = false;
+  document.body.classList.remove('grabbing');
+});
+
+container.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.92 : 1.08;
+  const newScale = Math.min(Math.max(scale * delta, 0.2), 1.5);
+  const rect = container.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  panX = mx - (mx - panX) * (newScale / scale);
+  panY = my - (my - panY) * (newScale / scale);
+  scale = newScale;
+  applyTransform();
+}, { passive: false });
+
+function zoomIn() {
+  const cx = container.clientWidth / 2;
+  const cy = container.clientHeight / 2;
+  const newScale = Math.min(scale * 1.2, 1.5);
+  panX = cx - (cx - panX) * (newScale / scale);
+  panY = cy - (cy - panY) * (newScale / scale);
+  scale = newScale;
+  applyTransform();
+}
+function zoomOut() {
+  const cx = container.clientWidth / 2;
+  const cy = container.clientHeight / 2;
+  const newScale = Math.max(scale * 0.8, 0.2);
+  panX = cx - (cx - panX) * (newScale / scale);
+  panY = cy - (cy - panY) * (newScale / scale);
+  scale = newScale;
+  applyTransform();
+}
+
+// Detail panel
+function showDetail(n) {
+  const colors = { core: 'var(--spark-gold)', product: 'var(--spark-amber)', tech: 'var(--spark-cyan)', revenue: 'var(--spark-flame)', vision: 'var(--spark-violet)', community: 'var(--spark-rose)', founder: 'var(--spark-gold)' };
+  document.getElementById('detail-title').textContent = n.label;
+  document.getElementById('detail-title').style.color = colors[n.type];
+  document.getElementById('detail-body').textContent = n.detail;
+  document.getElementById('detail-panel').classList.add('visible');
+}
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('visible');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.node') && !e.target.closest('#detail-panel')) closeDetail();
+});
+
+// Floating particles
+for (let i = 0; i < 40; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 3 + 1;
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.left = Math.random() * 4000 + 'px';
+  p.style.top = Math.random() * 3000 + 'px';
+  p.style.background = `rgba(240,192,64,${Math.random() * 0.15 + 0.05})`;
+  p.style.animation = `float${i % 2 === 0 ? 'A' : 'B'} ${Math.random() * 20 + 15}s ease-in-out infinite`;
+  p.style.animationDelay = Math.random() * -20 + 's';
+  canvas.appendChild(p);
+}
+
+// Particle keyframes
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes floatA {
+    0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+    25% { transform: translate(30px, -40px); opacity: 0.6; }
+    50% { transform: translate(-20px, -80px); opacity: 0.3; }
+    75% { transform: translate(40px, -30px); opacity: 0.5; }
+  }
+  @keyframes floatB {
+    0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+    33% { transform: translate(-50px, 20px); opacity: 0.5; }
+    66% { transform: translate(30px, -50px); opacity: 0.3; }
+  }
+`;
+document.head.appendChild(style);
+
+// Touch support
+let lastTouchDist = 0;
+container.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 1) {
+    isDragging = true;
+    dragStartX = e.touches[0].clientX - panX;
+    dragStartY = e.touches[0].clientY - panY;
+  } else if (e.touches.length === 2) {
+    lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }
+});
+container.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  if (e.touches.length === 1 && isDragging) {
+    panX = e.touches[0].clientX - dragStartX;
+    panY = e.touches[0].clientY - dragStartY;
+    applyTransform();
+  } else if (e.touches.length === 2) {
+    const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    const delta = dist / lastTouchDist;
+    scale = Math.min(Math.max(scale * delta, 0.2), 1.5);
+    lastTouchDist = dist;
+    applyTransform();
+  }
+}, { passive: false });
+container.addEventListener('touchend', () => { isDragging = false; });
+
+// Init
+applyTransform();
+</script>
+</body>
+</html>

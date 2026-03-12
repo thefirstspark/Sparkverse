@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparkverse - Free Knowledge Cosmos</title>
+    <style>
+        :root {
+            --void: #0a0e27;
+            --dim: #1a2332;
+            --glow: #64ffda;
+            --mirror: #a78bfa;
+            --glitch: #ef4444;
+            --fire: #f59e0b;
+            --garden: #10b981;
+            --source: #06b6d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--void);
+            color: var(--glow);
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--glow), var(--mirror), var(--fire));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #94a3b8;
+            font-size: 1.2em;
+        }
+
+        .token-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--dim);
+            border: 2px solid var(--glow);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 100;
+        }
+
+        .galaxy {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .planet {
+            background: var(--dim);
+            border: 3px solid var(--glow);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .planet::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .planet:hover::before {
+            opacity: 0.1;
+        }
+
+        .planet:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.3);
+        }
+
+        .planet h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .planet-desc {
+            color: #94a3b8;
+            margin: 10px 0;
+        }
+
+        .planet-status {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--dim);
+            font-size: 0.9em;
+            color: var(--glow);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--void);
+            border: 2px solid var(--glow);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        .quiz-question {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .quiz-question label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--glow);
+        }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background: var(--dim);
+            border: 2px solid var(--glow);
+            color: var(--glow);
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button {
+            margin-top: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: var(--glow);
+            color: var(--void);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--dim);
+            border: 2px solid var(--glow);
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .path-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .content-section {
+            background: var(--dim);
+            border-left: 4px solid var(--glow);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .earn-tokens {
+            background: linear-gradient(135deg, var(--mirror), var(--fire));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .earn-tokens h2 {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="token-display">
+        ✦ <span id="tokenCount">0</span> $SPRK
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 class="gradient-text">THE SPARKVERSE</h1>
+            <p class="tagline">A Free Cosmos of Knowledge • Explore Without Limits</p>
+            <div id="affinityBadge"></div>
+        </header>
+
+        <div class="earn-tokens">
+            <h2>How It Works</h2>
+            <p>All knowledge is FREE to explore. Earn $SPRK tokens by completing quests, sharing insights, and helping others learn. Use tokens for exclusive tools, cosmic themes, and supporting creators.</p>
+        </div>
+
+        <div class="galaxy" id="galaxy"></div>
+    </div>
+
+    <!-- Affinity Quiz Modal -->
+    <div class="modal" id="affinityModal">
+        <div class="modal-content">
+            <h2 class="gradient-text">Discover Your Path Affinity</h2>
+            <p style="margin: 15px 0; color: #94a3b8;">Answer these questions to find your cosmic learning path:</p>
+
+            <div class="quiz-question">
+                <label>1. When facing a complex problem, I tend to:</label>
+                <select id="q1">
+                    <option value="mirror">Reflect deeply and observe patterns</option>
+                    <option value="glitch">Break rules and experiment boldly</option>
+                    <option value="fire">Create something new from passion</option>
+                    <option value="garden">Nurture ideas and grow solutions</option>
+                    <option value="source">Dive into fundamentals and first principles</option>
+                </select>
+            </div>
+
+            <div class="quiz-question">
+                <label>2. My ideal learning environment is:</label>
+                <select id="q2">
+                    <option value="mirror">Quiet contemplation and self-study</option>
+                    <option value="glitch">Chaotic exploration and pushing boundaries</option>
+                    <option value="fire">Intense collaboration and rapid iteration</option>
+                    <option value="garden">Patient cultivation and hands-on practice</option>
+                    <option value="source">Deep research and understanding systems</option>
+                </select>
+            </div>
+
+            <div class="quiz-question">
+                <label>3. I find meaning through:</label>
+                <select id="q3">
+                    <option value="mirror">Understanding myself and others</option>
+                    <option value="glitch">Challenging assumptions and finding edges</option>
+                    <option value="fire">Building and manifesting visions</option>
+                    <option value="garden">Teaching and helping things flourish</option>
+                    <option value="source">Discovering truth and sharing wisdom</option>
+                </select>
+            </div>
+
+            <button onclick="scoreAffinity()">✦ Reveal My Path</button>
+        </div>
+    </div>
+
+    <!-- Planet Content Modal -->
+    <div class="modal" id="planetModal">
+        <div class="modal-content" id="planetContent">
+        </div>
+    </div>
+
+    <script>
+        // Generate starfield
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Path definitions
+        const PATHS = {
+            mirror: {
+                name: 'Mirror Path',
+                color: '#a78bfa',
+                desc: 'Reflective • Introspective • Observer',
+                trait: 'You see patterns in chaos and wisdom in silence.'
+            },
+            glitch: {
+                name: 'Glitch Path',
+                color: '#ef4444',
+                desc: 'Disruptive • Experimental • Boundary-Breaker',
+                trait: 'You find power in breaking rules and reimagining systems.'
+            },
+            fire: {
+                name: 'Fire Path',
+                color: '#f59e0b',
+                desc: 'Creative • Passionate • Builder',
+                trait: 'You transform vision into reality through relentless creation.'
+            },
+            garden: {
+                name: 'Garden Path',
+                color: '#10b981',
+                desc: 'Nurturing • Patient • Cultivator',
+                trait: 'You grow knowledge carefully and help others flourish.'
+            },
+            source: {
+                name: 'Source Path',
+                color: '#06b6d4',
+                desc: 'Foundational • Systematic • Truth-Seeker',
+                trait: 'You dive to first principles and illuminate the roots.'
+            }
+        };
+
+        // Planet data (all FREE to access)
+        const planets = [
+            {
+                name: 'Philosophy Nexus',
+                emoji: '🌌',
+                desc: 'Ancient wisdom meets modern thought',
+                topics: ['Ethics', 'Epistemology', 'Existentialism', 'Logic'],
+                free: true
+            },
+            {
+                name: 'Code Forge',
+                emoji: '💻',
+                desc: 'Learn programming from first principles',
+                topics: ['JavaScript', 'Python', 'Algorithms', 'Web Dev'],
+                free: true
+            },
+            {
+                name: 'Art & Design',
+                emoji: '🎨',
+                desc: 'Creative expression across mediums',
+                topics: ['Visual Design', 'Music Theory', 'Writing', 'UX'],
+                free: true
+            },
+            {
+                name: 'Science Lab',
+                emoji: '🔬',
+                desc: 'Explore the physical universe',
+                topics: ['Physics', 'Biology', 'Chemistry', 'Astronomy'],
+                free: true
+            },
+            {
+                name: 'Math Dimension',
+                emoji: '📐',
+                desc: 'Pure logic and beautiful patterns',
+                topics: ['Calculus', 'Linear Algebra', 'Statistics', 'Number Theory'],
+                free: true
+            },
+            {
+                name: 'History Archives',
+                emoji: '📜',
+                desc: 'Learn from the past to build the future',
+                topics: ['World History', 'Philosophy of History', 'Cultural Studies'],
+                free: true
+            }
+        ];
+
+        // Token system (earn by learning, not required to access)
+        let tokens = parseInt(localStorage.getItem('tokens')) || 0;
+        document.getElementById('tokenCount').textContent = tokens;
+
+        function earnTokens(amount, reason) {
+            tokens += amount;
+            localStorage.setItem('tokens', tokens);
+            document.getElementById('tokenCount').textContent = tokens;
+            showToast(`✦ +${amount} $SPRK: ${reason}`);
+        }
+
+        // Render galaxy
+        function renderGalaxy() {
+            const galaxy = document.getElementById('galaxy');
+            const affinity = localStorage.getItem('affinity') || null;
+
+            planets.forEach((planet, index) => {
+                const planetDiv = document.createElement('div');
+                planetDiv.className = 'planet';
+                if (affinity) {
+                    planetDiv.style.borderColor = PATHS[affinity].color;
+                }
+
+                planetDiv.innerHTML = `
+                    <div style="font-size: 3em; margin-bottom: 10px;">${planet.emoji}</div>
+                    <h3>${planet.name}</h3>
+                    <p class="planet-desc">${planet.desc}</p>
+                    <div class="planet-status">
+                        ${planet.free ? '🌟 FREE ACCESS' : `🔒 ${planet.cost} $SPRK`}
+                    </div>
+                `;
+
+                planetDiv.onclick = () => openPlanet(planet, index);
+                galaxy.appendChild(planetDiv);
+            });
+        }
+
+        function openPlanet(planet, index) {
+            const modal = document.getElementById('planetModal');
+            const content = document.getElementById('planetContent');
+
+            content.innerHTML = `
+                <div style="font-size: 4em; margin-bottom: 15px;">${planet.emoji}</div>
+                <h2 class="gradient-text">${planet.name}</h2>
+                <p style="margin: 15px 0; color: #94a3b8;">${planet.desc}</p>
+
+                <div class="content-section">
+                    <h3>Available Topics</h3>
+                    ${planet.topics.map(topic => `
+                        <div style="padding: 10px; margin: 5px 0; background: var(--void); border-radius: 5px;">
+                            ✓ ${topic}
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: var(--void); border-radius: 8px;">
+                    <p style="color: #10b981; font-weight: bold;">🌟 This knowledge is FREE for everyone</p>
+                    <p style="color: #94a3b8; margin-top: 5px; font-size: 0.9em;">Complete lessons to earn $SPRK tokens</p>
+                </div>
+
+                <button onclick="explorePlanet(${index})">Start Learning ✦</button>
+                <button onclick="closeModal('planetModal')" style="background: transparent; margin-top: 10px;">Close</button>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function explorePlanet(index) {
+            earnTokens(5, `Started exploring ${planets[index].name}`);
+            closeModal('planetModal');
+            showToast(`🚀 Welcome to ${planets[index].name}! Start learning to earn more tokens.`);
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Affinity quiz
+        function showAffinityQuiz() {
+            if (localStorage.getItem('affinity')) {
+                displayAffinity();
+                return;
+            }
+            document.getElementById('affinityModal').classList.add('active');
+        }
+
+        window.scoreAffinity = () => {
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const q3 = document.getElementById('q3').value;
+
+            // Count votes
+            const votes = {};
+            [q1, q2, q3].forEach(answer => {
+                votes[answer] = (votes[answer] || 0) + 1;
+            });
+
+            // Find primary path
+            let primaryPath = Object.keys(votes).reduce((a, b) => votes[a] > votes[b] ? a : b);
+
+            localStorage.setItem('affinity', primaryPath);
+            closeModal('affinityModal');
+
+            earnTokens(10, 'Discovered your path affinity');
+            displayAffinity();
+            renderGalaxy(); // Re-render with path colors
+
+            showToast(`✦ ${PATHS[primaryPath].name} Unlocked!`);
+        };
+
+        function displayAffinity() {
+            const affinity = localStorage.getItem('affinity');
+            if (!affinity) return;
+
+            const path = PATHS[affinity];
+            const badge = document.getElementById('affinityBadge');
+            badge.innerHTML = `
+                <div class="path-badge" style="background: ${path.color}; color: white; margin-top: 15px;">
+                    ${path.name} • ${path.desc}
+                </div>
+                <p style="margin-top: 10px; color: #94a3b8; font-style: italic;">${path.trait}</p>
+            `;
+        }
+
+        // Toast notifications
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            renderGalaxy();
+            showAffinityQuiz();
+        });
+
+        // Click outside modal to close
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

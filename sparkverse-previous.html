@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE SPARKVERSE | Consciousness Navigation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root{--void:#0a0a0f;--deep:#12121a;--gold:#d4af37;--ember:#ff6b35;--white:#f5f5f0;--ghost:rgba(245,245,240,.7);--whisper:rgba(245,245,240,.3);--glow:rgba(212,175,55,.3)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Cormorant Garamond',serif;background:var(--void);color:var(--white);min-height:100vh;overflow-x:hidden}
+        #cosmos{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        .container{position:relative;z-index:10;min-height:100vh}
+        .nav-orb{position:fixed;top:30px;right:30px;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold),var(--ember));cursor:pointer;z-index:1000;display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px var(--glow);transition:all .5s;animation:pulse 3s infinite}
+        .nav-orb:hover{transform:scale(1.1);box-shadow:0 0 50px var(--gold)}
+        .nav-orb span{font-family:Cinzel;font-size:10px;font-weight:600;letter-spacing:1px;color:var(--void)}
+        @keyframes pulse{0%,100%{box-shadow:0 0 30px var(--glow)}50%{box-shadow:0 0 50px var(--gold)}}
+        .nav-menu{position:fixed;top:0;right:-380px;width:360px;height:100vh;background:linear-gradient(135deg,var(--deep),var(--void));border-left:1px solid var(--whisper);z-index:999;padding:100px 40px;transition:right .6s;overflow-y:auto}
+        .nav-menu.active{right:0}
+        .nav-menu h3{font-family:Cinzel;font-size:12px;letter-spacing:4px;color:var(--gold);margin-bottom:30px;text-transform:uppercase}
+        .nav-link{display:block;font-size:18px;color:var(--ghost);text-decoration:none;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s}
+        .nav-link:hover{color:var(--gold);padding-left:15px}
+        .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+        .hero-sigil{width:160px;height:160px;margin-bottom:40px;animation:rotate 30s linear infinite;filter:drop-shadow(0 0 20px var(--glow))}
+        @keyframes rotate{to{transform:rotate(360deg)}}
+        .hero-title{font-family:Cinzel;font-size:clamp(2rem,8vw,4.5rem);letter-spacing:.3em;margin-bottom:20px;background:linear-gradient(135deg,var(--white),var(--gold),var(--ember));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .hero-sub{font-family:'Space Mono';font-size:11px;letter-spacing:6px;color:var(--ghost);text-transform:uppercase;margin-bottom:60px}
+        .enter-btn{font-family:Cinzel;font-size:14px;letter-spacing:4px;text-transform:uppercase;padding:20px 60px;background:0 0;border:1px solid var(--gold);color:var(--gold);cursor:pointer;transition:all .5s}
+        .enter-btn:hover{background:var(--gold);color:var(--void);box-shadow:0 0 40px var(--glow)}
+        .main{display:none;padding:40px}
+        .main.active{display:block;animation:fadeIn 1s}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        .dash-header{text-align:center;padding:60px 20px;margin-bottom:60px}
+        .dash-title{font-family:Cinzel;font-size:clamp(1.5rem,4vw,2.5rem);letter-spacing:.2em;margin-bottom:10px}
+        .dash-date{font-family:'Space Mono';font-size:11px;letter-spacing:3px;color:var(--ghost)}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;max-width:1400px;margin:0 auto;padding:0 20px}
+        .card{background:linear-gradient(145deg,rgba(26,26,46,.8),rgba(18,18,26,.9));border:1px solid var(--whisper);padding:35px;cursor:pointer;transition:all .5s;position:relative;overflow:hidden}
+        .card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--ember));transform:scaleX(0);transition:transform .5s}
+        .card:hover::before{transform:scaleX(1)}
+        .card:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px var(--glow)}
+        .card-icon{width:45px;height:45px;margin-bottom:20px}
+        .card-title{font-family:Cinzel;font-size:16px;letter-spacing:3px;color:var(--gold);margin-bottom:12px;text-transform:uppercase}
+        .card-desc{font-size:15px;color:var(--ghost);line-height:1.7;margin-bottom:20px}
+        .card-status{font-family:'Space Mono';font-size:10px;letter-spacing:2px;color:var(--whisper);text-transform:uppercase}
+        .expanded{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,15,.98);z-index:500;overflow-y:auto;padding:60px 40px}
+        .expanded.active{display:block;animation:fadeIn .5s}
+        .close-btn{position:fixed;top:30px;left:30px;font-family:Cinzel;font-size:12px;letter-spacing:2px;color:var(--ghost);background:0 0;border:1px solid var(--whisper);padding:12px 25px;cursor:pointer;z-index:600;transition:all .3s}
+        .close-btn:hover{color:var(--gold);border-color:var(--gold)}
+        .mod-content{max-width:900px;margin:0 auto;padding-top:40px}
+        .mod-content h2{font-family:Cinzel;font-size:clamp(1.8rem,4vw,2.5rem);letter-spacing:.15em;color:var(--gold);text-align:center;margin-bottom:20px}
+        .mod-content .intro{font-size:18px;color:var(--ghost);text-align:center;max-width:650px;margin:0 auto 50px;line-height:1.8}
+        .spark-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:500px;margin:0 auto 40px}
+        .spark-day{aspect-ratio:1;background:var(--deep);border:1px solid var(--whisper);cursor:pointer;transition:all .3s}
+        .spark-day:hover{border-color:var(--gold)}
+        .spark-day.sparked{background:linear-gradient(135deg,var(--gold),var(--ember));border-color:var(--gold)}
+        .spark-day.today{box-shadow:0 0 12px var(--glow)}
+        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;margin-top:40px}
+        .stat{text-align:center;padding:25px;background:var(--deep);border:1px solid var(--whisper)}
+        .stat-num{font-family:Cinzel;font-size:42px;color:var(--gold);display:block;margin-bottom:8px}
+        .stat-label{font-family:'Space Mono';font-size:10px;letter-spacing:2px;color:var(--ghost);text-transform:uppercase}
+        .freq-display{text-align:center;margin-bottom:40px}
+        .freq-num{font-family:Cinzel;font-size:70px;color:var(--gold);text-shadow:0 0 30px var(--glow)}
+        .freq-hz{font-family:'Space Mono';font-size:14px;letter-spacing:4px;color:var(--ghost)}
+        .freq-slider{width:100%;max-width:500px;height:4px;-webkit-appearance:none;background:var(--whisper);margin:0 auto 40px;display:block}
+        .freq-slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;background:var(--gold);border-radius:50%;cursor:pointer;box-shadow:0 0 20px var(--glow)}
+        .presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;max-width:700px;margin:0 auto}
+        .preset{padding:18px;background:var(--deep);border:1px solid var(--whisper);cursor:pointer;text-align:center;transition:all .3s}
+        .preset:hover{border-color:var(--gold);box-shadow:0 0 20px var(--glow)}
+        .preset.active{background:linear-gradient(135deg,rgba(212,175,55,.2),rgba(255,107,53,.1));border-color:var(--gold)}
+        .preset-freq{font-family:Cinzel;font-size:22px;color:var(--gold);display:block;margin-bottom:5px}
+        .preset-name{font-family:'Space Mono';font-size:9px;letter-spacing:1px;color:var(--ghost);text-transform:uppercase}
+        .play-btn{display:block;margin:40px auto 0;padding:18px 50px;font-family:Cinzel;font-size:14px;letter-spacing:3px;background:linear-gradient(135deg,var(--gold),var(--ember));border:none;color:var(--void);cursor:pointer;transition:all .3s}
+        .play-btn:hover{box-shadow:0 0 40px var(--glow);transform:scale(1.05)}
+        .ritual-phase{margin-bottom:25px;padding:25px;background:var(--deep);border:1px solid var(--whisper);border-left:3px solid var(--gold)}
+        .ritual-phase h4{font-family:Cinzel;font-size:13px;letter-spacing:3px;color:var(--gold);margin-bottom:12px;text-transform:uppercase}
+        .ritual-opts{display:flex;flex-wrap:wrap;gap:8px}
+        .ritual-opt{font-family:'Space Mono';font-size:10px;letter-spacing:1px;padding:10px 18px;background:0 0;border:1px solid var(--whisper);color:var(--ghost);cursor:pointer;transition:all .3s}
+        .ritual-opt:hover{border-color:var(--gold);color:var(--gold)}
+        .ritual-opt.selected{background:var(--gold);color:var(--void);border-color:var(--gold)}
+        .gen-ritual{display:block;width:100%;margin-top:30px;padding:18px;font-family:Cinzel;font-size:14px;letter-spacing:3px;background:0 0;border:2px solid var(--gold);color:var(--gold);cursor:pointer;transition:all .3s}
+        .gen-ritual:hover{background:var(--gold);color:var(--void)}
+        .ritual-out{margin-top:30px;padding:35px;background:linear-gradient(135deg,rgba(212,175,55,.05),rgba(26,26,46,.8));border:1px solid var(--gold);display:none}
+        .ritual-out.active{display:block}
+        .ritual-out h3{font-family:Cinzel;font-size:16px;letter-spacing:4px;color:var(--gold);text-align:center;margin-bottom:25px}
+        .ritual-step{padding:18px 0;border-bottom:1px solid var(--whisper)}
+        .ritual-step:last-child{border-bottom:none}
+        .step-num{font-family:Cinzel;font-size:22px;color:var(--gold);margin-right:12px}
+        .step-text{color:var(--ghost);line-height:1.7}
+        .journal-prompts{display:grid;gap:18px;margin-bottom:35px}
+        .j-prompt{padding:25px;background:var(--deep);border:1px solid var(--whisper);cursor:pointer;transition:all .3s}
+        .j-prompt:hover{border-color:var(--gold);box-shadow:0 0 20px var(--glow)}
+        .j-prompt.active{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.1),var(--deep))}
+        .prompt-cat{font-family:'Space Mono';font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+        .prompt-text{font-size:18px;font-style:italic;color:var(--ghost);line-height:1.6}
+        .journal-area{width:100%;min-height:280px;padding:25px;background:var(--deep);border:1px solid var(--whisper);color:var(--white);font-family:'Cormorant Garamond';font-size:17px;line-height:1.8;resize:vertical}
+        .journal-area:focus{outline:none;border-color:var(--gold)}
+        .save-btn{margin-top:18px;padding:14px 35px;font-family:Cinzel;font-size:12px;letter-spacing:2px;background:var(--gold);border:none;color:var(--void);cursor:pointer}
+        .clock-display{font-family:Cinzel;font-size:55px;letter-spacing:.1em;color:var(--gold);text-align:center;margin-bottom:20px;text-shadow:0 0 30px var(--glow)}
+        .cosmic-phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:25px;margin-top:45px}
+        .c-phase{padding:25px;background:var(--deep);border:1px solid var(--whisper);text-align:center}
+        .phase-icon{font-size:32px;margin-bottom:12px}
+        .phase-name{font-family:Cinzel;font-size:13px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+        .phase-info{font-family:'Space Mono';font-size:10px;color:var(--ghost)}
+        .level-display{text-align:center;margin-bottom:45px}
+        .level-num{font-family:Cinzel;font-size:90px;color:var(--gold);text-shadow:0 0 50px var(--glow);line-height:1}
+        .level-title{font-family:'Space Mono';font-size:11px;letter-spacing:4px;color:var(--ghost);text-transform:uppercase;margin-top:12px}
+        .xp-bar-wrap{background:var(--deep);border:1px solid var(--whisper);padding:4px;margin-bottom:45px}
+        .xp-bar{height:18px;background:linear-gradient(90deg,var(--gold),var(--ember));width:65%}
+        .achievements{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:15px}
+        .achievement{text-align:center;padding:20px;background:var(--deep);border:1px solid var(--whisper);transition:all .3s}
+        .achievement.unlocked{border-color:var(--gold);box-shadow:0 0 15px var(--glow)}
+        .achievement.locked{opacity:.4}
+        .ach-icon{font-size:28px;margin-bottom:8px}
+        .ach-name{font-family:'Space Mono';font-size:9px;letter-spacing:1px;color:var(--ghost);text-transform:uppercase}
+        .soul-map{width:100%;max-width:700px;margin:0 auto}
+        .soul-node{cursor:pointer;transition:all .3s}
+        .soul-node:hover{filter:drop-shadow(0 0 15px var(--gold))}
+        .node-label{font-family:'Space Mono';font-size:9px;fill:var(--ghost);letter-spacing:1px}
+        .node-panel{background:var(--deep);border:1px solid var(--whisper);padding:25px;margin-top:35px;display:none}
+        .node-panel.active{display:block;animation:fadeIn .4s}
+        .node-panel h4{font-family:Cinzel;font-size:15px;letter-spacing:3px;color:var(--gold);margin-bottom:12px}
+        .node-panel p{color:var(--ghost);line-height:1.7}
+        .sigil-forge{text-align:center}
+        #sigil-canvas{background:var(--deep);border:1px solid var(--whisper);margin-bottom:25px}
+        .sigil-ctrls{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:25px}
+        .sigil-btn{font-family:Cinzel;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 25px;background:0 0;border:1px solid var(--whisper);color:var(--ghost);cursor:pointer;transition:all .3s}
+        .sigil-btn:hover{border-color:var(--gold);color:var(--gold)}
+        .sigil-btn.active{background:var(--gold);color:var(--void);border-color:var(--gold)}
+        .intention-input{width:100%;max-width:450px;padding:18px;background:var(--deep);border:1px solid var(--whisper);color:var(--white);font-family:'Cormorant Garamond';font-size:17px;text-align:center;margin-bottom:25px}
+        .intention-input::placeholder{color:var(--whisper)}
+        .intention-input:focus{outline:none;border-color:var(--gold)}
+        .footer{text-align:center;padding:50px 40px;margin-top:70px;border-top:1px solid var(--whisper)}
+        .footer-text{font-family:'Space Mono';font-size:10px;letter-spacing:3px;color:var(--whisper);text-transform:uppercase}
+        @media(max-width:768px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.nav-menu{width:100%;right:-100%}.freq-num{font-size:50px}.clock-display{font-size:38px}.level-num{font-size:60px}}
+    </style>
+</head>
+<body>
+<canvas id="cosmos"></canvas>
+<div class="nav-orb" id="navOrb"><span>MENU</span></div>
+<nav class="nav-menu" id="navMenu">
+    <h3>Navigation</h3>
+    <a class="nav-link" data-target="hero">Portal Home</a>
+    <a class="nav-link" data-target="dashboard">Consciousness Dashboard</a>
+    <a class="nav-link" data-module="soul-map">Soul Map Navigator</a>
+    <a class="nav-link" data-module="spark-tracker">Spark Tracker</a>
+    <a class="nav-link" data-module="sigil-forge">Sigil Forge</a>
+    <a class="nav-link" data-module="frequency-tuner">Frequency Tuner</a>
+    <a class="nav-link" data-module="ritual-builder">Ritual Builder</a>
+    <a class="nav-link" data-module="journal-portal">Journal Portal</a>
+    <a class="nav-link" data-module="cosmic-clock">Cosmic Clock</a>
+    <a class="nav-link" data-module="progress-codex">Progress Codex</a>
+</nav>
+<div class="container">
+    <section class="hero" id="hero">
+        <svg class="hero-sigil" viewBox="0 0 200 200">
+            <defs><linearGradient id="gG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#d4af37"/><stop offset="50%" style="stop-color:#ff6b35"/><stop offset="100%" style="stop-color:#d4af37"/></linearGradient></defs>
+            <circle cx="100" cy="100" r="90" fill="none" stroke="url(#gG)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="url(#gG)" stroke-width=".5"/>
+            <polygon points="100,20 180,160 20,160" fill="none" stroke="url(#gG)" stroke-width="1"/>
+            <polygon points="100,180 20,40 180,40" fill="none" stroke="url(#gG)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="20" fill="url(#gG)" opacity=".8"/>
+        </svg>
+        <h1 class="hero-title">SPARKVERSE</h1>
+        <p class="hero-sub">Consciousness Navigation System</p>
+        <button class="enter-btn" id="enterBtn">Enter The Verse</button>
+    </section>
+    <main class="main" id="mainInterface">
+        <header class="dash-header">
+            <h2 class="dash-title">Consciousness Dashboard</h2>
+            <p class="dash-date" id="currentDate"></p>
+        </header>
+        <div class="grid">
+            <div class="card" data-module="soul-map">
+                <svg class="card-icon" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#d4af37"/><circle cx="25" cy="25" r="5" fill="#d4af37"/></svg>
+                <h3 class="card-title">Soul Map</h3>
+                <p class="card-desc">Navigate the interconnected dimensions of your consciousness through an interactive cosmic map.</p>
+                <span class="card-status">9 Nodes Active</span>
+            </div>
+            <div class="card" data-module="spark-tracker">
+                <svg class="card-icon" viewBox="0 0 50 50"><path d="M25 5 L30 20 L45 25 L30 30 L25 45 L20 30 L5 25 L20 20 Z" fill="none" stroke="#d4af37"/><circle cx="25" cy="25" r="8" fill="#ff6b35" opacity=".6"/></svg>
+                <h3 class="card-title">Spark Tracker</h3>
+                <p class="card-desc">Track your daily sparks of awakening and watch your consciousness streak grow.</p>
+                <span class="card-status">Current Streak: 12 Days</span>
+            </div>
+            <div class="card" data-module="sigil-forge">
+                <svg class="card-icon" viewBox="0 0 50 50"><polygon points="25,5 45,40 5,40" fill="none" stroke="#d4af37"/><polygon points="25,45 5,10 45,10" fill="none" stroke="#d4af37"/><circle cx="25" cy="25" r="8" fill="none" stroke="#ff6b35"/></svg>
+                <h3 class="card-title">Sigil Forge</h3>
+                <p class="card-desc">Craft personal sigils from your intentions using sacred geometry algorithms.</p>
+                <span class="card-status">3 Sigils Created</span>
+            </div>
+            <div class="card" data-module="frequency-tuner">
+                <svg class="card-icon" viewBox="0 0 50 50"><path d="M5 25 Q12.5 15,20 25 T35 25 T50 25" fill="none" stroke="#d4af37"/><circle cx="25" cy="25" r="3" fill="#ff6b35"/></svg>
+                <h3 class="card-title">Frequency Tuner</h3>
+                <p class="card-desc">Tune into solfeggio frequencies for consciousness calibration.</p>
+                <span class="card-status">Last: 432 Hz</span>
+            </div>
+            <div class="card" data-module="ritual-builder">
+                <svg class="card-icon" viewBox="0 0 50 50"><rect x="10" y="35" width="30" height="10" fill="none" stroke="#d4af37"/><path d="M25 35 L25 20" stroke="#d4af37" stroke-width="2"/><circle cx="25" cy="15" r="8" fill="none" stroke="#ff6b35"/></svg>
+                <h3 class="card-title">Ritual Builder</h3>
+                <p class="card-desc">Design personalized rituals by combining elements and intentions.</p>
+                <span class="card-status">5 Rituals Saved</span>
+            </div>
+            <div class="card" data-module="journal-portal">
+                <svg class="card-icon" viewBox="0 0 50 50"><rect x="8" y="5" width="34" height="40" fill="none" stroke="#d4af37"/><line x1="15" y1="12" x2="35" y2="12" stroke="#d4af37" stroke-width=".5"/><line x1="15" y1="18" x2="35" y2="18" stroke="#d4af37" stroke-width=".5"/><line x1="15" y1="24" x2="35" y2="24" stroke="#d4af37" stroke-width=".5"/></svg>
+                <h3 class="card-title">Journal Portal</h3>
+                <p class="card-desc">Deep-dive journaling with consciousness prompts.</p>
+                <span class="card-status">47 Entries</span>
+            </div>
+            <div class="card" data-module="cosmic-clock">
+                <svg class="card-icon" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" fill="none" stroke="#d4af37"/><circle cx="25" cy="25" r="2" fill="#d4af37"/><line x1="25" y1="25" x2="25" y2="10" stroke="#d4af37" stroke-width="1.5"/><line x1="25" y1="25" x2="35" y2="30" stroke="#d4af37"/></svg>
+                <h3 class="card-title">Cosmic Clock</h3>
+                <p class="card-desc">Track lunar phases and planetary hours.</p>
+                <span class="card-status">Waxing Gibbous</span>
+            </div>
+            <div class="card" data-module="progress-codex">
+                <svg class="card-icon" viewBox="0 0 50 50"><rect x="5" y="10" width="40" height="30" fill="none" stroke="#d4af37"/><rect x="10" y="25" width="16" height="8" fill="#ff6b35" opacity=".6"/></svg>
+                <h3 class="card-title">Progress Codex</h3>
+                <p class="card-desc">Your gamified consciousness journey - track levels and achievements.</p>
+                <span class="card-status">Level 7 Seeker</span>
+            </div>
+        </div>
+        <footer class="footer"><p class="footer-text">The First Spark • Consciousness Navigation System</p></footer>
+    </main>
+
+    <!-- SOUL MAP -->
+    <div class="expanded" id="soul-map-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Soul Map Navigator</h2>
+            <p class="intro">Navigate the nine dimensions of your consciousness. Click any node to explore its depths.</p>
+            <div class="soul-map">
+                <svg viewBox="0 0 500 500" width="100%">
+                    <line x1="250" y1="80" x2="150" y2="180" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="250" y1="80" x2="350" y2="180" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="150" y1="180" x2="100" y2="300" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="150" y1="180" x2="250" y2="280" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="350" y1="180" x2="400" y2="300" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="350" y1="180" x2="250" y2="280" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="100" y1="300" x2="170" y2="420" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="400" y1="300" x2="330" y2="420" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <line x1="250" y1="280" x2="250" y2="420" stroke="rgba(245,245,240,.3)" stroke-width="1"/>
+                    <g class="soul-node" data-node="crown"><circle cx="250" cy="80" r="30" fill="none" stroke="#d4af37" stroke-width="2"/><circle cx="250" cy="80" r="15" fill="#d4af37" opacity=".5"/><text class="node-label" x="250" y="130" text-anchor="middle">CROWN</text></g>
+                    <g class="soul-node" data-node="intuition"><circle cx="150" cy="180" r="25" fill="none" stroke="#d4af37" stroke-width="2"/><circle cx="150" cy="180" r="12" fill="#ff6b35" opacity=".5"/><text class="node-label" x="150" y="225" text-anchor="middle">INTUITION</text></g>
+                    <g class="soul-node" data-node="vision"><circle cx="350" cy="180" r="25" fill="none" stroke="#d4af37" stroke-width="2"/><circle cx="350" cy="180" r="12" fill="#ff6b35" opacity=".5"/><text class="node-label" x="350" y="225" text-anchor="middle">VISION</text></g>
+                    <g class="soul-node" data-node="shadow"><circle cx="100" cy="300" r="25" fill="none" stroke="#8b2635" stroke-width="2"/><circle cx="100" cy="300" r="12" fill="#8b2635" opacity=".5"/><text class="node-label" x="100" y="345" text-anchor="middle">SHADOW</text></g>
+                    <g class="soul-node" data-node="heart"><circle cx="250" cy="280" r="35" fill="none" stroke="#d4af37" stroke-width="2"/><circle cx="250" cy="280" r="18" fill="#d4af37" opacity=".6"/><text class="node-label" x="250" y="335" text-anchor="middle">HEART</text></g>
+                    <g class="soul-node" data-node="power"><circle cx="400" cy="300" r="25" fill="none" stroke="#ff6b35" stroke-width="2"/><circle cx="400" cy="300" r="12" fill="#ff6b35" opacity=".5"/><text class="node-label" x="400" y="345" text-anchor="middle">POWER</text></g>
+                    <g class="soul-node" data-node="creation"><circle cx="170" cy="420" r="25" fill="none" stroke="#d4af37" stroke-width="2"/><circle cx="170" cy="420" r="12" fill="#d4af37" opacity=".5"/><text class="node-label" x="170" y="465" text-anchor="middle">CREATION</text></g>
+                    <g class="soul-node" data-node="root"><circle cx="250" cy="420" r="25" fill="none" stroke="#8b2635" stroke-width="2"/><circle cx="250" cy="420" r="12" fill="#8b2635" opacity=".5"/><text class="node-label" x="250" y="465" text-anchor="middle">ROOT</text></g>
+                    <g class="soul-node" data-node="wisdom"><circle cx="330" cy="420" r="25" fill="none" stroke="#4a90a4" stroke-width="2"/><circle cx="330" cy="420" r="12" fill="#4a90a4" opacity=".5"/><text class="node-label" x="330" y="465" text-anchor="middle">WISDOM</text></g>
+                </svg>
+            </div>
+            <div class="node-panel" id="nodePanel"><h4 id="nodeTitle">Select a Node</h4><p id="nodeDesc">Click any node on the map to explore its meaning.</p></div>
+        </div>
+    </div>
+
+    <!-- SPARK TRACKER -->
+    <div class="expanded" id="spark-tracker-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Spark Tracker</h2>
+            <p class="intro">Track your daily moments of awakening. Each spark represents conscious connection.</p>
+            <div class="spark-grid" id="sparkGrid"></div>
+            <div class="stats">
+                <div class="stat"><span class="stat-num" id="currentStreak">12</span><span class="stat-label">Current Streak</span></div>
+                <div class="stat"><span class="stat-num" id="totalSparks">47</span><span class="stat-label">Total Sparks</span></div>
+                <div class="stat"><span class="stat-num" id="longestStreak">21</span><span class="stat-label">Longest Streak</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIGIL FORGE -->
+    <div class="expanded" id="sigil-forge-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Sigil Forge</h2>
+            <p class="intro">Transform your intentions into sacred geometric sigils.</p>
+            <div class="sigil-forge">
+                <input type="text" class="intention-input" id="intentionInput" placeholder="Enter your intention...">
+                <div class="sigil-ctrls">
+                    <button class="sigil-btn active" data-style="geometric">Geometric</button>
+                    <button class="sigil-btn" data-style="organic">Organic</button>
+                    <button class="sigil-btn" data-style="runic">Runic</button>
+                </div>
+                <canvas id="sigil-canvas" width="350" height="350"></canvas>
+                <div class="sigil-ctrls">
+                    <button class="sigil-btn" id="generateSigil">Generate</button>
+                    <button class="sigil-btn" id="saveSigil">Save</button>
+                    <button class="sigil-btn" id="clearSigil">Clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FREQUENCY TUNER -->
+    <div class="expanded" id="frequency-tuner-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Frequency Tuner</h2>
+            <p class="intro">Calibrate your consciousness with sacred frequencies.</p>
+            <div class="freq-display"><span class="freq-num" id="freqValue">432</span><span class="freq-hz">Hz</span></div>
+            <input type="range" class="freq-slider" id="freqSlider" min="100" max="963" value="432">
+            <div class="presets">
+                <div class="preset" data-freq="174"><span class="preset-freq">174</span><span class="preset-name">Pain Relief</span></div>
+                <div class="preset" data-freq="285"><span class="preset-freq">285</span><span class="preset-name">Cellular Heal</span></div>
+                <div class="preset" data-freq="396"><span class="preset-freq">396</span><span class="preset-name">Liberation</span></div>
+                <div class="preset active" data-freq="432"><span class="preset-freq">432</span><span class="preset-name">Harmony</span></div>
+                <div class="preset" data-freq="528"><span class="preset-freq">528</span><span class="preset-name">DNA Repair</span></div>
+                <div class="preset" data-freq="639"><span class="preset-freq">639</span><span class="preset-name">Connection</span></div>
+                <div class="preset" data-freq="741"><span class="preset-freq">741</span><span class="preset-name">Awakening</span></div>
+                <div class="preset" data-freq="852"><span class="preset-freq">852</span><span class="preset-name">Third Eye</span></div>
+                <div class="preset" data-freq="963"><span class="preset-freq">963</span><span class="preset-name">Crown</span></div>
+            </div>
+            <button class="play-btn" id="playFreq">▶ Play Frequency</button>
+        </div>
+    </div>
+
+    <!-- RITUAL BUILDER -->
+    <div class="expanded" id="ritual-builder-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Ritual Builder</h2>
+            <p class="intro">Design your personal ritual by selecting elements from each phase.</p>
+            <div class="ritual-phase"><h4>Opening Invocation</h4><div class="ritual-opts"><button class="ritual-opt" data-phase="opening" data-value="breathwork">Breathwork</button><button class="ritual-opt" data-phase="opening" data-value="meditation">Meditation</button><button class="ritual-opt" data-phase="opening" data-value="chanting">Chanting</button><button class="ritual-opt" data-phase="opening" data-value="movement">Movement</button></div></div>
+            <div class="ritual-phase"><h4>Sacred Element</h4><div class="ritual-opts"><button class="ritual-opt" data-phase="element" data-value="fire">Fire</button><button class="ritual-opt" data-phase="element" data-value="water">Water</button><button class="ritual-opt" data-phase="element" data-value="earth">Earth</button><button class="ritual-opt" data-phase="element" data-value="air">Air</button><button class="ritual-opt" data-phase="element" data-value="spirit">Spirit</button></div></div>
+            <div class="ritual-phase"><h4>Intention Focus</h4><div class="ritual-opts"><button class="ritual-opt" data-phase="intention" data-value="clarity">Clarity</button><button class="ritual-opt" data-phase="intention" data-value="release">Release</button><button class="ritual-opt" data-phase="intention" data-value="manifestation">Manifestation</button><button class="ritual-opt" data-phase="intention" data-value="healing">Healing</button><button class="ritual-opt" data-phase="intention" data-value="protection">Protection</button></div></div>
+            <div class="ritual-phase"><h4>Closing Seal</h4><div class="ritual-opts"><button class="ritual-opt" data-phase="closing" data-value="gratitude">Gratitude</button><button class="ritual-opt" data-phase="closing" data-value="affirmation">Affirmation</button><button class="ritual-opt" data-phase="closing" data-value="visualization">Visualization</button><button class="ritual-opt" data-phase="closing" data-value="grounding">Grounding</button></div></div>
+            <button class="gen-ritual" id="genRitual">Generate Your Ritual</button>
+            <div class="ritual-out" id="ritualOut"><h3>Your Personal Ritual</h3><div id="ritualSteps"></div></div>
+        </div>
+    </div>
+
+    <!-- JOURNAL PORTAL -->
+    <div class="expanded" id="journal-portal-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Journal Portal</h2>
+            <p class="intro">Select a prompt to begin your deep-dive journaling session.</p>
+            <div class="journal-prompts">
+                <div class="j-prompt" data-prompt="shadow"><span class="prompt-cat">Shadow Work</span><p class="prompt-text">"What part of myself have I been avoiding, and what wisdom does it hold?"</p></div>
+                <div class="j-prompt" data-prompt="gratitude"><span class="prompt-cat">Gratitude</span><p class="prompt-text">"What unexpected gift did today bring that I almost missed?"</p></div>
+                <div class="j-prompt" data-prompt="future"><span class="prompt-cat">Future Self</span><p class="prompt-text">"Write a letter from your highest self, five years from now."</p></div>
+                <div class="j-prompt" data-prompt="release"><span class="prompt-cat">Release</span><p class="prompt-text">"What am I ready to release into the cosmic fire?"</p></div>
+            </div>
+            <textarea class="journal-area" id="journalEntry" placeholder="Begin writing..."></textarea>
+            <button class="save-btn" id="saveJournal">Save Entry</button>
+        </div>
+    </div>
+
+    <!-- COSMIC CLOCK -->
+    <div class="expanded" id="cosmic-clock-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Cosmic Clock</h2>
+            <p class="intro">Align your practice with the rhythms of the cosmos.</p>
+            <div class="clock-display" id="cosmicTime">00:00:00</div>
+            <div class="cosmic-phases">
+                <div class="c-phase"><div class="phase-icon">🌔</div><div class="phase-name">Moon Phase</div><div class="phase-info" id="moonPhase">Waxing Gibbous</div></div>
+                <div class="c-phase"><div class="phase-icon">☉</div><div class="phase-name">Planetary Hour</div><div class="phase-info" id="planetaryHour">Hour of Jupiter</div></div>
+                <div class="c-phase"><div class="phase-icon">✧</div><div class="phase-name">Day Energy</div><div class="phase-info" id="dayEnergy">Expansion</div></div>
+                <div class="c-phase"><div class="phase-icon">◈</div><div class="phase-name">Best For</div><div class="phase-info" id="bestFor">Manifestation</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROGRESS CODEX -->
+    <div class="expanded" id="progress-codex-expanded">
+        <button class="close-btn">← Return</button>
+        <div class="mod-content">
+            <h2>Progress Codex</h2>
+            <p class="intro">Your consciousness evolution journey, gamified.</p>
+            <div class="level-display"><span class="level-num">7</span><div class="level-title">Awakening Seeker</div></div>
+            <div class="xp-bar-wrap"><div class="xp-bar" style="width:65%"></div></div>
+            <p style="text-align:center;color:var(--ghost);font-family:'Space Mono';font-size:11px;margin-bottom:40px">6,500 / 10,000 XP to Level 8</p>
+            <div class="achievements">
+                <div class="achievement unlocked"><div class="ach-icon">🔥</div><div class="ach-name">First Spark</div></div>
+                <div class="achievement unlocked"><div class="ach-icon">📿</div><div class="ach-name">7-Day Streak</div></div>
+                <div class="achievement unlocked"><div class="ach-icon">✍️</div><div class="ach-name">Deep Diver</div></div>
+                <div class="achievement unlocked"><div class="ach-icon">🎭</div><div class="ach-name">Shadow Dancer</div></div>
+                <div class="achievement unlocked"><div class="ach-icon">◈</div><div class="ach-name">Sigil Crafter</div></div>
+                <div class="achievement unlocked"><div class="ach-icon">🎵</div><div class="ach-name">Freq Master</div></div>
+                <div class="achievement locked"><div class="ach-icon">🌙</div><div class="ach-name">Lunar Aligned</div></div>
+                <div class="achievement locked"><div class="ach-icon">⚗️</div><div class="ach-name">Alchemist</div></div>
+                <div class="achievement locked"><div class="ach-icon">👁️</div><div class="ach-name">Third Eye</div></div>
+                <div class="achievement locked"><div class="ach-icon">∞</div><div class="ach-name">Infinite</div></div>
+                <div class="achievement locked"><div class="ach-icon">⭐</div><div class="ach-name">Starborn</div></div>
+                <div class="achievement locked"><div class="ach-icon">🏆</div><div class="ach-name">Ascended</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+    // Cosmos canvas
+    const canvas=document.getElementById('cosmos'),ctx=canvas.getContext('2d');
+    function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+    resize();window.addEventListener('resize',resize);
+    const stars=[];for(let i=0;i<150;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.5,o:Math.random(),s:Math.random()*.5+.1});
+    function animate(){ctx.fillStyle='rgba(10,10,15,.1)';ctx.fillRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.o+=(Math.random()-.5)*.02;s.o=Math.max(.1,Math.min(1,s.o));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(212,175,55,${s.o*.5})`;ctx.fill();s.y+=s.s*.1;if(s.y>canvas.height){s.y=0;s.x=Math.random()*canvas.width}});requestAnimationFrame(animate)}
+    animate();
+
+    // Date
+    const now=new Date();document.getElementById('currentDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase();
+
+    // Navigation
+    const navOrb=document.getElementById('navOrb'),navMenu=document.getElementById('navMenu'),enterBtn=document.getElementById('enterBtn'),hero=document.getElementById('hero'),main=document.getElementById('mainInterface');
+    navOrb.onclick=()=>navMenu.classList.toggle('active');
+    document.addEventListener('click',e=>{if(!navMenu.contains(e.target)&&!navOrb.contains(e.target))navMenu.classList.remove('active')});
+    enterBtn.onclick=()=>{hero.style.display='none';main.classList.add('active')};
+
+    document.querySelectorAll('.nav-link').forEach(l=>{l.onclick=()=>{navMenu.classList.remove('active');if(l.dataset.target==='hero'){hero.style.display='flex';main.classList.remove('active');closeAll()}else if(l.dataset.target==='dashboard'){hero.style.display='none';main.classList.add('active');closeAll()}else if(l.dataset.module){hero.style.display='none';main.classList.add('active');openMod(l.dataset.module)}}});
+
+    document.querySelectorAll('.card').forEach(c=>{c.onclick=()=>openMod(c.dataset.module)});
+    document.querySelectorAll('.close-btn').forEach(b=>{b.onclick=closeAll});
+
+    function openMod(name){closeAll();const el=document.getElementById(name+'-expanded');if(el)el.classList.add('active')}
+    function closeAll(){document.querySelectorAll('.expanded').forEach(e=>e.classList.remove('active'))}
+
+    // Soul Map
+    const nodeData={crown:{t:'THE CROWN',d:'Your connection to the infinite. Divine inspiration and spiritual download center.'},intuition:{t:'INTUITION',d:'Your inner knowing speaks here. The quiet voice that knows the path.'},vision:{t:'VISION',d:'Where futures crystallize into form. Your capacity to see beyond the present.'},shadow:{t:'THE SHADOW',d:'Gold hides in the darkness. Contains rejected parts that become your greatest powers.'},heart:{t:'THE HEART',d:'The central flame of your being. Where intuition meets vision, shadow dances with light.'},power:{t:'POWER',d:'Your sacred will made manifest. When actions flow from authentic desire.'},creation:{t:'CREATION',d:'Where spirit becomes matter. Infinite potential waiting to birth through you.'},root:{t:'THE ROOT',d:'Your anchor in the earthly realm. Grounds spiritual experiences into embodied reality.'},wisdom:{t:'WISDOM',d:'Experience transformed into understanding. Knowledge passed through the fire of experience.'}};
+    document.querySelectorAll('.soul-node').forEach(n=>{n.onclick=()=>{const d=nodeData[n.dataset.node];if(d){document.getElementById('nodeTitle').textContent=d.t;document.getElementById('nodeDesc').textContent=d.d;document.getElementById('nodePanel').classList.add('active')}}});
+
+    // Spark Tracker
+    const grid=document.getElementById('sparkGrid');
+    for(let i=34;i>=0;i--){const d=document.createElement('div');d.className='spark-day';if(Math.random()>.4||i<12)d.classList.add('sparked');if(i===0)d.classList.add('today');d.onclick=()=>{d.classList.toggle('sparked');updateStats()};grid.appendChild(d)}
+    function updateStats(){const s=document.querySelectorAll('.spark-day.sparked').length;document.getElementById('totalSparks').textContent=s;const days=Array.from(document.querySelectorAll('.spark-day')).reverse();let streak=0;for(let d of days){if(d.classList.contains('sparked'))streak++;else break}document.getElementById('currentStreak').textContent=streak}
+
+    // Sigil Forge
+    const sigilCanvas=document.getElementById('sigil-canvas'),sCtx=sigilCanvas.getContext('2d');let sigilStyle='geometric';
+    document.querySelectorAll('.sigil-btn[data-style]').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.sigil-btn[data-style]').forEach(x=>x.classList.remove('active'));b.classList.add('active');sigilStyle=b.dataset.style}});
+    document.getElementById('generateSigil').onclick=()=>{const intent=document.getElementById('intentionInput').value;generateSigil(intent,sigilStyle)};
+    document.getElementById('clearSigil').onclick=()=>{sCtx.fillStyle='#12121a';sCtx.fillRect(0,0,sigilCanvas.width,sigilCanvas.height)};
+    document.getElementById('saveSigil').onclick=()=>{const link=document.createElement('a');link.download='sparkverse-sigil.png';link.href=sigilCanvas.toDataURL();link.click()};
+    sCtx.fillStyle='#12121a';sCtx.fillRect(0,0,sigilCanvas.width,sigilCanvas.height);
+
+    function generateSigil(intent,style){const w=sigilCanvas.width,h=sigilCanvas.height,cx=w/2,cy=h/2;sCtx.fillStyle='#12121a';sCtx.fillRect(0,0,w,h);let seed=0;for(let i=0;i<intent.length;i++)seed+=intent.charCodeAt(i)*(i+1);const rand=()=>{seed=(seed*9301+49297)%233280;return seed/233280};sCtx.strokeStyle='#d4af37';sCtx.lineWidth=1.5;sCtx.lineCap='round';
+        if(style==='geometric'){sCtx.beginPath();sCtx.arc(cx,cy,130,0,Math.PI*2);sCtx.stroke();const n=Math.floor(rand()*3)+2;for(let i=0;i<n;i++){sCtx.beginPath();sCtx.arc(cx,cy,40+i*30,0,Math.PI*2);sCtx.strokeStyle=`rgba(212,175,55,${.3+rand()*.5})`;sCtx.stroke()}sCtx.strokeStyle='#d4af37';drawPoly(cx,cy,100,Math.floor(rand()*4)+3,rand()*Math.PI);drawPoly(cx,cy,60,Math.floor(rand()*4)+4,rand()*Math.PI);const nl=Math.floor(rand()*8)+4;for(let i=0;i<nl;i++){const a1=rand()*Math.PI*2,a2=rand()*Math.PI*2,r1=25+rand()*80,r2=25+rand()*80;sCtx.beginPath();sCtx.moveTo(cx+Math.cos(a1)*r1,cy+Math.sin(a1)*r1);sCtx.lineTo(cx+Math.cos(a2)*r2,cy+Math.sin(a2)*r2);sCtx.strokeStyle=`rgba(212,175,55,${.3+rand()*.4})`;sCtx.stroke()}sCtx.fillStyle='#ff6b35';sCtx.beginPath();sCtx.arc(cx,cy,12,0,Math.PI*2);sCtx.fill()}
+        else if(style==='organic'){sCtx.strokeStyle='#d4af37';for(let i=0;i<5;i++){sCtx.beginPath();sCtx.moveTo(cx,cy);let x=cx,y=cy;for(let j=0;j<5;j++){const a=rand()*Math.PI*2,d=30+rand()*60,nx=x+Math.cos(a)*d,ny=y+Math.sin(a)*d;sCtx.quadraticCurveTo(x+(rand()-.5)*50,y+(rand()-.5)*50,nx,ny);x=nx;y=ny}sCtx.strokeStyle=`rgba(212,175,55,${.4+rand()*.6})`;sCtx.lineWidth=1+rand()*2;sCtx.stroke()}for(let i=0;i<8;i++){const a=rand()*Math.PI*2,d=rand()*110,x=cx+Math.cos(a)*d,y=cy+Math.sin(a)*d;sCtx.beginPath();sCtx.arc(x,y,2+rand()*4,0,Math.PI*2);sCtx.fillStyle=rand()>.5?'#d4af37':'#ff6b35';sCtx.fill()}}
+        else{sCtx.strokeStyle='#d4af37';sCtx.lineWidth=2;sCtx.beginPath();sCtx.moveTo(cx,cy-120);sCtx.lineTo(cx,cy+120);sCtx.stroke();sCtx.beginPath();sCtx.moveTo(cx-120,cy);sCtx.lineTo(cx+120,cy);sCtx.stroke();for(let i=0;i<6;i++){const sa=rand()*Math.PI*2,sd=15+rand()*50,sx=cx+Math.cos(sa)*sd,sy=cy+Math.sin(sa)*sd,ea=sa+(rand()-.5)*1.5,ed=50+rand()*70,ex=cx+Math.cos(ea)*ed,ey=cy+Math.sin(ea)*ed;sCtx.beginPath();sCtx.moveTo(sx,sy);sCtx.lineTo(ex,ey);sCtx.strokeStyle=`rgba(212,175,55,${.5+rand()*.5})`;sCtx.stroke()}sCtx.fillStyle='#ff6b35';sCtx.fillRect(cx-6,cy-6,12,12)}}
+    function drawPoly(cx,cy,r,sides,rot){sCtx.beginPath();for(let i=0;i<=sides;i++){const a=(i*2*Math.PI/sides)+rot,x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);i===0?sCtx.moveTo(x,y):sCtx.lineTo(x,y)}sCtx.stroke()}
+
+    // Frequency Tuner
+    const fSlider=document.getElementById('freqSlider'),fDisplay=document.getElementById('freqValue');let audioCtx=null,osc=null,playing=false;
+    fSlider.oninput=()=>{fDisplay.textContent=fSlider.value;if(osc)osc.frequency.setValueAtTime(parseFloat(fSlider.value),audioCtx.currentTime);document.querySelectorAll('.preset').forEach(p=>p.classList.toggle('active',p.dataset.freq===fSlider.value))};
+    document.querySelectorAll('.preset').forEach(p=>{p.onclick=()=>{fSlider.value=p.dataset.freq;fDisplay.textContent=p.dataset.freq;document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));p.classList.add('active');if(osc)osc.frequency.setValueAtTime(parseFloat(p.dataset.freq),audioCtx.currentTime)}});
+    document.getElementById('playFreq').onclick=()=>{if(!playing){audioCtx=new(window.AudioContext||window.webkitAudioContext)();osc=audioCtx.createOscillator();const g=audioCtx.createGain();osc.type='sine';osc.frequency.setValueAtTime(parseFloat(fSlider.value),audioCtx.currentTime);g.gain.setValueAtTime(.3,audioCtx.currentTime);osc.connect(g);g.connect(audioCtx.destination);osc.start();document.getElementById('playFreq').textContent='■ Stop';playing=true}else{osc.stop();osc=null;audioCtx.close();audioCtx=null;document.getElementById('playFreq').textContent='▶ Play Frequency';playing=false}};
+
+    // Ritual Builder
+    const ritualTemplates={opening:{breathwork:'Begin with three deep breaths—inhale for 4, hold for 4, exhale for 8.',meditation:'Close your eyes and sink into stillness for 5 minutes.',chanting:'Sound "OM" three times, feeling the vibration rise through your crown.',movement:'Move freely for 3 minutes, shaking off stagnant energy.'},element:{fire:'Light a candle and gaze into its flame. Invite transformation.',water:'Place a bowl of water before you. Let it absorb what you release.',earth:'Hold a stone or touch the ground. Feel roots extending downward.',air:'Ring a bell or burn incense. Invite mental clarity.',spirit:'Sit in awareness of invisible forces around you.'},intention:{clarity:'Speak: "I open myself to clarity. Let truth reveal itself."',release:'Write what you release. Declare: "I release this now."',manifestation:'Visualize your desire complete. Speak: "This or something better."',healing:'Hands on heart, breathe golden light into places of pain.',protection:'Visualize a golden sphere surrounding you completely.'},closing:{gratitude:'Speak three specific gratitudes aloud.',affirmation:'Declare your truth: "I am ___ . I create ___ . I embody ___."',visualization:'See yourself 24 hours from now, having integrated this ritual.',grounding:'Stamp feet, touch the floor, take a sip of water.'}};
+    const selections={};
+    document.querySelectorAll('.ritual-opt').forEach(o=>{o.onclick=()=>{document.querySelectorAll(`.ritual-opt[data-phase="${o.dataset.phase}"]`).forEach(x=>x.classList.remove('selected'));o.classList.add('selected');selections[o.dataset.phase]=o.dataset.value}});
+    document.getElementById('genRitual').onclick=()=>{if(Object.keys(selections).length<4){alert('Select one option from each phase.');return}let html='';let n=1;['opening','element','intention','closing'].forEach(p=>{if(selections[p]){html+=`<div class="ritual-step"><span class="step-num">${n}.</span><span class="step-text">${ritualTemplates[p][selections[p]]}</span></div>`;n++}});document.getElementById('ritualSteps').innerHTML=html;document.getElementById('ritualOut').classList.add('active')};
+
+    // Journal
+    document.querySelectorAll('.j-prompt').forEach(p=>{p.onclick=()=>{document.querySelectorAll('.j-prompt').forEach(x=>x.classList.remove('active'));p.classList.add('active');document.getElementById('journalEntry').focus()}});
+    document.getElementById('saveJournal').onclick=()=>{const e=document.getElementById('journalEntry').value;if(e.trim()){const b=new Blob([e],{type:'text/plain'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=`sparkverse-journal-${new Date().toISOString().split('T')[0]}.txt`;a.click();alert('Journal entry saved! ✨')}};
+
+    // Cosmic Clock
+    function updateClock(){const now=new Date(),h=String(now.getHours()).padStart(2,'0'),m=String(now.getMinutes()).padStart(2,'0'),s=String(now.getSeconds()).padStart(2,'0');document.getElementById('cosmicTime').textContent=`${h}:${m}:${s}`;const planets=['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'],energies=['Rest','New Beginnings','Communication','Heart Opening','Expansion','Beauty','Transformation'],activities=['Meditation','Setting Intentions','Learning','Self-Care','Manifestation','Creative Expression','Ritual'];document.getElementById('planetaryHour').textContent='Hour of '+planets[(now.getDay()+now.getHours())%7];document.getElementById('dayEnergy').textContent=energies[now.getDay()];document.getElementById('bestFor').textContent=activities[now.getDay()];const phases=['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'],ld=Math.floor((now.getTime()/1000/60/60/24-10.75)%29.53);document.getElementById('moonPhase').textContent=phases[Math.floor(ld/3.69)]||'Waxing Gibbous'}
+    updateClock();setInterval(updateClock,1000);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Source Architecture | The First Spark</title>
+    <meta name="description" content="The operating system for consciousness. Four chambers to reprogram reality: Pattern Recognition, Collapse Protocol, Timeline Navigation, Lineage Debugging.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+        
+        :root {
+            --void: #0a0a0f;
+            --deep: #0d0d14;
+            --surface: #14141e;
+            --elevated: #1a1a26;
+            --border: #252532;
+            --muted: #6b6b80;
+            --text: #e0e0ec;
+            --bright: #ffffff;
+            --spark: #f97316;
+            --spark-glow: rgba(249, 115, 22, 0.4);
+            --geo: #06b6d4;
+            --quantum: #8b5cf6;
+            --timeline: #3b82f6;
+            --lineage: #a855f7;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background */
+        .bg-field {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-field::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 200%;
+            height: 200%;
+            transform: translate(-50%, -50%);
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(249, 115, 22, 0.04) 0%, transparent 60%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+        
+        .hero-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: var(--spark);
+            stroke-width: 0.8;
+            fill: none;
+        }
+        
+        .hero-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 150%;
+            height: 150%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, var(--spark-glow) 0%, transparent 70%);
+            animation: glow 4s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--bright) 0%, var(--spark) 50%, var(--quantum) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-sub {
+            font-size: 1.25rem;
+            color: var(--muted);
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+        
+        .hero-desc {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        
+        /* Layer Model */
+        .layers-section {
+            margin-bottom: 80px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--bright);
+            margin-bottom: 12px;
+        }
+        
+        .section-header p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        
+        .layers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .layer {
+            background: var(--surface);
+            padding: 28px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .layer:hover {
+            background: var(--elevated);
+        }
+        
+        .layer-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+        }
+        
+        .layer-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--bright);
+            margin-bottom: 6px;
+        }
+        
+        .layer-role {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        
+        .layer.geo { border-top: 3px solid var(--geo); }
+        .layer.quantum { border-top: 3px solid var(--quantum); }
+        .layer.timeline { border-top: 3px solid var(--timeline); }
+        .layer.lineage { border-top: 3px solid var(--lineage); }
+        
+        /* Chambers */
+        .chambers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        
+        .chamber-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .chamber-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.02) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .chamber-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--muted);
+        }
+        
+        .chamber-card:hover::before {
+            opacity: 1;
+        }
+        
+        .chamber-card.geo:hover { border-color: var(--geo); box-shadow: 0 20px 60px rgba(6, 182, 212, 0.15); }
+        .chamber-card.quantum:hover { border-color: var(--quantum); box-shadow: 0 20px 60px rgba(139, 92, 246, 0.15); }
+        .chamber-card.timeline:hover { border-color: var(--timeline); box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15); }
+        .chamber-card.lineage:hover { border-color: var(--lineage); box-shadow: 0 20px 60px rgba(168, 85, 247, 0.15); }
+        
+        .chamber-num {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: var(--deep);
+        }
+        
+        .chamber-card.geo .chamber-num { color: var(--geo); }
+        .chamber-card.quantum .chamber-num { color: var(--quantum); }
+        .chamber-card.timeline .chamber-num { color: var(--timeline); }
+        .chamber-card.lineage .chamber-num { color: var(--lineage); }
+        
+        .chamber-icon {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 20px;
+        }
+        
+        .chamber-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke-width: 1.2;
+            fill: none;
+        }
+        
+        .chamber-card.geo .chamber-icon svg { stroke: var(--geo); }
+        .chamber-card.quantum .chamber-icon svg { stroke: var(--quantum); }
+        .chamber-card.timeline .chamber-icon svg { stroke: var(--timeline); }
+        .chamber-card.lineage .chamber-icon svg { stroke: var(--lineage); }
+        
+        .chamber-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--bright);
+            margin-bottom: 8px;
+        }
+        
+        .chamber-subtitle {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+        
+        .chamber-desc {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+        
+        .chamber-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .chamber-feature {
+            padding: 6px 12px;
+            background: var(--deep);
+            border-radius: 16px;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+        
+        .chamber-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: gap 0.2s ease;
+        }
+        
+        .chamber-card.geo .chamber-cta { color: var(--geo); }
+        .chamber-card.quantum .chamber-cta { color: var(--quantum); }
+        .chamber-card.timeline .chamber-cta { color: var(--timeline); }
+        .chamber-card.lineage .chamber-cta { color: var(--lineage); }
+        
+        .chamber-card:hover .chamber-cta { gap: 12px; }
+        
+        /* How It Works */
+        .flow-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 48px;
+            margin-bottom: 60px;
+        }
+        
+        .flow-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-top: 32px;
+        }
+        
+        .flow-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .flow-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 30px;
+            color: var(--border);
+            font-size: 1.5rem;
+        }
+        
+        .flow-num {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            background: var(--deep);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--spark);
+        }
+        
+        .flow-step h4 {
+            font-size: 0.95rem;
+            color: var(--bright);
+            margin-bottom: 8px;
+        }
+        
+        .flow-step p {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--elevated) 100%);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+        }
+        
+        .cta-section h2 {
+            font-size: 1.75rem;
+            color: var(--bright);
+            margin-bottom: 16px;
+        }
+        
+        .cta-section p {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: var(--spark);
+            color: var(--bright);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px var(--spark-glow);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--elevated);
+            border-color: var(--muted);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 48px 0 24px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+        
+        .footer a { color: var(--spark); text-decoration: none; }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .footer-links a {
+            color: var(--muted);
+            transition: color 0.2s ease;
+        }
+        
+        .footer-links a:hover { color: var(--text); }
+        
+        @media (max-width: 800px) {
+            .hero h1 { font-size: 2rem; }
+            .chambers-grid { grid-template-columns: 1fr; }
+            .layers-grid { grid-template-columns: repeat(2, 1fr); }
+            .flow-steps { flex-direction: column; gap: 32px; }
+            .flow-step:not(:last-child)::after { display: none; }
+            .container { padding: 40px 20px; }
+        }
+        
+        @media (max-width: 500px) {
+            .layers-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-field"></div>
+    
+    <div class="container">
+        <header class="hero">
+            <div class="hero-icon">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40"/>
+                    <circle cx="50" cy="50" r="25"/>
+                    <circle cx="50" cy="50" r="10"/>
+                    <line x1="50" y1="10" x2="50" y2="25"/>
+                    <line x1="50" y1="75" x2="50" y2="90"/>
+                    <line x1="10" y1="50" x2="25" y2="50"/>
+                    <line x1="75" y1="50" x2="90" y2="50"/>
+                    <line x1="22" y1="22" x2="32" y2="32"/>
+                    <line x1="68" y1="68" x2="78" y2="78"/>
+                    <line x1="78" y1="22" x2="68" y2="32"/>
+                    <line x1="32" y1="68" x2="22" y2="78"/>
+                </svg>
+            </div>
+            <h1>SOURCE ARCHITECTURE</h1>
+            <p class="hero-sub">The Operating System for Consciousness</p>
+            <p class="hero-desc">
+                Reality runs on code you can learn to read and write. Source Architecture maps the four layers 
+                of this operating system—sacred geometry, quantum mechanics, timeline dynamics, and ancestral programming—into 
+                practical tools for deliberate reality creation.
+            </p>
+        </header>
+        
+        <section class="layers-section">
+            <div class="section-header">
+                <h2>The Four Layers</h2>
+                <p>Your consciousness interfaces with reality through these interconnected systems</p>
+            </div>
+            
+            <div class="layers-grid">
+                <div class="layer geo">
+                    <div class="layer-num">LAYER 0</div>
+                    <div class="layer-name">Sacred Geometry</div>
+                    <div class="layer-role">The Rendering Engine</div>
+                </div>
+                <div class="layer quantum">
+                    <div class="layer-num">LAYER 1</div>
+                    <div class="layer-name">Quantum Field</div>
+                    <div class="layer-role">Physics in Motion</div>
+                </div>
+                <div class="layer timeline">
+                    <div class="layer-num">LAYER 2</div>
+                    <div class="layer-name">Timeline Architecture</div>
+                    <div class="layer-role">Version Control</div>
+                </div>
+                <div class="layer lineage">
+                    <div class="layer-num">LAYER 3</div>
+                    <div class="layer-name">Ancestral Code</div>
+                    <div class="layer-role">Inherited Programs</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="chambers-section">
+            <div class="section-header">
+                <h2>The Four Chambers</h2>
+                <p>Interactive training tools to develop mastery over each layer</p>
+            </div>
+            
+            <div class="chambers-grid">
+                <a href="/patterns" class="chamber-card geo">
+                    <span class="chamber-num">CHAMBER 1</span>
+                    <div class="chamber-icon">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40"/>
+                            <circle cx="50" cy="50" r="25"/>
+                            <circle cx="50" cy="50" r="10"/>
+                            <circle cx="50" cy="25" r="8"/>
+                            <circle cx="71" cy="62" r="8"/>
+                            <circle cx="29" cy="62" r="8"/>
+                        </svg>
+                    </div>
+                    <h3 class="chamber-title">Pattern Recognition Trainer</h3>
+                    <p class="chamber-subtitle">See the code's visual language</p>
+                    <p class="chamber-desc">Train your perception to recognize sacred geometry everywhere. Speed drills, pattern library, extraction lab. Rewire visual processing until patterns become visible before thought.</p>
+                    <div class="chamber-features">
+                        <span class="chamber-feature">8 Core Patterns</span>
+                        <span class="chamber-feature">Speed Training</span>
+                        <span class="chamber-feature">Extraction Lab</span>
+                        <span class="chamber-feature">Progress Tracking</span>
+                    </div>
+                    <div class="chamber-cta">Enter Chamber →</div>
+                </a>
+                
+                <a href="/collapse" class="chamber-card quantum">
+                    <span class="chamber-num">CHAMBER 2</span>
+                    <div class="chamber-icon">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="35" stroke-dasharray="5,5"/>
+                            <circle cx="50" cy="50" r="8"/>
+                            <path d="M50,15 L50,35 M50,65 L50,85"/>
+                            <path d="M15,50 L35,50 M65,50 L85,50"/>
+                        </svg>
+                    </div>
+                    <h3 class="chamber-title">Collapse Protocol Interface</h3>
+                    <p class="chamber-subtitle">Deliberate reality selection</p>
+                    <p class="chamber-desc">Master the observer effect. Learn to collapse quantum superposition into chosen outcomes through structured protocols. Track your collapse accuracy over time.</p>
+                    <div class="chamber-features">
+                        <span class="chamber-feature">Observer States</span>
+                        <span class="chamber-feature">Micro Protocols</span>
+                        <span class="chamber-feature">Meso Protocols</span>
+                        <span class="chamber-feature">Verification System</span>
+                    </div>
+                    <div class="chamber-cta">Enter Chamber →</div>
+                </a>
+                
+                <a href="/timeline" class="chamber-card timeline">
+                    <span class="chamber-num">CHAMBER 3</span>
+                    <div class="chamber-icon">
+                        <svg viewBox="0 0 100 100">
+                            <path d="M10,50 Q30,30 50,50 T90,50"/>
+                            <path d="M10,50 Q30,70 50,50 T90,50"/>
+                            <circle cx="50" cy="50" r="8"/>
+                            <circle cx="20" cy="50" r="4"/>
+                            <circle cx="80" cy="50" r="4"/>
+                        </svg>
+                    </div>
+                    <h3 class="chamber-title">Timeline Navigator</h3>
+                    <p class="chamber-subtitle">Branch selection & Fold Points</p>
+                    <p class="chamber-desc">Map your timeline branches. Log Fold Points where reality converged. Use the Branch Selector protocol to consciously choose your path at crossroads.</p>
+                    <div class="chamber-features">
+                        <span class="chamber-feature">Timeline Mapping</span>
+                        <span class="chamber-feature">Fold Point Logger</span>
+                        <span class="chamber-feature">Branch Selector</span>
+                        <span class="chamber-feature">Convergence History</span>
+                    </div>
+                    <div class="chamber-cta">Enter Chamber →</div>
+                </a>
+                
+                <a href="/lineage" class="chamber-card lineage">
+                    <span class="chamber-num">CHAMBER 4</span>
+                    <div class="chamber-icon">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="20" r="8"/>
+                            <circle cx="30" cy="50" r="6"/>
+                            <circle cx="70" cy="50" r="6"/>
+                            <circle cx="20" cy="80" r="5"/>
+                            <circle cx="40" cy="80" r="5"/>
+                            <circle cx="60" cy="80" r="5"/>
+                            <circle cx="80" cy="80" r="5"/>
+                            <line x1="50" y1="28" x2="30" y2="44"/>
+                            <line x1="50" y1="28" x2="70" y2="44"/>
+                            <line x1="30" y1="56" x2="20" y2="75"/>
+                            <line x1="30" y1="56" x2="40" y2="75"/>
+                            <line x1="70" y1="56" x2="60" y2="75"/>
+                            <line x1="70" y1="56" x2="80" y2="75"/>
+                        </svg>
+                    </div>
+                    <h3 class="chamber-title">Lineage Debugger</h3>
+                    <p class="chamber-subtitle">Ancestral pattern work</p>
+                    <p class="chamber-desc">Identify inherited behavioral loops stored in your DNA. Scan for patterns across money, relationships, health, success. Heal patterns forward and backward through your line.</p>
+                    <div class="chamber-features">
+                        <span class="chamber-feature">Pattern Scanner</span>
+                        <span class="chamber-feature">Lineage Tracking</span>
+                        <span class="chamber-feature">Healing Protocol</span>
+                        <span class="chamber-feature">Lineage Tree</span>
+                    </div>
+                    <div class="chamber-cta">Enter Chamber →</div>
+                </a>
+            </div>
+        </section>
+        
+        <section class="flow-section">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>The chambers build on each other. Start anywhere, but mastery compounds.</p>
+            </div>
+            
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="flow-num">1</div>
+                    <h4>See the Patterns</h4>
+                    <p>Train perception to recognize the geometric substrate underlying reality</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">2</div>
+                    <h4>Learn to Collapse</h4>
+                    <p>Master observer effect to select outcomes from quantum superposition</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">3</div>
+                    <h4>Navigate Timelines</h4>
+                    <p>Map branch points and consciously select your path at Fold Points</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">4</div>
+                    <h4>Debug Your Code</h4>
+                    <p>Clear inherited patterns blocking your collapse effectiveness</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta-section">
+            <h2>Begin Your Training</h2>
+            <p>All four chambers are free to use. Start with whichever calls to you—but Chamber 2 (Collapse Protocol) is the unlock for making the others actually work.</p>
+            <div class="cta-buttons">
+                <a href="/collapse" class="btn btn-primary">Start with Collapse Protocol</a>
+                <a href="https://thefirstspark.shop" class="btn btn-secondary">Explore The First Spark</a>
+            </div>
+        </section>
+        
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="/patterns">Patterns</a>
+                <a href="/collapse">Collapse</a>
+                <a href="/timeline">Timeline</a>
+                <a href="/lineage">Lineage</a>
+            </div>
+            <p>Source Architecture — The Operating System for Consciousness<br>
+            Built by <a href="https://thefirstspark.shop" target="_blank">The First Spark</a></p>
+        </footer>
+    </div>
+</body>
+</html>

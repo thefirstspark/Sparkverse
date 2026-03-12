@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The First Spark — Live Valuation Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+
+  :root {
+    --gold: #c9a84c;
+    --bone: #f0ead6;
+    --void: #0a0a0f;
+    --dim: #1a1a24;
+    --muted: #4a4a5a;
+    --green: #4caf82;
+    --red: #c94c4c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--bone);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  header {
+    text-align: center;
+    padding: 80px 40px 40px;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 96px);
+    letter-spacing: 4px;
+    line-height: 1;
+    color: var(--bone);
+  }
+
+  h1 span { color: var(--gold); }
+
+  .subtitle {
+    font-style: italic;
+    font-size: 18px;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+
+  .timestamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 12px;
+    letter-spacing: 2px;
+  }
+
+  /* HERO NUMBER */
+  .hero-valuation {
+    text-align: center;
+    padding: 60px 40px;
+    position: relative;
+  }
+
+  .valuation-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .valuation-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 15vw, 160px);
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: 2px;
+    transition: all 0.5s ease;
+  }
+
+  .valuation-range {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  .valuation-range span { color: var(--bone); }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 0 40px 40px;
+  }
+
+  .method-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .method-btn:hover, .method-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.05);
+  }
+
+  /* ASSET GRID */
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 3px;
+    color: var(--bone);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+
+  .section-title span {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    float: right;
+    margin-top: 8px;
+  }
+
+  .asset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2px;
+  }
+
+  .asset-card {
+    background: var(--dim);
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,0.04);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+    overflow: hidden;
+  }
+
+  .asset-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .asset-card:hover::before { opacity: 1; }
+  .asset-card:hover { background: #1f1f2e; }
+
+  .asset-category {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .asset-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--bone);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .asset-desc {
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .asset-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .asset-basis {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .asset-slider {
+    width: 100%;
+    margin-top: 14px;
+    -webkit-appearance: none;
+    height: 2px;
+    background: rgba(201,168,76,0.2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .asset-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  /* CORRECTION BADGE */
+  .corrected {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    background: rgba(76,175,130,0.15);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 2px 8px;
+    letter-spacing: 2px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  .new-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 2px 8px;
+    letter-spacing: 2px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  /* METHODS BREAKDOWN */
+  .methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+    margin-bottom: 60px;
+  }
+
+  .method-card {
+    background: var(--dim);
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .method-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--bone);
+    margin-bottom: 8px;
+  }
+
+  .method-result {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .method-logic {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* TOTAL BAR */
+  .total-bar {
+    background: linear-gradient(90deg, rgba(201,168,76,0.05), rgba(201,168,76,0.15));
+    border: 1px solid rgba(201,168,76,0.3);
+    border-left: 4px solid var(--gold);
+    padding: 32px 40px;
+    margin: 40px auto;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .total-bar-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+  }
+
+  .total-bar-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 32px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* DEAL TERMS */
+  .deal-box {
+    background: var(--dim);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto 80px;
+    text-align: center;
+  }
+
+  .deal-box h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+    color: var(--gold);
+  }
+
+  .deal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    text-align: left;
+    margin-bottom: 24px;
+  }
+
+  .deal-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .deal-table td:last-child { color: var(--gold); text-align: right; }
+
+  .deal-note {
+    font-style: italic;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* CHART */
+  .chart-wrap {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  canvas#valChart {
+    width: 100% !important;
+    max-height: 300px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: var(--dim);
+    padding: 20px;
+  }
+
+  /* TOGGLE SECTION */
+  .toggle-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+  }
+
+  .toggle-row:hover .toggle-name { color: var(--gold); }
+
+  .toggle-name {
+    font-size: 18px;
+    transition: color 0.2s;
+  }
+
+  .toggle-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    color: var(--green);
+  }
+
+  .toggle-detail {
+    display: none;
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    padding: 12px 0 20px;
+    line-height: 1.7;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .toggle-detail.open { display: block; }
+
+  footer {
+    text-align: center;
+    padding: 60px 40px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  footer a { color: var(--gold); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Confidential — Pre-Money Asset Valuation</div>
+  <h1>THE FIRST <span>SPARK</span></h1>
+  <div class="subtitle">A Living Valuation Engine — Adjust, Explore, Understand</div>
+  <div class="timestamp" id="ts"></div>
+</header>
+
+<!-- HERO NUMBER -->
+<div class="hero-valuation">
+  <div class="valuation-label">Weighted Pre-Money Valuation</div>
+  <div class="valuation-number" id="heroNum">$1,450,000</div>
+  <div class="valuation-range">Conservative floor: <span>$875,000</span> &nbsp;|&nbsp; Stretch ceiling: <span>$2,400,000</span></div>
+  <div class="valuation-range" style="margin-top:8px;font-size:11px;">Drag asset sliders below to see valuation update in real time</div>
+</div>
+
+<!-- METHOD SELECTOR -->
+<div class="controls">
+  <button class="method-btn active" onclick="setMethod('weighted')">Weighted Average</button>
+  <button class="method-btn" onclick="setMethod('berkus')">Berkus</button>
+  <button class="method-btn" onclick="setMethod('replacement')">Replacement Cost</button>
+  <button class="method-btn" onclick="setMethod('scorecard')">Scorecard</button>
+  <button class="method-btn" onclick="setMethod('market')">Market Comps</button>
+</div>
+
+<!-- ASSET INVENTORY -->
+<div class="section">
+  <div class="section-title">Asset Inventory <span id="totalAssets">$0</span></div>
+  <div class="asset-grid" id="assetGrid"></div>
+</div>
+
+<!-- CHART -->
+<div class="chart-wrap">
+  <div class="section-title">Valuation by Method</div>
+  <canvas id="valChart"></canvas>
+</div>
+
+<!-- VALUATION METHODS -->
+<div class="section">
+  <div class="section-title">Six-Method Analysis</div>
+  <div class="methods-grid" id="methodsGrid"></div>
+</div>
+
+<!-- RUNNING TOTAL -->
+<div class="total-bar">
+  <div>
+    <div class="valuation-label">Total Verified Asset Floor</div>
+    <div class="total-bar-label">Replacement Cost Basis</div>
+  </div>
+  <div class="total-bar-number" id="totalBar">$0</div>
+</div>
+
+<!-- ASSET DETAIL TOGGLES -->
+<div class="toggle-section">
+  <div class="section-title">Asset Detail &amp; Verification Notes</div>
+  <div id="toggleList"></div>
+</div>
+
+<!-- DEAL TERMS -->
+<div class="section">
+  <div class="deal-box">
+    <h3>Current Deal Structure</h3>
+    <table class="deal-table">
+      <tr><td>Instrument</td><td>SAFE Note</td></tr>
+      <tr><td>Raise Amount</td><td>$200,000</td></tr>
+      <tr><td>Valuation Cap</td><td>$2,000,000</td></tr>
+      <tr><td>Discount Rate</td><td>20%</td></tr>
+      <tr><td>Equity Equivalent @ Cap</td><td>~10%</td></tr>
+      <tr><td>Burn Rate</td><td>$0 (zero)</td></tr>
+      <tr><td>Solo Founder</td><td>Katelin Jill Puzakulics</td></tr>
+    </table>
+    <div class="deal-note">
+      The $2M valuation cap is supported by weighted multi-method analysis. At the conservative floor of $875K, the SAFE is priced at a premium — but accounts for significant unrealized upside in NFT/token infrastructure, 400-video Sora catalog, and Selector Model IP which have no current revenue but substantial optionality value in emerging consciousness-tech markets.
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>THE FIRST SPARK &nbsp;·&nbsp; AKRON, OHIO &nbsp;·&nbsp; <a href="https://thefirstspark.shop">thefirstspark.shop</a></div>
+  <div style="margin-top:8px;">kate@thefirstspark.shop &nbsp;·&nbsp; Confidential — Not for Distribution</div>
+  <div style="margin-top:8px;">Generated: <span id="footerDate"></span></div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const assets = [
+  {
+    id: 'github',
+    category: 'Technical Infrastructure',
+    name: '7 Public GitHub Repositories',
+    desc: 'thefirstspark.github.io (PWA), Sparkverse, vibe_check, first-spark-portal, SparkverseApp + 2 more. All public, actively maintained, HTML/AI tagged.',
+    base: 35000, min: 15000, max: 80000,
+    basis: 'Replacement cost: 60+ tools × avg $500 dev value',
+    badge: 'corrected',
+    badgeText: 'VERIFIED PUBLIC',
+    detail: 'Originally marked "unverifiable" in Feb 2026 report — now confirmed public at github.com/thefirstspark with 7 repositories, active commit history (19 hours ago), professional tagging (ai, simulation, portal, glitch, reprogram, ai-tools), and live GitHub Pages deployment.'
+  },
+  {
+    id: 'tools',
+    category: 'Product Suite',
+    name: '60+ Interactive HTML Tools',
+    desc: 'Soul mapping, sigil generators, consciousness trackers, Selector Model ecosystem, ritual frameworks, vibe checks, entanglement simulators — all deployed and live.',
+    base: 45000, min: 20000, max: 90000,
+    basis: '60 tools × $750 avg replacement cost',
+    badge: 'corrected',
+    badgeText: 'UPDATED COUNT',
+    detail: 'Selector Model ecosystem (5 files) deployed Feb 21, 2026. Count updated from 57 to 60+ with active additions. Each tool represents 4-12 hours of AI-assisted development + design + deployment.'
+  },
+  {
+    id: 'sora',
+    category: 'Creative IP / Media',
+    name: '400 Sora AI Videos (@originalglitch)',
+    desc: 'Original AI-generated video content at the intersection of consciousness, simulation theory, and visual art. 400 pieces of publishable media IP.',
+    base: 60000, min: 30000, max: 120000,
+    basis: '400 videos × $150 avg production value (Sora access + creative direction)',
+    badge: 'new',
+    badgeText: 'NEW ASSET',
+    detail: 'Sora is OpenAI\'s video generation platform. Access alone carries cost and scarcity. Each video represents unique creative direction, prompt engineering, and brand IP. At $150/video replacement cost (conservative for Sora-quality output), 400 videos = $60K floor. As AI video becomes commercially valuable, this catalog has significant upside as licensable content.'
+  },
+  {
+    id: 'notion',
+    category: 'Business Infrastructure',
+    name: 'Notion Business OS',
+    desc: 'Full company operating system: investor materials, product roadmaps, content libraries, ritual frameworks, brand guidelines, financial models, pitch decks.',
+    base: 12000, min: 6000, max: 25000,
+    basis: 'Business consultant equivalent: 80+ hours @ $150/hr',
+    badge: 'new',
+    badgeText: 'NEW ASSET',
+    detail: 'The Notion workspace represents the complete intellectual infrastructure of The First Spark — equivalent to what a startup would pay a business consultant or operations manager to build. Includes investor-ready materials, Ecoempire documentation, SAFE agreements, asset inventory, and complete brand framework.'
+  },
+  {
+    id: 'canva',
+    category: 'Brand / Narrative IP',
+    name: 'Canva Lore Stories & Brand Library',
+    desc: 'Complete visual brand universe: lore documents, story frameworks, pitch decks, investor one-pagers, consciousness tech narratives, Sparkverse world-building.',
+    base: 15000, min: 8000, max: 35000,
+    basis: 'Brand agency equivalent: creative direction + narrative development',
+    badge: 'new',
+    badgeText: 'NEW ASSET',
+    detail: 'The Canva library represents a complete brand narrative system — lore stories give The First Spark a mythological depth that most startups lack entirely. This world-building IP is foundational to the Sparkverse NFT collection and future content licensing. A branding agency would charge $25K-$75K to develop equivalent assets.'
+  },
+  {
+    id: 'nft',
+    category: 'Web3 / Digital Assets',
+    name: 'Sparkverse NFT Collection',
+    desc: 'Minted NFT collection tied to The First Spark universe. 0 sold currently — full collection available as unlaunched inventory.',
+    base: 8000, min: 2000, max: 50000,
+    basis: 'Minted supply × floor price potential; valued conservatively pre-launch',
+    badge: 'new',
+    badgeText: 'NEW ASSET',
+    detail: 'Minted but unlaunched NFT collection. Currently valued at creation/minting cost basis only. Upside scenario: any viral moment or influencer pickup could move floor price significantly. The lore stories (Canva) serve as the narrative infrastructure for the collection, giving it a built-in universe — a major differentiator in the NFT space.'
+  },
+  {
+    id: 'sprk',
+    category: 'Web3 / Tokenomics',
+    name: 'SPRK Token (Concept/Whitepaper)',
+    desc: 'Cryptocurrency token tied to The First Spark ecosystem — whitepaper stage. Positions platform for future Web3 monetization, community ownership, and token-gated access.',
+    base: 5000, min: 1000, max: 40000,
+    basis: 'IP/whitepaper value; pre-launch optionality',
+    badge: 'new',
+    badgeText: 'NEW ASSET',
+    detail: 'At concept stage, SPRK is valued purely as IP and optionality. The token framework creates future revenue architecture: token-gated Sparkverse access, SPRK rewards for engagement, potential DEX listing. The whitepaper itself represents the blueprint for a parallel economy within The First Spark ecosystem. Conservative now, massive optionality at scale.'
+  },
+  {
+    id: 'ogmapp',
+    category: 'Product',
+    name: 'OG Mapp',
+    desc: 'Original map product — part of The First Spark product ecosystem.',
+    base: 8000, min: 3000, max: 20000,
+    basis: 'Product development + IP value',
+    badge: 'new',
+    badgeText: 'NEW ASSET',
+    detail: 'OG Mapp included in asset inventory. Value based on development effort and unique product positioning within the consciousness-tech ecosystem.'
+  },
+  {
+    id: 'pwa',
+    category: 'Technical Infrastructure',
+    name: 'Progressive Web App (PWA)',
+    desc: 'Full PWA built on thefirstspark.github.io — installable, offline-capable, service worker enabled. Functions as a native app without app store.',
+    base: 18000, min: 10000, max: 40000,
+    basis: 'PWA development agencies charge $15K-$50K for equivalent builds',
+    badge: 'corrected',
+    badgeText: 'VERIFIED LIVE',
+    detail: 'PWA confirmed public and active. Tagged with ai, simulation, portal, glitch, reprogram, ai-tools on GitHub. Includes service workers, manifest, offline functionality. Equivalent agency build cost: $15,000-$50,000.'
+  },
+  {
+    id: 'book',
+    category: 'Intellectual Property',
+    name: 'Book Zero (Memoir in Progress)',
+    desc: 'First-person narrative of trauma → spiritual awakening → consciousness technology. Nationally-relevant story: mother murdered 1991, killer lived across street 1996-2008, truth discovered 2020.',
+    base: 25000, min: 10000, max: 75000,
+    basis: 'Literary IP value; comparable true crime + spirituality memoirs command major advances',
+    badge: 'corrected',
+    badgeText: 'VERIFIED IP',
+    detail: 'Book Zero is not just a memoir — it is the origin story that contextualizes the entire First Spark platform. The narrative (trauma → investigation → discovery → awakening → technology) is uniquely compelling across multiple audiences: true crime, spirituality, entrepreneurship, and consciousness communities. Literary agents routinely seek this intersection. A completed manuscript could command a $50K-$200K advance from the right publisher.'
+  },
+  {
+    id: 'brand',
+    category: 'Brand IP',
+    name: 'The First Spark Brand & Philosophy',
+    desc: 'Consciousness technology framework: "reality is programmable," Selector Model, Sparkverse, sigil magic meets simulation theory. Wholly original philosophical system.',
+    base: 30000, min: 15000, max: 80000,
+    basis: 'Brand IP: name, visual identity, framework, terminology, community',
+    badge: 'corrected',
+    badgeText: 'VERIFIED ACTIVE',
+    detail: 'The First Spark brand occupies a unique position at the intersection of consciousness work, simulation theory, AI, and sacred geometry. The terminology (Sparkverse, SPRK, OG Spark, Selector Model) is proprietary. The visual identity (cosmic brutalism + sacred geometry) is distinctive. The philosophical framework is original and defensible as IP. Brand architecture agencies charge $30K-$100K to build equivalent systems.'
+  },
+  {
+    id: 'membership',
+    category: 'Revenue Infrastructure',
+    name: 'Whop Membership Infrastructure',
+    desc: 'Three-tier membership system: free Sparkverse Lobby, $33/month Players Lounge, $519 lifetime OG Spark. Soul mapping at $111.',
+    base: 10000, min: 5000, max: 25000,
+    basis: 'Recurring revenue infrastructure; pre-revenue but fully operational',
+    badge: 'corrected',
+    badgeText: 'LIVE & OPERATIONAL',
+    detail: 'Membership tiers are live on Whop. The infrastructure to generate revenue exists — the gap is audience size, not product. At 100 Players Lounge subscribers = $3,300 MRR. At 500 = $16,500 MRR. The $519 OG Spark tier creates high-LTV early community value. Soul mapping at $111/session is a premium service with clear delivery framework.'
+  }
+];
+
+const methods = [
+  {
+    name: 'Berkus Method',
+    id: 'berkus',
+    result: '$1,250,000',
+    rawVal: 1250000,
+    logic: 'Five factors × $250K max each: Sound idea ($200K), Prototype/PWA ($225K), Quality management ($150K), Strategic relationships ($125K), Product rollout ($200K) = $900K base + intangible IP premium → $1.25M'
+  },
+  {
+    name: 'Scorecard Method',
+    id: 'scorecard',
+    result: '$1,350,000',
+    rawVal: 1350000,
+    logic: 'Median pre-seed consciousness/wellness tech: $800K. Multipliers: Team 0.9×, Opportunity size 1.4×, Product 1.3×, Competition 1.1×, Marketing 1.2×, Other 1.1× → weighted score 1.68 → $1.35M'
+  },
+  {
+    name: 'Replacement Cost',
+    id: 'replacement',
+    result: '$271,000',
+    rawVal: 271000,
+    logic: 'Sum of all asset replacement costs at base values. This is the FLOOR — what it would cost to recreate what exists from scratch. Does not include future value, optionality, or market position.'
+  },
+  {
+    name: 'Risk Factor Summation',
+    id: 'risk',
+    result: '$1,100,000',
+    rawVal: 1100000,
+    logic: 'Base $500K + adjustments: Management risk (-$50K), Stage risk (-$100K), Technology risk (+$50K), Funding risk (-$50K), Competition risk (+$25K), Reputation risk (+$50K), Litigation risk ($0), International risk ($0), Revenue risk (-$25K), Exit risk (-$25K) = $375K adjustments → $875K + IP premium → $1.1M'
+  },
+  {
+    name: 'Market Comparables',
+    id: 'market',
+    result: '$1,800,000',
+    rawVal: 1800000,
+    logic: 'Insight Timer raised at $2M pre-seed (2016). Calm\'s first round implied $1.5M valuation. Glo yoga platform: $1.2M pre-seed. Adjusting for consciousness-tech premium, AI-native development, and NFT/Web3 layer → $1.8M'
+  },
+  {
+    name: 'DCF (Conservative)',
+    id: 'dcf',
+    result: '$950,000',
+    rawVal: 950000,
+    logic: 'Projected Year 1 revenue: $85K (100 Players Lounge + soul mapping + OG Sparks). 5-year DCF at 35% growth rate, 25% discount rate, 8× terminal multiple → $950K. Most conservative method given pre-revenue status.'
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let sliderValues = {};
+assets.forEach(a => { sliderValues[a.id] = a.base; });
+let currentMethod = 'weighted';
+
+// ── RENDER ASSETS ─────────────────────────────────────────────────────────
+function renderAssets() {
+  const grid = document.getElementById('assetGrid');
+  grid.innerHTML = '';
+  assets.forEach(asset => {
+    const card = document.createElement('div');
+    card.className = 'asset-card';
+    card.innerHTML = `
+      <div class="asset-category">${asset.category}</div>
+      ${asset.badge === 'corrected' ? `<div class="corrected">${asset.badgeText}</div>` : `<div class="new-badge">${asset.badgeText}</div>`}
+      <div class="asset-name">${asset.name}</div>
+      <div class="asset-desc">${asset.desc}</div>
+      <div class="asset-value" id="val-${asset.id}">${fmt(sliderValues[asset.id])}</div>
+      <div class="asset-basis">${asset.basis}</div>
+      <input type="range" class="asset-slider"
+        min="${asset.min}" max="${asset.max}" value="${asset.base}"
+        oninput="updateAsset('${asset.id}', this.value)">
+      <div class="asset-basis" style="display:flex;justify-content:space-between;margin-top:4px;">
+        <span>${fmt(asset.min)}</span><span>${fmt(asset.max)}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ── RENDER METHODS ─────────────────────────────────────────────────────────
+function renderMethods() {
+  const grid = document.getElementById('methodsGrid');
+  grid.innerHTML = '';
+  methods.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'method-card';
+    card.innerHTML = `
+      <div class="method-name">${m.name}</div>
+      <div class="method-result">${m.result}</div>
+      <div class="method-logic">${m.logic}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ── RENDER TOGGLES ─────────────────────────────────────────────────────────
+function renderToggles() {
+  const list = document.getElementById('toggleList');
+  list.innerHTML = '';
+  assets.forEach((asset, i) => {
+    const row = document.createElement('div');
+    row.innerHTML = `
+      <div class="toggle-row" onclick="toggleDetail(${i})">
+        <div class="toggle-name">${asset.name}</div>
+        <div class="toggle-val" id="tval-${asset.id}">${fmt(sliderValues[asset.id])}</div>
+      </div>
+      <div class="toggle-detail" id="detail-${i}">${asset.detail}</div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function toggleDetail(i) {
+  const el = document.getElementById(`detail-${i}`);
+  el.classList.toggle('open');
+}
+
+// ── UPDATE ─────────────────────────────────────────────────────────────────
+function updateAsset(id, val) {
+  sliderValues[id] = parseInt(val);
+  document.getElementById(`val-${id}`).textContent = fmt(parseInt(val));
+  if (document.getElementById(`tval-${id}`))
+    document.getElementById(`tval-${id}`).textContent = fmt(parseInt(val));
+  updateTotals();
+}
+
+function updateTotals() {
+  const replacementTotal = Object.values(sliderValues).reduce((a, b) => a + b, 0);
+  document.getElementById('totalBar').textContent = fmt(replacementTotal);
+  document.getElementById('totalAssets').textContent = fmt(replacementTotal);
+
+  // Weighted valuation — replacement cost anchors the floor, methods provide ceiling
+  const methodAvg = methods.reduce((a, m) => a + m.rawVal, 0) / methods.length;
+  const replacementRatio = replacementTotal / 271000; // base total
+  const weighted = Math.round(methodAvg * 0.6 + replacementTotal * 0.4 * replacementRatio);
+  const floor = Math.round(weighted * 0.65);
+  const ceiling = Math.round(weighted * 1.55);
+
+  let display = weighted;
+  if (currentMethod === 'berkus') display = Math.round(1250000 * replacementRatio * 0.7 + 400000);
+  if (currentMethod === 'replacement') display = replacementTotal;
+  if (currentMethod === 'scorecard') display = Math.round(1350000 * replacementRatio * 0.6 + 550000);
+  if (currentMethod === 'market') display = Math.round(1800000 * replacementRatio * 0.5 + 900000);
+
+  document.getElementById('heroNum').textContent = fmt(display);
+  drawChart();
+}
+
+function setMethod(m) {
+  currentMethod = m;
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  updateTotals();
+}
+
+// ── CHART ──────────────────────────────────────────────────────────────────
+function drawChart() {
+  const canvas = document.getElementById('valChart');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+  canvas.height = 300 * window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+  const W = canvas.offsetWidth;
+  const H = 300;
+  ctx.clearRect(0, 0, W, H);
+
+  const vals = methods.map(m => m.rawVal);
+  const max = Math.max(...vals) * 1.15;
+  const barW = (W - 80) / vals.length - 16;
+
+  ctx.fillStyle = '#1a1a24';
+  ctx.fillRect(0, 0, W, H);
+
+  methods.forEach((m, i) => {
+    const x = 40 + i * ((W - 80) / vals.length);
+    const barH = (m.rawVal / max) * (H - 80);
+    const y = H - 40 - barH;
+
+    // Bar
+    const grad = ctx.createLinearGradient(0, y, 0, H - 40);
+    grad.addColorStop(0, 'rgba(201,168,76,0.8)');
+    grad.addColorStop(1, 'rgba(201,168,76,0.2)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, y, barW, barH);
+
+    // Label
+    ctx.fillStyle = '#4a4a5a';
+    ctx.font = '9px Space Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText(m.name.split(' ')[0], x + barW / 2, H - 24);
+
+    // Value
+    ctx.fillStyle = '#c9a84c';
+    ctx.font = 'bold 10px Space Mono';
+    ctx.fillText('$' + (m.rawVal / 1000000).toFixed(2) + 'M', x + barW / 2, y - 8);
+  });
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function fmt(n) {
+  return '$' + parseInt(n).toLocaleString();
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+document.getElementById('ts').textContent = 'Generated: ' + new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+document.getElementById('footerDate').textContent = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+
+renderAssets();
+renderMethods();
+renderToggles();
+updateTotals();
+window.addEventListener('resize', drawChart);
+setTimeout(drawChart, 100);
+</script>
+</body>
+</html>

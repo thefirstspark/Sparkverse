@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The First Spark - Business Cards</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #1a1a1a;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        @media print {
+            body { background: white; }
+            .print-sheet { page-break-after: always; }
+            .no-print { display: none; }
+        }
+        
+        .print-sheet {
+            width: 8.5in;
+            height: 11in;
+            margin: 0 auto;
+            padding: 0.25in;
+            background: white;
+            display: grid;
+            grid-template-columns: repeat(2, 3.5in);
+            grid-template-rows: repeat(5, 2in);
+            gap: 0.1in;
+            justify-content: center;
+        }
+        
+        .card {
+            width: 3.5in;
+            height: 2in;
+            position: relative;
+            overflow: hidden;
+            border: 1px dashed #ccc;
+        }
+        
+        /* DESIGN 1: Void Portal */
+        .design-1 {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 50%, #0a0a0a 100%);
+            display: flex;
+            align-items: center;
+            padding: 0.15in;
+        }
+        
+        .design-1 .qr-zone {
+            width: 1.4in;
+            height: 1.4in;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.15in;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+        
+        .design-1 .qr-zone img {
+            width: 1.2in;
+            height: 1.2in;
+        }
+        
+        .design-1 .info {
+            flex: 1;
+            color: white;
+            text-align: right;
+        }
+        
+        .design-1 .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11pt;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .design-1 .tagline {
+            font-size: 6pt;
+            color: #888;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+        
+        .design-1 .url {
+            font-size: 7pt;
+            color: #9b59b6;
+            margin-top: 8px;
+        }
+        
+        .design-1 .cta {
+            font-size: 5pt;
+            color: #666;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* DESIGN 2: Sacred Grid */
+        .design-2 {
+            background: #0d0d0d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .design-2::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(90deg, transparent 49%, rgba(255,107,107,0.1) 50%, transparent 51%),
+                linear-gradient(0deg, transparent 49%, rgba(255,107,107,0.1) 50%, transparent 51%);
+            background-size: 0.2in 0.2in;
+        }
+        
+        .design-2 .content {
+            display: flex;
+            align-items: center;
+            gap: 0.2in;
+            z-index: 1;
+        }
+        
+        .design-2 .qr-zone {
+            width: 1.3in;
+            height: 1.3in;
+            background: white;
+            padding: 0.08in;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        
+        .design-2 .qr-zone img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .design-2 .info {
+            color: white;
+            text-align: left;
+        }
+        
+        .design-2 .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10pt;
+            font-weight: 700;
+            color: #ff6b6b;
+        }
+        
+        .design-2 .sub {
+            font-size: 6pt;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .design-2 .url {
+            font-size: 7pt;
+            color: #4d96ff;
+            margin-top: 6px;
+        }
+        
+        /* DESIGN 3: Glitch Minimal */
+        .design-3 {
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.2in;
+        }
+        
+        .design-3 .left {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .design-3 .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14pt;
+            font-weight: 900;
+            color: #0a0a0a;
+            position: relative;
+        }
+        
+        .design-3 .brand::before {
+            content: 'THE FIRST SPARK';
+            position: absolute;
+            left: 2px;
+            top: 0;
+            color: cyan;
+            opacity: 0.5;
+            clip-path: inset(0 0 50% 0);
+        }
+        
+        .design-3 .brand::after {
+            content: 'THE FIRST SPARK';
+            position: absolute;
+            left: -2px;
+            top: 0;
+            color: magenta;
+            opacity: 0.5;
+            clip-path: inset(50% 0 0 0);
+        }
+        
+        .design-3 .tagline {
+            font-size: 6pt;
+            color: #666;
+            margin-top: 4px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .design-3 .url {
+            font-size: 7pt;
+            color: #333;
+            margin-top: 12px;
+        }
+        
+        .design-3 .qr-zone {
+            width: 1.5in;
+            height: 1.5in;
+            border: 3px solid #0a0a0a;
+            padding: 0.1in;
+        }
+        
+        .design-3 .qr-zone img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* DESIGN 4: Neon Brutalist */
+        .design-4 {
+            background: #0a0a0a;
+            display: flex;
+            align-items: stretch;
+        }
+        
+        .design-4 .accent {
+            width: 0.15in;
+            background: linear-gradient(180deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+        }
+        
+        .design-4 .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0.15in;
+            gap: 0.15in;
+        }
+        
+        .design-4 .qr-zone {
+            width: 1.4in;
+            height: 1.4in;
+            background: white;
+            padding: 0.08in;
+        }
+        
+        .design-4 .qr-zone img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .design-4 .info {
+            color: white;
+        }
+        
+        .design-4 .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10pt;
+            font-weight: 900;
+            color: #ffd93d;
+        }
+        
+        .design-4 .tagline {
+            font-size: 5pt;
+            color: #888;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .design-4 .url {
+            font-size: 7pt;
+            color: #6bcb77;
+            margin-top: 10px;
+        }
+        
+        .design-4 .email {
+            font-size: 6pt;
+            color: #4d96ff;
+            margin-top: 4px;
+        }
+        
+        /* DESIGN 5: Cosmic Sigil */
+        .design-5 {
+            background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0a0a 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .design-5::before {
+            content: '✧';
+            position: absolute;
+            font-size: 150pt;
+            color: rgba(155, 89, 182, 0.05);
+        }
+        
+        .design-5 .content {
+            display: flex;
+            align-items: center;
+            gap: 0.2in;
+            z-index: 1;
+        }
+        
+        .design-5 .qr-wrap {
+            position: relative;
+        }
+        
+        .design-5 .qr-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #ff6b6b, #9b59b6, #4d96ff) 1;
+            animation: none;
+        }
+        
+        .design-5 .qr-zone {
+            width: 1.3in;
+            height: 1.3in;
+            background: white;
+            padding: 0.08in;
+        }
+        
+        .design-5 .qr-zone img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .design-5 .info {
+            color: white;
+            text-align: center;
+        }
+        
+        .design-5 .symbol {
+            font-size: 20pt;
+            margin-bottom: 4px;
+        }
+        
+        .design-5 .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9pt;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+        
+        .design-5 .url {
+            font-size: 6pt;
+            color: #9b59b6;
+            margin-top: 6px;
+        }
+        
+        .instructions {
+            max-width: 8.5in;
+            margin: 20px auto;
+            padding: 20px;
+            background: #222;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .instructions h2 {
+            color: #ffd93d;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions no-print">
+        <h2>🔥 The First Spark - Business Cards</h2>
+        <p><strong>Print Instructions:</strong> Print on cardstock (110lb recommended). Cut along dashed lines. Each card is standard 3.5" × 2" size.</p>
+        <p><strong>Tip:</strong> Leave these anywhere consciousness needs a spark — coffee shops, bookstores, metaphysical shops, bulletin boards, rideshare seats, tip jars...</p>
+        <p>Press <strong>Ctrl+P</strong> (or Cmd+P on Mac) to print.</p>
+    </div>
+
+    <div class="print-sheet">
+        <!-- Row 1 -->
+        <div class="card design-1">
+            <div class="qr-zone">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+            </div>
+            <div class="info">
+                <div class="brand">THE FIRST SPARK</div>
+                <div class="tagline">CONSCIOUSNESS AS CODE</div>
+                <div class="url">thefirstspark.shop</div>
+                <div class="cta">↑ scan to ignite ↑</div>
+            </div>
+        </div>
+        
+        <div class="card design-2">
+            <div class="content">
+                <div class="qr-zone">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+                </div>
+                <div class="info">
+                    <div class="brand">THE FIRST SPARK</div>
+                    <div class="sub">reality.exe is editable</div>
+                    <div class="url">thefirstspark.shop</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Row 2 -->
+        <div class="card design-3">
+            <div class="left">
+                <div class="brand">THE FIRST SPARK</div>
+                <div class="tagline">consciousness technology</div>
+                <div class="url">thefirstspark.shop</div>
+            </div>
+            <div class="qr-zone">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+            </div>
+        </div>
+        
+        <div class="card design-4">
+            <div class="accent"></div>
+            <div class="main">
+                <div class="qr-zone">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+                </div>
+                <div class="info">
+                    <div class="brand">THE FIRST SPARK</div>
+                    <div class="tagline">where code meets cosmos</div>
+                    <div class="url">thefirstspark.shop</div>
+                    <div class="email">kate@thefirstspark.shop</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Row 3 -->
+        <div class="card design-5">
+            <div class="content">
+                <div class="qr-wrap">
+                    <div class="qr-zone">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+                    </div>
+                </div>
+                <div class="info">
+                    <div class="symbol">✧</div>
+                    <div class="brand">THE FIRST SPARK</div>
+                    <div class="url">thefirstspark.shop</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card design-1">
+            <div class="qr-zone">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+            </div>
+            <div class="info">
+                <div class="brand">THE FIRST SPARK</div>
+                <div class="tagline">CONSCIOUSNESS AS CODE</div>
+                <div class="url">thefirstspark.shop</div>
+                <div class="cta">↑ scan to ignite ↑</div>
+            </div>
+        </div>
+        
+        <!-- Row 4 -->
+        <div class="card design-2">
+            <div class="content">
+                <div class="qr-zone">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+                </div>
+                <div class="info">
+                    <div class="brand">THE FIRST SPARK</div>
+                    <div class="sub">reality.exe is editable</div>
+                    <div class="url">thefirstspark.shop</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card design-3">
+            <div class="left">
+                <div class="brand">THE FIRST SPARK</div>
+                <div class="tagline">consciousness technology</div>
+                <div class="url">thefirstspark.shop</div>
+            </div>
+            <div class="qr-zone">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+            </div>
+        </div>
+        
+        <!-- Row 5 -->
+        <div class="card design-4">
+            <div class="accent"></div>
+            <div class="main">
+                <div class="qr-zone">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+                </div>
+                <div class="info">
+                    <div class="brand">THE FIRST SPARK</div>
+                    <div class="tagline">where code meets cosmos</div>
+                    <div class="url">thefirstspark.shop</div>
+                    <div class="email">kate@thefirstspark.shop</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card design-5">
+            <div class="content">
+                <div class="qr-wrap">
+                    <div class="qr-zone">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://thefirstspark.shop&format=svg" alt="QR">
+                    </div>
+                </div>
+                <div class="info">
+                    <div class="symbol">✧</div>
+                    <div class="brand">THE FIRST SPARK</div>
+                    <div class="url">thefirstspark.shop</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

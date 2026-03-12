@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invest in The First Spark | $200K Raise Open</title>
+<meta name="description" content="The First Spark — Consciousness Technology Platform. $200K raise for 20% equity. $62K-$108K verified digital assets. SAFE Note. Solo founder, all-in.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --void: #050507;
+  --bone: #E8E0D0;
+  --gold: #C9A227;
+  --gold-dim: #8B7320;
+  --ember: #D4451A;
+  --smoke: #1A1A1C;
+  --ash: #2A2A2E;
+  --mist: #999;
+  --glass: rgba(232, 224, 208, 0.06);
+  --glass-border: rgba(201, 162, 39, 0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--bone);
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+a { color: var(--gold); text-decoration: none; transition: all 0.3s; }
+a:hover { color: var(--bone); }
+
+/* ── NAVIGATION ── */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 3rem;
+  z-index: 100;
+  background: rgba(5, 5, 7, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.nav-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+}
+
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 3rem 4rem;
+  position: relative;
+}
+
+.hero-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.3s;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  line-height: 1.1;
+  color: var(--bone);
+  max-width: 900px;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.5s;
+}
+
+.hero h1 em {
+  color: var(--gold);
+  font-style: normal;
+}
+
+.hero-sub {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: var(--mist);
+  max-width: 550px;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.7s;
+}
+
+.hero-cta {
+  margin-top: 3rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.9s;
+}
+
+.btn-gold {
+  display: inline-block;
+  padding: 0.9rem 2.5rem;
+  background: var(--gold);
+  color: var(--void);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-gold:hover { background: var(--bone); color: var(--void); }
+
+.btn-ghost {
+  display: inline-block;
+  padding: 0.9rem 2.5rem;
+  background: transparent;
+  color: var(--gold);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid var(--gold-dim);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-ghost:hover { border-color: var(--gold); background: rgba(201,162,39,0.08); }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--glass-border);
+  border: 1px solid var(--glass-border);
+  margin: 0 3rem;
+}
+
+.stat-card {
+  background: var(--smoke);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.stat-card.visible { opacity: 1; transform: translateY(0); }
+
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-top: 0.3rem;
+}
+
+/* ── SECTIONS ── */
+.section {
+  padding: 6rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-tag {
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 1.5rem;
+}
+
+.section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+.section h2 em { color: var(--gold); font-style: italic; }
+
+/* ── REAL STORY ── */
+.story-text {
+  color: var(--mist);
+  font-size: 0.85rem;
+  line-height: 2;
+  max-width: 700px;
+}
+
+.story-text p { margin-bottom: 1.5rem; }
+
+.highlight {
+  color: var(--bone);
+  border-left: 2px solid var(--gold);
+  padding-left: 1.5rem;
+  margin: 2.5rem 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* ── ASSET GRID ── */
+.asset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--glass-border);
+  border: 1px solid var(--glass-border);
+  margin-top: 3rem;
+}
+
+.asset-item {
+  background: var(--smoke);
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: background 0.3s;
+}
+.asset-item:hover { background: var(--ash); }
+
+.asset-name {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+.asset-desc {
+  font-size: 0.7rem;
+  color: var(--mist);
+  margin-top: 0.3rem;
+}
+
+.asset-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+/* ── DEAL TERMS ── */
+.terms-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.terms-table tr {
+  border-bottom: 1px solid rgba(201,162,39,0.1);
+}
+
+.terms-table td {
+  padding: 1.2rem 0;
+  vertical-align: top;
+}
+
+.terms-table td:first-child {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mist);
+  width: 40%;
+}
+
+.terms-table td:last-child {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  color: var(--bone);
+  letter-spacing: 0.05em;
+}
+
+.terms-table td:last-child .sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mist);
+  display: block;
+  margin-top: 0.2rem;
+  letter-spacing: 0;
+}
+
+/* ── WHY SECTION ── */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.why-card {
+  border: 1px solid var(--glass-border);
+  padding: 2.5rem 2rem;
+  background: var(--glass);
+  transition: all 0.3s;
+}
+.why-card:hover {
+  border-color: var(--gold-dim);
+  background: rgba(201,162,39,0.04);
+}
+
+.why-card h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.why-card p {
+  font-size: 0.8rem;
+  color: var(--mist);
+  line-height: 1.8;
+}
+
+/* ── FOUNDER ── */
+.founder-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+  margin-top: 3rem;
+}
+
+.founder-facts { list-style: none; }
+.founder-facts li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(201,162,39,0.1);
+  font-size: 0.8rem;
+  color: var(--mist);
+}
+.founder-facts li strong {
+  color: var(--bone);
+  display: inline-block;
+  width: 140px;
+}
+
+/* ── CTA ── */
+.cta-section {
+  text-align: center;
+  padding: 8rem 3rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.cta-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+}
+
+.cta-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.contact-line {
+  margin-top: 3rem;
+  font-size: 0.7rem;
+  color: var(--mist);
+  letter-spacing: 0.1em;
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 3rem;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.6rem;
+  color: var(--mist);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  margin: 0 3rem;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.8s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { gap: 1rem; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  .stats-bar { margin: 0 1.5rem; grid-template-columns: repeat(3, 1fr); }
+  .section { padding: 4rem 1.5rem; }
+  .founder-block { grid-template-columns: 1fr; gap: 2rem; }
+  .asset-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 5rem 1.5rem; }
+  .footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .hero-cta { flex-direction: column; }
+  .btn-gold, .btn-ghost { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">THE FIRST SPARK</div>
+  <div class="nav-links">
+    <a href="index.html">Universe</a>
+    <a href="trinity.html">Trinity</a>
+    <a href="investor-deck-v2.html">Deck</a>
+    <a href="OGmap.html">Roadmap</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">◆ Raise Open — SAFE Note — Feb 2026</div>
+  <h1>One founder.<br>Zero VC.<br><em>$108K in verified assets.</em></h1>
+  <p class="hero-sub">The First Spark is a consciousness technology platform built from nothing by a self-taught programmer and single mother from Akron, Ohio. No team. No runway. No safety net. Just conviction and 57+ shipped tools.</p>
+  <div class="hero-cta">
+    <a href="investor-deck-v2.html" class="btn-gold">View Investor Deck</a>
+    <a href="mailto:kate@thefirstspark.shop?subject=Investment%20Inquiry" class="btn-ghost">Contact Founder</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-num">$200K</div>
+    <div class="stat-label">Raise Amount</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">20%</div>
+    <div class="stat-label">Equity Offered</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">57+</div>
+    <div class="stat-label">Tools Shipped</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">$108K</div>
+    <div class="stat-label">Verified Assets</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">$0</div>
+    <div class="stat-label">VC Taken</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">All In</div>
+  </div>
+</div>
+
+<div class="divider" style="margin-top: 0;"></div>
+
+<!-- THE REAL STORY -->
+<section class="section fade-in">
+  <div class="section-tag">001 — The Real Story</div>
+  <h2>This isn't a pitch deck fairytale.<br><em>This is what actually happened.</em></h2>
+  <div class="story-text">
+    <p>In 2020, during COVID lockdown week, Katelin Puzakulics discovered the identity of the man who murdered her mother in 1991. He had lived across the street from her family for twelve years, attending their gatherings while hiding his crime. She was two years old when it happened.</p>
+    <p>What followed was not a breakdown. It was an awakening. After weeks of processing a truth that would shatter most people, Katelin emerged with a framework for understanding consciousness, reality, and personal transformation that she couldn't find anywhere else — so she built it.</p>
+    <p>With no formal engineering background, no investors, no team, and two sons to raise, she taught herself to code and began shipping tools. Not prototypes. Not mockups. Working, deployed, interactive applications that treat consciousness as programmable and reality as something you can debug.</p>
+
+    <div class="highlight">
+      "I didn't have a co-founder, a pitch coach, or a safety net. I had a painting business, a laptop, and an AI that didn't judge me for thinking reality was code. I stopped painting. I went all in. This is what I built."
+    </div>
+
+    <p>57+ tools later, she has $62K–$108K in verified digital assets, a live platform at thefirstspark.shop, 7 public GitHub repositories, original sigil IP, a full membership infrastructure, and an investor deck that doesn't lie about having 50,000 users.</p>
+    <p>She has zero monthly recurring revenue from a safety-net side hustle. Zero venture capital. Zero employees. She survives on hustle and the support of early believers. This is what all-in actually looks like.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DEAL TERMS -->
+<section class="section fade-in">
+  <div class="section-tag">002 — Deal Terms</div>
+  <h2>The offer is <em>simple.</em></h2>
+
+  <table class="terms-table">
+    <tr>
+      <td>Raise Amount</td>
+      <td>$200,000 <span class="sub">SAFE Note</span></td>
+    </tr>
+    <tr>
+      <td>Equity</td>
+      <td>20% <span class="sub">Post-money basis</span></td>
+    </tr>
+    <tr>
+      <td>Valuation Cap</td>
+      <td>$1,000,000 <span class="sub">Pre-money implied</span></td>
+    </tr>
+    <tr>
+      <td>Instrument</td>
+      <td>SAFE Note <span class="sub">YC Standard Template</span></td>
+    </tr>
+    <tr>
+      <td>Verified Asset Base</td>
+      <td>$62K – $108K <span class="sub">Replacement value, Feb 2026 audit</span></td>
+    </tr>
+    <tr>
+      <td>Monthly Revenue</td>
+      <td>Pre-Revenue <span class="sub">Infrastructure built, monetization ready</span></td>
+    </tr>
+    <tr>
+      <td>Burn Rate</td>
+      <td>$0 <span class="sub">Solo founder, no overhead</span></td>
+    </tr>
+    <tr>
+      <td>Status</td>
+      <td style="color: #4CAF50;">OPEN <span class="sub">Accepting inquiries now</span></td>
+    </tr>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- VERIFIED ASSETS -->
+<section class="section fade-in">
+  <div class="section-tag">003 — Verified Asset Inventory</div>
+  <h2>What your money is <em>buying into.</em></h2>
+  <p class="story-text" style="margin-bottom: 0;">Every dollar figure below represents replacement cost — what it would take to rebuild from scratch at market rates. Independently audited February 2026.</p>
+
+  <div class="asset-grid">
+    <div class="asset-item">
+      <div><div class="asset-name">Interactive Tools Suite</div><div class="asset-desc">57+ deployed web applications</div></div>
+      <div class="asset-value">$15K–$25K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Progressive Web App</div><div class="asset-desc">Full PWA with offline + install</div></div>
+      <div class="asset-value">$8K–$13K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">GitHub Repositories</div><div class="asset-desc">7 public repos, version-controlled</div></div>
+      <div class="asset-value">$8K–$12K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Notion Workspace</div><div class="asset-desc">Operational hub, SOPs, documentation</div></div>
+      <div class="asset-value">$8K–$15K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Brand & IP Portfolio</div><div class="asset-desc">Name, visual identity, domain</div></div>
+      <div class="asset-value">$5K–$10K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Sigil Collection IP</div><div class="asset-desc">Original sacred geometry system</div></div>
+      <div class="asset-value">$3K–$6K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Content Library</div><div class="asset-desc">Videos, copy, educational content</div></div>
+      <div class="asset-value">$5K–$8K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Membership Infrastructure</div><div class="asset-desc">Whop, Stan Store, payment flows</div></div>
+      <div class="asset-value">$3K–$5K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Investor Materials</div><div class="asset-desc">Deck, SAFE, one-pager, projections</div></div>
+      <div class="asset-value">$4K–$8K</div>
+    </div>
+    <div class="asset-item">
+      <div><div class="asset-name">Social & Distribution</div><div class="asset-desc">TikTok, IG, multi-platform presence</div></div>
+      <div class="asset-value">$3K–$6K</div>
+    </div>
+  </div>
+
+  <p style="margin-top: 2rem; font-size: 0.7rem; color: var(--gold-dim); letter-spacing: 0.1em; text-align: right;">TOTAL VERIFIED: $62K – $108K · FEB 2026</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY INVEST -->
+<section class="section fade-in">
+  <div class="section-tag">004 — Investment Thesis</div>
+  <h2>Why this. <em>Why now.</em></h2>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <h3>Anti-Extraction Model</h3>
+      <p>While every platform extracts attention and sells it to advertisers, The First Spark builds tools that give people their agency back. Consciousness tech, not surveillance tech. The market is starving for this.</p>
+    </div>
+    <div class="why-card">
+      <h3>$0 Burn Rate</h3>
+      <p>No office. No employees. No monthly cloud bills eating runway. This means your $200K goes directly into growth — not into keeping the lights on. Every dollar is a building dollar.</p>
+    </div>
+    <div class="why-card">
+      <h3>57+ Shipped Products</h3>
+      <p>This isn't a pitch for something that might get built. The platform is live. The tools are deployed. The infrastructure exists. You're investing in scaling what already works, not funding a hypothesis.</p>
+    </div>
+    <div class="why-card">
+      <h3>Founder-Market Fit</h3>
+      <p>Katelin didn't study this market — she lived it. Personal transformation through trauma, self-taught engineering, solo parenting. The product is autobiography turned into technology. That's irreplicable.</p>
+    </div>
+    <div class="why-card">
+      <h3>AI-Native Build Process</h3>
+      <p>Built with AI from day one, not bolting it on later. The entire development pipeline — from ideation to deployment — is human+AI collaborative. This is the future of how software gets made.</p>
+    </div>
+    <div class="why-card">
+      <h3>Undervalued Entry Point</h3>
+      <p>$1M pre-money valuation for $108K in verified assets, 57+ tools, and a live platform. At any accelerator, this stage would command 3–5x this valuation. You're getting in at the floor.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOUNDER -->
+<section class="section fade-in">
+  <div class="section-tag">005 — Founder</div>
+  <h2>Katelin Jill Puzakulics</h2>
+
+  <div class="founder-block">
+    <div class="story-text">
+      <p>Self-taught programmer. Single mother of two. Founder and sole builder of The First Spark. Former painting business owner who walked away from her only income source to go all-in on consciousness technology.</p>
+      <p>Studied computer programming at University of Akron. Built Kate's Paint LLC from scratch. Helped solve her mother's 1991 cold case murder through DNA genealogy investigation. Channeled the resulting awakening into a technology platform that treats reality as programmable.</p>
+      <p>Operates under Kate's Paint LLC (DBA: The First Spark). Based in Akron, Ohio. Ships faster than most funded teams because there's no committee, no consensus, and no plan B.</p>
+    </div>
+    <ul class="founder-facts">
+      <li><strong>Role</strong>Founder & CEO</li>
+      <li><strong>Location</strong>Akron, Ohio</li>
+      <li><strong>Entity</strong>Kate's Paint LLC (DBA)</li>
+      <li><strong>Education</strong>University of Akron — CS</li>
+      <li><strong>Background</strong>Self-taught engineer</li>
+      <li><strong>Tools Shipped</strong>57+ and counting</li>
+      <li><strong>VC Raised</strong>$0</li>
+      <li><strong>Status</strong>100% all-in</li>
+      <li><strong>Contact</strong>kate@thefirstspark.shop</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section fade-in">
+  <div class="section-tag">◆</div>
+  <h2>The raise is open.<br><em>The window won't stay open forever.</em></h2>
+  <p style="color: var(--mist); max-width: 500px; margin: 0 auto; font-size: 0.85rem;">$200K for 20% equity. SAFE Note. No games, no inflated metrics, no fairytales. Just a builder who needs fuel.</p>
+
+  <div class="cta-links">
+    <a href="investor-deck-v2.html" class="btn-gold">Investor Deck</a>
+    <a href="trinity.html" class="btn-ghost">See the Platform</a>
+    <a href="mailto:kate@thefirstspark.shop?subject=Investment%20Inquiry" class="btn-ghost">Email Founder</a>
+  </div>
+
+  <p class="contact-line">kate@thefirstspark.shop · thefirstspark.shop · Akron, Ohio</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span>© 2026 The First Spark · Kate's Paint LLC</span>
+  <span>Verified Feb 2026 · All figures represent replacement value</span>
+</footer>
+
+<script>
+// Intersection Observer for fade-in animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-in, .stat-card').forEach(el => observer.observe(el));
+
+// Stagger stat cards
+document.querySelectorAll('.stat-card').forEach((card, i) => {
+  card.style.transitionDelay = `${i * 0.1}s`;
+});
+</script>
+
+</body>
+</html>

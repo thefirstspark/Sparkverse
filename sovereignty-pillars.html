@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Four Pillars of Sovereignty | The First Spark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0E0F1A 0%, #1a1b2e 100%);
+            color: #F7F1E1;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 2px solid #FFC857;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #FFC857;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #6FFFE9;
+            margin-bottom: 20px;
+        }
+
+        .progress-overview {
+            background: rgba(255, 200, 87, 0.1);
+            border: 2px solid #FFC857;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(14, 15, 26, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFC857 0%, #6FFFE9 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #0E0F1A;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+
+        .stat {
+            background: rgba(14, 15, 26, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            color: #6FFFE9;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #F7F1E1;
+            opacity: 0.8;
+        }
+
+        .pillar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #C792EA;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .pillar.completed {
+            border-color: #6FFFE9;
+            background: rgba(111, 255, 233, 0.1);
+        }
+
+        .pillar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .pillar-title {
+            font-size: 1.8em;
+            color: #C792EA;
+        }
+
+        .pillar.completed .pillar-title {
+            color: #6FFFE9;
+        }
+
+        .pillar-status {
+            font-size: 1.2em;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: rgba(199, 146, 234, 0.2);
+        }
+
+        .pillar.completed .pillar-status {
+            background: rgba(111, 255, 233, 0.2);
+            color: #6FFFE9;
+        }
+
+        .weeks {
+            display: grid;
+            gap: 15px;
+        }
+
+        .week {
+            background: rgba(14, 15, 26, 0.5);
+            border: 1px solid rgba(255, 200, 87, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .week.completed {
+            border-color: #6FFFE9;
+            background: rgba(111, 255, 233, 0.05);
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .week-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #FFC857;
+        }
+
+        .week.completed .week-title {
+            color: #6FFFE9;
+        }
+
+        .week-content {
+            color: #F7F1E1;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .exercise-title {
+            font-style: italic;
+            color: #C792EA;
+            margin-bottom: 10px;
+        }
+
+        .save-ring {
+            background: rgba(255, 200, 87, 0.1);
+            border-left: 3px solid #FFC857;
+            padding: 15px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .complete-btn {
+            background: linear-gradient(135deg, #FFC857 0%, #6FFFE9 100%);
+            color: #0E0F1A;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .complete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 200, 87, 0.4);
+        }
+
+        .complete-btn.completed {
+            background: rgba(111, 255, 233, 0.3);
+            color: #6FFFE9;
+            cursor: default;
+        }
+
+        .complete-btn.completed:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .seal {
+            text-align: center;
+            padding: 60px 30px;
+            background: linear-gradient(135deg, rgba(255, 200, 87, 0.1) 0%, rgba(111, 255, 233, 0.1) 100%);
+            border: 3px solid #6FFFE9;
+            border-radius: 12px;
+            margin-top: 40px;
+        }
+
+        .seal h2 {
+            font-size: 2.5em;
+            color: #6FFFE9;
+            margin-bottom: 20px;
+        }
+
+        .seal-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .reset-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: #F7F1E1;
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .pillar-title {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👑 The Four Pillars of Sovereignty</h1>
+            <p class="subtitle">Agency Within Reality | The First Spark</p>
+        </header>
+
+        <div class="progress-overview">
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress">0%</div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="completedWeeks">0</div>
+                    <div class="stat-label">Weeks Complete</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="completedPillars">0</div>
+                    <div class="stat-label">Pillars Complete</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="saveRings">0</div>
+                    <div class="stat-label">Save Rings</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pillars"></div>
+
+        <div id="seal" style="display: none;" class="seal">
+            <div class="seal-icon">👑</div>
+            <h2>Sovereignty Seal Earned</h2>
+            <p style="font-size: 1.2em; margin-top: 20px;">You've built the foundation that can't be taken from you.</p>
+            <p style="margin-top: 20px; color: #6FFFE9;">The Sovereign recognizes: I control my resources, own my time, ship my work, and hold clear boundaries.</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
+        </div>
+    </div>
+
+    <script>
+        const pillarsData = [
+            {
+                id: 'economic',
+                title: '💰 Pillar I: Economic Sovereignty',
+                subtitle: 'Control your resources. Money as tool, not master.',
+                weeks: [
+                    {
+                        title: 'Week 1: Resource Audit',
+                        exercise: 'The Honest Inventory',
+                        content: 'Answer without judgment: How many months can you survive with zero income? What are your actual monthly expenses? What skills could someone pay for today? What assets do you control?',
+                        saveRing: 'Complete resource audit. Know your ground truth.'
+                    },
+                    {
+                        title: 'Week 2: The Sovereignty Fund',
+                        exercise: 'Separate the Sacred',
+                        content: 'Open a separate account called THE SOVEREIGNTY FUND. This is your "I can say no" fund. Seed it with any amount. Route unexpected income here.',
+                        saveRing: 'Sovereignty Fund opened and seeded.'
+                    },
+                    {
+                        title: 'Week 3: Income Diversification Map',
+                        exercise: 'Three Revenue Streams',
+                        content: 'Map your path to three streams: Primary (main income), Secondary (skills-based side income), Passive/Asset (product, content, investment).',
+                        saveRing: 'Three-stream revenue map documented.'
+                    },
+                    {
+                        title: 'Week 4: The Quick Cash Protocol',
+                        exercise: '$500 in 7 Days',
+                        content: 'Prove you can generate money outside your primary source. Pick: Service (≥$50/hr), Product ($27-$47 digital), or Connector (intro fee). Route 100% to Sovereignty Fund.',
+                        saveRing: '$500 generated outside primary income stream.'
+                    }
+                ]
+            },
+            {
+                id: 'temporal',
+                title: '⏰ Pillar II: Temporal Sovereignty',
+                subtitle: 'Reclaim your attention. Time as sacred, not stolen.',
+                weeks: [
+                    {
+                        title: 'Week 1: Time Audit',
+                        exercise: 'Where It Actually Goes',
+                        content: 'Track your time for 7 days. Every hour. Categories: Deep work, Shallow work, Maintenance, Recovery, Stolen. Calculate percentages.',
+                        saveRing: 'Complete 7-day time audit.'
+                    },
+                    {
+                        title: 'Week 2: The Sacred Block',
+                        exercise: 'Non-Negotiable Time',
+                        content: 'Claim ONE 90-minute block per day with zero interruptions. No phone, notifications, or meetings. Use for building, creating, thinking.',
+                        saveRing: '5 consecutive days with protected 90-minute block.'
+                    },
+                    {
+                        title: 'Week 3: The Attention Fortress',
+                        exercise: 'Digital Boundaries',
+                        content: 'Remove/limit social apps (max 30 min/day), close email except 2x daily, turn off all notifications except key contacts, batch meetings. Reclaim 2+ hours.',
+                        saveRing: 'Attention fortress protocols active for 7 days.'
+                    },
+                    {
+                        title: 'Week 4: The Calendar Takeover',
+                        exercise: 'Design Your Ideal Week',
+                        content: 'Create your Ideal Week template: When deep work? Shallow work? Rest? Connection? What percentage each? Audit actual vs ideal.',
+                        saveRing: 'Ideal Week designed and implemented for 5 days.'
+                    }
+                ]
+            },
+            {
+                id: 'creative',
+                title: '🎨 Pillar III: Creative Sovereignty',
+                subtitle: 'Own your output. Expression without permission.',
+                weeks: [
+                    {
+                        title: 'Week 1: Output Audit',
+                        exercise: 'Creation vs. Consumption',
+                        content: 'Track for 7 days: Hours consuming vs. hours creating. Calculate Creation Ratio: (Create hours / Total hours) × 100. Target: 20%+.',
+                        saveRing: '7-day creation ratio calculated.'
+                    },
+                    {
+                        title: 'Week 2: The Daily Ship',
+                        exercise: 'Ship Something Every Day',
+                        content: 'For 7 consecutive days, create and ship something small publicly: paragraph, sketch, photo+caption, video, thought. Doesn\'t matter if it\'s "good."',
+                        saveRing: '7 consecutive days of public creation.'
+                    },
+                    {
+                        title: 'Week 3: Own Your Distribution',
+                        exercise: 'Build Your Channel',
+                        content: 'Set up ONE owned channel: Email list (Beehiiv/ConvertKit), Website/blog (Notion public), or GitHub repo. Post your first piece of content.',
+                        saveRing: 'Owned distribution channel live with first post.'
+                    },
+                    {
+                        title: 'Week 4: The Creative System',
+                        exercise: 'Repeatable Process',
+                        content: 'Design your system: When create? Where? How capture ideas? How ship? Document it. Run for 7 days.',
+                        saveRing: 'Creative system documented and executed for 7 days.'
+                    }
+                ]
+            },
+            {
+                id: 'relational',
+                title: '🤝 Pillar IV: Relational Sovereignty',
+                subtitle: 'Set clear boundaries. Connection without collapse.',
+                weeks: [
+                    {
+                        title: 'Week 1: Relationship Audit',
+                        exercise: 'Energy Inventory',
+                        content: 'List significant relationships. For each: Energize or drain? Show up as self or perform? Boundaries clear? Mutual or extractive? Sort: Energizing, Neutral, Draining.',
+                        saveRing: 'Complete relationship energy audit.'
+                    },
+                    {
+                        title: 'Week 2: Boundary Setting',
+                        exercise: 'The First No',
+                        content: 'Decline 3 requests without explanation or apology. Use: "I\'m not available for that," "That doesn\'t work for me," "I\'m focusing elsewhere." No justification.',
+                        saveRing: '3 clear boundaries set with no apology.'
+                    },
+                    {
+                        title: 'Week 3: Energy Protection',
+                        exercise: 'Shielding Practice',
+                        content: 'Before draining situations: Ground (3 breaths), Claim ("My energy is mine"), Shield (visualize boundary). After: Release (shake/wash), Reset (5 min alone). Practice 5x.',
+                        saveRing: '5 energy protection cycles completed.'
+                    },
+                    {
+                        title: 'Week 4: Sovereign Connection',
+                        exercise: 'Relationships by Design',
+                        content: 'Identify 3 relationships to deepen. For each: What makes it energizing? How show up more fully? What would deeper look like? Reach out intentionally.',
+                        saveRing: 'Intentional connection with 3 chosen relationships.'
+                    }
+                ]
+            }
+        ];
+
+        let progress = JSON.parse(localStorage.getItem('sovereigntyProgress') || '{}');
+
+        function initProgress() {
+            pillarsData.forEach(pillar => {
+                if (!progress[pillar.id]) {
+                    progress[pillar.id] = pillar.weeks.map(() => false);
+                }
+            });
+            saveProgress();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('sovereigntyProgress', JSON.stringify(progress));
+            updateStats();
+        }
+
+        function toggleWeek(pillarId, weekIndex) {
+            progress[pillarId][weekIndex] = !progress[pillarId][weekIndex];
+            saveProgress();
+            renderPillars();
+        }
+
+        function updateStats() {
+            let totalWeeks = 0;
+            let completedWeeks = 0;
+            let completedPillars = 0;
+
+            pillarsData.forEach(pillar => {
+                totalWeeks += pillar.weeks.length;
+                const pillarProgress = progress[pillar.id] || [];
+                const pillarComplete = pillarProgress.filter(w => w).length;
+                completedWeeks += pillarComplete;
+                if (pillarComplete === pillar.weeks.length) {
+                    completedPillars++;
+                }
+            });
+
+            const percentage = Math.round((completedWeeks / totalWeeks) * 100);
+            
+            document.getElementById('overallProgress').textContent = percentage + '%';
+            document.getElementById('overallProgress').style.width = percentage + '%';
+            document.getElementById('completedWeeks').textContent = completedWeeks;
+            document.getElementById('completedPillars').textContent = completedPillars;
+            document.getElementById('saveRings').textContent = completedWeeks;
+
+            // Show seal if all complete
+            if (completedWeeks === totalWeeks) {
+                document.getElementById('seal').style.display = 'block';
+            } else {
+                document.getElementById('seal').style.display = 'none';
+            }
+        }
+
+        function renderPillars() {
+            const container = document.getElementById('pillars');
+            container.innerHTML = '';
+
+            pillarsData.forEach(pillar => {
+                const pillarProgress = progress[pillar.id] || [];
+                const completedCount = pillarProgress.filter(w => w).length;
+                const isComplete = completedCount === pillar.weeks.length;
+
+                const pillarEl = document.createElement('div');
+                pillarEl.className = 'pillar' + (isComplete ? ' completed' : '');
+                
+                pillarEl.innerHTML = `
+                    <div class="pillar-header">
+                        <div>
+                            <div class="pillar-title">${pillar.title}</div>
+                            <div style="color: #F7F1E1; opacity: 0.8; margin-top: 5px;">${pillar.subtitle}</div>
+                        </div>
+                        <div class="pillar-status">${completedCount}/${pillar.weeks.length}</div>
+                    </div>
+                    <div class="weeks" id="${pillar.id}-weeks"></div>
+                `;
+
+                container.appendChild(pillarEl);
+
+                const weeksContainer = document.getElementById(`${pillar.id}-weeks`);
+                
+                pillar.weeks.forEach((week, index) => {
+                    const isWeekComplete = pillarProgress[index];
+                    
+                    const weekEl = document.createElement('div');
+                    weekEl.className = 'week' + (isWeekComplete ? ' completed' : '');
+                    
+                    weekEl.innerHTML = `
+                        <div class="week-header">
+                            <div class="week-title">${week.title}</div>
+                        </div>
+                        <div class="exercise-title">${week.exercise}</div>
+                        <div class="week-content">${week.content}</div>
+                        <div class="save-ring">💾 Save Ring: ${week.saveRing}</div>
+                        <button class="complete-btn ${isWeekComplete ? 'completed' : ''}" 
+                                onclick="toggleWeek('${pillar.id}', ${index})">
+                            ${isWeekComplete ? '✓ Completed' : 'Mark Complete'}
+                        </button>
+                    `;
+                    
+                    weeksContainer.appendChild(weekEl);
+                });
+            });
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                localStorage.removeItem('sovereigntyProgress');
+                progress = {};
+                initProgress();
+                renderPillars();
+            }
+        }
+
+        // Initialize
+        initProgress();
+        renderPillars();
+    </script>
+</body>
+</html>

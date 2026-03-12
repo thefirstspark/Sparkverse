@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereignty Dashboard - The First Spark</title>
+    <meta name="description" content="Your weekly reality checkpoint. Track reciprocity, energy, patterns, and sovereignty across all areas of life.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --deep-space: #0a0a1a;
+            --dark-navy: #1a1a2e;
+            --electric-blue: #00d4ff;
+            --neon-cyan: #00ffff;
+            --neon-magenta: #ff00ff;
+            --neon-purple: #9d00ff;
+            --white: #ffffff;
+            --gray-light: #e0e0e0;
+            --gray-mid: #808080;
+            --gray-dark: #2a2a2a;
+            --accent-gold: #ffd700;
+            --accent-orange: #ff6b35;
+            --accent-green: #00ff88;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Starfield */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #starCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem 0;
+            border-bottom: 2px solid var(--electric-blue);
+        }
+
+        h1 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.5rem;
+            color: var(--electric-blue);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px var(--electric-blue);
+        }
+
+        .tagline {
+            color: var(--neon-cyan);
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .nav-home {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            color: var(--electric-blue);
+            text-decoration: none;
+            border: 2px solid var(--electric-blue);
+            transition: all 0.3s ease;
+        }
+
+        .nav-home:hover {
+            background: var(--electric-blue);
+            color: var(--black);
+            box-shadow: 0 0 20px var(--electric-blue);
+        }
+
+        /* Week Selector */
+        .week-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--deep-space);
+            border: 2px solid var(--electric-blue);
+            margin-bottom: 2rem;
+        }
+
+        .week-selector h2 {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--neon-cyan);
+        }
+
+        .week-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .week-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--electric-blue);
+            border: 2px solid var(--electric-blue);
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .week-btn:hover {
+            background: var(--electric-blue);
+            color: var(--black);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: var(--gray-light);
+            border: 2px solid var(--gray-dark);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tab:hover {
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+        }
+
+        .tab.active {
+            background: var(--electric-blue);
+            color: var(--black);
+            border-color: var(--electric-blue);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section */
+        .section {
+            background: var(--deep-space);
+            border: 2px solid var(--electric-blue);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h3 {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            color: var(--gray-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Button */
+        .btn {
+            padding: 0.75rem 2rem;
+            background: var(--electric-blue);
+            color: var(--black);
+            border: 2px solid var(--electric-blue);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+        }
+
+        .btn:hover {
+            background: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--electric-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--electric-blue);
+            color: var(--black);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-number {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number.positive { color: var(--accent-green); }
+        .stat-number.negative { color: var(--neon-magenta); }
+        .stat-number.neutral { color: var(--neon-cyan); }
+
+        .stat-label {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Energy Tracker */
+        .energy-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .energy-bar {
+            height: 30px;
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .energy-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .energy-fill.gain { background: var(--accent-green); }
+        .energy-fill.drain { background: var(--neon-magenta); }
+
+        /* Reciprocity Items */
+        .reciprocity-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            margin-bottom: 1rem;
+        }
+
+        .reciprocity-item.balanced {
+            border-color: var(--accent-green);
+        }
+
+        .reciprocity-item.extracting {
+            border-color: var(--neon-magenta);
+        }
+
+        .reciprocity-item.giving {
+            border-color: var(--electric-blue);
+        }
+
+        /* Pattern List */
+        .pattern-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .pattern-card {
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-card:hover {
+            border-color: var(--neon-magenta);
+            transform: translateX(5px);
+        }
+
+        .pattern-title {
+            color: var(--neon-magenta);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pattern-description {
+            color: var(--gray-light);
+            font-size: 0.95rem;
+        }
+
+        .pattern-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-mid);
+        }
+
+        /* Sovereignty Pillars */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .pillar-card {
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            padding: 1.5rem;
+        }
+
+        .pillar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .pillar-name {
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        .pillar-score {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .pillar-progress {
+            height: 8px;
+            background: var(--gray-dark);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--electric-blue), var(--neon-cyan));
+            transition: width 0.3s ease;
+        }
+
+        .pillar-notes {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Weekly Report */
+        .report-section {
+            margin-bottom: 2rem;
+        }
+
+        .report-section h4 {
+            color: var(--electric-blue);
+            margin-bottom: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .report-content {
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            padding: 1.5rem;
+            color: var(--gray-light);
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* List Items */
+        .list-item {
+            background: var(--black);
+            border: 2px solid var(--gray-dark);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item-content {
+            flex: 1;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: var(--neon-magenta);
+            border-color: var(--neon-magenta);
+        }
+
+        .btn-delete:hover {
+            background: var(--neon-magenta);
+            color: var(--black);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .tabs { flex-direction: column; }
+            .tab { width: 100%; }
+            .energy-item,
+            .reciprocity-item {
+                grid-template-columns: 1fr;
+            }
+            .week-selector {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-mid);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Starfield Background -->
+    <div class="starfield">
+        <canvas id="starCanvas"></canvas>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>◇ SOVEREIGNTY DASHBOARD ◇</h1>
+            <p class="tagline">"Reality is programmable. You're the first spark."</p>
+            <p style="color: var(--gray-light); margin-bottom: 1rem;">Your weekly reality checkpoint. Track reciprocity, energy, patterns, and sovereignty.</p>
+            <a href="index.html" class="nav-home">← Back to Home</a>
+        </header>
+
+        <!-- Week Selector -->
+        <div class="week-selector">
+            <h2 id="currentWeek">Week of Jan 21, 2025</h2>
+            <div class="week-nav">
+                <button class="week-btn" onclick="dashboard.previousWeek()">← Previous</button>
+                <button class="week-btn" onclick="dashboard.currentWeek()">This Week</button>
+                <button class="week-btn" onclick="dashboard.nextWeek()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="overview">✦ Overview</button>
+            <button class="tab" data-tab="reciprocity">◇ Reciprocity</button>
+            <button class="tab" data-tab="energy">⚡ Energy</button>
+            <button class="tab" data-tab="patterns">◆ Patterns</button>
+            <button class="tab" data-tab="pillars">✧ Sovereignty Pillars</button>
+            <button class="tab" data-tab="weekly">📅 Weekly Review</button>
+        </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number neutral" id="overview-sovereignty">0</div>
+                    <div class="stat-label">Sovereignty Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="overview-reciprocity">0</div>
+                    <div class="stat-label">Reciprocity Balance</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="overview-energy">0</div>
+                    <div class="stat-label">Net Energy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number neutral" id="overview-patterns">0</div>
+                    <div class="stat-label">Patterns Tracked</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>⚡ Quick Snapshot</h3>
+                <div id="quickSnapshot" class="report-content">
+                    <p>Complete your weekly check-in to see your sovereignty snapshot.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECIPROCITY TAB -->
+        <div id="tab-reciprocity" class="tab-content">
+            <div class="section">
+                <h3>◇ Reciprocity Ledger</h3>
+                <p style="color: var(--gray-light); margin-bottom: 2rem;">Track energetic exchanges. Who/what gives to you? Who/what do you give to? Are you in balance or being extracted from?</p>
+
+                <form id="reciprocityForm">
+                    <div class="form-group">
+                        <label>Relationship/Entity *</label>
+                        <input type="text" id="recip-entity" placeholder="e.g., Instagram, Mom, Work Project" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>What I Give (Energy, Time, Money, Attention)</label>
+                            <select id="recip-give">
+                                <option value="1">Very Little (1)</option>
+                                <option value="2">Some (2)</option>
+                                <option value="3">Moderate (3)</option>
+                                <option value="4">Significant (4)</option>
+                                <option value="5">Massive (5)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What I Receive (Value, Support, Joy, Growth)</label>
+                            <select id="recip-receive">
+                                <option value="1">Very Little (1)</option>
+                                <option value="2">Some (2)</option>
+                                <option value="3">Moderate (3)</option>
+                                <option value="4">Significant (4)</option>
+                                <option value="5">Massive (5)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="recip-notes" placeholder="How does this relationship feel? Balanced, draining, or nourishing?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">ADD TO LEDGER</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h3>📊 Your Reciprocity Map</h3>
+                <div id="reciprocityList"></div>
+            </div>
+        </div>
+
+        <!-- ENERGY TAB -->
+        <div id="tab-energy" class="tab-content">
+            <div class="section">
+                <h3>⚡ Energy Audit</h3>
+                <p style="color: var(--gray-light); margin-bottom: 2rem;">Track where your energy goes this week. What fills you? What drains you?</p>
+
+                <form id="energyForm">
+                    <div class="form-group">
+                        <label>Activity/Person/Project *</label>
+                        <input type="text" id="energy-activity" placeholder="e.g., Morning meditation, Client calls, Scrolling TikTok" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="energy-type">
+                            <option value="gain">Energy Gain (Fills me)</option>
+                            <option value="drain">Energy Drain (Depletes me)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Intensity (1-10)</label>
+                        <input type="number" id="energy-intensity" min="1" max="10" value="5">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Time Investment (hours/week)</label>
+                        <input type="number" id="energy-hours" min="0" step="0.5" placeholder="Hours spent">
+                    </div>
+
+                    <button type="submit" class="btn">LOG ENERGY</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h3>📊 Energy Flow This Week</h3>
+                <div id="energyList"></div>
+                <div id="energyBalance" style="margin-top: 2rem;"></div>
+            </div>
+        </div>
+
+        <!-- PATTERNS TAB -->
+        <div id="tab-patterns" class="tab-content">
+            <div class="section">
+                <h3>◆ Pattern Recognition</h3>
+                <p style="color: var(--gray-light); margin-bottom: 2rem;">What repeated this week? Behaviors, thoughts, emotions, situations. Seeing patterns is the first step to breaking loops.</p>
+
+                <form id="patternForm">
+                    <div class="form-group">
+                        <label>Pattern Title *</label>
+                        <input type="text" id="pattern-title" placeholder="e.g., Sunday Anxiety, Post-Lunch Energy Crash" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pattern Description</label>
+                        <textarea id="pattern-description" placeholder="What happens? When? What triggers it? What's the loop?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pattern Type</label>
+                        <select id="pattern-type">
+                            <option value="Behavioral">Behavioral (Actions)</option>
+                            <option value="Emotional">Emotional (Feelings)</option>
+                            <option value="Mental">Mental (Thoughts)</option>
+                            <option value="Social">Social (People/Relationships)</option>
+                            <option value="Temporal">Temporal (Time-based)</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Frequency</label>
+                        <select id="pattern-frequency">
+                            <option value="Daily">Daily</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Sporadic">Sporadic</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn">LOG PATTERN</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h3>📊 Patterns Detected</h3>
+                <div id="patternList" class="pattern-list"></div>
+            </div>
+        </div>
+
+        <!-- SOVEREIGNTY PILLARS TAB -->
+        <div id="tab-pillars" class="tab-content">
+            <div class="section">
+                <h3>✧ The 8 Sovereignty Pillars</h3>
+                <p style="color: var(--gray-light); margin-bottom: 2rem;">Rate each area of your life (1-10). Track progress week over week.</p>
+
+                <div class="pillars-grid" id="pillarsGrid">
+                    <!-- Pillars will be generated dynamically -->
+                </div>
+
+                <div class="action-bar">
+                    <button class="btn" onclick="dashboard.savePillars()">SAVE PILLAR SCORES</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WEEKLY REVIEW TAB -->
+        <div id="tab-weekly" class="tab-content">
+            <div class="section">
+                <h3>📅 Weekly Reality Checkpoint</h3>
+                <p style="color: var(--gray-light); margin-bottom: 2rem;">Your complete week at a glance. Review, reflect, recalibrate.</p>
+
+                <div class="report-section">
+                    <h4>⚡ Energy Summary</h4>
+                    <div id="weekly-energy" class="report-content"></div>
+                </div>
+
+                <div class="report-section">
+                    <h4>◇ Reciprocity Summary</h4>
+                    <div id="weekly-reciprocity" class="report-content"></div>
+                </div>
+
+                <div class="report-section">
+                    <h4>◆ Pattern Summary</h4>
+                    <div id="weekly-patterns" class="report-content"></div>
+                </div>
+
+                <div class="report-section">
+                    <h4>✧ Sovereignty Summary</h4>
+                    <div id="weekly-sovereignty" class="report-content"></div>
+                </div>
+
+                <div class="report-section">
+                    <h4>✦ Wins & Lessons</h4>
+                    <textarea id="weekly-wins" placeholder="What went well? What did you learn?" style="width: 100%; min-height: 100px;"></textarea>
+                </div>
+
+                <div class="report-section">
+                    <h4>🎯 Next Week Intentions</h4>
+                    <textarea id="weekly-intentions" placeholder="What do you want to focus on next week?" style="width: 100%; min-height: 100px;"></textarea>
+                </div>
+
+                <div class="action-bar">
+                    <button class="btn" onclick="dashboard.saveWeeklyReview()">SAVE WEEKLY REVIEW</button>
+                    <button class="btn btn-secondary" onclick="dashboard.exportWeek()">EXPORT THIS WEEK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="section" style="text-align: center; margin-top: 3rem;">
+            <h3 style="margin-bottom: 1rem;">◆ Data Management</h3>
+            <div class="action-bar" style="justify-content: center;">
+                <button class="btn btn-secondary" onclick="dashboard.exportAllData()">Export All Data</button>
+                <button class="btn btn-secondary" onclick="dashboard.clearAllData()">Clear All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Starfield
+        function createStarfield() {
+            const canvas = document.getElementById('starCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const starCount = 200;
+            const stars = [];
+
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3,
+                    opacity: Math.random(),
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 2 + Math.random() * 2
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const time = Date.now() * 0.001;
+
+                stars.forEach(star => {
+                    const twinkle = (Math.sin(time * star.speed + star.phase) + 1) / 2;
+                    const opacity = 0.3 + (twinkle * 0.7);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        // Dashboard Manager
+        class SovereigntyDashboard {
+            constructor() {
+                this.currentWeekOffset = 0;
+                this.data = this.loadData();
+                this.pillars = [
+                    { name: 'Physical Health', icon: '💪' },
+                    { name: 'Mental Clarity', icon: '🧠' },
+                    { name: 'Emotional Balance', icon: '❤️' },
+                    { name: 'Financial Sovereignty', icon: '💰' },
+                    { name: 'Relationships', icon: '👥' },
+                    { name: 'Purpose & Work', icon: '🎯' },
+                    { name: 'Spiritual Connection', icon: '✨' },
+                    { name: 'Environment', icon: '🏠' }
+                ];
+                this.init();
+            }
+
+            init() {
+                this.setupTabs();
+                this.setupForms();
+                this.updateWeekDisplay();
+                this.renderPillars();
+                this.renderAll();
+            }
+
+            loadData() {
+                const stored = localStorage.getItem('sovereigntyDashboard');
+                return stored ? JSON.parse(stored) : { weeks: {} };
+            }
+
+            saveData() {
+                localStorage.setItem('sovereigntyDashboard', JSON.stringify(this.data));
+            }
+
+            getWeekKey() {
+                const now = new Date();
+                now.setDate(now.getDate() + (this.currentWeekOffset * 7));
+                const year = now.getFullYear();
+                const week = this.getWeekNumber(now);
+                return `${year}-W${week}`;
+            }
+
+            getWeekNumber(date) {
+                const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                const dayNum = d.getUTCDay() || 7;
+                d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+                const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+                return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            }
+
+            getWeekData() {
+                const key = this.getWeekKey();
+                if (!this.data.weeks[key]) {
+                    this.data.weeks[key] = {
+                        reciprocity: [],
+                        energy: [],
+                        patterns: [],
+                        pillars: {},
+                        wins: '',
+                        intentions: ''
+                    };
+                }
+                return this.data.weeks[key];
+            }
+
+            updateWeekDisplay() {
+                const now = new Date();
+                now.setDate(now.getDate() + (this.currentWeekOffset * 7));
+                const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                const weekStart = new Date(now);
+                weekStart.setDate(now.getDate() - now.getDay());
+                document.getElementById('currentWeek').textContent = `Week of ${weekStart.toLocaleDateString('en-US', options)}`;
+            }
+
+            previousWeek() {
+                this.currentWeekOffset--;
+                this.updateWeekDisplay();
+                this.renderAll();
+            }
+
+            currentWeek() {
+                this.currentWeekOffset = 0;
+                this.updateWeekDisplay();
+                this.renderAll();
+            }
+
+            nextWeek() {
+                this.currentWeekOffset++;
+                this.updateWeekDisplay();
+                this.renderAll();
+            }
+
+            setupTabs() {
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+
+                        if (tab.dataset.tab === 'weekly') {
+                            this.renderWeeklyReview();
+                        }
+                    });
+                });
+            }
+
+            setupForms() {
+                // Reciprocity Form
+                document.getElementById('reciprocityForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const weekData = this.getWeekData();
+                    weekData.reciprocity.push({
+                        entity: document.getElementById('recip-entity').value,
+                        give: parseInt(document.getElementById('recip-give').value),
+                        receive: parseInt(document.getElementById('recip-receive').value),
+                        notes: document.getElementById('recip-notes').value,
+                        timestamp: new Date().toISOString()
+                    });
+                    this.saveData();
+                    e.target.reset();
+                    this.renderReciprocity();
+                    this.renderOverview();
+                });
+
+                // Energy Form
+                document.getElementById('energyForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const weekData = this.getWeekData();
+                    weekData.energy.push({
+                        activity: document.getElementById('energy-activity').value,
+                        type: document.getElementById('energy-type').value,
+                        intensity: parseInt(document.getElementById('energy-intensity').value),
+                        hours: parseFloat(document.getElementById('energy-hours').value) || 0,
+                        timestamp: new Date().toISOString()
+                    });
+                    this.saveData();
+                    e.target.reset();
+                    this.renderEnergy();
+                    this.renderOverview();
+                });
+
+                // Pattern Form
+                document.getElementById('patternForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const weekData = this.getWeekData();
+                    weekData.patterns.push({
+                        title: document.getElementById('pattern-title').value,
+                        description: document.getElementById('pattern-description').value,
+                        type: document.getElementById('pattern-type').value,
+                        frequency: document.getElementById('pattern-frequency').value,
+                        timestamp: new Date().toISOString()
+                    });
+                    this.saveData();
+                    e.target.reset();
+                    this.renderPatterns();
+                    this.renderOverview();
+                });
+            }
+
+            renderAll() {
+                this.renderOverview();
+                this.renderReciprocity();
+                this.renderEnergy();
+                this.renderPatterns();
+                this.renderPillars();
+            }
+
+            renderOverview() {
+                const weekData = this.getWeekData();
+
+                // Calculate metrics
+                const sovereigntyScore = this.calculateSovereigntyScore();
+                const reciprocityBalance = this.calculateReciprocityBalance();
+                const netEnergy = this.calculateNetEnergy();
+                const patternCount = weekData.patterns.length;
+
+                // Update overview stats
+                document.getElementById('overview-sovereignty').textContent = sovereigntyScore + '/10';
+                document.getElementById('overview-reciprocity').textContent = reciprocityBalance > 0 ? `+${reciprocityBalance}` : reciprocityBalance;
+                document.getElementById('overview-energy').textContent = netEnergy > 0 ? `+${netEnergy}` : netEnergy;
+                document.getElementById('overview-patterns').textContent = patternCount;
+
+                // Color coding
+                const recipElem = document.getElementById('overview-reciprocity');
+                recipElem.className = 'stat-number ' + (reciprocityBalance > 0 ? 'positive' : reciprocityBalance < 0 ? 'negative' : 'neutral');
+
+                const energyElem = document.getElementById('overview-energy');
+                energyElem.className = 'stat-number ' + (netEnergy > 0 ? 'positive' : netEnergy < 0 ? 'negative' : 'neutral');
+
+                // Quick snapshot
+                const snapshot = this.generateSnapshot();
+                document.getElementById('quickSnapshot').innerHTML = snapshot;
+            }
+
+            calculateSovereigntyScore() {
+                const weekData = this.getWeekData();
+                const scores = Object.values(weekData.pillars);
+                if (scores.length === 0) return 0;
+                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+                return Math.round(avg * 10) / 10;
+            }
+
+            calculateReciprocityBalance() {
+                const weekData = this.getWeekData();
+                let balance = 0;
+                weekData.reciprocity.forEach(item => {
+                    balance += (item.receive - item.give);
+                });
+                return balance;
+            }
+
+            calculateNetEnergy() {
+                const weekData = this.getWeekData();
+                let net = 0;
+                weekData.energy.forEach(item => {
+                    const value = item.intensity * (item.hours || 1);
+                    net += item.type === 'gain' ? value : -value;
+                });
+                return Math.round(net);
+            }
+
+            generateSnapshot() {
+                const weekData = this.getWeekData();
+                if (weekData.reciprocity.length === 0 && weekData.energy.length === 0 && weekData.patterns.length === 0) {
+                    return '<p>No data yet for this week. Start logging your reciprocity, energy, and patterns!</p>';
+                }
+
+                let html = '<ul style="list-style: none; padding: 0;">';
+
+                if (weekData.reciprocity.length > 0) {
+                    const balance = this.calculateReciprocityBalance();
+                    if (balance > 0) {
+                        html += '<li>✓ Your reciprocity is <span class="highlight">positive</span> - you\'re receiving more than you\'re giving.</li>';
+                    } else if (balance < 0) {
+                        html += '<li>⚠️ Your reciprocity is <span class="highlight">negative</span> - you\'re giving more than receiving. Check for extraction.</li>';
+                    } else {
+                        html += '<li>◇ Your reciprocity is <span class="highlight">balanced</span>.</li>';
+                    }
+                }
+
+                if (weekData.energy.length > 0) {
+                    const net = this.calculateNetEnergy();
+                    if (net > 0) {
+                        html += '<li>⚡ Net energy is <span class="highlight">positive</span> - more gains than drains this week!</li>';
+                    } else if (net < 0) {
+                        html += '<li>⚠️ Net energy is <span class="highlight">negative</span> - more drains than gains. Protect your energy.</li>';
+                    }
+                }
+
+                if (weekData.patterns.length > 0) {
+                    html += `<li>◆ Tracking <span class="highlight">${weekData.patterns.length} pattern(s)</span> this week.</li>`;
+                }
+
+                const score = this.calculateSovereigntyScore();
+                if (score > 0) {
+                    html += `<li>✧ Sovereignty score: <span class="highlight">${score}/10</span></li>`;
+                }
+
+                html += '</ul>';
+                return html;
+            }
+
+            renderReciprocity() {
+                const weekData = this.getWeekData();
+                const container = document.getElementById('reciprocityList');
+
+                if (weekData.reciprocity.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">◇</div><p>No reciprocity data yet. Add your first relationship/entity above.</p></div>';
+                    return;
+                }
+
+                container.innerHTML = weekData.reciprocity.map((item, index) => {
+                    const balance = item.receive - item.give;
+                    let status = 'balanced';
+                    let statusText = 'Balanced';
+                    if (balance < -1) { status = 'extracting'; statusText = 'Extracting from you'; }
+                    if (balance > 1) { status = 'giving'; statusText = 'You receive more'; }
+
+                    return `
+                        <div class="reciprocity-item ${status}">
+                            <div>
+                                <strong style="color: var(--neon-cyan);">${this.escapeHtml(item.entity)}</strong>
+                                <div style="font-size: 0.85rem; color: var(--gray-mid); margin-top: 0.25rem;">${statusText}</div>
+                                ${item.notes ? `<div style="font-size: 0.9rem; color: var(--gray-light); margin-top: 0.5rem;">${this.escapeHtml(item.notes)}</div>` : ''}
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: var(--neon-magenta); font-size: 1.5rem; font-weight: 700;">${item.give}</div>
+                                <div style="font-size: 0.8rem; color: var(--gray-mid);">You Give</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: var(--accent-green); font-size: 1.5rem; font-weight: 700;">${item.receive}</div>
+                                <div style="font-size: 0.8rem; color: var(--gray-mid);">You Receive</div>
+                            </div>
+                            <button class="btn-small btn-delete" onclick="dashboard.deleteReciprocity(${index})">Delete</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            renderEnergy() {
+                const weekData = this.getWeekData();
+                const container = document.getElementById('energyList');
+
+                if (weekData.energy.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚡</div><p>No energy data yet. Log your first activity above.</p></div>';
+                    return;
+                }
+
+                container.innerHTML = weekData.energy.map((item, index) => {
+                    const percentage = (item.intensity / 10) * 100;
+                    return `
+                        <div class="list-item">
+                            <div class="list-item-content">
+                                <strong style="color: var(--neon-cyan);">${this.escapeHtml(item.activity)}</strong>
+                                <div style="font-size: 0.85rem; color: var(--gray-mid); margin-top: 0.25rem;">
+                                    ${item.type === 'gain' ? '⚡ Gain' : '⚠️ Drain'} • Intensity: ${item.intensity}/10 • ${item.hours}hrs/week
+                                </div>
+                                <div class="energy-bar" style="margin-top: 0.5rem;">
+                                    <div class="energy-fill ${item.type}" style="width: ${percentage}%"></div>
+                                </div>
+                            </div>
+                            <button class="btn-small btn-delete" onclick="dashboard.deleteEnergy(${index})">Delete</button>
+                        </div>
+                    `;
+                }).join('');
+
+                // Energy balance summary
+                const gains = weekData.energy.filter(e => e.type === 'gain');
+                const drains = weekData.energy.filter(e => e.type === 'drain');
+                const gainTotal = gains.reduce((sum, e) => sum + e.intensity, 0);
+                const drainTotal = drains.reduce((sum, e) => sum + e.intensity, 0);
+
+                document.getElementById('energyBalance').innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number positive">${gainTotal}</div>
+                            <div class="stat-label">Total Energy Gains</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number negative">${drainTotal}</div>
+                            <div class="stat-label">Total Energy Drains</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number ${gainTotal - drainTotal >= 0 ? 'positive' : 'negative'}">${gainTotal - drainTotal}</div>
+                            <div class="stat-label">Net Energy</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderPatterns() {
+                const weekData = this.getWeekData();
+                const container = document.getElementById('patternList');
+
+                if (weekData.patterns.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">◆</div><p>No patterns logged yet. What repeated this week?</p></div>';
+                    return;
+                }
+
+                container.innerHTML = weekData.patterns.map((pattern, index) => `
+                    <div class="pattern-card">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div class="pattern-title">${this.escapeHtml(pattern.title)}</div>
+                                ${pattern.description ? `<div class="pattern-description">${this.escapeHtml(pattern.description)}</div>` : ''}
+                                <div class="pattern-meta">
+                                    <span>Type: ${pattern.type}</span>
+                                    <span>Frequency: ${pattern.frequency}</span>
+                                </div>
+                            </div>
+                            <button class="btn-small btn-delete" onclick="dashboard.deletePattern(${index})">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderPillars() {
+                const weekData = this.getWeekData();
+                const container = document.getElementById('pillarsGrid');
+
+                container.innerHTML = this.pillars.map((pillar, index) => {
+                    const score = weekData.pillars[pillar.name] || 5;
+                    const percentage = (score / 10) * 100;
+
+                    return `
+                        <div class="pillar-card">
+                            <div class="pillar-header">
+                                <span class="pillar-name">${pillar.icon} ${pillar.name}</span>
+                                <span class="pillar-score">${score}/10</span>
+                            </div>
+                            <div class="pillar-progress">
+                                <div class="pillar-progress-fill" style="width: ${percentage}%"></div>
+                            </div>
+                            <input type="range" min="1" max="10" value="${score}"
+                                   onchange="dashboard.updatePillar('${pillar.name}', this.value)"
+                                   style="width: 100%; margin-top: 0.5rem;">
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updatePillar(name, value) {
+                const weekData = this.getWeekData();
+                weekData.pillars[name] = parseInt(value);
+                this.renderPillars();
+                this.renderOverview();
+            }
+
+            savePillars() {
+                this.saveData();
+                alert('Pillar scores saved!');
+            }
+
+            renderWeeklyReview() {
+                const weekData = this.getWeekData();
+
+                // Energy summary
+                document.getElementById('weekly-energy').innerHTML = weekData.energy.length > 0
+                    ? `<p>Logged <span class="highlight">${weekData.energy.length} activities</span>. Net energy: <span class="highlight">${this.calculateNetEnergy()}</span></p>`
+                    : '<p>No energy data logged this week.</p>';
+
+                // Reciprocity summary
+                document.getElementById('weekly-reciprocity').innerHTML = weekData.reciprocity.length > 0
+                    ? `<p>Tracked <span class="highlight">${weekData.reciprocity.length} relationships</span>. Balance: <span class="highlight">${this.calculateReciprocityBalance()}</span></p>`
+                    : '<p>No reciprocity data logged this week.</p>';
+
+                // Pattern summary
+                document.getElementById('weekly-patterns').innerHTML = weekData.patterns.length > 0
+                    ? `<p>Identified <span class="highlight">${weekData.patterns.length} patterns</span> this week.</p>`
+                    : '<p>No patterns logged this week.</p>';
+
+                // Sovereignty summary
+                const score = this.calculateSovereigntyScore();
+                document.getElementById('weekly-sovereignty').innerHTML = score > 0
+                    ? `<p>Average sovereignty score: <span class="highlight">${score}/10</span></p>`
+                    : '<p>No pillar scores recorded this week.</p>';
+
+                // Load wins and intentions
+                document.getElementById('weekly-wins').value = weekData.wins || '';
+                document.getElementById('weekly-intentions').value = weekData.intentions || '';
+            }
+
+            saveWeeklyReview() {
+                const weekData = this.getWeekData();
+                weekData.wins = document.getElementById('weekly-wins').value;
+                weekData.intentions = document.getElementById('weekly-intentions').value;
+                this.saveData();
+                alert('Weekly review saved!');
+            }
+
+            exportWeek() {
+                const weekData = this.getWeekData();
+                const weekKey = this.getWeekKey();
+                const blob = new Blob([JSON.stringify({ [weekKey]: weekData }, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `sovereignty-dashboard-${weekKey}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            exportAllData() {
+                const blob = new Blob([JSON.stringify(this.data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `sovereignty-dashboard-all-data-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            clearAllData() {
+                if (confirm('⚠️ This will delete ALL your sovereignty data permanently. Are you sure?')) {
+                    localStorage.removeItem('sovereigntyDashboard');
+                    location.reload();
+                }
+            }
+
+            deleteReciprocity(index) {
+                const weekData = this.getWeekData();
+                weekData.reciprocity.splice(index, 1);
+                this.saveData();
+                this.renderReciprocity();
+                this.renderOverview();
+            }
+
+            deleteEnergy(index) {
+                const weekData = this.getWeekData();
+                weekData.energy.splice(index, 1);
+                this.saveData();
+                this.renderEnergy();
+                this.renderOverview();
+            }
+
+            deletePattern(index) {
+                const weekData = this.getWeekData();
+                weekData.patterns.splice(index, 1);
+                this.saveData();
+                this.renderPatterns();
+                this.renderOverview();
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Initialize
+        let dashboard;
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                createStarfield();
+                dashboard = new SovereigntyDashboard();
+            });
+        } else {
+            createStarfield();
+            dashboard = new SovereigntyDashboard();
+        }
+    </script>
+</body>
+</html>
