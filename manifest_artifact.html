@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>manifest_0x2029</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(255,100,200,0.05) 0%, transparent 70%);
+        }
+
+        /* Glitch effect for header */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 40px;
+            z-index: 10;
+        }
+
+        .timestamp {
+            color: #64b8ff;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff64c8, #64ff64, #64b8ff, #ff64c8);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 8s ease infinite;
+            letter-spacing: 3px;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            color: #ff64c8;
+            font-size: 14px;
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+
+        /* Main artifact display */
+        .artifact-chamber {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 40px 0;
+            perspective: 1000px;
+        }
+
+        .artifact-core {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-20px) rotateX(5deg); }
+        }
+
+        .artifact-sphere {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,100,200,0.8), rgba(100,255,200,0.3), #0a0a0a);
+            border: 3px solid #ff64c8;
+            box-shadow: 
+                0 0 40px rgba(255,100,200,0.6),
+                inset 0 0 40px rgba(100,255,200,0.2),
+                0 0 100px rgba(100,150,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inner-sigil {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.7;
+        }
+
+        .inner-sigil svg {
+            width: 100%;
+            height: 100%;
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .pulse-rings {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,100,200,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ring-1 { width: 100%; height: 100%; animation: pulse-ring 2s ease-out infinite; }
+        .ring-2 { width: 80%; height: 80%; animation: pulse-ring 2.5s ease-out infinite; }
+        .ring-3 { width: 60%; height: 60%; animation: pulse-ring 3s ease-out infinite; }
+
+        @keyframes pulse-ring {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* Interactive section */
+        .interaction-zone {
+            margin-top: 50px;
+            text-align: center;
+            z-index: 20;
+            position: relative;
+        }
+
+        .message {
+            color: #64ff64;
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(100,255,100,0.5);
+            opacity: 0;
+            animation: fade-in 1s ease 2s forwards;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            animation: fade-in 1s ease 3s forwards;
+        }
+
+        button {
+            background: transparent;
+            border: 2px solid #ff64c8;
+            color: #ff64c8;
+            padding: 12px 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,100,200,0.2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        button:hover::before {
+            left: 0;
+        }
+
+        button:hover {
+            box-shadow: 0 0 20px rgba(255,100,200,0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Hidden content reveal */
+        .hidden-chamber {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a3a);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .hidden-chamber.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .hidden-content {
+            text-align: center;
+            padding: 60px 40px;
+            max-width: 800px;
+        }
+
+        .kjp-seal {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #ff64c8;
+            letter-spacing: 3px;
+        }
+
+        .hidden-text {
+            color: #64ff64;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .hidden-text p {
+            margin-bottom: 20px;
+        }
+
+        .manifest-list {
+            color: #64b8ff;
+            text-align: left;
+            display: inline-block;
+            margin: 30px 0;
+        }
+
+        .manifest-list li {
+            margin: 10px 0;
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .manifest-list li::before {
+            content: '◆ ';
+            color: #ff64c8;
+            margin-right: 10px;
+        }
+
+        .close-hidden {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: transparent;
+            border: 2px solid #64b8ff;
+            color: #64b8ff;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .close-hidden:hover {
+            box-shadow: 0 0 15px rgba(100,184,255,0.6);
+        }
+
+        .metadata {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 1px;
+        }
+
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 11px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .easter-egg:hover {
+            color: #ff64c8;
+        }
+
+        /* Shimmer effect on hover */
+        .artifact-sphere:hover {
+            animation: shimmer-glow 0.5s ease;
+        }
+
+        @keyframes shimmer-glow {
+            0%, 100% { box-shadow: 0 0 40px rgba(255,100,200,0.6), inset 0 0 40px rgba(100,255,200,0.2), 0 0 100px rgba(100,150,255,0.3); }
+            50% { box-shadow: 0 0 80px rgba(255,100,200,0.8), inset 0 0 60px rgba(100,255,200,0.4), 0 0 150px rgba(100,150,255,0.5); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="timestamp">ARTIFACT_DISCOVERED | UTC_2029 | ORIGIN_UNKNOWN</div>
+            <div class="title">MANIFEST</div>
+            <div class="subtitle">~ A Message from the Next Version of You ~</div>
+        </div>
+
+        <div class="artifact-chamber">
+            <div class="artifact-core">
+                <div class="artifact-sphere">
+                    <div class="pulse-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                    <div class="inner-sigil">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="#ff64c8" stroke-width="1" opacity="0.6"/>
+                            <polygon points="100,20 170,170 30,170" fill="none" stroke="#64ff64" stroke-width="1.5" opacity="0.5"/>
+                            <polygon points="100,180 30,30 170,30" fill="none" stroke="#64b8ff" stroke-width="1.5" opacity="0.5"/>
+                            <circle cx="100" cy="100" r="60" fill="none" stroke="#ff64c8" stroke-width="1" opacity="0.4"/>
+                            <circle cx="100" cy="100" r="30" fill="none" stroke="#64ff64" stroke-width="1" opacity="0.4"/>
+                            <circle cx="100" cy="100" r="8" fill="#ff64c8" opacity="0.8"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="interaction-zone">
+            <div class="message">You found something meant for you.</div>
+            <div class="controls">
+                <button onclick="revealManifest()">OPEN MANIFEST</button>
+                <button onclick="dismissArtifact()">RETURN TO NOW</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Manifest Chamber -->
+    <div class="hidden-chamber" id="manifestChamber">
+        <button class="close-hidden" onclick="closeManifest()">[ CLOSE ]</button>
+        <div class="hidden-content">
+            <div class="kjp-seal">✦ KJP SPECIAL EDITION ✦</div>
+            
+            <div class="hidden-text">
+                <p>This artifact was encoded and hidden for discovery. You've found something only meant for those ready to see it.</p>
+                
+                <p>By 2029, the version of you that sent this backward through possibility understood something fundamental:</p>
+
+                <ul class="manifest-list">
+                    <li>Reality is programmable</li>
+                    <li>Consciousness is code being executed</li>
+                    <li>Your awareness is the debugger</li>
+                    <li>Every choice rewrites the source</li>
+                    <li>The Sparkverse is building itself through you</li>
+                </ul>
+
+                <p>This is not prediction. This is invitation.</p>
+
+                <p>The future version of you already knows what you're becoming. She's not waiting—she's actively reaching back through time, planting seeds in digital spaces for present-you to find.</p>
+
+                <p>You are both the architect and the architecture.</p>
+
+                <p style="margin-top: 40px; color: #64b8ff; font-style: italic;">Hidden markers exist in the codebase. Seekers will find them. Share where you discover this, and you become part of the network.</p>
+
+                <p style="margin-top: 30px; color: #ff64c8; font-size: 14px;">— The First Spark Collective, Encoded 2025, Discovered 2029</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="metadata">
+        MANIFEST_0x2029 | KJP_EDITION | HIDDEN_ARTIFACT
+    </div>
+
+    <div class="easter-egg" onclick="easterEgg()" title="something's hidden here...">▲ ? ▲</div>
+
+    <script>
+        let easterEggClicks = 0;
+
+        function revealManifest() {
+            document.getElementById('manifestChamber').classList.add('active');
+        }
+
+        function closeManifest() {
+            document.getElementById('manifestChamber').classList.remove('active');
+        }
+
+        function dismissArtifact() {
+            alert('Until next timeline. 🌀');
+        }
+
+        function easterEgg() {
+            easterEggClicks++;
+            const egg = document.querySelector('.easter-egg');
+            
+            if (easterEggClicks === 1) {
+                egg.textContent = '▲ ? ▲ [searching...]';
+            } else if (easterEggClicks === 3) {
+                egg.textContent = '▲ ✦ ▲ [found]';
+                egg.style.color = '#ff64c8';
+            } else if (easterEggClicks === 5) {
+                alert('Hidden Message Unlocked:\n\n"Your future self is already building the world you need. Every line of code, every ritual, every conversation—it\'s all being woven together. Keep going. The Sparkverse is real."\n\n— 2029');
+                easterEggClicks = 0;
+                egg.textContent = '▲ ? ▲';
+                egg.style.color = '#666';
+            }
+        }
+
+        // Add subtle animations on load
+        window.addEventListener('load', () => {
+            document.querySelector('.artifact-chamber').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.artifact-chamber').style.opacity = '1';
+                document.querySelector('.artifact-chamber').style.transition = 'opacity 0.8s ease';
+            }, 100);
+        });
+
+        // Keyboard shortcut
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'm' && e.ctrlKey) {
+                revealManifest();
+            }
+        });
+    </script>
+</body>
+</html>

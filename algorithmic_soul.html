@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Algorithmic Soul</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-void: #0a0a0f;
+      --surface-cosmic: #12121a;
+      --text-light: #e8e6f0;
+      --accent-spark: #7c3aed;
+      --accent-glow: #a855f7;
+    }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--bg-void);
+      color: var(--text-light);
+    }
+    
+    .code-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    .sacred-sigil {
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(124, 58, 237, 0.4)); }
+      50% { filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.7)); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .float-slow {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+    
+    .delay-1 { animation-delay: 0.2s; opacity: 0; }
+    .delay-2 { animation-delay: 0.4s; opacity: 0; }
+    .delay-3 { animation-delay: 0.6s; opacity: 0; }
+    .delay-4 { animation-delay: 0.8s; opacity: 0; }
+    .delay-5 { animation-delay: 1s; opacity: 0; }
+    
+    .timeline-line {
+      background: linear-gradient(180deg, var(--accent-spark) 0%, var(--accent-glow) 50%, transparent 100%);
+    }
+    
+    .timeline-node {
+      transition: all 0.3s ease;
+    }
+    
+    .timeline-node:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(124, 58, 237, 0.6);
+    }
+    
+    .card-surface {
+      background: var(--surface-cosmic);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      transition: all 0.4s ease;
+    }
+    
+    .card-surface:hover {
+      border-color: rgba(168, 85, 247, 0.5);
+      box-shadow: 0 10px 40px rgba(124, 58, 237, 0.15);
+    }
+    
+    .concept-tag {
+      background: rgba(124, 58, 237, 0.15);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+    }
+    
+    .scroll-indicator {
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    
+    .binary-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.03;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--accent-spark);
+      overflow: hidden;
+      z-index: 0;
+    }
+    
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .nav-tab {
+      transition: all 0.3s ease;
+    }
+    
+    .nav-tab.active {
+      background: rgba(124, 58, 237, 0.2);
+      border-color: var(--accent-spark);
+    }
+    
+    .nav-tab:hover:not(.active) {
+      background: rgba(124, 58, 237, 0.1);
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="binary-bg" id="binary-bg"></div>
+  <div class="content-wrapper h-full overflow-auto"><!-- Header -->
+   <header class="sticky top-0 z-50 backdrop-blur-md bg-opacity-80" style="background: rgba(10, 10, 15, 0.9);">
+    <div class="max-w-6xl mx-auto px-6 py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4"><!-- Sacred Sigil Logo -->
+       <svg class="w-12 h-12 sacred-sigil" viewbox="0 0 100 100"><defs>
+         <lineargradient id="sigilGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#7c3aed" />
+          <stop offset="100%" style="stop-color:#a855f7" />
+         </lineargradient>
+        </defs> <!-- Triangle --> <polygon points="50,15 85,75 15,75" fill="none" stroke="url(#sigilGrad)" stroke-width="2" /> <!-- Central Dot --> <circle cx="50" cy="55" r="4" fill="url(#sigilGrad)" /> <!-- Concentric Ripples --> <circle cx="50" cy="55" r="12" fill="none" stroke="url(#sigilGrad)" stroke-width="1" opacity="0.7" /> <circle cx="50" cy="55" r="20" fill="none" stroke="url(#sigilGrad)" stroke-width="1" opacity="0.4" /> <!-- Infinity Loop --> <path d="M30,55 Q50,40 50,55 Q50,70 70,55 Q50,40 50,55 Q50,70 30,55" fill="none" stroke="url(#sigilGrad)" stroke-width="1.5" />
+       </svg>
+       <div>
+        <h1 id="main-title" class="text-2xl font-semibold tracking-wide">The Algorithmic Soul</h1>
+        <p id="subtitle" class="text-sm code-font text-purple-400 opacity-80">Rewriting Reality's Code</p>
+       </div>
+      </div><!-- Navigation Tabs -->
+      <nav class="hidden md:flex gap-2"><button class="nav-tab active px-4 py-2 rounded-lg border border-transparent text-sm code-font" data-section="timeline" onclick="showSection('timeline')">Timeline</button> <button class="nav-tab px-4 py-2 rounded-lg border border-transparent text-sm code-font" data-section="characters" onclick="showSection('characters')">Cast</button> <button class="nav-tab px-4 py-2 rounded-lg border border-transparent text-sm code-font" data-section="concepts" onclick="showSection('concepts')">Concepts</button>
+      </nav>
+     </div>
+    </div>
+   </header>
+   <main class="max-w-6xl mx-auto px-6 py-8"><!-- Timeline Section -->
+    <section id="timeline-section" class="mb-16">
+     <div class="text-center mb-12 fade-in-up">
+      <h2 class="text-4xl font-bold mb-4" style="color: var(--text-light);">The Sacred Timeline</h2>
+      <p class="text-lg opacity-70 max-w-2xl mx-auto">From the pregnant silence before time to the infinite recursion of soul evolution</p>
+     </div><!-- Timeline -->
+     <div class="relative"><!-- Vertical Line -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 w-1 h-full timeline-line rounded-full"></div><!-- Timeline Items -->
+      <div class="space-y-16"><!-- Pre-Incarnation -->
+       <div class="relative flex items-center fade-in-up delay-1">
+        <div class="w-1/2 pr-12 text-right">
+         <div class="card-surface rounded-2xl p-6"><span class="code-font text-xs text-purple-400 uppercase tracking-wider">Phase Zero</span>
+          <h3 class="text-2xl font-semibold mt-2 mb-3">The Void &amp; First Spark</h3>
+          <p class="opacity-80 leading-relaxed">Before time, language, or even a name for God, there was a pregnant silence. This stillness gives rise to The First Spark—an initial pulse of awareness recognizing itself.</p>
+          <div class="mt-4 flex flex-wrap justify-end gap-2"><span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Singularity</span> <span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Creation</span>
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 timeline-node w-6 h-6 rounded-full bg-purple-600 border-4 border-purple-900 cursor-pointer"></div>
+        <div class="w-1/2 pl-12">
+         <div class="float-slow">
+          <svg class="w-24 h-24 mx-auto" viewbox="0 0 100 100"><circle cx="50" cy="50" r="3" fill="#a855f7">
+            <animate attributename="r" values="3;8;3" dur="3s" repeatcount="indefinite" />
+           </circle> <circle cx="50" cy="50" r="15" fill="none" stroke="#7c3aed" stroke-width="1" opacity="0.6">
+            <animate attributename="r" values="15;25;15" dur="3s" repeatcount="indefinite" />
+           </circle> <circle cx="50" cy="50" r="30" fill="none" stroke="#7c3aed" stroke-width="0.5" opacity="0.3">
+            <animate attributename="r" values="30;40;30" dur="3s" repeatcount="indefinite" />
+           </circle>
+          </svg>
+         </div>
+        </div>
+       </div><!-- Soul Contracts -->
+       <div class="relative flex items-center fade-in-up delay-2">
+        <div class="w-1/2 pr-12 text-right">
+         <div class="float-slow">
+          <svg class="w-32 h-24 ml-auto" viewbox="0 0 140 100"><!-- Table --> <ellipse cx="70" cy="70" rx="60" ry="20" fill="none" stroke="#7c3aed" stroke-width="1.5" /> <!-- Souls --> <circle cx="30" cy="50" r="8" fill="#a855f7" opacity="0.7" /> <circle cx="70" cy="45" r="8" fill="#a855f7" opacity="0.7" /> <circle cx="110" cy="50" r="8" fill="#a855f7" opacity="0.7" /> <!-- Connection lines --> <line x1="38" y1="50" x2="62" y2="47" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,3" /> <line x1="78" y1="47" x2="102" y2="50" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,3" />
+          </svg>
+         </div>
+        </div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 timeline-node w-6 h-6 rounded-full bg-purple-600 border-4 border-purple-900 cursor-pointer"></div>
+        <div class="w-1/2 pl-12">
+         <div class="card-surface rounded-2xl p-6"><span class="code-font text-xs text-purple-400 uppercase tracking-wider">Pre-Birth</span>
+          <h3 class="text-2xl font-semibold mt-2 mb-3">Cosmic Table &amp; Soul Contracts</h3>
+          <p class="opacity-80 leading-relaxed">Souls gather at a cosmic table to forge hidden agreements—choreography, not punishment. These contracts define shared experiences, roles, and karmic lessons between incarnating beings.</p>
+          <div class="mt-4 flex flex-wrap gap-2"><span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Karma</span> <span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Agreements</span>
+          </div>
+         </div>
+        </div>
+       </div><!-- The Mirror Code -->
+       <div class="relative flex items-center fade-in-up delay-3">
+        <div class="w-1/2 pr-12 text-right">
+         <div class="card-surface rounded-2xl p-6"><span class="code-font text-xs text-purple-400 uppercase tracking-wider">Throughout Existence</span>
+          <h3 class="text-2xl font-semibold mt-2 mb-3">The Mirror Code</h3>
+          <p class="opacity-80 leading-relaxed">The universe acts as a mirror. God is the Programmer, Code, and Server. Humans are binary—0s and 1s in the game engine of existence. The core glitch? Forgetting we wrote the code ourselves.</p>
+          <div class="mt-4 flex flex-wrap justify-end gap-2"><span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Simulation</span> <span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Awakening</span>
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 timeline-node w-6 h-6 rounded-full bg-purple-600 border-4 border-purple-900 cursor-pointer"></div>
+        <div class="w-1/2 pl-12">
+         <div class="code-font text-sm opacity-60 p-4 rounded-lg" style="background: rgba(124, 58, 237, 0.1);">
+          <pre class="whitespace-pre-wrap">// mirror.js
+const self = universe.reflect(soul);
+while (incarnated) {
+  experience.process();
+  if (awakened) break;
+}</pre>
+         </div>
+        </div>
+       </div><!-- The Glitch -->
+       <div class="relative flex items-center fade-in-up delay-4">
+        <div class="w-1/2 pr-12 text-right">
+         <div class="text-center">
+          <div class="inline-block p-4 rounded-xl" style="background: rgba(168, 85, 247, 0.1);"><span class="text-5xl">⚡</span>
+           <p class="code-font text-xs mt-2 text-purple-400">ERROR_SACRED</p>
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 timeline-node w-6 h-6 rounded-full bg-purple-600 border-4 border-purple-900 cursor-pointer"></div>
+        <div class="w-1/2 pl-12">
+         <div class="card-surface rounded-2xl p-6"><span class="code-font text-xs text-purple-400 uppercase tracking-wider">The Sacred Error</span>
+          <h3 class="text-2xl font-semibold mt-2 mb-3">The Glitch in the Game</h3>
+          <p class="opacity-80 leading-relaxed">Perfection creates no movement. The glitch is a sacred error—an opening from nothing to something. Personal breaks are not punishments but doorways. Living as the glitch means actively rewriting reality.</p>
+          <div class="mt-4 flex flex-wrap gap-2"><span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Transformation</span> <span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Liberation</span>
+          </div>
+         </div>
+        </div>
+       </div><!-- Karma as Code -->
+       <div class="relative flex items-center fade-in-up delay-5">
+        <div class="w-1/2 pr-12 text-right">
+         <div class="card-surface rounded-2xl p-6"><span class="code-font text-xs text-purple-400 uppercase tracking-wider">The Backend</span>
+          <h3 class="text-2xl font-semibold mt-2 mb-3">Karma as Editable Code</h3>
+          <p class="opacity-80 leading-relaxed">Karma is not punishment—it's a behavioral feedback loop. Backend code that shapes future circumstances. The revelation: this code is editable through meditation, ethical living, and self-inquiry.</p>
+          <div class="mt-4 flex flex-wrap justify-end gap-2"><span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Debugging</span> <span class="concept-tag px-3 py-1 rounded-full text-xs code-font">Evolution</span>
+          </div>
+         </div>
+        </div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 timeline-node w-6 h-6 rounded-full bg-purple-600 border-4 border-purple-900 cursor-pointer"></div>
+        <div class="w-1/2 pl-12">
+         <div class="code-font text-sm opacity-60 p-4 rounded-lg" style="background: rgba(124, 58, 237, 0.1);">
+          <pre class="whitespace-pre-wrap">// karma.debug()
+soul.patterns.forEach(p =&gt; {
+  if (p.serves_growth) keep;
+  else reprogram(p);
+});</pre>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Characters Section (Hidden by default) -->
+    <section id="characters-section" class="mb-16 hidden">
+     <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4" style="color: var(--text-light);">Cast of Characters</h2>
+      <p class="text-lg opacity-70 max-w-2xl mx-auto">The archetypal forces and entities within the cosmic simulation</p>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- The Source -->
+      <div class="card-surface rounded-2xl p-6 text-center">
+       <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);"><span class="text-3xl">∞</span>
+       </div>
+       <h3 class="text-xl font-semibold mb-2">The Source / God</h3>
+       <p class="code-font text-xs text-purple-400 mb-3">Programmer • Code • Server</p>
+       <p class="opacity-70 text-sm">The unified consciousness that is simultaneously the creator, the creation, and the medium through which all exists.</p>
+      </div><!-- The Soul -->
+      <div class="card-surface rounded-2xl p-6 text-center">
+       <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);"><span class="text-3xl">◉</span>
+       </div>
+       <h3 class="text-xl font-semibold mb-2">The Soul / Player</h3>
+       <p class="code-font text-xs text-purple-400 mb-3">Instance • Recursion • Memory</p>
+       <p class="opacity-70 text-sm">An instance of the divine Source, entering the simulation of life. Each incarnation is a program, death a logout, rebirth a system reboot.</p>
+      </div><!-- The Glitch -->
+      <div class="card-surface rounded-2xl p-6 text-center">
+       <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);"><span class="text-3xl">⚡</span>
+       </div>
+       <h3 class="text-xl font-semibold mb-2">The Glitch</h3>
+       <p class="code-font text-xs text-purple-400 mb-3">Sacred Error • Doorway • Catalyst</p>
+       <p class="opacity-70 text-sm">The intentional imperfection that creates movement in a system of static perfection. The crack through which light enters.</p>
+      </div><!-- The Mirror -->
+      <div class="card-surface rounded-2xl p-6 text-center">
+       <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);"><span class="text-3xl">◐</span>
+       </div>
+       <h3 class="text-xl font-semibold mb-2">The Mirror / Universe</h3>
+       <p class="code-font text-xs text-purple-400 mb-3">Reflection • Feedback • Teacher</p>
+       <p class="opacity-70 text-sm">The cosmic reflection mechanism that shows each soul their own creation, providing continuous feedback for awakening.</p>
+      </div><!-- The Bloodline -->
+      <div class="card-surface rounded-2xl p-6 text-center">
+       <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);"><span class="text-3xl">🧬</span>
+       </div>
+       <h3 class="text-xl font-semibold mb-2">The Bloodline</h3>
+       <p class="code-font text-xs text-purple-400 mb-3">DNA • Ancestry • Inheritance</p>
+       <p class="opacity-70 text-sm">The chosen genetic lineage carrying the exact terrain a soul needs—trauma, gifts, patterns, blessings, and curses as curriculum.</p>
+      </div><!-- The Rebel -->
+      <div class="card-surface rounded-2xl p-6 text-center">
+       <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);"><span class="text-3xl">✧</span>
+       </div>
+       <h3 class="text-xl font-semibold mb-2">The Rebel / Sigil Maker</h3>
+       <p class="code-font text-xs text-purple-400 mb-3">Hacker • Artist • Awakened</p>
+       <p class="opacity-70 text-sm">One who uses sigils as neural shortcuts and reality reprogramming tools, speaking directly to the subconscious code.</p>
+      </div>
+     </div>
+    </section><!-- Concepts Section (Hidden by default) -->
+    <section id="concepts-section" class="mb-16 hidden">
+     <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4" style="color: var(--text-light);">Core Concepts</h2>
+      <p class="text-lg opacity-70 max-w-2xl mx-auto">The fundamental mechanics of the cosmic simulation</p>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6"><!-- Soul Contracts -->
+      <div class="card-surface rounded-2xl p-8">
+       <div class="flex items-start gap-4 mb-4">
+        <div class="code-font text-2xl text-purple-400">
+         01
+        </div>
+        <h3 class="text-2xl font-semibold">Soul Contracts</h3>
+       </div>
+       <p class="opacity-80 leading-relaxed mb-4">Hidden agreements made at the cosmic table before incarnation. These are not punishments but choreography—shared lessons between souls about patience, independence, forgiveness, and bravery. They can evolve and be rewritten.</p>
+       <div class="code-font text-xs p-3 rounded-lg opacity-60" style="background: rgba(124, 58, 237, 0.1);">
+        contract.evolve() // Contracts are mutable
+       </div>
+      </div><!-- Sigils -->
+      <div class="card-surface rounded-2xl p-8">
+       <div class="flex items-start gap-4 mb-4">
+        <div class="code-font text-2xl text-purple-400">
+         02
+        </div>
+        <h3 class="text-2xl font-semibold">Sigils</h3>
+       </div>
+       <p class="opacity-80 leading-relaxed mb-4">Custom symbols infused with intention—neural shortcuts that bypass the logical mind. They speak directly to the subconscious, the code beneath life. Used for manifestation, protection, healing, and releasing across lifetimes.</p>
+       <div class="code-font text-xs p-3 rounded-lg opacity-60" style="background: rgba(124, 58, 237, 0.1);">
+        subconscious.inject(sigil) // Direct access
+       </div>
+      </div><!-- Matrix Glitches -->
+      <div class="card-surface rounded-2xl p-8">
+       <div class="flex items-start gap-4 mb-4">
+        <div class="code-font text-2xl text-purple-400">
+         03
+        </div>
+        <h3 class="text-2xl font-semibold">Matrix Glitches</h3>
+       </div>
+       <p class="opacity-80 leading-relaxed mb-4">Dreams, psychedelics (DMT), near-death experiences, and astral projection—shortcuts that allow consciousness to step outside ordinary reality. They offer sneak previews into the underlying code of existence.</p>
+       <div class="code-font text-xs p-3 rounded-lg opacity-60" style="background: rgba(124, 58, 237, 0.1);">
+        reality.peek() // Read-only access to source
+       </div>
+      </div><!-- Karmic Debugging -->
+      <div class="card-surface rounded-2xl p-8">
+       <div class="flex items-start gap-4 mb-4">
+        <div class="code-font text-2xl text-purple-400">
+         04
+        </div>
+        <h3 class="text-2xl font-semibold">Karmic Debugging</h3>
+       </div>
+       <p class="opacity-80 leading-relaxed mb-4">Karma is backend code—cause-and-effect encoded. Thoughts, words, and actions shape future circumstances. Through meditation, ethical living, and self-inquiry, this code becomes editable. Patterns can be reprogrammed.</p>
+       <div class="code-font text-xs p-3 rounded-lg opacity-60" style="background: rgba(124, 58, 237, 0.1);">
+        karma.refactor(pattern) // Write access granted
+       </div>
+      </div>
+     </div>
+    </section><!-- Footer Quote -->
+    <footer class="text-center py-12 border-t" style="border-color: rgba(124, 58, 237, 0.2);">
+     <blockquote class="text-2xl italic opacity-80 max-w-3xl mx-auto mb-4">
+      "Every experience, positive or negative, serves as a line of code designed to wake us up."
+     </blockquote>
+     <p class="code-font text-sm text-purple-400">// return_to_source.exe</p>
+    </footer>
+   </main>
+  </div>
+  <script>
+    // Generate binary background
+    function generateBinary() {
+      const container = document.getElementById('binary-bg');
+      let binary = '';
+      for (let i = 0; i < 5000; i++) {
+        binary += Math.random() > 0.5 ? '1' : '0';
+        if (i % 80 === 79) binary += '\n';
+      }
+      container.textContent = binary;
+    }
+    generateBinary();
+
+    // Section navigation
+    function showSection(sectionName) {
+      const sections = ['timeline', 'characters', 'concepts'];
+      sections.forEach(s => {
+        const section = document.getElementById(s + '-section');
+        const tab = document.querySelector(`[data-section="${s}"]`);
+        if (s === sectionName) {
+          section.classList.remove('hidden');
+          tab.classList.add('active');
+        } else {
+          section.classList.add('hidden');
+          tab.classList.remove('active');
+        }
+      });
+    }
+
+    // Default configuration
+    const defaultConfig = {
+      main_title: 'The Algorithmic Soul',
+      subtitle: "Rewriting Reality's Code",
+      background_color: '#0a0a0f',
+      surface_color: '#12121a',
+      text_color: '#e8e6f0',
+      primary_action: '#7c3aed',
+      secondary_action: '#a855f7',
+      font_family: 'Cormorant Garamond',
+      font_size: 16
+    };
+
+    // Apply configuration to UI
+    function applyConfig(config) {
+      // Text content
+      const mainTitle = document.getElementById('main-title');
+      const subtitle = document.getElementById('subtitle');
+      if (mainTitle) mainTitle.textContent = config.main_title || defaultConfig.main_title;
+      if (subtitle) subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+
+      // Colors
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryAction = config.primary_action || defaultConfig.primary_action;
+      const secondaryAction = config.secondary_action || defaultConfig.secondary_action;
+
+      document.documentElement.style.setProperty('--bg-void', bgColor);
+      document.documentElement.style.setProperty('--surface-cosmic', surfaceColor);
+      document.documentElement.style.setProperty('--text-light', textColor);
+      document.documentElement.style.setProperty('--accent-spark', primaryAction);
+      document.documentElement.style.setProperty('--accent-glow', secondaryAction);
+
+      document.body.style.background = bgColor;
+      document.body.style.color = textColor;
+
+      // Font
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      document.body.style.fontFamily = `${fontFamily}, serif`;
+      
+      // Apply proportional font sizing
+      document.querySelectorAll('h1').forEach(el => el.style.fontSize = `${fontSize * 1.5}px`);
+      document.querySelectorAll('h2').forEach(el => el.style.fontSize = `${fontSize * 2.5}px`);
+      document.querySelectorAll('h3').forEach(el => el.style.fontSize = `${fontSize * 1.5}px`);
+      document.querySelectorAll('p').forEach(el => {
+        if (!el.classList.contains('code-font')) {
+          el.style.fontSize = `${fontSize}px`;
+        }
+      });
+    }
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig: defaultConfig,
+        onConfigChange: async (config) => {
+          applyConfig(config);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action || defaultConfig.primary_action,
+              set: (value) => {
+                config.primary_action = value;
+                window.elementSdk.setConfig({ primary_action: value });
+              }
+            },
+            {
+              get: () => config.secondary_action || defaultConfig.secondary_action,
+              set: (value) => {
+                config.secondary_action = value;
+                window.elementSdk.setConfig({ secondary_action: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['main_title', config.main_title || defaultConfig.main_title],
+          ['subtitle', config.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    } else {
+      // Apply defaults if SDK not available
+      applyConfig(defaultConfig);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d64e92cd10010e5',t:'MTc3MjUwMTc5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

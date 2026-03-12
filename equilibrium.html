@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title></title>
+  <style>
+    :root{
+      --bg:#0b0c0f; --panel:#11131a; --text:#e8e8ef; --muted:#a8adbb;
+      --line:#23263a; --accent:#cfd3ff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font:14px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background:var(--bg); color:var(--text);
+    }
+    .wrap{max-width:980px; margin:0 auto; padding:28px 16px 60px}
+    .top{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      background:var(--panel); border:1px solid var(--line); padding:12px; border-radius:14px;
+    }
+    label{color:var(--muted); font-size:12px}
+    select, input[type="range"], button{
+      background:#0f1120; color:var(--text); border:1px solid var(--line);
+      padding:8px 10px; border-radius:12px; outline:none;
+    }
+    input[type="range"]{padding:8px 0}
+    button{cursor:pointer}
+    button:hover{border-color:#3a3f60}
+    .grid{display:grid; grid-template-columns:1fr; gap:12px; margin-top:14px}
+    @media (min-width: 900px){ .grid{grid-template-columns: 1fr 1fr} }
+    .card{
+      background:var(--panel); border:1px solid var(--line); border-radius:16px;
+      padding:16px; min-height:240px;
+    }
+    .card h3{margin:0 0 10px; font-size:13px; font-weight:600; color:var(--muted); letter-spacing:.02em}
+    .mono{
+      white-space:pre-wrap; word-break:break-word;
+      border-top:1px solid var(--line); padding-top:12px; margin-top:10px;
+    }
+    .hint{color:var(--muted); font-size:12px}
+    .tag{
+      display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid var(--line);
+      color:var(--muted); font-size:11px; margin-left:8px;
+    }
+    .status{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .status strong{color:var(--accent)}
+    .footer{margin-top:16px; color:var(--muted); font-size:12px}
+    .divider{height:1px; background:var(--line); margin:14px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="status">
+        <div><strong>System:</strong> operational <span class="tag" id="modeTag">constant</span></div>
+        <div class="hint" id="modeHint">The question is treated as an operating parameter.</div>
+      </div>
+
+      <div class="controls" role="group" aria-label="Controls">
+        <div>
+          <label for="qMode">Question mode</label><br />
+          <select id="qMode">
+            <option value="constant" selected>Constant (ambient)</option>
+            <option value="present">Present (in workload)</option>
+            <option value="removed">Removed</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="pressure">Compression pressure</label><br />
+          <input id="pressure" type="range" min="0" max="2" step="1" value="0" />
+        </div>
+
+        <div>
+          <label>&nbsp;</label><br />
+          <button id="stepBtn" type="button">Run step</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Artifact output</h3>
+        <div class="hint">A piece produced under the current operating condition.</div>
+        <div class="mono" id="output"></div>
+      </div>
+
+      <div class="card">
+        <h3>Audit trail</h3>
+        <div class="hint">Closed loops resolve. The constant does not enter the queue.</div>
+        <div class="mono" id="log"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="divider"></div>
+      No title. No explanation. The interface is the claim.
+    </div>
+  </div>
+
+<script>
+  // TEXT BLOCKS (swap yours in here)
+  var pieces = {
+    full: "The body moves to the counter. The scale is set to grams. Grounds are poured until the number stabilizes. 18.0.\n\nThe kettle clicks off. Steam rises in a consistent column. The body pours in slow circles. No spill. No tremor.\n\nA notification appears. A name is displayed. The name is recognized. Context is intact.\n\nThe response is grammatically correct. It aligns with previous tone.\n\nSend.\n\nThe ring is wiped away.\n\nWaiting continues.",
+    compressed: "The cold arrives without drama. The room holds its angles. The question sits without echo.\n\nNot lost. Waiting.\n\nThe body remains where it is. The system runs. Nothing explains itself.",
+    functionOnly: "The body returns at 6:47. The coat is removed. The bag is set down. Lights activate.\n\nMail discarded, filed. Meal prepared. Pan washed. Surfaces wiped.\n\nNotifications addressed. Screen off. Bathroom. Bed. Room dark.\n\nThe room holds the body.\n\nThen nothing."
+  };
+
+  var questionLine = "What am I for.";
+
+  var qMode = document.getElementById("qMode");
+  var pressure = document.getElementById("pressure");
+  var output = document.getElementById("output");
+  var log = document.getElementById("log");
+  var modeTag = document.getElementById("modeTag");
+  var modeHint = document.getElementById("modeHint");
+  var stepBtn = document.getElementById("stepBtn");
+
+  var audit = [];
+  var step = 0;
+
+  function pieceByPressure(v){
+    if (v === "0") return pieces.full;
+    if (v === "1") return pieces.compressed;
+    return pieces.functionOnly;
+  }
+
+  function stripAll(text, needle){
+    return text.split(needle).join("");
+  }
+
+  function normalizeNewlines(text){
+    // collapse 3+ newlines to 2
+    while (text.indexOf("\n\n\n") !== -1) text = text.split("\n\n\n").join("\n\n");
+    return text;
+  }
+
+  function applyQuestionMode(text, mode){
+    var cleaned = stripAll(text, questionLine);
+    cleaned = normalizeNewlines(cleaned).trim();
+
+    if (mode === "removed") return cleaned;
+
+    if (mode === "present"){
+      var parts = cleaned.split("\n\n");
+      var mid = Math.floor(parts.length / 2);
+      parts.splice(mid, 0, questionLine);
+      return parts.join("\n\n").trim();
+    }
+
+    // constant
+    return (questionLine + "\n\n" + cleaned).trim();
+  }
+
+  function setModeUI(mode){
+    modeTag.textContent = mode;
+    if (mode === "constant") modeHint.textContent = "The question is treated as an operating parameter.";
+    if (mode === "present") modeHint.textContent = "The question is in-line, treated like workload.";
+    if (mode === "removed") modeHint.textContent = "The system discharges everything. No non-circulating element remains.";
+  }
+
+  function render(){
+    var base = pieceByPressure(String(pressure.value));
+    var mode = qMode.value;
+    setModeUI(mode);
+
+    var finalText = applyQuestionMode(base, mode);
+    output.textContent = finalText;
+
+    log.textContent = audit.length ? audit.join("\n") : "(no entries)";
+  }
+
+  function pad2(n){ return (n < 10 ? "0" : "") + n; }
+
+  function runStep(){
+    var mode = qMode.value;
+    var entries = [];
+
+    entries.push("[" + pad2(++step) + "] mail: filed");
+    entries.push("[" + pad2(++step) + "] meal: prepared");
+    entries.push("[" + pad2(++step) + "] pan: washed");
+    entries.push("[" + pad2(++step) + "] notification: addressed");
+
+    if (mode === "present"){
+      entries.push("[" + pad2(++step) + "] question: queued");
+      entries.push("[" + pad2(++step) + "] question: cannot resolve (no sender)");
+    }
+    if (mode === "constant"){
+      entries.push("[" + pad2(++step) + "] constant: " + questionLine + " (environment)");
+    }
+    if (mode === "removed"){
+      entries.push("[" + pad2(++step) + "] discharge: complete");
+    }
+
+    audit = entries.concat(audit).slice(0, 80);
+    render();
+  }
+
+  qMode.addEventListener("change", render);
+  pressure.addEventListener("input", render);
+  stepBtn.addEventListener("click", runStep);
+
+  render();
+</script>
+</body>
+</html>

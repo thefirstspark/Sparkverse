@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The First Spark — Consciousness Tools</title>
+  <style>
+    /* ════════════════════════════════════════════════════
+       RESET & CUSTOM PROPERTIES
+    ════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #07070f;
+      --surface:  #0d0d1c;
+      --border:   rgba(120, 100, 255, 0.18);
+      --primary:  #7b5fff;
+      --glow:     #a78bfa;
+      --accent:   #ffd700;
+      --teal:     #2dd4bf;
+      --rose:     #f472b6;
+      --gold:     #f5c842;
+      --text:     #ddddf5;
+      --muted:    #64648c;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ════════════════════════════════════════════════════
+       BACKGROUND CANVAS
+    ════════════════════════════════════════════════════ */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════════════════
+       LAYOUT
+    ════════════════════════════════════════════════════ */
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 2rem 1rem 5rem;
+    }
+
+    /* ════════════════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════════════════ */
+    header {
+      text-align: center;
+      padding: 2.5rem 0 1rem;
+    }
+
+    .brand {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    h1.site-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, var(--glow) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .tagline {
+      margin-top: 0.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* ════════════════════════════════════════════════════
+       NAVIGATION
+    ════════════════════════════════════════════════════ */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 2rem 0 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab {
+      padding: 0.55rem 1.3rem;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-family: inherit;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    }
+
+    .nav-tab:hover {
+      color: var(--text);
+      border-color: var(--primary);
+    }
+
+    .nav-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 22px rgba(123, 95, 255, 0.45);
+    }
+
+    /* ════════════════════════════════════════════════════
+       TOOL PANELS
+    ════════════════════════════════════════════════════ */
+    .tool-panel { display: none; }
+    .tool-panel.active {
+      display: block;
+      animation: panelIn 0.35s ease;
+    }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ════════════════════════════════════════════════════
+       CARD
+    ════════════════════════════════════════════════════ */
+    .card {
+      background: rgba(13, 13, 28, 0.82);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .card h2 {
+      font-size: 1.55rem;
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+
+    .card .sub {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ════════════════════════════════════════════════════
+       FORM ELEMENTS
+    ════════════════════════════════════════════════════ */
+    .field { margin-bottom: 1rem; }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      color-scheme: dark;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123, 95, 255, 0.14);
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.55;
+    }
+
+    /* ════════════════════════════════════════════════════
+       BUTTONS
+    ════════════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.7rem 1.6rem;
+      border-radius: 100px;
+      border: none;
+      font-size: 0.88rem;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.22s, opacity 0.22s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #9b74ff 100%);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(123, 95, 255, 0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 28px rgba(123, 95, 255, 0.5); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, #d4a000 100%);
+      color: #1a1000;
+      font-weight: 600;
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 0 22px rgba(245, 200, 66, 0.4); }
+
+    .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+    /* ════════════════════════════════════════════════════
+       TOOL 1 — SPARK MIRROR
+    ════════════════════════════════════════════════════ */
+
+    /* Output container */
+    .mirror-out {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: rgba(123, 95, 255, 0.05);
+      border: 1px solid rgba(123, 95, 255, 0.2);
+      border-radius: 14px;
+      animation: panelIn 0.4s ease;
+    }
+    .mirror-out.show { display: block; }
+
+    .mirror-section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Animated word spans */
+    .mirror-word {
+      display: inline;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .mirror-word.vis { opacity: 1; }
+
+    /* Highlighted word styles */
+    .mirror-word.hl-gold    { color: var(--accent); text-shadow: 0 0 12px rgba(255,215,0,0.55); font-weight: 500; }
+    .mirror-word.hl-glow    { color: var(--glow);   text-shadow: 0 0 10px rgba(167,139,250,0.6); }
+    .mirror-word.hl-teal    { color: var(--teal);   text-shadow: 0 0 10px rgba(45,212,191,0.55); }
+    .mirror-word.hl-italic  { font-style: italic; color: var(--teal); }
+
+    #mirror-text { font-size: 1.08rem; line-height: 1.85; }
+
+    /* Pattern tags */
+    .pattern-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .ptag {
+      padding: 0.22rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      border: 1px solid;
+      opacity: 0;
+      animation: tagPop 0.35s ease forwards;
+    }
+    @keyframes tagPop {
+      from { opacity: 0; transform: scale(0.75); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .ptag-q  { border-color: var(--primary); color: var(--primary); }
+    .ptag-id { border-color: var(--glow);    color: var(--glow); }
+    .ptag-sk { border-color: var(--gold);    color: var(--gold); }
+    .ptag-em { border-color: var(--rose);    color: var(--rose); }
+    .ptag-ch { border-color: var(--teal);    color: var(--teal); }
+    .ptag-rs { border-color: #fb7185;        color: #fb7185; }
+
+    /* ════════════════════════════════════════════════════
+       TOOL 2 — SOUL MAP GENERATOR
+    ════════════════════════════════════════════════════ */
+    .sm-result { display: none; }
+    .sm-result.show { display: block; }
+
+    .arch-grid {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .arch-info { flex: 1; min-width: 200px; }
+
+    .arch-name {
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      font-weight: 300;
+      background: linear-gradient(135deg, var(--gold), #e8a800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.2rem;
+    }
+
+    .arch-title {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .arch-desc {
+      font-size: 0.93rem;
+      line-height: 1.72;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .num-chips {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.1rem;
+    }
+
+    .chip {
+      text-align: center;
+      padding: 0.5rem 0.9rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+    }
+    .chip .n   { font-size: 1.6rem; font-weight: 300; color: var(--gold); line-height: 1; }
+    .chip .lbl { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.2rem; }
+
+    .qual-list { list-style: none; margin-bottom: 1rem; }
+    .qual-list li {
+      padding: 0.28rem 0;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .qual-list li::before { content: '◆'; color: var(--primary); font-size: 0.45rem; }
+
+    .intention-echo {
+      font-size: 0.83rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Sigil column */
+    .sigil-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sigil-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    #sigil-svg {
+      border-radius: 14px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid var(--border);
+    }
+
+    /* Sigil CSS animations */
+    .sig-outer { transform-origin: 100px 100px; animation: spin 22s linear infinite; }
+    .sig-inner { transform-origin: 100px 100px; animation: spin 13s linear infinite reverse; }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ════════════════════════════════════════════════════
+       TOOL 3 — OBSERVER → PLAYER
+    ════════════════════════════════════════════════════ */
+    .op-wrap {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 430px;
+      border: 1px solid var(--border);
+    }
+
+    #op-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .op-content {
+      position: relative;
+      z-index: 2;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    #op-mode-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      transition: color 0.6s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    #op-main-text {
+      font-size: clamp(1.15rem, 3vw, 1.6rem);
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 70px;
+      transition: opacity 0.5s ease;
+      margin-bottom: 1.25rem;
+      white-space: pre-line;
+    }
+
+    #op-instruction {
+      font-size: 0.9rem;
+      line-height: 1.75;
+      min-height: 90px;
+      color: rgba(221, 221, 245, 0.72);
+      transition: opacity 0.5s ease;
+      max-width: 540px;
+      margin-bottom: 2rem;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 1rem;
+    }
+
+    .sl-lbl {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+    .sl-lbl.obs { color: var(--teal); }
+    .sl-lbl.ply { color: var(--gold); }
+
+    /* Custom range slider */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+      background: linear-gradient(to right, var(--teal), var(--primary) 50%, var(--gold));
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5), 0 2px 6px rgba(0,0,0,0.35);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    input[type="range"]::-moz-range-thumb {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    #op-state-pct {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .breathe-btn {
+      margin-top: 1rem;
+      padding: 0.55rem 1.4rem;
+      border-radius: 100px;
+      border: 1px solid;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.83rem;
+      letter-spacing: 0.05em;
+      transition: all 0.4s ease;
+    }
+    .breathe-btn.active {
+      animation: breathePulse 4s ease-in-out infinite;
+    }
+    @keyframes breathePulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50%       { transform: scale(1.06); opacity: 1; }
+    }
+
+    /* ════════════════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════════════════ */
+    footer {
+      text-align: center;
+      padding: 2.5rem 0 1rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+    footer p:last-child { margin-top: 0.4rem; opacity: 0.45; }
+
+    /* ════════════════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .card { padding: 1.4rem; }
+      .arch-grid { flex-direction: column-reverse; }
+      .op-content { padding: 1.75rem 1rem; }
+      .sigil-col { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Global background particle canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<div class="app">
+
+  <!-- ══════════════════════════════════ HEADER ══ -->
+  <header>
+    <div class="brand">KJP &nbsp;·&nbsp; The First Spark</div>
+    <h1 class="site-title">Consciousness Tools</h1>
+    <p class="tagline">Explore identity · pattern · presence</p>
+  </header>
+
+  <!-- ══════════════════════════════════ NAV ══════ -->
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" data-tool="mirror"   role="tab">✦ Spark Mirror</button>
+    <button class="nav-tab"        data-tool="soulmap"  role="tab">◈ Soul Map</button>
+    <button class="nav-tab"        data-tool="observer" role="tab">◎ Observer → Player</button>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════
+       TOOL 1 — THE SPARK MIRROR
+  ══════════════════════════════════════════════════ -->
+  <div class="tool-panel active" id="panel-mirror">
+    <div class="card">
+      <div class="card-label">Tool One</div>
+      <h2>The Spark Mirror</h2>
+      <p class="sub">Type a phrase, question, or feeling. The mirror detects the pattern and reflects a deeper meaning back to you. Press <kbd style="font-size:0.8em;padding:1px 5px;border:1px solid var(--border);border-radius:4px;">Ctrl+Enter</kbd> to reflect.</p>
+
+      <div class="field">
+        <label for="mirror-input">Your phrase or question</label>
+        <textarea id="mirror-input" rows="3"
+          placeholder="What is holding me back?  /  I feel lost but keep searching.  /  Why does this keep happening?"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="mirror-btn">✦ Reflect</button>
+        <button class="btn btn-outline" id="mirror-clear">Clear</button>
+      </div>
+
+      <!-- Animated output -->
+      <div class="mirror-out" id="mirror-out">
+        <div class="mirror-section-label">◈ The Mirror Speaks</div>
+        <div id="mirror-text"></div>
+        <div class="pattern-row" id="mirror-tags"></div>
+        <div class="divider"></div>
+        <div class="btn-row">
+          <button class="btn btn-outline" id="mirror-copy">Copy Reflection</button>
+          <button class="btn btn-outline" id="mirror-again">New Reflection</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TOOL 2 — SOUL MAP GENERATOR
+  ══════════════════════════════════════════════════ -->
+  <div class="tool-panel" id="panel-soulmap">
+    <div class="card">
+      <div class="card-label">Tool Two</div>
+      <h2>Soul Map Generator</h2>
+      <p class="sub">Enter your name, birthdate, and a current intention. Receive your symbolic identity profile — archetype, numerological keys, and a unique animated sigil you can download.</p>
+
+      <div class="field">
+        <label for="sm-name">Full Name</label>
+        <input type="text" id="sm-name" placeholder="Your full name">
+      </div>
+      <div class="field">
+        <label for="sm-date">Date of Birth</label>
+        <input type="date" id="sm-date">
+      </div>
+      <div class="field">
+        <label for="sm-intention">Current Intention</label>
+        <textarea id="sm-intention" rows="2"
+          placeholder="What are you moving toward? What do you intend to create, release, or become?"></textarea>
+      </div>
+
+      <button class="btn btn-primary" id="sm-btn">◈ Generate Soul Map</button>
+    </div>
+
+    <!-- Result card -->
+    <div class="card sm-result" id="sm-result">
+      <div class="card-label">◈ Your Soul Map</div>
+      <div class="arch-grid">
+
+        <div class="arch-info">
+          <div class="arch-name"  id="sm-arch-name"></div>
+          <div class="arch-title" id="sm-arch-title"></div>
+          <div class="num-chips"  id="sm-chips"></div>
+          <div class="arch-desc"  id="sm-arch-desc"></div>
+          <ul  class="qual-list"  id="sm-quals"></ul>
+          <div class="intention-echo" id="sm-intention-echo"></div>
+        </div>
+
+        <div class="sigil-col">
+          <div class="sigil-label">Your Sigil</div>
+          <svg id="sigil-svg" width="200" height="200" viewBox="0 0 200 200"
+               aria-label="Generated geometric sigil"></svg>
+          <button class="btn btn-gold" id="sm-download">↓ Download PNG</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TOOL 3 — OBSERVER → PLAYER SWITCH
+  ══════════════════════════════════════════════════ -->
+  <div class="tool-panel" id="panel-observer">
+    <div class="card">
+      <div class="card-label">Tool Three</div>
+      <h2>Observer → Player Switch</h2>
+      <p class="sub">Drag the slider to move between modes. Watch the language, the light, and your own state shift in real time.</p>
+    </div>
+
+    <div class="op-wrap" id="op-wrap">
+      <canvas id="op-canvas"></canvas>
+      <div class="op-content">
+        <div id="op-mode-label">OBSERVER MODE</div>
+        <div id="op-main-text">You are watching.
+Everything is information.</div>
+        <div id="op-instruction">Notice what arises without judgment. You are the awareness witnessing this moment. Breathe. Observe. Let what is present simply be present.</div>
+
+        <div class="slider-row">
+          <span class="sl-lbl obs">Observer</span>
+          <input type="range" id="op-slider" min="0" max="100" value="0" aria-label="Observer to Player slider">
+          <span class="sl-lbl ply">Player</span>
+        </div>
+
+        <div id="op-state-pct">0% Player</div>
+
+        <button class="breathe-btn" id="op-breathe"
+          style="color:var(--teal);border-color:var(--teal);">
+          Begin Breath Cycle
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>The First Spark &nbsp;·&nbsp; KJP &nbsp;·&nbsp; Consciousness Tools v1.0</p>
+    <p>Built to help you recognize what was always already here.</p>
+  </footer>
+
+</div><!-- /app -->
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   THE FIRST SPARK — Consciousness Tools
+   KJP · v1.0 · Client-side only, no dependencies
+   ════════════════════════════════════════════════════════════════ */
+
+'use strict';
+
+/* ──────────────────────────────────────────────────────────────
+   UTILITY HELPERS
+────────────────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+const lerp = (a, b, t) => a + (b - a) * t;
+const rand = (lo, hi) => Math.random() * (hi - lo) + lo;
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+/* ──────────────────────────────────────────────────────────────
+   MODULE: BACKGROUND PARTICLE SYSTEM
+   Subtle drifting star-field drawn on the body canvas.
+────────────────────────────────────────────────────────────── */
+const BGParticles = (() => {
+  const canvas = $('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let pts = [];
+
+  const mkPt = () => ({
+    x: rand(0, canvas.width),
+    y: rand(0, canvas.height),
+    r: rand(0.3, 1.6),
+    dx: rand(-0.06, 0.06),
+    dy: rand(-0.12, -0.02),
+    base: rand(0.08, 0.55),
+    ph: rand(0, Math.PI * 2),
+    spd: rand(0.004, 0.018),
+  });
+
+  const resize = () => {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+
+  const draw = () => {
+    requestAnimationFrame(draw);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (const p of pts) {
+      p.ph += p.spd;
+      const a = p.base * (0.55 + 0.45 * Math.sin(p.ph));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(167,139,250,${a})`;
+      ctx.fill();
+
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.y < -4) { p.y = canvas.height + 4; p.x = rand(0, canvas.width); }
+      if (p.x < -4) p.x = canvas.width + 4;
+      if (p.x > canvas.width + 4) p.x = -4;
+    }
+  };
+
+  return {
+    init() {
+      resize();
+      window.addEventListener('resize', resize);
+      pts = Array.from({ length: 200 }, mkPt);
+      draw();
+    },
+  };
+})();
+
+
+/* ──────────────────────────────────────────────────────────────
+   MODULE: NAVIGATION
+   Handles switching between the three tool panels.
+────────────────────────────────────────────────────────────── */
+const Nav = (() => ({
+  init() {
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const id = tab.dataset.tool;
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        $(`panel-${id}`).classList.add('active');
+        // Initialise the OP canvas when its tab is first opened
+        if (id === 'observer') OPSwitch.ensureCanvas();
+      });
+    });
+  },
+}))();
+
+
+/* ──────────────────────────────────────────────────────────────
+   MODULE: THE SPARK MIRROR (Tool 1)
+   Pattern detection → animated reflection with word highlights.
+────────────────────────────────────────────────────────────── */
+const SparkMirror = (() => {
+
+  /* ── Word category sets ── */
+  const QUESTION  = new Set(['what','why','how','who','where','when','is','am','are','do','does','did','should','could','would','can','will','have','has','doesnt','dont','wont']);
+  const SELF      = new Set(['i','me','my','mine','myself','im','ive','ill','id']);
+  const SEEKING   = new Set(['find','finding','looking','searching','seeking','want','wanting','need','needing','wish','wishing','hope','hoping','desire','desiring','trying','try','reach','reaching']);
+  const FEELING   = new Set(['feel','feeling','felt','emotion','sad','happy','lost','confused','stuck','afraid','fear','anxiety','anxious','excited','love','hate','angry','frustrated','empty','alone','disconnected','alive','joy','grief','pain','hurt','tired','exhausted','unsure','uncertain']);
+  const POWER     = new Set(['power','strength','capable','worthy','enough','ready','able','possible','potential','gift','purpose','path','destiny','calling','mission','truth','light','true','real','authentic']);
+  const CHANGE    = new Set(['change','changing','transform','transforming','grow','growing','evolve','evolving','shift','shifting','move','moving','become','becoming','release','releasing','let','letting','leave','leaving','start','begin','create','creating','build','building']);
+  const RESIST    = new Set(['cant','cannot','wont','wouldnt','unable','blocked','stuck','holding','held','back','trapped','escape','free','stop','stopping','prevent','limiting','limit']);
+
+  /* ── Detect which thematic patterns are present ── */
+  const detect = (tokens) => {
+    const lower = tokens.map(t => t.toLowerCase().replace(/[^a-z']/g,''));
+    const has = set => lower.some(w => set.has(w));
+    const pats = [];
+    const isQ = tokens.some(t => t.includes('?'));
+    if (isQ || has(QUESTION))  pats.push('question');
+    if (has(SELF))             pats.push('identity');
+    if (has(SEEKING))          pats.push('seeker');
+    if (has(FEELING))          pats.push('emotion');
+    if (has(POWER))            pats.push('power');
+    if (has(CHANGE))           pats.push('change');
+    if (has(RESIST))           pats.push('resistance');
+    return [...new Set(pats)];
+  };
+
+  /* ── Reflection library — ordered most-specific first ── */
+  // Wrap *word* in asterisks to italicise/highlight in the animation.
+  const REFLECTIONS = [
+    {
+      needs: ['resistance','identity','seeker'],
+      text: 'The resistance you feel is not a wall — it is a door that opens *inward*. What you have been pushing against is asking you to *listen* rather than force. The part of you that keeps seeking is the very part that already knows the way.',
+    },
+    {
+      needs: ['question','identity','emotion'],
+      text: 'The question you are asking lives inside a feeling. You are not separate from the answer — the emotion itself is the *intelligence* trying to reach you. What does it feel like in your body, exactly where this question lives?',
+    },
+    {
+      needs: ['seeker','identity','change'],
+      text: 'You are already in *motion*. The act of seeking is the act of becoming. What you are moving toward is also moving toward you — this is the law of resonance. The path does not need to be clear; it only needs your next step.',
+    },
+    {
+      needs: ['question','seeker'],
+      text: 'Every meaningful question carries its answer in *seed form*. Notice: you already knew enough to ask this question in this way. The intelligence that formed these words is the same intelligence that holds the truth you seek.',
+    },
+    {
+      needs: ['resistance','emotion'],
+      text: 'What feels like being blocked is often the *threshold moment* — the last test before the gate opens. The emotion you carry is not a sign that something is wrong. It is energy, held in form, waiting to be recognized and moved.',
+    },
+    {
+      needs: ['identity','power'],
+      text: 'The qualities you seek are not outside you — they are your original nature asking to be *remembered*. Worthy. Enough. Capable. These are not things you become. They are what remains when you stop proving otherwise.',
+    },
+    {
+      needs: ['identity','change'],
+      text: 'You are not the person you were when this pattern began. The version of you reading these words has *already changed*. The question is not whether you can transform — it is which version of you chooses to step forward today.',
+    },
+    {
+      needs: ['emotion','change'],
+      text: 'The feeling you carry is a *messenger*. Before you try to move through it, hear it. What is it saying underneath the noise? Emotions do not block the path — they are the path, for those willing to walk into them.',
+    },
+    {
+      needs: ['question'],
+      text: 'You are the awareness in which this question arises. The question is not a problem to solve — it is a doorway to walk through. What would you do today if you trusted that the answer was *already moving toward you*?',
+    },
+    {
+      needs: ['identity'],
+      text: 'Who you are cannot be found in a concept or a story. It is the silent space that was present before you had words for anything. You are *already that*. The seeking is the only thing in the way.',
+    },
+    {
+      needs: ['emotion'],
+      text: 'What you feel is real and it is *information*. Your inner world is not separate from intelligence — it IS intelligence taking the form of sensation. What is this feeling asking you to honor?',
+    },
+    {
+      needs: ['seeker'],
+      text: 'The seeker and the sought are never truly separate. You cannot look for something you have no knowledge of. The fact that you seek this tells you: a part of you *already knows it*. Turn the search inward for three breaths.',
+    },
+    {
+      needs: ['change'],
+      text: 'Change does not require you to force anything. It requires you to *stop holding* the old thing so tightly. What would you release today if you fully trusted what is trying to emerge?',
+    },
+    {
+      needs: ['power'],
+      text: 'The power you sense within yourself is *not imaginary*. It is the signal that something real is present and ready to move. The only question is whether you are willing to act from it before you feel certain.',
+    },
+    {
+      needs: [],
+      text: 'There is a pattern in what you just wrote — and patterns are the language of the *deeper mind*. Sit with what arose as you typed these words. The first feeling that came before the thought: that one carries the message.',
+    },
+  ];
+
+  /* ── Find the best-matching reflection ── */
+  const findReflection = (pats) => {
+    let best = REFLECTIONS[REFLECTIONS.length - 1];
+    let bestScore = -1;
+    for (const r of REFLECTIONS) {
+      const score = r.needs.filter(n => pats.includes(n)).length;
+      if (score >= r.needs.length && score > bestScore) {
+        bestScore = score;
+        best = r;
+      }
+    }
+    return best.text;
+  };
+
+  /* ── Animate words with staggered fade-in ── */
+  const animateWords = (container, text) => {
+    container.innerHTML = '';
+    const words = text.split(' ');
+    let delay = 0;
+
+    words.forEach(raw => {
+      const isItalic = raw.startsWith('*') && raw.endsWith('*');
+      const word = raw.replace(/\*/g, '');
+      const span = document.createElement('span');
+      span.className = `mirror-word${isItalic ? ' hl-italic' : ''}`;
+      span.textContent = word + ' ';
+      container.appendChild(span);
+      setTimeout(() => span.classList.add('vis'), delay);
+      delay += 42 + Math.random() * 22;
+    });
+  };
+
+  /* ── Pattern tag metadata ── */
+  const TAG_META = {
+    question:   { label: '◎ Questioning', cls: 'ptag-q' },
+    identity:   { label: '◈ Identity',    cls: 'ptag-id' },
+    seeker:     { label: '✦ Seeking',     cls: 'ptag-sk' },
+    emotion:    { label: '♡ Feeling',     cls: 'ptag-em' },
+    power:      { label: '◆ Power',       cls: 'ptag-id' },
+    change:     { label: '↗ Transforming',cls: 'ptag-ch' },
+    resistance: { label: '⊗ Resistance',  cls: 'ptag-rs' },
+  };
+
+  /* ── Main reflect action ── */
+  const reflect = () => {
+    const raw = $('mirror-input').value.trim();
+    if (!raw) return;
+
+    const tokens = raw.split(/\s+/);
+    const pats   = detect(tokens);
+    const refText = findReflection(pats);
+    const tagsEl  = $('mirror-tags');
+    const outEl   = $('mirror-out');
+
+    outEl.classList.add('show');
+    tagsEl.innerHTML = '';
+    animateWords($('mirror-text'), refText);
+
+    // Stagger-render pattern tags
+    pats.forEach((p, i) => {
+      const meta = TAG_META[p];
+      if (!meta) return;
+      const tag = document.createElement('span');
+      tag.className = `ptag ${meta.cls}`;
+      tag.textContent = meta.label;
+      tag.style.animationDelay = `${550 + i * 110}ms`;
+      setTimeout(() => tagsEl.appendChild(tag), 550 + i * 110);
+    });
+
+    // Store text for clipboard
+    outEl.dataset.text = refText;
+  };
+
+  return {
+    init() {
+      $('mirror-btn').addEventListener('click', reflect);
+
+      $('mirror-input').addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 'Enter') reflect();
+      });
+
+      $('mirror-clear').addEventListener('click', () => {
+        $('mirror-input').value = '';
+        $('mirror-out').classList.remove('show');
+      });
+
+      $('mirror-copy').addEventListener('click', () => {
+        const text = $('mirror-out').dataset.text || '';
+        navigator.clipboard.writeText(`The First Spark — Mirror Reflection\n\n${text}`)
+          .then(() => {
+            const btn = $('mirror-copy');
+            const orig = btn.textContent;
+            btn.textContent = 'Copied ✓';
+            setTimeout(() => btn.textContent = orig, 2000);
+          })
+          .catch(() => {
+            // Fallback for non-HTTPS environments
+            prompt('Copy this reflection:', $('mirror-out').dataset.text || '');
+          });
+      });
+
+      $('mirror-again').addEventListener('click', () => {
+        $('mirror-input').focus();
+        $('mirror-out').classList.remove('show');
+      });
+    },
+  };
+})();
+
+
+/* ──────────────────────────────────────────────────────────────
+   MODULE: SOUL MAP GENERATOR (Tool 2)
+   Calculates numerological profile → archetype + animated SVG sigil.
+────────────────────────────────────────────────────────────── */
+const SoulMap = (() => {
+
+  /* ── Numerology ── */
+
+  // Reduce sum to single digit, preserve master numbers 11 / 22 / 33
+  const reduce = n => {
+    const masters = new Set([11, 22, 33]);
+    while (n > 9 && !masters.has(n)) {
+      n = String(n).split('').reduce((a, d) => a + +d, 0);
+    }
+    return n;
+  };
+
+  // Life path: sum all digits in "YYYY-MM-DD"
+  const lifePath = dateStr =>
+    reduce(dateStr.replace(/-/g,'').split('').reduce((a,d) => a + +d, 0));
+
+  // Name number: A=1 … Z=26, sum all letters
+  const nameNum = name =>
+    reduce(name.toUpperCase().replace(/[^A-Z]/g,'').split('')
+      .reduce((a, c) => a + (c.charCodeAt(0) - 64), 0));
+
+  // Soul urge: vowels only
+  const soulUrge = name => {
+    const vowels = new Set(['A','E','I','O','U']);
+    const sum = name.toUpperCase().replace(/[^A-Z]/g,'').split('')
+      .filter(c => vowels.has(c))
+      .reduce((a, c) => a + (c.charCodeAt(0) - 64), 0);
+    return reduce(sum) || 1;
+  };
+
+  // Intention resonance: word count + first-letter value
+  const intentionNum = text => {
+    if (!text) return 1;
+    const words = text.trim().split(/\s+/).length;
+    const letter = (text.trim()[0] || 'A').toUpperCase();
+    return reduce(words + (letter.charCodeAt(0) - 64));
+  };
+
+  /* ── Archetype data (indexed by life-path number) ── */
+  const ARCH = {
+    1:  { name:'The Pioneer',       title:'Initiator · Creator · Original',
+          desc:'You are a first-mover. Your soul carries the frequency of pure beginning — the impulse before the form. You are here to initiate, lead from originality, and trust that your singular vision is itself the map.',
+          quals:['Courage to begin','Original perspective','Creative force','Leadership through authenticity','The power of the solo path'] },
+    2:  { name:'The Weaver',        title:'Connector · Intuitive · Harmonizer',
+          desc:'You feel the threads between people, ideas, and moments that others miss. Your gift is not force but resonance — you bring things together not by pushing, but by being the field in which connection becomes natural.',
+          quals:['Deep empathy','Intuitive pattern-sensing','Peace-making','Collaborative intelligence','Sacred sensitivity'] },
+    3:  { name:'The Transmitter',   title:'Communicator · Artist · Channel',
+          desc:'You are wired for expression. Something moves through you — a voice, a vision, a frequency — that wants to take form. Your work is to trust the channel and let the signal come through clearly.',
+          quals:['Expressive genius','Magnetic presence','Creative joy','Truth-telling through art','Contagious aliveness'] },
+    4:  { name:'The Architect',     title:'Builder · Foundation · Stabilizer',
+          desc:'You build what lasts. Your soul understands that great things require great groundwork — and you carry the discipline, patience, and structural intelligence to create foundations that will hold.',
+          quals:['Methodical mastery','Reliable presence','Long-term vision','The gift of structure','Sacred discipline'] },
+    5:  { name:'The Explorer',      title:'Freedom · Catalyst · Change-Maker',
+          desc:'You are here to move — through space, ideas, experiences, and edges. You are a catalyst who loosens what is fixed and opens what is closed, simply by being present.',
+          quals:['Dynamic adaptability','Fearless curiosity','Liberation energy','Multi-dimensional intelligence','The gift of the edge'] },
+    6:  { name:'The Guardian',      title:'Nurturer · Healer · Harmonizer',
+          desc:'Love is your first language. You sense what is needed before it is spoken, and your gift is the capacity to create conditions in which others flourish. You are here to build the sacred and the beautiful.',
+          quals:['Unconditional care','Healing presence','Aesthetic intelligence','Community-building','The wisdom of the heart'] },
+    7:  { name:'The Mystic',        title:'Seeker · Philosopher · Inner Knower',
+          desc:'You live at the interface between the visible and invisible. You are pulled toward depth — toward the question inside the question, the pattern inside the pattern. Your gift is the willingness to go all the way in.',
+          quals:['Deep analysis','Spiritual discernment','The inner compass','Sacred solitude','Wisdom beyond logic'] },
+    8:  { name:'The Manifestor',    title:'Builder · Activator · Power Bearer',
+          desc:'You carry the frequency of material mastery and purposeful power. You understand that resources and systems are not separate from spirit — they are spirit in form. Your gift is the capacity to make vision tangible.',
+          quals:['Strategic intelligence','Abundance consciousness','Purposeful power','Executive vision','The alchemy of matter'] },
+    9:  { name:'The Humanitarian',  title:'Visionary · Integrator · World Server',
+          desc:'You have lived many lives within this one. The breadth of your awareness and empathy makes you uniquely positioned to serve the whole, not just the part.',
+          quals:['Universal compassion','Integrative wisdom','Completion energy','The long view','Service as purpose'] },
+    11: { name:'The Illuminator',   title:'Master Intuitive · Lightbringer',
+          desc:'You are a bridge between realms. The 11 carries a double charge — the tension of opposites held in one field. Your life may have been intense, but that intensity has been sharpening you as an instrument of awakening.',
+          quals:['Visionary insight','Spiritual sensitivity','Inspirational presence','The gift of seeing through','Master of the in-between'] },
+    22: { name:'The Master Builder',title:'Architect of Worlds · Sacred Constructor',
+          desc:'You are here to build systems and movements that last beyond a single lifetime. Your vision is not small — and neither is your responsibility. The 22 carries the weight and glory of making the invisible permanent.',
+          quals:['Monumental vision','Practical mysticism','Structural mastery','Leadership through service','The alchemy of scale'] },
+    33: { name:'The Blessing',      title:'Master Teacher · Healing Presence',
+          desc:'You embody the highest expression of unconditional love made fully conscious. Your presence alone shifts fields. You are here not to teach doctrine but to demonstrate, through your being, what love in form looks like.',
+          quals:['Embodied compassion','Selfless service','Healing mastery','Transformational presence','The living teaching'] },
+  };
+
+  /* ── Color palettes per life-path number ── */
+  const PALETTES = {
+    1: ['#ffd700','#ff8c00'],  2: ['#a78bfa','#ec4899'],
+    3: ['#f472b6','#fb923c'],  4: ['#60a5fa','#34d399'],
+    5: ['#f97316','#fbbf24'],  6: ['#34d399','#6ee7b7'],
+    7: ['#818cf8','#c084fc'],  8: ['#fcd34d','#f59e0b'],
+    9: ['#e879f9','#a78bfa'], 11: ['#f0abfc','#7dd3fc'],
+   22: ['#fde68a','#fca5a5'], 33: ['#86efac','#fde68a'],
+  };
+
+  /* ── SVG helpers ── */
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svgEl = (tag, attrs) => {
+    const el = document.createElementNS(svgNS, tag);
+    if (attrs) Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+    return el;
+  };
+
+  // Evenly-spaced polygon vertices on a circle
+  const polyPts = (cx, cy, r, n, offset = -Math.PI / 2) =>
+    Array.from({ length: n }, (_, i) => {
+      const a = offset + (2 * Math.PI * i) / n;
+      return [+(cx + r * Math.cos(a)).toFixed(2), +(cy + r * Math.sin(a)).toFixed(2)];
+    });
+
+  /* ── Draw sigil ── */
+  const drawSigil = (lp, nn, inp) => {
+    const svg = $('sigil-svg');
+    svg.innerHTML = '';
+    const cx = 100, cy = 100, R = 84;
+    const [c1, c2] = PALETTES[lp] || PALETTES[1];
+
+    // Defs: gradient + glow filter
+    const defs = svgEl('defs');
+    defs.innerHTML = `
+      <radialGradient id="rg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="${c1}" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="${c2}" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="gf" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.8" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>`;
+    svg.appendChild(defs);
+
+    // Ambient glow background
+    svg.appendChild(svgEl('circle',{ cx, cy, r:R, fill:'url(#rg)' }));
+
+    // ─ Outer ring (animated, CSS class) ─
+    const outerRing = svgEl('circle',{ cx, cy, r:R-1.5, fill:'none', stroke:c1, 'stroke-width':'0.8', opacity:'0.55' });
+    outerRing.setAttribute('class','sig-outer');
+    svg.appendChild(outerRing);
+
+    // ─ Outer polygon star (N = life-path, 3–9 points) ─
+    const nO = clamp(lp <= 9 ? lp : lp === 11 ? 4 : lp === 22 ? 8 : 6, 3, 9);
+    const oPts = polyPts(cx, cy, R - 7, nO);
+
+    // Cross-connect all non-adjacent outer points
+    for (let i = 0; i < oPts.length; i++) {
+      for (let j = i + 2; j < oPts.length - (i === 0 ? 1 : 0); j++) {
+        svg.appendChild(svgEl('line',{
+          x1:oPts[i][0], y1:oPts[i][1], x2:oPts[j][0], y2:oPts[j][1],
+          stroke:c1, 'stroke-width':'0.5', opacity:'0.25',
+        }));
+      }
+    }
+
+    // Outer polygon outline
+    const oGroup = svgEl('g', { class:'sig-outer' });
+    oGroup.appendChild(svgEl('polygon',{
+      points: oPts.map(p=>p.join(',')).join(' '),
+      fill:'none', stroke:c1, 'stroke-width':'1', opacity:'0.75', filter:'url(#gf)',
+    }));
+    svg.appendChild(oGroup);
+
+    // Outer point dots
+    oPts.forEach(p => svg.appendChild(svgEl('circle',{
+      cx:p[0], cy:p[1], r:'2.8', fill:c1, opacity:'0.85', filter:'url(#gf)',
+    })));
+
+    // ─ Inner shape (animated, name number, 3–8 points) ─
+    const nI = clamp(nn, 3, 8);
+    const iR = R * 0.44;
+    const iPts = polyPts(cx, cy, iR, nI, Math.PI / nI);
+
+    const iGroup = svgEl('g', { class:'sig-inner' });
+
+    // Spokes from centre to inner points
+    iPts.forEach(p => iGroup.appendChild(svgEl('line',{
+      x1:cx, y1:cy, x2:p[0], y2:p[1],
+      stroke:c2, 'stroke-width':'0.55', opacity:'0.38',
+    })));
+
+    iGroup.appendChild(svgEl('polygon',{
+      points: iPts.map(p=>p.join(',')).join(' '),
+      fill:'none', stroke:c2, 'stroke-width':'1.3', opacity:'0.82', filter:'url(#gf)',
+    }));
+    svg.appendChild(iGroup);
+
+    // ─ Centre cluster (intention number dots, 1–7) ─
+    const nC = clamp(inp, 1, 7);
+    const cPts = nC === 1 ? [[cx,cy]] : polyPts(cx, cy, R * 0.1, nC);
+    cPts.forEach(p => svg.appendChild(svgEl('circle',{
+      cx:p[0], cy:p[1], r:'3', fill:c1, opacity:'0.95', filter:'url(#gf)',
+    })));
+
+    // Centre ring
+    svg.appendChild(svgEl('circle',{
+      cx, cy, r:'6', fill:'none', stroke:c1, 'stroke-width':'1.5', opacity:'0.8',
+    }));
+  };
+
+  /* ── Download sigil + profile as PNG ── */
+  const download = (name, archName) => {
+    const svg   = $('sigil-svg');
+    const svgStr = new XMLSerializer().serializeToString(svg);
+    const blob   = new Blob([svgStr], { type:'image/svg+xml;charset=utf-8' });
+    const url    = URL.createObjectURL(blob);
+
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = 420; c.height = 540;
+      const cx = c.getContext('2d');
+
+      // Background
+      const bg = cx.createLinearGradient(0,0,0,540);
+      bg.addColorStop(0,'#07070f');
+      bg.addColorStop(1,'#0d0d25');
+      cx.fillStyle = bg;
+      cx.fillRect(0,0,420,540);
+
+      // Subtle grid lines
+      cx.strokeStyle = 'rgba(120,100,255,0.07)';
+      cx.lineWidth = 1;
+      for (let y = 0; y < 540; y += 30) { cx.beginPath(); cx.moveTo(0,y); cx.lineTo(420,y); cx.stroke(); }
+      for (let x = 0; x < 420; x += 30) { cx.beginPath(); cx.moveTo(x,0); cx.lineTo(x,540); cx.stroke(); }
+
+      // Header label
+      cx.fillStyle = '#6b6b8a';
+      cx.font = '10px monospace';
+      cx.textAlign = 'center';
+      cx.fillText('THE FIRST SPARK  ·  SOUL MAP', 210, 38);
+
+      // Name
+      cx.fillStyle = '#f5c842';
+      cx.font = '700 20px "Segoe UI",sans-serif';
+      cx.fillText(name.toUpperCase(), 210, 70);
+
+      // Archetype
+      cx.fillStyle = '#ddddf5';
+      cx.font = '400 14px "Segoe UI",sans-serif';
+      cx.fillText(archName, 210, 96);
+
+      // Sigil image (scale up)
+      cx.drawImage(img, 110, 120, 200, 200);
+
+      // Footer
+      cx.fillStyle = '#3d3d5c';
+      cx.font = '9px monospace';
+      cx.fillText('kjp  ·  thefirstspark.com', 210, 525);
+
+      URL.revokeObjectURL(url);
+      const a = document.createElement('a');
+      a.download = `soul-map-${name.toLowerCase().replace(/\s+/g,'-')}.png`;
+      a.href = c.toDataURL('image/png');
+      a.click();
+    };
+    img.src = url;
+  };
+
+  /* ── Main generate action ── */
+  const generate = () => {
+    const name   = $('sm-name').value.trim();
+    const date   = $('sm-date').value;
+    const intent = $('sm-intention').value.trim();
+
+    if (!name || !date) {
+      alert('Please enter your name and birthdate to generate your Soul Map.');
+      return;
+    }
+
+    const lp = lifePath(date);
+    const nn = nameNum(name);
+    const su = soulUrge(name);
+    const ip = intentionNum(intent);
+    const arch = ARCH[lp] || ARCH[1];
+
+    // Populate text
+    $('sm-arch-name').textContent  = arch.name;
+    $('sm-arch-title').textContent = arch.title;
+    $('sm-arch-desc').textContent  = arch.desc;
+    $('sm-chips').innerHTML = `
+      <div class="chip"><div class="n">${lp}</div><div class="lbl">Life Path</div></div>
+      <div class="chip"><div class="n">${nn}</div><div class="lbl">Name</div></div>
+      <div class="chip"><div class="n">${su}</div><div class="lbl">Soul Urge</div></div>`;
+    $('sm-quals').innerHTML = arch.quals.map(q => `<li>${q}</li>`).join('');
+    $('sm-intention-echo').textContent = intent
+      ? `Intention: "${intent}"` : '';
+
+    // Draw sigil
+    drawSigil(lp, nn, ip);
+
+    // Show result
+    const resultEl = $('sm-result');
+    resultEl.classList.add('show');
+    resultEl.scrollIntoView({ behavior:'smooth', block:'start' });
+
+    $('sm-download').onclick = () => download(name, arch.name);
+  };
+
+  return {
+    init() {
+      $('sm-btn').addEventListener('click', generate);
+    },
+  };
+})();
+
+
+/* ──────────────────────────────────────────────────────────────
+   MODULE: OBSERVER → PLAYER SWITCH (Tool 3)
+   Slider-driven canvas animation + shifting language states.
+────────────────────────────────────────────────────────────── */
+const OPSwitch = (() => {
+  const canvas = $('op-canvas');
+  const ctx    = canvas.getContext('2d');
+  let pts = [], raf = null, val = 0, breatheOn = false, breathePhase = 0;
+  let canvasReady = false;
+
+  /* ── Content snapshots at threshold values ── */
+  const STATES = [
+    { at: 0,
+      label: 'OBSERVER MODE',
+      main:  'You are watching.\nEverything is information.',
+      body:  'Notice what arises without judgment. You are the awareness witnessing this moment. Breathe. Observe. Let what is present simply be present.',
+      color: '#2dd4bf' },
+    { at: 20,
+      label: 'AWAKENING',
+      main:  'Something stirs.\nThe watcher begins to move.',
+      body:  'A shift is happening. Notice how awareness itself has changed — less detached, more alive. What would you do if you knew the rules were suggestions?',
+      color: '#a78bfa' },
+    { at: 40,
+      label: 'ENTERING THE FIELD',
+      main:  'You are not separate\nfrom what you observe.',
+      body:  'You are beginning to participate. The field responds to your presence. Stand up straight. Take a breath. What is the first move that wants to happen through you?',
+      color: '#818cf8' },
+    { at: 60,
+      label: 'ENGAGED',
+      main:  'You are in the game.\nEvery choice matters.',
+      body:  'You have crossed the threshold. You are no longer watching — you are happening. Your choices ripple outward. What bold move has been waiting for you to be ready?',
+      color: '#c084fc' },
+    { at: 80,
+      label: 'FULL PLAY',
+      main:  'You are the move.\nYou ARE the game.',
+      body:  'This is the flow state. There is no gap between intention and action. You are not in the game — you are the game playing itself through you. Go. Now. Move.',
+      color: '#fbbf24' },
+    { at: 100,
+      label: 'PLAYER MODE',
+      main:  'ACTIVATED.\nEVERY MOMENT IS YOUR MOVE.',
+      body:  'You are fully here. Fully alive. Fully responsible for this experience. The field is yours. The board is clear. What is the most alive thing you could do in the next 10 minutes?',
+      color: '#f5c842' },
+  ];
+
+  const getState = v => {
+    let s = STATES[0];
+    for (const st of STATES) { if (v >= st.at) s = st; }
+    return s;
+  };
+
+  /* ── Particle factory for OP canvas ── */
+  const mkPt = () => ({
+    x: rand(0, canvas.width),
+    y: rand(0, canvas.height),
+    r: rand(0.5, 2.2),
+    vx: (Math.random() - 0.5) * 0.35,
+    vy: (Math.random() - 0.5) * 0.35,
+    op: rand(0.12, 0.55),
+  });
+
+  /* ── Resize canvas to match its container ── */
+  const resize = () => {
+    const wrap = $('op-wrap');
+    canvas.width  = wrap.offsetWidth  || 600;
+    canvas.height = wrap.offsetHeight || 430;
+  };
+
+  /* ── Animation loop ── */
+  const draw = () => {
+    raf = requestAnimationFrame(draw);
+    const t = val / 100;
+
+    // Background colour shifts teal→purple→amber
+    const r = Math.round(lerp(6,  32, t));
+    const g = Math.round(lerp(6,  16, t));
+    const b = Math.round(lerp(28,  6, t));
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Radial glow at centre
+    const glowAlpha = 0.05 + t * 0.12;
+    const glowR = Math.round(lerp(45, 245, t));
+    const glowG = Math.round(lerp(212, 200, t));
+    const glowB = Math.round(lerp(191, 66, t));
+    const grad = ctx.createRadialGradient(
+      canvas.width/2, canvas.height/2, 0,
+      canvas.width/2, canvas.height/2, canvas.width * 0.7
+    );
+    grad.addColorStop(0, `rgba(${glowR},${glowG},${glowB},${glowAlpha})`);
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Particles — speed + outward drift scale with Player value
+    const speed = 0.4 + t * 3.2;
+    for (const p of pts) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${glowR},${glowG},${glowB},${p.op})`;
+      ctx.fill();
+
+      p.x += p.vx * speed;
+      p.y += p.vy * speed;
+
+      // Player mode: accelerate away from centre
+      if (t > 0.45) {
+        const dx = p.x - canvas.width / 2;
+        const dy = p.y - canvas.height / 2;
+        const d  = Math.sqrt(dx*dx + dy*dy) || 1;
+        const push = (t - 0.45) * 0.8;
+        p.x += (dx / d) * push;
+        p.y += (dy / d) * push;
+      }
+
+      // Wrap
+      if (p.x < 0) p.x = canvas.width;  if (p.x > canvas.width)  p.x = 0;
+      if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+    }
+
+    // Breathing circle overlay
+    if (breatheOn) {
+      breathePhase += 0.007;
+      const br = 18 + 24 * (0.5 + 0.5 * Math.sin(breathePhase));
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height - 50, br, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(${glowR},${glowG},${glowB},${0.25 + 0.18 * Math.sin(breathePhase)})`;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+  };
+
+  /* ── Update UI text & colours from slider value ── */
+  const update = v => {
+    val = v;
+    const st = getState(v);
+    $('op-mode-label').textContent = st.label;
+    $('op-mode-label').style.color = st.color;
+    $('op-main-text').textContent  = st.main;
+    $('op-instruction').textContent = st.body;
+    $('op-state-pct').textContent  = `${v}% Player`;
+
+    const btn = $('op-breathe');
+    btn.style.color       = st.color;
+    btn.style.borderColor = st.color;
+  };
+
+  return {
+    ensureCanvas() {
+      if (canvasReady) return;
+      canvasReady = true;
+      resize();
+      pts = Array.from({ length: 90 }, mkPt);
+      window.addEventListener('resize', () => { resize(); pts = Array.from({ length: 90 }, mkPt); });
+      if (!raf) draw();
+    },
+
+    init() {
+      const slider = $('op-slider');
+      slider.addEventListener('input', e => update(+e.target.value));
+
+      $('op-breathe').addEventListener('click', () => {
+        breatheOn = !breatheOn;
+        const btn = $('op-breathe');
+        btn.textContent = breatheOn ? 'Stop Breath Cycle' : 'Begin Breath Cycle';
+        btn.classList.toggle('active', breatheOn);
+      });
+    },
+  };
+})();
+
+
+/* ──────────────────────────────────────────────────────────────
+   BOOTSTRAP — wire everything up on DOMContentLoaded
+────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  BGParticles.init();
+  Nav.init();
+  SparkMirror.init();
+  SoulMap.init();
+  OPSwitch.init();
+});
+</script>
+</body>
+</html>

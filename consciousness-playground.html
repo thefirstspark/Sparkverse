@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consciousness Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+
+        #playground {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            position: relative;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .stats {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #a78bfa;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border: 1px solid #6d28d9;
+            border-radius: 4px;
+            min-width: 200px;
+        }
+
+        .stats-title {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .stat-line {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            color: #a78bfa;
+        }
+
+        .stat-value {
+            color: #ec4899;
+            font-weight: bold;
+        }
+
+        .unlocked {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #6d28d9;
+            font-size: 11px;
+        }
+
+        .unlock-item {
+            color: #fbbf24;
+            margin: 3px 0;
+        }
+
+        .center-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            color: #a78bfa;
+            z-index: 50;
+            pointer-events: none;
+            text-shadow: 0 0 20px rgba(109, 40, 217, 0.8);
+        }
+
+        .title {
+            font-size: 3em;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
+            animation: fadeInOut 4s infinite;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #ec4899;
+            animation: fadeInOut 6s infinite 1s;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .pulse {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                font-size: 10px;
+                padding: 10px;
+                min-width: auto;
+            }
+
+            .center-text {
+                width: 90%;
+            }
+
+            .title {
+                font-size: 1.8em;
+            }
+
+            .subtitle {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="playground">
+        <canvas id="canvas"></canvas>
+        <div class="stats">
+            <div class="stats-title">⚡ CONSCIOUSNESS</div>
+            <div class="stat-line">
+                <span class="stat-label">Interactions:</span>
+                <span class="stat-value" id="clickCount">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-label">Active Particles:</span>
+                <span class="stat-value" id="particleCount">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-label">Intensity Level:</span>
+                <span class="stat-value" id="intensity">0%</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-label">Energy Field:</span>
+                <span class="stat-value" id="field">DORMANT</span>
+            </div>
+            <div class="unlocked">
+                <div style="color: #6d28d9; font-weight: bold; margin-bottom: 5px;">UNLOCKED:</div>
+                <div id="unlockedList"></div>
+            </div>
+        </div>
+
+        <div class="center-text" id="centerText">
+            <div class="title">CONSCIOUSNESS PLAYGROUND</div>
+            <div class="subtitle">Click to Awaken</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        let mouseX = width / 2;
+        let mouseY = height / 2;
+        let time = 0;
+        let clickCount = 0;
+        let particles = [];
+        let activeSystems = {
+            particles: false,
+            frequencyBars: false,
+            chakras: false,
+            geometry: false,
+            energyFlow: false,
+            pulses: false,
+            waveforms: false,
+            fractals: false
+        };
+
+        const unlocks = [
+            { clicks: 1, name: 'PARTICLE GENESIS', key: 'particles' },
+            { clicks: 3, name: 'FREQUENCY SPECTRUM', key: 'frequencyBars' },
+            { clicks: 5, name: 'CHAKRA RESONANCE', key: 'chakras' },
+            { clicks: 8, name: 'SACRED GEOMETRY', key: 'geometry' },
+            { clicks: 12, name: 'ENERGY FLOWS', key: 'energyFlow' },
+            { clicks: 17, name: 'PULSE WAVES', key: 'pulses' },
+            { clicks: 25, name: 'WAVEFORM CHAOS', key: 'waveforms' },
+            { clicks: 40, name: 'FRACTAL DIMENSION', key: 'fractals' }
+        ];
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        canvas.addEventListener('click', (e) => {
+            clickCount++;
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            // Spawn big pulse
+            spawnPulse(clickX, clickY);
+
+            // Spawn burst of particles
+            for (let i = 0; i < 20; i++) {
+                spawnParticle(clickX, clickY);
+            }
+
+            // Check unlocks
+            checkUnlocks();
+            updateStats();
+        });
+
+        // Particle system
+        class Particle {
+            constructor(x, y) {
+                this.x = x + (Math.random() - 0.5) * 50;
+                this.y = y + (Math.random() - 0.5) * 50;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4;
+                this.life = 1;
+                this.size = Math.random() * 3 + 2;
+                this.colors = ['#a78bfa', '#6d28d9', '#ec4899', '#fbbf24', '#00f0ff'];
+                this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= 0.008;
+                this.vy += 0.08;
+                this.vx *= 0.98;
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life * 0.8;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        class Pulse {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = 0;
+                this.maxRadius = 200 + Math.random() * 200;
+                this.life = 1;
+            }
+
+            update() {
+                this.radius += this.maxRadius * 0.05;
+                this.life -= 0.02;
+            }
+
+            draw(ctx) {
+                ctx.strokeStyle = `rgba(236, 72, 153, ${this.life * 0.8})`;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.strokeStyle = `rgba(167, 139, 250, ${this.life * 0.5})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius * 0.7, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        let pulses = [];
+
+        function spawnParticle(x, y) {
+            if (activeSystems.particles) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function spawnPulse(x, y) {
+            if (activeSystems.pulses) {
+                pulses.push(new Pulse(x, y));
+            }
+        }
+
+        // Background animations
+        function drawFrequencyBars() {
+            if (!activeSystems.frequencyBars) return;
+
+            const barWidth = 8;
+            const barGap = 10;
+            const startX = 40;
+            const startY = height - 100;
+            const numBars = 48;
+
+            for (let i = 0; i < numBars; i++) {
+                const height_bar = Math.sin(time * 0.05 + i * 0.15) * 40 + 25 + Math.random() * 15;
+                const hue = (i / numBars * 360 + time * 0.3) % 360;
+                
+                ctx.fillStyle = `hsla(${hue}, 100%, 50%, 0.7)`;
+                ctx.fillRect(
+                    startX + i * (barWidth + barGap),
+                    startY - height_bar,
+                    barWidth,
+                    height_bar
+                );
+            }
+        }
+
+        function drawSacredGeometry() {
+            if (!activeSystems.geometry) return;
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            ctx.strokeStyle = 'rgba(167, 139, 250, 0.2)';
+            ctx.lineWidth = 1.5;
+
+            // Rotating hexagons
+            for (let layer = 0; layer < 5; layer++) {
+                const radius = 80 + layer * 100 + Math.sin(time * 0.02 + layer) * 30;
+                const rotation = time * (0.01 + layer * 0.007);
+
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i * Math.PI / 3) + rotation;
+                    const x = centerX + Math.cos(angle) * radius;
+                    const y = centerY + Math.sin(angle) * radius;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            // Rotating circles
+            for (let circle = 0; circle < 4; circle++) {
+                ctx.strokeStyle = `rgba(109, 40, 217, ${0.25 - circle * 0.05})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                const r = 120 + circle * 120;
+                ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        function drawChakras() {
+            if (!activeSystems.chakras) return;
+
+            const chakras = [
+                { color: '#dc2626', y: 0.85 },
+                { color: '#ea580c', y: 0.72 },
+                { color: '#eab308', y: 0.59 },
+                { color: '#16a34a', y: 0.46 },
+                { color: '#0ea5e9', y: 0.33 },
+                { color: '#8b5cf6', y: 0.20 },
+                { color: '#d946ef', y: 0.07 }
+            ];
+
+            chakras.forEach((chakra, index) => {
+                const x = width * (0.1 + index * 0.125);
+                const y = height * chakra.y;
+                const pulse = Math.sin(time * 0.03 + index) * 8 + 12;
+                const glow = Math.sin(time * 0.05 + index) * 0.4 + 0.7;
+
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, pulse * 2.5);
+                gradient.addColorStop(0, chakra.color + Math.floor(glow * 100).toString(16));
+                gradient.addColorStop(1, chakra.color + '00');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(x, y, pulse * 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = chakra.color;
+                ctx.globalAlpha = glow;
+                ctx.beginPath();
+                ctx.arc(x, y, pulse, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            });
+        }
+
+        function drawEnergyFlow() {
+            if (!activeSystems.energyFlow) return;
+
+            ctx.strokeStyle = 'rgba(167, 139, 250, 0.4)';
+            ctx.lineWidth = 2;
+
+            for (let line = 0; line < 6; line++) {
+                ctx.beginPath();
+                const offset = time * 0.03 + line;
+                
+                for (let x = 0; x < width; x += 25) {
+                    const y = height / 2 + 
+                        Math.sin(x * 0.004 + offset) * 100 + 
+                        Math.cos(time * 0.01 + line) * 70;
+                    
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function drawWaveforms() {
+            if (!activeSystems.waveforms) return;
+
+            for (let wave = 0; wave < 4; wave++) {
+                ctx.strokeStyle = `hsla(${wave * 90 + time * 2}, 100%, 50%, 0.4)`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+
+                for (let x = 0; x < width; x += 10) {
+                    const y = height / 2 + 
+                        Math.sin(x * 0.01 + time * 0.02 + wave) * 60 +
+                        Math.cos(x * 0.005 + time * 0.015) * 40;
+                    
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function drawFractals() {
+            if (!activeSystems.fractals) return;
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            ctx.fillStyle = 'rgba(236, 72, 153, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            // Mandelbrot-ish recursion visualization
+            for (let i = 0; i < 8; i++) {
+                const angle = time * 0.02 + (i / 8) * Math.PI * 2;
+                const dist = 100 + i * 50;
+                const x = centerX + Math.cos(angle) * dist;
+                const y = centerY + Math.sin(angle) * dist;
+
+                ctx.strokeStyle = `hsla(${i * 45 + time}, 100%, 50%, 0.6)`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+
+                for (let j = 0; j < 50; j++) {
+                    const subAngle = (j / 50) * Math.PI * 2 + time * 0.05;
+                    const subDist = 30 + Math.sin(time * 0.03 + i) * 15;
+                    const px = x + Math.cos(subAngle) * subDist;
+                    const py = y + Math.sin(subAngle) * subDist;
+                    
+                    if (j === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function drawCursor() {
+            const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 150);
+            gradient.addColorStop(0, 'rgba(236, 72, 153, 0.4)');
+            gradient.addColorStop(1, 'rgba(236, 72, 153, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(mouseX - 150, mouseY - 150, 300, 300);
+
+            // Cursor circle
+            ctx.strokeStyle = 'rgba(167, 139, 250, 0.6)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(mouseX, mouseY, 30, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        function animate() {
+            // Dark fade instead of clear
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.95)';
+            ctx.fillRect(0, 0, width, height);
+
+            time++;
+
+            // Draw all active systems
+            drawFrequencyBars();
+            drawSacredGeometry();
+            drawChakras();
+            drawEnergyFlow();
+            drawWaveforms();
+            drawFractals();
+
+            // Update and draw particles
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw(ctx);
+            });
+
+            // Update and draw pulses
+            pulses = pulses.filter(p => p.life > 0);
+            pulses.forEach(p => {
+                p.update();
+                p.draw(ctx);
+            });
+
+            // Always draw cursor
+            drawCursor();
+
+            requestAnimationFrame(animate);
+        }
+
+        function checkUnlocks() {
+            unlocks.forEach(unlock => {
+                if (clickCount >= unlock.clicks && !activeSystems[unlock.key]) {
+                    activeSystems[unlock.key] = true;
+                }
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('particleCount').textContent = particles.length;
+            
+            const intensity = Math.min(clickCount * 2.5, 100);
+            document.getElementById('intensity').textContent = Math.round(intensity) + '%';
+
+            let fieldText = 'DORMANT';
+            if (clickCount > 5) fieldText = 'AWAKENING';
+            if (clickCount > 15) fieldText = 'ACTIVE';
+            if (clickCount > 30) fieldText = 'RESONANT';
+            document.getElementById('field').textContent = fieldText;
+
+            // Update unlocked list
+            const unlockedDiv = document.getElementById('unlockedList');
+            const unlockedItems = unlocks.filter(u => clickCount >= u.clicks);
+            unlockedDiv.innerHTML = unlockedItems.map(u => 
+                `<div class="unlock-item">✓ ${u.name}</div>`
+            ).join('');
+
+            // Hide center text after some clicks
+            const centerText = document.getElementById('centerText');
+            if (clickCount > 0 && clickCount < 8) {
+                centerText.style.opacity = Math.max(0, 1 - (clickCount / 8));
+            } else if (clickCount >= 8) {
+                centerText.style.display = 'none';
+            }
+        }
+
+        animate();
+    </script>
+</body>
+</html>
