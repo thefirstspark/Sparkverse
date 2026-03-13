@@ -63,6 +63,19 @@
         .new-prompt { margin-top: 15px; padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #666; font-size: 0.75rem; cursor: pointer; }
         .new-prompt:hover { border-color: #9d4edd; color: #9d4edd; }
         
+        .premium-cta { background: linear-gradient(135deg, rgba(255,209,102,0.08), rgba(247,37,133,0.06)); border: 1px solid rgba(255,209,102,0.25); border-radius: 20px; padding: 25px 20px; margin-bottom: 25px; text-align: center; position: relative; overflow: hidden; }
+        .premium-cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #ffd166, #f72585, transparent); }
+        .premium-cta .pc-badge { display: inline-block; padding: 4px 12px; background: rgba(255,209,102,0.12); border: 1px solid rgba(255,209,102,0.3); border-radius: 100px; font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 3px; color: #ffd166; margin-bottom: 12px; }
+        .premium-cta h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: #fff; margin-bottom: 8px; letter-spacing: 1px; }
+        .premium-cta .pc-desc { font-size: 0.85rem; color: #888; line-height: 1.6; margin-bottom: 6px; }
+        .premium-cta .pc-price { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #ffd166; margin-bottom: 14px; }
+        .premium-cta .pc-price small { font-size: 0.7rem; color: #666; font-family: 'Rajdhani', sans-serif; }
+        .premium-cta .pc-btn { display: inline-block; padding: 14px 36px; background: linear-gradient(135deg, #ffd166, #f72585); border-radius: 14px; color: #0a0a12; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 2px; text-decoration: none; transition: all 0.3s; }
+        .premium-cta .pc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,209,102,0.25); }
+        .premium-cta .pc-samples { margin-top: 12px; font-size: 0.7rem; color: #555; }
+        .premium-cta .pc-samples a { color: #9d4edd; text-decoration: none; }
+        .premium-cta .pc-samples a:hover { text-decoration: underline; }
+        
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
         .modal-content { background: #0a0a12; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; }
@@ -109,6 +122,15 @@
             <button class="new-prompt" id="newPromptBtn">New Prompt</button>
         </div>
         
+        <div class="premium-cta">
+            <div class="pc-badge">✦ PREMIUM SERVICE</div>
+            <h3>Get Your Personal Soul Map</h3>
+            <p class="pc-desc">Your life's hidden code — mapped by KJP.<br>Custom soul map with a permanent URL to keep and share forever.</p>
+            <div class="pc-price">$22 <small>first 22 sold — jumps to $44 after</small></div>
+            <a href="https://whop.com/sparkverse-511c/get-your-personal-soul-map/" target="_blank" rel="noopener" class="pc-btn">ORDER YOUR MAP</a>
+            <p class="pc-samples">See samples at <a href="http://soul-maps.thefirstspark.shop/" target="_blank" rel="noopener">soul-maps.thefirstspark.shop</a></p>
+        </div>
+
         <div class="aspects-section">
             <h2 class="section-title">◇ YOUR SOUL ASPECTS</h2>
             <div class="aspect-list" id="aspectList"></div>
