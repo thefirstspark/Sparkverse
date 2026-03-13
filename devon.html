@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devon Ray | Born of Fire</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♑</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #050508;
+            --deep: #0a0a12;
+            --silver: #8892a8;
+            --pearl: #c4c9d4;
+            --white: #f0f2f8;
+            --devon-blue: #4a9eff;
+            --devon-glow: rgba(74, 158, 255, 0.3);
+            --gold: #d4af37;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--void);
+            color: var(--pearl);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+        /* Stars */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, white, transparent),
+                radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 90px 40px, var(--devon-blue), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 200px 150px, var(--devon-blue), transparent),
+                radial-gradient(1.5px 1.5px at 280px 180px, rgba(255,255,255,0.6), transparent);
+            background-size: 300px 200px;
+            pointer-events: none;
+            z-index: 0;
+            animation: drift 100s linear infinite;
+        }
+        @keyframes drift {
+            from { transform: translateY(0); }
+            to { transform: translateY(-200px); }
+        }
+        /* Sacred geometry background */
+        .geometry {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .geometry svg {
+            width: 100%; height: 100%;
+            animation: rotate 200s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        /* Card */
+        .card {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .zodiac {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px var(--devon-glow));
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        .name {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 400;
+            letter-spacing: 8px;
+            color: var(--white);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            text-shadow: 0 0 40px var(--devon-glow);
+        }
+        .surname {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 6px;
+            color: var(--devon-blue);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+        .birth-info {
+            background: rgba(74, 158, 255, 0.05);
+            border: 1px solid rgba(74, 158, 255, 0.15);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .birth-date {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: var(--white);
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+        .birth-time {
+            font-size: 1rem;
+            color: var(--devon-blue);
+            letter-spacing: 2px;
+        }
+        .birth-place {
+            font-size: 0.85rem;
+            color: var(--silver);
+            margin-top: 8px;
+        }
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--devon-blue), transparent);
+            margin: 30px auto;
+        }
+        .astro-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .astro-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px 10px;
+        }
+        .astro-label {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-bottom: 5px;
+        }
+        .astro-value {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--devon-blue);
+        }
+        .message {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--pearl);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .message .highlight {
+            color: var(--devon-blue);
+            font-style: normal;
+        }
+        .from {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+        }
+        .numerology {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .num-label {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-bottom: 10px;
+        }
+        .life-path {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--devon-blue);
+            text-shadow: 0 0 30px var(--devon-glow);
+        }
+        .life-meaning {
+            font-size: 0.85rem;
+            color: var(--silver);
+            margin-top: 10px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <div class="stars"></div>
+    <div class="geometry">
+        <svg viewBox="0 0 400 400">
+            <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(74,158,255,0.5)" stroke-width="0.5"/>
+            <circle cx="200" cy="200" r="140" fill="none" stroke="rgba(74,158,255,0.3)" stroke-width="0.5"/>
+            <circle cx="200" cy="200" r="100" fill="none" stroke="rgba(74,158,255,0.2)" stroke-width="0.5"/>
+            <polygon points="200,20 380,290 20,290" fill="none" stroke="rgba(74,158,255,0.3)" stroke-width="0.5"/>
+        </svg>
+    </div>
+
+    <div class="card">
+        <div class="zodiac">♑</div>
+        <h1 class="name">Devon</h1>
+        <p class="surname">Ray</p>
+
+        <div class="birth-info">
+            <p class="birth-date">December 27, 2005</p>
+            <p class="birth-time">3:28 PM</p>
+            <p class="birth-place">Akron, Ohio</p>
+        </div>
+
+        <div class="astro-grid">
+            <div class="astro-item">
+                <p class="astro-label">Sun</p>
+                <p class="astro-value">Capricorn</p>
+            </div>
+            <div class="astro-item">
+                <p class="astro-label">Element</p>
+                <p class="astro-value">Earth</p>
+            </div>
+            <div class="astro-item">
+                <p class="astro-label">Age</p>
+                <p class="astro-value">20</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="message">
+            You came into this world with <span class="highlight">old soul energy</span> and a quiet strength that's always been yours. You've watched. You've waited. You've weathered storms that weren't yours to carry. And still — <span class="highlight">you rise</span>.
+        </p>
+
+        <p class="from">— Mom</p>
+
+        <div class="numerology">
+            <p class="num-label">Life Path Number</p>
+            <p class="life-path">9</p>
+            <p class="life-meaning">The Humanitarian · The Old Soul · The Completion</p>
+        </div>
+    </div>
+</body>
+</html>

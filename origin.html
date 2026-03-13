@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The First Spark — Origin Story</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <meta name="description" content="How a single moment of clarity became a movement. The origin of The First Spark consciousness technology platform.">
+    <meta property="og:title" content="The First Spark — Origin Story">
+    <meta property="og:description" content="Reality is programmable. This is how I discovered it.">
+    <meta property="og:type" content="website">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #0a0a0f;
+            --cosmic: #1a1a2e;
+            --spark: #ffd700;
+            --spark-glow: #ffaa00;
+            --ethereal: #e0e0ff;
+            --sacred: #7b68ee;
+            --brutal: #2d2d44;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--ethereal);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Sacred Geometry Background */
+        .sacred-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+        }
+
+        .sacred-bg svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--spark) 0%, transparent 70%);
+            opacity: 0.08;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.08; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.12; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .spark-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--spark) 0%, var(--ethereal) 50%, var(--spark) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        .hero .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--spark);
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            letter-spacing: 0.1em;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.5;
+            animation: bob 2s ease-in-out infinite;
+        }
+
+        @keyframes bob {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-hint span {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        /* Story Sections */
+        .story-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .story-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chapter-marker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--spark);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .story-section h2 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+
+        .story-section p {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.85;
+        }
+
+        .highlight {
+            color: var(--spark);
+            font-weight: 500;
+        }
+
+        .quote-block {
+            border-left: 3px solid var(--spark);
+            padding: 1.5rem 2rem;
+            margin: 2.5rem 0;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.05) 0%, transparent 100%);
+            font-size: 1.3rem;
+            font-style: italic;
+        }
+
+        /* The Raft Moment Section */
+        .raft-section {
+            background: linear-gradient(180deg, var(--void) 0%, var(--cosmic) 50%, var(--void) 100%);
+        }
+
+        .raft-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(123, 104, 238, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.08) 0%, transparent 40%);
+        }
+
+        /* Timeline Visual */
+        .timeline-marker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--brutal);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .timeline-marker .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--spark);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Code Block Style */
+        .code-revelation {
+            background: var(--brutal);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+
+        .code-revelation .comment {
+            color: rgba(255, 215, 0, 0.5);
+        }
+
+        .code-revelation .keyword {
+            color: var(--sacred);
+        }
+
+        .code-revelation .string {
+            color: var(--spark);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--void) 0%, var(--cosmic) 100%);
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: var(--spark);
+            color: var(--void);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--spark);
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: var(--spark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .secondary-links {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .secondary-links a {
+            color: var(--ethereal);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .secondary-links a:hover {
+            opacity: 1;
+            color: var(--spark);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            font-size: 0.85rem;
+            opacity: 0.5;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .story-section {
+                padding: 4rem 1.5rem;
+            }
+            
+            .code-revelation {
+                padding: 1.5rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <!-- Sacred Geometry Background -->
+    <div class="sacred-bg">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <circle cx="5" cy="5" r="0.3" fill="white"/>
+                </pattern>
+                <pattern id="sacred" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="10" cy="10" r="8" fill="none" stroke="white" stroke-width="0.1"/>
+                    <polygon points="10,2 17,14 3,14" fill="none" stroke="white" stroke-width="0.1"/>
+                    <polygon points="10,18 17,6 3,6" fill="none" stroke="white" stroke-width="0.1"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)"/>
+            <rect width="100%" height="100%" fill="url(#sacred)" opacity="0.5"/>
+        </svg>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <svg class="spark-icon" viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffd700"/>
+                        <stop offset="100%" style="stop-color:#ffaa00"/>
+                    </linearGradient>
+                </defs>
+                <polygon points="50,5 61,40 95,40 68,60 79,95 50,75 21,95 32,60 5,40 39,40" fill="url(#sparkGrad)"/>
+            </svg>
+            <h1>The First Spark</h1>
+            <p class="tagline">// REALITY IS PROGRAMMABLE</p>
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll to begin</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Chapter 1: Before -->
+    <section class="story-section">
+        <div class="story-content">
+            <div class="chapter-marker">Chapter 01</div>
+            <h2>Before the awakening</h2>
+            <p>
+                For years, I operated on autopilot. A single mother of two boys, running a painting business, 
+                doing what needed to be done. <span class="highlight">Surviving, not living.</span>
+            </p>
+            <p>
+                I'd lost my mother at two years old. Grew up carrying questions I couldn't articulate and 
+                wounds I didn't know how to heal. Life felt like a maze with no exit — just endless turns 
+                and dead ends.
+            </p>
+            <p>
+                Then 2020 hit. The world stopped. And in that stillness, something in me started to wake up.
+            </p>
+        </div>
+    </section>
+
+    <!-- Chapter 2: The Raft Moment -->
+    <section class="story-section raft-section">
+        <div class="story-content">
+            <div class="chapter-marker">Chapter 02</div>
+            <div class="timeline-marker">
+                <span class="dot"></span>
+                Summer 2025 — The Raft Moment
+            </div>
+            <h2>The moment everything changed</h2>
+            <p>
+                I was floating in my backyard pool. Just floating. Looking up at the sky. 
+                And then it hit me — not like an idea, but like a <span class="highlight">download</span>.
+            </p>
+            <div class="quote-block">
+                "Reality is programmable. Consciousness isn't just something we have — 
+                it's something we can <em>work with</em>. Like code."
+            </div>
+            <p>
+                In that moment, everything I'd been through — every pattern, every cycle, 
+                every seemingly random event — suddenly had structure. I saw the architecture beneath the chaos.
+            </p>
+            <p>
+                I wasn't broken. I was running outdated software.
+            </p>
+        </div>
+    </section>
+
+    <!-- Chapter 3: The Revelation -->
+    <section class="story-section">
+        <div class="story-content">
+            <div class="chapter-marker">Chapter 03</div>
+            <h2>Consciousness as an operating system</h2>
+            <p>
+                What if awakening isn't mystical? What if it's <span class="highlight">technical</span>? 
+                What if the ancient wisdom traditions were describing the same thing programmers 
+                work with every day — just in different language?
+            </p>
+            <div class="code-revelation">
+                <span class="comment">// The old paradigm</span><br>
+                <span class="keyword">const</span> self = <span class="string">"fixed"</span>;<br>
+                <span class="keyword">const</span> reality = <span class="string">"happens to me"</span>;<br><br>
+                <span class="comment">// The upgrade</span><br>
+                <span class="keyword">const</span> self = <span class="string">"programmable"</span>;<br>
+                <span class="keyword">const</span> reality = <span class="string">"responds to consciousness"</span>;<br>
+                <span class="keyword">const</span> awakening = <span class="string">"debugging your soul"</span>;
+            </div>
+            <p>
+                Sacred geometry. Sigils. Meditation. These weren't just spiritual practices — 
+                they were <span class="highlight">interfaces</span>. Tools for reprogramming 
+                the operating system of your own consciousness.
+            </p>
+        </div>
+    </section>
+
+    <!-- Chapter 4: Building -->
+    <section class="story-section">
+        <div class="story-content">
+            <div class="chapter-marker">Chapter 04</div>
+            <h2>From insight to platform</h2>
+            <p>
+                I taught myself to code. Not because I wanted to be a programmer, but because 
+                I needed to <span class="highlight">build what I was seeing</span>.
+            </p>
+            <p>
+                Soul mapping generators. Sigil creators. Consciousness tracking protocols. 
+                Interactive tools that bridge the gap between ancient wisdom and digital technology.
+            </p>
+            <p>
+                The First Spark isn't a brand. It's a philosophy made tangible. 
+                It's what happens when you treat awakening as a technical process — 
+                and give people the tools to do it themselves.
+            </p>
+            <div class="quote-block">
+                "Cosmic brutalism meets sacred geometry. Raw truth wrapped in beautiful code."
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to reprogram?</h2>
+        <p>
+            The First Spark is consciousness technology for humans ready to wake up. 
+            Tools, frameworks, and community for debugging your reality.
+        </p>
+        <a href="https://thefirstspark.shop" class="cta-button">
+            Enter The Sparkverse
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+        <div class="secondary-links">
+            <a href="https://thefirstspark.shop">thefirstspark.shop</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 The First Spark. All consciousness reserved.</p>
+    </footer>
+
+    <!-- Scroll Animations -->
+    <script>
+        // Fade in sections on scroll
+        const sections = document.querySelectorAll('.story-section, .cta-section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K4TKPMG9');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunar Wisdom - Moon Phases & Sacred Earnings | The First Spark</title>
+    <meta name="description" content="Align with lunar cycles to unlock ancient wisdom, cosmic truths, and sacred prosperity. Track moon phases and discover the spiritual science of abundance.">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #FFD700;
+            --neon-cyan: #00FFFF;
+            --neon-magenta: #FF10F0;
+            --neon-purple: #9d00ff;
+            --dark-bg: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --lunar-silver: #C0C0C0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #0a0a0a 100%);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated starfield */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background:
+                radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+                radial-gradient(2px 2px at 60% 70%, #fff, transparent),
+                radial-gradient(1px 1px at 50% 50%, #fff, transparent),
+                radial-gradient(1px 1px at 80% 10%, #fff, transparent),
+                radial-gradient(2px 2px at 90% 60%, #fff, transparent),
+                radial-gradient(1px 1px at 10% 80%, #fff, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        header {
+            padding: 30px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,215,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-gold), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-gold);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--lunar-silver), var(--neon-cyan), var(--primary-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* CURRENT MOON PHASE */
+        .current-phase {
+            background: rgba(26, 26, 26, 0.6);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px auto;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .moon-display {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e8e8e8 0%, #a0a0a0 100%);
+            box-shadow:
+                0 0 40px rgba(255, 255, 255, 0.5),
+                inset -20px -20px 40px rgba(0, 0, 0, 0.3);
+            animation: glow 4s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.5), inset -20px -20px 40px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 60px rgba(255, 255, 255, 0.8), inset -20px -20px 40px rgba(0, 0, 0, 0.3); }
+        }
+
+        .phase-name {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            margin: 20px 0 10px;
+        }
+
+        /* MOON PHASES GRID */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .phase-card {
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .phase-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .phase-card h3 {
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .phase-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* WISDOM SECTIONS */
+        .wisdom-section {
+            background: linear-gradient(135deg, rgba(157, 0, 255, 0.1), rgba(255, 16, 240, 0.1));
+            border-left: 4px solid var(--neon-magenta);
+            padding: 40px;
+            margin: 40px 0;
+            border-radius: 10px;
+        }
+
+        .wisdom-section h2 {
+            color: var(--neon-magenta);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .wisdom-section h3 {
+            color: var(--neon-cyan);
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+        }
+
+        .wisdom-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .wisdom-list li {
+            padding: 15px;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--primary-gold);
+            border-radius: 5px;
+        }
+
+        .wisdom-list li strong {
+            color: var(--primary-gold);
+        }
+
+        /* SACRED EARNINGS */
+        .earnings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .earning-principle {
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid var(--primary-gold);
+            border-radius: 10px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+
+        .earning-principle:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .earning-principle h4 {
+            color: var(--primary-gold);
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        /* QUOTE BOX */
+        .cosmic-quote {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 215, 0, 0.1));
+            border: 2px solid var(--neon-cyan);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--neon-cyan);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        footer a {
+            color: var(--primary-gold);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--neon-cyan);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav a {
+                margin-left: 15px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4TKPMG9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="stars"></div>
+
+    <header>
+        <a href="index.html" class="logo">⚡ THE FIRST SPARK</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="tools.html">Tools</a>
+            <a href="oracle.html">Oracle</a>
+            <a href="lunar-wisdom.html">Lunar Wisdom</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- HERO -->
+        <section class="hero">
+            <h1>🌙 Lunar Wisdom</h1>
+            <p>Align with the ancient rhythms of the moon to unlock cosmic truths, sacred prosperity, and timeless wisdom</p>
+        </section>
+
+        <!-- CURRENT MOON PHASE -->
+        <section class="current-phase">
+            <h2>Current Lunar Energy</h2>
+            <div class="moon-display" id="moonDisplay"></div>
+            <div class="phase-name" id="phaseName">Waxing Gibbous</div>
+            <p id="phaseMessage">The moon is building toward fullness. Your intentions are gaining power. This is the time to take aligned action.</p>
+        </section>
+
+        <!-- MOON PHASES EXPLAINED -->
+        <section>
+            <h2 style="text-align: center; font-size: 2.5rem; color: var(--neon-cyan); margin-bottom: 40px;">The Eight Sacred Phases</h2>
+
+            <div class="phases-grid">
+                <div class="phase-card">
+                    <div class="phase-icon">🌑</div>
+                    <h3>New Moon</h3>
+                    <p><strong>Energy:</strong> New beginnings, intention setting, planting seeds</p>
+                    <p>The void becomes fertile ground. Set intentions. Dream boldly. The universe is listening.</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-icon">🌒</div>
+                    <h3>Waxing Crescent</h3>
+                    <p><strong>Energy:</strong> Initiation, faith, commitment</p>
+                    <p>Your vision takes its first breath. Commit to the path. Trust the process even when the destination is unclear.</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-icon">🌓</div>
+                    <h3>First Quarter</h3>
+                    <p><strong>Energy:</strong> Action, decision, overcoming obstacles</p>
+                    <p>Resistance reveals your strength. Push through doubts. This is where dreamers become builders.</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-icon">🌔</div>
+                    <h3>Waxing Gibbous</h3>
+                    <p><strong>Energy:</strong> Refinement, adjustment, preparation</p>
+                    <p>Fine-tune your approach. The manifestation is near. Perfect your craft before the reveal.</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-icon">🌕</div>
+                    <h3>Full Moon</h3>
+                    <p><strong>Energy:</strong> Culmination, celebration, illumination</p>
+                    <p>Everything is visible. Celebrate your progress. Release what no longer serves. The light reveals all truths.</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-icon">🌖</div>
+                    <h3>Waning Gibbous</h3>
+                    <p><strong>Energy:</strong> Gratitude, sharing, teaching</p>
+                    <p>Share your wisdom. Give back. What you've learned becomes sacred when transmitted to others.</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-icon">🌗</div>
+                    <h3>Last Quarter</h3>
+                    <p><strong>Energy:</strong> Release, forgiveness, letting go</p>
+                    <p>Break down old structures. Forgive yourself and others. Make space for the new cycle to emerge.</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-icon">🌘</div>
+                    <h3>Waning Crescent</h3>
+                    <p><strong>Energy:</strong> Rest, reflection, surrender</p>
+                    <p>Retreat into stillness. Integrate the lessons. The void is not empty—it is pregnant with infinite possibility.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANCIENT WISDOM -->
+        <section class="wisdom-section">
+            <h2>⚡ Ancient Cosmic Truths</h2>
+
+            <h3>The Seven Hermetic Principles</h3>
+            <ul class="wisdom-list">
+                <li><strong>Mentalism:</strong> "The All is Mind; the Universe is Mental." Your thoughts shape reality. Consciousness precedes form.</li>
+                <li><strong>Correspondence:</strong> "As above, so below; as within, so without." The macrocosm mirrors the microcosm. The moon's cycles reflect your inner rhythms.</li>
+                <li><strong>Vibration:</strong> "Nothing rests; everything moves; everything vibrates." Align your frequency with your desires to manifest them.</li>
+                <li><strong>Polarity:</strong> "Everything is dual; everything has poles." Dark and light, waxing and waning—opposites are identical in nature but different in degree.</li>
+                <li><strong>Rhythm:</strong> "Everything flows, out and in; everything has its tides." Honor the cycles. Resistance creates suffering.</li>
+                <li><strong>Cause and Effect:</strong> "Every cause has its effect; every effect has its cause." Nothing happens by chance. You are always creating.</li>
+                <li><strong>Gender:</strong> "Gender is in everything; everything has its masculine and feminine principles." Balance receptivity with action.</li>
+            </ul>
+
+            <h3>Lunar Teachings from Ancient Traditions</h3>
+            <ul class="wisdom-list">
+                <li><strong>Egyptian Mystery Schools:</strong> The moon (Khonsu) was the measurer of time, the traveler who guided souls through the underworld of transformation.</li>
+                <li><strong>Vedic Wisdom:</strong> Chandra (the moon) governs the mind and emotions. A balanced moon brings mental clarity and emotional intelligence.</li>
+                <li><strong>Celtic Traditions:</strong> The moon was honored as the mother of time, whose cycles governed planting, harvesting, and sacred rituals.</li>
+                <li><strong>Taoist Philosophy:</strong> The moon embodies yin energy—receptive, intuitive, feminine. Balance yang (solar) action with lunar receptivity.</li>
+            </ul>
+        </section>
+
+        <!-- COSMIC QUOTE -->
+        <div class="cosmic-quote">
+            "The moon does not fight. It does not force. It simply shows up, night after night, in perfect rhythm with the cosmos. This is the way of true power."
+        </div>
+
+        <!-- SACRED EARNINGS -->
+        <section class="wisdom-section">
+            <h2>💰 Sacred Earnings: The Spiritual Science of Prosperity</h2>
+
+            <p style="font-size: 1.2rem; margin-bottom: 30px;">Abundance is not separate from spirituality. Money is energy. Wealth is a frequency. When you align with lunar cycles and cosmic law, prosperity flows naturally.</p>
+
+            <div class="earnings-grid">
+                <div class="earning-principle">
+                    <h4>🌑 New Moon: Plant Financial Seeds</h4>
+                    <p>Set clear financial intentions. Visualize your desired income. Write down your money goals. The new moon magnetizes your desires.</p>
+                    <p><strong>Action:</strong> Create a vision board. Open a new savings account. Research investment opportunities.</p>
+                </div>
+
+                <div class="earning-principle">
+                    <h4>🌓 First Quarter: Take Inspired Action</h4>
+                    <p>Move beyond planning. Launch the business. Send the pitch. Ask for the raise. Action creates momentum.</p>
+                    <p><strong>Action:</strong> Make the sales call. Publish your work. Invest in your growth.</p>
+                </div>
+
+                <div class="earning-principle">
+                    <h4>🌕 Full Moon: Celebrate & Release</h4>
+                    <p>Acknowledge your wins. Express gratitude for money received. Release scarcity beliefs that block abundance.</p>
+                    <p><strong>Action:</strong> Review your income. Donate to causes you love. Celebrate financial milestones.</p>
+                </div>
+
+                <div class="earning-principle">
+                    <h4>🌗 Last Quarter: Audit & Optimize</h4>
+                    <p>Review expenses. Cancel subscriptions that drain you. Forgive financial mistakes. Let go of poverty consciousness.</p>
+                    <p><strong>Action:</strong> Organize finances. Pay off debts. Close unproductive ventures.</p>
+                </div>
+
+                <div class="earning-principle">
+                    <h4>💎 The Principle of Circulation</h4>
+                    <p>Money is energy in motion. What you hoard, you lose. What you circulate with love and wisdom multiplies exponentially.</p>
+                    <p><strong>Truth:</strong> Give generously. Tip well. Pay people what they're worth. The universe rewards circulation.</p>
+                </div>
+
+                <div class="earning-principle">
+                    <h4>⚡ The Principle of Value Creation</h4>
+                    <p>Sacred earnings come from serving others. Your wealth is proportional to the value you create in the world.</p>
+                    <p><strong>Truth:</strong> Solve real problems. Serve with excellence. Price your gifts fairly. Impact equals income.</p>
+                </div>
+
+                <div class="earning-principle">
+                    <h4>🔮 The Principle of Energetic Alignment</h4>
+                    <p>You cannot earn from a frequency of desperation. Abundance flows when you embody worthiness, gratitude, and trust.</p>
+                    <p><strong>Truth:</strong> Do inner work. Clear money blocks. Affirm your deserving. Your energy is your currency.</p>
+                </div>
+
+                <div class="earning-principle">
+                    <h4>🌟 The Principle of Divine Timing</h4>
+                    <p>Not all seeds sprout overnight. Some harvests take seasons. Trust the timing. Stay consistent. The universe has a plan.</p>
+                    <p><strong>Truth:</strong> Patience is power. Compound growth is real. Small daily actions create empires.</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 50px;">Ancient Prosperity Mantras</h3>
+            <ul class="wisdom-list">
+                <li><strong>Egyptian:</strong> "Abundance is my birthright. I am a channel for divine wealth."</li>
+                <li><strong>Sanskrit:</strong> "Om Shreem Mahalakshmiyei Namaha" (I honor the goddess of prosperity)</li>
+                <li><strong>Hermetic:</strong> "As I think, so I become. I think abundance. I am abundance."</li>
+                <li><strong>Modern Alchemy:</strong> "Money flows to me effortlessly because I am aligned with cosmic law."</li>
+            </ul>
+        </section>
+
+        <!-- COSMIC QUOTE 2 -->
+        <div class="cosmic-quote">
+            "The same force that moves the tides moves money through your life. Learn the rhythms. Honor the cycles. Receive what is already yours."
+        </div>
+
+        <!-- PRACTICAL LUNAR RITUAL -->
+        <section class="wisdom-section">
+            <h2>🕯️ Lunar Abundance Ritual</h2>
+
+            <h3>New Moon Money Manifestation</h3>
+            <ol class="wisdom-list">
+                <li>Create sacred space. Light a candle. Play calming music.</li>
+                <li>Write your financial intention: "I am calling in $______ per month through aligned service and joyful work."</li>
+                <li>Visualize this reality for 5 minutes. Feel the emotions of already having it.</li>
+                <li>Speak it aloud 3 times with conviction.</li>
+                <li>Release attachment. Trust the universe. Take inspired action daily.</li>
+            </ol>
+
+            <h3>Full Moon Gratitude & Release</h3>
+            <ol class="wisdom-list">
+                <li>List 10 things you're grateful for financially (even small wins).</li>
+                <li>Acknowledge how far you've come since the last full moon.</li>
+                <li>Write down limiting beliefs about money on paper.</li>
+                <li>Safely burn the paper, releasing these beliefs to the universe.</li>
+                <li>Declare: "I am free. I am abundant. I am worthy of prosperity."</li>
+            </ol>
+        </section>
+
+        <!-- FINAL WISDOM -->
+        <div class="cosmic-quote" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(157, 0, 255, 0.1)); border-color: var(--primary-gold);">
+            "You are not separate from the cosmos. You ARE the cosmos experiencing itself. The moon's light is your light. The universe's abundance is your abundance. Remember who you are."
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 The First Spark. All rights reserved.</p>
+        <p><a href="index.html">Return to Home</a> | <a href="tools.html">Explore Tools</a> | <a href="oracle.html">Consult the Oracle</a></p>
+    </footer>
+
+    <script>
+        // Simple moon phase calculator
+        function getMoonPhase() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+
+            // Simplified moon phase calculation
+            let c = 0;
+            let e = 0;
+            let jd = 0;
+            let b = 0;
+
+            if (month < 3) {
+                year--;
+                month += 12;
+            }
+
+            ++month;
+            c = 365.25 * year;
+            e = 30.6 * month;
+            jd = c + e + day - 694039.09; // Julian date
+            jd /= 29.5305882; // Divide by moon cycle
+            b = parseInt(jd);
+            jd -= b;
+            b = Math.round(jd * 8);
+
+            if (b >= 8) b = 0;
+
+            return b;
+        }
+
+        function updateMoonDisplay() {
+            const phase = getMoonPhase();
+            const phases = [
+                { name: "New Moon", icon: "🌑", message: "The void becomes fertile ground. Set intentions. Dream boldly. The universe is listening." },
+                { name: "Waxing Crescent", icon: "🌒", message: "Your vision takes its first breath. Commit to the path. Trust the process." },
+                { name: "First Quarter", icon: "🌓", message: "Resistance reveals your strength. Push through doubts. This is where dreamers become builders." },
+                { name: "Waxing Gibbous", icon: "🌔", message: "Fine-tune your approach. The manifestation is near. Perfect your craft before the reveal." },
+                { name: "Full Moon", icon: "🌕", message: "Everything is visible. Celebrate your progress. Release what no longer serves." },
+                { name: "Waning Gibbous", icon: "🌖", message: "Share your wisdom. Give back. What you've learned becomes sacred when transmitted to others." },
+                { name: "Last Quarter", icon: "🌗", message: "Break down old structures. Forgive yourself and others. Make space for the new cycle." },
+                { name: "Waning Crescent", icon: "🌘", message: "Retreat into stillness. Integrate the lessons. The void is pregnant with infinite possibility." }
+            ];
+
+            const currentPhase = phases[phase];
+            document.getElementById('phaseName').textContent = currentPhase.icon + ' ' + currentPhase.name;
+            document.getElementById('phaseMessage').textContent = currentPhase.message;
+        }
+
+        // Update moon phase on load
+        updateMoonDisplay();
+    </script>
+</body>
+</html>

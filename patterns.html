@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Recognition Trainer | The First Spark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+        
+        :root {
+            --void: #0a0a0f;
+            --deep: #12121a;
+            --surface: #1a1a24;
+            --elevated: #242430;
+            --border: #2a2a38;
+            --muted: #6b6b80;
+            --text: #e0e0ec;
+            --bright: #ffffff;
+            --spark: #f97316;
+            --spark-glow: rgba(249, 115, 22, 0.3);
+            --quantum: #8b5cf6;
+            --quantum-glow: rgba(139, 92, 246, 0.3);
+            --geo: #06b6d4;
+            --geo-glow: rgba(6, 182, 212, 0.3);
+            --coherent: #10b981;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .bg-geometry {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.04;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        .header { text-align: center; margin-bottom: 40px; }
+        
+        .header-icon { width: 80px; height: 80px; margin: 0 auto 24px; }
+        
+        .header-icon svg {
+            width: 100%; height: 100%;
+            stroke: var(--geo);
+            stroke-width: 1;
+            fill: none;
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--bright), var(--geo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p { color: var(--muted); font-size: 0.95rem; }
+        
+        .nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+        
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-btn:hover { background: var(--elevated); color: var(--text); }
+        .nav-btn.active { background: var(--elevated); border-color: var(--geo); color: var(--geo); box-shadow: 0 0 20px var(--geo-glow); }
+        
+        .panel { display: none; animation: fadeIn 0.3s ease; }
+        .panel.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+        .card-header { margin-bottom: 24px; }
+        .card-header h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--bright); }
+        .card-header p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+        
+        .pattern-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        .pattern-card {
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pattern-card:hover { border-color: var(--geo); transform: translateY(-4px); box-shadow: 0 10px 40px rgba(6, 182, 212, 0.1); }
+        
+        .pattern-visual {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            background: var(--void);
+            border-radius: 8px;
+        }
+        
+        .pattern-visual svg { width: 80%; height: 80%; stroke: var(--geo); stroke-width: 0.5; fill: none; }
+        .pattern-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; color: var(--bright); }
+        .pattern-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .modal-overlay.active { display: flex; }
+        
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+        }
+        
+        .modal-close { float: right; background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
+        .modal-close:hover { color: var(--text); }
+        
+        .modal-visual { width: 100%; max-width: 300px; margin: 0 auto 24px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+        .modal-visual svg { width: 100%; height: 100%; stroke: var(--geo); stroke-width: 0.5; fill: none; }
+        .modal h2 { font-size: 1.5rem; margin-bottom: 16px; color: var(--bright); text-align: center; }
+        .modal-section { margin-bottom: 20px; }
+        .modal-section h4 { font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; color: var(--geo); margin-bottom: 8px; letter-spacing: 0.1em; }
+        .modal-section p, .modal-section ul { font-size: 0.95rem; line-height: 1.7; color: var(--text); }
+        .modal-section ul { padding-left: 20px; }
+        .modal-section li { margin: 8px 0; }
+        
+        .trainer-area {
+            background: var(--deep);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .trainer-pattern { width: 200px; height: 200px; margin-bottom: 32px; }
+        .trainer-pattern svg { width: 100%; height: 100%; stroke: var(--geo); stroke-width: 0.5; fill: none; }
+        
+        .trainer-options { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 24px; }
+        
+        .trainer-option {
+            padding: 12px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .trainer-option:hover { background: var(--elevated); border-color: var(--geo); }
+        .trainer-option.correct { background: rgba(16, 185, 129, 0.2); border-color: var(--coherent); color: var(--coherent); }
+        .trainer-option.incorrect { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #ef4444; }
+        
+        .trainer-stats { display: flex; gap: 32px; justify-content: center; margin-bottom: 24px; }
+        .trainer-stat { text-align: center; }
+        .trainer-stat-value { font-size: 2rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--geo); }
+        .trainer-stat-label { font-size: 0.8rem; color: var(--muted); }
+        .trainer-timer { font-size: 3rem; font-family: 'JetBrains Mono', monospace; color: var(--bright); margin-bottom: 16px; }
+        
+        .trainer-btn {
+            padding: 14px 32px;
+            background: var(--geo);
+            border: none;
+            border-radius: 8px;
+            color: var(--bright);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .trainer-btn:hover { background: #0891b2; transform: translateY(-2px); }
+        
+        .difficulty-select { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; }
+        .difficulty-btn {
+            padding: 10px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .difficulty-btn:hover { background: var(--elevated); }
+        .difficulty-btn.active { border-color: var(--geo); color: var(--geo); }
+        
+        .extraction-container { position: relative; background: var(--deep); border-radius: 12px; overflow: hidden; }
+        .extraction-image { width: 100%; aspect-ratio: 16/10; background-size: cover; background-position: center; position: relative; }
+        .extraction-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; }
+        .extraction-tools { padding: 20px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); }
+        .tool-group { display: flex; gap: 8px; }
+        .tool-btn { padding: 10px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-family: inherit; font-size: 0.85rem; cursor: pointer; }
+        .tool-btn:hover { background: var(--elevated); color: var(--text); }
+        .tool-btn.active { border-color: var(--geo); color: var(--geo); }
+        .extraction-prompts { padding: 20px; border-top: 1px solid var(--border); }
+        .prompt-text { font-size: 0.95rem; color: var(--text); margin-bottom: 12px; }
+        .pattern-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .pattern-tag { padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--muted); cursor: pointer; }
+        .pattern-tag:hover { border-color: var(--geo); color: var(--geo); }
+        
+        .progress-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .progress-card { padding: 24px; background: var(--deep); border: 1px solid var(--border); border-radius: 12px; text-align: center; }
+        .progress-value { font-size: 2.5rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--geo); margin-bottom: 8px; }
+        .progress-label { font-size: 0.85rem; color: var(--muted); }
+        .mastery-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: var(--bright); }
+        .mastery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+        .mastery-item { padding: 16px; background: var(--deep); border: 1px solid var(--border); border-radius: 8px; text-align: center; }
+        .mastery-item.mastered { border-color: var(--coherent); background: rgba(16, 185, 129, 0.1); }
+        .mastery-icon { width: 48px; height: 48px; margin: 0 auto 12px; }
+        .mastery-icon svg { width: 100%; height: 100%; stroke: var(--muted); stroke-width: 0.5; fill: none; }
+        .mastery-item.mastered .mastery-icon svg { stroke: var(--coherent); }
+        .mastery-name { font-size: 0.85rem; color: var(--text); margin-bottom: 4px; }
+        .mastery-score { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--muted); }
+        .mastery-item.mastered .mastery-score { color: var(--coherent); }
+        
+        .footer { text-align: center; padding: 48px 0 24px; color: var(--muted); font-size: 0.8rem; }
+        .footer a { color: var(--spark); text-decoration: none; }
+        
+        @media (max-width: 600px) {
+            .container { padding: 24px 16px; }
+            .card { padding: 24px 20px; }
+            .header h1 { font-size: 1.4rem; }
+            .trainer-area { padding: 24px; }
+            .trainer-pattern { width: 150px; height: 150px; }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <div class="bg-geometry">
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+            <defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white"/></pattern></defs>
+            <rect width="100%" height="100%" fill="url(#grid)"/>
+            <g transform="translate(500,500)">
+                <circle r="400" stroke="white" stroke-width="0.3" fill="none"/>
+                <circle r="300" stroke="white" stroke-width="0.3" fill="none"/>
+                <circle r="200" stroke="white" stroke-width="0.3" fill="none"/>
+                <polygon points="0,-400 346,200 -346,200" stroke="white" stroke-width="0.3" fill="none"/>
+                <polygon points="0,400 346,-200 -346,-200" stroke="white" stroke-width="0.3" fill="none"/>
+            </g>
+        </svg>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-icon">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45"/><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="15"/>
+                    <circle cx="50" cy="20" r="10"/><circle cx="76" cy="65" r="10"/><circle cx="24" cy="65" r="10"/>
+                </svg>
+            </div>
+            <h1>PATTERN RECOGNITION TRAINER</h1>
+            <p>Chamber 1 — See the Code's Visual Language</p>
+        </header>
+
+        <nav class="nav">
+            <button class="nav-btn active" data-panel="library">Pattern Library</button>
+            <button class="nav-btn" data-panel="trainer">Recognition Trainer</button>
+            <button class="nav-btn" data-panel="extraction">Extraction Lab</button>
+            <button class="nav-btn" data-panel="progress">Progress</button>
+        </nav>
+
+        <div id="library-panel" class="panel active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Sacred Geometry Library</h2>
+                    <p>The code's native visual language. These patterns exist before thought, before matter. Learn to recognize them everywhere—they're the substrate reality renders from.</p>
+                </div>
+                <div class="pattern-grid" id="pattern-library"></div>
+            </div>
+        </div>
+
+        <div id="trainer-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Speed Recognition</h2>
+                    <p>Train your pattern recognition until it's automatic. The faster you identify, the more your visual processing rewires.</p>
+                </div>
+                <div class="difficulty-select">
+                    <button class="difficulty-btn active" data-difficulty="easy">Basic</button>
+                    <button class="difficulty-btn" data-difficulty="medium">Intermediate</button>
+                    <button class="difficulty-btn" data-difficulty="hard">Advanced</button>
+                </div>
+                <div class="trainer-area" id="trainer-area">
+                    <div class="trainer-stats">
+                        <div class="trainer-stat"><div class="trainer-stat-value" id="score">0</div><div class="trainer-stat-label">Score</div></div>
+                        <div class="trainer-stat"><div class="trainer-stat-value" id="streak">0</div><div class="trainer-stat-label">Streak</div></div>
+                        <div class="trainer-stat"><div class="trainer-stat-value" id="best-streak">0</div><div class="trainer-stat-label">Best</div></div>
+                    </div>
+                    <div class="trainer-timer" id="timer">30</div>
+                    <div class="trainer-pattern" id="current-pattern"></div>
+                    <div class="trainer-options" id="trainer-options"></div>
+                    <button class="trainer-btn" id="start-trainer">Begin Training</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="extraction-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Extraction Lab</h2>
+                    <p>Find the hidden geometry in complex images. Nature, architecture, art—they all contain sacred patterns.</p>
+                </div>
+                <div class="extraction-container">
+                    <div class="extraction-image" id="extraction-image">
+                        <canvas class="extraction-canvas" id="extraction-canvas"></canvas>
+                    </div>
+                    <div class="extraction-tools">
+                        <div class="tool-group">
+                            <button class="tool-btn active" data-tool="circle">○ Circle</button>
+                            <button class="tool-btn" data-tool="spiral">◐ Spiral</button>
+                            <button class="tool-btn" data-tool="line">/ Line</button>
+                            <button class="tool-btn" data-tool="triangle">△ Triangle</button>
+                        </div>
+                        <div class="tool-group">
+                            <button class="tool-btn" id="clear-canvas">Clear</button>
+                            <button class="tool-btn" id="reveal-patterns">Reveal</button>
+                            <button class="tool-btn" id="next-image">Next →</button>
+                        </div>
+                    </div>
+                    <div class="extraction-prompts">
+                        <p class="prompt-text" id="extraction-prompt">Look for spiraling patterns in this nautilus shell.</p>
+                        <div class="pattern-tags" id="pattern-tags"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="progress-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recognition Progress</h2>
+                    <p>Your pattern perception is developing. These metrics track how your visual processing is rewiring.</p>
+                </div>
+                <div class="progress-grid">
+                    <div class="progress-card"><div class="progress-value" id="total-trained">0</div><div class="progress-label">Patterns Trained</div></div>
+                    <div class="progress-card"><div class="progress-value" id="accuracy-rate">—</div><div class="progress-label">Accuracy</div></div>
+                    <div class="progress-card"><div class="progress-value" id="avg-speed">—</div><div class="progress-label">Avg Speed (ms)</div></div>
+                    <div class="progress-card"><div class="progress-value" id="patterns-mastered">0</div><div class="progress-label">Mastered</div></div>
+                </div>
+                <div class="mastery-section">
+                    <h3>Pattern Mastery</h3>
+                    <div class="mastery-grid" id="mastery-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Pattern Recognition Trainer — Chamber 1 of Source Architecture<br>
+            Built for <a href="https://thefirstspark.shop" target="_blank">The First Spark</a></p>
+        </footer>
+    </div>
+
+    <div class="modal-overlay" id="pattern-modal">
+        <div class="modal">
+            <button class="modal-close" id="close-modal">×</button>
+            <div class="modal-visual" id="modal-visual"></div>
+            <h2 id="modal-title"></h2>
+            <div class="modal-section"><h4>MEANING</h4><p id="modal-meaning"></p></div>
+            <div class="modal-section"><h4>WHERE TO FIND IT</h4><ul id="modal-locations"></ul></div>
+            <div class="modal-section"><h4>CONSCIOUSNESS APPLICATION</h4><p id="modal-application"></p></div>
+        </div>
+    </div>
+
+    <script>
+        const Patterns = {
+            'flower-of-life': {
+                name: 'Flower of Life',
+                svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15"/><circle cx="50" cy="35" r="15"/><circle cx="50" cy="65" r="15"/><circle cx="37" cy="42.5" r="15"/><circle cx="63" cy="42.5" r="15"/><circle cx="37" cy="57.5" r="15"/><circle cx="63" cy="57.5" r="15"/><circle cx="50" cy="50" r="30"/></svg>`,
+                description: 'The blueprint of creation. All sacred geometry emerges from this pattern.',
+                meaning: 'The Flower of Life contains the patterns of creation as they emerged from the void. Every living thing carries this signature.',
+                locations: ['Ancient temples worldwide', 'Cell division patterns', 'Honeycomb structures', 'Snowflake formations', 'Fruit cross-sections'],
+                application: 'Meditate on the Flower of Life to access creation energy. Use as a coherence pattern before manifestation work.'
+            },
+            'metatrons-cube': {
+                name: "Metatron's Cube",
+                svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="20" r="6"/><circle cx="50" cy="80" r="6"/><circle cx="20" cy="35" r="6"/><circle cx="80" cy="35" r="6"/><circle cx="20" cy="65" r="6"/><circle cx="80" cy="65" r="6"/><circle cx="50" cy="50" r="6"/><line x1="50" y1="20" x2="20" y2="35"/><line x1="50" y1="20" x2="80" y2="35"/><line x1="50" y1="20" x2="50" y2="80"/><line x1="20" y1="35" x2="80" y2="35"/><line x1="20" y1="35" x2="20" y2="65"/><line x1="20" y1="35" x2="80" y2="65"/><line x1="80" y1="35" x2="80" y2="65"/><line x1="80" y1="35" x2="20" y2="65"/><line x1="20" y1="65" x2="80" y2="65"/><line x1="20" y1="65" x2="50" y2="80"/><line x1="80" y1="65" x2="50" y2="80"/></svg>`,
+                description: 'Contains all five Platonic solids. The map between dimensions.',
+                meaning: "Contains the geometric blueprints for all physical forms—the five Platonic solids that define 3D reality.",
+                locations: ['Crystal structures', 'Virus geometries', 'Molecular bonds', 'Sacred architecture', 'Magnetic fields'],
+                application: 'Use for protection and energy clearing. Meditating on it helps access higher-dimensional thinking.'
+            },
+            'vesica-piscis': {
+                name: 'Vesica Piscis',
+                svg: `<svg viewBox="0 0 100 100"><circle cx="35" cy="50" r="30"/><circle cx="65" cy="50" r="30"/></svg>`,
+                description: 'The womb of creation. Where two circles overlap, new reality emerges.',
+                meaning: 'Formed when two circles intersect so each center lies on the other circumference. The generative portal where duality creates the new.',
+                locations: ['Human eye shape', 'Leaf formations', 'Fish body profiles', 'Gothic arches', 'Cell division'],
+                application: 'Use for creation work. The vesica is where polarities merge to birth something new.'
+            },
+            'golden-spiral': {
+                name: 'Golden Spiral',
+                svg: `<svg viewBox="0 0 100 100"><path d="M85,50 A35,35 0 0,1 50,85 A28,28 0 0,1 22,57 A21,21 0 0,1 43,36 A13,13 0 0,1 56,49 A8,8 0 0,1 48,57 A5,5 0 0,1 43,52" fill="none"/><rect x="15" y="15" width="70" height="70" fill="none"/></svg>`,
+                description: 'The growth pattern of the universe. Found everywhere life expands.',
+                meaning: 'Expands by the golden ratio (1.618) with each quarter turn. Describes how energy moves efficiently through space.',
+                locations: ['Nautilus shells', 'Hurricane formations', 'Galaxy arms', 'Pinecone patterns', 'Human ear cochlea'],
+                application: 'Trace the spiral to enter flow states. Represents natural expansion without forced effort.'
+            },
+            'seed-of-life': {
+                name: 'Seed of Life',
+                svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="12"/><circle cx="50" cy="38" r="12"/><circle cx="50" cy="62" r="12"/><circle cx="39.6" cy="44" r="12"/><circle cx="60.4" cy="44" r="12"/><circle cx="39.6" cy="56" r="12"/><circle cx="60.4" cy="56" r="12"/></svg>`,
+                description: 'Seven circles forming the genesis pattern. The first week of creation.',
+                meaning: 'Represents the seven days/stages of creation. Contains the blueprint that unfolds into the Flower of Life.',
+                locations: ['Embryonic cell division', 'Chakra system', 'Musical notes', 'Color spectrum', 'Religious symbols'],
+                application: 'Use at beginnings. Starting a project? New phase of life? The Seed carries initiation energy.'
+            },
+            'sri-yantra': {
+                name: 'Sri Yantra',
+                svg: `<svg viewBox="0 0 100 100"><polygon points="50,10 90,90 10,90"/><polygon points="50,90 10,20 90,20"/><polygon points="50,25 75,75 25,75"/><polygon points="50,75 25,30 75,30"/><circle cx="50" cy="50" r="8"/></svg>`,
+                description: 'Nine interlocking triangles. The supreme yantra of manifestation.',
+                meaning: 'Contains 9 interlocking triangles—4 up (masculine) and 5 down (feminine). Their intersection creates 43 smaller triangles representing the cosmos.',
+                locations: ['Hindu/Buddhist temples', 'Meditation mandalas', 'Sound wave patterns', 'Crystal formations', 'Energy vortexes'],
+                application: 'The most powerful manifestation geometry. Meditate outer to inner for dissolution, inner to outer for creation.'
+            },
+            'torus': {
+                name: 'Torus',
+                svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="40" ry="20"/><ellipse cx="50" cy="50" rx="15" ry="8"/><path d="M50,30 C70,30 85,40 85,50 C85,60 70,70 50,70" fill="none"/><path d="M50,30 C30,30 15,40 15,50 C15,60 30,70 50,70" fill="none"/></svg>`,
+                description: 'The shape of energy flow. Donut-shaped field dynamics.',
+                meaning: 'How energy actually moves—flowing out from center, curving around, returning. Every self-sustaining system has a toroidal field.',
+                locations: ['Earth magnetic field', 'Human heart field', 'Apple cross-sections', 'Smoke rings', 'Atomic structure'],
+                application: 'Visualize your energy field as a torus for grounding and protection.'
+            },
+            'merkaba': {
+                name: 'Merkaba',
+                svg: `<svg viewBox="0 0 100 100"><polygon points="50,15 80,70 20,70"/><polygon points="50,85 20,30 80,30"/></svg>`,
+                description: 'Star tetrahedron. The vehicle of light-body activation.',
+                meaning: 'Two interlocking tetrahedra—one up (masculine/electrical), one down (feminine/magnetic). When counter-rotated, becomes a vehicle for consciousness.',
+                locations: ['Star of David', 'Molecular geometry', 'Crop circles', 'Energy healing', 'Crystal structures'],
+                application: 'Advanced consciousness work. Visualize merkaba around your body for light body activation.'
+            }
+        };
+
+        const ExtractionImages = [
+            { url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800', prompt: 'Look for spiraling patterns in this nautilus shell. Trace the golden ratio spiral.', patterns: ['golden-spiral', 'fibonacci', 'logarithmic'] },
+            { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800', prompt: 'Find the geometric patterns in this sunflower. Notice the dual spirals in the seed head.', patterns: ['golden-spiral', 'fibonacci', 'flower-of-life'] },
+            { url: 'https://images.unsplash.com/photo-1494192785370-e91e091d544f?w=800', prompt: 'Identify the sacred geometry in this galaxy. Where do you see spirals and circular patterns?', patterns: ['golden-spiral', 'torus', 'logarithmic'] },
+            { url: 'https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?w=800', prompt: 'Look at the branching patterns in this tree. Can you find the fractal geometry?', patterns: ['fractal', 'fibonacci', 'golden-ratio'] },
+            { url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800', prompt: 'Find the triangular and pyramid geometry in this mountain range.', patterns: ['triangle', 'pyramid', 'golden-ratio'] }
+        ];
+
+        const DataStore = {
+            stats: { totalTrained: 0, correct: 0, totalTime: 0, responses: 0, bestStreak: 0, patternScores: {} },
+            load() { const s = localStorage.getItem('pattern-recognition-data'); if (s) this.stats = JSON.parse(s); },
+            save() { localStorage.setItem('pattern-recognition-data', JSON.stringify(this.stats)); },
+            recordAttempt(pattern, correct, time) {
+                this.stats.totalTrained++;
+                if (correct) this.stats.correct++;
+                this.stats.totalTime += time;
+                this.stats.responses++;
+                if (!this.stats.patternScores[pattern]) this.stats.patternScores[pattern] = { correct: 0, total: 0 };
+                this.stats.patternScores[pattern].total++;
+                if (correct) this.stats.patternScores[pattern].correct++;
+                this.save();
+            },
+            updateBestStreak(streak) { if (streak > this.stats.bestStreak) { this.stats.bestStreak = streak; this.save(); } }
+        };
+
+        const UI = {
+            currentPattern: null, trainerActive: false, trainerInterval: null, timeLeft: 30, score: 0, streak: 0,
+            difficulty: 'easy', currentTool: 'circle', currentExtractionIndex: 0, canvas: null, ctx: null,
+            isDrawing: false, startX: 0, startY: 0,
+            
+            init() {
+                DataStore.load();
+                this.bindNavigation();
+                this.renderPatternLibrary();
+                this.bindModal();
+                this.bindTrainer();
+                this.bindExtraction();
+                this.updateProgress();
+            },
+            
+            bindNavigation() {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                        document.getElementById(btn.dataset.panel + '-panel').classList.add('active');
+                    });
+                });
+            },
+            
+            renderPatternLibrary() {
+                const grid = document.getElementById('pattern-library');
+                grid.innerHTML = '';
+                Object.entries(Patterns).forEach(([key, pattern]) => {
+                    const card = document.createElement('div');
+                    card.className = 'pattern-card';
+                    card.innerHTML = `<div class="pattern-visual">${pattern.svg}</div><h3>${pattern.name}</h3><p>${pattern.description}</p>`;
+                    card.addEventListener('click', () => this.showPatternModal(key));
+                    grid.appendChild(card);
+                });
+            },
+            
+            bindModal() {
+                document.getElementById('close-modal').addEventListener('click', () => document.getElementById('pattern-modal').classList.remove('active'));
+                document.getElementById('pattern-modal').addEventListener('click', (e) => { if (e.target.id === 'pattern-modal') document.getElementById('pattern-modal').classList.remove('active'); });
+            },
+            
+            showPatternModal(key) {
+                const p = Patterns[key];
+                document.getElementById('modal-visual').innerHTML = p.svg;
+                document.getElementById('modal-title').textContent = p.name;
+                document.getElementById('modal-meaning').textContent = p.meaning;
+                document.getElementById('modal-locations').innerHTML = p.locations.map(l => `<li>${l}</li>`).join('');
+                document.getElementById('modal-application').textContent = p.application;
+                document.getElementById('pattern-modal').classList.add('active');
+            },
+            
+            bindTrainer() {
+                document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.difficulty = btn.dataset.difficulty;
+                    });
+                });
+                document.getElementById('start-trainer').addEventListener('click', () => this.trainerActive ? this.stopTrainer() : this.startTrainer());
+            },
+            
+            startTrainer() {
+                this.trainerActive = true; this.score = 0; this.streak = 0; this.timeLeft = 30;
+                document.getElementById('score').textContent = '0';
+                document.getElementById('streak').textContent = '0';
+                document.getElementById('start-trainer').textContent = 'Stop';
+                this.showNextPattern();
+                this.trainerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    document.getElementById('timer').textContent = this.timeLeft;
+                    if (this.timeLeft <= 0) this.stopTrainer();
+                }, 1000);
+            },
+            
+            stopTrainer() {
+                this.trainerActive = false;
+                clearInterval(this.trainerInterval);
+                document.getElementById('start-trainer').textContent = 'Begin Training';
+                document.getElementById('trainer-options').innerHTML = '';
+                document.getElementById('current-pattern').innerHTML = '';
+                DataStore.updateBestStreak(this.streak);
+                document.getElementById('best-streak').textContent = DataStore.stats.bestStreak;
+                this.updateProgress();
+            },
+            
+            showNextPattern() {
+                const keys = Object.keys(Patterns);
+                const key = keys[Math.floor(Math.random() * keys.length)];
+                this.currentPattern = key;
+                document.getElementById('current-pattern').innerHTML = Patterns[key].svg;
+                let opts = [key];
+                while (opts.length < 4) { const o = keys[Math.floor(Math.random() * keys.length)]; if (!opts.includes(o)) opts.push(o); }
+                opts = opts.sort(() => Math.random() - 0.5);
+                const el = document.getElementById('trainer-options');
+                el.innerHTML = '';
+                const startTime = Date.now();
+                opts.forEach(o => {
+                    const btn = document.createElement('button');
+                    btn.className = 'trainer-option';
+                    btn.textContent = Patterns[o].name;
+                    btn.addEventListener('click', () => this.handleAnswer(o, Date.now() - startTime));
+                    el.appendChild(btn);
+                });
+            },
+            
+            handleAnswer(answer, responseTime) {
+                const correct = answer === this.currentPattern;
+                document.querySelectorAll('.trainer-option').forEach(btn => {
+                    if (btn.textContent === Patterns[this.currentPattern].name) btn.classList.add('correct');
+                    else if (btn.textContent === Patterns[answer].name && !correct) btn.classList.add('incorrect');
+                });
+                if (correct) { this.score++; this.streak++; } else { this.streak = 0; }
+                document.getElementById('score').textContent = this.score;
+                document.getElementById('streak').textContent = this.streak;
+                DataStore.recordAttempt(this.currentPattern, correct, responseTime);
+                if (this.trainerActive) setTimeout(() => this.showNextPattern(), 500);
+            },
+            
+            bindExtraction() {
+                this.canvas = document.getElementById('extraction-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.loadExtractionImage(0);
+                document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.currentTool = btn.dataset.tool;
+                    });
+                });
+                this.canvas.addEventListener('mousedown', (e) => this.startDraw(e));
+                this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+                this.canvas.addEventListener('mouseup', () => this.endDraw());
+                this.canvas.addEventListener('mouseleave', () => this.endDraw());
+                this.canvas.addEventListener('touchstart', (e) => { e.preventDefault(); this.startDraw(e.touches[0]); });
+                this.canvas.addEventListener('touchmove', (e) => { e.preventDefault(); this.draw(e.touches[0]); });
+                this.canvas.addEventListener('touchend', () => this.endDraw());
+                document.getElementById('clear-canvas').addEventListener('click', () => this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height));
+                document.getElementById('next-image').addEventListener('click', () => { this.currentExtractionIndex = (this.currentExtractionIndex + 1) % ExtractionImages.length; this.loadExtractionImage(this.currentExtractionIndex); });
+                document.getElementById('reveal-patterns').addEventListener('click', () => alert('Pattern hints: ' + ExtractionImages[this.currentExtractionIndex].patterns.join(', ')));
+            },
+            
+            loadExtractionImage(index) {
+                const img = ExtractionImages[index];
+                const container = document.getElementById('extraction-image');
+                container.style.backgroundImage = `url(${img.url})`;
+                document.getElementById('extraction-prompt').textContent = img.prompt;
+                document.getElementById('pattern-tags').innerHTML = img.patterns.map(p => `<span class="pattern-tag">${p.replace('-', ' ')}</span>`).join('');
+                setTimeout(() => { this.canvas.width = container.offsetWidth; this.canvas.height = container.offsetHeight; }, 100);
+                if (this.ctx) this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            },
+            
+            startDraw(e) { this.isDrawing = true; const r = this.canvas.getBoundingClientRect(); this.startX = e.clientX - r.left; this.startY = e.clientY - r.top; },
+            
+            draw(e) {
+                if (!this.isDrawing) return;
+                const r = this.canvas.getBoundingClientRect();
+                const x = e.clientX - r.left, y = e.clientY - r.top;
+                this.ctx.strokeStyle = '#06b6d4'; this.ctx.lineWidth = 2;
+                if (this.currentTool === 'line') {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.ctx.beginPath(); this.ctx.moveTo(this.startX, this.startY); this.ctx.lineTo(x, y); this.ctx.stroke();
+                } else if (this.currentTool === 'circle') {
+                    const radius = Math.sqrt(Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2));
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.ctx.beginPath(); this.ctx.arc(this.startX, this.startY, radius, 0, Math.PI * 2); this.ctx.stroke();
+                } else if (this.currentTool === 'triangle') {
+                    const size = Math.sqrt(Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2));
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.startX, this.startY - size);
+                    this.ctx.lineTo(this.startX - size * 0.866, this.startY + size * 0.5);
+                    this.ctx.lineTo(this.startX + size * 0.866, this.startY + size * 0.5);
+                    this.ctx.closePath(); this.ctx.stroke();
+                } else if (this.currentTool === 'spiral') {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.ctx.beginPath();
+                    for (let i = 0; i < 720; i++) {
+                        const angle = 0.1 * i, radius = 0.5 * angle;
+                        const px = this.startX + radius * Math.cos(angle), py = this.startY + radius * Math.sin(angle);
+                        if (i === 0) this.ctx.moveTo(px, py); else this.ctx.lineTo(px, py);
+                    }
+                    this.ctx.stroke();
+                }
+            },
+            
+            endDraw() { this.isDrawing = false; },
+            
+            updateProgress() {
+                const s = DataStore.stats;
+                document.getElementById('total-trained').textContent = s.totalTrained;
+                document.getElementById('accuracy-rate').textContent = s.responses > 0 ? Math.round((s.correct / s.responses) * 100) + '%' : '—';
+                document.getElementById('avg-speed').textContent = s.responses > 0 ? Math.round(s.totalTime / s.responses) : '—';
+                document.getElementById('best-streak').textContent = s.bestStreak;
+                let mastered = 0;
+                Object.values(s.patternScores).forEach(p => { if (p.total >= 10 && (p.correct / p.total) >= 0.8) mastered++; });
+                document.getElementById('patterns-mastered').textContent = mastered;
+                const grid = document.getElementById('mastery-grid');
+                grid.innerHTML = '';
+                Object.entries(Patterns).forEach(([key, pattern]) => {
+                    const score = s.patternScores[key] || { correct: 0, total: 0 };
+                    const acc = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
+                    const m = score.total >= 10 && acc >= 80;
+                    const item = document.createElement('div');
+                    item.className = 'mastery-item' + (m ? ' mastered' : '');
+                    item.innerHTML = `<div class="mastery-icon">${pattern.svg}</div><div class="mastery-name">${pattern.name}</div><div class="mastery-score">${acc}% (${score.total})</div>`;
+                    grid.appendChild(item);
+                });
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+    </script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Bridge Letter | The Legacy Project</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Raleway:wght@200;300;400&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: #0a0a0c;
+      font-family: 'Raleway', sans-serif;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    
+    /* Subtle ambient light */
+    .ambient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(200, 180, 150, 0.03) 0%, transparent 60%);
+    }
+    
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .project-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(200, 180, 150, 0.4);
+      margin-bottom: 0.5rem;
+    }
+    
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: rgba(255, 250, 240, 0.9);
+      margin-bottom: 0.75rem;
+    }
+    
+    .subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(200, 180, 150, 0.5);
+      line-height: 1.6;
+    }
+    
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(200, 180, 150, 0.3);
+      margin: 2.5rem auto;
+    }
+    
+    .intro {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .intro em {
+      color: rgba(255, 250, 240, 0.8);
+      font-style: normal;
+    }
+    
+    /* The Letter Space */
+    .letter-space {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(200, 180, 150, 0.1);
+      border-radius: 2px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .letter-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(200, 180, 150, 0.5);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(200, 180, 150, 0.1);
+    }
+    
+    .prompt-section {
+      margin-bottom: 2.5rem;
+    }
+    
+    .prompt-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .prompt-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: rgba(255, 250, 240, 0.8);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .prompt-number {
+      font-size: 0.75rem;
+      color: rgba(200, 180, 150, 0.4);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+    }
+    
+    .writing-area {
+      width: 100%;
+      min-height: 120px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(200, 180, 150, 0.08);
+      border-radius: 2px;
+      padding: 1.25rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+    
+    .writing-area:focus {
+      outline: none;
+      border-color: rgba(200, 180, 150, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+    }
+    
+    .writing-area::placeholder {
+      color: rgba(200, 180, 150, 0.25);
+      font-style: italic;
+    }
+    
+    /* Letter closing */
+    .letter-closing {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(200, 180, 150, 0.1);
+    }
+    
+    .signature-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(200, 180, 150, 0.4);
+      margin-bottom: 0.5rem;
+    }
+    
+    .signature-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(200, 180, 150, 0.15);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: rgba(255, 250, 240, 0.8);
+      padding: 0.5rem 0;
+      width: 200px;
+    }
+    
+    .signature-input:focus {
+      outline: none;
+      border-bottom-color: rgba(200, 180, 150, 0.3);
+    }
+    
+    .signature-input::placeholder {
+      color: rgba(200, 180, 150, 0.2);
+    }
+    
+    .date-line {
+      font-size: 0.85rem;
+      color: rgba(200, 180, 150, 0.3);
+      margin-top: 1rem;
+    }
+    
+    /* Actions */
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .action-btn {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      padding: 0.875rem 1.75rem;
+      background: transparent;
+      border: 1px solid rgba(200, 180, 150, 0.2);
+      color: rgba(200, 180, 150, 0.7);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+    
+    .action-btn:hover {
+      background: rgba(200, 180, 150, 0.05);
+      border-color: rgba(200, 180, 150, 0.3);
+    }
+    
+    .action-btn.primary {
+      background: rgba(200, 180, 150, 0.08);
+      border-color: rgba(200, 180, 150, 0.25);
+    }
+    
+    .action-btn.primary:hover {
+      background: rgba(200, 180, 150, 0.12);
+    }
+    
+    /* Status message */
+    .status {
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(200, 180, 150, 0.5);
+      margin-top: 1rem;
+      min-height: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    /* Guidance note */
+    .guidance {
+      text-align: center;
+      margin: 3rem auto;
+      max-width: 450px;
+    }
+    
+    .guidance p {
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.4);
+      font-style: italic;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 0 2rem;
+    }
+    
+    .footer-text {
+      font-size: 0.75rem;
+      color: rgba(200, 180, 150, 0.3);
+      letter-spacing: 0.1em;
+    }
+    
+    .nav-links {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    
+    .nav-link {
+      font-size: 0.8rem;
+      color: rgba(200, 180, 150, 0.4);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: rgba(200, 180, 150, 0.7);
+    }
+    
+    /* Print styles */
+    @media print {
+      body {
+        background: white;
+        color: #333;
+      }
+      
+      .ambient, .actions, .nav-links, .guidance {
+        display: none;
+      }
+      
+      .letter-space {
+        border: 1px solid #ccc;
+        padding: 2rem;
+      }
+      
+      .writing-area {
+        border: 1px solid #ddd;
+        background: #fafafa;
+        color: #333;
+        min-height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+  <div class="ambient"></div>
+  
+  <div class="container">
+    <header>
+      <p class="project-label">The Legacy Project</p>
+      <h1>The Bridge Letter</h1>
+      <p class="subtitle">A letter from you, written once,<br>addressed to the future, not to a person.</p>
+    </header>
+    
+    <div class="divider"></div>
+    
+    <p class="intro">
+      Not long. Not perfect. <em>Just true.</em><br>
+      Write when you're ready. There is no deadline for legacy.
+    </p>
+    
+    <div class="letter-space">
+      <p class="letter-header">To whoever carries this forward—</p>
+      
+      <div class="prompt-section">
+        <label class="prompt-label">
+          <span class="prompt-number">I.</span>
+          What ends with me.
+        </label>
+        <textarea class="writing-area" id="prompt1" 
+                  placeholder="The patterns I chose not to pass on... the weight I set down..."></textarea>
+      </div>
+      
+      <div class="prompt-section">
+        <label class="prompt-label">
+          <span class="prompt-number">II.</span>
+          What I hope continues.
+        </label>
+        <textarea class="writing-area" id="prompt2" 
+                  placeholder="The things worth keeping... what worked... what matters..."></textarea>
+      </div>
+      
+      <div class="prompt-section">
+        <label class="prompt-label">
+          <span class="prompt-number">III.</span>
+          What I want you to know about love.
+        </label>
+        <textarea class="writing-area" id="prompt3" 
+                  placeholder="The truth I learned... what I wish someone had told me..."></textarea>
+      </div>
+      
+      <div class="letter-closing">
+        <p class="signature-line">With everything I have,</p>
+        <input type="text" class="signature-input" id="signature" placeholder="Your name">
+        <p class="date-line" id="dateDisplay"></p>
+      </div>
+    </div>
+    
+    <div class="actions">
+      <button class="action-btn" onclick="saveDraft()">Save Draft</button>
+      <button class="action-btn" onclick="clearAll()">Start Fresh</button>
+      <button class="action-btn primary" onclick="printLetter()">Print Letter</button>
+    </div>
+    
+    <p class="status" id="status"></p>
+    
+    <div class="guidance">
+      <p>
+        This letter stays in your browser. No one else can see it.<br>
+        Print it when you're ready. Or don't. The writing is the gift.
+      </p>
+    </div>
+    
+    <footer>
+      <p class="footer-text">The Legacy Project — The Bridge</p>
+      <div class="nav-links">
+        <a href="/genesis" class="nav-link">← Genesis Map</a>
+        <a href="/" class="nav-link">Home</a>
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Set current date
+    const dateDisplay = document.getElementById('dateDisplay');
+    const now = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+    
+    // Load saved draft on page load
+    window.addEventListener('load', function() {
+      const saved = localStorage.getItem('bridgeLetter');
+      if (saved) {
+        const data = JSON.parse(saved);
+        document.getElementById('prompt1').value = data.prompt1 || '';
+        document.getElementById('prompt2').value = data.prompt2 || '';
+        document.getElementById('prompt3').value = data.prompt3 || '';
+        document.getElementById('signature').value = data.signature || '';
+        showStatus('Draft restored');
+      }
+    });
+    
+    // Auto-save as user types
+    let saveTimeout;
+    document.querySelectorAll('.writing-area, .signature-input').forEach(el => {
+      el.addEventListener('input', function() {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(saveDraft, 2000);
+      });
+    });
+    
+    function saveDraft() {
+      const data = {
+        prompt1: document.getElementById('prompt1').value,
+        prompt2: document.getElementById('prompt2').value,
+        prompt3: document.getElementById('prompt3').value,
+        signature: document.getElementById('signature').value,
+        lastSaved: new Date().toISOString()
+      };
+      localStorage.setItem('bridgeLetter', JSON.stringify(data));
+      showStatus('Draft saved');
+    }
+    
+    function clearAll() {
+      if (confirm('Are you sure? This will clear everything you\'ve written.')) {
+        document.getElementById('prompt1').value = '';
+        document.getElementById('prompt2').value = '';
+        document.getElementById('prompt3').value = '';
+        document.getElementById('signature').value = '';
+        localStorage.removeItem('bridgeLetter');
+        showStatus('Cleared — ready for a fresh start');
+      }
+    }
+    
+    function printLetter() {
+      window.print();
+    }
+    
+    function showStatus(message) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      setTimeout(() => {
+        status.textContent = '';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

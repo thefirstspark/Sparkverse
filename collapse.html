@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapse Protocol Interface | The First Spark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+        
+        :root {
+            --void: #0a0a0f;
+            --deep: #12121a;
+            --surface: #1a1a24;
+            --elevated: #242430;
+            --border: #2a2a38;
+            --muted: #6b6b80;
+            --text: #e0e0ec;
+            --bright: #ffffff;
+            --spark: #f97316;
+            --spark-glow: rgba(249, 115, 22, 0.3);
+            --quantum: #8b5cf6;
+            --quantum-glow: rgba(139, 92, 246, 0.3);
+            --coherent: #10b981;
+            --coherent-glow: rgba(16, 185, 129, 0.3);
+            --scattered: #ef4444;
+            --passive: #6b7280;
+            --forced: #f59e0b;
+            --deliberate: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .bg-geometry {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+        }
+        
+        .bg-geometry svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        
+        .header-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+        
+        .header-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--spark);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .header-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: var(--spark);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--spark-glow);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--bright), var(--spark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-btn:hover {
+            background: var(--elevated);
+            color: var(--text);
+        }
+        
+        .nav-btn.active {
+            background: var(--elevated);
+            border-color: var(--spark);
+            color: var(--spark);
+            box-shadow: 0 0 20px var(--spark-glow);
+        }
+        
+        .panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .panel.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .card-header {
+            margin-bottom: 24px;
+        }
+        
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--bright);
+        }
+        
+        .card-header p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        @media (max-width: 600px) {
+            .state-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .state-option {
+            padding: 24px;
+            background: var(--deep);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        
+        .state-option:hover {
+            background: var(--elevated);
+        }
+        
+        .state-option.selected {
+            border-color: var(--current-state-color, var(--spark));
+            box-shadow: 0 0 30px var(--current-state-glow, var(--spark-glow));
+        }
+        
+        .state-option.scattered { --current-state-color: var(--scattered); --current-state-glow: rgba(239, 68, 68, 0.2); }
+        .state-option.passive { --current-state-color: var(--passive); --current-state-glow: rgba(107, 114, 128, 0.2); }
+        .state-option.forced { --current-state-color: var(--forced); --current-state-glow: rgba(245, 158, 11, 0.2); }
+        .state-option.deliberate { --current-state-color: var(--deliberate); --current-state-glow: rgba(16, 185, 129, 0.2); }
+        
+        .state-option h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .state-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .state-option.scattered .state-dot { background: var(--scattered); }
+        .state-option.passive .state-dot { background: var(--passive); }
+        .state-option.forced .state-dot { background: var(--forced); }
+        .state-option.deliberate .state-dot { background: var(--deliberate); }
+        
+        .state-option p {
+            color: var(--muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .state-option .state-indicators {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .continue-btn {
+            width: 100%;
+            padding: 16px 24px;
+            margin-top: 24px;
+            background: linear-gradient(135deg, var(--spark), #ea580c);
+            border: none;
+            border-radius: 12px;
+            color: var(--bright);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .continue-btn.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .continue-btn.enabled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px var(--spark-glow);
+        }
+        
+        .protocol-grid {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .protocol-card {
+            padding: 24px;
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .protocol-card:hover {
+            background: var(--elevated);
+            border-color: var(--quantum);
+        }
+        
+        .protocol-card.selected {
+            border-color: var(--quantum);
+            box-shadow: 0 0 30px var(--quantum-glow);
+        }
+        
+        .protocol-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .protocol-tag {
+            padding: 4px 10px;
+            background: var(--surface);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--muted);
+        }
+        
+        .protocol-tag.micro { color: var(--coherent); background: rgba(16, 185, 129, 0.1); }
+        .protocol-tag.meso { color: var(--quantum); background: rgba(139, 92, 246, 0.1); }
+        .protocol-tag.macro { color: var(--spark); background: rgba(249, 115, 22, 0.1); }
+        
+        .protocol-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--bright);
+        }
+        
+        .protocol-card p {
+            color: var(--muted);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        
+        .protocol-phase {
+            padding: 32px;
+            background: var(--deep);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        
+        .protocol-phase.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .phase-indicator {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .phase-dot {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-dot.complete {
+            background: var(--coherent);
+        }
+        
+        .phase-dot.current {
+            background: var(--quantum);
+            box-shadow: 0 0 10px var(--quantum-glow);
+        }
+        
+        .phase-label {
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--quantum);
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+        }
+        
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--bright);
+        }
+        
+        .phase-content {
+            color: var(--text);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+        
+        .phase-instruction {
+            padding: 20px;
+            background: var(--surface);
+            border-left: 3px solid var(--quantum);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 24px;
+        }
+        
+        .phase-instruction p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+        
+        .timer-display {
+            text-align: center;
+            margin: 32px 0;
+        }
+        
+        .timer-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+        
+        .timer-circle.running {
+            border-color: var(--quantum);
+            box-shadow: 0 0 30px var(--quantum-glow);
+        }
+        
+        .timer-value {
+            font-size: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--bright);
+        }
+        
+        .timer-btn {
+            padding: 12px 32px;
+            background: var(--quantum);
+            border: none;
+            border-radius: 8px;
+            color: var(--bright);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .timer-btn:hover {
+            background: #7c3aed;
+        }
+        
+        .phase-nav {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            margin-top: 32px;
+        }
+        
+        .phase-nav-btn {
+            padding: 14px 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .phase-nav-btn:hover {
+            background: var(--elevated);
+        }
+        
+        .phase-nav-btn.primary {
+            background: var(--quantum);
+            border-color: var(--quantum);
+        }
+        
+        .phase-nav-btn.primary:hover {
+            background: #7c3aed;
+        }
+        
+        .quality-input {
+            margin: 24px 0;
+        }
+        
+        .quality-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+        
+        .quality-label span:last-child {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--quantum);
+        }
+        
+        .quality-slider {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        .quality-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--quantum);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--quantum-glow);
+        }
+        
+        .quality-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: var(--quantum);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--quantum);
+        }
+        
+        .notes-textarea::placeholder {
+            color: var(--muted);
+        }
+        
+        .log-entry {
+            padding: 20px;
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .log-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .log-entry-title {
+            font-weight: 600;
+            color: var(--bright);
+        }
+        
+        .log-entry-time {
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--muted);
+        }
+        
+        .log-entry-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .log-meta-item {
+            font-size: 0.85rem;
+        }
+        
+        .log-meta-item span {
+            color: var(--muted);
+        }
+        
+        .log-entry-notes {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .log-verification {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .log-verification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .verify-btn {
+            padding: 8px 16px;
+            background: var(--coherent);
+            border: none;
+            border-radius: 6px;
+            color: var(--bright);
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .verify-btn:hover {
+            background: #059669;
+        }
+        
+        .verification-form {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--surface);
+            border-radius: 8px;
+        }
+        
+        .verification-form.active {
+            display: block;
+        }
+        
+        .accuracy-options {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+        
+        .accuracy-option {
+            padding: 8px 16px;
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .accuracy-option:hover {
+            background: var(--elevated);
+        }
+        
+        .accuracy-option.selected {
+            border-color: var(--coherent);
+            color: var(--coherent);
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            padding: 24px;
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--spark);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        
+        .pattern-section {
+            margin-bottom: 32px;
+        }
+        
+        .pattern-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--bright);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pattern-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .pattern-bar:last-child {
+            border-bottom: none;
+        }
+        
+        .pattern-label {
+            width: 120px;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        
+        .pattern-bar-track {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .pattern-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .pattern-bar-fill.scattered { background: var(--scattered); }
+        .pattern-bar-fill.passive { background: var(--passive); }
+        .pattern-bar-fill.forced { background: var(--forced); }
+        .pattern-bar-fill.deliberate { background: var(--deliberate); }
+        .pattern-bar-fill.quantum { background: var(--quantum); }
+        .pattern-bar-fill.coherent { background: var(--coherent); }
+        .pattern-bar-fill.spark { background: var(--spark); }
+        
+        .pattern-value {
+            width: 50px;
+            text-align: right;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--muted);
+        }
+        
+        .insight-card {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(249, 115, 22, 0.1));
+            border: 1px solid var(--quantum);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .insight-card h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--quantum);
+            margin-bottom: 8px;
+        }
+        
+        .insight-card p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--muted);
+        }
+        
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        
+        .empty-state p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 48px 0 24px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+        
+        .footer a {
+            color: var(--spark);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 16px;
+            }
+            
+            .card {
+                padding: 24px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            
+            .nav-btn {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+            }
+            
+            .phase-nav {
+                flex-direction: column;
+            }
+            
+            .phase-nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <div class="bg-geometry">
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <circle cx="25" cy="25" r="1" fill="white"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)"/>
+            <circle cx="500" cy="500" r="300" stroke="white" stroke-width="0.5" fill="none"/>
+            <circle cx="500" cy="500" r="200" stroke="white" stroke-width="0.5" fill="none"/>
+            <polygon points="500,200 759,350 759,650 500,800 241,650 241,350" stroke="white" stroke-width="0.5" fill="none"/>
+        </svg>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-icon"></div>
+            <h1>COLLAPSE PROTOCOL INTERFACE</h1>
+            <p>Chamber 2 — Observer Training</p>
+        </header>
+
+        <nav class="nav">
+            <button class="nav-btn active" data-panel="state">State Check-In</button>
+            <button class="nav-btn" data-panel="protocols">Protocols</button>
+            <button class="nav-btn" data-panel="log">Session Log</button>
+            <button class="nav-btn" data-panel="patterns">Patterns</button>
+        </nav>
+
+        <div id="state-panel" class="panel active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Where is your observer right now?</h2>
+                    <p>Accurate state identification is the first skill. Most people think they're Deliberate when they're Forced, or Passive when they're Scattered. Be honest—the tool works better with truth.</p>
+                </div>
+
+                <div class="state-grid">
+                    <div class="state-option scattered" data-state="scattered">
+                        <h3><span class="state-dot"></span>Scattered</h3>
+                        <p>Attention fragmented. Multiple tabs open in consciousness. Hard to hold one thought. Mind jumping between past, future, worries, tasks.</p>
+                        <div class="state-indicators">
+                            Attention: Fragmented<br>
+                            Intention: Unclear<br>
+                            Collapse result: Noise
+                        </div>
+                    </div>
+
+                    <div class="state-option passive" data-state="passive">
+                        <h3><span class="state-dot"></span>Passive</h3>
+                        <p>Present but diffuse. Watching reality happen to you. Observing without directing. Going through motions. Consensus reality running.</p>
+                        <div class="state-indicators">
+                            Attention: Diffuse<br>
+                            Intention: Absent<br>
+                            Collapse result: Default patterns
+                        </div>
+                    </div>
+
+                    <div class="state-option forced" data-state="forced">
+                        <h3><span class="state-dot"></span>Forced</h3>
+                        <p>Concentrated but gripping. Trying to make something happen through willpower. Efforting. Attached to specific outcomes. Fighting the field.</p>
+                        <div class="state-indicators">
+                            Attention: Concentrated<br>
+                            Intention: Rigid<br>
+                            Collapse result: Resistance
+                        </div>
+                    </div>
+
+                    <div class="state-option deliberate" data-state="deliberate">
+                        <h3><span class="state-dot"></span>Deliberate</h3>
+                        <p>Focused yet relaxed. Clear intention without attachment. Selecting from the field without forcing. Coherent signal. Ready to collapse.</p>
+                        <div class="state-indicators">
+                            Attention: Focused<br>
+                            Intention: Clear<br>
+                            Collapse result: Clean selection
+                        </div>
+                    </div>
+                </div>
+
+                <button class="continue-btn" id="state-continue">Continue to Protocol Selection</button>
+            </div>
+
+            <div id="state-guidance" class="card" style="display: none;">
+                <div class="card-header">
+                    <h2 id="guidance-title">Preparing Your Observer</h2>
+                </div>
+                <div id="guidance-content"></div>
+            </div>
+        </div>
+
+        <div id="protocols-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Select Protocol</h2>
+                    <p>Choose based on available time and current capacity. Micro-protocols build skill through repetition. Meso-protocols develop deeper practice. Start where you are.</p>
+                </div>
+
+                <div class="protocol-grid" id="protocol-list">
+                    <div class="protocol-card" data-protocol="color-call">
+                        <div class="protocol-meta">
+                            <span class="protocol-tag micro">MICRO</span>
+                            <span class="protocol-tag">5-10 min active</span>
+                            <span class="protocol-tag">24hr observation</span>
+                        </div>
+                        <h3>Color Call</h3>
+                        <p>Select an uncommon color. Cohere on its frequency. Release and track appearances over 24 hours. Classic observer training.</p>
+                    </div>
+
+                    <div class="protocol-card" data-protocol="word-drop">
+                        <div class="protocol-meta">
+                            <span class="protocol-tag micro">MICRO</span>
+                            <span class="protocol-tag">5-10 min active</span>
+                            <span class="protocol-tag">24hr observation</span>
+                        </div>
+                        <h3>Word Drop</h3>
+                        <p>Select an unusual word. Cohere on its sound, shape, meaning. Release and track how it appears—conversations, signs, media.</p>
+                    </div>
+
+                    <div class="protocol-card" data-protocol="micro-shift">
+                        <div class="protocol-meta">
+                            <span class="protocol-tag micro">MICRO</span>
+                            <span class="protocol-tag">5-15 min</span>
+                            <span class="protocol-tag">immediate</span>
+                        </div>
+                        <h3>Micro-Shift</h3>
+                        <p>Identify something slightly off in your environment or state. Witness the corrected version as already present. Track what shifts.</p>
+                    </div>
+
+                    <div class="protocol-card" data-protocol="sync-summon">
+                        <div class="protocol-meta">
+                            <span class="protocol-tag micro">MICRO</span>
+                            <span class="protocol-tag">5-10 min active</span>
+                            <span class="protocol-tag">24-48hr observation</span>
+                        </div>
+                        <h3>Synchronicity Summon</h3>
+                        <p>Select a category of meaningful coincidence. Not specific events—a type of event. Cohere on that pattern. Track what appears.</p>
+                    </div>
+
+                    <div class="protocol-card" data-protocol="conversation-architect">
+                        <div class="protocol-meta">
+                            <span class="protocol-tag meso">MESO</span>
+                            <span class="protocol-tag">15-20 min</span>
+                            <span class="protocol-tag">pre-conversation</span>
+                        </div>
+                        <h3>Conversation Architect</h3>
+                        <p>Before an upcoming conversation, cohere on the quality you want present. Not words—the felt sense of how it goes. Verify after.</p>
+                    </div>
+
+                    <div class="protocol-card" data-protocol="day-tone">
+                        <div class="protocol-meta">
+                            <span class="protocol-tag meso">MESO</span>
+                            <span class="protocol-tag">10-15 min</span>
+                            <span class="protocol-tag">morning ritual</span>
+                        </div>
+                        <h3>Day Tone Setting</h3>
+                        <p>Morning protocol. Select the dominant frequency of your day. Not events—tone. Witness the day already carrying it. Evening verification.</p>
+                    </div>
+
+                    <div class="protocol-card" data-protocol="state-transplant">
+                        <div class="protocol-meta">
+                            <span class="protocol-tag meso">MESO</span>
+                            <span class="protocol-tag">20-30 min</span>
+                            <span class="protocol-tag">state work</span>
+                        </div>
+                        <h3>State Transplant</h3>
+                        <p>Identify a state you want more access to. Locate where it exists in memory, imagination, another timeline. Cohere until you can feel it running.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="protocol-execution" class="panel">
+            <div class="card">
+                <div class="phase-indicator">
+                    <div class="phase-dot" data-phase="1"></div>
+                    <div class="phase-dot" data-phase="2"></div>
+                    <div class="phase-dot" data-phase="3"></div>
+                    <div class="phase-dot" data-phase="4"></div>
+                    <div class="phase-dot" data-phase="5"></div>
+                </div>
+
+                <div class="protocol-phase" data-phase="1">
+                    <div class="phase-label">PHASE 1 OF 5</div>
+                    <h2 class="phase-title">COHERE</h2>
+                    <div class="phase-content">
+                        <p>Get your observer into a unified state. This isn't meditation for relaxation—it's signal clarification. Reduce internal noise until there's one clear broadcast.</p>
+                    </div>
+                    <div class="phase-instruction" id="cohere-instruction"></div>
+
+                    <div class="timer-display">
+                        <div class="timer-circle">
+                            <span class="timer-value">2:00</span>
+                        </div>
+                        <button class="timer-btn" id="cohere-timer">Begin Coherence</button>
+                    </div>
+
+                    <div class="phase-nav">
+                        <button class="phase-nav-btn" id="back-to-protocols">← Back to Protocols</button>
+                        <button class="phase-nav-btn primary" id="to-phase-2">Continue to Select →</button>
+                    </div>
+                </div>
+
+                <div class="protocol-phase" data-phase="2">
+                    <div class="phase-label">PHASE 2 OF 5</div>
+                    <h2 class="phase-title">SELECT</h2>
+                    <div class="phase-content">
+                        <p>Identify what you're observing into reality. Not the outcome—the <em>quality</em> or <em>pattern</em> being called in. The system handles form. You select frequency.</p>
+                    </div>
+                    <div class="phase-instruction" id="select-instruction"></div>
+
+                    <div class="quality-input">
+                        <label class="quality-label">
+                            <span>Selection Clarity</span>
+                            <span id="clarity-value">5</span>
+                        </label>
+                        <input type="range" class="quality-slider" id="clarity-slider" min="1" max="10" value="5">
+                    </div>
+
+                    <label style="display: block; margin-bottom: 8px; font-size: 0.9rem;">What are you selecting? (Record for yourself)</label>
+                    <textarea class="notes-textarea" id="selection-notes" placeholder="Describe the quality, frequency, or pattern you're calling in..."></textarea>
+
+                    <div class="phase-nav">
+                        <button class="phase-nav-btn" id="back-to-phase-1">← Back</button>
+                        <button class="phase-nav-btn primary" id="to-phase-3">Continue to Witness →</button>
+                    </div>
+                </div>
+
+                <div class="protocol-phase" data-phase="3">
+                    <div class="phase-label">PHASE 3 OF 5</div>
+                    <h2 class="phase-title">WITNESS</h2>
+                    <div class="phase-content">
+                        <p>The collapse moment. Hold your selection in coherent attention without grasping. This is where most fail—they either let go too soon or grip too hard. Find the middle: steady presence, no force.</p>
+                    </div>
+                    <div class="phase-instruction" id="witness-instruction"></div>
+
+                    <div class="timer-display">
+                        <div class="timer-circle">
+                            <span class="timer-value">3:00</span>
+                        </div>
+                        <button class="timer-btn" id="witness-timer">Begin Witness Hold</button>
+                    </div>
+
+                    <div class="quality-input" style="margin-top: 32px;">
+                        <label class="quality-label">
+                            <span>Coherence Quality</span>
+                            <span id="coherence-value">5</span>
+                        </label>
+                        <input type="range" class="quality-slider" id="coherence-slider" min="1" max="10" value="5">
+                        <p style="font-size: 0.8rem; color: var(--muted); margin-top: 8px;">1 = couldn't hold it, kept slipping | 10 = rock solid, no effort</p>
+                    </div>
+
+                    <div class="phase-nav">
+                        <button class="phase-nav-btn" id="back-to-phase-2">← Back</button>
+                        <button class="phase-nav-btn primary" id="to-phase-4">Continue to Release →</button>
+                    </div>
+                </div>
+
+                <div class="protocol-phase" data-phase="4">
+                    <div class="phase-label">PHASE 4 OF 5</div>
+                    <h2 class="phase-title">RELEASE</h2>
+                    <div class="phase-content">
+                        <p>The observation is complete. The collapse has occurred. Now—stop observing. Exit the kitchen and let it cook. Continued attention after collapse is like opening the oven every 30 seconds.</p>
+                    </div>
+                    <div class="phase-instruction" id="release-instruction">
+                        <p>Take a breath. Consciously withdraw your attention from the selection. Feel the moment of letting go. The work is done. Trust the field to render what you've observed.</p>
+                    </div>
+
+                    <div class="quality-input">
+                        <label class="quality-label">
+                            <span>Release Quality</span>
+                            <span id="release-value">5</span>
+                        </label>
+                        <input type="range" class="quality-slider" id="release-slider" min="1" max="10" value="5">
+                        <p style="font-size: 0.8rem; color: var(--muted); margin-top: 8px;">1 = still gripping, can't let go | 10 = fully released, at peace</p>
+                    </div>
+
+                    <div class="phase-nav">
+                        <button class="phase-nav-btn" id="back-to-phase-3">← Back</button>
+                        <button class="phase-nav-btn primary" id="to-phase-5">Complete Session →</button>
+                    </div>
+                </div>
+
+                <div class="protocol-phase" data-phase="5">
+                    <div class="phase-label">PHASE 5 OF 5</div>
+                    <h2 class="phase-title">LOG</h2>
+                    <div class="phase-content">
+                        <p>Record this session. Verification comes later—hours or days depending on the protocol. Your patterns emerge from data. The more you log, the more you learn.</p>
+                    </div>
+
+                    <label style="display: block; margin-bottom: 8px; font-size: 0.9rem;">Session Notes</label>
+                    <textarea class="notes-textarea" id="session-notes" placeholder="How did this session feel? Any observations about your process? What felt easy or difficult?"></textarea>
+
+                    <div class="phase-nav" style="margin-top: 24px;">
+                        <button class="phase-nav-btn" id="back-to-phase-4">← Back</button>
+                        <button class="phase-nav-btn primary" id="save-session">Save Session</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="log-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Session Log</h2>
+                    <p>Your collapse history. Return to add verifications as reality responds.</p>
+                </div>
+
+                <div id="session-list">
+                    <div class="empty-state" id="empty-log">
+                        <div class="empty-state-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </div>
+                        <h3>No sessions yet</h3>
+                        <p>Complete a protocol to start building your collapse history.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="patterns-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Pattern Dashboard</h2>
+                    <p>Your collapse signature emerges from practice. Patterns surface after multiple sessions.</p>
+                </div>
+
+                <div class="stat-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-sessions">0</div>
+                        <div class="stat-label">Total Sessions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avg-coherence">—</div>
+                        <div class="stat-label">Avg Coherence</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="verified-collapses">0</div>
+                        <div class="stat-label">Verified Collapses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="accuracy-rate">—</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                </div>
+
+                <div class="pattern-section">
+                    <h3>Observer State Distribution</h3>
+                    <div id="state-distribution">
+                        <div class="pattern-bar">
+                            <span class="pattern-label">Scattered</span>
+                            <div class="pattern-bar-track">
+                                <div class="pattern-bar-fill scattered" style="width: 0%"></div>
+                            </div>
+                            <span class="pattern-value" id="scattered-pct">0%</span>
+                        </div>
+                        <div class="pattern-bar">
+                            <span class="pattern-label">Passive</span>
+                            <div class="pattern-bar-track">
+                                <div class="pattern-bar-fill passive" style="width: 0%"></div>
+                            </div>
+                            <span class="pattern-value" id="passive-pct">0%</span>
+                        </div>
+                        <div class="pattern-bar">
+                            <span class="pattern-label">Forced</span>
+                            <div class="pattern-bar-track">
+                                <div class="pattern-bar-fill forced" style="width: 0%"></div>
+                            </div>
+                            <span class="pattern-value" id="forced-pct">0%</span>
+                        </div>
+                        <div class="pattern-bar">
+                            <span class="pattern-label">Deliberate</span>
+                            <div class="pattern-bar-track">
+                                <div class="pattern-bar-fill deliberate" style="width: 0%"></div>
+                            </div>
+                            <span class="pattern-value" id="deliberate-pct">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pattern-section">
+                    <h3>Protocol Usage</h3>
+                    <div id="protocol-distribution"></div>
+                </div>
+
+                <div class="pattern-section" id="insights-section" style="display: none;">
+                    <h3>Emerging Insights</h3>
+                    <div id="insights-list"></div>
+                </div>
+
+                <div class="empty-state" id="empty-patterns">
+                    <div class="empty-state-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 3v18h18"/>
+                            <path d="M7 12l4-4 4 4 4-4"/>
+                        </svg>
+                    </div>
+                    <h3>Patterns emerging...</h3>
+                    <p>Complete more sessions to reveal your collapse signature. Insights surface after 5+ sessions.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Collapse Protocol Interface — Chamber 2 of Source Architecture<br>
+            Built for <a href="https://thefirstspark.shop" target="_blank">The First Spark</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const DataStore = {
+            sessions: [],
+            currentSession: null,
+            currentState: null,
+            currentProtocol: null,
+            
+            load() {
+                const saved = localStorage.getItem('collapse-protocol-data');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.sessions = data.sessions || [];
+                }
+            },
+            
+            save() {
+                localStorage.setItem('collapse-protocol-data', JSON.stringify({
+                    sessions: this.sessions
+                }));
+            },
+            
+            addSession(session) {
+                this.sessions.unshift(session);
+                this.save();
+            },
+            
+            updateSession(id, updates) {
+                const session = this.sessions.find(s => s.id === id);
+                if (session) {
+                    Object.assign(session, updates);
+                    this.save();
+                }
+            },
+            
+            getStats() {
+                const total = this.sessions.length;
+                if (total === 0) return null;
+                
+                const avgCoherence = this.sessions.reduce((sum, s) => sum + (s.coherence || 0), 0) / total;
+                const verified = this.sessions.filter(s => s.verification).length;
+                const accurate = this.sessions.filter(s => s.verification && 
+                    (s.verification.accuracy === 'match' || s.verification.accuracy === 'partial')).length;
+                
+                const states = { scattered: 0, passive: 0, forced: 0, deliberate: 0 };
+                this.sessions.forEach(s => {
+                    if (s.state && states.hasOwnProperty(s.state)) {
+                        states[s.state]++;
+                    }
+                });
+                
+                const protocols = {};
+                this.sessions.forEach(s => {
+                    if (s.protocol) {
+                        protocols[s.protocol] = (protocols[s.protocol] || 0) + 1;
+                    }
+                });
+                
+                return {
+                    total,
+                    avgCoherence: avgCoherence.toFixed(1),
+                    verified,
+                    accuracyRate: verified > 0 ? Math.round((accurate / verified) * 100) : null,
+                    states,
+                    protocols
+                };
+            }
+        };
+        
+        const Protocols = {
+            'color-call': {
+                name: 'Color Call',
+                category: 'micro',
+                cohere: `<p>Close your eyes. Take three slow breaths. Let your mind settle like water becoming still.</p>
+                        <p>Now, let a color arise. Not a common one—not red, blue, green. Let something specific emerge. Chartreuse. Burnt sienna. Teal. Magenta. Wait for it to appear without forcing.</p>
+                        <p>When you have your color, hold it. Feel its frequency. Not the word—the <em>quality</em> of that color.</p>`,
+                select: `<p>Lock onto your chosen color. Not the label—the actual visual experience of it.</p>
+                        <p>You're not hoping to see it. You're <em>tuning to its frequency.</em> Like adjusting a radio dial until the signal comes in clear.</p>`,
+                witness: `<p>Hold the color in your awareness. See it. Feel it. Let it become so real in your inner vision that it's already part of your reality.</p>
+                        <p>This isn't visualization for manifestation. You're collapsing superposition. The color is already there—you're just selecting which probability renders.</p>
+                        <p>Steady presence. No forcing. Let the observation do the work.</p>`,
+                verificationTime: '24 hours'
+            },
+            'word-drop': {
+                name: 'Word Drop',
+                category: 'micro',
+                cohere: `<p>Settle your attention. Three breaths. Let mental chatter quiet.</p>
+                        <p>Allow an unusual word to surface. Not everyday language. Something specific, slightly uncommon. A word you might encounter but don't think about regularly.</p>
+                        <p>Wait for it to arrive rather than choosing with your thinking mind.</p>`,
+                select: `<p>Your word has arrived. Now cohere on its totality.</p>
+                        <p>Its sound. How it feels to say. Its shape on a page. What it means, what it evokes. Let the word become dimensional in your awareness.</p>`,
+                witness: `<p>Hold your word as a complete experience. You're not chanting it or affirming it. You're <em>resonating</em> with it.</p>
+                        <p>Imagine you're a tuning fork calibrated to this exact frequency. When matching frequencies exist in your environment, they'll respond.</p>`,
+                verificationTime: '24 hours'
+            },
+            'micro-shift': {
+                name: 'Micro-Shift',
+                category: 'micro',
+                cohere: `<p>Look around your current environment. Notice your current state.</p>
+                        <p>Identify something slightly off. Not major—subtle. A quality of light, an arrangement, an aspect of how you feel. Something that could be slightly <em>more right.</em></p>
+                        <p>Don't try to fix it yet. Just notice it.</p>`,
+                select: `<p>Now hold the corrected version. Not how you'll make it happen—the <em>state of it already being so.</em></p>
+                        <p>If it's environmental, see it as you'd prefer. If it's internal, feel the adjusted state as already running.</p>`,
+                witness: `<p>This is subtle work. You're not forcing change—you're observing an adjacent possibility into this timeline.</p>
+                        <p>Hold the corrected state gently. As if it's already true and you're just noticing it. Because at the quantum level, it <em>is</em> already one of the options.</p>`,
+                verificationTime: 'Immediate to 1 hour'
+            },
+            'sync-summon': {
+                name: 'Synchronicity Summon',
+                category: 'micro',
+                cohere: `<p>Settle into coherent awareness. Breath. Stillness.</p>
+                        <p>Consider: what pattern of meaningful coincidence would feel significant to you right now? Not a specific event—a <em>category</em> of synchronicity.</p>
+                        <p>Connections about a topic. Messages through unexpected channels. Meaningful encounters. Choose the type.</p>`,
+                select: `<p>Define your synchronicity pattern. Be specific about the category, not the form.</p>
+                        <p>Example: "Meaningful messages about my next creative direction" — not "Someone will tell me to start a podcast."</p>
+                        <p>The universe is creative. Give it room to work.</p>`,
+                witness: `<p>Hold the pattern-type in awareness. Feel what it would be like to encounter this kind of synchronicity.</p>
+                        <p>Not hoping. Not asking. <em>Tuning.</em> You're setting your receiver to notice what's already broadcasting.</p>`,
+                verificationTime: '24-48 hours'
+            },
+            'conversation-architect': {
+                name: 'Conversation Architect',
+                category: 'meso',
+                cohere: `<p>Bring to mind an upcoming conversation. Someone you'll speak with in the near future.</p>
+                        <p>Don't rehearse words or scenarios. Simply let the <em>reality</em> of this coming interaction settle into your awareness.</p>`,
+                select: `<p>What quality do you want present in this conversation? Not what you want them to say or do—the <em>tone</em>, the <em>frequency</em> of the exchange.</p>
+                        <p>Ease? Clarity? Breakthrough? Connection? Resolution? Identify the felt sense, not the content.</p>`,
+                witness: `<p>Feel the conversation as if it has already occurred with this quality present.</p>
+                        <p>Not a movie of what happens—the <em>afterglow</em> of it having gone that way. The residue of a conversation with that tone.</p>
+                        <p>You're collapsing one version from many possible conversations.</p>`,
+                verificationTime: 'After conversation'
+            },
+            'day-tone': {
+                name: 'Day Tone Setting',
+                category: 'meso',
+                cohere: `<p>Morning practice. Before the day begins, before the inbox, before the tasks.</p>
+                        <p>Sit with the blankness of the day ahead. Not yet determined. Full of superposition.</p>`,
+                select: `<p>What is the dominant frequency of this day? Not events—<em>tone.</em></p>
+                        <p>Productive. Peaceful. Breakthrough. Connective. Playful. Powerful. Choose a single frequency to run through everything.</p>`,
+                witness: `<p>Feel evening arriving. The day is done. This tone has been present throughout.</p>
+                        <p>How do you feel at the end of a day that carried this frequency? What's the quality of your state?</p>
+                        <p>Collapse from there. Select from the future backward.</p>`,
+                verificationTime: 'Evening review'
+            },
+            'state-transplant': {
+                name: 'State Transplant',
+                category: 'meso',
+                cohere: `<p>Identify a state you want more access to. A way of being that feels slightly out of reach right now.</p>
+                        <p>Not a mood—a <em>state.</em> Confidence. Creative flow. Calm authority. Playful presence. Choose one.</p>`,
+                select: `<p>Now locate this state somewhere in your experience.</p>
+                        <p>A memory where you had it. An imagined future where it's running. A version of you in another timeline who operates from it naturally.</p>
+                        <p>Find the access point.</p>`,
+                witness: `<p>This is state alchemy. You're not trying to create something from nothing—you're accessing what exists elsewhere and running it here.</p>
+                        <p>Feel the state as already installed. Already running. Already your default. Collapse the version where this is how you operate.</p>`,
+                verificationTime: 'Track duration over hours'
+            }
+        };
+        
+        const UI = {
+            init() {
+                this.bindNavigation();
+                this.bindStateSelection();
+                this.bindProtocolSelection();
+                this.bindPhaseNavigation();
+                this.bindSliders();
+                this.bindTimers();
+                DataStore.load();
+                this.updateLog();
+                this.updatePatterns();
+            },
+            
+            bindNavigation() {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                        document.getElementById(btn.dataset.panel + '-panel').classList.add('active');
+                    });
+                });
+            },
+            
+            bindStateSelection() {
+                const stateOptions = document.querySelectorAll('.state-option');
+                const continueBtn = document.getElementById('state-continue');
+                
+                stateOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        stateOptions.forEach(o => o.classList.remove('selected'));
+                        option.classList.add('selected');
+                        DataStore.currentState = option.dataset.state;
+                        continueBtn.classList.add('enabled');
+                        this.showStateGuidance(option.dataset.state);
+                    });
+                });
+                
+                continueBtn.addEventListener('click', () => {
+                    if (DataStore.currentState) {
+                        document.querySelector('[data-panel="protocols"]').click();
+                    }
+                });
+            },
+            
+            showStateGuidance(state) {
+                const guidance = {
+                    scattered: {
+                        title: 'Grounding Before Protocol',
+                        content: `<p>Your observer is fragmented. Before running any protocol, you'll need to consolidate.</p>
+                                  <p style="margin-top: 16px;"><strong>Quick consolidation:</strong></p>
+                                  <ul style="margin: 12px 0; padding-left: 20px; color: var(--text);">
+                                      <li style="margin: 8px 0;">Physical grounding — feet on floor, feel your weight</li>
+                                      <li style="margin: 8px 0;">Breath anchor — 5 breaths, counting each exhale</li>
+                                      <li style="margin: 8px 0;">Single point — choose one object, hold attention on it for 30 seconds</li>
+                                  </ul>
+                                  <p style="margin-top: 16px;">Start with a Micro protocol. Don't attempt Meso work until you can hold Deliberate state.</p>`
+                    },
+                    passive: {
+                        title: 'Activating the Observer',
+                        content: `<p>You're present but not directing. The default rendering engine is running—consensus reality, inherited patterns.</p>
+                                  <p style="margin-top: 16px;"><strong>Wake up the selector:</strong></p>
+                                  <ul style="margin: 12px 0; padding-left: 20px; color: var(--text);">
+                                      <li style="margin: 8px 0;">Make a choice — any small choice, made deliberately</li>
+                                      <li style="margin: 8px 0;">Speak an intention aloud — hearing yourself claim something</li>
+                                      <li style="margin: 8px 0;">Change something physical — move an object, adjust your position</li>
+                                  </ul>
+                                  <p style="margin-top: 16px;">Any protocol will help. The act of selecting and observing is the training.</p>`
+                    },
+                    forced: {
+                        title: 'Softening the Grip',
+                        content: `<p>You're concentrated but tight. Willpower is engaged but creating resistance. This is the most common mistake in collapse work.</p>
+                                  <p style="margin-top: 16px;"><strong>Release while maintaining focus:</strong></p>
+                                  <ul style="margin: 12px 0; padding-left: 20px; color: var(--text);">
+                                      <li style="margin: 8px 0;">Unclench your jaw, drop your shoulders</li>
+                                      <li style="margin: 8px 0;">Soften the muscles around your eyes</li>
+                                      <li style="margin: 8px 0;">Exhale longer than you inhale (4 counts in, 6 out)</li>
+                                  </ul>
+                                  <p style="margin-top: 16px;">The skill is focused+relaxed, not focused+gripping. Let the protocol teach you the difference.</p>`
+                    },
+                    deliberate: {
+                        title: 'Ready State',
+                        content: `<p>Your observer is coherent. Focused yet relaxed, clear yet unattached. This is where collapse work works.</p>
+                                  <p style="margin-top: 16px;">You can run any protocol from here. Consider trying a Meso-level practice to deepen your skill.</p>
+                                  <p style="margin-top: 16px;">Notice what got you here. The path to Deliberate state is data you'll want to map.</p>`
+                    }
+                };
+                
+                const g = guidance[state];
+                document.getElementById('guidance-title').textContent = g.title;
+                document.getElementById('guidance-content').innerHTML = g.content;
+                document.getElementById('state-guidance').style.display = 'block';
+            },
+            
+            bindProtocolSelection() {
+                document.querySelectorAll('.protocol-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.protocol-card').forEach(c => c.classList.remove('selected'));
+                        card.classList.add('selected');
+                        
+                        const protocolId = card.dataset.protocol;
+                        DataStore.currentProtocol = protocolId;
+                        this.startProtocol(protocolId);
+                    });
+                });
+            },
+            
+            startProtocol(protocolId) {
+                const protocol = Protocols[protocolId];
+                if (!protocol) return;
+                
+                DataStore.currentSession = {
+                    id: Date.now().toString(),
+                    timestamp: new Date().toISOString(),
+                    state: DataStore.currentState,
+                    protocol: protocolId,
+                    protocolName: protocol.name,
+                    clarity: 5,
+                    coherence: 5,
+                    release: 5,
+                    selection: '',
+                    notes: '',
+                    verification: null
+                };
+                
+                document.getElementById('cohere-instruction').innerHTML = protocol.cohere;
+                document.getElementById('select-instruction').innerHTML = protocol.select;
+                document.getElementById('witness-instruction').innerHTML = protocol.witness;
+                
+                document.getElementById('protocols-panel').classList.remove('active');
+                document.getElementById('protocol-execution').classList.add('active');
+                
+                this.showPhase(1);
+            },
+            
+            bindPhaseNavigation() {
+                document.getElementById('back-to-protocols').addEventListener('click', () => {
+                    document.getElementById('protocol-execution').classList.remove('active');
+                    document.getElementById('protocols-panel').classList.add('active');
+                });
+                
+                document.getElementById('to-phase-2').addEventListener('click', () => this.showPhase(2));
+                document.getElementById('back-to-phase-1').addEventListener('click', () => this.showPhase(1));
+                document.getElementById('to-phase-3').addEventListener('click', () => {
+                    DataStore.currentSession.selection = document.getElementById('selection-notes').value;
+                    this.showPhase(3);
+                });
+                document.getElementById('back-to-phase-2').addEventListener('click', () => this.showPhase(2));
+                document.getElementById('to-phase-4').addEventListener('click', () => this.showPhase(4));
+                document.getElementById('back-to-phase-3').addEventListener('click', () => this.showPhase(3));
+                document.getElementById('to-phase-5').addEventListener('click', () => this.showPhase(5));
+                document.getElementById('back-to-phase-4').addEventListener('click', () => this.showPhase(4));
+                
+                document.getElementById('save-session').addEventListener('click', () => {
+                    DataStore.currentSession.notes = document.getElementById('session-notes').value;
+                    DataStore.addSession(DataStore.currentSession);
+                    
+                    document.getElementById('selection-notes').value = '';
+                    document.getElementById('session-notes').value = '';
+                    document.getElementById('clarity-slider').value = 5;
+                    document.getElementById('coherence-slider').value = 5;
+                    document.getElementById('release-slider').value = 5;
+                    
+                    document.getElementById('protocol-execution').classList.remove('active');
+                    document.querySelector('[data-panel="log"]').click();
+                    this.updateLog();
+                    this.updatePatterns();
+                });
+            },
+            
+            showPhase(phase) {
+                document.querySelectorAll('.phase-dot').forEach(dot => {
+                    const dotPhase = parseInt(dot.dataset.phase);
+                    dot.classList.remove('current', 'complete');
+                    if (dotPhase < phase) dot.classList.add('complete');
+                    if (dotPhase === phase) dot.classList.add('current');
+                });
+                
+                document.querySelectorAll('.protocol-phase').forEach(p => p.classList.remove('active'));
+                document.querySelector(`.protocol-phase[data-phase="${phase}"]`).classList.add('active');
+            },
+            
+            bindSliders() {
+                const sliders = [
+                    { id: 'clarity-slider', display: 'clarity-value', session: 'clarity' },
+                    { id: 'coherence-slider', display: 'coherence-value', session: 'coherence' },
+                    { id: 'release-slider', display: 'release-value', session: 'release' }
+                ];
+                
+                sliders.forEach(s => {
+                    const slider = document.getElementById(s.id);
+                    const display = document.getElementById(s.display);
+                    
+                    slider.addEventListener('input', () => {
+                        display.textContent = slider.value;
+                        if (DataStore.currentSession) {
+                            DataStore.currentSession[s.session] = parseInt(slider.value);
+                        }
+                    });
+                });
+            },
+            
+            bindTimers() {
+                let timerInterval = null;
+                let remainingSeconds = 0;
+                
+                const startTimer = (duration, btn, circle) => {
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                        circle.classList.remove('running');
+                        btn.textContent = 'Resume';
+                        return;
+                    }
+                    
+                    if (remainingSeconds === 0) {
+                        remainingSeconds = duration;
+                    }
+                    
+                    circle.classList.add('running');
+                    btn.textContent = 'Pause';
+                    
+                    timerInterval = setInterval(() => {
+                        remainingSeconds--;
+                        const mins = Math.floor(remainingSeconds / 60);
+                        const secs = remainingSeconds % 60;
+                        circle.querySelector('.timer-value').textContent = 
+                            `${mins}:${secs.toString().padStart(2, '0')}`;
+                        
+                        if (remainingSeconds <= 0) {
+                            clearInterval(timerInterval);
+                            timerInterval = null;
+                            circle.classList.remove('running');
+                            btn.textContent = 'Complete';
+                            remainingSeconds = 0;
+                        }
+                    }, 1000);
+                };
+                
+                document.getElementById('cohere-timer').addEventListener('click', function() {
+                    const circle = this.parentElement.querySelector('.timer-circle');
+                    startTimer(120, this, circle);
+                });
+                
+                document.getElementById('witness-timer').addEventListener('click', function() {
+                    const circle = this.parentElement.querySelector('.timer-circle');
+                    startTimer(180, this, circle);
+                });
+            },
+            
+            updateLog() {
+                const listEl = document.getElementById('session-list');
+                const emptyEl = document.getElementById('empty-log');
+                
+                if (DataStore.sessions.length === 0) {
+                    emptyEl.style.display = 'block';
+                    return;
+                }
+                
+                emptyEl.style.display = 'none';
+                listEl.querySelectorAll('.log-entry').forEach(e => e.remove());
+                
+                DataStore.sessions.forEach(session => {
+                    const entry = document.createElement('div');
+                    entry.className = 'log-entry';
+                    entry.innerHTML = `
+                        <div class="log-entry-header">
+                            <span class="log-entry-title">${session.protocolName}</span>
+                            <span class="log-entry-time">${new Date(session.timestamp).toLocaleString()}</span>
+                        </div>
+                        <div class="log-entry-meta">
+                            <span class="log-meta-item"><span>State:</span> ${session.state}</span>
+                            <span class="log-meta-item"><span>Coherence:</span> ${session.coherence}/10</span>
+                            <span class="log-meta-item"><span>Release:</span> ${session.release}/10</span>
+                        </div>
+                        ${session.selection ? `<div class="log-entry-notes"><strong>Selection:</strong> ${session.selection}</div>` : ''}
+                        ${session.notes ? `<div class="log-entry-notes">${session.notes}</div>` : ''}
+                        <div class="log-verification">
+                            <div class="log-verification-header">
+                                ${session.verification ? 
+                                    `<span>Verified: ${session.verification.accuracy}</span>` :
+                                    `<button class="verify-btn" data-session="${session.id}">Add Verification</button>`
+                                }
+                            </div>
+                            <div class="verification-form" id="verify-${session.id}">
+                                <label style="font-size: 0.85rem; margin-bottom: 8px; display: block;">What collapsed / what showed up?</label>
+                                <textarea class="notes-textarea" style="min-height: 80px;" id="verify-notes-${session.id}" placeholder="Describe what you observed..."></textarea>
+                                <label style="font-size: 0.85rem; margin: 16px 0 8px; display: block;">Accuracy to intention:</label>
+                                <div class="accuracy-options">
+                                    <span class="accuracy-option" data-accuracy="match">Match</span>
+                                    <span class="accuracy-option" data-accuracy="partial">Partial</span>
+                                    <span class="accuracy-option" data-accuracy="different">Different</span>
+                                    <span class="accuracy-option" data-accuracy="nothing">Nothing</span>
+                                </div>
+                                <button class="verify-btn" style="margin-top: 16px;" onclick="UI.saveVerification('${session.id}')">Save Verification</button>
+                            </div>
+                        </div>
+                    `;
+                    listEl.appendChild(entry);
+                });
+                
+                document.querySelectorAll('.verify-btn[data-session]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const form = document.getElementById(`verify-${btn.dataset.session}`);
+                        form.classList.toggle('active');
+                    });
+                });
+                
+                document.querySelectorAll('.accuracy-option').forEach(opt => {
+                    opt.addEventListener('click', function() {
+                        this.parentElement.querySelectorAll('.accuracy-option').forEach(o => o.classList.remove('selected'));
+                        this.classList.add('selected');
+                    });
+                });
+            },
+            
+            saveVerification(sessionId) {
+                const notes = document.getElementById(`verify-notes-${sessionId}`).value;
+                const accuracyEl = document.querySelector(`#verify-${sessionId} .accuracy-option.selected`);
+                
+                if (!accuracyEl) {
+                    alert('Please select an accuracy rating');
+                    return;
+                }
+                
+                DataStore.updateSession(sessionId, {
+                    verification: {
+                        timestamp: new Date().toISOString(),
+                        notes: notes,
+                        accuracy: accuracyEl.dataset.accuracy
+                    }
+                });
+                
+                this.updateLog();
+                this.updatePatterns();
+            },
+            
+            updatePatterns() {
+                const stats = DataStore.getStats();
+                const emptyEl = document.getElementById('empty-patterns');
+                
+                if (!stats || stats.total === 0) {
+                    emptyEl.style.display = 'block';
+                    return;
+                }
+                
+                emptyEl.style.display = 'none';
+                
+                document.getElementById('total-sessions').textContent = stats.total;
+                document.getElementById('avg-coherence').textContent = stats.avgCoherence;
+                document.getElementById('verified-collapses').textContent = stats.verified;
+                document.getElementById('accuracy-rate').textContent = stats.accuracyRate !== null ? `${stats.accuracyRate}%` : '—';
+                
+                Object.entries(stats.states).forEach(([state, count]) => {
+                    const pct = Math.round((count / stats.total) * 100);
+                    document.querySelector(`.pattern-bar-fill.${state}`).style.width = `${pct}%`;
+                    document.getElementById(`${state}-pct`).textContent = `${pct}%`;
+                });
+                
+                const protocolDist = document.getElementById('protocol-distribution');
+                protocolDist.innerHTML = '';
+                
+                Object.entries(stats.protocols).forEach(([proto, count]) => {
+                    const pct = Math.round((count / stats.total) * 100);
+                    const protoInfo = Protocols[proto];
+                    protocolDist.innerHTML += `
+                        <div class="pattern-bar">
+                            <span class="pattern-label">${protoInfo ? protoInfo.name : proto}</span>
+                            <div class="pattern-bar-track">
+                                <div class="pattern-bar-fill quantum" style="width: ${pct}%"></div>
+                            </div>
+                            <span class="pattern-value">${count}</span>
+                        </div>
+                    `;
+                });
+                
+                if (stats.total >= 5) {
+                    this.generateInsights(stats);
+                }
+            },
+            
+            generateInsights(stats) {
+                const insightsEl = document.getElementById('insights-list');
+                const insightsSection = document.getElementById('insights-section');
+                insightsSection.style.display = 'block';
+                insightsEl.innerHTML = '';
+                
+                const insights = [];
+                
+                const dominantState = Object.entries(stats.states).sort((a, b) => b[1] - a[1])[0];
+                if (dominantState[1] > stats.total * 0.4) {
+                    const stateInsights = {
+                        scattered: 'You often enter practice fragmented. Consider a grounding ritual before protocols. Your collapse rate will improve with coherence work.',
+                        passive: 'You tend toward passive observation. The skill to develop: active selection. Try stating your intention aloud before the witness phase.',
+                        forced: 'You bring intensity but it creates resistance. Your edge is learning to stay focused while releasing grip. Exhale practice will help.',
+                        deliberate: 'You enter practice in ready state often. This is your strength. Consider deepening into Meso and Macro protocols.'
+                    };
+                    insights.push({
+                        title: 'Dominant Entry State',
+                        content: stateInsights[dominantState[0]] || ''
+                    });
+                }
+                
+                if (parseFloat(stats.avgCoherence) < 5) {
+                    insights.push({
+                        title: 'Coherence Pattern',
+                        content: 'Your average coherence is below 5. This suggests the witness phase is where you\'re losing signal. Practice holding longer before moving to release.'
+                    });
+                } else if (parseFloat(stats.avgCoherence) >= 7) {
+                    insights.push({
+                        title: 'Coherence Strength',
+                        content: 'Your coherence scores are strong. You can hold the observation well. Consider testing with higher-stakes protocols or longer witness phases.'
+                    });
+                }
+                
+                if (stats.accuracyRate !== null) {
+                    if (stats.accuracyRate >= 60) {
+                        insights.push({
+                            title: 'Collapse Effectiveness',
+                            content: `${stats.accuracyRate}% of your verified collapses matched or partially matched intention. Your observer is calibrated. This is above average.`
+                        });
+                    } else if (stats.accuracyRate < 40 && stats.verified >= 3) {
+                        insights.push({
+                            title: 'Calibration Needed',
+                            content: 'Your collapse accuracy is below 40%. Focus on the selection phase—be more specific about the quality you\'re calling, less attached to form.'
+                        });
+                    }
+                }
+                
+                insights.forEach(insight => {
+                    insightsEl.innerHTML += `
+                        <div class="insight-card">
+                            <h4>${insight.title}</h4>
+                            <p>${insight.content}</p>
+                        </div>
+                    `;
+                });
+                
+                if (insights.length === 0) {
+                    insightsSection.style.display = 'none';
+                }
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            UI.init();
+        });
+    </script>
+</body>
+</html>

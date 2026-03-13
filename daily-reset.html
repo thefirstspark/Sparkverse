@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Daily Reset | Your 5-Minute Consciousness Calibration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+
+    <style>
+        :root {
+            --void: #0a0a0c;
+            --obsidian: #141418;
+            --smoke: #1e1e24;
+            --ash: #2a2a32;
+            --silver: #8a8a9a;
+            --pearl: #d4d4dc;
+            --white: #f4f4f8;
+            --spark-gold: #d4a574;
+            --spark-ember: #c48b5c;
+            --spark-glow: #e8c9a8;
+            --breath-in: #7eb8a8;
+            --breath-out: #a87eb8;
+            --energy-low: #b85c5c;
+            --energy-mid: #d4a574;
+            --energy-high: #7eb87e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            color: var(--pearl);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Sparkverse Star Background */
+        .stars, .twinkling {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .stars {
+            background: #000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAE0lEQVQIW2NkYGD4z8DAwMgABAAAfgABAXLGvAAAAABJRU5ErkJggg==) repeat;
+            z-index: 0;
+        }
+
+        .twinkling {
+            background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAE0lEQVQIW2NkYGD4z8DAwMgABAAAfgABAXLGvAAAAABJRU5ErkJggg==) repeat;
+            z-index: 1;
+            animation: move-twink-back 200s linear infinite;
+        }
+
+        @keyframes move-twink-back {
+            from { background-position: 0 0; }
+            to { background-position: -10000px 5000px; }
+        }
+
+        /* Back Button */
+        .back-to-universe {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
+        .back-to-universe:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Main Container */
+        .reset-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 900px;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Background Effects */
+        .ambient-layer {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(126, 184, 168, 0.05) 0%, transparent 50%),
+                var(--void);
+            pointer-events: none;
+            transition: all 2s ease;
+        }
+
+        .particle-field {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--spark-gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+            50% { opacity: 0.6; transform: translateY(-100px) scale(1.5); }
+        }
+
+        /* Phase Navigation */
+        .phase-indicator {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .phase-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--ash);
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .phase-dot.active {
+            background: var(--spark-gold);
+            box-shadow: 0 0 15px var(--spark-gold);
+            transform: scale(1.3);
+        }
+
+        .phase-dot.completed {
+            background: var(--breath-in);
+        }
+
+        /* All Phases Container */
+        .phases-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .phase {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px 30px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .phase.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        /* Phase Labels */
+        .phase-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-bottom: 8px;
+        }
+
+        .phase-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 300;
+            color: var(--white);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* ==================== */
+        /* PHASE 1: ARRIVAL */
+        /* ==================== */
+        .arrival-prompt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-style: italic;
+            color: var(--pearl);
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 320px;
+        }
+
+        .energy-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        .energy-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--obsidian);
+            border: 1px solid var(--ash);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .energy-option:hover {
+            border-color: var(--silver);
+            transform: translateX(5px);
+        }
+
+        .energy-option.selected {
+            border-color: var(--spark-gold);
+            background: rgba(212, 165, 116, 0.08);
+        }
+
+        .energy-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .energy-icon.depleted { background: rgba(184, 92, 92, 0.2); }
+        .energy-icon.low { background: rgba(212, 165, 116, 0.2); }
+        .energy-icon.neutral { background: rgba(138, 138, 154, 0.2); }
+        .energy-icon.charged { background: rgba(126, 184, 126, 0.2); }
+        .energy-icon.overflow { background: rgba(212, 165, 116, 0.3); }
+
+        .energy-text {
+            flex: 1;
+        }
+
+        .energy-text strong {
+            display: block;
+            color: var(--white);
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .energy-text span {
+            font-size: 13px;
+            color: var(--silver);
+        }
+
+        /* ==================== */
+        /* PHASE 2: BREATHWORK */
+        /* ==================== */
+        .breath-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .breath-orb {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--breath-in), transparent 70%),
+                        radial-gradient(circle at 70% 70%, var(--breath-out), transparent 70%),
+                        var(--obsidian);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 4s ease-in-out;
+            position: relative;
+        }
+
+        .breath-orb::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            border: 1px solid var(--ash);
+            transition: all 4s ease-in-out;
+        }
+
+        .breath-orb.inhale {
+            transform: scale(1.3);
+            box-shadow: 0 0 60px rgba(126, 184, 168, 0.4);
+        }
+
+        .breath-orb.inhale::before {
+            border-color: var(--breath-in);
+        }
+
+        .breath-orb.exhale {
+            transform: scale(0.8);
+            box-shadow: 0 0 40px rgba(168, 126, 184, 0.3);
+        }
+
+        .breath-orb.exhale::before {
+            border-color: var(--breath-out);
+        }
+
+        .breath-orb.hold {
+            box-shadow: 0 0 50px rgba(212, 165, 116, 0.4);
+        }
+
+        .breath-orb.hold::before {
+            border-color: var(--spark-gold);
+        }
+
+        .breath-instruction {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--white);
+            transition: opacity 0.5s ease;
+        }
+
+        .breath-counter {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 48px;
+            font-weight: 300;
+            color: var(--spark-gold);
+        }
+
+        .breath-progress {
+            display: flex;
+            gap: 8px;
+        }
+
+        .breath-cycle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--ash);
+            transition: all 0.3s ease;
+        }
+
+        .breath-cycle.complete {
+            background: var(--breath-in);
+        }
+
+        .breath-cycle.current {
+            background: var(--spark-gold);
+            box-shadow: 0 0 10px var(--spark-gold);
+        }
+
+        .breath-controls {
+            display: flex;
+            gap: 20px;
+        }
+
+        .breath-btn {
+            padding: 12px 28px;
+            background: transparent;
+            border: 1px solid var(--ash);
+            border-radius: 30px;
+            color: var(--pearl);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .breath-btn:hover {
+            border-color: var(--spark-gold);
+            color: var(--spark-gold);
+        }
+
+        .breath-btn.primary {
+            background: var(--spark-gold);
+            border-color: var(--spark-gold);
+            color: var(--void);
+        }
+
+        .breath-btn.primary:hover {
+            background: var(--spark-ember);
+        }
+
+        /* ==================== */
+        /* PHASE 3: INTENTION */
+        /* ==================== */
+        .intention-container {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .intention-prompt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--silver);
+            text-align: center;
+        }
+
+        .intention-field {
+            position: relative;
+        }
+
+        .intention-input {
+            width: 100%;
+            padding: 20px;
+            background: var(--obsidian);
+            border: 1px solid var(--ash);
+            border-radius: 16px;
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            text-align: center;
+            resize: none;
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .intention-input:focus {
+            outline: none;
+            border-color: var(--spark-gold);
+            box-shadow: 0 0 30px rgba(212, 165, 116, 0.15);
+        }
+
+        .intention-input::placeholder {
+            color: var(--silver);
+            font-style: italic;
+        }
+
+        .intention-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .suggestion-chip {
+            padding: 8px 16px;
+            background: var(--smoke);
+            border: 1px solid var(--ash);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--silver);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-chip:hover {
+            border-color: var(--spark-gold);
+            color: var(--spark-gold);
+        }
+
+        /* ==================== */
+        /* PHASE 4: RELEASE */
+        /* ==================== */
+        .release-container {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .release-prompt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--silver);
+            text-align: center;
+        }
+
+        .release-input {
+            width: 100%;
+            padding: 20px;
+            background: var(--obsidian);
+            border: 1px solid var(--ash);
+            border-radius: 16px;
+            color: var(--pearl);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            text-align: center;
+            resize: none;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .release-input:focus {
+            outline: none;
+            border-color: var(--breath-out);
+            box-shadow: 0 0 30px rgba(168, 126, 184, 0.15);
+        }
+
+        .release-btn {
+            padding: 16px 40px;
+            background: transparent;
+            border: 1px solid var(--breath-out);
+            border-radius: 30px;
+            color: var(--breath-out);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .release-btn:hover {
+            background: rgba(168, 126, 184, 0.1);
+        }
+
+        .release-btn.releasing {
+            animation: dissolve 2s ease forwards;
+        }
+
+        @keyframes dissolve {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+
+        .released-message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: var(--breath-in);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .released-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==================== */
+        /* PHASE 5: SEAL */
+        /* ==================== */
+        .seal-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .seal-sigil {
+            width: 180px;
+            height: 180px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sigil-ring {
+            position: absolute;
+            border: 1px solid var(--spark-gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: ringPulse 3s infinite ease-out;
+        }
+
+        .sigil-ring:nth-child(1) { width: 100%; height: 100%; animation-delay: 0s; }
+        .sigil-ring:nth-child(2) { width: 80%; height: 80%; animation-delay: 0.5s; }
+        .sigil-ring:nth-child(3) { width: 60%; height: 60%; animation-delay: 1s; }
+
+        @keyframes ringPulse {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 0.8; }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+
+        .sigil-core {
+            width: 60px;
+            height: 60px;
+            background: var(--spark-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 40px var(--spark-gold);
+        }
+
+        .seal-affirmation {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--white);
+            text-align: center;
+            line-height: 1.5;
+            max-width: 320px;
+        }
+
+        .seal-summary {
+            background: var(--obsidian);
+            border: 1px solid var(--ash);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--ash);
+            font-size: 14px;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--silver);
+        }
+
+        .summary-value {
+            color: var(--spark-gold);
+            font-weight: 500;
+        }
+
+        .complete-btn {
+            padding: 18px 50px;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            border: none;
+            border-radius: 30px;
+            color: var(--void);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .complete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            position: absolute;
+            bottom: 30px;
+            padding: 14px 32px;
+            background: transparent;
+            border: 1px solid var(--ash);
+            border-radius: 30px;
+            color: var(--pearl);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--spark-gold);
+            color: var(--spark-gold);
+        }
+
+        .nav-btn.next {
+            right: 30px;
+            background: var(--spark-gold);
+            border-color: var(--spark-gold);
+            color: var(--void);
+        }
+
+        .nav-btn.next:hover {
+            background: var(--spark-ember);
+        }
+
+        .nav-btn.back {
+            left: 30px;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Streak Counter */
+        .streak-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--obsidian);
+            border: 1px solid var(--ash);
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 100;
+        }
+
+        .streak-flame {
+            font-size: 16px;
+        }
+
+        .streak-count {
+            color: var(--spark-gold);
+            font-weight: 500;
+        }
+
+        /* Completion Screen */
+        .completion-overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--void);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.8s ease;
+            z-index: 200;
+        }
+
+        .completion-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .completion-check {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .completion-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 300;
+            color: var(--white);
+        }
+
+        .completion-message {
+            font-size: 16px;
+            color: var(--silver);
+            text-align: center;
+            max-width: 280px;
+            line-height: 1.6;
+        }
+
+        .reset-again-btn {
+            margin-top: 20px;
+            padding: 14px 36px;
+            background: transparent;
+            border: 1px solid var(--spark-gold);
+            border-radius: 30px;
+            color: var(--spark-gold);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-again-btn:hover {
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        /* Branding */
+        .brand-mark {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: var(--ash);
+            opacity: 0.6;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .phase {
+                padding: 50px 20px 20px;
+            }
+            
+            .phase-title {
+                font-size: 26px;
+            }
+            
+            .breath-orb {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .nav-btn {
+                padding: 12px 24px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <a href="index.html" class="back-to-universe">← Back to Universe</a>
+
+    <div class="reset-container">
+        <!-- Background Effects -->
+        <div class="ambient-layer"></div>
+        <div class="particle-field" id="particles"></div>
+
+        <!-- Streak Display -->
+        <div class="streak-display">
+            <span class="streak-flame">🔥</span>
+            <span class="streak-count" id="streakCount">0</span>
+            <span style="color: var(--silver);">day streak</span>
+        </div>
+
+        <!-- Phase Navigation -->
+        <div class="phase-indicator">
+            <div class="phase-dot active" data-phase="0"></div>
+            <div class="phase-dot" data-phase="1"></div>
+            <div class="phase-dot" data-phase="2"></div>
+            <div class="phase-dot" data-phase="3"></div>
+            <div class="phase-dot" data-phase="4"></div>
+        </div>
+
+        <!-- Phases Wrapper -->
+        <div class="phases-wrapper">
+            
+            <!-- Phase 1: Arrival -->
+            <div class="phase active" id="phase0">
+                <span class="phase-label">Phase One</span>
+                <h2 class="phase-title">Arrival</h2>
+                <p class="arrival-prompt">Before we begin, how does your energy feel right now?</p>
+                
+                <div class="energy-selector">
+                    <div class="energy-option" data-energy="depleted">
+                        <div class="energy-icon depleted">🪫</div>
+                        <div class="energy-text">
+                            <strong>Depleted</strong>
+                            <span>Running on empty, exhausted</span>
+                        </div>
+                    </div>
+                    <div class="energy-option" data-energy="low">
+                        <div class="energy-icon low">🌙</div>
+                        <div class="energy-text">
+                            <strong>Low</strong>
+                            <span>Tired, need restoration</span>
+                        </div>
+                    </div>
+                    <div class="energy-option" data-energy="neutral">
+                        <div class="energy-icon neutral">⚖️</div>
+                        <div class="energy-text">
+                            <strong>Neutral</strong>
+                            <span>Balanced, ready to calibrate</span>
+                        </div>
+                    </div>
+                    <div class="energy-option" data-energy="charged">
+                        <div class="energy-icon charged">⚡</div>
+                        <div class="energy-text">
+                            <strong>Charged</strong>
+                            <span>Good energy, want to amplify</span>
+                        </div>
+                    </div>
+                    <div class="energy-option" data-energy="overflow">
+                        <div class="energy-icon overflow">✨</div>
+                        <div class="energy-text">
+                            <strong>Overflow</strong>
+                            <span>Abundant, ready to direct</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2: Breathwork -->
+            <div class="phase" id="phase1">
+                <span class="phase-label">Phase Two</span>
+                <h2 class="phase-title">Calibrate</h2>
+                
+                <div class="breath-container">
+                    <div class="breath-progress">
+                        <div class="breath-cycle" data-cycle="1"></div>
+                        <div class="breath-cycle" data-cycle="2"></div>
+                        <div class="breath-cycle" data-cycle="3"></div>
+                        <div class="breath-cycle" data-cycle="4"></div>
+                    </div>
+                    
+                    <div class="breath-orb" id="breathOrb">
+                        <span class="breath-counter" id="breathCounter">4</span>
+                    </div>
+                    
+                    <p class="breath-instruction" id="breathInstruction">Press begin when ready</p>
+                    
+                    <div class="breath-controls">
+                        <button class="breath-btn primary" id="startBreath">Begin</button>
+                        <button class="breath-btn" id="skipBreath">Skip</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Intention -->
+            <div class="phase" id="phase2">
+                <span class="phase-label">Phase Three</span>
+                <h2 class="phase-title">Intention</h2>
+                
+                <div class="intention-container">
+                    <p class="intention-prompt">What is your single focus for today?</p>
+                    
+                    <div class="intention-field">
+                        <textarea class="intention-input" id="intentionInput" placeholder="I am focused on..."></textarea>
+                    </div>
+                    
+                    <div class="intention-suggestions">
+                        <span class="suggestion-chip">clarity</span>
+                        <span class="suggestion-chip">peace</span>
+                        <span class="suggestion-chip">energy</span>
+                        <span class="suggestion-chip">connection</span>
+                        <span class="suggestion-chip">creativity</span>
+                        <span class="suggestion-chip">abundance</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 4: Release -->
+            <div class="phase" id="phase3">
+                <span class="phase-label">Phase Four</span>
+                <h2 class="phase-title">Release</h2>
+                
+                <div class="release-container">
+                    <p class="release-prompt">What are you ready to let go of today?</p>
+                    
+                    <textarea class="release-input" id="releaseInput" placeholder="I release..."></textarea>
+                    
+                    <button class="release-btn" id="releaseBtn">Let It Go</button>
+                    
+                    <p class="released-message" id="releasedMessage">Released into the void ✦</p>
+                </div>
+            </div>
+
+            <!-- Phase 5: Seal -->
+            <div class="phase" id="phase4">
+                <span class="phase-label">Phase Five</span>
+                <h2 class="phase-title">Seal</h2>
+                
+                <div class="seal-container">
+                    <div class="seal-sigil">
+                        <div class="sigil-ring"></div>
+                        <div class="sigil-ring"></div>
+                        <div class="sigil-ring"></div>
+                        <div class="sigil-core">✦</div>
+                    </div>
+                    
+                    <p class="seal-affirmation" id="sealAffirmation">
+                        Your reset is complete.<br>
+                        You are calibrated.<br>
+                        Move with intention.
+                    </p>
+                    
+                    <div class="seal-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Starting Energy</span>
+                            <span class="summary-value" id="summaryEnergy">—</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Breath Cycles</span>
+                            <span class="summary-value" id="summaryBreaths">—</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Today's Focus</span>
+                            <span class="summary-value" id="summaryIntention">—</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Released</span>
+                            <span class="summary-value" id="summaryRelease">—</span>
+                        </div>
+                    </div>
+                    
+                    <button class="complete-btn" id="completeBtn">Complete Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <button class="nav-btn back" id="backBtn" style="display: none;">← Back</button>
+        <button class="nav-btn next" id="nextBtn" disabled>Continue →</button>
+
+        <!-- Brand Mark -->
+        <div class="brand-mark">THE FIRST SPARK</div>
+
+        <!-- Completion Overlay -->
+        <div class="completion-overlay" id="completionOverlay">
+            <div class="completion-check">✓</div>
+            <h2 class="completion-title">Reset Complete</h2>
+            <p class="completion-message">You've taken 5 minutes to calibrate your consciousness. This small act ripples through your entire day.</p>
+            <button class="reset-again-btn" id="resetAgainBtn">Reset Again Tomorrow</button>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        const state = {
+            currentPhase: 0,
+            energy: null,
+            breathCycles: 0,
+            intention: '',
+            release: '',
+            breathActive: false,
+            streak: parseInt(localStorage.getItem('dailyResetStreak') || '0'),
+            lastReset: localStorage.getItem('lastResetDate')
+        };
+
+        // DOM Elements
+        const phases = document.querySelectorAll('.phase');
+        const phaseDots = document.querySelectorAll('.phase-dot');
+        const nextBtn = document.getElementById('nextBtn');
+        const backBtn = document.getElementById('backBtn');
+        const streakCount = document.getElementById('streakCount');
+
+        // Initialize
+        function init() {
+            checkStreak();
+            generateParticles();
+            setupEventListeners();
+        }
+
+        // Check and update streak
+        function checkStreak() {
+            const today = new Date().toDateString();
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+            
+            if (state.lastReset === today) {
+                // Already reset today
+            } else if (state.lastReset === yesterday) {
+                // Continuing streak
+            } else if (state.lastReset !== today) {
+                // Streak broken or first time
+                if (state.lastReset && state.lastReset !== yesterday) {
+                    state.streak = 0;
+                }
+            }
+            
+            streakCount.textContent = state.streak;
+        }
+
+        // Generate floating particles
+        function generateParticles() {
+            const field = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                field.appendChild(particle);
+            }
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Energy selection
+            document.querySelectorAll('.energy-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.energy-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    state.energy = option.dataset.energy;
+                    nextBtn.disabled = false;
+                });
+            });
+
+            // Breathwork
+            document.getElementById('startBreath').addEventListener('click', startBreathwork);
+            document.getElementById('skipBreath').addEventListener('click', () => {
+                state.breathCycles = 0;
+                nextBtn.disabled = false;
+            });
+
+            // Intention suggestions
+            document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const input = document.getElementById('intentionInput');
+                    input.value = 'I am focused on ' + chip.textContent;
+                    state.intention = chip.textContent;
+                    nextBtn.disabled = false;
+                });
+            });
+
+            // Intention input
+            document.getElementById('intentionInput').addEventListener('input', (e) => {
+                state.intention = e.target.value;
+                nextBtn.disabled = e.target.value.trim() === '';
+            });
+
+            // Release input
+            document.getElementById('releaseInput').addEventListener('input', (e) => {
+                state.release = e.target.value;
+                document.getElementById('releaseBtn').disabled = e.target.value.trim() === '';
+            });
+
+            // Release button
+            document.getElementById('releaseBtn').addEventListener('click', performRelease);
+
+            // Navigation
+            nextBtn.addEventListener('click', nextPhase);
+            backBtn.addEventListener('click', prevPhase);
+
+            // Phase dots
+            phaseDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const targetPhase = parseInt(dot.dataset.phase);
+                    if (targetPhase < state.currentPhase) {
+                        goToPhase(targetPhase);
+                    }
+                });
+            });
+
+            // Complete button
+            document.getElementById('completeBtn').addEventListener('click', completeReset);
+            document.getElementById('resetAgainBtn').addEventListener('click', resetAll);
+        }
+
+        // Breathwork functionality
+        let breathInterval;
+        let breathTimeout;
+
+        function startBreathwork() {
+            state.breathActive = true;
+            state.breathCycles = 0;
+            document.getElementById('startBreath').style.display = 'none';
+            runBreathCycle();
+        }
+
+        function runBreathCycle() {
+            if (state.breathCycles >= 4) {
+                endBreathwork();
+                return;
+            }
+
+            const orb = document.getElementById('breathOrb');
+            const instruction = document.getElementById('breathInstruction');
+            const counter = document.getElementById('breathCounter');
+            const cycles = document.querySelectorAll('.breath-cycle');
+
+            // Mark current cycle
+            cycles[state.breathCycles].classList.add('current');
+
+            // Inhale
+            let count = 4;
+            counter.textContent = count;
+            instruction.textContent = 'Breathe in...';
+            orb.className = 'breath-orb inhale';
+
+            breathInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    counter.textContent = count;
+                }
+            }, 1000);
+
+            breathTimeout = setTimeout(() => {
+                clearInterval(breathInterval);
+                
+                // Hold
+                count = 4;
+                counter.textContent = count;
+                instruction.textContent = 'Hold...';
+                orb.className = 'breath-orb hold';
+
+                breathInterval = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        counter.textContent = count;
+                    }
+                }, 1000);
+
+                breathTimeout = setTimeout(() => {
+                    clearInterval(breathInterval);
+                    
+                    // Exhale
+                    count = 4;
+                    counter.textContent = count;
+                    instruction.textContent = 'Breathe out...';
+                    orb.className = 'breath-orb exhale';
+
+                    breathInterval = setInterval(() => {
+                        count--;
+                        if (count > 0) {
+                            counter.textContent = count;
+                        }
+                    }, 1000);
+
+                    breathTimeout = setTimeout(() => {
+                        clearInterval(breathInterval);
+                        
+                        // Hold
+                        count = 4;
+                        counter.textContent = count;
+                        instruction.textContent = 'Hold...';
+                        orb.className = 'breath-orb hold';
+
+                        breathInterval = setInterval(() => {
+                            count--;
+                            if (count > 0) {
+                                counter.textContent = count;
+                            }
+                        }, 1000);
+
+                        breathTimeout = setTimeout(() => {
+                            clearInterval(breathInterval);
+                            
+                            // Complete cycle
+                            cycles[state.breathCycles].classList.remove('current');
+                            cycles[state.breathCycles].classList.add('complete');
+                            state.breathCycles++;
+                            
+                            runBreathCycle();
+                        }, 4000);
+                    }, 4000);
+                }, 4000);
+            }, 4000);
+        }
+
+        function endBreathwork() {
+            const instruction = document.getElementById('breathInstruction');
+            const orb = document.getElementById('breathOrb');
+            
+            instruction.textContent = 'Calibration complete';
+            orb.className = 'breath-orb';
+            document.getElementById('breathCounter').textContent = '✓';
+            
+            nextBtn.disabled = false;
+        }
+
+        // Release functionality
+        function performRelease() {
+            const btn = document.getElementById('releaseBtn');
+            const input = document.getElementById('releaseInput');
+            const message = document.getElementById('releasedMessage');
+            
+            btn.classList.add('releasing');
+            
+            setTimeout(() => {
+                btn.style.display = 'none';
+                input.style.opacity = '0.3';
+                input.disabled = true;
+                message.classList.add('visible');
+                nextBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Navigation
+        function nextPhase() {
+            if (state.currentPhase < 4) {
+                goToPhase(state.currentPhase + 1);
+            }
+        }
+
+        function prevPhase() {
+            if (state.currentPhase > 0) {
+                goToPhase(state.currentPhase - 1);
+            }
+        }
+
+        function goToPhase(phaseNum) {
+            // Update current phase
+            phases[state.currentPhase].classList.remove('active');
+            phaseDots[state.currentPhase].classList.remove('active');
+            if (state.currentPhase < phaseNum) {
+                phaseDots[state.currentPhase].classList.add('completed');
+            }
+
+            state.currentPhase = phaseNum;
+            
+            phases[state.currentPhase].classList.add('active');
+            phaseDots[state.currentPhase].classList.add('active');
+
+            // Update navigation
+            backBtn.style.display = phaseNum > 0 ? 'block' : 'none';
+            
+            // Update next button state based on phase
+            updateNextButtonState();
+
+            // Update summary on final phase
+            if (phaseNum === 4) {
+                updateSummary();
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'block';
+            }
+        }
+
+        function updateNextButtonState() {
+            switch (state.currentPhase) {
+                case 0:
+                    nextBtn.disabled = !state.energy;
+                    break;
+                case 1:
+                    nextBtn.disabled = !state.breathCycles && !document.getElementById('startBreath').style.display;
+                    break;
+                case 2:
+                    nextBtn.disabled = !state.intention;
+                    break;
+                case 3:
+                    nextBtn.disabled = !document.getElementById('releasedMessage').classList.contains('visible');
+                    break;
+            }
+        }
+
+        function updateSummary() {
+            const energyMap = {
+                depleted: 'Depleted',
+                low: 'Low',
+                neutral: 'Neutral',
+                charged: 'Charged',
+                overflow: 'Overflow'
+            };
+            
+            document.getElementById('summaryEnergy').textContent = energyMap[state.energy] || '—';
+            document.getElementById('summaryBreaths').textContent = state.breathCycles > 0 ? state.breathCycles + ' cycles' : 'Skipped';
+            
+            const intentionText = state.intention.length > 20 
+                ? state.intention.substring(0, 20) + '...' 
+                : state.intention;
+            document.getElementById('summaryIntention').textContent = intentionText || '—';
+            
+            const releaseText = state.release.length > 20 
+                ? state.release.substring(0, 20) + '...' 
+                : state.release;
+            document.getElementById('summaryRelease').textContent = releaseText || '—';
+        }
+
+        // Complete reset
+        function completeReset() {
+            // Update streak
+            const today = new Date().toDateString();
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+            
+            if (state.lastReset !== today) {
+                if (state.lastReset === yesterday) {
+                    state.streak++;
+                } else {
+                    state.streak = 1;
+                }
+                
+                localStorage.setItem('dailyResetStreak', state.streak.toString());
+                localStorage.setItem('lastResetDate', today);
+            }
+
+            // Save today's data
+            const resetData = {
+                date: today,
+                energy: state.energy,
+                breathCycles: state.breathCycles,
+                intention: state.intention,
+                release: state.release
+            };
+            
+            const history = JSON.parse(localStorage.getItem('resetHistory') || '[]');
+            history.push(resetData);
+            localStorage.setItem('resetHistory', JSON.stringify(history.slice(-30))); // Keep last 30 days
+
+            // Show completion
+            document.getElementById('completionOverlay').classList.add('active');
+        }
+
+        function resetAll() {
+            location.reload();
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

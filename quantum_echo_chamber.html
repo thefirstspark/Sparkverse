@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Echo Chamber - TheFirstSpark Prototype</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
+        #chamber { width: 400px; height: 400px; margin: 20px auto; border: 1px solid #fff; }
+        input, button { margin: 10px; padding: 10px; }
+        #output { margin-top: 20px; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <h1>Quantum Echo Chamber</h1>
+    <p>Enter your intention below to generate a quantum echo.</p>
+    
+    <input type="text" id="intention" placeholder="e.g., I seek abundance">
+    <button onclick="generateEcho()">Echo Intention</button>
+    
+    <div id="chamber"></div>
+    <div id="output"></div>
+    
+    <script>
+        // Setup Three.js scene for visuals
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(400, 400);
+        document.getElementById('chamber').appendChild(renderer.domElement);
+        
+        const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+        const knot = new THREE.Mesh(geometry, material);
+        scene.add(knot);
+        camera.position.z = 50;
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            knot.rotation.x += 0.01;
+            knot.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        // Audio setup
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function generateTone(frequency, duration) {
+            const oscillator = audioCtx.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            oscillator.connect(audioCtx.destination);
+            oscillator.start();
+            setTimeout(() => oscillator.stop(), duration * 1000);
+        }
+        
+        // Main function to process intention
+        function generateEcho() {
+            const intention = document.getElementById('intention').value.trim();
+            if (!intention) return alert('Enter an intention!');
+            
+            // Simple "AI" processing: evolve intention (in real version, integrate with NLP API)
+            const themes = intention.toLowerCase().split(' ').filter(word => word.length > 3);
+            const quantumAffirmation = `I am entangled with infinite ${themes[0] || 'possibilities'}.`;
+            
+            // Visual echo: change color based on input
+            const color = intention.length % 2 === 0 ? 0xff0000 : 0x0000ff;
+            knot.material.color.setHex(color);
+            
+            // Audio echo: play binaural beat (simplified)
+            generateTone(440, 2); // Left ear tone
+            setTimeout(() => generateTone(450, 2), 100); // Right ear offset for beat
+            
+            // Text output
+            document.getElementById('output').innerHTML = `
+                <h2>Quantum Affirmation:</h2>
+                <p>${quantumAffirmation}</p>
+                <p>Echo Strength: ${Math.round(Math.random() * 100)}% (Track over sessions)</p>
+            `;
+        }
+    </script>
+</body>
+</html>

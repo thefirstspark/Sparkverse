@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pause Chamber | The First Spark</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #c9a227, #f4d03f, #c9a227);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+
+        /* States */
+        .state {
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .state.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Intro State */
+        .instruction {
+            font-size: 1.2rem;
+            line-height: 2;
+            margin-bottom: 40px;
+            color: #ccc;
+        }
+
+        .instruction p {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid #c9a227;
+            color: #c9a227;
+            padding: 15px 50px;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: #c9a227;
+            color: #0a0a0f;
+        }
+
+        /* Chamber State */
+        .chamber-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid #c9a227;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chamber-circle:hover {
+            box-shadow: 0 0 60px rgba(201, 162, 39, 0.3);
+        }
+
+        .chamber-circle.holding {
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 80px rgba(201, 162, 39, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); border-color: #c9a227; }
+            50% { transform: scale(1.05); border-color: #f4d03f; }
+        }
+
+        .chamber-text {
+            font-size: 1.3rem;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+
+        .chamber-circle.holding .chamber-text {
+            color: #f4d03f;
+        }
+
+        .timer {
+            font-size: 4rem;
+            font-weight: 200;
+            color: #c9a227;
+            display: none;
+        }
+
+        .chamber-circle.holding .timer {
+            display: block;
+        }
+
+        .chamber-circle.holding .chamber-text {
+            display: none;
+        }
+
+        .chamber-prompt {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        /* Reflection State */
+        .question {
+            font-size: 1.5rem;
+            color: #c9a227;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .reflection-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: none;
+            min-height: 120px;
+            margin-bottom: 30px;
+            transition: border-color 0.3s ease;
+        }
+
+        .reflection-input:focus {
+            outline: none;
+            border-color: #c9a227;
+        }
+
+        .reflection-input::placeholder {
+            color: #555;
+        }
+
+        /* Complete State */
+        .complete-message {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .texture-display {
+            background: rgba(201, 162, 39, 0.1);
+            border: 1px solid #c9a227;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #f4d03f;
+        }
+
+        .restart-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 40px;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .restart-link:hover {
+            color: #c9a227;
+        }
+
+        /* Background elements */
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            font-size: 0.75rem;
+            color: #444;
+            letter-spacing: 2px;
+        }
+
+        .footer a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #c9a227;
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <div class="bg-glow"></div>
+    
+    <div class="container">
+        <div class="brand">The First Spark</div>
+
+        <!-- INTRO STATE -->
+        <div class="state active" id="intro">
+            <h1>The Pause Chamber</h1>
+            <p class="subtitle">One second, fully inhabited.</p>
+            
+            <div class="instruction">
+                <p>Find a transition moment—</p>
+                <p>Hand on doorknob.<br>
+                Finger over send button.<br>
+                Breath between inhale and exhale.</p>
+                <p>Instead of moving through it,<br>
+                <strong>move into it.</strong></p>
+            </div>
+
+            <button class="btn" onclick="enterChamber()">Enter the Chamber</button>
+        </div>
+
+        <!-- CHAMBER STATE -->
+        <div class="state" id="chamber">
+            <h1>The Chamber</h1>
+            <p class="subtitle">Hold the circle. Stay in the second.</p>
+
+            <div class="chamber-circle" id="chamberCircle">
+                <span class="chamber-text">Press & Hold</span>
+                <span class="timer" id="timer">0.0</span>
+            </div>
+
+            <p class="chamber-prompt">Feel time stretch. Release when you've found the texture.</p>
+        </div>
+
+        <!-- REFLECTION STATE -->
+        <div class="state" id="reflection">
+            <h1>The Texture</h1>
+            <p class="question">"What was the moment holding?"</p>
+
+            <textarea 
+                class="reflection-input" 
+                id="textureInput"
+                placeholder="Describe what you found in the pause..."
+            ></textarea>
+
+            <button class="btn" onclick="completeRitual()">Seal the Moment</button>
+        </div>
+
+        <!-- COMPLETE STATE -->
+        <div class="state" id="complete">
+            <h1>Moment Sealed</h1>
+            
+            <div class="complete-message">
+                <p>That pause you just inhabited?</p>
+                <p>That's the room you'll learn to furnish.</p>
+            </div>
+
+            <div class="texture-display" id="textureDisplay"></div>
+
+            <p style="color: #888; margin-top: 30px;">
+                Time held: <span id="finalTime">0.0</span> seconds<br>
+                <small>But you already knew it was longer than that.</small>
+            </p>
+
+            <a href="#" class="restart-link" onclick="restart(); return false;">↻ Enter again</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://thefirstspark.shop" target="_blank">thefirstspark.shop</a>
+    </div>
+
+    <script>
+        let holdStart = null;
+        let holdTime = 0;
+        let timerInterval = null;
+        let isHolding = false;
+
+        const circle = document.getElementById('chamberCircle');
+        const timerDisplay = document.getElementById('timer');
+
+        function showState(stateId) {
+            document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+            document.getElementById(stateId).classList.add('active');
+        }
+
+        function enterChamber() {
+            showState('chamber');
+        }
+
+        function startHold() {
+            if (isHolding) return;
+            isHolding = true;
+            holdStart = Date.now();
+            circle.classList.add('holding');
+            
+            timerInterval = setInterval(() => {
+                holdTime = (Date.now() - holdStart) / 1000;
+                timerDisplay.textContent = holdTime.toFixed(1);
+            }, 50);
+        }
+
+        function endHold() {
+            if (!isHolding) return;
+            isHolding = false;
+            clearInterval(timerInterval);
+            circle.classList.remove('holding');
+            
+            if (holdTime >= 1) {
+                document.getElementById('finalTime').textContent = holdTime.toFixed(1);
+                showState('reflection');
+            }
+            
+            holdTime = 0;
+            timerDisplay.textContent = '0.0';
+        }
+
+        // Mouse events
+        circle.addEventListener('mousedown', startHold);
+        circle.addEventListener('mouseup', endHold);
+        circle.addEventListener('mouseleave', endHold);
+
+        // Touch events
+        circle.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startHold();
+        });
+        circle.addEventListener('touchend', endHold);
+        circle.addEventListener('touchcancel', endHold);
+
+        function completeRitual() {
+            const texture = document.getElementById('textureInput').value;
+            document.getElementById('textureDisplay').textContent = texture || '(The texture was felt, not named.)';
+            showState('complete');
+        }
+
+        function restart() {
+            document.getElementById('textureInput').value = '';
+            holdTime = 0;
+            showState('intro');
+        }
+    </script>
+</body>
+</html>

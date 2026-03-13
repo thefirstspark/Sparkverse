@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Check-In | Sparkverse</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Sparkverse Star Background */
+        .stars, .twinkling {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .stars {
+            background: #000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAE0lEQVQIW2NkYGD4z8DAwMgABAAAfgABAXLGvAAAAABJRU5ErkJggg==) repeat;
+            z-index: 0;
+        }
+
+        .twinkling {
+            background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAE0lEQVQIW2NkYGD4z8DAwMgABAAAfgABAXLGvAAAAABJRU5ErkJggg==) repeat;
+            z-index: 1;
+            animation: move-twink-back 200s linear infinite;
+        }
+
+        @keyframes move-twink-back {
+            from { background-position: 0 0; }
+            to { background-position: -10000px 5000px; }
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 2em;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            font-size: 0.95em;
+        }
+
+        .energy-selector {
+            margin: 30px 0;
+        }
+
+        .energy-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .energy-btn {
+            aspect-ratio: 1;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .energy-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .energy-btn.selected {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+            border-color: #4facfe;
+        }
+
+        .energy-btn.selected::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .energy-label {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .note-section {
+            margin: 30px 0;
+        }
+
+        label {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.6);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(132, 250, 176, 0.2) 0%, rgba(143, 211, 244, 0.2) 100%);
+            border: 2px solid rgba(79, 172, 254, 0.5);
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h2 {
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .emoji-display {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <a href="index.html" class="back-btn">← Back to Universe</a>
+
+    <div class="container">
+        <h1>⚡ Energy Check-In</h1>
+        <p class="subtitle">How's your energy today?</p>
+
+        <div class="energy-selector">
+            <div class="energy-options">
+                <button class="energy-btn" data-level="1" style="background: #ff6b6b;">😴</button>
+                <button class="energy-btn" data-level="2" style="background: #ffa07a;">😔</button>
+                <button class="energy-btn" data-level="3" style="background: #ffd93d;">😐</button>
+                <button class="energy-btn" data-level="4" style="background: #95e1d3;">😊</button>
+                <button class="energy-btn" data-level="5" style="background: #6bcf7f;">🚀</button>
+            </div>
+            <div class="energy-label" id="energyLabel">Select your energy level</div>
+        </div>
+
+        <div class="note-section">
+            <label for="notes">What's influencing your energy? (optional)</label>
+            <textarea id="notes" placeholder="Sleep, stress, excitement, coffee... anything on your mind?"></textarea>
+        </div>
+
+        <button class="submit-btn" id="submitBtn">Submit Check-In</button>
+
+        <div class="result" id="result">
+            <div class="emoji-display" id="resultEmoji"></div>
+            <h2 id="resultTitle"></h2>
+            <p id="resultMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        const energyBtns = document.querySelectorAll('.energy-btn');
+        const energyLabel = document.getElementById('energyLabel');
+        const submitBtn = document.getElementById('submitBtn');
+        const result = document.getElementById('result');
+        const resultEmoji = document.getElementById('resultEmoji');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+        const notesInput = document.getElementById('notes');
+
+        let selectedLevel = null;
+
+        const labels = {
+            1: "Drained 😴",
+            2: "Low Energy 😔",
+            3: "Neutral 😐",
+            4: "Energized 😊",
+            5: "Peak Energy 🚀"
+        };
+
+        const responses = {
+            1: {
+                emoji: "😴",
+                title: "Rest & Recharge",
+                message: "Your body's asking for rest. Take it easy, hydrate, and be kind to yourself today."
+            },
+            2: {
+                emoji: "😔",
+                title: "Take It Slow",
+                message: "Energy's running low. Maybe grab a healthy snack or take a short walk? Small steps count."
+            },
+            3: {
+                emoji: "😐",
+                title: "Steady State",
+                message: "You're in balance. Perfect time to maintain momentum or tackle moderate tasks."
+            },
+            4: {
+                emoji: "😊",
+                title: "Great Energy!",
+                message: "You're feeling good! Channel this into something meaningful today."
+            },
+            5: {
+                emoji: "🚀",
+                title: "Unstoppable!",
+                message: "Peak performance mode! Make the most of this high-energy state. You're crushing it!"
+            }
+        };
+
+        energyBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                energyBtns.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedLevel = btn.dataset.level;
+                energyLabel.textContent = labels[selectedLevel];
+                energyLabel.style.color = '#4facfe';
+                energyLabel.style.fontSize = '1.1em';
+            });
+        });
+
+        submitBtn.addEventListener('click', () => {
+            if (!selectedLevel) {
+                alert('Please select your energy level first! 😊');
+                return;
+            }
+
+            const response = responses[selectedLevel];
+            resultEmoji.textContent = response.emoji;
+            resultTitle.textContent = response.title;
+            resultMessage.textContent = response.message;
+
+            if (notesInput.value.trim()) {
+                resultMessage.textContent += ` Thanks for sharing: "${notesInput.value.trim()}"`;
+            }
+
+            result.style.display = 'block';
+            result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Store the check-in (in a real app, this would go to a backend)
+            console.log({
+                level: selectedLevel,
+                notes: notesInput.value,
+                timestamp: new Date().toISOString()
+            });
+        });
+    </script>
+</body>
+</html>

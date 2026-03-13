@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lineage Debugger | The First Spark</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+        
+        :root {
+            --void: #0a0a0f;
+            --deep: #12121a;
+            --surface: #1a1a24;
+            --elevated: #242430;
+            --border: #2a2a38;
+            --muted: #6b6b80;
+            --text: #e0e0ec;
+            --bright: #ffffff;
+            --spark: #f97316;
+            --lineage: #a855f7;
+            --lineage-glow: rgba(168, 85, 247, 0.3);
+            --mother: #ec4899;
+            --father: #3b82f6;
+            --healed: #10b981;
+            --active: #ef4444;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+        
+        .header { text-align: center; margin-bottom: 40px; }
+        .header-icon { width: 80px; height: 80px; margin: 0 auto 24px; }
+        .header-icon svg { width: 100%; height: 100%; stroke: var(--lineage); stroke-width: 1.5; fill: none; }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--bright), var(--lineage));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p { color: var(--muted); font-size: 0.95rem; }
+        
+        .nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover { background: var(--elevated); color: var(--text); }
+        .nav-btn.active { background: var(--elevated); border-color: var(--lineage); color: var(--lineage); box-shadow: 0 0 20px var(--lineage-glow); }
+        
+        .panel { display: none; animation: fadeIn 0.3s ease; }
+        .panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+        .card-header { margin-bottom: 24px; }
+        .card-header h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--bright); }
+        .card-header p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+        
+        /* Pattern Scanner */
+        .scan-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .scan-cat {
+            padding: 16px;
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        .scan-cat:hover { border-color: var(--lineage); }
+        .scan-cat.selected { border-color: var(--lineage); background: rgba(168, 85, 247, 0.1); }
+        .scan-cat-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .scan-cat-name { font-size: 0.85rem; font-weight: 600; color: var(--bright); }
+        .scan-cat-desc { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+        
+        /* Pattern Entry */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--lineage); }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        
+        .line-toggle {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .line-btn {
+            flex: 1;
+            padding: 14px;
+            background: var(--deep);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .line-btn:hover { background: var(--elevated); }
+        .line-btn.mother.selected { border-color: var(--mother); color: var(--mother); background: rgba(236, 72, 153, 0.1); }
+        .line-btn.father.selected { border-color: var(--father); color: var(--father); background: rgba(59, 130, 246, 0.1); }
+        .line-btn.both.selected { border-color: var(--lineage); color: var(--lineage); background: rgba(168, 85, 247, 0.1); }
+        
+        .btn {
+            padding: 14px 28px;
+            background: var(--lineage);
+            border: none;
+            border-radius: 8px;
+            color: var(--bright);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-heal { background: var(--healed); }
+        
+        /* Pattern List */
+        .pattern-list { display: flex; flex-direction: column; gap: 16px; }
+        
+        .pattern-item {
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .pattern-item:hover { border-color: var(--lineage); }
+        .pattern-item.healed { border-color: var(--healed); background: rgba(16, 185, 129, 0.05); }
+        .pattern-item.active-pattern { border-color: var(--active); border-left: 4px solid var(--active); }
+        
+        .pattern-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .pattern-title { font-weight: 600; color: var(--bright); font-size: 1rem; }
+        .pattern-line {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .pattern-line.mother { background: rgba(236, 72, 153, 0.2); color: var(--mother); }
+        .pattern-line.father { background: rgba(59, 130, 246, 0.2); color: var(--father); }
+        .pattern-line.both { background: rgba(168, 85, 247, 0.2); color: var(--lineage); }
+        
+        .pattern-category { font-size: 0.75rem; color: var(--lineage); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .pattern-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+        .pattern-evidence { font-size: 0.8rem; color: var(--text); background: var(--surface); padding: 12px; border-radius: 6px; margin-bottom: 12px; }
+        .pattern-evidence-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; }
+        
+        .pattern-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .status-dot.active { background: var(--active); }
+        .status-dot.healed { background: var(--healed); }
+        
+        .pattern-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .pattern-action {
+            padding: 8px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .pattern-action:hover { background: var(--elevated); color: var(--text); }
+        .pattern-action.heal { border-color: var(--healed); color: var(--healed); }
+        
+        /* Healing Protocol */
+        .protocol-steps {
+            counter-reset: step;
+        }
+        .protocol-step {
+            background: var(--deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            position: relative;
+            padding-left: 70px;
+        }
+        .protocol-step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 24px;
+            top: 24px;
+            width: 32px;
+            height: 32px;
+            background: var(--lineage);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--bright);
+        }
+        .protocol-step h4 { font-size: 1rem; color: var(--bright); margin-bottom: 8px; }
+        .protocol-step p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+        .protocol-step .prompt { background: var(--surface); padding: 12px; border-radius: 6px; margin-top: 12px; font-style: italic; color: var(--text); }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card { background: var(--deep); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--lineage); }
+        .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+        .stat-value.healed { color: var(--healed); }
+        .stat-value.active { color: var(--active); }
+        
+        /* Lineage Tree Viz */
+        .lineage-tree {
+            background: var(--deep);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            min-height: 300px;
+        }
+        .tree-node {
+            display: inline-block;
+            padding: 12px 20px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            margin: 8px;
+            font-size: 0.85rem;
+            position: relative;
+        }
+        .tree-node.you { border-color: var(--spark); color: var(--spark); }
+        .tree-node.mother-line { border-color: var(--mother); }
+        .tree-node.father-line { border-color: var(--father); }
+        .tree-level { margin: 20px 0; }
+        .tree-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 8px; }
+        
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+        .empty-state svg { width: 64px; height: 64px; stroke: var(--border); margin-bottom: 16px; }
+        
+        .footer { text-align: center; padding: 48px 0 24px; color: var(--muted); font-size: 0.8rem; }
+        .footer a { color: var(--spark); text-decoration: none; }
+        
+        @media (max-width: 600px) {
+            .container { padding: 24px 16px; }
+            .card { padding: 24px 20px; }
+            .header h1 { font-size: 1.4rem; }
+            .protocol-step { padding-left: 60px; }
+            .protocol-step::before { left: 16px; }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <div class="container">
+        <header class="header">
+            <div class="header-icon">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="20" r="8"/>
+                    <circle cx="30" cy="50" r="6"/>
+                    <circle cx="70" cy="50" r="6"/>
+                    <circle cx="20" cy="80" r="5"/>
+                    <circle cx="40" cy="80" r="5"/>
+                    <circle cx="60" cy="80" r="5"/>
+                    <circle cx="80" cy="80" r="5"/>
+                    <line x1="50" y1="28" x2="30" y2="44"/>
+                    <line x1="50" y1="28" x2="70" y2="44"/>
+                    <line x1="30" y1="56" x2="20" y2="75"/>
+                    <line x1="30" y1="56" x2="40" y2="75"/>
+                    <line x1="70" y1="56" x2="60" y2="75"/>
+                    <line x1="70" y1="56" x2="80" y2="75"/>
+                </svg>
+            </div>
+            <h1>LINEAGE DEBUGGER</h1>
+            <p>Chamber 4 — Ancestral Pattern Work</p>
+        </header>
+
+        <nav class="nav">
+            <button class="nav-btn active" data-panel="scan">Pattern Scanner</button>
+            <button class="nav-btn" data-panel="patterns">My Patterns</button>
+            <button class="nav-btn" data-panel="heal">Healing Protocol</button>
+            <button class="nav-btn" data-panel="tree">Lineage Tree</button>
+        </nav>
+
+        <!-- Pattern Scanner -->
+        <div id="scan-panel" class="panel active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Scan for Inherited Patterns</h2>
+                    <p>Your DNA carries more than physical traits—it stores behavioral loops, emotional patterns, and unresolved traumas from your lineage. Identify what's running that isn't yours.</p>
+                </div>
+                
+                <p style="font-size:0.9rem; color:var(--muted); margin-bottom:16px;">Select pattern categories to scan:</p>
+                
+                <div class="scan-categories" id="scan-categories">
+                    <div class="scan-cat" data-cat="money">
+                        <div class="scan-cat-icon">💰</div>
+                        <div class="scan-cat-name">Money Patterns</div>
+                        <div class="scan-cat-desc">Scarcity, guilt, earning limits</div>
+                    </div>
+                    <div class="scan-cat" data-cat="relationship">
+                        <div class="scan-cat-icon">💔</div>
+                        <div class="scan-cat-name">Relationship Patterns</div>
+                        <div class="scan-cat-desc">Attachment, abandonment, trust</div>
+                    </div>
+                    <div class="scan-cat" data-cat="health">
+                        <div class="scan-cat-icon">🩺</div>
+                        <div class="scan-cat-name">Health Patterns</div>
+                        <div class="scan-cat-desc">Body beliefs, illness loops</div>
+                    </div>
+                    <div class="scan-cat" data-cat="success">
+                        <div class="scan-cat-icon">🎯</div>
+                        <div class="scan-cat-name">Success Patterns</div>
+                        <div class="scan-cat-desc">Self-sabotage, visibility fear</div>
+                    </div>
+                    <div class="scan-cat" data-cat="safety">
+                        <div class="scan-cat-icon">🛡️</div>
+                        <div class="scan-cat-name">Safety Patterns</div>
+                        <div class="scan-cat-desc">Hypervigilance, threat response</div>
+                    </div>
+                    <div class="scan-cat" data-cat="voice">
+                        <div class="scan-cat-icon">🗣️</div>
+                        <div class="scan-cat-name">Voice Patterns</div>
+                        <div class="scan-cat-desc">Silence, suppression, expression</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" id="scan-form-card" style="display:none;">
+                <div class="card-header">
+                    <h2>Log Pattern: <span id="selected-category"></span></h2>
+                    <p>Document the pattern you've identified running in your system.</p>
+                </div>
+                
+                <form id="pattern-form">
+                    <div class="form-group">
+                        <label>Pattern Name</label>
+                        <input type="text" class="form-input" id="pattern-name" placeholder="e.g., 'Money disappears fast'" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Which lineage carries this?</label>
+                        <div class="line-toggle">
+                            <button type="button" class="line-btn mother" data-line="mother">Mother's Line</button>
+                            <button type="button" class="line-btn father" data-line="father">Father's Line</button>
+                            <button type="button" class="line-btn both" data-line="both">Both Lines</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>How does this pattern show up in you?</label>
+                        <textarea class="form-textarea" id="pattern-behavior" placeholder="Describe the behaviors, thoughts, or feelings that activate..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Evidence from your lineage (who else had this?)</label>
+                        <textarea class="form-textarea" id="pattern-evidence" placeholder="e.g., 'Grandmother lost everything twice. Mom always says we can't afford things.'"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>What triggers this pattern?</label>
+                        <input type="text" class="form-input" id="pattern-trigger" placeholder="e.g., 'When I have more than $5k saved'">
+                    </div>
+                    
+                    <input type="hidden" id="pattern-category">
+                    <button type="submit" class="btn">Log Pattern</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- My Patterns -->
+        <div id="patterns-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Identified Patterns</h2>
+                    <p>Your logged ancestral patterns. Awareness is the first step—you can't debug code you can't see.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-patterns">0</div>
+                        <div class="stat-label">Total Identified</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value active" id="active-patterns">0</div>
+                        <div class="stat-label">Still Active</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value healed" id="healed-patterns">0</div>
+                        <div class="stat-label">Healed/Integrated</div>
+                    </div>
+                </div>
+                
+                <div class="pattern-list" id="pattern-list"></div>
+            </div>
+        </div>
+
+        <!-- Healing Protocol -->
+        <div id="heal-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Lineage Healing Protocol</h2>
+                    <p>When you heal a pattern, you heal it forward AND backward through your line. Your ancestors couldn't complete this work—you can.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Select pattern to heal</label>
+                    <select class="form-select" id="heal-pattern-select">
+                        <option value="">Choose a pattern...</option>
+                    </select>
+                </div>
+                
+                <div id="healing-protocol" style="display:none;">
+                    <div class="protocol-steps">
+                        <div class="protocol-step">
+                            <h4>Acknowledge the Pattern</h4>
+                            <p>Speak aloud: "I see you, [pattern name]. I recognize you have been running in my line."</p>
+                            <div class="prompt">Close your eyes. Feel where this pattern lives in your body. Place a hand there.</div>
+                        </div>
+                        
+                        <div class="protocol-step">
+                            <h4>Honor the Origin</h4>
+                            <p>This pattern began as protection. Someone in your line needed this to survive.</p>
+                            <div class="prompt">"Thank you for protecting my ancestors. I understand why you were created."</div>
+                        </div>
+                        
+                        <div class="protocol-step">
+                            <h4>Declare Completion</h4>
+                            <p>The circumstances that created this pattern no longer exist. You are safe to release it.</p>
+                            <div class="prompt">"The danger has passed. I am safe now. This pattern has completed its purpose."</div>
+                        </div>
+                        
+                        <div class="protocol-step">
+                            <h4>Rewrite the Code</h4>
+                            <p>What new pattern will replace this? Nature fills voids—choose consciously.</p>
+                            <textarea class="form-textarea" id="new-pattern" placeholder="Write the new pattern... e.g., 'Money flows to me easily and I keep it.'"></textarea>
+                        </div>
+                        
+                        <div class="protocol-step">
+                            <h4>Seal with Breath</h4>
+                            <p>Three deep breaths. On each exhale, release the old. On each inhale, install the new.</p>
+                            <div class="prompt">Breathe. Release. Receive. Repeat three times.</div>
+                        </div>
+                        
+                        <div class="protocol-step">
+                            <h4>Send It Back & Forward</h4>
+                            <p>Visualize the healing rippling backward through your ancestors and forward through future generations.</p>
+                            <div class="prompt">"This healing travels through all time. My line is free."</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-heal" id="mark-healed" style="margin-top:24px;">Mark Pattern as Healed</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lineage Tree -->
+        <div id="tree-panel" class="panel">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Your Lineage Tree</h2>
+                    <p>Visualize where patterns flow from. Click nodes to see associated patterns.</p>
+                </div>
+                
+                <div class="lineage-tree">
+                    <div class="tree-level">
+                        <div class="tree-label">Great-Grandparents</div>
+                        <div class="tree-node mother-line">MM-GM</div>
+                        <div class="tree-node mother-line">MM-GF</div>
+                        <div class="tree-node mother-line">MF-GM</div>
+                        <div class="tree-node mother-line">MF-GF</div>
+                        <div class="tree-node father-line">FM-GM</div>
+                        <div class="tree-node father-line">FM-GF</div>
+                        <div class="tree-node father-line">FF-GM</div>
+                        <div class="tree-node father-line">FF-GF</div>
+                    </div>
+                    <div class="tree-level">
+                        <div class="tree-label">Grandparents</div>
+                        <div class="tree-node mother-line">M-Grandma</div>
+                        <div class="tree-node mother-line">M-Grandpa</div>
+                        <div class="tree-node father-line">F-Grandma</div>
+                        <div class="tree-node father-line">F-Grandpa</div>
+                    </div>
+                    <div class="tree-level">
+                        <div class="tree-label">Parents</div>
+                        <div class="tree-node mother-line">Mother</div>
+                        <div class="tree-node father-line">Father</div>
+                    </div>
+                    <div class="tree-level">
+                        <div class="tree-label">You</div>
+                        <div class="tree-node you">YOU</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top:24px; padding:20px; background:var(--deep); border-radius:12px;">
+                    <h4 style="color:var(--bright); margin-bottom:12px;">Pattern Distribution</h4>
+                    <div style="display:flex; gap:24px; flex-wrap:wrap;">
+                        <div><span style="color:var(--mother);">●</span> Mother's Line: <span id="mother-count">0</span> patterns</div>
+                        <div><span style="color:var(--father);">●</span> Father's Line: <span id="father-count">0</span> patterns</div>
+                        <div><span style="color:var(--lineage);">●</span> Both Lines: <span id="both-count">0</span> patterns</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Lineage Debugger — Chamber 4 of Source Architecture<br>
+            Built for <a href="https://thefirstspark.shop" target="_blank">The First Spark</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const DataStore = {
+            patterns: [],
+            load() { const s = localStorage.getItem('lineage-patterns'); if (s) this.patterns = JSON.parse(s); },
+            save() { localStorage.setItem('lineage-patterns', JSON.stringify(this.patterns)); },
+            addPattern(p) { p.id = Date.now(); p.date = new Date().toISOString(); p.healed = false; this.patterns.unshift(p); this.save(); },
+            healPattern(id) { const p = this.patterns.find(x => x.id === id); if (p) { p.healed = true; p.healedDate = new Date().toISOString(); this.save(); } },
+            getPatterns() { return this.patterns; }
+        };
+
+        const UI = {
+            selectedCategory: null,
+            selectedLine: null,
+            
+            init() {
+                DataStore.load();
+                this.bindNavigation();
+                this.bindScanCategories();
+                this.bindLineToggle();
+                this.bindPatternForm();
+                this.bindHealingProtocol();
+                this.renderPatterns();
+                this.updateStats();
+            },
+            
+            bindNavigation() {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                        document.getElementById(btn.dataset.panel + '-panel').classList.add('active');
+                    });
+                });
+            },
+            
+            bindScanCategories() {
+                document.querySelectorAll('.scan-cat').forEach(cat => {
+                    cat.addEventListener('click', () => {
+                        document.querySelectorAll('.scan-cat').forEach(c => c.classList.remove('selected'));
+                        cat.classList.add('selected');
+                        this.selectedCategory = cat.dataset.cat;
+                        document.getElementById('selected-category').textContent = cat.querySelector('.scan-cat-name').textContent;
+                        document.getElementById('pattern-category').value = cat.dataset.cat;
+                        document.getElementById('scan-form-card').style.display = 'block';
+                    });
+                });
+            },
+            
+            bindLineToggle() {
+                document.querySelectorAll('.line-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.line-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        this.selectedLine = btn.dataset.line;
+                    });
+                });
+            },
+            
+            bindPatternForm() {
+                document.getElementById('pattern-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (!this.selectedLine) { alert('Select which lineage carries this pattern'); return; }
+                    
+                    const pattern = {
+                        name: document.getElementById('pattern-name').value,
+                        category: document.getElementById('pattern-category').value,
+                        line: this.selectedLine,
+                        behavior: document.getElementById('pattern-behavior').value,
+                        evidence: document.getElementById('pattern-evidence').value,
+                        trigger: document.getElementById('pattern-trigger').value
+                    };
+                    
+                    DataStore.addPattern(pattern);
+                    e.target.reset();
+                    document.querySelectorAll('.line-btn').forEach(b => b.classList.remove('selected'));
+                    document.querySelectorAll('.scan-cat').forEach(c => c.classList.remove('selected'));
+                    document.getElementById('scan-form-card').style.display = 'none';
+                    this.selectedLine = null;
+                    this.renderPatterns();
+                    this.updateStats();
+                    alert('Pattern logged. Awareness initiated.');
+                });
+            },
+            
+            bindHealingProtocol() {
+                const select = document.getElementById('heal-pattern-select');
+                select.addEventListener('change', () => {
+                    document.getElementById('healing-protocol').style.display = select.value ? 'block' : 'none';
+                });
+                
+                document.getElementById('mark-healed').addEventListener('click', () => {
+                    const id = parseInt(document.getElementById('heal-pattern-select').value);
+                    if (!id) return;
+                    DataStore.healPattern(id);
+                    this.renderPatterns();
+                    this.updateStats();
+                    select.value = '';
+                    document.getElementById('healing-protocol').style.display = 'none';
+                    alert('Pattern marked as healed. The healing ripples through your line.');
+                });
+            },
+            
+            renderPatterns() {
+                const patterns = DataStore.getPatterns();
+                const list = document.getElementById('pattern-list');
+                const select = document.getElementById('heal-pattern-select');
+                
+                // Update heal select
+                select.innerHTML = '<option value="">Choose a pattern...</option>' + 
+                    patterns.filter(p => !p.healed).map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+                
+                if (patterns.length === 0) {
+                    list.innerHTML = `<div class="empty-state"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="none"/><line x1="35" y1="40" x2="45" y2="40"/><line x1="55" y1="40" x2="65" y2="40"/><path d="M35,60 Q50,50 65,60" fill="none"/></svg><p>No patterns logged yet.<br>Use the Pattern Scanner to identify ancestral code.</p></div>`;
+                    return;
+                }
+                
+                list.innerHTML = patterns.map(p => `
+                    <div class="pattern-item ${p.healed ? 'healed' : 'active-pattern'}">
+                        <div class="pattern-header">
+                            <div class="pattern-title">${p.name}</div>
+                            <span class="pattern-line ${p.line}">${p.line === 'both' ? 'Both Lines' : p.line === 'mother' ? "Mother's Line" : "Father's Line"}</span>
+                        </div>
+                        <div class="pattern-category">${p.category}</div>
+                        <p class="pattern-desc">${p.behavior || 'No behavior description'}</p>
+                        ${p.evidence ? `<div class="pattern-evidence"><div class="pattern-evidence-label">Lineage Evidence</div>${p.evidence}</div>` : ''}
+                        <div class="pattern-status">
+                            <span class="status-dot ${p.healed ? 'healed' : 'active'}"></span>
+                            ${p.healed ? 'Healed' : 'Active'}
+                            ${p.trigger ? ` · Trigger: ${p.trigger}` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            },
+            
+            updateStats() {
+                const patterns = DataStore.getPatterns();
+                document.getElementById('total-patterns').textContent = patterns.length;
+                document.getElementById('active-patterns').textContent = patterns.filter(p => !p.healed).length;
+                document.getElementById('healed-patterns').textContent = patterns.filter(p => p.healed).length;
+                
+                document.getElementById('mother-count').textContent = patterns.filter(p => p.line === 'mother').length;
+                document.getElementById('father-count').textContent = patterns.filter(p => p.line === 'father').length;
+                document.getElementById('both-count').textContent = patterns.filter(p => p.line === 'both').length;
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+    </script>
+</body>
+</html>

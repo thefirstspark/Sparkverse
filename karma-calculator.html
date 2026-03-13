@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karma Debugger | Resolve Your Soul's Threads</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #0a0a0f;
+            --cosmic-purple: #2d1b4e;
+            --karma-gold: #d4a574;
+            --resolve-green: #4a9e7c;
+            --debt-red: #8b3a3a;
+            --neutral: #6b6b7b;
+            --light: #e8e4db;
+            --thread: #3d2a5c;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--void);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Cosmic background threads */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .thread-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--karma-gold), transparent);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.6; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--thread);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--karma-gold), var(--light), var(--karma-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--neutral);
+            letter-spacing: 0.2em;
+        }
+
+        /* Karma Score Display */
+        .karma-score {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            padding: 3rem;
+            margin: 2rem 0;
+            background: linear-gradient(135deg, rgba(45, 27, 78, 0.3), rgba(10, 10, 15, 0.8));
+            border: 1px solid var(--thread);
+            border-radius: 2px;
+        }
+
+        .score-ring {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .score-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-bg {
+            fill: none;
+            stroke: var(--thread);
+            stroke-width: 8;
+        }
+
+        .score-fill {
+            fill: none;
+            stroke: url(#karmaGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 565;
+            stroke-dashoffset: 565;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--karma-gold);
+        }
+
+        .score-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--neutral);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .karma-stats {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 2px solid var(--neutral);
+        }
+
+        .stat.positive { border-left-color: var(--resolve-green); }
+        .stat.negative { border-left-color: var(--debt-red); }
+        .stat.pending { border-left-color: var(--karma-gold); }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 300;
+            min-width: 60px;
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--neutral);
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: linear-gradient(180deg, rgba(45, 27, 78, 0.2), rgba(10, 10, 15, 0.9));
+            border: 1px solid var(--thread);
+            padding: 2rem;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--karma-gold);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--thread);
+        }
+
+        /* Add Thread Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--neutral);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--thread);
+            color: var(--light);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--karma-gold);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: var(--void);
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 0.8rem;
+            background: transparent;
+            border: 1px solid var(--thread);
+            color: var(--neutral);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .type-btn:hover {
+            border-color: var(--karma-gold);
+            color: var(--light);
+        }
+
+        .type-btn.active.debt {
+            background: rgba(139, 58, 58, 0.3);
+            border-color: var(--debt-red);
+            color: var(--debt-red);
+        }
+
+        .type-btn.active.credit {
+            background: rgba(74, 158, 124, 0.3);
+            border-color: var(--resolve-green);
+            color: var(--resolve-green);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--karma-gold), #c49664);
+            border: none;
+            color: var(--void);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
+        }
+
+        /* Threads List */
+        .threads-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .threads-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .threads-list::-webkit-scrollbar-track {
+            background: var(--void);
+        }
+
+        .threads-list::-webkit-scrollbar-thumb {
+            background: var(--thread);
+        }
+
+        .thread-item {
+            padding: 1.2rem;
+            margin-bottom: 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--neutral);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .thread-item:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .thread-item.debt { border-left-color: var(--debt-red); }
+        .thread-item.credit { border-left-color: var(--resolve-green); }
+        .thread-item.resolved { 
+            opacity: 0.5;
+            border-left-color: var(--neutral);
+        }
+
+        .thread-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .thread-name {
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .thread-weight {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .thread-weight.debt { color: var(--debt-red); }
+        .thread-weight.credit { color: var(--resolve-green); }
+
+        .thread-category {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--karma-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .thread-description {
+            font-size: 0.9rem;
+            color: var(--neutral);
+            line-height: 1.5;
+            margin-bottom: 0.8rem;
+        }
+
+        .thread-resolution {
+            font-size: 0.85rem;
+            color: var(--light);
+            padding: 0.8rem;
+            background: rgba(74, 158, 124, 0.1);
+            border-left: 2px solid var(--resolve-green);
+            margin-bottom: 0.8rem;
+        }
+
+        .thread-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .thread-btn {
+            padding: 0.4rem 0.8rem;
+            background: transparent;
+            border: 1px solid var(--thread);
+            color: var(--neutral);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .thread-btn:hover {
+            border-color: var(--karma-gold);
+            color: var(--karma-gold);
+        }
+
+        .thread-btn.resolve:hover {
+            border-color: var(--resolve-green);
+            color: var(--resolve-green);
+        }
+
+        .thread-btn.delete:hover {
+            border-color: var(--debt-red);
+            color: var(--debt-red);
+        }
+
+        /* Categories Panel */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .category-card {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--thread);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .category-card:hover {
+            border-color: var(--karma-gold);
+        }
+
+        .category-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+        }
+
+        .category-balance {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        /* Resolution Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            width: 90%;
+            max-width: 500px;
+            background: linear-gradient(180deg, var(--cosmic-purple), var(--void));
+            border: 1px solid var(--karma-gold);
+            padding: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--karma-gold);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid var(--thread);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.cancel {
+            background: transparent;
+            color: var(--light);
+        }
+
+        .modal-btn.confirm {
+            background: var(--resolve-green);
+            border-color: var(--resolve-green);
+            color: var(--void);
+        }
+
+        /* Wisdom Panel */
+        .wisdom-box {
+            padding: 1.5rem;
+            background: rgba(212, 165, 116, 0.1);
+            border: 1px solid var(--karma-gold);
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .wisdom-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--light);
+        }
+
+        .wisdom-source {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--karma-gold);
+            margin-top: 1rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--neutral);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .thread-item {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Filter tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--thread);
+            color: var(--neutral);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab:hover, .filter-tab.active {
+            border-color: var(--karma-gold);
+            color: var(--karma-gold);
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:12px;left:12px;z-index:99999;display:flex;gap:8px;font-family:sans-serif}.sparkverse-back-nav a{background:rgba(0,0,0,0.85);color:#d4af37;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(10px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:#d4af37;color:#000}</style><div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+    <!-- Cosmic Background Threads -->
+    <div class="cosmic-bg" id="cosmicBg"></div>
+
+    <div class="container">
+        <header>
+            <h1>Karma Debugger</h1>
+            <p class="subtitle">// resolve your soul's tangled threads</p>
+        </header>
+
+        <!-- Karma Score Display -->
+        <div class="karma-score">
+            <div class="score-ring">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="karmaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#8b3a3a"/>
+                            <stop offset="50%" stop-color="#d4a574"/>
+                            <stop offset="100%" stop-color="#4a9e7c"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="score-bg" cx="100" cy="100" r="90"/>
+                    <circle class="score-fill" id="scoreFill" cx="100" cy="100" r="90"/>
+                </svg>
+                <div class="score-value">
+                    <div class="score-number" id="karmaScore">0</div>
+                    <div class="score-label">Karma Balance</div>
+                </div>
+            </div>
+            <div class="karma-stats">
+                <div class="stat positive">
+                    <span class="stat-value" id="creditCount">0</span>
+                    <span class="stat-label">Credits Earned<br><small>good karma generated</small></span>
+                </div>
+                <div class="stat negative">
+                    <span class="stat-value" id="debtCount">0</span>
+                    <span class="stat-label">Debts Pending<br><small>awaiting resolution</small></span>
+                </div>
+                <div class="stat pending">
+                    <span class="stat-value" id="resolvedCount">0</span>
+                    <span class="stat-label">Threads Resolved<br><small>karma cleared</small></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Overview -->
+        <div class="panel" style="margin-bottom: 2rem;">
+            <h2 class="panel-title">⟡ Life Domain Balance</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">♡</div>
+                    <div class="category-name">Relationships</div>
+                    <div class="category-balance" id="cat-relationships">0</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">◈</div>
+                    <div class="category-name">Self</div>
+                    <div class="category-balance" id="cat-self">0</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">⬡</div>
+                    <div class="category-name">Community</div>
+                    <div class="category-balance" id="cat-community">0</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">◉</div>
+                    <div class="category-name">Purpose</div>
+                    <div class="category-balance" id="cat-purpose">0</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">⧫</div>
+                    <div class="category-name">Abundance</div>
+                    <div class="category-balance" id="cat-abundance">0</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">✧</div>
+                    <div class="category-name">Spirit</div>
+                    <div class="category-balance" id="cat-spirit">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Add New Thread -->
+            <div class="panel">
+                <h2 class="panel-title">⟡ Log Karmic Thread</h2>
+                
+                <div class="type-selector">
+                    <button class="type-btn debt active" data-type="debt">⊖ Debt</button>
+                    <button class="type-btn credit" data-type="credit">⊕ Credit</button>
+                </div>
+
+                <form id="threadForm">
+                    <div class="form-group">
+                        <label>Thread Name</label>
+                        <input type="text" id="threadName" placeholder="e.g., Broke a promise to myself" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Life Domain</label>
+                        <select id="threadCategory">
+                            <option value="relationships">♡ Relationships</option>
+                            <option value="self">◈ Self</option>
+                            <option value="community">⬡ Community</option>
+                            <option value="purpose">◉ Purpose</option>
+                            <option value="abundance">⧫ Abundance</option>
+                            <option value="spirit">✧ Spirit</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Weight (1-10)</label>
+                        <input type="range" id="threadWeight" min="1" max="10" value="5">
+                        <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--neutral);">
+                            <span>Minor</span>
+                            <span id="weightDisplay">5</span>
+                            <span>Major</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="threadDesc" placeholder="What happened? What energy did this create?"></textarea>
+                    </div>
+
+                    <div class="form-group" id="resolutionGroup" style="display: none;">
+                        <label>Resolution Path (for debts)</label>
+                        <textarea id="resolutionPath" placeholder="How might you resolve this? What action could clear this thread?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Weave Thread Into Tapestry</button>
+                </form>
+            </div>
+
+            <!-- Active Threads -->
+            <div class="panel">
+                <h2 class="panel-title">⟡ Active Threads</h2>
+                
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All</button>
+                    <button class="filter-tab" data-filter="debt">Debts</button>
+                    <button class="filter-tab" data-filter="credit">Credits</button>
+                    <button class="filter-tab" data-filter="resolved">Resolved</button>
+                </div>
+
+                <div class="threads-list" id="threadsList">
+                    <div class="empty-state">
+                        <div class="empty-icon">∞</div>
+                        <p>Your karmic slate is clear.<br>Begin logging threads to track your soul's journey.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wisdom Box -->
+        <div class="wisdom-box">
+            <p class="wisdom-text" id="wisdomText">"What you do not transform, you will transmit."</p>
+            <p class="wisdom-source" id="wisdomSource">— Richard Rohr</p>
+        </div>
+    </div>
+
+    <!-- Resolution Modal -->
+    <div class="modal-overlay" id="resolutionModal">
+        <div class="modal">
+            <h3 class="modal-title">✧ Resolve This Thread</h3>
+            <p style="color: var(--neutral); margin-bottom: 1rem; text-align: center;">
+                Describe how you resolved or balanced this karmic thread:
+            </p>
+            <textarea id="resolutionNote" placeholder="What did you do? What shifted? What did you learn?"></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="confirmResolution()">Mark Resolved</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let threads = JSON.parse(localStorage.getItem('karmaThreads')) || [];
+        let currentType = 'debt';
+        let currentFilter = 'all';
+        let resolvingThreadId = null;
+
+        // Wisdom quotes
+        const wisdoms = [
+            { text: "What you do not transform, you will transmit.", source: "Richard Rohr" },
+            { text: "The wound is the place where the light enters you.", source: "Rumi" },
+            { text: "You cannot solve a problem with the same mind that created it.", source: "Albert Einstein" },
+            { text: "Holding onto anger is like drinking poison and expecting the other person to die.", source: "Buddha" },
+            { text: "The best time to plant a tree was 20 years ago. The second best time is now.", source: "Chinese Proverb" },
+            { text: "What we resist persists.", source: "Carl Jung" },
+            { text: "Everything that irritates us about others can lead us to an understanding of ourselves.", source: "Carl Jung" },
+            { text: "The only way out is through.", source: "Robert Frost" },
+            { text: "When you change the way you look at things, the things you look at change.", source: "Wayne Dyer" },
+            { text: "Your task is not to seek for love, but to find all the barriers you have built against it.", source: "Rumi" }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createCosmicBg();
+            setupEventListeners();
+            render();
+            showRandomWisdom();
+        });
+
+        function createCosmicBg() {
+            const bg = document.getElementById('cosmicBg');
+            for (let i = 0; i < 15; i++) {
+                const thread = document.createElement('div');
+                thread.className = 'thread-line';
+                thread.style.top = `${Math.random() * 100}%`;
+                thread.style.left = '0';
+                thread.style.width = `${30 + Math.random() * 70}%`;
+                thread.style.animationDelay = `${Math.random() * 4}s`;
+                bg.appendChild(thread);
+            }
+        }
+
+        function setupEventListeners() {
+            // Type selector
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentType = btn.dataset.type;
+                    document.getElementById('resolutionGroup').style.display = 
+                        currentType === 'debt' ? 'block' : 'none';
+                });
+            });
+
+            // Weight slider
+            const weightSlider = document.getElementById('threadWeight');
+            weightSlider.addEventListener('input', (e) => {
+                document.getElementById('weightDisplay').textContent = e.target.value;
+            });
+
+            // Form submission
+            document.getElementById('threadForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                addThread();
+            });
+
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    renderThreads();
+                });
+            });
+        }
+
+        function addThread() {
+            const thread = {
+                id: Date.now(),
+                name: document.getElementById('threadName').value,
+                type: currentType,
+                category: document.getElementById('threadCategory').value,
+                weight: parseInt(document.getElementById('threadWeight').value),
+                description: document.getElementById('threadDesc').value,
+                resolutionPath: document.getElementById('resolutionPath')?.value || '',
+                resolved: false,
+                resolutionNote: '',
+                createdAt: new Date().toISOString(),
+                resolvedAt: null
+            };
+
+            threads.unshift(thread);
+            saveThreads();
+            render();
+            
+            // Reset form
+            document.getElementById('threadForm').reset();
+            document.getElementById('weightDisplay').textContent = '5';
+        }
+
+        function resolveThread(id) {
+            resolvingThreadId = id;
+            document.getElementById('resolutionModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('resolutionModal').classList.remove('active');
+            document.getElementById('resolutionNote').value = '';
+            resolvingThreadId = null;
+        }
+
+        function confirmResolution() {
+            const note = document.getElementById('resolutionNote').value;
+            const thread = threads.find(t => t.id === resolvingThreadId);
+            if (thread) {
+                thread.resolved = true;
+                thread.resolutionNote = note;
+                thread.resolvedAt = new Date().toISOString();
+                saveThreads();
+                render();
+            }
+            closeModal();
+        }
+
+        function deleteThread(id) {
+            if (confirm('Remove this thread from your tapestry?')) {
+                threads = threads.filter(t => t.id !== id);
+                saveThreads();
+                render();
+            }
+        }
+
+        function saveThreads() {
+            localStorage.setItem('karmaThreads', JSON.stringify(threads));
+        }
+
+        function calculateKarma() {
+            let score = 0;
+            let credits = 0;
+            let debts = 0;
+            let resolved = 0;
+            const categories = {
+                relationships: 0,
+                self: 0,
+                community: 0,
+                purpose: 0,
+                abundance: 0,
+                spirit: 0
+            };
+
+            threads.forEach(t => {
+                const value = t.weight * (t.type === 'credit' ? 1 : -1);
+                
+                if (t.resolved) {
+                    resolved++;
+                    // Resolved debts become neutral or slightly positive
+                    if (t.type === 'debt') {
+                        score += Math.ceil(t.weight / 2); // Bonus for resolution
+                    }
+                } else {
+                    score += value;
+                    categories[t.category] += value;
+                    
+                    if (t.type === 'credit') credits++;
+                    else debts++;
+                }
+            });
+
+            return { score, credits, debts, resolved, categories };
+        }
+
+        function render() {
+            const { score, credits, debts, resolved, categories } = calculateKarma();
+            
+            // Update score ring
+            const maxScore = 100;
+            const normalizedScore = Math.max(-maxScore, Math.min(maxScore, score));
+            const percentage = (normalizedScore + maxScore) / (2 * maxScore);
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference * (1 - percentage);
+            
+            document.getElementById('scoreFill').style.strokeDashoffset = offset;
+            document.getElementById('karmaScore').textContent = score > 0 ? `+${score}` : score;
+            document.getElementById('karmaScore').style.color = 
+                score > 0 ? 'var(--resolve-green)' : score < 0 ? 'var(--debt-red)' : 'var(--karma-gold)';
+
+            // Update stats
+            document.getElementById('creditCount').textContent = credits;
+            document.getElementById('debtCount').textContent = debts;
+            document.getElementById('resolvedCount').textContent = resolved;
+
+            // Update categories
+            Object.entries(categories).forEach(([cat, val]) => {
+                const el = document.getElementById(`cat-${cat}`);
+                el.textContent = val > 0 ? `+${val}` : val;
+                el.style.color = val > 0 ? 'var(--resolve-green)' : val < 0 ? 'var(--debt-red)' : 'var(--light)';
+            });
+
+            renderThreads();
+        }
+
+        function renderThreads() {
+            const list = document.getElementById('threadsList');
+            
+            let filtered = threads;
+            if (currentFilter === 'debt') filtered = threads.filter(t => t.type === 'debt' && !t.resolved);
+            else if (currentFilter === 'credit') filtered = threads.filter(t => t.type === 'credit');
+            else if (currentFilter === 'resolved') filtered = threads.filter(t => t.resolved);
+            else if (currentFilter === 'all') filtered = threads.filter(t => !t.resolved);
+
+            if (filtered.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">∞</div>
+                        <p>${currentFilter === 'resolved' ? 'No resolved threads yet.' : 
+                            currentFilter === 'debt' ? 'No pending debts. Well done!' :
+                            currentFilter === 'credit' ? 'No credits logged yet.' :
+                            'Your karmic slate is clear.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const categoryIcons = {
+                relationships: '♡',
+                self: '◈',
+                community: '⬡',
+                purpose: '◉',
+                abundance: '⧫',
+                spirit: '✧'
+            };
+
+            list.innerHTML = filtered.map(t => `
+                <div class="thread-item ${t.type} ${t.resolved ? 'resolved' : ''}">
+                    <div class="thread-header">
+                        <span class="thread-name">${t.name}</span>
+                        <span class="thread-weight ${t.type}">${t.type === 'credit' ? '+' : '-'}${t.weight}</span>
+                    </div>
+                    <div class="thread-category">${categoryIcons[t.category]} ${t.category}</div>
+                    ${t.description ? `<p class="thread-description">${t.description}</p>` : ''}
+                    ${t.resolutionPath && !t.resolved ? `
+                        <div class="thread-resolution" style="background: rgba(212, 165, 116, 0.1); border-left-color: var(--karma-gold);">
+                            <strong style="color: var(--karma-gold);">Resolution Path:</strong> ${t.resolutionPath}
+                        </div>
+                    ` : ''}
+                    ${t.resolved && t.resolutionNote ? `
+                        <div class="thread-resolution">
+                            <strong>Resolved:</strong> ${t.resolutionNote}
+                        </div>
+                    ` : ''}
+                    <div class="thread-actions">
+                        ${!t.resolved && t.type === 'debt' ? `
+                            <button class="thread-btn resolve" onclick="resolveThread(${t.id})">✓ Resolve</button>
+                        ` : ''}
+                        <button class="thread-btn delete" onclick="deleteThread(${t.id})">✕ Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showRandomWisdom() {
+            const wisdom = wisdoms[Math.floor(Math.random() * wisdoms.length)];
+            document.getElementById('wisdomText').textContent = `"${wisdom.text}"`;
+            document.getElementById('wisdomSource').textContent = `— ${wisdom.source}`;
+        }
+
+        // Refresh wisdom periodically
+        setInterval(showRandomWisdom, 30000);
+    </script>
+</body>
+</html>
