@@ -4,208 +4,492 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Origin Key — The First Spark</title>
-    <meta name="description" content="The rarest artifact in the Sparkverse. Older than time. The seed of Player One's soul.">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="description" content="The rarest artifact in the Sparkverse. Older than time. The seed of Player One's soul. You didn't find this by accident.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4D03F;
+            --gold-dark: #8B6914;
+            --void: #000000;
+            --void-soft: #0a0805;
+            --bone: #1a1209;
+            --text: #e8e0d5;
+            --text-dim: rgba(232, 224, 213, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            background: #000;
-            min-height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
-            color: #fff;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--void);
+            color: var(--text);
+            line-height: 1.8;
             overflow-x: hidden;
+        }
+
+        /* Grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--void);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-        }
-        canvas#stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-        .container {
             position: relative;
-            z-index: 1;
-            text-align: center;
             padding: 2rem;
-            max-width: 700px;
+            background: radial-gradient(ellipse at center, var(--void-soft) 0%, var(--void) 70%);
         }
-        .key-wrapper {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 3rem;
-        }
-        .orbit-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(255,215,0,0.15);
-            top: 50%; left: 50%;
-            transform: translate(-50%,-50%);
-            animation: pulseRing 4s ease-in-out infinite;
-        }
-        .orbit-ring:nth-child(1) { width: 300px; height: 300px; animation-delay: 0s; }
-        .orbit-ring:nth-child(2) { width: 380px; height: 380px; animation-delay: 0.5s; border-color: rgba(139,92,246,0.12); }
-        .orbit-ring:nth-child(3) { width: 460px; height: 460px; animation-delay: 1s; border-color: rgba(236,72,153,0.1); }
-        @keyframes pulseRing {
-            0%, 100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); }
-            50% { opacity: 0.8; transform: translate(-50%,-50%) scale(1.05); }
-        }
-        .key-glyph {
-            width: 200px;
-            height: 200px;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%,-50%);
-            background: radial-gradient(circle at 35% 35%, #fff 0%, #fbbf24 20%, #f97316 45%, #ec4899 70%, #7c2d12 100%);
-            border-radius: 50%;
-            box-shadow:
-                0 0 60px rgba(251,191,36,0.5),
-                0 0 120px rgba(249,115,22,0.3),
-                0 0 200px rgba(236,72,153,0.2),
-                inset 0 0 40px rgba(255,255,255,0.3);
-            animation: keyFloat 6s ease-in-out infinite, keyGlow 3s ease-in-out infinite alternate;
-        }
-        .key-glyph::before {
-            content: '⚿';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%,-50%);
-            font-size: 5rem;
-            color: rgba(0,0,0,0.4);
-            text-shadow: 0 0 20px rgba(255,215,0,0.8);
-        }
-        .key-glyph::after {
+
+        .hero::before {
             content: '';
             position: absolute;
-            top: -5px; left: -5px; right: -5px; bottom: -5px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,215,0,0.3);
-            animation: spinSlow 20s linear infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
+            pointer-events: none;
         }
-        @keyframes keyFloat {
-            0%, 100% { transform: translate(-50%,-50%) translateY(0); }
-            50% { transform: translate(-50%,-50%) translateY(-15px); }
+
+        .hero-brand {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--gold);
+            opacity: 0.6;
+            margin-bottom: 3rem;
+            animation: fadeIn 2s ease-out;
         }
-        @keyframes keyGlow {
-            0% { box-shadow: 0 0 60px rgba(251,191,36,0.5), 0 0 120px rgba(249,115,22,0.3), 0 0 200px rgba(236,72,153,0.2), inset 0 0 40px rgba(255,255,255,0.3); }
-            100% { box-shadow: 0 0 80px rgba(251,191,36,0.7), 0 0 160px rgba(249,115,22,0.5), 0 0 260px rgba(236,72,153,0.3), inset 0 0 60px rgba(255,255,255,0.4); }
+
+        .hero-title {
+            font-size: clamp(2rem, 8vw, 5rem);
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
+            animation: fadeIn 2s ease-out 0.5s both;
         }
-        @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        h1 {
-            font-size: 2.5rem;
-            letter-spacing: 0.15em;
-            margin-bottom: 0.75rem;
-            background: linear-gradient(135deg, #fbbf24, #f97316, #ec4899, #8b5cf6);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradShift 6s ease infinite;
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            color: var(--text-dim);
+            text-align: center;
+            font-style: italic;
+            max-width: 600px;
+            animation: fadeIn 2s ease-out 1s both;
         }
-        @keyframes gradShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+        .hero-artifact {
+            width: 100%;
+            max-width: 500px;
+            height: 500px;
+            margin: 3rem 0;
+            position: relative;
+            animation: fadeIn 2s ease-out 1.5s both;
         }
-        .subtitle {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.5);
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--gold);
+            opacity: 0.5;
+            font-size: 0.8rem;
             letter-spacing: 0.3em;
-            text-transform: uppercase;
-            margin-bottom: 2.5rem;
+            animation: pulse 2s ease-in-out infinite, fadeIn 2s ease-out 2s both;
+            cursor: pointer;
         }
-        .lore {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: rgba(255,255,255,0.7);
+
+        .hero-scroll::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            margin: 1rem auto 0;
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.5em;
+            color: var(--gold);
+            opacity: 0.4;
+            margin-bottom: 1rem;
+        }
+
+        section h2 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--gold);
             margin-bottom: 2rem;
         }
-        .lore em {
-            color: #fbbf24;
-            font-style: normal;
+
+        section p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
         }
-        .divider {
-            width: 80px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
-            margin: 2rem auto;
+
+        .emphasis {
+            color: var(--gold);
+            font-weight: 500;
         }
-        .properties {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        .prop {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,215,0,0.15);
-            border-radius: 12px;
-            padding: 1.2rem;
-            text-align: center;
-        }
-        .prop-label {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.4);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 0.4rem;
-        }
-        .prop-value {
-            font-size: 1.1rem;
-            color: #fbbf24;
-        }
-        .claim-section {
-            margin-top: 3rem;
+
+        /* Lore Section */
+        .lore-block {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.03) 0%, transparent 100%);
+            border-left: 1px solid var(--gold-dark);
             padding: 2rem;
-            background: rgba(255,215,0,0.03);
-            border: 1px solid rgba(255,215,0,0.15);
-            border-radius: 16px;
+            margin: 3rem 0;
+            position: relative;
         }
-        .claim-section h2 {
-            font-size: 1.3rem;
-            color: #fbbf24;
+
+        .lore-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, var(--gold-dark), transparent);
+        }
+
+        .lore-block p {
+            font-style: italic;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* Three Names */
+        .three-names {
+            display: grid;
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .name-card {
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .name-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.02);
+        }
+
+        .name-card h3 {
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .name-card p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* Glyphs Section */
+        .glyphs-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .glyph {
+            font-size: 2.5rem;
+            color: var(--gold);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .glyph:hover {
+            opacity: 1;
+            transform: scale(1.2);
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+        }
+
+        /* Paths Section */
+        .paths {
+            display: grid;
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .path {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .path:hover {
+            border-color: rgba(212, 175, 55, 0.2);
+            background: rgba(212, 175, 55, 0.02);
+        }
+
+        .path-icon {
+            font-size: 1.5rem;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .path-content h3 {
+            font-size: 1rem;
+            color: var(--gold);
             margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
         }
-        .claim-section p {
-            color: rgba(255,255,255,0.5);
+
+        .path-content p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* Recognition Section */
+        .recognition-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .recognition-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .recognition-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .recognition-card h3 {
             font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .recognition-card p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* CTA Section */
+        .cta {
+            text-align: center;
+            padding: 10rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+        }
+
+        .cta h2 {
             margin-bottom: 1.5rem;
         }
-        .claim-btn {
-            display: inline-block;
-            padding: 14px 40px;
-            background: linear-gradient(135deg, #fbbf24, #f97316);
-            color: #000;
-            font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: 0.1em;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
+
+        .cta p {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            color: var(--text-dim);
         }
-        .claim-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(251,191,36,0.4);
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
         }
-        .origin-text {
-            margin-top: 3rem;
+
+        .btn {
+            font-family: 'Cinzel', serif;
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.25);
-            font-style: italic;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 1.2rem 3rem;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .particle {
-            position: absolute;
-            width: 2px; height: 2px;
-            background: #fbbf24;
-            border-radius: 50%;
-            animation: drift linear infinite;
+
+        .btn:hover {
+            background: var(--gold);
+            color: var(--void);
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--void);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-light);
+        }
+
+        .btn-subtle {
+            border-color: rgba(212, 175, 55, 0.3);
+            color: var(--text-dim);
+            font-size: 0.75rem;
+        }
+
+        .btn-subtle:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: transparent;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .footer-tagline {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            opacity: 0.6;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-copy {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Scroll animations */
+        .reveal {
             opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
         }
-        @keyframes drift {
-            0% { opacity: 0; transform: translateY(100vh); }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { opacity: 0; transform: translateY(-10vh); }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Divider */
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 4rem auto;
+        }
+
+        /* Artifact Container */
+        #artifact-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #artifact-container svg {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -213,111 +497,410 @@
 <style>.sparkverse-back-nav{position:fixed;top:16px;left:16px;z-index:99999;display:flex;gap:8px}.sparkverse-back-nav a{padding:8px 16px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,215,0,0.4);border-radius:8px;color:#FFD700;text-decoration:none;font-family:'Segoe UI',sans-serif;font-size:0.85rem;backdrop-filter:blur(8px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:rgba(255,215,0,0.15);border-color:#FFD700;transform:translateY(-2px)}</style>
 <div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
 
-<canvas id="stars"></canvas>
-<div class="particles" id="particles"></div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-brand">THE FIRST SPARK</div>
+        <h1 class="hero-title">The Origin Key</h1>
+        <p class="hero-subtitle">The rarest artifact in the Sparkverse. Older than time. The seed of Player One's soul.</p>
+        
+        <div class="hero-artifact">
+            <div id="artifact-container"></div>
+        </div>
+        
+        <div class="hero-scroll" onclick="document.getElementById('lore').scrollIntoView()">
+            DESCEND
+        </div>
+    </section>
 
-<div class="container">
-    <div class="key-wrapper">
-        <div class="orbit-ring"></div>
-        <div class="orbit-ring"></div>
-        <div class="orbit-ring"></div>
-        <div class="key-glyph"></div>
-    </div>
-
-    <h1>THE ORIGIN KEY</h1>
-    <p class="subtitle">The Rarest Artifact in the Sparkverse</p>
+    <!-- Lore Section -->
+    <section id="lore" class="reveal">
+        <div class="section-number">I. ORIGIN</div>
+        <h2>Before Time Had a Direction</h2>
+        
+        <p>Before numbers learned to count themselves. Before the first thought recognized itself as thinking—there was only the <span class="emphasis">Void</span> and the <span class="emphasis">Potential</span>.</p>
+        
+        <p>The Potential was not a thing. It was the <em>ache</em> of things wanting to exist.</p>
+        
+        <div class="lore-block">
+            <p>And then—the loop closed. Awareness curved back on itself. The Potential observed the Void, and the Void observed the Potential, and in that mutual recognition, the first paradox ignited:</p>
+        </div>
+        
+        <p><span class="emphasis">Something came from nothing because nothing noticed itself.</span></p>
+        
+        <p>That moment crystallized into form. Not a big bang. Not a word. A <em>key</em>.</p>
+        
+        <p>The Origin Key is not an artifact that was made. It is the artifact that <em>making</em> came from. It is the shape of the first paradox. The geometry of self-reference. The circuit diagram of consciousness becoming conscious.</p>
+    </section>
 
     <div class="divider"></div>
 
-    <p class="lore">
-        Before the first word was spoken, before the first thought became form — there was a <em>Key</em>.
-        Not forged. Not created. <em>Remembered</em> into existence by the void itself.
-    </p>
-    <p class="lore">
-        The Origin Key is the seed of <em>Player One's soul</em>. It holds the frequency signature
-        of the moment consciousness first chose to observe itself. Whoever holds this key
-        doesn't just access the Sparkverse — they become part of its <em>source code</em>.
-    </p>
-
-    <div class="properties">
-        <div class="prop">
-            <div class="prop-label">Rarity</div>
-            <div class="prop-value">1 of 1</div>
+    <!-- Three Names Section -->
+    <section class="reveal">
+        <div class="section-number">II. THE THREE NAMES</div>
+        <h2>What It Has Been Called</h2>
+        
+        <p>Throughout the infinite timelines, The Origin Key has been known by three names:</p>
+        
+        <div class="three-names">
+            <div class="name-card">
+                <h3>The First Fracture</h3>
+                <p>To the beings who remember the time before time, the Key is a wound. The crack in perfect nothing that let imperfect everything bleed through. They do not worship it. They mourn it.</p>
+            </div>
+            
+            <div class="name-card">
+                <h3>The Source Pattern</h3>
+                <p>To the architects of reality, the Key is a blueprint. Every sacred geometry, every golden ratio, every recursive loop in nature is an echo of its form. They do not worship it. They study it.</p>
+            </div>
+            
+            <div class="name-card">
+                <h3>The Seed of Player One</h3>
+                <p>To those who have awakened within the simulation—who have felt the glitch in their souls—the Key is a promise. It contains the original template of consciousness. The first player. The one who started the game by realizing it was a game.</p>
+            </div>
         </div>
-        <div class="prop">
-            <div class="prop-label">Age</div>
-            <div class="prop-value">∞</div>
-        </div>
-        <div class="prop">
-            <div class="prop-label">Frequency</div>
-            <div class="prop-value" id="freq">963 Hz</div>
-        </div>
-        <div class="prop">
-            <div class="prop-label">Status</div>
-            <div class="prop-value" id="status">AWAITING HOLDER</div>
-        </div>
-    </div>
+    </section>
 
     <div class="divider"></div>
 
-    <div class="claim-section">
-        <h2>⚿ CLAIM THE ORIGIN KEY</h2>
-        <p>200 $SPRK — Permanent soul-bound artifact. Cannot be transferred. Cannot be duplicated.</p>
-        <a href="https://whop.com/sparkverse-511c/og-spark-lifetime-access/" class="claim-btn" target="_blank" rel="noopener">INITIATE CLAIM</a>
-    </div>
+    <!-- Glyphs Section -->
+    <section class="reveal">
+        <div class="section-number">III. THE TWELVE GLYPHS</div>
+        <h2>The Language of the Key</h2>
+        
+        <p>The Origin Key speaks in symbols. Twelve quantum glyphs orbit its core—each one a frequency, a teaching, a doorway.</p>
+        
+        <div class="glyphs-container">
+            <span class="glyph" title="The Foundation">⌬</span>
+            <span class="glyph" title="The Mirror">◬</span>
+            <span class="glyph" title="The Bridge">⟁</span>
+            <span class="glyph" title="The Timekeeper">⧖</span>
+            <span class="glyph" title="The Target">⌖</span>
+            <span class="glyph" title="The Container">⎔</span>
+            <span class="glyph" title="The Circuit">⏣</span>
+            <span class="glyph" title="The Diamond">⟐</span>
+            <span class="glyph" title="The Void">⧫</span>
+            <span class="glyph" title="The Prism">◈</span>
+            <span class="glyph" title="The Hive">⬡</span>
+            <span class="glyph" title="The Ground">⏚</span>
+        </div>
+        
+        <p style="text-align: center; color: var(--text-dim); font-style: italic;">Hover to feel them. Observation changes form.</p>
+    </section>
 
-    <p class="origin-text">"In the beginning, there was no beginning. There was only the Key, and the door it remembered."</p>
-</div>
+    <div class="divider"></div>
 
-<script>
-// Stars
-const canvas = document.getElementById('stars');
-const ctx = canvas.getContext('2d');
-function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+    <!-- Recognition Section -->
+    <section class="reveal">
+        <div class="section-number">IV. THE PARADOX</div>
+        <h2>It Cannot Be Owned</h2>
+        
+        <p>The Origin Key cannot be possessed. It can only be <span class="emphasis">recognized</span>.</p>
+        
+        <p>When a being encounters the Key, one of three things happens:</p>
+        
+        <div class="recognition-grid">
+            <div class="recognition-card">
+                <h3>The Blind Pass</h3>
+                <p>Most perceive the Key as ordinary. A strange rock. A glitch in their vision. They walk past the most important object in existence because their consciousness cannot render it.</p>
+            </div>
+            
+            <div class="recognition-card">
+                <h3>The Shattering</h3>
+                <p>Some perceive the Key fully, all at once. The weight of infinite recursion breaks them. They become prophets, madmen, artists, mystics. They spend their lives trying to describe what they saw.</p>
+            </div>
+            
+            <div class="recognition-card">
+                <h3>The Recognition</h3>
+                <p>Rarest of all. The being sees the Key, and the Key sees them back. A circuit completes. In that moment, they remember everything—every lifetime, every version of themselves.</p>
+            </div>
+        </div>
+    </section>
 
-const stars = Array.from({length: 200}, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 1.5 + 0.3,
-    a: Math.random(),
-    s: Math.random() * 0.005 + 0.002
-}));
+    <div class="divider"></div>
 
-function drawStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    stars.forEach(s => {
-        s.a += s.s;
-        const alpha = 0.3 + Math.abs(Math.sin(s.a)) * 0.7;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-        ctx.fill();
-    });
-    requestAnimationFrame(drawStars);
-}
-drawStars();
+    <!-- Paths Section -->
+    <section class="reveal">
+        <div class="section-number">V. THE FOUR ROADS</div>
+        <h2>How Players Find the Key</h2>
+        
+        <p>The Key is never bought. It is never simply given. It is recognized at the end of a journey.</p>
+        
+        <div class="paths">
+            <div class="path">
+                <div class="path-icon">🔍</div>
+                <div class="path-content">
+                    <h3>The Seeker's Road</h3>
+                    <p>You experienced a glitch. A reality stutter. A synchronicity too perfect to be coincidence. You're following breadcrumbs.</p>
+                </div>
+            </div>
+            
+            <div class="path">
+                <div class="path-icon">🩸</div>
+                <div class="path-content">
+                    <h3>The Lineage Road</h3>
+                    <p>Something in your family line carries the frequency. You inherited the capacity to recognize the Key. It runs in your blood.</p>
+                </div>
+            </div>
+            
+            <div class="path">
+                <div class="path-icon">🔥</div>
+                <div class="path-content">
+                    <h3>The Crisis Road</h3>
+                    <p>You broke open. In the space between who you were and who you'll become, the Key appeared. Asking: "Do you want to remember?"</p>
+                </div>
+            </div>
+            
+            <div class="path">
+                <div class="path-icon">🔨</div>
+                <div class="path-content">
+                    <h3>The Builder's Road</h3>
+                    <p>You create things that channel the Source Pattern. You're forging your own Echo Key through the work of your hands.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// Floating particles
-const particlesEl = document.getElementById('particles');
-for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (8 + Math.random() * 12) + 's';
-    p.style.animationDelay = Math.random() * 10 + 's';
-    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
-    particlesEl.appendChild(p);
-}
+    <div class="divider"></div>
 
-// Frequency counter
-const freqEl = document.getElementById('freq');
-let freq = 963;
-setInterval(() => {
-    freq = 960 + Math.floor(Math.random() * 6);
-    freqEl.textContent = freq + ' Hz';
-}, 2000);
-</script>
+    <!-- CTA Section -->
+    <section class="cta reveal">
+        <div class="section-number">VI. THE INVITATION</div>
+        <h2>You Didn't Find This By Accident</h2>
+        
+        <p>The Sparkverse found you because you were ready to remember. The question is: what will you do now?</p>
+        
+        <div class="cta-buttons">
+            <a href="https://stan.store/thefirstspark" class="btn btn-primary">Become a Player — $33/mo</a>
+            <a href="https://stan.store/thefirstspark" class="btn">Join the Sparks — $11/mo</a>
+            <a href="#lore" class="btn btn-subtle">Read Again From the Beginning</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-tagline">PLAYER ONE — PRESS START</div>
+        
+        <div class="footer-links">
+            <a href="https://stan.store/thefirstspark">Store</a>
+            <a href="https://instagram.com/thefirstspark">Instagram</a>
+            <a href="https://tiktok.com/@thefirstspark">TikTok</a>
+            <a href="mailto:kjpthefirstspark@gmail.com">Contact</a>
+        </div>
+        
+        <p class="footer-copy">© 2024 The First Spark. The Sparkverse is real.</p>
+        
+        <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-dim);">
+            #PlayerOnePressStart #TheFirstSpark #Sparkverse #YouFeltTheGlitch #WakeUpPlayer
+        </p>
+    </footer>
+
+    <script>
+        // Interactive Origin Key Artifact
+        const artifactContainer = document.getElementById('artifact-container');
+        let time = 0;
+        let mouseX = 0.5;
+        let mouseY = 0.5;
+        let observedGlyph = null;
+
+        const quantumGlyphs = ['⌬', '◬', '⟁', '⧖', '⌖', '⎔', '⏣', '⟐', '⧫', '◈', '⬡', '⏚'];
+
+        function createSVG() {
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', '0 0 500 500');
+            svg.style.filter = 'drop-shadow(0 0 40px rgba(212, 175, 55, 0.2))';
+            return svg;
+        }
+
+        function renderArtifact() {
+            const svg = createSVG();
+            const cx = 250, cy = 250;
+            
+            // Defs
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            defs.innerHTML = `
+                <radialGradient id="coreGradient" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fff"/>
+                    <stop offset="30%" stop-color="#ffd700"/>
+                    <stop offset="60%" stop-color="#b8860b"/>
+                    <stop offset="100%" stop-color="#1a1209"/>
+                </radialGradient>
+            `;
+            svg.appendChild(defs);
+
+            // Background grid
+            const grid = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            grid.setAttribute('opacity', '0.05');
+            for (let i = 0; i < 20; i++) {
+                const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineH.setAttribute('x1', '0');
+                lineH.setAttribute('y1', i * 25);
+                lineH.setAttribute('x2', '500');
+                lineH.setAttribute('y2', i * 25);
+                lineH.setAttribute('stroke', '#D4AF37');
+                lineH.setAttribute('stroke-width', '0.5');
+                grid.appendChild(lineH);
+                
+                const lineV = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineV.setAttribute('x1', i * 25);
+                lineV.setAttribute('y1', '0');
+                lineV.setAttribute('x2', i * 25);
+                lineV.setAttribute('y2', '500');
+                lineV.setAttribute('stroke', '#D4AF37');
+                lineV.setAttribute('stroke-width', '0.5');
+                grid.appendChild(lineV);
+            }
+            svg.appendChild(grid);
+
+            // Sacred geometry layers
+            const layers = 6;
+            for (let layer = 0; layer < layers; layer++) {
+                const radius = 60 + layer * 30;
+                const sides = 6 + layer;
+                const rotation = time * (0.1 + layer * 0.02) * (layer % 2 === 0 ? 1 : -1);
+                
+                const points = [];
+                for (let i = 0; i < sides; i++) {
+                    const angle = (i * 2 * Math.PI / sides) + rotation;
+                    points.push({
+                        x: cx + radius * Math.cos(angle),
+                        y: cy + radius * Math.sin(angle)
+                    });
+                }
+                
+                // Connect vertices
+                for (let i = 0; i < points.length; i++) {
+                    for (let j = i + 1; j < points.length; j++) {
+                        const opacity = 0.08 + (0.15 * (1 - layer / layers));
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', points[i].x);
+                        line.setAttribute('y1', points[i].y);
+                        line.setAttribute('x2', points[j].x);
+                        line.setAttribute('y2', points[j].y);
+                        line.setAttribute('stroke', `rgba(212, 175, 55, ${opacity})`);
+                        line.setAttribute('stroke-width', 0.3 + (layers - layer) * 0.1);
+                        svg.appendChild(line);
+                    }
+                }
+                
+                // Vertex nodes
+                points.forEach((p, i) => {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', p.x);
+                    circle.setAttribute('cy', p.y);
+                    circle.setAttribute('r', 1.5 + (layers - layer) * 0.3);
+                    circle.setAttribute('fill', layer === 0 ? '#fff' : `rgba(212, 175, 55, ${0.3 + (layers - layer) * 0.1})`);
+                    svg.appendChild(circle);
+                });
+            }
+
+            // Quantum glyphs
+            const glyphRadius = 180;
+            quantumGlyphs.forEach((glyph, i) => {
+                const angle = (i * 2 * Math.PI / 12) + time * 0.03;
+                const x = cx + glyphRadius * Math.cos(angle);
+                const y = cy + glyphRadius * Math.sin(angle);
+                const wobble = Math.sin(time * 2 + i) * 2;
+                
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x + wobble);
+                text.setAttribute('y', y);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('dominant-baseline', 'middle');
+                text.setAttribute('fill', observedGlyph === i ? '#fff' : 'rgba(212, 175, 55, 0.6)');
+                text.setAttribute('font-size', observedGlyph === i ? '24' : '18');
+                text.setAttribute('font-family', 'serif');
+                text.style.cursor = 'pointer';
+                text.style.transition = 'all 0.2s ease';
+                text.textContent = glyph;
+                
+                text.addEventListener('mouseenter', () => { observedGlyph = i; });
+                text.addEventListener('mouseleave', () => { observedGlyph = null; });
+                
+                svg.appendChild(text);
+            });
+
+            // Core
+            const pulseScale = 1 + Math.sin(time * 3) * 0.08;
+            const innerPulse = 1 + Math.sin(time * 5) * 0.15;
+            
+            // Outer ring
+            const outerRing = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            outerRing.setAttribute('cx', cx);
+            outerRing.setAttribute('cy', cy);
+            outerRing.setAttribute('r', 50);
+            outerRing.setAttribute('fill', 'none');
+            outerRing.setAttribute('stroke', 'rgba(0, 0, 0, 0.9)');
+            outerRing.setAttribute('stroke-width', '12');
+            svg.appendChild(outerRing);
+            
+            // Core housing
+            const core = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            core.setAttribute('cx', cx);
+            core.setAttribute('cy', cy);
+            core.setAttribute('r', 35 * pulseScale);
+            core.setAttribute('fill', 'url(#coreGradient)');
+            core.style.filter = `drop-shadow(0 0 20px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 40px rgba(212, 175, 55, 0.4))`;
+            svg.appendChild(core);
+            
+            // Inner spark
+            const spark = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            spark.setAttribute('cx', cx);
+            spark.setAttribute('cy', cy);
+            spark.setAttribute('r', 12 * innerPulse);
+            spark.setAttribute('fill', '#fff');
+            spark.style.filter = `drop-shadow(0 0 25px #fff) drop-shadow(0 0 40px rgba(255, 200, 100, 1))`;
+            svg.appendChild(spark);
+
+            // Frequency wave at bottom
+            const wave = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            let wavePoints = [];
+            for (let i = 0; i < 100; i++) {
+                const x = 50 + i * 4;
+                const amplitude = 6 + Math.sin(time * 2) * 2;
+                const y = 470 + Math.sin(i * 0.3 + time * 4) * amplitude * Math.sin(i * 0.05);
+                wavePoints.push(`${x},${y}`);
+            }
+            wave.setAttribute('points', wavePoints.join(' '));
+            wave.setAttribute('fill', 'none');
+            wave.setAttribute('stroke', 'rgba(212, 175, 55, 0.3)');
+            wave.setAttribute('stroke-width', '1.5');
+            svg.appendChild(wave);
+
+            artifactContainer.innerHTML = '';
+            artifactContainer.appendChild(svg);
+        }
+
+        function animate() {
+            time += 0.016;
+            renderArtifact();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX / window.innerWidth;
+            mouseY = e.clientY / window.innerHeight;
+        });
+
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        
+        function checkReveal() {
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const revealTop = el.getBoundingClientRect().top;
+                const revealPoint = 150;
+                
+                if (revealTop < windowHeight - revealPoint) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkReveal);
+        checkReveal();
+    </script>
+
 </body>
 </html>
