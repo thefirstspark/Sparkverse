@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Origin Key — The First Spark</title>
+    <meta name="description" content="The rarest artifact in the Sparkverse. Older than time. The seed of Player One's soul.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        canvas#stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            max-width: 700px;
+        }
+        .key-wrapper {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 3rem;
+        }
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,215,0,0.15);
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            animation: pulseRing 4s ease-in-out infinite;
+        }
+        .orbit-ring:nth-child(1) { width: 300px; height: 300px; animation-delay: 0s; }
+        .orbit-ring:nth-child(2) { width: 380px; height: 380px; animation-delay: 0.5s; border-color: rgba(139,92,246,0.12); }
+        .orbit-ring:nth-child(3) { width: 460px; height: 460px; animation-delay: 1s; border-color: rgba(236,72,153,0.1); }
+        @keyframes pulseRing {
+            0%, 100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%,-50%) scale(1.05); }
+        }
+        .key-glyph {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            background: radial-gradient(circle at 35% 35%, #fff 0%, #fbbf24 20%, #f97316 45%, #ec4899 70%, #7c2d12 100%);
+            border-radius: 50%;
+            box-shadow:
+                0 0 60px rgba(251,191,36,0.5),
+                0 0 120px rgba(249,115,22,0.3),
+                0 0 200px rgba(236,72,153,0.2),
+                inset 0 0 40px rgba(255,255,255,0.3);
+            animation: keyFloat 6s ease-in-out infinite, keyGlow 3s ease-in-out infinite alternate;
+        }
+        .key-glyph::before {
+            content: '⚿';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 5rem;
+            color: rgba(0,0,0,0.4);
+            text-shadow: 0 0 20px rgba(255,215,0,0.8);
+        }
+        .key-glyph::after {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,215,0,0.3);
+            animation: spinSlow 20s linear infinite;
+        }
+        @keyframes keyFloat {
+            0%, 100% { transform: translate(-50%,-50%) translateY(0); }
+            50% { transform: translate(-50%,-50%) translateY(-15px); }
+        }
+        @keyframes keyGlow {
+            0% { box-shadow: 0 0 60px rgba(251,191,36,0.5), 0 0 120px rgba(249,115,22,0.3), 0 0 200px rgba(236,72,153,0.2), inset 0 0 40px rgba(255,255,255,0.3); }
+            100% { box-shadow: 0 0 80px rgba(251,191,36,0.7), 0 0 160px rgba(249,115,22,0.5), 0 0 260px rgba(236,72,153,0.3), inset 0 0 60px rgba(255,255,255,0.4); }
+        }
+        @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        h1 {
+            font-size: 2.5rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, #fbbf24, #f97316, #ec4899, #8b5cf6);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradShift 6s ease infinite;
+        }
+        @keyframes gradShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+        }
+        .lore {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+        }
+        .lore em {
+            color: #fbbf24;
+            font-style: normal;
+        }
+        .divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+            margin: 2rem auto;
+        }
+        .properties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .prop {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,215,0,0.15);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .prop-label {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+        .prop-value {
+            font-size: 1.1rem;
+            color: #fbbf24;
+        }
+        .claim-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255,215,0,0.03);
+            border: 1px solid rgba(255,215,0,0.15);
+            border-radius: 16px;
+        }
+        .claim-section h2 {
+            font-size: 1.3rem;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+        .claim-section p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        .claim-btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #fbbf24, #f97316);
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .claim-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(251,191,36,0.4);
+        }
+        .origin-text {
+            margin-top: 3rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.25);
+            font-style: italic;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fbbf24;
+            border-radius: 50%;
+            animation: drift linear infinite;
+            opacity: 0;
+        }
+        @keyframes drift {
+            0% { opacity: 0; transform: translateY(100vh); }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-10vh); }
+        }
+    </style>
+</head>
+<body>
+<style>.sparkverse-back-nav{position:fixed;top:16px;left:16px;z-index:99999;display:flex;gap:8px}.sparkverse-back-nav a{padding:8px 16px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,215,0,0.4);border-radius:8px;color:#FFD700;text-decoration:none;font-family:'Segoe UI',sans-serif;font-size:0.85rem;backdrop-filter:blur(8px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:rgba(255,215,0,0.15);border-color:#FFD700;transform:translateY(-2px)}</style>
+<div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+
+<canvas id="stars"></canvas>
+<div class="particles" id="particles"></div>
+
+<div class="container">
+    <div class="key-wrapper">
+        <div class="orbit-ring"></div>
+        <div class="orbit-ring"></div>
+        <div class="orbit-ring"></div>
+        <div class="key-glyph"></div>
+    </div>
+
+    <h1>THE ORIGIN KEY</h1>
+    <p class="subtitle">The Rarest Artifact in the Sparkverse</p>
+
+    <div class="divider"></div>
+
+    <p class="lore">
+        Before the first word was spoken, before the first thought became form — there was a <em>Key</em>.
+        Not forged. Not created. <em>Remembered</em> into existence by the void itself.
+    </p>
+    <p class="lore">
+        The Origin Key is the seed of <em>Player One's soul</em>. It holds the frequency signature
+        of the moment consciousness first chose to observe itself. Whoever holds this key
+        doesn't just access the Sparkverse — they become part of its <em>source code</em>.
+    </p>
+
+    <div class="properties">
+        <div class="prop">
+            <div class="prop-label">Rarity</div>
+            <div class="prop-value">1 of 1</div>
+        </div>
+        <div class="prop">
+            <div class="prop-label">Age</div>
+            <div class="prop-value">∞</div>
+        </div>
+        <div class="prop">
+            <div class="prop-label">Frequency</div>
+            <div class="prop-value" id="freq">963 Hz</div>
+        </div>
+        <div class="prop">
+            <div class="prop-label">Status</div>
+            <div class="prop-value" id="status">AWAITING HOLDER</div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="claim-section">
+        <h2>⚿ CLAIM THE ORIGIN KEY</h2>
+        <p>200 $SPRK — Permanent soul-bound artifact. Cannot be transferred. Cannot be duplicated.</p>
+        <a href="https://whop.com/sparkverse-511c/og-spark-lifetime-access/" class="claim-btn" target="_blank" rel="noopener">INITIATE CLAIM</a>
+    </div>
+
+    <p class="origin-text">"In the beginning, there was no beginning. There was only the Key, and the door it remembered."</p>
+</div>
+
+<script>
+// Stars
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const stars = Array.from({length: 200}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5 + 0.3,
+    a: Math.random(),
+    s: Math.random() * 0.005 + 0.002
+}));
+
+function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+        s.a += s.s;
+        const alpha = 0.3 + Math.abs(Math.sin(s.a)) * 0.7;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+}
+drawStars();
+
+// Floating particles
+const particlesEl = document.getElementById('particles');
+for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+    particlesEl.appendChild(p);
+}
+
+// Frequency counter
+const freqEl = document.getElementById('freq');
+let freq = 963;
+setInterval(() => {
+    freq = 960 + Math.floor(Math.random() * 6);
+    freqEl.textContent = freq + ' Hz';
+}, 2000);
+</script>
+</body>
+</html>
