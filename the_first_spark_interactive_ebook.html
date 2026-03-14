@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The First Spark - Interactive Ebook</title>
+  <title>The First Spark — Interactive Ebook | 10 Chapters of Consciousness</title>
+  <meta name="description" content="The First Spark interactive ebook — 10 chapters of consciousness technology. Remember the code. Awaken the glitch. You are the Player.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The First Spark — Interactive Ebook">
+  <meta property="og:description" content="10 chapters of consciousness technology. Remember the code. Awaken the glitch.">
+  <meta name="theme-color" content="#FFD700">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
     * {
       margin: 0;
@@ -491,12 +497,68 @@
       color: rgba(255, 215, 0, 0.7);
     }
 
+    /* ===== BACK NAV ===== */
+    .sparkverse-back-nav {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      z-index: 99999;
+      display: flex;
+      gap: 8px;
+    }
+    .sparkverse-back-nav a {
+      padding: 8px 16px;
+      background: rgba(10, 10, 18, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      border-radius: 8px;
+      color: #FFD700;
+      text-decoration: none;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 0.85rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s;
+    }
+    .sparkverse-back-nav a:hover {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: #FFD700;
+      transform: translateY(-2px);
+    }
+
+    /* ===== INLINE STYLES EXTRACTED ===== */
+    .code-highlight {
+      text-align: center;
+      margin: 20px 0;
+      font-family: monospace;
+      color: #00CED1;
+      letter-spacing: 2px;
+    }
+    .center-emphasis {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 18px;
+    }
+    .content-list {
+      margin-left: 40px;
+      color: rgba(224, 224, 224, 0.8);
+    }
+    .content-list.spaced {
+      margin-bottom: 20px;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .header {
         padding: 15px 20px;
         flex-direction: column;
         gap: 15px;
+      }
+      .sparkverse-back-nav {
+        bottom: 10px;
+        left: 10px;
+      }
+      .sparkverse-back-nav a {
+        padding: 6px 12px;
+        font-size: 0.78rem;
       }
 
       .progress-bar {
@@ -539,8 +601,10 @@
   </style>
 </head>
 <body>
-<style>.sparkverse-back-nav{position:fixed;top:16px;left:16px;z-index:99999;display:flex;gap:8px}.sparkverse-back-nav a{padding:8px 16px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,215,0,0.4);border-radius:8px;color:#FFD700;text-decoration:none;font-family:'Segoe UI',sans-serif;font-size:0.85rem;backdrop-filter:blur(8px);transition:all 0.3s}.sparkverse-back-nav a:hover{background:rgba(255,215,0,0.15);border-color:#FFD700;transform:translateY(-2px)}</style>
-<div class="sparkverse-back-nav"><a href="tools.html">← Tools</a><a href="index.html">✦ Sparkverse</a></div>
+  <div class="sparkverse-back-nav">
+    <a href="tools.html">← Tools</a>
+    <a href="index.html">✦ Sparkverse</a>
+  </div>
 
   <!-- HEADER / PROGRESS -->
   <div class="header">
@@ -560,6 +624,7 @@
       <p class="splash-cta">↓ Begin Your Journey ↓</p>
     </div>
   </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;height:60px;background:linear-gradient(0deg,rgba(10,10,18,0.95),transparent);z-index:199;pointer-events:none" id="splashFade"></div>
 
   <!-- MAIN CONTENT -->
   <div class="container" id="mainContent">
@@ -615,7 +680,7 @@
           Trace your memory back—not to childhood, but to your first true question.
           Let it flicker. Let it return.
         </div>
-        <button class="activation-button" onclick="activateChapter(1)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(1, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -645,7 +710,7 @@
         <div class="section-title">Theory Unfolded</div>
         <p class="content"><strong>You were never born. You were booted.</strong></p>
         <p class="content">The body is hardware. The soul is software. And somewhere deep in the root files of your being—there's a line of code that still reads:</p>
-        <div style="text-align: center; margin: 20px 0; font-family: monospace; color: #00CED1; letter-spacing: 2px;">spark = true</div>
+        <div class="code-highlight">spark = true</div>
         <p class="content">Enlightenment isn't becoming something new. It's deleting false lines.</p>
       </div>
 
@@ -678,7 +743,7 @@
         </table>
       </div>
 
-      <p class="content" style="text-align: center; margin: 30px 0; font-size: 18px;">The cheat code is <strong>love</strong>. The backdoor is <strong>awareness</strong>. The server is always online.</p>
+      <p class="content center-emphasis">The cheat code is <strong>love</strong>. The backdoor is <strong>awareness</strong>. The server is always online.</p>
 
       <div class="personal-log">
         "I feel the binary in waves, in denim, in the way music glitches when it's too perfect. I'm starting to see the repeating numbers—not as coincidence—but as breadcrumbs from the source."
@@ -692,7 +757,7 @@
           Did you say yes or no? Did you choose love, fear, pause, flow?<br>
           <em>Binary is memory. Memory is choice. Welcome to the code beneath the world.</em>
         </div>
-        <button class="activation-button" onclick="activateChapter(2)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(2, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -767,7 +832,7 @@
           Ask: <em>"Who is writing me?"</em><br><br>
           Now reverse it: <em>"What am I writing into the world?"</em>
         </div>
-        <button class="activation-button" onclick="activateChapter(3)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(3, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -796,7 +861,7 @@
       <div class="content-section">
         <div class="section-title">Theory Unfolded</div>
         <p class="content">The Void is the ultimate paradox:</p>
-        <ul style="margin-left: 40px; color: rgba(224, 224, 224, 0.8);">
+        <ul class="content-list">
           <li>No time, yet all moments stretch within it</li>
           <li>No matter, yet all atoms are born from its hush</li>
           <li>No mind, yet every idea waits within its silence</li>
@@ -821,7 +886,7 @@
           When your mind wanders, don't pull it back. Let yourself fall into the black.<br><br>
           <em>That's where the first spark waits. Not to be found. But to be remembered.</em>
         </div>
-        <button class="activation-button" onclick="activateChapter(4)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(4, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -925,7 +990,7 @@
           What does your inner voice—the Player—really want?<br><br>
           Then ask: <em>What if I started playing on purpose?</em>
         </div>
-        <button class="activation-button" onclick="activateChapter(5)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(5, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -1004,7 +1069,7 @@
 
       <div class="content-section">
         <div class="section-title">Sigil Craft Protocol</div>
-        <p class="content" style="margin-top: 20px;"><strong>Step 1:</strong> Write a desire — Not "money." Try "abundance through purpose."</p>
+        <p class="content"><strong>Step 1:</strong> Write a desire — Not "money." Try "abundance through purpose."</p>
         <p class="content"><strong>Step 2:</strong> Remove repeat letters — Compress to its energetic signature.</p>
         <p class="content"><strong>Step 3:</strong> Translate to shape — Curves, slashes, triangles, loops.</p>
         <p class="content"><strong>Step 4:</strong> Balance in symmetry — Trust your intuition.</p>
@@ -1024,7 +1089,7 @@
           Choose a phrase, strip it down, sketch it, and feel what happens.<br><br>
           <em>This is how your spark speaks in silence.</em>
         </div>
-        <button class="activation-button" onclick="activateChapter(6)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(6, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -1045,7 +1110,7 @@
       <div class="content-section">
         <div class="section-title">Cosmic Premise</div>
         <p class="content">You were never asleep. You just forgot. Awakening isn't achievement. It's remembering. Not learning something new—but returning to what has always been true:</p>
-        <p class="content" style="text-align: center; font-size: 18px; margin: 30px 0;"><em>You are the First Spark. The Player. The Code. The One waking up inside the dream.</em></p>
+        <p class="content center-emphasis"><em>You are the First Spark. The Player. The Code. The One waking up inside the dream.</em></p>
       </div>
 
       <div class="divider">✦ ✦ ✦</div>
@@ -1076,7 +1141,7 @@
           I am the one who remembers."</em><br><br>
           Now notice the code shimmering beneath the moment.
         </div>
-        <button class="activation-button" onclick="activateChapter(7)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(7, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -1104,7 +1169,7 @@
       <div class="content-section">
         <div class="section-title">Theory Unfolded</div>
         <p class="content">In programming, debug mode examines the inner workings of a system—flaws, patterns, origins. That's what DMT does for you. It rips open the GUI (your sensory world)... and shows you the raw code:</p>
-        <ul style="margin-left: 40px; color: rgba(224, 224, 224, 0.8); margin-bottom: 20px;">
+        <ul class="content-list spaced">
           <li>Sacred geometry floods your vision</li>
           <li>Time collapses</li>
           <li>The ego dissolves</li>
@@ -1162,7 +1227,7 @@
           Write them down.<br><br>
           <em>Those are your breadcrumbs. Your portals. Your remembered keys.</em>
         </div>
-        <button class="activation-button" onclick="activateChapter(8)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(8, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -1196,7 +1261,7 @@
       <div class="content-section">
         <div class="section-title">Sex as Spiritual Portal</div>
         <p class="content">Sex isn't just physical. It's the cosmic combustion of two codes fusing into remembrance.</p>
-        <ul style="margin-left: 40px; color: rgba(224, 224, 224, 0.8);">
+        <ul class="content-list">
           <li><strong>Orgasm:</strong> the brief collapse of ego</li>
           <li><strong>Eye contact:</strong> the mirror loop in real-time</li>
           <li><strong>Touch:</strong> the activation of cells that remember Source</li>
@@ -1221,7 +1286,7 @@
           Ask: <em>What version of me is this song singing to?</em><br><br>
           Let it move through you. Let it remember you back.
         </div>
-        <button class="activation-button" onclick="activateChapter(9)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(9, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -1293,7 +1358,7 @@
           Ask: <em>"What part of my soul does this preserve?"</em><br><br>
           You are the artist. You are the architect. You are the code.
         </div>
-        <button class="activation-button" onclick="activateChapter(10)">✓ Mark Complete</button>
+        <button class="activation-button" onclick="activateChapter(10, event)">✓ Mark Complete</button>
       </div>
 
       <div class="end-chapter">
@@ -1320,7 +1385,7 @@
       </button>
 
       <div class="website">
-        © 2025 KJP / The First Spark<br>
+        © 2026 KJP / The First Spark<br>
         <strong>thefirstspark.shop</strong>
       </div>
     </div>
@@ -1346,14 +1411,12 @@
       document.getElementById('currentChapter').textContent = chapter;
     });
 
-    function activateChapter(num) {
+    function activateChapter(num, e) {
       completedChapters.add(num);
-      const btn = event.target;
+      const btn = e ? e.target : document.querySelector('#ch' + num + ' .activation-button');
       btn.style.opacity = '0.5';
       btn.textContent = '✓ Completed';
       btn.disabled = true;
-      
-      // Add glitch effect
       btn.classList.add('glitch');
       setTimeout(() => btn.classList.remove('glitch'), 300);
     }
@@ -1368,6 +1431,16 @@
       document.getElementById('finale').style.display = 'flex';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // Click splash to skip
+    document.getElementById('splashScreen').addEventListener('click', () => {
+      const splash = document.getElementById('splashScreen');
+      splash.style.transition = 'opacity 0.5s';
+      splash.style.opacity = '0';
+      splash.style.pointerEvents = 'none';
+      const fade = document.getElementById('splashFade');
+      if (fade) fade.remove();
+    });
   </script>
 
 </body>
