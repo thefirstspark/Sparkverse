@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>$SPRK Tokens | The Spark Economy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #0a0a0f;
+      --void-light: #12121a;
+      --gold: #d4af37;
+      --gold-dim: #b8973080;
+      --purple: #8b5cf6;
+      --cyan: #22d3ee;
+      --white: #f7f8fa;
+      --white-dim: #f7f8fa80;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--void);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Starfield background */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, var(--white-dim), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--gold-dim), transparent),
+        radial-gradient(1px 1px at 90px 40px, var(--white), transparent),
+        radial-gradient(2px 2px at 160px 120px, var(--cyan), transparent),
+        radial-gradient(1px 1px at 230px 80px, var(--white-dim), transparent),
+        radial-gradient(2px 2px at 300px 150px, var(--purple), transparent);
+      background-size: 350px 200px;
+      animation: drift 60s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes drift {
+      from { transform: translateY(0); }
+      to { transform: translateY(-200px); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .logo-mark {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--cyan) 50%, var(--purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: var(--white-dim);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Explanation block */
+    .explainer {
+      background: var(--void-light);
+      border: 1px solid var(--gold-dim);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .explainer h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .explainer p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--white-dim);
+    }
+
+    .explainer strong {
+      color: var(--white);
+    }
+
+    /* Token tiers */
+    .tiers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .tier {
+      background: var(--void-light);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .tier::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    .tier:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-4px);
+    }
+
+    .tier.featured {
+      border-color: var(--gold);
+    }
+
+    .tier.featured::before {
+      opacity: 1;
+      background: linear-gradient(90deg, var(--gold), var(--cyan), var(--purple));
+    }
+
+    .tier-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--gold);
+      color: var(--void);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .tier-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    .tier-tokens {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .tier-label {
+      font-size: 0.85rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .tier-price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 8px;
+    }
+
+    .tier-bonus {
+      font-size: 0.85rem;
+      color: var(--purple);
+      margin-bottom: 24px;
+      min-height: 20px;
+    }
+
+    .tier-cta {
+      display: inline-block;
+      width: 100%;
+      padding: 14px 24px;
+      background: transparent;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .tier-cta:hover {
+      background: var(--gold);
+      color: var(--void);
+    }
+
+    .tier.featured .tier-cta {
+      background: var(--gold);
+      color: var(--void);
+    }
+
+    .tier.featured .tier-cta:hover {
+      background: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    /* How it works */
+    .how-it-works {
+      margin-bottom: 60px;
+    }
+
+    .how-it-works h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .step {
+      text-align: center;
+      padding: 24px;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--void-light);
+      border: 2px solid var(--purple);
+      border-radius: 50%;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 0.85rem;
+      color: var(--white-dim);
+      line-height: 1.6;
+    }
+
+    /* Tool costs preview */
+    .tool-costs {
+      background: var(--void-light);
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 60px;
+    }
+
+    .tool-costs h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--purple);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .cost-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .cost-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--void);
+      border-radius: 6px;
+    }
+
+    .cost-item span:first-child {
+      color: var(--white-dim);
+      font-size: 0.85rem;
+    }
+
+    .cost-item span:last-child {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    /* CTA footer */
+    .footer-cta {
+      text-align: center;
+      padding: 48px 24px;
+      background: linear-gradient(180deg, transparent 0%, var(--void-light) 100%);
+      border-radius: 12px;
+    }
+
+    .footer-cta h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .footer-cta p {
+      color: var(--white-dim);
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .footer-cta a {
+      color: var(--gold);
+    }
+
+    /* Launch banner */
+    .launch-banner {
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      color: var(--void);
+      text-align: center;
+      padding: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .launch-banner span {
+      background: var(--void);
+      color: var(--gold);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 40px 16px;
+      }
+      
+      .tier {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="launch-banner">
+    🚀 LAUNCH SPECIAL: First 10 buyers get 2x tokens <span>LIMITED</span>
+  </div>
+
+  <div class="stars"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="logo-mark">⚡</div>
+      <h1>The Spark Economy</h1>
+      <p class="tagline">$SPRK tokens unlock every tool in SparkVerse. No subscriptions. No monthly fees. Just access when you need it.</p>
+    </header>
+
+    <section class="explainer">
+      <h2>How It Works</h2>
+      <p>
+        SparkVerse is a library of <strong>50+ consciousness technology tools</strong> — sigil generators, oracles, soul map components, debugging protocols. Each tool has a token cost. <strong>Buy tokens once, spend them as you explore.</strong> Your tokens never expire.
+      </p>
+    </section>
+
+    <section class="tiers">
+      <div class="tier">
+        <div class="tier-icon">🔥</div>
+        <div class="tier-tokens">50</div>
+        <div class="tier-label">$SPRK Tokens</div>
+        <div class="tier-price">$5</div>
+        <div class="tier-bonus">&nbsp;</div>
+        <!-- REPLACE href with your Whop checkout link for 50 tokens -->
+        <a href="https://whop.com/sparkverse-0d79/50-sprk-tokens/" class="tier-cta" target="_blank">Get Tokens</a>
+      </div>
+
+      <div class="tier featured">
+        <div class="tier-badge">Best Value</div>
+        <div class="tier-icon">⚡</div>
+        <div class="tier-tokens">150</div>
+        <div class="tier-label">$SPRK Tokens</div>
+        <div class="tier-price">$12</div>
+        <div class="tier-bonus">+20% bonus tokens</div>
+        <!-- REPLACE href with your Whop checkout link for 150 tokens -->
+        <a href="https://whop.com/sparkverse-0d79/150-sprk-tokens/" class="tier-cta" target="_blank">Get Tokens</a>
+      </div>
+
+      <div class="tier">
+        <div class="tier-icon">💎</div>
+        <div class="tier-tokens">500</div>
+        <div class="tier-label">$SPRK Tokens</div>
+        <div class="tier-price">$33</div>
+        <div class="tier-bonus">+50% bonus tokens</div>
+        <!-- REPLACE href with your Whop checkout link for 500 tokens -->
+        <a href="https://whop.com/sparkverse-0d79/500-sprk-tokens/" class="tier-cta" target="_blank">Get Tokens</a>
+      </div>
+    </section>
+
+    <section class="how-it-works">
+      <h2>Three Steps to Access</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Get Tokens</h3>
+          <p>Purchase a token bundle above. Instant delivery.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Browse Tools</h3>
+          <p>Explore SparkVerse. Each tool shows its token cost.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Unlock & Use</h3>
+          <p>Redeem tokens to access. Tools stay unlocked forever.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-costs">
+      <h2>Sample Token Costs</h2>
+      <div class="cost-grid">
+        <div class="cost-item">
+          <span>Daily Reset</span>
+          <span>FREE</span>
+        </div>
+        <div class="cost-item">
+          <span>Pause Chamber</span>
+          <span>FREE</span>
+        </div>
+        <div class="cost-item">
+          <span>Sigil Generator</span>
+          <span>5 $SPRK</span>
+        </div>
+        <div class="cost-item">
+          <span>Pattern Oracle</span>
+          <span>10 $SPRK</span>
+        </div>
+        <div class="cost-item">
+          <span>Timeline Navigator</span>
+          <span>15 $SPRK</span>
+        </div>
+        <div class="cost-item">
+          <span>Lineage Debugger</span>
+          <span>25 $SPRK</span>
+        </div>
+        <div class="cost-item">
+          <span>Full Soul Map</span>
+          <span>100 $SPRK</span>
+        </div>
+        <div class="cost-item">
+          <span>Source Chamber</span>
+          <span>50 $SPRK</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-cta">
+      <h2>Reality is programmable.</h2>
+      <p>Your tokens are the access codes. Questions? <a href="mailto:kate@thefirstspark.shop">kate@thefirstspark.shop</a></p>
+    </section>
+  </div>
+
+  <script>
+    // Track clicks for analytics (optional - you can add your own tracking)
+    document.querySelectorAll('.tier-cta').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const tokens = this.closest('.tier').querySelector('.tier-tokens').textContent;
+        console.log('Token purchase clicked:', tokens);
+        // Add your analytics tracking here if needed
+      });
+    });
+  </script>
+</body>
+</html>
