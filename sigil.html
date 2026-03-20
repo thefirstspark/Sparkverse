@@ -228,5 +228,7 @@
         document.getElementById('chargeBtn').addEventListener('click', () => { canvas.style.boxShadow = '0 0 50px rgba(247,37,133,0.8)'; setTimeout(() => canvas.style.boxShadow = 'none', 500); });
         document.getElementById('intentionInput').addEventListener('keypress', e => { if (e.key === 'Enter') generateSigil(); });
     </script>
+<script src="spark-auth.js"></script>
+<script>SparkAuth.applyGate();</script>
 </body>
 </html>

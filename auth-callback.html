@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecting to SparkVerse...</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --void: #050508;
+            --spark-gold: #d4af37;
+            --spark-amber: #e8b878;
+            --nebula-purple: #8b5cf6;
+            --cosmic-cyan: #22d3ee;
+            --dim: rgba(255,255,255,0.4);
+            --ghost-white: rgba(255,255,255,0.9);
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--void);
+            color: var(--ghost-white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Starfield background */
+        .starfield {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            background:
+                radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
+                radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
+                radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 10% 80%, rgba(212,175,55,0.6) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 70% 90%, rgba(139,92,246,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.3) 0%, transparent 100%);
+            animation: twinkle 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .auth-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px;
+            max-width: 480px;
+            width: 90%;
+        }
+
+        /* Spinning spark icon */
+        .spark-icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+            display: inline-block;
+            animation: pulse-spin 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-spin {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 1; }
+            100% { transform: scale(1) rotate(360deg); opacity: 0.8; }
+        }
+
+        .auth-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--spark-gold);
+            margin-bottom: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        .auth-status {
+            font-size: 0.85rem;
+            color: var(--dim);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        /* Loading bar */
+        .loading-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin: 0 auto 24px;
+            overflow: hidden;
+        }
+
+        .loading-bar-inner {
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, var(--spark-gold), var(--cosmic-cyan), var(--nebula-purple));
+            border-radius: 2px;
+            animation: loading-slide 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading-slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(350%); }
+        }
+
+        /* Error state */
+        .auth-error {
+            display: none;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #fca5a5;
+            line-height: 1.5;
+        }
+
+        .auth-error.visible {
+            display: block;
+        }
+
+        .retry-btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 10px 24px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--spark-gold);
+            color: var(--void);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .retry-btn:hover {
+            background: var(--cosmic-cyan);
+        }
+
+        /* Success state */
+        .auth-success {
+            display: none;
+        }
+
+        .auth-success.visible {
+            display: block;
+        }
+
+        .auth-success .check {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .auth-success .msg {
+            color: #86efac;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="starfield"></div>
+
+    <div class="auth-container">
+        <!-- Loading state (shown by default) -->
+        <div id="loading-state">
+            <div class="spark-icon">&#10024;</div>
+            <div class="auth-title">Connecting to SparkVerse...</div>
+            <div class="auth-status" id="status-text">Authenticating with Whop</div>
+            <div class="loading-bar">
+                <div class="loading-bar-inner"></div>
+            </div>
+        </div>
+
+        <!-- Success state (hidden by default) -->
+        <div class="auth-success" id="success-state">
+            <div class="check">&#9989;</div>
+            <div class="auth-title" style="color: #86efac;">Connected!</div>
+            <div class="auth-success msg" id="success-msg">Redirecting you back...</div>
+        </div>
+
+        <!-- Error display -->
+        <div class="auth-error" id="error-display">
+            <strong>Connection Error</strong>
+            <p id="error-text"></p>
+            <a href="/" class="retry-btn">Return Home</a>
+        </div>
+    </div>
+
+    <script>
+    /**
+     * SparkVerse OAuth Callback Handler
+     *
+     * Handles the redirect from Whop OAuth:
+     * 1. Extracts code + state from URL
+     * 2. Verifies state matches sessionStorage
+     * 3. Exchanges code for tokens (PKCE, no client_secret)
+     * 4. Fetches user info
+     * 5. Checks membership access
+     * 6. Stores everything in localStorage
+     * 7. Redirects back to the originating page
+     */
+
+    const CONFIG = {
+        CLIENT_ID: 'app_4AA9dex5xqN39E',
+        COMPANY_ID: 'biz_UFWoRUc3NZyLmq',
+        REDIRECT_URI: 'https://sparkverse.thefirstspark.shop/auth-callback.html',
+        TOKEN_URL: 'https://api.whop.com/oauth/token',
+        USERINFO_URL: 'https://api.whop.com/oauth/userinfo',
+        ACCESS_URL_BASE: 'https://api.whop.com/api/v1/users/'
+    };
+
+    // DOM references
+    const statusText = document.getElementById('status-text');
+    const loadingState = document.getElementById('loading-state');
+    const successState = document.getElementById('success-state');
+    const successMsg = document.getElementById('success-msg');
+    const errorDisplay = document.getElementById('error-display');
+    const errorText = document.getElementById('error-text');
+
+    /**
+     * Update the loading status message
+     */
+    function setStatus(msg) {
+        if (statusText) statusText.textContent = msg;
+    }
+
+    /**
+     * Show an error and hide the loading state
+     */
+    function showError(msg) {
+        loadingState.style.display = 'none';
+        errorDisplay.classList.add('visible');
+        errorText.textContent = msg;
+        console.error('[SparkAuth Callback]', msg);
+    }
+
+    /**
+     * Show the success state
+     */
+    function showSuccess(userName) {
+        loadingState.style.display = 'none';
+        successState.classList.add('visible');
+        successState.style.display = 'block';
+        if (userName) {
+            successMsg.textContent = 'Welcome, ' + userName + '! Redirecting...';
+            successMsg.style.display = 'block';
+        }
+    }
+
+    /**
+     * Main callback handler - runs on page load
+     */
+    async function handleCallback() {
+        try {
+            // Step 1: Extract code and state from URL params
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const state = params.get('state');
+            const error = params.get('error');
+            const errorDescription = params.get('error_description');
+
+            // Handle OAuth error response
+            if (error) {
+                showError('OAuth error: ' + (errorDescription || error));
+                return;
+            }
+
+            if (!code) {
+                showError('No authorization code received. Please try logging in again.');
+                return;
+            }
+
+            if (!state) {
+                showError('No state parameter received. Please try logging in again.');
+                return;
+            }
+
+            // Step 2: Verify state matches what we stored
+            const storedState = sessionStorage.getItem('spark_auth_state');
+            if (!storedState || storedState !== state) {
+                showError('Security check failed: state mismatch. This may indicate a CSRF attack. Please try logging in again.');
+                return;
+            }
+
+            // Get the code_verifier for PKCE
+            const codeVerifier = sessionStorage.getItem('spark_auth_code_verifier');
+            if (!codeVerifier) {
+                showError('PKCE verification data missing. Please try logging in again.');
+                return;
+            }
+
+            // Step 3: Exchange the authorization code for tokens
+            setStatus('Exchanging authorization code...');
+
+            const tokenBody = new URLSearchParams({
+                grant_type: 'authorization_code',
+                code: code,
+                redirect_uri: CONFIG.REDIRECT_URI,
+                client_id: CONFIG.CLIENT_ID,
+                code_verifier: codeVerifier
+            });
+
+            const tokenResponse = await fetch(CONFIG.TOKEN_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: tokenBody.toString()
+            });
+
+            if (!tokenResponse.ok) {
+                const tokenError = await tokenResponse.text();
+                console.error('[SparkAuth] Token exchange failed:', tokenError);
+                showError('Failed to exchange authorization code. The code may have expired. Please try logging in again.');
+                return;
+            }
+
+            const tokenData = await tokenResponse.json();
+            const accessToken = tokenData.access_token;
+            const refreshToken = tokenData.refresh_token;
+
+            if (!accessToken) {
+                showError('No access token received from Whop.');
+                return;
+            }
+
+            // Step 4: Get user info
+            setStatus('Retrieving your profile...');
+
+            const userResponse = await fetch(CONFIG.USERINFO_URL, {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + accessToken }
+            });
+
+            let userName = '';
+            let userEmail = '';
+            let userId = '';
+
+            if (userResponse.ok) {
+                const userData = await userResponse.json();
+                // Whop userinfo response fields
+                userName = userData.name || userData.username || '';
+                userEmail = userData.email || '';
+                userId = userData.sub || userData.id || '';
+            } else {
+                console.warn('[SparkAuth] Could not fetch user info, continuing without it.');
+            }
+
+            // Step 5: Check access to the company/product
+            setStatus('Checking your access...');
+
+            let hasAccess = false;
+
+            if (userId) {
+                try {
+                    const accessResponse = await fetch(
+                        CONFIG.ACCESS_URL_BASE + encodeURIComponent(userId) + '/access/' + CONFIG.COMPANY_ID,
+                        {
+                            method: 'GET',
+                            headers: { 'Authorization': 'Bearer ' + accessToken }
+                        }
+                    );
+
+                    if (accessResponse.ok) {
+                        const accessData = await accessResponse.json();
+                        // If the endpoint returns successfully with valid data, user has access
+                        // The response structure may contain a `has_access` field or just returning 200 means access
+                        hasAccess = accessData.has_access !== undefined ? !!accessData.has_access : true;
+                    } else if (accessResponse.status === 403 || accessResponse.status === 404) {
+                        // User does not have access to this company's products
+                        hasAccess = false;
+                    } else {
+                        console.warn('[SparkAuth] Access check returned status:', accessResponse.status);
+                        hasAccess = false;
+                    }
+                } catch (accessErr) {
+                    console.warn('[SparkAuth] Access check failed:', accessErr);
+                    hasAccess = false;
+                }
+            }
+
+            // Step 6: Store everything in localStorage
+            setStatus('Saving session...');
+
+            localStorage.setItem('spark_auth_access_token', accessToken);
+            if (refreshToken) {
+                localStorage.setItem('spark_auth_refresh_token', refreshToken);
+            }
+            localStorage.setItem('spark_auth_user_name', userName);
+            localStorage.setItem('spark_auth_user_email', userEmail);
+            localStorage.setItem('spark_auth_user_id', userId);
+            localStorage.setItem('spark_auth_has_access', hasAccess ? 'true' : 'false');
+            localStorage.setItem('spark_auth_timestamp', Date.now().toString());
+
+            // Clean up sessionStorage
+            sessionStorage.removeItem('spark_auth_state');
+            sessionStorage.removeItem('spark_auth_code_verifier');
+
+            // Step 7: Show success and redirect
+            showSuccess(userName);
+
+            // Get the return URL (where user was before login)
+            const returnTo = sessionStorage.getItem('spark_auth_return_to') || '/';
+            sessionStorage.removeItem('spark_auth_return_to');
+
+            // Brief delay so user sees the success message
+            setTimeout(function() {
+                window.location.href = returnTo;
+            }, 1500);
+
+        } catch (err) {
+            console.error('[SparkAuth Callback] Unexpected error:', err);
+            showError('An unexpected error occurred: ' + err.message + '. Please try again.');
+        }
+    }
+
+    // Run the callback handler when the page loads
+    handleCallback();
+    </script>
+</body>
+</html>
