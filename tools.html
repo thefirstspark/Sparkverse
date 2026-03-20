@@ -142,6 +142,23 @@
         .nope .g{font-size:3rem;opacity:.25;margin-bottom:.8rem}
         .nope p{color:var(--text-dim);font-size:.88rem}
 
+        /* ── WHOP MEMBERSHIP TIERS ── */
+        .whop-tiers{position:relative;z-index:1;display:flex;gap:.75rem;justify-content:center;
+            flex-wrap:wrap;padding:.75rem 2rem 1.25rem;max-width:900px;margin:0 auto}
+        .wt-card{display:flex;flex-direction:column;align-items:center;gap:3px;
+            padding:12px 20px;border-radius:14px;text-decoration:none;
+            border:1px solid;transition:all .25s ease;text-align:center;min-width:160px}
+        .wt-icon{font-size:1.1rem}
+        .wt-label{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.1em;font-weight:700}
+        .wt-price{font-family:'Space Mono',monospace;font-size:.58rem;opacity:.7}
+        .wt-desc{font-size:.68rem;opacity:.55;line-height:1.4;margin-top:2px;max-width:140px}
+        .wt-free{background:rgba(132,204,22,.06);border-color:rgba(132,204,22,.2);color:#84cc16}
+        .wt-free:hover{background:rgba(132,204,22,.12);border-color:rgba(132,204,22,.45)}
+        .wt-player{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2);color:#3b82f6}
+        .wt-player:hover{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.45)}
+        .wt-og{background:rgba(251,191,36,.07);border-color:rgba(251,191,36,.25);color:var(--gold)}
+        .wt-og:hover{background:rgba(251,191,36,.13);border-color:rgba(251,191,36,.55)}
+
         /* ── RESPONSIVE ── */
         @media(max-width:1200px){.snav{display:none}}
         @media(max-width:768px){
@@ -154,6 +171,8 @@
             .bnav{bottom:.75rem;right:.75rem}
             .bnav a{padding:7px 12px;font-size:.7rem}
             .pills{overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px;-webkit-overflow-scrolling:touch}
+            .whop-tiers{padding:.5rem .75rem .75rem;gap:.5rem}
+            .wt-card{min-width:130px;padding:10px 14px}
         }
     </style>
 </head>
@@ -167,6 +186,27 @@
         <p class="tag">consciousness technology arsenal</p>
         <span class="cnt" id="toolCount">97 TOOLS</span>
     </header>
+
+    <!-- Whop Membership Tiers -->
+    <section class="whop-tiers" id="whop-tiers" aria-label="Membership tiers">
+        <a href="https://whop.com/discover/sparkverse-511c/" target="_blank" rel="noopener noreferrer" class="wt-card wt-free">
+            <span class="wt-icon">✦</span>
+            <span class="wt-label">FREE</span>
+            <span class="wt-desc">Explore free tools — no account needed</span>
+        </a>
+        <a href="https://whop.com/sparkverse-511c/the-players-lounge/" target="_blank" rel="noopener noreferrer" class="wt-card wt-player">
+            <span class="wt-icon">◆</span>
+            <span class="wt-label">PLAYERS LOUNGE</span>
+            <span class="wt-price">$33/mo</span>
+            <span class="wt-desc">Unlock 60+ Player-tier tools &amp; community</span>
+        </a>
+        <a href="https://whop.com/sparkverse-511c/og-spark-lifetime-access/" target="_blank" rel="noopener noreferrer" class="wt-card wt-og">
+            <span class="wt-icon">⚡</span>
+            <span class="wt-label">OG SPARK</span>
+            <span class="wt-price">$519 lifetime</span>
+            <span class="wt-desc">Full access — all tools, all tiers, forever</span>
+        </a>
+    </section>
 
     <!-- Search + Filter -->
     <div class="ctrl" id="ctrl">
