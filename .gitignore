@@ -1,0 +1,11 @@
+.claude/
+.env
+.env.*
+*.pptx
+*.docx
+node_modules/
+Phone Link/
+NotebookLM/
+desktop.ini
+.DS_Store
+Thumbs.db

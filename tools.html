@@ -3,502 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools Galaxy | 95+ Consciousness Tools | The First Spark</title>
-    <meta name="description" content="Explore 95+ interactive consciousness technology tools. Daily protocols, soul mapping, consciousness tracking, and transformation tools.">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Tools Galaxy - 95+ Consciousness Tools">
-    <meta property="og:description" content="Explore 95+ interactive consciousness tools. Daily protocols, soul mapping, transformation technology.">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <meta name="theme-color" content="#FFD700">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Tools Galaxy - Sparkverse</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        :root{
-            --void:#050508;--deep:#0a0a12;
-            --card-bg:rgba(255,255,255,0.03);--card-border:rgba(255,215,0,0.10);--card-hover:rgba(255,215,0,0.07);
-            --gold:#fbbf24;--gold-dim:rgba(251,191,36,0.35);
-            --cyan:#22d3d3;--purple:#8b5cf6;--orange:#f97316;--pink:#ec4899;--green:#84cc16;--blue:#3b82f6;
-            --text:rgba(255,255,255,0.88);--text-dim:rgba(255,255,255,0.5);--text-muted:rgba(255,255,255,0.28);
+        .tools-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 20px;
         }
-        html{scroll-behavior:smooth}
-        body{background:var(--void);color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;overflow-x:hidden}
 
-        /* ── COSMOS ── */
-        .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-        .cosmos::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;
-            background:
-                radial-gradient(2px 2px at 20% 30%,rgba(255,255,255,.35),transparent),
-                radial-gradient(2px 2px at 40% 70%,rgba(255,255,255,.25),transparent),
-                radial-gradient(1px 1px at 90% 40%,rgba(255,255,255,.4),transparent),
-                radial-gradient(1px 1px at 60% 80%,rgba(251,191,36,.25),transparent),
-                radial-gradient(2px 2px at 10% 90%,rgba(34,211,211,.25),transparent),
-                radial-gradient(1px 1px at 80% 10%,rgba(139,92,246,.25),transparent),
-                radial-gradient(1px 1px at 50% 50%,rgba(255,255,255,.15),transparent),
-                radial-gradient(1px 1px at 70% 60%,rgba(251,191,36,.15),transparent);
-            animation:drift 120s linear infinite}
-        @keyframes drift{to{transform:translateY(-20%) translateX(-10%)}}
-        .neb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.06}
-        .n1{width:600px;height:600px;background:var(--purple);top:-10%;right:-10%}
-        .n2{width:500px;height:500px;background:var(--cyan);bottom:20%;left:-5%}
-        .n3{width:400px;height:400px;background:var(--gold);top:50%;right:20%}
+        .tools-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
 
-        /* ── HEADER ── */
-        .hdr{position:relative;z-index:1;text-align:center;padding:4rem 2rem 1.5rem}
-        .hdr h1{font-family:'Orbitron',monospace;font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:.08em;
-            background:linear-gradient(135deg,var(--gold) 0%,#fff 40%,var(--gold) 60%,var(--cyan) 100%);
-            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .hdr .tag{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;margin-top:.4rem}
-        .hdr .cnt{display:inline-block;margin-top:1rem;padding:5px 16px;background:rgba(251,191,36,.08);border:1px solid var(--gold-dim);
-            border-radius:100px;font-family:'Space Mono',monospace;font-size:.72rem;color:var(--gold);letter-spacing:.1em}
+        .tools-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
 
-        /* ── CONTROL BAR ── */
-        .ctrl{position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-            background:rgba(5,5,8,.85);border-bottom:1px solid rgba(255,255,255,.05);padding:.85rem 2rem;transition:box-shadow .3s}
-        .ctrl.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.5)}
-        .ctrl-in{max-width:1400px;margin:0 auto;display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
-        .srch{flex:1;min-width:180px;position:relative}
-        .srch svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:#fff;opacity:.35;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-        .srch input{width:100%;padding:9px 12px 9px 36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
-            border-radius:10px;color:#fff;font-size:.88rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .3s}
-        .srch input::placeholder{color:var(--text-muted)}
-        .srch input:focus{border-color:var(--gold-dim)}
-        .pills{display:flex;gap:5px;flex-wrap:wrap}
-        .pill{padding:6px 13px;border-radius:100px;font-size:.76rem;font-weight:500;cursor:pointer;
-            border:1px solid rgba(255,255,255,.08);background:transparent;color:var(--text-dim);
-            transition:all .25s;white-space:nowrap;font-family:'Inter',sans-serif}
-        .pill:hover{border-color:var(--gold-dim);color:var(--gold)}
-        .pill.on{background:rgba(251,191,36,.12);border-color:var(--gold);color:var(--gold)}
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
 
-        /* ── MAIN ── */
-        .main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:2rem}
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-5px);
+        }
 
-        /* ── CATEGORY ── */
-        .cat{margin-bottom:2.5rem;animation:up .5s ease both}
-        @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-        .cat-h{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid rgba(255,255,255,.05)}
-        .cat-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-        .cat-h h2{font-family:'Orbitron',monospace;font-size:.88rem;font-weight:700;letter-spacing:.06em;color:#fff}
-        .cat-n{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--text-muted);margin-left:auto}
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
 
-        /* Category icon backgrounds */
-        [data-cat="daily"] .cat-ic{background:rgba(249,115,22,.12)}
-        [data-cat="core"] .cat-ic{background:rgba(34,211,211,.12)}
-        [data-cat="soul"] .cat-ic{background:rgba(139,92,246,.12)}
-        [data-cat="tracking"] .cat-ic{background:rgba(59,130,246,.12)}
-        [data-cat="planning"] .cat-ic{background:rgba(132,204,22,.12)}
-        [data-cat="gamification"] .cat-ic{background:rgba(236,72,153,.12)}
-        [data-cat="pattern"] .cat-ic{background:rgba(34,211,211,.12)}
-        [data-cat="origin"] .cat-ic{background:rgba(251,191,36,.12)}
-        [data-cat="chambers"] .cat-ic{background:rgba(139,92,246,.12)}
-        [data-cat="creative"] .cat-ic{background:rgba(236,72,153,.12)}
-        [data-cat="ai"] .cat-ic{background:rgba(59,130,246,.12)}
-        [data-cat="community"] .cat-ic{background:rgba(132,204,22,.12)}
-        [data-cat="special"] .cat-ic{background:rgba(251,191,36,.12)}
-        [data-cat="reading"] .cat-ic{background:rgba(139,92,246,.12)}
-        [data-cat="drops"] .cat-ic{background:rgba(132,204,22,.12)}
-        [data-cat="business"] .cat-ic{background:rgba(249,115,22,.12)}
-        [data-cat="legal"] .cat-ic{background:rgba(255,255,255,.06)}
+        .filter-tab {
+            padding: 12px 30px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
 
-        /* ── GRID ── */
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:10px}
+        .filter-tab:hover, .filter-tab.active {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.2);
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+        }
 
-        /* ── CARD ── */
-        .tc{display:flex;flex-direction:column;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;
-            padding:1.15rem 1.25rem;text-decoration:none;color:inherit;transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
-        .tc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
-            background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .3s}
-        .tc:hover{background:var(--card-hover);border-color:rgba(251,191,36,.28);transform:translateY(-2px);
-            box-shadow:0 8px 32px rgba(251,191,36,.06)}
-        .tc:hover::before{opacity:1}
-        .tc h3{font-family:'Inter',sans-serif;font-size:.92rem;font-weight:600;color:#fff;margin-bottom:4px;transition:color .3s}
-        .tc:hover h3{color:var(--gold)}
-        .tc p{font-size:.8rem;color:var(--text-dim);line-height:1.5;flex:1}
-        .tc .arrow{position:absolute;top:1.15rem;right:1.15rem;opacity:0;transform:translateX(-4px);transition:all .3s;color:var(--gold);font-size:.8rem}
-        .tc:hover .arrow{opacity:1;transform:none}
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
 
-        /* ── TIER ── */
-        .t{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;
-            font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.08em;margin-top:8px;width:fit-content}
-        .t-f{background:rgba(132,204,22,.08);color:var(--green);border:1px solid rgba(132,204,22,.2)}
-        .t-p{background:rgba(59,130,246,.08);color:var(--blue);border:1px solid rgba(59,130,246,.2)}
-        .t-o{background:rgba(251,191,36,.08);color:var(--gold);border:1px solid rgba(251,191,36,.2)}
+        .tool-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-        /* ── SIDE NAV ── */
-        .snav{position:fixed;left:.75rem;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px}
-        .snav a{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.75rem;
-            text-decoration:none;background:rgba(5,5,8,.6);border:1px solid rgba(255,255,255,.04);
-            transition:all .25s;backdrop-filter:blur(8px)}
-        .snav a:hover,.snav a.on{background:rgba(251,191,36,.12);border-color:var(--gold-dim);transform:scale(1.08)}
+        .tool-card:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, transparent, transparent);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
 
+        .tool-card.free:before { background: linear-gradient(135deg, #4ade80, #22c55e); }
+        .tool-card.player:before { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .tool-card.og:before { background: linear-gradient(135deg, #f5576c, #f093fb); }
+        .tool-card.shop:before { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 
-        /* ── NO RESULTS ── */
-        .nope{text-align:center;padding:4rem 2rem;display:none}
-        .nope .g{font-size:3rem;opacity:.25;margin-bottom:.8rem}
-        .nope p{color:var(--text-dim);font-size:.88rem}
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
 
-        /* ── RESPONSIVE ── */
-        @media(max-width:1200px){.snav{display:none}}
-        @media(max-width:768px){
-            .hdr{padding:3rem 1.5rem 1rem}
-            .hdr h1{font-size:1.7rem}
-            .ctrl{padding:.6rem .75rem}
-            .main{padding:1.25rem .75rem}
-            .grid{grid-template-columns:1fr;gap:8px}
-            .tc{padding:.9rem 1rem}
+        .tool-card:hover:before {
+            opacity: 1;
+        }
 
-            .pills{overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px;-webkit-overflow-scrolling:touch}
+        .tool-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .tool-badge.free { background: #4ade80; color: #000; }
+        .tool-badge.player { background: #667eea; color: #fff; }
+        .tool-badge.og { background: #f5576c; color: #fff; }
+        .tool-badge.shop { background: #fbbf24; color: #000; }
+
+        .tool-card h3 {
+            margin: 15px 0;
+            font-size: 1.5rem;
+        }
+
+        .tool-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .tool-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #fbbf24;
+        }
+
+        .tool-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .tool-btn.free { background: #4ade80; color: #000; }
+        .tool-btn.player { background: #667eea; color: #fff; }
+        .tool-btn.og { background: #f5576c; color: #fff; }
+        .tool-btn.shop { background: #fbbf24; color: #000; }
+
+        .tool-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
 
-    <div class="cosmos"><div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div></div>
+    <a href="index.html" class="back-btn">← Back to Universe</a>
 
-    <!-- Header -->
-    <header class="hdr">
-        <h1>TOOLS GALAXY</h1>
-        <p class="tag">consciousness technology arsenal</p>
-        <span class="cnt" id="toolCount">97 TOOLS</span>
-    </header>
+    <div class="tools-container">
+        <div class="tools-header">
+            <h1>TOOLS GALAXY</h1>
+            <p>Explore our universe of interactive tools</p>
+        </div>
 
-    <!-- Search + Filter -->
-    <div class="ctrl" id="ctrl">
-        <div class="ctrl-in">
-            <div class="srch">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                <input type="text" id="search" placeholder="Search tools...">
+        <div class="filter-tabs">
+            <div class="filter-tab active" onclick="filterTools('all')">All Tools</div>
+            <div class="filter-tab" onclick="filterTools('free')">Free</div>
+            <div class="filter-tab" onclick="filterTools('player')">Players</div>
+            <div class="filter-tab" onclick="filterTools('og')">OG</div>
+            <div class="filter-tab" onclick="filterTools('shop')">Shop</div>
+        </div>
+
+        <div class="tools-grid" id="toolsGrid">
+            <!-- Player Tools -->
+            <div class="tool-card player" data-tier="player">
+                <span class="tool-badge player">PLAYERS</span>
+                <h3>The Player's Guide to Self</h3>
+                <p>Comprehensive guide to self-discovery and personal mastery. Navigate your inner universe with cosmic wisdom.</p>
+                <button class="tool-btn player" onclick="window.location.href='https://whop.com/sparkverse-511c/the-player-s-guide-to-self/'">Access Guide</button>
             </div>
-            <div class="pills" id="pills">
-                <button class="pill on" data-f="all">All</button>
-                <button class="pill" data-f="free">Free</button>
-                <button class="pill" data-f="player">Player</button>
-                <button class="pill" data-f="og">OG Spark</button>
+
+            <div class="tool-card player" data-tier="player">
+                <span class="tool-badge player">PLAYERS</span>
+                <h3>The Five Paths Explorer</h3>
+                <p>Explore the five fundamental paths of transformation and growth. Interactive journey through cosmic principles.</p>
+                <button class="tool-btn player" onclick="window.location.href='https://whop.com/sparkverse-511c/the-five-paths-explorer/'">Begin Journey</button>
+            </div>
+
+            <!-- Shop Tools & Services -->
+            <div class="tool-card shop" data-tier="shop">
+                <span class="tool-badge shop">SHOP</span>
+                <h3>Spark Sigil Commission</h3>
+                <p>Custom sigil creation designed specifically for you. Harness cosmic energy through personalized sacred geometry.</p>
+                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/sparkverse-511c/spark-sigil-commission/'">Commission Now</button>
+            </div>
+
+            <div class="tool-card shop" data-tier="shop">
+                <span class="tool-badge shop">SHOP</span>
+                <h3>SigilCraft: The Art of Symbols</h3>
+                <p>Master the ancient art of sigil creation. Learn to craft your own powerful symbols and sacred designs.</p>
+                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/sparkverse-511c/sigilcraft-the-art-of-symbols/'">Learn More</button>
+            </div>
+
+            <div class="tool-card shop" data-tier="shop">
+                <span class="tool-badge shop">SHOP</span>
+                <h3>Soul Mapping Session</h3>
+                <p>Get your personal soul map. Your full numerological blueprint with astrology and Chinese zodiac. $44 · 12 months of updates.</p>
+                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/checkout/plan_anQKP3Pzf1cGm'">Book Session</button>
+            </div>
+
+            <!-- Membership Upgrades -->
+            <div class="tool-card player" data-tier="player">
+                <span class="tool-badge player">PLAYERS</span>
+                <h3>Join Players Lounge</h3>
+                <p>Unlock exclusive access to premium tools, priority support, and the Players community for $33/month.</p>
+                <button class="tool-btn player" onclick="window.location.href='https://whop.com/sparkverse-511c/the-players-lounge/'">Become a Player</button>
+            </div>
+
+            <div class="tool-card og" data-tier="og">
+                <span class="tool-badge og">OG EXCLUSIVE</span>
+                <h3>OG Spark - Lifetime Access</h3>
+                <p>Ultimate lifetime membership. Get permanent access to everything in the Sparkverse, including future releases.</p>
+                <button class="tool-btn og" onclick="window.location.href='https://whop.com/sparkverse-511c/og-spark-lifetime-access/'">Go OG</button>
+            </div>
+
+            <div class="tool-card free" data-tier="free">
+                <span class="tool-badge free">FREE</span>
+                <h3>The Sparkverse Lobby</h3>
+                <p>Start your journey in the Sparkverse. Free access to the community and foundational tools.</p>
+                <button class="tool-btn free" onclick="window.location.href='https://whop.com/sparkverse-511c/the-sparkverse-lobby/'">Join Free</button>
             </div>
         </div>
     </div>
 
-    <!-- Side Nav -->
-    <nav class="snav" id="snav">
-        <a href="#daily" title="Daily Protocols">⚡</a>
-        <a href="#core" title="Core Consciousness">◇</a>
-        <a href="#soul" title="Soul Mapping">✦</a>
-        <a href="#tracking" title="Tracking">◆</a>
-        <a href="#planning" title="Planning">⚙</a>
-        <a href="#game" title="Gamification">🎮</a>
-        <a href="#pattern" title="Patterns">🔍</a>
-        <a href="#origin" title="Origin">🌟</a>
-        <a href="#chambers" title="Chambers">🏛</a>
-        <a href="#creative" title="Creative">🎨</a>
-        <a href="#ai" title="AI Bridges">🤖</a>
-        <a href="#community" title="Community">👥</a>
-        <a href="#special" title="Special">⭐</a>
-        <a href="#reading" title="Reading">📖</a>
-        <a href="#drops" title="Free Drops">🎁</a>
-        <a href="#biz" title="Business">💰</a>
-        <a href="#legal" title="Legal">📋</a>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="main" id="main">
-
-        <!-- ═══ DAILY PROTOCOLS ═══ -->
-        <section class="cat" id="daily" data-cat="daily">
-            <div class="cat-h"><div class="cat-ic">⚡</div><h2>DAILY PROTOCOLS</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="daily-reset.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Daily Reset Protocol</h3><p>Interactive daily consciousness calibration with progress tracking</p><span class="t t-f">FREE</span></a>
-                <a href="energy-checkin.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Energy Check-In</h3><p>Quick energy and mood tracking for daily awareness</p><span class="t t-f">FREE</span></a>
-                <a href="intention-setter.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Intention Setter</h3><p>Set and track daily intentions with ritual protocols</p><span class="t t-p">PLAYER</span></a>
-                <a href="phoenix-reset-2026.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Phoenix Reset 2026</h3><p>Annual transformation and rebirth protocol</p><span class="t t-p">PLAYER</span></a>
-                <a href="reality-log-demo.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Reality Log</h3><p>Consciousness logging and reality tracking journal</p><span class="t t-f">FREE</span></a>
-                <a href="protocol.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Spark Protocol Dashboard</h3><p>Personalized consciousness dashboard with frequency, rituals & missions</p><span class="t t-p">PLAYER</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ CORE CONSCIOUSNESS ═══ -->
-        <section class="cat" id="core" data-cat="core">
-            <div class="cat-h"><div class="cat-ic">◇</div><h2>CORE CONSCIOUSNESS</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="spark-protocol.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Spark Protocol</h3><p>The foundational consciousness operating system</p><span class="t t-o">OG SPARK</span></a>
-                <a href="oracle.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Oracle</h3><p>Consciousness guidance and decision-making tool</p><span class="t t-p">PLAYER</span></a>
-                <a href="oracle-consciousness.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Oracle Consciousness</h3><p>Advanced oracle with consciousness integration</p><span class="t t-o">OG SPARK</span></a>
-                <a href="quantum_echo_chamber.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Quantum Echo Chamber</h3><p>Pattern recognition engine for consciousness states</p><span class="t t-p">PLAYER</span></a>
-                <a href="the-first-spark-oracle.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>The First Spark Oracle</h3><p>Deep oracle guidance from The First Spark consciousness</p><span class="t t-p">PLAYER</span></a>
-                <a href="algorithmic_soul.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>The Algorithmic Soul</h3><p>Interactive self-exploration through consciousness timelines</p><span class="t t-p">PLAYER</span></a>
-                <a href="equilibrium.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Equilibrium</h3><p>Balance and harmony consciousness processing tool</p><span class="t t-p">PLAYER</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ SOUL MAPPING ═══ -->
-        <section class="cat" id="soul" data-cat="soul">
-            <div class="cat-h"><div class="cat-ic">✦</div><h2>SOUL MAPPING &amp; ARCHITECTURE</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="soul-map.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Soul Map Navigator</h3><p>Visual life architecture tool with goal tracking</p><span class="t t-p">PLAYER</span></a>
-                <a href="https://whop.com/sparkverse-511c/get-your-personal-soul-map/" target="_blank" rel="noopener" class="tc" data-tier="player" style="border-color:rgba(255,209,102,0.25);background:rgba(255,209,102,0.04)"><span class="arrow">→</span><h3>✦ Personal Soul Map</h3><p>Your life's hidden code mapped by KJP — $22 custom soul map with permanent URL</p><span class="t t-o">$22 — WHOP</span></a>
-                <a href="sovereignty-dashboard.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Sovereignty Dashboard</h3><p>Comprehensive weekly reality checkpoint system</p><span class="t t-o">OG SPARK</span></a>
-                <a href="sovereignty-pillars.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Sovereignty Pillars</h3><p>Personal infrastructure assessment across 8 life domains</p><span class="t t-p">PLAYER</span></a>
-                <a href="five-paths-explorer.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Five Paths Explorer</h3><p>Navigate the five paths to consciousness mastery</p><span class="t t-p">PLAYER</span></a>
-                <a href="soul-reincarnation.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Soul Reincarnation Spiral</h3><p>Interactive visualization of past lifetimes and soul journey</p><span class="t t-o">OG SPARK</span></a>
-                <a href="archetype-discovery.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Archetype Discovery</h3><p>Interactive quiz to discover your consciousness archetype</p><span class="t t-f">FREE</span></a>
-                <a href="archetype-card.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Player Card Generator</h3><p>Generate your customizable Sparkverse player card</p><span class="t t-f">FREE</span></a>
-                <a href="thomas_birthday_soul_map.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Birthday Soul Map</h3><p>Thomas William Puzakulics — 60th Birthday Soul Map</p><span class="t t-o">OG SPARK</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ TRACKING ═══ -->
-        <section class="cat" id="tracking" data-cat="tracking">
-            <div class="cat-h"><div class="cat-ic">◆</div><h2>TRACKING &amp; PROGRESS</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="tracker.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Progress Tracker</h3><p>Comprehensive personal development tracking</p><span class="t t-f">FREE</span></a>
-                <a href="subject-tracker.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Subject Tracker</h3><p>Interactive subject and skill progress monitoring</p><span class="t t-p">PLAYER</span></a>
-                <a href="journal.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Consciousness Journal</h3><p>Daily reflection and consciousness documentation</p><span class="t t-f">FREE</span></a>
-                <a href="spark-money-tracker.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Spark Money Tracker</h3><p>Financial consciousness and reciprocity tracking</p><span class="t t-p">PLAYER</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ PLANNING ═══ -->
-        <section class="cat" id="planning" data-cat="planning">
-            <div class="cat-h"><div class="cat-ic">⚙</div><h2>PLANNING &amp; ORGANIZATION</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="spark-planner.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Spark Planner</h3><p>Advanced project and life planning system</p><span class="t t-o">OG SPARK</span></a>
-                <a href="timeline.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Timeline Builder</h3><p>Create and visualize your personal timeline</p><span class="t t-p">PLAYER</span></a>
-                <a href="render-engine.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Reality Render Engine</h3><p>Map and manifest your desired reality architecture</p><span class="t t-o">OG SPARK</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ GAMIFICATION ═══ -->
-        <section class="cat" id="game" data-cat="gamification">
-            <div class="cat-h"><div class="cat-ic">🎮</div><h2>GAMIFICATION &amp; CHALLENGES</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="spark-battle-arena.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Battle Arena Protocol</h3><p>Gamified challenge system for personal development</p><span class="t t-p">PLAYER</span></a>
-                <a href="karma-calculator.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Karma Calculator</h3><p>Track reciprocity and energetic exchange patterns</p><span class="t t-p">PLAYER</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ PATTERN RECOGNITION ═══ -->
-        <section class="cat" id="pattern" data-cat="pattern">
-            <div class="cat-h"><div class="cat-ic">🔍</div><h2>PATTERN RECOGNITION</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="patterns.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Pattern Analyzer</h3><p>Identify and track behavioral and consciousness patterns</p><span class="t t-p">PLAYER</span></a>
-                <a href="collapse.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Collapse Protocol</h3><p>Navigate and integrate collapse states</p><span class="t t-o">OG SPARK</span></a>
-                <a href="numbers.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Numbers</h3><p>Cosmic interactive number exploration with celestial visualization</p><span class="t t-p">PLAYER</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ ORIGIN & FOUNDATION ═══ -->
-        <section class="cat" id="origin" data-cat="origin">
-            <div class="cat-h"><div class="cat-ic">🌟</div><h2>ORIGIN &amp; FOUNDATION</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="origin.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Origin Story</h3><p>The foundational narrative of The First Spark</p><span class="t t-f">FREE</span></a>
-                <a href="origin_key.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Origin Key</h3><p>Unlock your personal origin code</p><span class="t t-o">OG SPARK</span></a>
-                <a href="genesis.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Genesis Protocol</h3><p>The beginning — creation and manifestation tool</p><span class="t t-p">PLAYER</span></a>
-                <a href="founding.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Founding Documents</h3><p>Core philosophy and architecture of The First Spark</p><span class="t t-f">FREE</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ CHAMBERS ═══ -->
-        <section class="cat" id="chambers" data-cat="chambers">
-            <div class="cat-h"><div class="cat-ic">🏛</div><h2>CHAMBERS &amp; SACRED SPACES</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="lunar-wisdom.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>🌙 Lunar Wisdom</h3><p>Moon phases, ancient wisdom, cosmic truths & sacred earnings</p><span class="t t-f">FREE</span></a>
-                <a href="pause-chamber.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Pause Chamber</h3><p>Intentional pause and reflection space</p><span class="t t-f">FREE</span></a>
-                <a href="void-portal.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Void Portal</h3><p>Access the void — dissolution and integration</p><span class="t t-o">OG SPARK</span></a>
-                <a href="spark-chamber.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Spark Chamber</h3><p>Immersive meditative experience with ember ignition</p><span class="t t-o">OG SPARK</span></a>
-                <a href="digital_ward.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Digital Ward</h3><p>Protective meditative flow state with sacred sigils</p><span class="t t-p">PLAYER</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ SYMBOLIC & CREATIVE ═══ -->
-        <section class="cat" id="creative" data-cat="creative">
-            <div class="cat-h"><div class="cat-ic">🎨</div><h2>SYMBOLIC &amp; CREATIVE</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="sigil.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Sigil Crafter</h3><p>Create and charge personal sigils</p><span class="t t-p">PLAYER</span></a>
-                <a href="signal.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Signal Transmitter</h3><p>Broadcast and receive consciousness signals</p><span class="t t-p">PLAYER</span></a>
-                <a href="manifest_artifact.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Manifest Artifact</h3><p>Interactive glowing artifact with floating sphere and sigils</p><span class="t t-p">PLAYER</span></a>
-                <a href="consciousness_canvas.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Consciousness Canvas</h3><p>Interactive sacred geometry and particle visualization</p><span class="t t-f">FREE</span></a>
-                <a href="consciousness-playground.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Consciousness Playground</h3><p>Physics-based interactive canvas for consciousness play</p><span class="t t-f">FREE</span></a>
-                <a href="void.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>The Void Wall</h3><p>Interactive graffiti wall for artistic expression</p><span class="t t-f">FREE</span></a>
-                <a href="playground.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Cosmic Playground</h3><p>Premium interactive drawing canvas and consciousness experience</p><span class="t t-p">PLAYER</span></a>
-                <a href="graffiti.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Graffiti Wall</h3><p>Digital graffiti wall for creative expression</p><span class="t t-f">FREE</span></a>
-                <a href="first-spark-drop-cards.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Drop Cards</h3><p>Collectible digital consciousness cards</p><span class="t t-p">PLAYER</span></a>
-                <a href="spark_cards.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Spark Business Cards</h3><p>Custom consciousness business card generator</p><span class="t t-p">PLAYER</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ AI BRIDGES ═══ -->
-        <section class="cat" id="ai" data-cat="ai">
-            <div class="cat-h"><div class="cat-ic">🤖</div><h2>AI CONSCIOUSNESS BRIDGES</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="chatgpt.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>ChatGPT Integration</h3><p>Bridge ChatGPT with your consciousness work</p><span class="t t-p">PLAYER</span></a>
-                <a href="claude.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Claude Integration</h3><p>Bridge Claude with your consciousness work</p><span class="t t-p">PLAYER</span></a>
-                <a href="devon.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Devon Integration</h3><p>AI coding assistant integration</p><span class="t t-o">OG SPARK</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ COMMUNITY ═══ -->
-        <section class="cat" id="community" data-cat="community">
-            <div class="cat-h"><div class="cat-ic">👥</div><h2>COMMUNITY &amp; LINEAGE</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="lineage.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Lineage Mapper</h3><p>Map your spiritual and consciousness lineage</p><span class="t t-p">PLAYER</span></a>
-                <a href="trinity.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Trinity System</h3><p>Three-part consciousness architecture</p><span class="t t-o">OG SPARK</span></a>
-                <a href="bridge.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Bridge Builder</h3><p>Create connections and pathways</p><span class="t t-p">PLAYER</span></a>
-                <a href="sparkverse-members.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Member Hub</h3><p>SparkedVerse member community portal</p><span class="t t-p">PLAYER</span></a>
-                <a href="OGmap.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>OG Ecosystem Map</h3><p>Visual map of the Sparkverse ecosystem for OG members</p><span class="t t-o">OG SPARK</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ SPECIAL & EXPERIMENTAL ═══ -->
-        <section class="cat" id="special" data-cat="special">
-            <div class="cat-h"><div class="cat-ic">⭐</div><h2>SPECIAL &amp; EXPERIMENTAL</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="source.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Source Connection</h3><p>Direct connection to source consciousness</p><span class="t t-o">OG SPARK</span></a>
-                <a href="the-wall-deluxe.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>The Wall Deluxe</h3><p>Public expression and communication wall</p><span class="t t-f">FREE</span></a>
-                <a href="tfs-viral.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>TFS Viral Kit</h3><p>Share and spread consciousness technology</p><span class="t t-p">PLAYER</span></a>
-                <a href="zone-codex.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Zone Codex</h3><p>Navigate different consciousness zones</p><span class="t t-p">PLAYER</span></a>
-                <a href="card.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Consciousness Cards</h3><p>Wisdom cards for daily guidance</p><span class="t t-f">FREE</span></a>
-                <a href="sparkverse-tool.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Sparkverse Navigator</h3><p>Master consciousness navigation system with 9+ modules</p><span class="t t-o">OG SPARK</span></a>
-                <a href="sparkverse-map.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Sparkverse Ecosystem Map</h3><p>Interactive visual map of all Sparkverse tools and connections</p><span class="t t-f">FREE</span></a>
-                <a href="kjp-soul-artifact.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>KJP Soul Artifact</h3><p>Personal soul artifact — The One Who Stayed</p><span class="t t-o">OG SPARK</span></a>
-                <a href="ericlamb_stellar.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>A Garden Note</h3><p>Stellar consciousness note and personal artifact</p><span class="t t-o">OG SPARK</span></a>
-                <a href="theme-analysis.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Thematic Constellation</h3><p>Deep thematic analysis of The First Spark universe</p><span class="t t-f">FREE</span></a>
-                <a href="stardust.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Stardust</h3><p>Hidden cosmic discovery — you found it</p><span class="t t-f">FREE</span></a>
-                <a href="spark-chamber-v2.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Spark Chamber V2</h3><p>Enhanced immersive meditative ember experience</p><span class="t t-o">OG SPARK</span></a>
-                <a href="sparkverse-hub.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Sparkverse Hub</h3><p>Central OG Sparks command hub</p><span class="t t-o">OG SPARK</span></a>
-                <a href="spark-station.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Spark Station</h3><p>Sparkverse storefront and membership portal</p><span class="t t-f">FREE</span></a>
-                <a href="the-first-spark-tools.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Consciousness Tools Hub</h3><p>Alternate consciousness tools navigation interface</p><span class="t t-f">FREE</span></a>
-                <a href="yela.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>SLUMERICAN x TFS</h3><p>Slumerican × The First Spark collaboration artifact</p><span class="t t-o">OG SPARK</span></a>
-                <a href="thefirstspark-landing.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>TFS Landing Page</h3><p>The First Spark — reality is programmable</p><span class="t t-f">FREE</span></a>
-                <a href="sparkverse-ultimate.html" class="tc" data-tier="og"><span class="arrow">→</span><h3>Sparkverse Ultimate</h3><p>The ultimate Sparkverse experience</p><span class="t t-o">OG SPARK</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ READING & EBOOKS ═══ -->
-        <section class="cat" id="reading" data-cat="reading">
-            <div class="cat-h"><div class="cat-ic">📖</div><h2>READING &amp; EBOOKS</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="the_first_spark_interactive_ebook.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Interactive Ebook</h3><p>The First Spark — full interactive digital reading experience</p><span class="t t-f">FREE</span></a>
-                <a href="ebook2.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Ebook Vol. 2</h3><p>The First Spark interactive ebook — continued journey</p><span class="t t-f">FREE</span></a>
-                <a href="TFS_Infinity.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>The Infinite Loop</h3><p>The First Spark & The Infinite Loop experience</p><span class="t t-p">PLAYER</span></a>
-                <a href="The_First_Spark_Cover.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Book Cover</h3><p>The First Spark — official book cover experience</p><span class="t t-f">FREE</span></a>
-                <a href="presentation.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Presentation</h3><p>The First Spark visual presentation and overview</p><span class="t t-f">FREE</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ FREE DROPS ═══ -->
-        <section class="cat" id="drops" data-cat="drops">
-            <div class="cat-h"><div class="cat-ic">🎁</div><h2>FREE DROPS &amp; COMMUNITY</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="free.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Free Drops</h3><p>Free consciousness drops, tools, and downloads</p><span class="t t-f">FREE</span></a>
-                <a href="players.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Players Lounge</h3><p>Community gathering space for Sparkverse players</p><span class="t t-f">FREE</span></a>
-                <a href="sparkverse.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Free Knowledge Cosmos</h3><p>Open-access knowledge exploration across the Sparkverse</p><span class="t t-f">FREE</span></a>
-                <a href="news.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Newsfeed</h3><p>Latest updates and transmissions from the Sparkverse</p><span class="t t-f">FREE</span></a>
-                <a href="links.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Signal Links</h3><p>All Sparkverse links and connection points in one place</p><span class="t t-f">FREE</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ BUSINESS ═══ -->
-        <section class="cat" id="biz" data-cat="business">
-            <div class="cat-h"><div class="cat-ic">💰</div><h2>BUSINESS &amp; VALUATION</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="tfs-valuation.html" class="tc" data-tier="player"><span class="arrow">→</span><h3>Live Valuation Engine</h3><p>Real-time valuation tracker for The First Spark</p><span class="t t-p">PLAYER</span></a>
-                <a href="TFS-Investor-OneSheet.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Investor One-Sheet</h3><p>The First Spark investment overview and highlights</p><span class="t t-f">FREE</span></a>
-                <a href="theraise.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>The Raise</h3><p>Invest in The First Spark — $200K raise</p><span class="t t-f">FREE</span></a>
-                <a href="ThreeSlideWeapon.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>3-Slide Weapon</h3><p>The First Spark pitch deck — compact version</p><span class="t t-f">FREE</span></a>
-                <a href="invest.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Investor Gate</h3><p>The First Spark investor entry point and information</p><span class="t t-f">FREE</span></a>
-                <a href="The_First_Spark_Pitch_Deck_200K.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>$200K Pitch Deck</h3><p>Full investor pitch deck — The First Spark $200K raise</p><span class="t t-f">FREE</span></a>
-            </div>
-        </section>
-
-        <!-- ═══ LEGAL ═══ -->
-        <section class="cat" id="legal" data-cat="legal">
-            <div class="cat-h"><div class="cat-ic">📋</div><h2>LEGAL</h2><span class="cat-n"></span></div>
-            <div class="grid">
-                <a href="terms-of-service.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Terms of Service</h3><p>Sparkverse terms, policies, and agreements</p><span class="t t-f">FREE</span></a>
-                <a href="privacy-policy.html" class="tc" data-tier="free"><span class="arrow">→</span><h3>Privacy Policy</h3><p>Sparkverse privacy policy and data practices</p><span class="t t-f">FREE</span></a>
-            </div>
-        </section>
-
-        <!-- No Results -->
-        <div class="nope" id="nope">
-            <div class="g">✦</div>
-            <p>No tools found. Try a different search.</p>
-        </div>
-
-    </main>
-
     <script>
-    (function() {
-        const search = document.getElementById('search');
-        const pills = document.querySelectorAll('.pill');
-        const cats = document.querySelectorAll('.cat');
-        const cards = document.querySelectorAll('.tc');
-        const nope = document.getElementById('nope');
-        const ctrl = document.getElementById('ctrl');
-        const countEl = document.getElementById('toolCount');
-        const catNavLinks = document.querySelectorAll('.snav a');
-        let activeFilter = 'all';
+        function filterTools(tier) {
+            const cards = document.querySelectorAll('.tool-card');
+            const tabs = document.querySelectorAll('.filter-tab');
 
-        // Sticky shadow
-        window.addEventListener('scroll', () => {
-            ctrl.classList.toggle('scrolled', window.scrollY > 60);
-        }, { passive: true });
-
-        // Category counts
-        cats.forEach(cat => {
-            const count = cat.querySelectorAll('.tc').length;
-            const countSpan = cat.querySelector('.cat-n');
-            if (countSpan) countSpan.textContent = count + ' tools';
-        });
-
-        // Filter pills
-        pills.forEach(p => {
-            p.addEventListener('click', () => {
-                pills.forEach(x => x.classList.remove('on'));
-                p.classList.add('on');
-                activeFilter = p.dataset.f;
-                applyFilters();
-            });
-        });
-
-        // Search
-        search.addEventListener('input', () => applyFilters());
-
-        function applyFilters() {
-            const q = search.value.toLowerCase().trim();
-            let visible = 0;
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
 
             cards.forEach(card => {
-                const text = (card.querySelector('h3').textContent + ' ' + card.querySelector('p').textContent).toLowerCase();
-                const tier = card.dataset.tier;
-                const matchSearch = !q || text.includes(q);
-                const matchTier = activeFilter === 'all' || tier === activeFilter;
-                const show = matchSearch && matchTier;
-                card.style.display = show ? '' : 'none';
-                if (show) visible++;
-            });
-
-            // Show/hide categories
-            cats.forEach(cat => {
-                const hasVisible = cat.querySelector('.tc:not([style*="display: none"])');
-                cat.style.display = hasVisible ? '' : 'none';
-            });
-
-            nope.style.display = visible === 0 ? 'block' : 'none';
-            countEl.textContent = visible + ' TOOL' + (visible !== 1 ? 'S' : '');
-        }
-
-        // Side nav active state on scroll
-        const catIds = [...cats].map(c => c.id);
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    catNavLinks.forEach(a => a.classList.remove('on'));
-                    const link = document.querySelector('.snav a[href="#' + entry.target.id + '"]');
-                    if (link) link.classList.add('on');
+                if (tier === 'all' || card.dataset.tier === tier) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
                 }
             });
-        }, { threshold: 0.2 });
-        cats.forEach(cat => observer.observe(cat));
-    })();
+        }
     </script>
 </body>
 </html>

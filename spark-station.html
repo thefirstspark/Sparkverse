@@ -3,223 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spark Station - Sparkverse</title>
+    <title>Spark Station - Choose Your Spark</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body { overflow-y: auto; }
-
         .station-container {
-            position: relative;
-            z-index: 10;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            min-height: 100vh;
+            position: relative; z-index: 10;
+            max-width: 1100px; margin: 0 auto;
+            padding: 60px 20px; min-height: 100vh;
         }
-
-        .station-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
+        .station-header { text-align: center; margin-bottom: 60px; }
         .station-header h1 {
             font-size: 3.5rem;
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom: 15px; letter-spacing: 3px;
+        }
+        .station-header .tagline { font-size: 1.4rem; opacity: 0.9; margin-bottom: 10px; color: #fed6e3; }
+        .station-header p { font-size: 1rem; opacity: 0.6; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* Tier Cards Grid */
+        .tiers-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; margin-bottom: 60px;
+        }
+        .tier-card {
+            background: rgba(255,255,255,0.04);
+            border: 2px solid rgba(168,237,234,0.15);
+            border-radius: 24px; padding: 35px 30px;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .tier-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; border-radius: 24px 24px 0 0;
+        }
+        .tier-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(168,237,234,0.4);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(168,237,234,0.1);
+        }
+        .tier-card .tier-emoji { font-size: 2.5rem; margin-bottom: 15px; }
+        .tier-card .tier-name {
+            font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px;
+        }
+        .tier-card .tier-price {
+            font-size: 1.1rem; opacity: 0.7; margin-bottom: 20px; font-weight: 600;
+        }
+        .tier-card .tier-desc {
+            font-size: 0.95rem; opacity: 0.65; line-height: 1.7; margin-bottom: 25px; flex-grow: 1;
+        }
+        .tier-card .tier-features { list-style: none; margin: 0 0 25px; padding: 0; }
+        .tier-card .tier-features li {
+            padding: 8px 0; padding-left: 25px; position: relative;
+            font-size: 0.9rem; opacity: 0.75; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .tier-card .tier-features li::before {
+            content: "✦"; position: absolute; left: 0; color: #a8edea;
         }
 
-        .station-header .tagline {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            margin-bottom: 15px;
+        .tier-cta {
+            display: block; text-align: center; padding: 16px 30px;
+            border-radius: 16px; text-decoration: none;
+            font-weight: 800; font-size: 1rem; letter-spacing: 1px;
+            transition: all 0.3s ease; border: 2px solid transparent;
         }
+        /* Tier-specific colors */
+        .tier-starter::before { background: linear-gradient(90deg, #4facfe, #00f2fe); }
+        .tier-starter .tier-name { color: #4facfe; }
+        .tier-starter .tier-cta { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #0a0a0f; }
+        .tier-starter .tier-cta:hover { box-shadow: 0 8px 30px rgba(79,172,254,0.4); transform: translateY(-2px); }
 
-        .station-header p {
-            font-size: 1rem;
-            opacity: 0.7;
-            line-height: 1.6;
-            max-width: 700px;
-            margin: 0 auto;
+        .tier-starter-plus::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+        .tier-starter-plus .tier-name { color: #667eea; }
+        .tier-starter-plus .tier-cta { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .tier-starter-plus .tier-cta:hover { box-shadow: 0 8px 30px rgba(102,126,234,0.4); transform: translateY(-2px); }
+
+        .tier-power::before { background: linear-gradient(90deg, #f093fb, #f5576c); }
+        .tier-power .tier-name { color: #f093fb; }
+        .tier-power .tier-cta { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
+        .tier-power .tier-cta:hover { box-shadow: 0 8px 30px rgba(240,147,251,0.4); transform: translateY(-2px); }
+
+        .tier-player::before { background: linear-gradient(90deg, #ffecd2, #fcb69f); }
+        .tier-player .tier-name { color: #ffecd2; }
+        .tier-player .tier-cta { background: linear-gradient(135deg, #ffecd2, #fcb69f); color: #0a0a0f; }
+        .tier-player .tier-cta:hover { box-shadow: 0 8px 30px rgba(252,182,159,0.4); transform: translateY(-2px); }
+
+        .tier-og::before { background: linear-gradient(90deg, #ffd700, #ff8c00); }
+        .tier-og .tier-name { color: #ffd700; }
+        .tier-og .tier-features li::before { color: #ffd700; }
+        .tier-og .tier-cta { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #0a0a0f; }
+        .tier-og .tier-cta:hover { box-shadow: 0 8px 30px rgba(255,215,0,0.4); transform: translateY(-2px); }
+        .tier-og { border-color: rgba(255,215,0,0.3); }
+
+        .popular-badge {
+            position: absolute; top: 15px; right: 15px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #0a0a0f; padding: 5px 14px; border-radius: 20px;
+            font-size: 0.7rem; font-weight: 900; letter-spacing: 1px;
         }
-
-        .section {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(168, 237, 234, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            margin: 30px 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #a8edea;
-            letter-spacing: 2px;
-        }
-
-        .section h3 {
-            font-size: 1.5rem;
-            margin: 25px 0 15px;
-            color: #fed6e3;
-        }
-
-        .section p {
-            line-height: 1.8;
-            opacity: 0.8;
-            margin-bottom: 15px;
-        }
-
-        .section ul {
-            list-style: none;
-            margin: 20px 0;
-        }
-
-        .section li {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-left: 30px;
-            position: relative;
-        }
-
-        .section li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #a8edea;
-            font-weight: bold;
-        }
-
-        .roadmap-timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .roadmap-item {
-            background: rgba(168, 237, 234, 0.1);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 4px solid #a8edea;
-        }
-
-        .roadmap-item h4 {
-            font-size: 1.2rem;
-            color: #fed6e3;
-            margin-bottom: 10px;
-        }
-
-        .roadmap-item .status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .status.planning { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-        .status.development { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
-        .status.testing { background: rgba(156, 39, 176, 0.2); color: #9c27b0; }
-        .status.launch { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
-
-        .cta-section {
-            text-align: center;
-            margin: 50px 0;
-            padding: 50px 20px;
-            background: linear-gradient(135deg, rgba(168, 237, 234, 0.1), rgba(254, 214, 227, 0.1));
-            border-radius: 20px;
-        }
-
-        .cta-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #a8edea;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-
-        .cta-button {
-            padding: 18px 40px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 2px solid;
-        }
-
-        .cta-button.primary {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #0a0a0f;
-            border-color: transparent;
-        }
-
-        .cta-button.primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(168, 237, 234, 0.4);
-        }
-
-        .cta-button.secondary {
-            background: transparent;
-            color: #a8edea;
-            border-color: #a8edea;
-        }
-
-        .cta-button.secondary:hover {
-            background: rgba(168, 237, 234, 0.1);
-            transform: translateY(-3px);
-        }
-
         .back-button {
-            display: inline-block;
-            margin: 40px auto 0;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
+            display: block; max-width: 200px; margin: 40px auto 0;
+            padding: 15px 30px; background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none; border-radius: 25px; color: white; text-decoration: none;
+            font-size: 1rem; font-weight: bold; text-align: center;
             transition: all 0.3s ease;
-            text-align: center;
-            display: block;
-            max-width: 200px;
-            margin-left: auto;
-            margin-right: auto;
         }
-
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
+        .back-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.6); }
         @media (max-width: 768px) {
             .station-header h1 { font-size: 2.5rem; }
-            .cta-buttons { flex-direction: column; align-items: center; }
-            .cta-button { width: 100%; max-width: 300px; }
+            .tiers-grid { grid-template-columns: 1fr; }
         }
     </style>
-
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-P8B1ERP8ML');
+        gtag('js', new Date()); gtag('config', 'G-SKL8XQ51ZH');
     </script>
 </head>
 <body>
@@ -228,69 +131,93 @@
 
     <div class="station-container">
         <div class="station-header">
-            <h1>SPARK STATION</h1>
-            <p class="tagline">Mobile Consciousness Hub</p>
-            <p>A mobile command center bringing consciousness tools, simulation theory resources, and geometric awakening directly to your pocket.</p>
+            <h1>⚡ SPARK STATION</h1>
+            <p class="tagline">Choose Your Spark. Enter the Game.</p>
+            <p>Every spark is a key to consciousness tools, community access, and the geometric universe. Pick the tier that matches your frequency.</p>
         </div>
 
-        <div class="section">
-            <h2>What is Spark Station?</h2>
-            <p>Spark Station is the next evolution of The First Spark universe—a mobile app designed to be your personal consciousness companion. Access sacred geometry tools, simulation theory insights, daily consciousness exercises, and connect with the Spark community anytime, anywhere.</p>
-
-            <h3>Core Features</h3>
-            <ul>
-                <li>Sacred Geometry Generator - Create and customize consciousness sigils on the go</li>
-                <li>Reality Mapper - Track synchronicities and document your awakening journey</li>
-                <li>Daily Spark - Consciousness prompts and geometric meditations</li>
-                <li>Simulation Scanner - AR tool for detecting geometric patterns in reality</li>
-                <li>Community Portal - Connect with fellow sparks in real-time</li>
-                <li>Tool Vault - Offline access to all consciousness tools and guides</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Why It Matters</h2>
-            <p>Consciousness technology should be accessible at the moment of awakening. When you notice the glitch, spot the pattern, or experience the synchronicity—Spark Station is there. No desktop required. No barriers between you and your geometric truth.</p>
-
-            <p>This isn't just another app. It's a consciousness activation device in your pocket. A portal to the geometric universe. A command center for navigating the simulation.</p>
-        </div>
-
-        <div class="section">
-            <h2>Development Roadmap</h2>
-            <div class="roadmap-timeline">
-                <div class="roadmap-item">
-                    <span class="status planning">Phase 1 - Planning</span>
-                    <h4>Q2 2026: Foundation</h4>
-                    <p>Core architecture design, feature specification, and community feedback gathering. Beta testing signup opens for OG Spark members.</p>
-                </div>
-
-                <div class="roadmap-item">
-                    <span class="status development">Phase 2 - Development</span>
-                    <h4>Q3 2026: Build</h4>
-                    <p>Mobile app development, sacred geometry engine, AR feature implementation. Private alpha testing with select community members.</p>
-                </div>
-
-                <div class="roadmap-item">
-                    <span class="status testing">Phase 3 - Testing</span>
-                    <h4>Q4 2026: Refinement</h4>
-                    <p>Public beta launch, community feedback integration, feature polishing, and consciousness tool optimization.</p>
-                </div>
-
-                <div class="roadmap-item">
-                    <span class="status launch">Phase 4 - Launch</span>
-                    <h4>Q1 2027: Activation</h4>
-                    <p>Full public release on iOS and Android. Free tier for all sparks, premium features for Players and OG members.</p>
-                </div>
+        <div class="tiers-grid">
+            <!-- Tier 1: Starter Spark -->
+            <div class="tier-card tier-starter">
+                <div class="tier-emoji">🌱</div>
+                <div class="tier-name">STARTER SPARK</div>
+                <div class="tier-price">Free / Entry Level</div>
+                <div class="tier-desc">Your first step into the Sparkverse. Get access to foundational consciousness tools and see what the geometric universe is all about.</div>
+                <ul class="tier-features">
+                    <li>Access to free consciousness tools</li>
+                    <li>Sparkverse community entry</li>
+                    <li>Basic geometric resources</li>
+                    <li>Welcome to the simulation</li>
+                </ul>
+                <a href="https://whop.com/sparkverse-0d79/starter-spark-0c/" target="_blank" class="tier-cta">GET STARTED →</a>
             </div>
-        </div>
 
-        <div class="cta-section">
-            <h2>Be Part of the Journey</h2>
-            <p>Support Spark Station development and get exclusive early access, beta testing privileges, and your name in the consciousness credits.</p>
+            <!-- Tier 2: Starter Spark+ -->
+            <div class="tier-card tier-starter-plus">
+                <div class="tier-emoji">✨</div>
+                <div class="tier-name">STARTER SPARK+</div>
+                <div class="tier-price">Upgraded Access</div>
+                <div class="tier-desc">Ready for more? Level up your starter experience with expanded tools and deeper access to consciousness technology.</div>
+                <ul class="tier-features">
+                    <li>Everything in Starter Spark</li>
+                    <li>Expanded tool library</li>
+                    <li>Priority consciousness prompts</li>
+                    <li>Enhanced geometric generators</li>
+                </ul>
+                <a href="https://whop.com/sparkverse-0d79/starter-spark-copy/" target="_blank" class="tier-cta">UPGRADE →</a>
+            </div>
 
-            <div class="cta-buttons">
-                <a href="invest.html" class="cta-button primary">Support Development</a>
-                <a href="https://whop.com/sparkverse-511c/the-players-lounge/" target="_blank" class="cta-button secondary">Join Players Lounge</a>
+            <!-- Tier 3: Power Pack -->
+            <div class="tier-card tier-power">
+                <span class="popular-badge">POPULAR</span>
+                <div class="tier-emoji">⚡</div>
+                <div class="tier-name">POWER PACK</div>
+                <div class="tier-price">Full Power Access</div>
+                <div class="tier-desc">Unlock the full arsenal of consciousness tools. Sigil generators, soul mapping, reality trackers — the works.</div>
+                <ul class="tier-features">
+                    <li>Full consciousness tool suite</li>
+                    <li>Soul Mapping access</li>
+                    <li>Sigil & sacred geometry engines</li>
+                    <li>Reality tracking systems</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="https://whop.com/sparkverse-0d79/power-pack-copy/" target="_blank" class="tier-cta">POWER UP →</a>
+            </div>
+
+            <!-- Tier 4: Player Pack -->
+            <div class="tier-card tier-player">
+                <div class="tier-emoji">🎮</div>
+                <div class="tier-name">PLAYER PACK</div>
+                <div class="tier-price">Players Lounge Access</div>
+                <div class="tier-desc">Enter the Players Lounge. Monthly community access, exclusive drops, live consciousness sessions, and direct connection to the Spark creator.</div>
+                <ul class="tier-features">
+                    <li>Everything in Power Pack</li>
+                    <li>Players Lounge membership</li>
+                    <li>Exclusive monthly drops</li>
+                    <li>Live consciousness sessions</li>
+                    <li>Direct creator access</li>
+                    <li>Early feature previews</li>
+                </ul>
+                <a href="https://whop.com/sparkverse-0d79/player-pack-copy/" target="_blank" class="tier-cta">JOIN THE GAME →</a>
+            </div>
+
+            <!-- Tier 5: OG Player Pack -->
+            <div class="tier-card tier-og">
+                <span class="popular-badge">👑 LIFETIME</span>
+                <div class="tier-emoji">👑</div>
+                <div class="tier-name">OG PLAYER PACK</div>
+                <div class="tier-price">Lifetime • Founding Member</div>
+                <div class="tier-desc">The ultimate commitment. Lifetime access to everything in the Sparkverse — forever. Your name goes in the code. You become part of the origin story.</div>
+                <ul class="tier-features">
+                    <li>LIFETIME access to all tools</li>
+                    <li>Permanent Players Lounge membership</li>
+                    <li>Founding member recognition</li>
+                    <li>All future products included</li>
+                    <li>Name in the source code</li>
+                    <li>Direct line to the founder</li>
+                    <li>OG Genesis NFT (when available)</li>
+                </ul>
+                <a href="https://whop.com/sparkverse-0d79/og-player-pack-copy/" target="_blank" class="tier-cta">CLAIM YOUR OG SPARK →</a>
             </div>
         </div>
 
@@ -298,5 +225,6 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="cosmic.js"></script>
 </body>
 </html>
