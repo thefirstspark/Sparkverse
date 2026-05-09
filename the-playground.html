@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0f">
+<title>The Playground — The First Spark</title>
+<meta name="description" content="A magical interactive playground. Touch the void. Draw constellations. Summon sparks. Play.">
+<meta property="og:title" content="The Playground — The First Spark">
+<meta property="og:description" content="Touch the void. Draw constellations. Summon sparks. Play.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0a0f;cursor:crosshair}
+
+/* ── CANVAS ── */
+#cosmos{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
+
+/* ── UI OVERLAY ── */
+.ui{position:fixed;z-index:10;pointer-events:none}
+.ui *{pointer-events:auto}
+
+/* ── TITLE ── */
+.title-wrap{
+  position:fixed;top:0;left:0;width:100%;
+  text-align:center;padding:28px 20px 0;z-index:20;
+  pointer-events:none;
+  transition:opacity 1.5s;
+}
+.title-wrap h1{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.2rem,4vw,2rem);
+  letter-spacing:8px;
+  text-transform:uppercase;
+  background:linear-gradient(135deg,#f59e0b,#FF6A3D,#8b5cf6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:6px;
+}
+.title-wrap .sub{
+  font-family:'Space Mono',monospace;
+  font-size:.65rem;letter-spacing:4px;
+  color:rgba(224,231,255,.3);text-transform:uppercase;
+}
+.title-wrap .hint{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.9rem;font-style:italic;
+  color:rgba(139,92,246,.5);
+  margin-top:14px;
+  animation:breathe 3s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:.3}50%{opacity:.7}}
+
+/* ── MODE SELECTOR ── */
+.modes{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:20;
+  background:rgba(10,10,15,.8);
+  border:1px solid rgba(139,92,246,.15);
+  padding:6px;backdrop-filter:blur(12px);
+}
+.mode-btn{
+  font-family:'Space Mono',monospace;
+  font-size:.6rem;letter-spacing:2px;
+  text-transform:uppercase;
+  background:none;border:1px solid rgba(255,255,255,.08);
+  color:rgba(224,231,255,.4);
+  padding:10px 16px;cursor:pointer;
+  transition:all .25s;
+}
+.mode-btn:hover{color:#e0e7ff;border-color:rgba(139,92,246,.4)}
+.mode-btn.active{
+  color:#f59e0b;border-color:#d97706;
+  box-shadow:0 0 20px rgba(217,119,6,.15);
+}
+
+/* ── STATS ── */
+.stats{
+  position:fixed;top:20px;right:20px;z-index:20;
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;letter-spacing:2px;
+  color:rgba(224,231,255,.2);text-align:right;
+  text-transform:uppercase;
+}
+.stats .val{color:#26E4D8;font-weight:700}
+
+/* ── CTA ── */
+.cta-float{
+  position:fixed;bottom:80px;right:20px;z-index:20;
+  opacity:0;transition:opacity 1s;
+}
+.cta-float.visible{opacity:1}
+.cta-float a{
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;letter-spacing:3px;
+  text-transform:uppercase;
+  color:#f59e0b;text-decoration:none;
+  border:1px solid rgba(245,158,11,.3);
+  padding:10px 18px;
+  transition:all .25s;
+  display:block;
+  background:rgba(10,10,15,.8);
+  backdrop-filter:blur(8px);
+}
+.cta-float a:hover{
+  background:rgba(245,158,11,.1);
+  box-shadow:0 0 25px rgba(245,158,11,.2);
+}
+
+/* ── SECRET MESSAGE ── */
+.secret{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,5vw,3rem);
+  font-weight:700;font-style:italic;
+  color:#f59e0b;text-shadow:0 0 60px rgba(245,158,11,.4);
+  opacity:0;pointer-events:none;z-index:30;
+  transition:opacity 2s;
+  text-align:center;
+}
+.secret.show{opacity:1}
+
+/* ── CLEAR BTN ── */
+.clear-btn{
+  position:fixed;top:20px;left:20px;z-index:20;
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;letter-spacing:2px;
+  text-transform:uppercase;
+  background:none;border:1px solid rgba(255,255,255,.08);
+  color:rgba(224,231,255,.25);
+  padding:8px 14px;cursor:pointer;
+  transition:all .25s;
+}
+.clear-btn:hover{color:#FF6A3D;border-color:rgba(255,106,61,.4)}
+
+@media(max-width:600px){
+  .modes{bottom:16px;gap:4px;padding:4px}
+  .mode-btn{padding:8px 10px;font-size:.5rem;letter-spacing:1px}
+  .stats{top:12px;right:12px;font-size:.45rem}
+  .clear-btn{top:12px;left:12px;font-size:.45rem;padding:6px 10px}
+  .cta-float{bottom:70px;right:12px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="cosmos"></canvas>
+
+<div class="title-wrap" id="title">
+  <h1>The Playground</h1>
+  <div class="sub">The First Spark</div>
+  <div class="hint">click anywhere to begin</div>
+</div>
+
+<button class="clear-btn" id="clearBtn">Clear</button>
+
+<div class="stats" id="stats">
+  Sparks: <span class="val" id="sparkCount">0</span><br>
+  Lines: <span class="val" id="lineCount">0</span><br>
+  Mode: <span class="val" id="modeName">Spark</span>
+</div>
+
+<div class="modes" id="modes">
+  <button class="mode-btn active" data-mode="spark">Spark</button>
+  <button class="mode-btn" data-mode="constellation">Constellation</button>
+  <button class="mode-btn" data-mode="gravity">Gravity Well</button>
+  <button class="mode-btn" data-mode="sigil">Sigil Spin</button>
+  <button class="mode-btn" data-mode="aurora">Aurora</button>
+</div>
+
+<div class="cta-float" id="cta">
+  <a href="https://whop.com/checkout/plan_dBFxXLnwQoj1l" target="_blank">Enter The Sparkverse</a>
+</div>
+
+<div class="secret" id="secret">You are the spark.</div>
+
+<script>
+// ════════════════════════════════════════════
+// THE PLAYGROUND — The First Spark
+// ════════════════════════════════════════════
+
+const canvas = document.getElementById('cosmos');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ── STATE ──
+let mode = 'spark';
+let mouse = { x: W/2, y: H/2, down: false };
+let particles = [];
+let constellationPoints = [];
+let constellationLines = [];
+let gravityWells = [];
+let sigilAngle = 0;
+let sigilPoints = [];
+let auroraWaves = [];
+let sparkCount = 0;
+let lineCount = 0;
+let interacted = false;
+let secretShown = false;
+let bgStars = [];
+
+// ── COLORS ──
+const PALETTE = {
+  ember:  ['#FF6A3D','#ff8a5d','#ff4500'],
+  gold:   ['#f59e0b','#F3B23A','#fbbf24'],
+  violet: ['#8b5cf6','#a855f7','#c084fc'],
+  cyan:   ['#26E4D8','#22d3ee','#06b6d4'],
+  white:  ['#e0e7ff','#c7d2fe','#f0f0ff'],
+};
+const ALL_COLORS = Object.values(PALETTE).flat();
+function rColor() { return ALL_COLORS[Math.floor(Math.random()*ALL_COLORS.length)]; }
+function rPalette(name) { const p = PALETTE[name]; return p[Math.floor(Math.random()*p.length)]; }
+
+// ── BACKGROUND STARS ──
+for (let i = 0; i < 200; i++) {
+  bgStars.push({
+    x: Math.random()*4000-1000, y: Math.random()*3000-500,
+    r: Math.random()*1.2+0.3,
+    a: Math.random()*0.4+0.1,
+    speed: Math.random()*0.3+0.05,
+    phase: Math.random()*Math.PI*2,
+  });
+}
+
+// ── PARTICLE CLASS ──
+class Particle {
+  constructor(x, y, opts={}) {
+    this.x = x; this.y = y;
+    this.vx = opts.vx || (Math.random()-0.5)*4;
+    this.vy = opts.vy || (Math.random()-0.5)*4;
+    this.r = opts.r || Math.random()*3+1;
+    this.color = opts.color || rColor();
+    this.life = opts.life || 1;
+    this.decay = opts.decay || (Math.random()*0.008+0.003);
+    this.glow = opts.glow || 0;
+    this.trail = [];
+    this.maxTrail = opts.trail || 8;
+  }
+  update(wells) {
+    // gravity wells influence
+    if (wells && wells.length) {
+      for (const w of wells) {
+        const dx = w.x - this.x;
+        const dy = w.y - this.y;
+        const dist = Math.sqrt(dx*dx+dy*dy) + 1;
+        const force = w.strength / (dist * 0.8);
+        this.vx += (dx/dist) * force;
+        this.vy += (dy/dist) * force;
+      }
+    }
+    this.trail.push({x:this.x, y:this.y});
+    if (this.trail.length > this.maxTrail) this.trail.shift();
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vx *= 0.99;
+    this.vy *= 0.99;
+    this.life -= this.decay;
+  }
+  draw() {
+    // trail
+    if (this.trail.length > 1) {
+      ctx.beginPath();
+      ctx.moveTo(this.trail[0].x, this.trail[0].y);
+      for (let i = 1; i < this.trail.length; i++) {
+        ctx.lineTo(this.trail[i].x, this.trail[i].y);
+      }
+      ctx.strokeStyle = this.color;
+      ctx.globalAlpha = this.life * 0.15;
+      ctx.lineWidth = this.r * 0.5;
+      ctx.stroke();
+    }
+    // glow
+    if (this.glow) {
+      ctx.globalAlpha = this.life * 0.2;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI*2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+    // core
+    ctx.globalAlpha = this.life * 0.9;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+// ── SPARK BURST ──
+function spawnBurst(x, y, count=25) {
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI*2/count)*i + Math.random()*0.3;
+    const speed = Math.random()*5+2;
+    particles.push(new Particle(x, y, {
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed,
+      r: Math.random()*2.5+0.5,
+      color: rColor(),
+      glow: 1,
+      trail: 12,
+      decay: Math.random()*0.006+0.004,
+    }));
+  }
+  sparkCount += count;
+  updateStats();
+}
+
+// ── CONSTELLATION ──
+function addConstellationPoint(x, y) {
+  const point = {x, y, pulse: 1};
+  if (constellationPoints.length > 0) {
+    const prev = constellationPoints[constellationPoints.length-1];
+    constellationLines.push({x1:prev.x, y1:prev.y, x2:x, y2:y, a:1});
+    lineCount++;
+  }
+  constellationPoints.push(point);
+  // small burst at point
+  for (let i = 0; i < 6; i++) {
+    particles.push(new Particle(x, y, {
+      vx:(Math.random()-0.5)*2, vy:(Math.random()-0.5)*2,
+      r:1, color:rPalette('cyan'), decay:0.02, trail:4,
+    }));
+  }
+  sparkCount += 6;
+  updateStats();
+}
+
+// ── GRAVITY WELL ──
+function addGravityWell(x, y) {
+  gravityWells.push({x, y, strength: 0.5, life: 1, decay: 0.001});
+  // spawn orbiting particles
+  for (let i = 0; i < 40; i++) {
+    const angle = Math.random()*Math.PI*2;
+    const dist = Math.random()*80+30;
+    particles.push(new Particle(
+      x + Math.cos(angle)*dist,
+      y + Math.sin(angle)*dist,
+      {
+        vx: Math.cos(angle+Math.PI/2)*2,
+        vy: Math.sin(angle+Math.PI/2)*2,
+        r: Math.random()*2+0.5,
+        color: rPalette('violet'),
+        decay: 0.002,
+        glow: 1,
+        trail: 15,
+      }
+    ));
+  }
+  sparkCount += 40;
+  updateStats();
+}
+
+// ── SIGIL ──
+function spawnSigil(x, y) {
+  const points = Math.floor(Math.random()*4)+5; // 5-8 pointed
+  const outerR = Math.random()*60+40;
+  const innerR = outerR * (Math.random()*0.3+0.3);
+  sigilPoints.push({x, y, points, outerR, innerR, angle:0, life:1, color:rPalette('gold')});
+  sparkCount += points;
+  updateStats();
+}
+
+// ── AURORA ──
+function spawnAurora(x, y) {
+  const waveCount = 5;
+  for (let i = 0; i < waveCount; i++) {
+    auroraWaves.push({
+      x, y: y + i*8,
+      width: Math.random()*200+100,
+      amplitude: Math.random()*30+15,
+      frequency: Math.random()*0.02+0.01,
+      speed: Math.random()*0.03+0.01,
+      phase: Math.random()*Math.PI*2,
+      color: i%2===0 ? rPalette('cyan') : rPalette('violet'),
+      life: 1,
+      decay: 0.002,
+    });
+  }
+  sparkCount += waveCount;
+  updateStats();
+}
+
+// ── CONTINUOUS EMIT (mouse hold) ──
+function emitContinuous(x, y) {
+  if (mode === 'spark') {
+    for (let i = 0; i < 3; i++) {
+      particles.push(new Particle(x, y, {
+        vx:(Math.random()-0.5)*6,
+        vy:(Math.random()-0.5)*6 - 1,
+        r:Math.random()*2+0.5,
+        color:rColor(),
+        glow:1,
+        trail:10,
+        decay:0.008,
+      }));
+    }
+    sparkCount += 3;
+  } else if (mode === 'aurora') {
+    if (Math.random() < 0.15) spawnAurora(x, y);
+  }
+}
+
+// ── INPUT HANDLING ──
+function onDown(x, y) {
+  mouse.down = true;
+  mouse.x = x; mouse.y = y;
+  if (!interacted) {
+    interacted = true;
+    document.getElementById('title').style.opacity = '0';
+    setTimeout(() => { document.getElementById('cta').classList.add('visible'); }, 15000);
+  }
+  if (mode === 'spark') spawnBurst(x, y, 30);
+  else if (mode === 'constellation') addConstellationPoint(x, y);
+  else if (mode === 'gravity') addGravityWell(x, y);
+  else if (mode === 'sigil') spawnSigil(x, y);
+  else if (mode === 'aurora') spawnAurora(x, y);
+
+  // Secret: after 100 sparks
+  if (sparkCount > 100 && !secretShown) {
+    secretShown = true;
+    const sec = document.getElementById('secret');
+    sec.classList.add('show');
+    setTimeout(() => sec.classList.remove('show'), 4000);
+  }
+}
+function onMove(x, y) {
+  mouse.x = x; mouse.y = y;
+  if (mouse.down) emitContinuous(x, y);
+}
+function onUp() { mouse.down = false; }
+
+canvas.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+canvas.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+canvas.addEventListener('mouseup', onUp);
+canvas.addEventListener('mouseleave', onUp);
+canvas.addEventListener('touchstart', e => { e.preventDefault(); const t=e.touches[0]; onDown(t.clientX,t.clientY); }, {passive:false});
+canvas.addEventListener('touchmove', e => { e.preventDefault(); const t=e.touches[0]; onMove(t.clientX,t.clientY); }, {passive:false});
+canvas.addEventListener('touchend', e => { e.preventDefault(); onUp(); }, {passive:false});
+
+// ── MODE BUTTONS ──
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelector('.mode-btn.active').classList.remove('active');
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    document.getElementById('modeName').textContent = btn.textContent;
+  });
+});
+
+// ── CLEAR ──
+document.getElementById('clearBtn').addEventListener('click', () => {
+  particles = [];
+  constellationPoints = [];
+  constellationLines = [];
+  gravityWells = [];
+  sigilPoints = [];
+  auroraWaves = [];
+  sparkCount = 0;
+  lineCount = 0;
+  updateStats();
+});
+
+// ── STATS ──
+function updateStats() {
+  document.getElementById('sparkCount').textContent = sparkCount;
+  document.getElementById('lineCount').textContent = lineCount;
+}
+
+// ── KONAMI CODE EASTER EGG ──
+const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+let konamiIndex = 0;
+document.addEventListener('keydown', e => {
+  if (e.keyCode === konamiCode[konamiIndex]) {
+    konamiIndex++;
+    if (konamiIndex === konamiCode.length) {
+      konamiIndex = 0;
+      // MEGA BURST
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          spawnBurst(Math.random()*W, Math.random()*H, 60);
+        }, i*150);
+      }
+      const sec = document.getElementById('secret');
+      sec.textContent = 'REALITY IS PROGRAMMABLE';
+      sec.classList.add('show');
+      setTimeout(() => { sec.classList.remove('show'); sec.textContent = 'You are the spark.'; }, 5000);
+    }
+  } else {
+    konamiIndex = 0;
+  }
+});
+
+// ════════════════════════════════════════════
+// RENDER LOOP
+// ════════════════════════════════════════════
+
+let frame = 0;
+
+function render() {
+  frame++;
+  ctx.fillStyle = 'rgba(10,10,15,0.12)';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Background stars ──
+  for (const s of bgStars) {
+    const flicker = Math.sin(frame*0.02 + s.phase) * 0.15 + s.a;
+    ctx.globalAlpha = Math.max(0, flicker);
+    ctx.fillStyle = '#c7d2fe';
+    ctx.beginPath();
+    ctx.arc(s.x % W, s.y % H, s.r, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // ── Gravity wells ──
+  for (let i = gravityWells.length-1; i >= 0; i--) {
+    const w = gravityWells[i];
+    w.life -= w.decay;
+    if (w.life <= 0) { gravityWells.splice(i,1); continue; }
+    // draw pull ring
+    ctx.globalAlpha = w.life * 0.15;
+    ctx.strokeStyle = '#a855f7';
+    ctx.lineWidth = 1;
+    for (let r = 20; r < 100; r += 25) {
+      ctx.beginPath();
+      ctx.arc(w.x, w.y, r, 0, Math.PI*2);
+      ctx.stroke();
+    }
+    // core glow
+    const grad = ctx.createRadialGradient(w.x,w.y,0,w.x,w.y,30);
+    grad.addColorStop(0, 'rgba(139,92,246,'+w.life*0.4+')');
+    grad.addColorStop(1, 'rgba(139,92,246,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(w.x-30,w.y-30,60,60);
+    ctx.globalAlpha = 1;
+  }
+
+  // ── Particles ──
+  for (let i = particles.length-1; i >= 0; i--) {
+    const p = particles[i];
+    p.update(gravityWells);
+    if (p.life <= 0) { particles.splice(i,1); continue; }
+    p.draw();
+  }
+
+  // ── Constellation lines ──
+  for (let i = constellationLines.length-1; i >= 0; i--) {
+    const l = constellationLines[i];
+    ctx.globalAlpha = l.a * 0.6;
+    ctx.strokeStyle = '#26E4D8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(l.x1, l.y1);
+    ctx.lineTo(l.x2, l.y2);
+    ctx.stroke();
+    // midpoint glow
+    ctx.globalAlpha = l.a * 0.1;
+    const mx = (l.x1+l.x2)/2, my = (l.y1+l.y2)/2;
+    ctx.beginPath();
+    ctx.arc(mx, my, 8, 0, Math.PI*2);
+    ctx.fillStyle = '#26E4D8';
+    ctx.fill();
+  }
+
+  // ── Constellation points ──
+  for (const p of constellationPoints) {
+    p.pulse = 0.5 + Math.sin(frame*0.04)*0.3;
+    ctx.globalAlpha = 0.9;
+    ctx.fillStyle = '#26E4D8';
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+    ctx.fill();
+    // glow
+    ctx.globalAlpha = p.pulse * 0.2;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 12, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // ── Sigils ──
+  for (let i = sigilPoints.length-1; i >= 0; i--) {
+    const s = sigilPoints[i];
+    s.angle += 0.008;
+    s.life -= 0.001;
+    if (s.life <= 0) { sigilPoints.splice(i,1); continue; }
+    ctx.save();
+    ctx.translate(s.x, s.y);
+    ctx.rotate(s.angle);
+    ctx.globalAlpha = s.life * 0.7;
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = 1.2;
+    // outer star
+    ctx.beginPath();
+    for (let j = 0; j < s.points*2; j++) {
+      const r = j%2===0 ? s.outerR : s.innerR;
+      const a = (Math.PI/s.points)*j - Math.PI/2;
+      if (j===0) ctx.moveTo(Math.cos(a)*r, Math.sin(a)*r);
+      else ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
+    }
+    ctx.closePath();
+    ctx.stroke();
+    // inner circle
+    ctx.beginPath();
+    ctx.arc(0, 0, s.innerR*0.6, 0, Math.PI*2);
+    ctx.stroke();
+    // connecting lines
+    for (let j = 0; j < s.points; j++) {
+      const a = (Math.PI*2/s.points)*j - Math.PI/2 + s.angle*0.5;
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(Math.cos(a)*s.outerR*0.8, Math.sin(a)*s.outerR*0.8);
+      ctx.globalAlpha = s.life * 0.25;
+      ctx.stroke();
+    }
+    // glow
+    const grad = ctx.createRadialGradient(0,0,0,0,0,s.outerR);
+    grad.addColorStop(0, s.color.replace(')', ',0.08)').replace('rgb','rgba'));
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = s.life * 0.3;
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(0, 0, s.outerR, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Aurora waves ──
+  for (let i = auroraWaves.length-1; i >= 0; i--) {
+    const w = auroraWaves[i];
+    w.phase += w.speed;
+    w.life -= w.decay;
+    if (w.life <= 0) { auroraWaves.splice(i,1); continue; }
+    ctx.globalAlpha = w.life * 0.25;
+    ctx.strokeStyle = w.color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let x = -w.width/2; x < w.width/2; x += 3) {
+      const yOff = Math.sin(x * w.frequency + w.phase) * w.amplitude;
+      const px = w.x + x;
+      const py = w.y + yOff;
+      if (x === -w.width/2) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    // glow layer
+    ctx.globalAlpha = w.life * 0.06;
+    ctx.lineWidth = 20;
+    ctx.stroke();
+  }
+
+  ctx.globalAlpha = 1;
+
+  // ── Mouse glow (ambient) ──
+  if (interacted) {
+    const mGrad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 60);
+    const mColor = mode === 'spark' ? '245,158,11' :
+                   mode === 'constellation' ? '38,228,216' :
+                   mode === 'gravity' ? '139,92,246' :
+                   mode === 'sigil' ? '243,178,58' : '38,228,216';
+    mGrad.addColorStop(0, `rgba(${mColor},0.06)`);
+    mGrad.addColorStop(1, `rgba(${mColor},0)`);
+    ctx.fillStyle = mGrad;
+    ctx.fillRect(mouse.x-60, mouse.y-60, 120, 120);
+  }
+
+  // ── Cap particles ──
+  if (particles.length > 2000) {
+    particles.splice(0, particles.length - 2000);
+  }
+
+  requestAnimationFrame(render);
+}
+
+render();
+</script>
+</body>
+</html>
