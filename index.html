@@ -21,7 +21,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPARKVERSE | The First Spark</title>
-    <meta name="description" content="Navigate the cosmos of consciousness. Interactive soul mapping, reality tools, and $SPRK token economy.">
+    <meta name="description" content="Navigate the cosmos of consciousness. Interactive soul mapping, reality tools, and membership community.">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -226,48 +226,7 @@
             letter-spacing: 0.2em;
         }
 
-        .token-display {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            backdrop-filter: blur(10px);
-        }
 
-        .token-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--spark-gold), var(--blood-orange), var(--hot-pink));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--void);
-            animation: tokenGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes tokenGlow {
-            0%, 100% { box-shadow: 0 0 10px var(--spark-gold); }
-            50% { box-shadow: 0 0 20px var(--hot-pink); }
-        }
-
-        .token-amount {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .token-label {
-            font-size: 0.65rem;
-            color: var(--dim);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
 
         /* ===== MAIN GALAXY ===== */
         .galaxy-container {
@@ -948,13 +907,6 @@
     <!-- Header -->
     <header class="header">
         <div class="logo gradient-text">SPARKVERSE</div>
-        <div class="token-display">
-            <div class="token-icon">◆</div>
-            <div>
-                <div class="token-amount gradient-text" id="tokenBalance">500</div>
-                <div class="token-label">$SPRK</div>
-            </div>
-        </div>
     </header>
 
     <!-- Galaxy Container -->
@@ -987,7 +939,7 @@
                 <div class="planet-ring"></div>
                 <div class="planet-info">
                     <div class="planet-name">NEXUS</div>
-                    <div class="planet-cost">◆ 5-50 $SPRK</div>
+                    <div class="planet-cost">◆ MEMBERS</div>
                 </div>
             </div>
 
@@ -995,7 +947,7 @@
                 <div class="planet-body"></div>
                 <div class="planet-info">
                     <div class="planet-name">VOID STATION</div>
-                    <div class="planet-cost">◆ 100 $SPRK</div>
+                    <div class="planet-cost">◆ MEMBERS</div>
                 </div>
             </div>
 
@@ -1296,7 +1248,7 @@
                     { name: 'Numbers', cost: '10', url: 'numbers.html' },
                     { name: 'Spark Protocol Dashboard', cost: '25', url: 'protocol.html' }
                 ],
-                action: 'LAND (25 $SPRK)',
+                action: 'EXPLORE NEXUS',
                 url: 'tools.html',
                 cost: 25
             },
@@ -1314,7 +1266,7 @@
                     { name: 'Digital Ward', cost: '75', url: 'digital_ward.html' },
                     { name: 'Soul Reincarnation Spiral', cost: '100', url: 'soul-reincarnation.html' }
                 ],
-                action: 'ENTER VOID (100 $SPRK)',
+                action: 'ENTER VOID',
                 url: 'void-portal.html',
                 cost: 100
             },
@@ -1357,7 +1309,7 @@
                 name: 'ECHO CHAMBER',
                 subtitle: 'Earn & Amplify',
                 icon: 'radial-gradient(circle at 25% 25%, #a5f3fc, #06b6d4, #0891b2, #155e75)',
-                description: 'The earning zone. Complete challenges, share insights, bring others into the Sparkverse. Your participation generates $SPRK and amplifies your presence.',
+                description: 'The earning zone. Complete challenges, share insights, bring others into the Sparkverse. Your participation amplifies your presence.',
                 tools: [
                     { name: 'Daily Reset Challenge', cost: 'EARN 5', url: 'daily-reset.html' },
                     { name: 'The Wall — Post & Share', cost: 'EARN 10', url: 'the-wall-deluxe.html' },
@@ -1381,13 +1333,11 @@
                     { name: 'Spark Sigil Commission', cost: 'AUCTION', url: 'https://whop.com/sparkverse-511c/spark-sigil-commission/' },
                     { name: 'OG Spark Membership', cost: 'OG ONLY', url: 'https://whop.com/sparkverse-511c/og-spark-lifetime-access/' }
                 ],
-                action: 'ENTER GENESIS (50 $SPRK)',
+                action: 'ENTER GENESIS',
                 url: 'genesis.html',
                 cost: 50
             }
         };
-
-        let tokenBalance = 500;
 
         function openModal(planetId) {
             const planet = planets[planetId];
@@ -1427,22 +1377,10 @@
 
         function landOnPlanet(planetId) {
             const planet = planets[planetId];
-
-            if (typeof planet.cost === 'number' && planet.cost > 0) {
-                if (tokenBalance >= planet.cost) {
-                    tokenBalance -= planet.cost;
-                    document.getElementById('tokenBalance').textContent = tokenBalance;
-                    showToast(`✦ Landed on ${planet.name}! -${planet.cost} $SPRK`);
-                    closeModal();
-                    if (planet.url) setTimeout(() => window.open(planet.url, '_blank'), 600);
-                } else {
-                    showToast('⚠ Insufficient $SPRK! Earn more in the Echo Chamber.');
-                }
-            } else {
-                showToast(`✦ Welcome to ${planet.name}!`);
-                closeModal();
-                if (planet.url) setTimeout(() => window.open(planet.url, '_blank'), 600);
-            }
+            showToast(`✦ Welcome to ${planet.name}!`);
+            closeModal();
+            if (planet.url) setTimeout(() => window.open(planet.url, '_blank'), 600);
+        }
         }
 
         function showToast(message) {

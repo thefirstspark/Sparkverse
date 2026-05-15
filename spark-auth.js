@@ -502,10 +502,10 @@ const SparkAuth = (function() {
 
         } else {
             // ---- User is NOT logged in ----
-            // Replace the "I Have Tokens" button with "Login with Whop"
+            // Replace the login button with "Login with Whop"
             const actionsEl = gateEl.querySelector('.spark-gate-actions');
             if (actionsEl) {
-                // Find the secondary button ("I Have Tokens") and replace it
+                // Find the secondary button and replace it with Login
                 const secondaryBtn = actionsEl.querySelector('.spark-gate-btn-secondary');
                 if (secondaryBtn) {
                     const loginBtn = document.createElement('button');

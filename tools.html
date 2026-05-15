@@ -184,6 +184,65 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        /* ── Paywall lock overlay ── */
+        .tool-card {
+            isolation: isolate;
+        }
+
+        .tool-lock-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 13px;
+            background: rgba(7, 7, 20, 0.82);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            z-index: 10;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tool-lock-icon {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .tool-lock-msg {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.5;
+            max-width: 200px;
+        }
+
+        .tool-lock-btn {
+            padding: 9px 22px;
+            border-radius: 20px;
+            border: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 4px;
+        }
+
+        .tool-lock-btn.login {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #000;
+        }
+
+        .tool-lock-btn.upgrade {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+        }
+
+        .tool-lock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
     </style>
 </head>
 <body>
@@ -268,6 +327,7 @@
         </div>
     </div>
 
+    <script src="spark-auth.js"></script>
     <script>
         function filterTools(tier) {
             const cards = document.querySelectorAll('.tool-card');
@@ -284,6 +344,68 @@
                 }
             });
         }
+
+        // ── Paywall: lock paid tool cards based on membership ──
+        (async function applyToolPaywall() {
+            // free-tier cards are always accessible
+            const paidCards = document.querySelectorAll('.tool-card[data-tier="player"], .tool-card[data-tier="og"], .tool-card[data-tier="shop"]');
+
+            const loggedIn  = SparkAuth.isLoggedIn();
+            const hasAccess = SparkAuth.hasAccess();
+
+            // Nothing to lock if user has full access
+            if (loggedIn && hasAccess) {
+                SparkAuth.applyGate(); // show user badge
+                return;
+            }
+
+            // Determine overlay variant
+            const variant = loggedIn ? 'upgrade' : 'login';
+
+            paidCards.forEach(function(card) {
+                const tier = card.dataset.tier;
+
+                // Tier-specific label
+                const tierLabel = {
+                    player: 'Players Lounge',
+                    og:     'OG Membership',
+                    shop:   'Purchase required'
+                }[tier] || 'Membership';
+
+                const overlay = document.createElement('div');
+                overlay.className = 'tool-lock-overlay';
+
+                const icon = document.createElement('div');
+                icon.className = 'tool-lock-icon';
+                icon.textContent = '🔒';
+
+                const msg = document.createElement('div');
+                msg.className = 'tool-lock-msg';
+                msg.textContent = variant === 'login'
+                    ? 'Login to unlock · ' + tierLabel
+                    : 'Upgrade to ' + tierLabel + ' to access this tool';
+
+                const btn = document.createElement('button');
+                btn.className = 'tool-lock-btn ' + variant;
+                btn.textContent = variant === 'login' ? 'Login with Whop' : 'Get Access';
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (variant === 'login') {
+                        SparkAuth.login();
+                    } else {
+                        window.open('https://whop.com/sparkverse-0d79/', '_blank', 'noopener,noreferrer');
+                    }
+                });
+
+                overlay.appendChild(icon);
+                overlay.appendChild(msg);
+                overlay.appendChild(btn);
+                card.appendChild(overlay);
+            });
+
+            // Still show user badge if logged in
+            SparkAuth.applyGate();
+        })();
     </script>
 </body>
 </html>

@@ -83,18 +83,6 @@
             font-size: 1.2em;
         }
 
-        .token-display {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--dim);
-            border: 2px solid var(--glow);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            z-index: 100;
-        }
-
         .galaxy {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -253,27 +241,10 @@
             margin: 20px 0;
             border-radius: 8px;
         }
-
-        .earn-tokens {
-            background: linear-gradient(135deg, var(--mirror), var(--fire));
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 40px 0;
-            text-align: center;
-        }
-
-        .earn-tokens h2 {
-            margin-bottom: 15px;
-        }
     </style>
 </head>
 <body>
     <div class="stars" id="stars"></div>
-
-    <div class="token-display">
-        ✦ <span id="tokenCount">0</span> $SPRK
-    </div>
 
     <div class="container">
         <header>
@@ -281,11 +252,6 @@
             <p class="tagline">A Free Cosmos of Knowledge • Explore Without Limits</p>
             <div id="affinityBadge"></div>
         </header>
-
-        <div class="earn-tokens">
-            <h2>How It Works</h2>
-            <p>All knowledge is FREE to explore. Earn $SPRK tokens by completing quests, sharing insights, and helping others learn. Use tokens for exclusive tools, cosmic themes, and supporting creators.</p>
-        </div>
 
         <div class="galaxy" id="galaxy"></div>
     </div>
@@ -431,17 +397,6 @@
             }
         ];
 
-        // Token system (earn by learning, not required to access)
-        let tokens = parseInt(localStorage.getItem('tokens')) || 0;
-        document.getElementById('tokenCount').textContent = tokens;
-
-        function earnTokens(amount, reason) {
-            tokens += amount;
-            localStorage.setItem('tokens', tokens);
-            document.getElementById('tokenCount').textContent = tokens;
-            showToast(`✦ +${amount} $SPRK: ${reason}`);
-        }
-
         // Render galaxy
         function renderGalaxy() {
             const galaxy = document.getElementById('galaxy');
@@ -459,7 +414,7 @@
                     <h3>${planet.name}</h3>
                     <p class="planet-desc">${planet.desc}</p>
                     <div class="planet-status">
-                        ${planet.free ? '🌟 FREE ACCESS' : `🔒 ${planet.cost} $SPRK`}
+                        ${planet.free ? '🌟 FREE ACCESS' : '🔒 MEMBERS ONLY'}
                     </div>
                 `;
 
@@ -488,7 +443,7 @@
 
                 <div style="margin-top: 20px; padding: 15px; background: var(--void); border-radius: 8px;">
                     <p style="color: #10b981; font-weight: bold;">🌟 This knowledge is FREE for everyone</p>
-                    <p style="color: #94a3b8; margin-top: 5px; font-size: 0.9em;">Complete lessons to earn $SPRK tokens</p>
+                    <p style="color: #94a3b8; margin-top: 5px; font-size: 0.9em;">Members get unlimited access to all tools</p>
                 </div>
 
                 <button onclick="explorePlanet(${index})">Start Learning ✦</button>
@@ -499,9 +454,8 @@
         }
 
         function explorePlanet(index) {
-            earnTokens(5, `Started exploring ${planets[index].name}`);
             closeModal('planetModal');
-            showToast(`🚀 Welcome to ${planets[index].name}! Start learning to earn more tokens.`);
+            showToast(`🚀 Welcome to ${planets[index].name}! Start exploring.`);
         }
 
         function closeModal(id) {
@@ -534,7 +488,6 @@
             localStorage.setItem('affinity', primaryPath);
             closeModal('affinityModal');
 
-            earnTokens(10, 'Discovered your path affinity');
             displayAffinity();
             renderGalaxy(); // Re-render with path colors
 

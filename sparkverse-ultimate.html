@@ -103,39 +103,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         .header-actions { display: flex; gap: 1rem; align-items: center; }
 
-        .token-display {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(251,191,36,0.3);
-            padding: 0.4rem 1rem;
-            border-radius: 2rem;
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .token-display:hover { border-color: var(--spark); box-shadow: 0 0 20px rgba(251,191,36,0.3); }
-
-        .token-icon {
-            width: 26px; height: 26px;
-            background: linear-gradient(135deg, var(--spark), var(--orange), var(--pink));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: var(--void);
-            animation: tokenGlow 2s ease-in-out infinite;
-        }
-        @keyframes tokenGlow {
-            0%, 100% { box-shadow: 0 0 8px var(--spark); }
-            50% { box-shadow: 0 0 20px var(--pink); }
-        }
-
-        .token-amount { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1rem; }
-
         .buy-btn {
             padding: 0.5rem 1.2rem;
             background: linear-gradient(135deg, var(--spark), var(--orange));
@@ -437,13 +404,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <header class="header">
         <div class="logo gradient-text">SPARKVERSE</div>
         <div class="header-actions">
-            <div class="token-display" onclick="openBuyModal()">
-                <div class="token-icon">◆</div>
-                <div>
-                    <div class="token-amount"><span id="tokenBalance">500</span></div>
-                </div>
-            </div>
-            <button class="buy-btn" onclick="openBuyModal()">GET $SPRK</button>
         </div>
     </header>
 
@@ -539,43 +499,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </div>
 
-    <!-- BUY MODAL -->
-    <div class="modal-overlay" id="buyModal">
-        <div class="modal buy-modal">
-            <span class="modal-close" onclick="closeBuyModal()">&times;</span>
-            <h2 class="buy-title gradient-text">GET $SPRK TOKENS</h2>
-            
-            <div class="buy-options">
-                <div class="buy-option" onclick="buyTokens(100, 11.11)">
-                    <div class="token-icon" style="width:40px;height:40px;font-size:1rem;">◆</div>
-                    <div>
-                        <div class="buy-amount">100 $SPRK</div>
-                        <div class="buy-price">$11.11 USD</div>
-                    </div>
-                </div>
-                <div class="buy-option" onclick="buyTokens(500, 44.44)">
-                    <div class="token-icon" style="width:40px;height:40px;font-size:1rem;">◆</div>
-                    <div>
-                        <div class="buy-amount">500 $SPRK</div>
-                        <div class="buy-price">$44.44 USD</div>
-                        <div class="buy-bonus">+50 bonus tokens!</div>
-                    </div>
-                </div>
-                <div class="buy-option" onclick="buyTokens(1111, 88.88)">
-                    <div class="token-icon" style="width:40px;height:40px;font-size:1rem;">◆</div>
-                    <div>
-                        <div class="buy-amount">1,111 $SPRK</div>
-                        <div class="buy-price">$88.88 USD</div>
-                        <div class="buy-bonus">+200 bonus tokens!</div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="modal-btn buy-action" onclick="buyWithCrypto()">BUY WITH SOL / CRYPTO →</button>
-            <p style="text-align:center;margin-top:1rem;font-size:0.7rem;color:var(--dim);">Or earn free tokens on the Echo planet!</p>
-        </div>
-    </div>
-
     <div class="toast" id="toast"></div>
 
     <script>
@@ -636,7 +559,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     { name: 'Frequency Scanner', cost: '10' },
                     { name: 'Pattern Decoder', cost: '50' }
                 ],
-                action: 'LAND ON NEXUS (25 $SPRK)',
+                action: 'LAND ON NEXUS',
                 cost: 25
             },
             void: {
@@ -650,7 +573,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     { name: 'Ancestor Trace', cost: '150' },
                     { name: 'Ego Death Simulation', cost: '200' }
                 ],
-                action: 'ENTER VOID (100 $SPRK)',
+                action: 'ENTER VOID',
                 cost: 100
             },
             forge: {
@@ -685,7 +608,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 name: 'ECHO CHAMBER',
                 subtitle: 'Earn & Amplify',
                 icon: 'radial-gradient(circle at 25% 25%, #a5f3fc, #06b6d4, #0891b2, #155e75)',
-                description: 'The earning zone. Complete challenges, share insights, bring others in. Participation generates $SPRK.',
+                description: 'The earning zone. Complete challenges, share insights, bring others in. Your participation amplifies your presence.',
                 tools: [
                     { name: 'Daily Challenge', cost: 'EARN 5' },
                     { name: 'Share Portal', cost: 'EARN 10' },
@@ -706,13 +629,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     { name: 'Genesis Collection', cost: 'AUCTION' },
                     { name: 'Artifact Forge', cost: 'VAR' }
                 ],
-                action: 'ENTER GENESIS (50 $SPRK)',
+                action: 'ENTER GENESIS',
                 cost: 50
             }
         };
 
-        let tokenBalance = parseInt(localStorage.getItem('sprkBalance')) || 500;
-        document.getElementById('tokenBalance').textContent = tokenBalance;
+        function landOnPlanet(id) {
+            const p = planets[id];
+            showToast(`◆ Welcome to ${p.name}!`);
+            closeModal();
+        }
 
         function openModal(id) {
             const p = planets[id];
@@ -740,39 +666,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         function closeModal() { document.getElementById('planetModal').classList.remove('active'); }
 
-        function landOnPlanet(id) {
-            const p = planets[id];
-            if (typeof p.cost === 'number' && p.cost > 0) {
-                if (tokenBalance >= p.cost) {
-                    tokenBalance -= p.cost;
-                    localStorage.setItem('sprkBalance', tokenBalance);
-                    document.getElementById('tokenBalance').textContent = tokenBalance;
-                    showToast(`◆ Landed on ${p.name}! -${p.cost} $SPRK`);
-                    closeModal();
-                } else {
-                    showToast('⚠ Insufficient $SPRK! Get more tokens or earn on Echo.');
-                }
-            } else {
-                showToast(`◆ Welcome to ${p.name}!`);
-                closeModal();
-            }
-        }
-
-        function openBuyModal() { document.getElementById('buyModal').classList.add('active'); }
-        function closeBuyModal() { document.getElementById('buyModal').classList.remove('active'); }
-
-        function buyTokens(amount, price) {
-            // In production, this would redirect to Whop or payment processor
-            window.open(`https://thefirstspark.shop/checkout?amount=${amount}&price=${price}`, '_blank');
-            closeBuyModal();
-        }
-
-        function buyWithCrypto() {
-            // In production, links to pump.fun token page or DEX
-            window.open('https://pump.fun/search?q=sprk', '_blank');
-            closeBuyModal();
-        }
-
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
@@ -780,9 +673,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        document.addEventListener('keydown', e => { if(e.key === 'Escape') { closeModal(); closeBuyModal(); } });
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
         document.getElementById('planetModal').addEventListener('click', e => { if(e.target.id === 'planetModal') closeModal(); });
-        document.getElementById('buyModal').addEventListener('click', e => { if(e.target.id === 'buyModal') closeBuyModal(); });
     </script>
 </body>
 </html>
