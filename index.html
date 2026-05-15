@@ -1,33 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-K4TKPMG9');</script>
-    <!-- End Google Tag Manager -->
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8B1ERP8ML"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-P8B1ERP8ML');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPARKVERSE | The First Spark</title>
-    <meta name="description" content="Navigate the cosmos of consciousness. Interactive soul mapping, reality tools, and $SPRK token economy.">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -772,15 +748,11 @@
             align-items: center;
             gap: 0.5rem;
             transition: all 0.2s ease;
-            text-decoration: none;
-            color: inherit;
-            cursor: pointer;
         }
 
         .tool-tag:hover {
             border-color: var(--nebula-purple);
             background: rgba(139, 92, 246, 0.1);
-            transform: translateY(-2px);
         }
 
         .tool-cost {
@@ -900,6 +872,143 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* ===== NOVEL SHOWCASE ===== */
+        .novel-showcase {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .novel-showcase-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            background: linear-gradient(135deg, rgba(20,20,30,0.7), rgba(30,20,40,0.7));
+            border: 1px solid rgba(236, 72, 153, 0.25);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow:
+                0 0 60px rgba(236, 72, 153, 0.15),
+                0 0 120px rgba(139, 92, 246, 0.08);
+        }
+
+        .novel-cover-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .novel-cover-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 360px;
+            background: radial-gradient(ellipse, rgba(236, 72, 153, 0.3), rgba(139, 92, 246, 0.15), transparent 70%);
+            filter: blur(30px);
+            animation: coverGlow 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes coverGlow {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .novel-cover-img {
+            position: relative;
+            z-index: 1;
+            width: 220px;
+            border-radius: 0.75rem;
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.6),
+                0 0 20px rgba(236, 72, 153, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .novel-cover-img:hover {
+            transform: scale(1.04) translateY(-4px);
+            box-shadow:
+                0 12px 40px rgba(0,0,0,0.7),
+                0 0 30px rgba(236, 72, 153, 0.5),
+                0 0 60px rgba(139, 92, 246, 0.2);
+        }
+
+        .novel-info {
+            flex: 1;
+        }
+
+        .novel-tagline {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.35em;
+            color: var(--hot-pink);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .novel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+            text-shadow:
+                0 0 20px rgba(236, 72, 153, 0.4),
+                0 0 40px rgba(139, 92, 246, 0.2);
+        }
+
+        .novel-subtitle {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .novel-description {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 2rem;
+        }
+
+        .novel-description em {
+            color: var(--hot-pink);
+            font-style: italic;
+        }
+
+        .btn-purchase {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--hot-pink), var(--nebula-purple), var(--cosmic-cyan));
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 0.75rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            animation: btnGradient 3s ease infinite;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn-purchase:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow:
+                0 8px 30px rgba(236, 72, 153, 0.5),
+                0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .solar-system {
@@ -926,15 +1035,31 @@
             .logo { font-size: 1.1rem; letter-spacing: 0.15em; }
             .galaxy-title h1 { letter-spacing: 0.2em; }
             .bottom-nav { gap: 1.5rem; }
+
+            .novel-showcase-inner {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+                gap: 2rem;
+            }
+
+            .novel-cover-img {
+                width: 180px;
+            }
+
+            .novel-cover-glow {
+                width: 220px;
+                height: 300px;
+            }
+
+            .btn-purchase {
+                padding: 0.875rem 2rem;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4TKPMG9"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <!-- Cosmic Background -->
     <div class="cosmic-bg">
         <div class="deep-space"></div>
@@ -1033,21 +1158,44 @@
         </div>
     </main>
 
+    <!-- Novel Showcase: The Genesis -->
+    <section class="novel-showcase" id="novelShowcase">
+        <div class="novel-showcase-inner">
+            <div class="novel-cover-wrapper">
+                <div class="novel-cover-glow"></div>
+                <img src="novel-cover.avif" alt="The Genesis — A Novel by Kate" class="novel-cover-img" />
+            </div>
+            <div class="novel-info">
+                <p class="novel-tagline">A SPARKVERSE NOVEL</p>
+                <h2 class="novel-title gradient-text">THE GENESIS</h2>
+                <p class="novel-subtitle">The Lineage Layer — What moved through us</p>
+                <p class="novel-description">
+                    What moved through us — and what stops here? <em>The Genesis</em> traces the bloodline of fire,
+                    silence, and reinvention across generations. Part origin story, part awakening,
+                    this is the novel that started everything.
+                </p>
+                <a href="https://whop.com/checkout/plan_hW8GlMaVgyLCu" target="_blank" rel="noopener" class="btn btn-purchase">
+                    PURCHASE IT NOW
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
+        <a href="#" class="nav-item active">
             <span class="nav-icon">◉</span>
             <span>Galaxy</span>
         </a>
-        <a href="invest.html" class="nav-item" target="_blank" rel="noopener">
+        <a href="#" class="nav-item">
             <span class="nav-icon">◆</span>
             <span>Wallet</span>
         </a>
-        <a href="tools.html" class="nav-item">
+        <a href="#" class="nav-item">
             <span class="nav-icon">☰</span>
             <span>Inventory</span>
         </a>
-        <a href="https://whop.com/sparkverse-511c/" class="nav-item" target="_blank" rel="noopener">
+        <a href="#" class="nav-item">
             <span class="nav-icon">◈</span>
             <span>Profile</span>
         </a>
@@ -1244,15 +1392,12 @@
                 icon: 'radial-gradient(circle at 30% 30%, #fff, #fbbf24, #f97316, #ec4899, #7c2d12)',
                 description: 'The central hub of the Sparkverse. Your journey begins and returns here. Access your soul map, track your evolution, and sync your consciousness data across all dimensions.',
                 tools: [
-                    { name: 'Soul Map Navigator', cost: 'FREE', url: 'soul-map.html' },
-                    { name: 'Evolution Timeline', cost: 'FREE', url: 'timeline.html' },
-                    { name: 'Sovereignty Dashboard', cost: 'FREE', url: 'sovereignty-dashboard.html' },
-                    { name: 'Consciousness Journal', cost: 'FREE', url: 'journal.html' },
-                    { name: 'Sparkverse Navigator', cost: 'FREE', url: 'sparkverse-tool.html' },
-                    { name: 'Ecosystem Map', cost: 'FREE', url: 'sparkverse-map.html' }
+                    { name: 'Soul Map Viewer', cost: 'FREE' },
+                    { name: 'Evolution Timeline', cost: 'FREE' },
+                    { name: 'Spark Sync', cost: 'FREE' },
+                    { name: 'Dimension Portal', cost: 'FREE' }
                 ],
                 action: 'ENTER CORE',
-                url: 'sparkverse-hub.html',
                 cost: 0
             },
             lumina: {
@@ -1261,43 +1406,26 @@
                 icon: 'radial-gradient(circle at 25% 25%, #fff, #22d3d3, #0d9488, #064e3b)',
                 description: 'The gateway planet. Free to explore, Lumina contains foundational teachings on consciousness, reality programming basics, and introductory tools for awakening minds.',
                 tools: [
-                    { name: 'Daily Reset Protocol', cost: 'FREE', url: 'daily-reset.html' },
-                    { name: 'Pause Chamber', cost: 'FREE', url: 'pause-chamber.html' },
-                    { name: 'Consciousness Journal', cost: 'FREE', url: 'journal.html' },
-                    { name: 'Sigil Crafter', cost: 'FREE', url: 'sigil.html' },
-                    { name: 'Consciousness Cards', cost: 'FREE', url: 'card.html' },
-                    { name: 'Lunar Wisdom', cost: 'FREE', url: 'lunar-wisdom.html' },
-                    { name: 'Archetype Discovery', cost: 'FREE', url: 'archetype-discovery.html' },
-                    { name: 'Player Card Generator', cost: 'FREE', url: 'archetype-card.html' },
-                    { name: 'Consciousness Canvas', cost: 'FREE', url: 'consciousness_canvas.html' },
-                    { name: 'Consciousness Playground', cost: 'FREE', url: 'consciousness-playground.html' },
-                    { name: 'Reality Log', cost: 'FREE', url: 'reality-log-demo.html' }
+                    { name: 'Reality 101 Course', cost: 'FREE' },
+                    { name: 'Breath Tracker', cost: 'FREE' },
+                    { name: 'Daily Spark Journal', cost: 'FREE' },
+                    { name: 'Basic Sigil Generator', cost: 'FREE' }
                 ],
                 action: 'LAND FREE',
-                url: 'daily-reset.html',
                 cost: 0
             },
             nexus: {
                 name: 'NEXUS',
                 subtitle: 'Interactive Tools Hub',
                 icon: 'radial-gradient(circle at 25% 25%, #e9d5ff, #8b5cf6, #6d28d9, #4c1d95)',
-                description: 'The workshop of consciousness. Every tool here transforms energy. Soul mapping, sigil creation, reality tuning — the full toolkit for active reality architects.',
+                description: 'The workshop of consciousness. Every tool here transforms energy. Soul mapping, sigil creation, frequency alignment — each activation costs $SPRK to power.',
                 tools: [
-                    { name: 'Advanced Soul Map', cost: '25', url: 'soul-map.html' },
-                    { name: 'Selector Interface', cost: '15', url: 'selector-interface.html' },
-                    { name: 'Pattern Analyzer', cost: '10', url: 'patterns.html' },
-                    { name: 'Quantum Echo Chamber', cost: '20', url: 'quantum_echo_chamber.html' },
-                    { name: 'Oracle', cost: '30', url: 'oracle.html' },
-                    { name: 'Five Paths Explorer', cost: '25', url: 'five-paths-explorer.html' },
-                    { name: 'Karma Calculator', cost: '10', url: 'karma-calculator.html' },
-                    { name: 'The First Spark Oracle', cost: '25', url: 'the-first-spark-oracle.html' },
-                    { name: 'Algorithmic Soul', cost: '20', url: 'algorithmic_soul.html' },
-                    { name: 'Equilibrium', cost: '15', url: 'equilibrium.html' },
-                    { name: 'Numbers', cost: '10', url: 'numbers.html' },
-                    { name: 'Spark Protocol Dashboard', cost: '25', url: 'protocol.html' }
+                    { name: 'Advanced Soul Map', cost: '25' },
+                    { name: 'Sigil Forge', cost: '15' },
+                    { name: 'Frequency Scanner', cost: '10' },
+                    { name: 'Pattern Decoder', cost: '50' }
                 ],
                 action: 'LAND (25 $SPRK)',
-                url: 'tools.html',
                 cost: 25
             },
             void: {
@@ -1306,35 +1434,26 @@
                 icon: 'radial-gradient(circle at 25% 25%, #374151, #111827, #000)',
                 description: 'Not for the faint of heart. The Void Station holds tools for shadow integration, trauma processing, and deep consciousness work. High value, high intensity.',
                 tools: [
-                    { name: 'Void Portal', cost: '100', url: 'void-portal.html' },
-                    { name: 'Collapse Protocol', cost: '75', url: 'collapse.html' },
-                    { name: 'Lineage Mapper', cost: '50', url: 'lineage.html' },
-                    { name: 'Oracle Consciousness', cost: '150', url: 'oracle-consciousness.html' },
-                    { name: 'Spark Chamber', cost: '100', url: 'spark-chamber.html' },
-                    { name: 'Digital Ward', cost: '75', url: 'digital_ward.html' },
-                    { name: 'Soul Reincarnation Spiral', cost: '100', url: 'soul-reincarnation.html' }
+                    { name: 'Shadow Mirror', cost: '100' },
+                    { name: 'Wound Mapping', cost: '75' },
+                    { name: 'Ancestor Trace', cost: '150' },
+                    { name: 'Ego Death Simulation', cost: '200' }
                 ],
                 action: 'ENTER VOID (100 $SPRK)',
-                url: 'void-portal.html',
                 cost: 100
             },
             forge: {
                 name: 'THE FORGE',
                 subtitle: 'Reality Creation Tools',
                 icon: 'radial-gradient(circle at 25% 25%, #fef3c7, #fbbf24, #f97316, #9a3412)',
-                description: 'Where consciousness becomes creation. Build your reality with programmable intention tools. The Selector System, Render Engine, and Spark Protocol live here.',
+                description: 'Where consciousness becomes creation. Build your reality with programmable intention tools. Variable burn rate based on manifestation complexity.',
                 tools: [
-                    { name: 'Reality Render Engine', cost: 'VAR', url: 'render-engine.html' },
-                    { name: 'Spark Protocol', cost: 'VAR', url: 'spark-protocol.html' },
-                    { name: 'Selector Command Center', cost: 'VAR', url: 'selector-hub.html' },
-                    { name: 'Intention Ritual', cost: 'VAR', url: 'selector-ritual.html' },
-                    { name: 'Entanglement Simulator', cost: 'VAR', url: 'selector-entanglement.html' },
-                    { name: 'Timeline Brancher', cost: 'VAR', url: 'timeline.html' },
-                    { name: 'Manifest Artifact', cost: 'VAR', url: 'manifest_artifact.html' },
-                    { name: 'Cosmic Playground', cost: 'VAR', url: 'playground.html' }
+                    { name: 'Reality Script Editor', cost: 'VAR' },
+                    { name: 'Manifestation Compiler', cost: 'VAR' },
+                    { name: 'Timeline Brancher', cost: 'VAR' },
+                    { name: 'Probability Engine', cost: 'VAR' }
                 ],
                 action: 'ENTER FORGE',
-                url: 'render-engine.html',
                 cost: 'variable'
             },
             archive: {
@@ -1343,14 +1462,12 @@
                 icon: 'radial-gradient(circle at 25% 25%, #f3f4f6, #9ca3af, #4b5563, #1f2937)',
                 description: 'Orbital libraries containing Book Zero chapters, origin stories, and the documented journey from trauma to awakening. Unlock tiers to dive deeper into the source.',
                 tools: [
-                    { name: 'Origin Story', cost: 'FREE', url: 'origin.html' },
-                    { name: 'Founding Documents', cost: 'FREE', url: 'founding.html' },
-                    { name: 'Genesis Protocol', cost: '50', url: 'genesis.html' },
-                    { name: 'Origin Key', cost: '200', url: 'origin_key.html' },
-                    { name: 'Private Archives', cost: 'OG ONLY', url: 'https://whop.com/sparkverse-511c/og-spark-lifetime-access/' }
+                    { name: 'Book Zero: Ch 1-3', cost: 'FREE' },
+                    { name: 'Book Zero: Ch 4-7', cost: '50' },
+                    { name: 'Book Zero: Complete', cost: '200' },
+                    { name: 'Private Archives', cost: 'OG ONLY' }
                 ],
                 action: 'ORBIT ARCHIVES',
-                url: 'origin.html',
                 cost: 0
             },
             echo: {
@@ -1359,15 +1476,12 @@
                 icon: 'radial-gradient(circle at 25% 25%, #a5f3fc, #06b6d4, #0891b2, #155e75)',
                 description: 'The earning zone. Complete challenges, share insights, bring others into the Sparkverse. Your participation generates $SPRK and amplifies your presence.',
                 tools: [
-                    { name: 'Daily Reset Challenge', cost: 'EARN 5', url: 'daily-reset.html' },
-                    { name: 'The Wall — Post & Share', cost: 'EARN 10', url: 'the-wall-deluxe.html' },
-                    { name: 'TFS Viral Kit', cost: 'EARN 25', url: 'tfs-viral.html' },
-                    { name: 'Signal Transmitter', cost: 'EARN 15', url: 'signal.html' },
-                    { name: 'Spark Battle Arena', cost: 'EARN 100', url: 'spark-battle-arena.html' },
-                    { name: 'The Void Wall', cost: 'EARN 10', url: 'void.html' }
+                    { name: 'Daily Challenge', cost: 'EARN 5' },
+                    { name: 'Share Portal', cost: 'EARN 10' },
+                    { name: 'Referral Beacon', cost: 'EARN 25' },
+                    { name: 'Creation Contest', cost: 'EARN 100' }
                 ],
                 action: 'START EARNING',
-                url: 'the-wall-deluxe.html',
                 cost: 0
             },
             genesis: {
@@ -1376,13 +1490,12 @@
                 icon: 'radial-gradient(circle at 25% 25%, #fce7f3, #ec4899, #be185d, #831843)',
                 description: 'Where soul maps become permanent artifacts. Mint your consciousness evolution on-chain. Your transformation has receipts that live forever in the Sparkverse.',
                 tools: [
-                    { name: 'Soul Map NFT Mint', cost: '50', url: 'soul-map.html' },
-                    { name: 'KJP Soul Artifact', cost: '100', url: 'kjp-soul-artifact.html' },
-                    { name: 'Spark Sigil Commission', cost: 'AUCTION', url: 'https://whop.com/sparkverse-511c/spark-sigil-commission/' },
-                    { name: 'OG Spark Membership', cost: 'OG ONLY', url: 'https://whop.com/sparkverse-511c/og-spark-lifetime-access/' }
+                    { name: 'Soul Map NFT Mint', cost: '50' },
+                    { name: 'Evolution Series', cost: '100' },
+                    { name: 'Genesis Collection', cost: 'AUCTION' },
+                    { name: 'Artifact Forge', cost: 'VAR' }
                 ],
-                action: 'ENTER GENESIS (50 $SPRK)',
-                url: 'genesis.html',
+                action: 'ENTER GENESIS',
                 cost: 50
             }
         };
@@ -1402,21 +1515,18 @@
             const toolsContainer = document.getElementById('modalTools');
             toolsContainer.innerHTML = '';
             planet.tools.forEach(tool => {
-                const tag = document.createElement('a');
+                const tag = document.createElement('div');
                 tag.className = 'tool-tag';
-                tag.href = tool.url || '#';
-                tag.target = '_blank';
-                tag.rel = 'noopener noreferrer';
                 const costDisplay = tool.cost === 'FREE' || tool.cost.includes('EARN') || tool.cost === 'VAR' || tool.cost === 'AUCTION' || tool.cost === 'OG ONLY'
-                    ? tool.cost
+                    ? tool.cost 
                     : '◆' + tool.cost;
-                const costColor = tool.cost.includes('EARN') ? 'color: #84cc16' :
-                                  tool.cost === 'FREE' ? 'color: #22d3d3' :
+                const costColor = tool.cost.includes('EARN') ? 'color: #84cc16' : 
+                                  tool.cost === 'FREE' ? 'color: #22d3d3' : 
                                   'color: #fbbf24';
                 tag.innerHTML = `${tool.name} <span class="tool-cost" style="${costColor}">${costDisplay}</span>`;
                 toolsContainer.appendChild(tag);
             });
-
+            
             document.getElementById('modalAction').onclick = () => landOnPlanet(planetId);
             modal.classList.add('active');
         }
@@ -1427,21 +1537,19 @@
 
         function landOnPlanet(planetId) {
             const planet = planets[planetId];
-
+            
             if (typeof planet.cost === 'number' && planet.cost > 0) {
                 if (tokenBalance >= planet.cost) {
                     tokenBalance -= planet.cost;
                     document.getElementById('tokenBalance').textContent = tokenBalance;
                     showToast(`✦ Landed on ${planet.name}! -${planet.cost} $SPRK`);
                     closeModal();
-                    if (planet.url) setTimeout(() => window.open(planet.url, '_blank'), 600);
                 } else {
                     showToast('⚠ Insufficient $SPRK! Earn more in the Echo Chamber.');
                 }
             } else {
                 showToast(`✦ Welcome to ${planet.name}!`);
                 closeModal();
-                if (planet.url) setTimeout(() => window.open(planet.url, '_blank'), 600);
             }
         }
 
@@ -1460,6 +1568,60 @@
             if (e.target.id === 'planetModal') closeModal();
         });
     </script>
+
+    <!-- Social Links -->
+    <style>
+        .spark-social {
+            display:flex;
+            gap:18px;
+            justify-content:center;
+            padding:20px;
+        }
+
+        .spark-social a{
+            width:44px;
+            height:44px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:12px;
+            background:rgba(255,255,255,0.05);
+            color:#00f7ff;
+            text-decoration:none;
+            transition:0.3s;
+            box-shadow:0 0 8px rgba(0,247,255,0.3);
+        }
+
+        .spark-social a:hover{
+            transform:translateY(-3px);
+            color:white;
+            box-shadow:
+            0 0 10px #00f7ff,
+            0 0 20px #00f7ff,
+            0 0 40px #8b5cf6;
+        }
+
+        .spark-social svg{
+            width:22px;
+            height:22px;
+            fill:currentColor;
+        }
+    </style>
+
+    <div class="spark-social">
+        <a href="https://x.com/originalglitch" target="_blank" rel="noopener" title="X (Twitter)">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2H21l-6.52 7.45L22 22h-6.828l-5.34-6.98L3.7 22H1l6.98-7.97L2 2h6.828l4.84 6.34L18.244 2z"/></svg>
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.5 9.87v-6.99H8.07V12h2.43V9.8c0-2.4 1.43-3.73 3.63-3.73 1.05 0 2.15.19 2.15.19v2.36h-1.21c-1.19 0-1.56.74-1.56 1.5V12h2.66l-.43 2.88h-2.23v6.99A10 10 0 0 0 22 12"/></svg>
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5.8A4.2 4.2 0 1 1 7.8 12 4.2 4.2 0 0 1 12 7.8zm5.2-.6a1 1 0 1 1-1-1 1 1 0 0 1 1 1z"/></svg>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.8.6 9.4.6 9.4.6s7.6 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.8 15.5v-7l6.2 3.5-6.2 3.5z"/></svg>
+        </a>
+    </div>
+
 </body>
 </html>
-
