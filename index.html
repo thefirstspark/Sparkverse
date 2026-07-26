@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--void:#050508;--nebula-purple:#8b5cf6;--spark-gold:#fbbf24;--cosmic-cyan:#22d3d3;--blood-orange:#f97316;--hot-pink:#ec4899;--ghost-white:rgba(255,255,255,.9);--dim:rgba(255,255,255,.4)}
+:root{--void:#050508;--nebula-purple:#8b5cf6;--spark-gold:#fbbf24;--cosmic-cyan:#22d3d3;--blood-orange:#f97316;--hot-pink:#ec4899;--ghost-white:rgba(255,255,255,.9);--dim:rgba(255,255,255,.45)}
 body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;color:var(--ghost-white);overflow-x:hidden;cursor:crosshair}
 .gradient-text{background:linear-gradient(135deg,var(--hot-pink),var(--nebula-purple),var(--cosmic-cyan),#84cc16,var(--spark-gold),var(--blood-orange),var(--hot-pink));background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gs 8s ease infinite}
 @keyframes gs{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
@@ -48,8 +48,8 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .planet-forge .planet-body{background:radial-gradient(circle at 25% 25%,#fef3c7,var(--spark-gold),var(--blood-orange));box-shadow:0 0 50px var(--blood-orange)}
 .planet-forge .planet-name{color:var(--blood-orange)}
 .planet-archive{width:48px;height:48px;top:calc(50% - 260px);left:calc(50% - 180px)}
-.planet-archive .planet-body{background:radial-gradient(circle at 25% 25%,#f3f4f6,#9ca3af,#4b5563);box-shadow:0 0 25px rgba(156,163,175,.5)}
-.planet-archive .planet-name{color:#d1d5db}
+.planet-archive .planet-body{background:radial-gradient(circle at 25% 25%,#ff6b3d,#c94c2a,#7c2d12);box-shadow:0 0 25px rgba(201,76,42,.5)}
+.planet-archive .planet-name{color:#ff6b3d}
 .planet-echo{width:45px;height:45px;top:calc(50% + 310px);left:calc(50% + 120px)}
 .planet-echo .planet-body{background:radial-gradient(circle at 25% 25%,#a5f3fc,#06b6d4,#0891b2);box-shadow:0 0 30px rgba(6,182,212,.6)}
 .planet-echo .planet-name{color:#22d3ee}
@@ -58,17 +58,22 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .planet-genesis .planet-name{color:var(--hot-pink)}
 .planet-modal{position:fixed;inset:0;background:rgba(5,5,8,.97);z-index:1000;display:none;align-items:center;justify-content:center;padding:2rem;opacity:0;transition:opacity .3s;backdrop-filter:blur(10px)}
 .planet-modal.active{display:flex;opacity:1}
-.modal-content{max-width:560px;width:100%;background:linear-gradient(135deg,rgba(20,20,30,.95),rgba(30,30,45,.95));border:1px solid rgba(139,92,246,.3);border-radius:1.5rem;padding:2.5rem;position:relative;transform:scale(.92);transition:transform .3s;box-shadow:0 0 60px rgba(139,92,246,.2)}
+.modal-content{max-width:620px;width:100%;background:linear-gradient(135deg,rgba(20,20,30,.96),rgba(30,30,45,.96));border:1px solid rgba(139,92,246,.3);border-radius:1.5rem;padding:2.25rem;position:relative;transform:scale(.92);transition:transform .3s;box-shadow:0 0 60px rgba(139,92,246,.2);max-height:90vh;overflow-y:auto}
 .planet-modal.active .modal-content{transform:scale(1)}
-.modal-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:var(--dim);font-size:1.5rem;cursor:pointer}
+.modal-close{position:absolute;top:1.1rem;right:1.1rem;background:none;border:none;color:var(--dim);font-size:1.4rem;cursor:pointer;z-index:2}
 .modal-close:hover{color:var(--hot-pink)}
-.modal-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.25rem}
-.modal-planet-icon{width:80px;height:80px;border-radius:50%;flex-shrink:0}
-.modal-title{font-family:Orbitron,sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:.12em;margin-bottom:.35rem}
-.modal-subtitle{font-size:.85rem;color:var(--cosmic-cyan)}
-.modal-description{color:var(--dim);line-height:1.75;margin-bottom:1.5rem;font-size:.92rem}
+.modal-header{display:flex;align-items:center;gap:1.25rem;margin-bottom:1rem}
+.modal-planet-icon{width:72px;height:72px;border-radius:50%;flex-shrink:0}
+.modal-title{font-family:Orbitron,sans-serif;font-size:1.35rem;font-weight:700;letter-spacing:.12em;margin-bottom:.3rem}
+.modal-subtitle{font-size:.82rem;color:var(--cosmic-cyan)}
+.modal-description{color:var(--dim);line-height:1.7;margin-bottom:1.25rem;font-size:.9rem}
+.modal-tools{margin-bottom:1.35rem}
+.modal-tools h4{font-family:Orbitron,sans-serif;font-size:.68rem;letter-spacing:.22em;margin-bottom:.7rem}
+.tool-list{display:flex;flex-wrap:wrap;gap:.45rem}
+.tool-tag{display:inline-block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);padding:.45rem .85rem;border-radius:2rem;font-size:.72rem;color:var(--ghost-white);text-decoration:none;transition:all .2s;cursor:pointer}
+.tool-tag:hover{border-color:var(--nebula-purple);background:rgba(139,92,246,.15);color:#fff;box-shadow:0 0 16px rgba(139,92,246,.25)}
 .modal-actions{display:flex;gap:1rem}
-.btn{flex:1;padding:.85rem 1.4rem;border-radius:.75rem;font-family:Orbitron,sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.15em;cursor:pointer;text-transform:uppercase;transition:all .2s}
+.btn{flex:1;padding:.85rem 1.3rem;border-radius:.75rem;font-family:Orbitron,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.15em;cursor:pointer;text-transform:uppercase;transition:all .2s}
 .btn-primary{background:linear-gradient(135deg,var(--spark-gold),var(--blood-orange),var(--hot-pink));border:none;color:var(--void)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(251,191,36,.35)}
 .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--ghost-white)}
@@ -77,7 +82,7 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:.35rem;color:var(--dim);text-decoration:none;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
 .nav-item.active,.nav-item:hover{color:var(--ghost-white)}
 .nav-icon{font-size:1.3rem}
-@media(max-width:768px){.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{letter-spacing:.2em}.bottom-nav{gap:1.5rem}}
+@media(max-width:768px){.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{letter-spacing:.2em}.bottom-nav{gap:1.5rem}.modal-content{padding:1.5rem}}
 </style>
 </head>
 <body>
@@ -117,6 +122,10 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
       </div>
     </div>
     <p class="modal-description" id="modalDescription"></p>
+    <div class="modal-tools">
+      <h4 class="gradient-text">TOOLS IN THIS ZONE</h4>
+      <div class="tool-list" id="modalTools"></div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-secondary" onclick="closeModal()">ORBIT</button>
       <button class="btn btn-primary" id="modalAction">ENTER</button>
@@ -124,21 +133,190 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
   </div>
 </div>
 <script>
-const planets={
-  core:{name:'CORE SPARK',subtitle:'The Origin Point',icon:'radial-gradient(circle at 30% 30%,#fff,#fbbf24,#f97316,#ec4899,#7c2d12)',description:'The central hub of the Sparkverse. Your journey begins and returns here.',action:'ENTER CORE',url:'soul-map.html'},
-  lumina:{name:'LUMINA',subtitle:'Beginner Consciousness',icon:'radial-gradient(circle at 25% 25%,#fff,#22d3d3,#0d9488,#064e3b)',description:'The gateway zone. Foundational teachings on consciousness and introductory tools.',action:'ENTER LUMINA',url:'free.html'},
-  nexus:{name:'NEXUS',subtitle:'Interactive Tools Hub',icon:'radial-gradient(circle at 25% 25%,#e9d5ff,#8b5cf6,#6d28d9,#4c1d95)',description:'The workshop of consciousness. Soul mapping, sigil creation, frequency alignment.',action:'ENTER NEXUS',url:'tools.html'},
-  void:{name:'VOID STATION',subtitle:'Shadow Work & Deep Processing',icon:'radial-gradient(circle at 25% 25%,#374151,#111827,#000)',description:'Tools for shadow integration, trauma processing, and deep consciousness work.',action:'ENTER VOID',url:'void-portal.html'},
-  forge:{name:'THE FORGE',subtitle:'Reality Creation Tools',icon:'radial-gradient(circle at 25% 25%,#fef3c7,#fbbf24,#f97316,#9a3412)',description:'Where consciousness becomes creation. Build your reality with intention tools.',action:'ENTER FORGE',url:'spark-protocol.html'},
-  archive:{name:'DNA CHAMBER',subtitle:'The Lineage Layer',icon:'radial-gradient(circle at 25% 25%,#ff6b3d,#c94c2a,#7c2d12)',description:'Four living strands. Ancestral fire, selector choice, forge, orbit. What moves through us — and what stops here.',action:'ENTER DNA CHAMBER',url:'dna-chamber.html'},
-  echo:{name:'ECHO CHAMBER',subtitle:'Community & Signal',icon:'radial-gradient(circle at 25% 25%,#a5f3fc,#06b6d4,#0891b2,#155e75)',description:'The signal zone. Share insights, complete challenges, connect with other Players.',action:'ENTER ECHO',url:'players.html'},
-  genesis:{name:'GENESIS',subtitle:'Soul Artifacts',icon:'radial-gradient(circle at 25% 25%,#fce7f3,#ec4899,#be185d,#831843)',description:'Where soul maps become permanent artifacts. Your transformation has receipts.',action:'ENTER GENESIS',url:'genesis.html'}
+const planets = {
+  core: {
+    name: 'CORE SPARK',
+    subtitle: 'The Origin Point',
+    icon: 'radial-gradient(circle at 30% 30%, #fff, #fbbf24, #f97316, #ec4899, #7c2d12)',
+    description: 'The central hub. Soul maps, origin stories, sovereignty dashboards, and the timeline of your evolution across dimensions.',
+    action: 'ENTER CORE',
+    url: 'soul-map.html',
+    tools: [
+      { name: 'Soul Map', url: 'soul-map.html' },
+      { name: 'Origin', url: 'origin.html' },
+      { name: 'The Source', url: 'the-source.html' },
+      { name: 'Timeline', url: 'timeline.html' },
+      { name: 'Sovereignty Dashboard', url: 'sovereignty-dashboard.html' },
+      { name: 'Sovereignty Pillars', url: 'sovereignty-pillars.html' },
+      { name: 'Origin Key', url: 'origin_key.html' }
+    ]
+  },
+  lumina: {
+    name: 'LUMINA',
+    subtitle: 'Beginner Consciousness',
+    icon: 'radial-gradient(circle at 25% 25%, #fff, #22d3d3, #0d9488, #064e3b)',
+    description: 'The gateway zone. Foundational practices, daily resets, energy check-ins, and the playground where awakening begins.',
+    action: 'ENTER LUMINA',
+    url: 'consciousness-playground.html',
+    tools: [
+      { name: 'Consciousness Playground', url: 'consciousness-playground.html' },
+      { name: 'Daily Reset', url: 'daily-reset.html' },
+      { name: 'Energy Check-in', url: 'energy-checkin.html' },
+      { name: 'Journal', url: 'journal.html' },
+      { name: 'Pause Chamber', url: 'pause-chamber.html' },
+      { name: 'The Playground', url: 'the-playground.html' },
+      { name: 'Free Zone', url: 'free.html' },
+      { name: 'Phoenix Reset', url: 'phoenix-reset-2026.html' }
+    ]
+  },
+  nexus: {
+    name: 'NEXUS',
+    subtitle: 'Interactive Tools Hub',
+    icon: 'radial-gradient(circle at 25% 25%, #e9d5ff, #8b5cf6, #6d28d9, #4c1d95)',
+    description: 'The workshop. Sigils, oracles, numerology, karma, patterns, archetypes — every instrument that transforms energy into clarity.',
+    action: 'ENTER NEXUS',
+    url: 'the-first-spark-tools.html',
+    tools: [
+      { name: 'Full Tools Hub', url: 'the-first-spark-tools.html' },
+      { name: 'Sigil Generator', url: 'sigil.html' },
+      { name: 'Oracle', url: 'oracle.html' },
+      { name: 'First Spark Oracle', url: 'the-first-spark-oracle.html' },
+      { name: 'Numbers', url: 'numbers.html' },
+      { name: 'Karma Calculator', url: 'karma-calculator.html' },
+      { name: 'Patterns', url: 'patterns.html' },
+      { name: 'Archetype Discovery', url: 'archetype-discovery.html' },
+      { name: 'Five Paths Explorer', url: 'five-paths-explorer.html' },
+      { name: 'Lunar Wisdom', url: 'lunar-wisdom.html' }
+    ]
+  },
+  void: {
+    name: 'VOID STATION',
+    subtitle: 'Shadow Work & Deep Processing',
+    icon: 'radial-gradient(circle at 25% 25%, #374151, #111827, #000)',
+    description: 'High intensity. Shadow integration, collapse and reset, digital wards, equilibrium — the work that happens in the dark.',
+    action: 'ENTER VOID',
+    url: 'void-portal.html',
+    tools: [
+      { name: 'Void Portal', url: 'void-portal.html' },
+      { name: 'Void Chamber', url: 'void.html' },
+      { name: 'Collapse', url: 'collapse.html' },
+      { name: 'Equilibrium', url: 'equilibrium.html' },
+      { name: 'Digital Ward', url: 'digital_ward.html' },
+      { name: 'Quantum Echo', url: 'quantum_echo_chamber.html' },
+      { name: 'Spark Chamber', url: 'spark-chamber.html' }
+    ]
+  },
+  forge: {
+    name: 'THE FORGE',
+    subtitle: 'Reality Creation Tools',
+    icon: 'radial-gradient(circle at 25% 25%, #fef3c7, #fbbf24, #f97316, #9a3412)',
+    description: 'Where intention becomes form. Protocols, planners, render engines, manifestation compilers — the heat that shapes reality.',
+    action: 'ENTER FORGE',
+    url: 'spark-protocol.html',
+    tools: [
+      { name: 'Spark Protocol', url: 'spark-protocol.html' },
+      { name: 'Intention Setter', url: 'intention-setter.html' },
+      { name: 'Render Engine', url: 'render-engine.html' },
+      { name: 'Spark Planner', url: 'spark-planner.html' },
+      { name: 'Protocol', url: 'protocol.html' },
+      { name: 'Manifest Artifact', url: 'manifest_artifact.html' },
+      { name: 'Reality Log', url: 'reality-log-demo.html' },
+      { name: 'Consciousness Canvas', url: 'consciousness_canvas.html' }
+    ]
+  },
+  archive: {
+    name: 'DNA CHAMBER',
+    subtitle: 'The Lineage Layer',
+    icon: 'radial-gradient(circle at 25% 25%, #ff6b3d, #c94c2a, #7c2d12)',
+    description: 'Four living strands. Ancestral fire, selector choice, forge, orbit. Lineage work, origin keys, and the algorithmic soul.',
+    action: 'ENTER DNA CHAMBER',
+    url: 'dna-chamber.html',
+    tools: [
+      { name: 'DNA Chamber', url: 'dna-chamber.html' },
+      { name: 'Lineage', url: 'lineage.html' },
+      { name: 'Algorithmic Soul', url: 'algorithmic_soul.html' },
+      { name: 'KJP Soul Artifact', url: 'kjp-soul-artifact.html' },
+      { name: 'Origin Key', url: 'origin_key.html' },
+      { name: 'Source', url: 'source.html' },
+      { name: 'Theme Analysis', url: 'theme-analysis.html' }
+    ]
+  },
+  echo: {
+    name: 'ECHO CHAMBER',
+    subtitle: 'Community & Signal',
+    icon: 'radial-gradient(circle at 25% 25%, #a5f3fc, #06b6d4, #0891b2, #155e75)',
+    description: 'The signal zone. Players, walls, graffiti, members — amplify presence and connect with the living network.',
+    action: 'ENTER ECHO',
+    url: 'players.html',
+    tools: [
+      { name: 'Players', url: 'players.html' },
+      { name: 'The Wall', url: 'the-wall-deluxe.html' },
+      { name: 'Signal', url: 'signal.html' },
+      { name: 'Graffiti', url: 'graffiti.html' },
+      { name: 'Members', url: 'sparkverse-members.html' },
+      { name: 'Sparkverse Hub', url: 'sparkverse-hub.html' },
+      { name: 'News', url: 'news.html' },
+      { name: 'Links', url: 'links.html' }
+    ]
+  },
+  genesis: {
+    name: 'GENESIS',
+    subtitle: 'Soul Artifacts',
+    icon: 'radial-gradient(circle at 25% 25%, #fce7f3, #ec4899, #be185d, #831843)',
+    description: 'Where soul maps become permanent. Cards, drop artifacts, reincarnation paths — receipts that live in the Sparkverse.',
+    action: 'ENTER GENESIS',
+    url: 'genesis.html',
+    tools: [
+      { name: 'Genesis', url: 'genesis.html' },
+      { name: 'Soul Reincarnation', url: 'soul-reincarnation.html' },
+      { name: 'Drop Cards', url: 'first-spark-drop-cards.html' },
+      { name: 'Spark Cards', url: 'spark_cards.html' },
+      { name: 'Archetype Card', url: 'archetype-card.html' },
+      { name: 'Manifest Artifact', url: 'manifest_artifact.html' },
+      { name: 'Soul Map Thank You', url: 'thankyou-soulmap.html' },
+      { name: 'Trinity', url: 'trinity.html' }
+    ]
+  }
 };
-function openModal(id){const p=planets[id];if(!p)return;document.getElementById('modalIcon').style.background=p.icon;document.getElementById('modalTitle').textContent=p.name;document.getElementById('modalSubtitle').textContent=p.subtitle;document.getElementById('modalDescription').textContent=p.description;document.getElementById('modalAction').textContent=p.action;document.getElementById('modalAction').onclick=()=>landOnPlanet(id);document.getElementById('planetModal').classList.add('active')}
-function closeModal(){document.getElementById('planetModal').classList.remove('active')}
-function landOnPlanet(id){const p=planets[id];if(p&&p.url)window.location.href=p.url}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-document.getElementById('planetModal').addEventListener('click',e=>{if(e.target.id==='planetModal')closeModal()});
+
+function openModal(id) {
+  const p = planets[id];
+  if (!p) return;
+  document.getElementById('modalIcon').style.background = p.icon;
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalSubtitle').textContent = p.subtitle;
+  document.getElementById('modalDescription').textContent = p.description;
+  document.getElementById('modalAction').textContent = p.action;
+  document.getElementById('modalAction').onclick = () => landOnPlanet(id);
+
+  const toolsEl = document.getElementById('modalTools');
+  toolsEl.innerHTML = '';
+  (p.tools || []).forEach(t => {
+    const a = document.createElement('a');
+    a.className = 'tool-tag';
+    a.href = t.url;
+    a.textContent = t.name;
+    toolsEl.appendChild(a);
+  });
+
+  document.getElementById('planetModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('planetModal').classList.remove('active');
+}
+
+function landOnPlanet(id) {
+  const p = planets[id];
+  if (p && p.url) window.location.href = p.url;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+document.getElementById('planetModal').addEventListener('click', e => {
+  if (e.target.id === 'planetModal') closeModal();
+});
 </script>
 </body>
 </html>
