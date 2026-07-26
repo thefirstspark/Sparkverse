@@ -7,12 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--void:#050508;--nebula-purple:#8b5cf6;--spark-gold:#fbbf24;--cosmic-cyan:#22d3d3;--blood-orange:#f97316;--hot-pink:#ec4899;--ghost-white:rgba(255,255,255,.9);--dim:rgba(255,255,255,.45)}
+:root{--void:#050508;--nebula-purple:#8b5cf6;--spark-gold:#fbbf24;--cosmic-cyan:#22d3d3;--blood-orange:#f97316;--hot-pink:#ec4899;--acid-green:#84cc16;--ghost-white:rgba(255,255,255,.9);--dim:rgba(255,255,255,.45)}
 body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;color:var(--ghost-white);overflow-x:hidden;cursor:crosshair}
-.gradient-text{background:linear-gradient(135deg,var(--hot-pink),var(--nebula-purple),var(--cosmic-cyan),#84cc16,var(--spark-gold),var(--blood-orange),var(--hot-pink));background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gs 8s ease infinite}
+.gradient-text{background:linear-gradient(135deg,var(--hot-pink),var(--nebula-purple),var(--cosmic-cyan),var(--acid-green),var(--spark-gold),var(--blood-orange),var(--hot-pink));background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gs 8s ease infinite}
 @keyframes gs{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .cosmic-bg{position:fixed;inset:0;z-index:0;overflow:hidden}
-.deep-space{position:absolute;inset:0;background:radial-gradient(ellipse at 10% 20%,rgba(139,92,246,.15),transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(236,72,153,.12),transparent 45%),linear-gradient(180deg,#050508,#0a0a12 50%,#050510)}
+.deep-space{position:absolute;inset:0;background:radial-gradient(ellipse at 10% 20%,rgba(139,92,246,.15),transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(236,72,153,.12),transparent 45%),radial-gradient(ellipse at 70% 30%,rgba(132,204,22,.06),transparent 40%),linear-gradient(180deg,#050508,#0a0a12 50%,#050510)}
 .header{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(5,5,8,.98),transparent)}
 .logo{font-family:Orbitron,sans-serif;font-weight:900;font-size:1.5rem;letter-spacing:.2em}
 .galaxy-container{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 2rem 2rem}
@@ -56,6 +56,10 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .planet-genesis{width:52px;height:52px;top:calc(50% + 100px);left:calc(50% + 250px)}
 .planet-genesis .planet-body{background:radial-gradient(circle at 25% 25%,#fce7f3,var(--hot-pink),#be185d);box-shadow:0 0 35px var(--hot-pink)}
 .planet-genesis .planet-name{color:var(--hot-pink)}
+.planet-playground{width:58px;height:58px;top:calc(50% - 220px);left:calc(50% + 160px)}
+.planet-playground .planet-body{background:radial-gradient(circle at 25% 25%,#ecfccb,var(--acid-green),#4d7c0f,#365314);box-shadow:0 0 35px var(--acid-green),0 0 70px rgba(132,204,22,.35);animation:playGlow 2.5s ease-in-out infinite}
+@keyframes playGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+.planet-playground .planet-name{color:var(--acid-green)}
 .planet-modal{position:fixed;inset:0;background:rgba(5,5,8,.97);z-index:1000;display:none;align-items:center;justify-content:center;padding:2rem;opacity:0;transition:opacity .3s;backdrop-filter:blur(10px)}
 .planet-modal.active{display:flex;opacity:1}
 .modal-content{max-width:620px;width:100%;background:linear-gradient(135deg,rgba(20,20,30,.96),rgba(30,30,45,.96));border:1px solid rgba(139,92,246,.3);border-radius:1.5rem;padding:2.25rem;position:relative;transform:scale(.92);transition:transform .3s;box-shadow:0 0 60px rgba(139,92,246,.2);max-height:90vh;overflow-y:auto}
@@ -82,7 +86,7 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:.35rem;color:var(--dim);text-decoration:none;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
 .nav-item.active,.nav-item:hover{color:var(--ghost-white)}
 .nav-icon{font-size:1.3rem}
-@media(max-width:768px){.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{letter-spacing:.2em}.bottom-nav{gap:1.5rem}.modal-content{padding:1.5rem}}
+@media(max-width:768px){.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.planet-playground{width:40px;height:40px;top:calc(50% - 130px);left:calc(50% + 95px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{letter-spacing:.2em}.bottom-nav{gap:1.5rem}.modal-content{padding:1.5rem}}
 </style>
 </head>
 <body>
@@ -97,6 +101,7 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
     <div class="orbit orbit-1"></div><div class="orbit orbit-2"></div><div class="orbit orbit-3"></div><div class="orbit orbit-4"></div>
     <div class="sun" onclick="openModal('core')"><span class="sun-label">CORE<br>SPARK</span></div>
     <div class="planet planet-lumina" onclick="openModal('lumina')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">LUMINA</div></div></div>
+    <div class="planet planet-playground" onclick="openModal('playground')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">PLAYGROUND</div></div></div>
     <div class="planet planet-nexus" onclick="openModal('nexus')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">NEXUS</div></div></div>
     <div class="planet planet-void" onclick="openModal('void')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">VOID STATION</div></div></div>
     <div class="planet planet-forge" onclick="openModal('forge')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">THE FORGE</div></div></div>
@@ -155,18 +160,36 @@ const planets = {
     name: 'LUMINA',
     subtitle: 'Beginner Consciousness',
     icon: 'radial-gradient(circle at 25% 25%, #fff, #22d3d3, #0d9488, #064e3b)',
-    description: 'The gateway zone. Foundational practices, daily resets, energy check-ins, and the playground where awakening begins.',
+    description: 'The gateway zone. Foundational practices, daily resets, energy check-ins — where awakening begins.',
     action: 'ENTER LUMINA',
-    url: 'consciousness-playground.html',
+    url: 'daily-reset.html',
     tools: [
-      { name: 'Consciousness Playground', url: 'consciousness-playground.html' },
       { name: 'Daily Reset', url: 'daily-reset.html' },
       { name: 'Energy Check-in', url: 'energy-checkin.html' },
       { name: 'Journal', url: 'journal.html' },
       { name: 'Pause Chamber', url: 'pause-chamber.html' },
-      { name: 'The Playground', url: 'the-playground.html' },
       { name: 'Free Zone', url: 'free.html' },
       { name: 'Phoenix Reset', url: 'phoenix-reset-2026.html' }
+    ]
+  },
+  playground: {
+    name: 'PLAYGROUND',
+    subtitle: 'Experiment · Glitch · Play',
+    icon: 'radial-gradient(circle at 25% 25%, #ecfccb, #84cc16, #4d7c0f, #365314)',
+    description: 'The free experimental zone. No rules, no hierarchy — just consciousness toys, canvases, arenas, and wild prototypes. Get lost here on purpose.',
+    action: 'ENTER PLAYGROUND',
+    url: 'consciousness-playground.html',
+    tools: [
+      { name: 'Consciousness Playground', url: 'consciousness-playground.html' },
+      { name: 'The Playground', url: 'the-playground.html' },
+      { name: 'Playground', url: 'playground.html' },
+      { name: 'Consciousness Canvas', url: 'consciousness_canvas.html' },
+      { name: 'Spark Battle Arena', url: 'spark-battle-arena.html' },
+      { name: 'Render Engine', url: 'render-engine.html' },
+      { name: 'Stardust', url: 'stardust.html' },
+      { name: 'Zone Codex', url: 'zone-codex.html' },
+      { name: 'Spark Chamber v2', url: 'spark-chamber-v2.html' },
+      { name: 'Subject Tracker', url: 'subject-tracker.html' }
     ]
   },
   nexus: {
@@ -220,8 +243,7 @@ const planets = {
       { name: 'Spark Planner', url: 'spark-planner.html' },
       { name: 'Protocol', url: 'protocol.html' },
       { name: 'Manifest Artifact', url: 'manifest_artifact.html' },
-      { name: 'Reality Log', url: 'reality-log-demo.html' },
-      { name: 'Consciousness Canvas', url: 'consciousness_canvas.html' }
+      { name: 'Reality Log', url: 'reality-log-demo.html' }
     ]
   },
   archive: {
