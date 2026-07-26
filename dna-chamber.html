@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNA Chamber — Sparkverse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #050508;
+      --lineage: #c94c2a;
+      --lineage-glow: #ff6b3d;
+      --selector: #00d4c8;
+      --selector-glow: #5ef0e6;
+      --forge: #d4a017;
+      --forge-glow: #ffd700;
+      --orbit: #6b8cff;
+      --orbit-glow: #a8c0ff;
+      --gold: #e8c87a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--void);
+      color: #e8e6e3;
+      font-family: 'Orbitron', system-ui, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .cosmos {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 20%, rgba(107, 140, 255, 0.07), transparent),
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(0, 212, 200, 0.05), transparent),
+        radial-gradient(ellipse 50% 30% at 80% 70%, rgba(201, 76, 42, 0.04), transparent),
+        var(--void);
+      z-index: 0;
+    }
+    .helix-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: clamp(1rem, 4vw, 3rem);
+      min-height: 70vh;
+      padding: 2rem 1rem 4rem;
+    }
+    .strand {
+      position: relative;
+      width: clamp(48px, 8vw, 72px);
+      height: clamp(320px, 55vh, 520px);
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .strand:hover, .strand.active {
+      transform: scale(1.06) translateY(-8px);
+    }
+    .strand-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: linear-gradient(180deg, transparent 0%, var(--strand-color) 15%, var(--strand-color) 85%, transparent 100%);
+      opacity: 0.22;
+      filter: blur(10px);
+    }
+    .strand-core {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, transparent, var(--strand-color), transparent);
+      box-shadow: 0 0 20px var(--strand-glow), 0 0 40px var(--strand-color);
+      border-radius: 999px;
+    }
+    .strand-label {
+      position: absolute;
+      bottom: -2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--strand-color);
+      text-shadow: 0 0 12px var(--strand-glow);
+    }
+    .header-bar {
+      position: relative;
+      z-index: 20;
+      padding: 1.5rem 1.5rem 0.5rem;
+      text-align: center;
+    }
+    .header-bar h1 {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      background: linear-gradient(135deg, #ff6b3d, #00d4c8, #d4a017, #6b8cff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shift 8s ease infinite;
+    }
+    @keyframes shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .subtitle {
+      font-family: 'VT323', monospace;
+      font-size: 1.1rem;
+      color: rgba(232, 200, 122, 0.7);
+      letter-spacing: 0.15em;
+      margin-top: 0.35rem;
+    }
+    .panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(380px, 92vw);
+      height: 100%;
+      background: rgba(8, 8, 14, 0.92);
+      border-left: 1px solid rgba(232, 200, 122, 0.15);
+      backdrop-filter: blur(16px);
+      z-index: 30;
+      transform: translateX(100%);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      padding: 2rem 1.5rem;
+      overflow-y: auto;
+    }
+    .panel.open { transform: translateX(0); }
+    .panel h2 {
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 0.75rem;
+    }
+    .panel p {
+      font-family: 'VT323', monospace;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: rgba(232, 230, 227, 0.75);
+    }
+    .back-link {
+      position: fixed;
+      top: 1.25rem;
+      left: 1.25rem;
+      z-index: 40;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: rgba(232, 200, 122, 0.7);
+      text-decoration: none;
+      border: 1px solid rgba(232, 200, 122, 0.25);
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      transition: all 0.2s;
+    }
+    .back-link:hover {
+      color: #e8c87a;
+      border-color: #e8c87a;
+      box-shadow: 0 0 16px rgba(232, 200, 122, 0.2);
+    }
+    .status {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      font-family: 'VT323', monospace;
+      font-size: 0.9rem;
+      color: rgba(0, 212, 200, 0.6);
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="cosmos"></div>
+  <canvas id="particle-canvas"></canvas>
+
+  <a href="index.html" class="back-link">← GALAXY</a>
+
+  <div class="header-bar">
+    <h1>DNA CHAMBER</h1>
+    <p class="subtitle">Four living strands · What moves through us</p>
+  </div>
+
+  <div class="helix-container" id="helix">
+    <div class="strand" data-layer="lineage" style="--strand-color: var(--lineage); --strand-glow: var(--lineage-glow);">
+      <div class="strand-inner"></div>
+      <div class="strand-core"></div>
+      <span class="strand-label">LINEAGE</span>
+    </div>
+    <div class="strand" data-layer="selector" style="--strand-color: var(--selector); --strand-glow: var(--selector-glow);">
+      <div class="strand-inner"></div>
+      <div class="strand-core"></div>
+      <span class="strand-label">SELECTOR</span>
+    </div>
+    <div class="strand" data-layer="forge" style="--strand-color: var(--forge); --strand-glow: var(--forge-glow);">
+      <div class="strand-inner"></div>
+      <div class="strand-core"></div>
+      <span class="strand-label">FORGE</span>
+    </div>
+    <div class="strand" data-layer="orbit" style="--strand-color: var(--orbit); --strand-glow: var(--orbit-glow);">
+      <div class="strand-inner"></div>
+      <div class="strand-core"></div>
+      <span class="strand-label">ORBIT</span>
+    </div>
+  </div>
+
+  <div class="panel" id="panel">
+    <button onclick="closePanel()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#888;font-size:1.2rem;cursor:pointer;">✕</button>
+    <h2 id="panelTitle">—</h2>
+    <p id="panelBody">—</p>
+  </div>
+
+  <div class="status" id="status">fluid field online · move to stir</div>
+
+  <script>
+    const layers = {
+      lineage: {
+        title: 'LINEAGE',
+        color: '#c94c2a',
+        body: 'Ancestral fire. The bloodline of what moved through us — silence, reinvention, and the spark that refused to go out. This strand holds the origin stories and the weight of what was carried so you could choose differently.'
+      },
+      selector: {
+        title: 'SELECTOR',
+        color: '#00d4c8',
+        body: 'The living choice point. Reality as programmable code. Here the glitch becomes a portal — the moment you stop running the inherited script and rewrite the next line from the heart of the present.'
+      },
+      forge: {
+        title: 'FORGE',
+        color: '#d4a017',
+        body: 'Where intention becomes form. The gold of creation. Tools, sigils, and the heat required to transmute pattern into presence. What you build here leaves receipts in the field.'
+      },
+      orbit: {
+        title: 'ORBIT',
+        color: '#6b8cff',
+        body: 'The wider field. Collective signal, community, and the orbits we share. Not isolation — resonance. The chamber does not end at the edge of one body.'
+      }
+    };
+
+    document.querySelectorAll('.strand').forEach(s => {
+      s.addEventListener('click', () => {
+        document.querySelectorAll('.strand').forEach(x => x.classList.remove('active'));
+        s.classList.add('active');
+        const key = s.dataset.layer;
+        const data = layers[key];
+        document.getElementById('panelTitle').textContent = data.title;
+        document.getElementById('panelTitle').style.color = data.color;
+        document.getElementById('panelBody').textContent = data.body;
+        document.getElementById('panel').classList.add('open');
+      });
+    });
+
+    function closePanel() {
+      document.getElementById('panel').classList.remove('open');
+      document.querySelectorAll('.strand').forEach(x => x.classList.remove('active'));
+    }
+
+    // —— Lightweight particle field (canvas) ——
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [], mouse = { x: -9999, y: -9999 };
+
+    function resize() {
+      W = canvas.width = innerWidth;
+      H = canvas.height = innerHeight;
+    }
+    resize();
+    addEventListener('resize', resize);
+    addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+    const COLORS = ['#c94c2a', '#00d4c8', '#d4a017', '#6b8cff'];
+    for (let i = 0; i < 180; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.8 + 0.4,
+        c: COLORS[i % 4],
+        a: Math.random() * 0.5 + 0.2
+      });
+    }
+
+    function tick() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of particles) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const d = Math.sqrt(dx * dx + dy * dy) || 1;
+        if (d < 160) {
+          p.vx += (dx / d) * 0.02;
+          p.vy += (dy / d) * 0.02;
+        }
+        p.vx *= 0.98;
+        p.vy *= 0.98;
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H;
+        if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.c;
+        ctx.globalAlpha = p.a;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(tick);
+    }
+    tick();
+  </script>
+</body>
+</html>
