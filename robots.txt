@@ -1,0 +1,39 @@
+# Sparkverse — robots.txt
+# https://sparkverse.thefirstspark.shop
+
+User-agent: *
+
+# Allow all public-facing pages
+Allow: /
+
+# Disallow OAuth callback (no crawlable content)
+Disallow: /auth-callback.html
+
+# Disallow internal reference/draft files
+Disallow: /index.refrence.html
+
+# Disallow internal pitch decks and one-sheets
+Disallow: /TFS-Investor-OneSheet.html
+Disallow: /TFS_Infinity.html
+Disallow: /The_First_Spark_Cover.html
+Disallow: /The_First_Spark_Pitch_Deck_200K.html
+Disallow: /The_First_Spark_Pitch_Deck_REDESIGNED.html
+Disallow: /ThreeSlideWeapon.html
+Disallow: /OGmap.html
+Disallow: /tfs-valuation.html
+Disallow: /tfs-viral.html
+Disallow: /presentation.html
+
+# Disallow personal/named soul artifacts
+Disallow: /thomas_birthday_soul_map.html
+Disallow: /kjp-soul-artifact.html
+Disallow: /ericlamb_stellar.html
+Disallow: /devon.html
+Disallow: /yela.html
+
+# Disallow AI chat interface pages
+Disallow: /chatgpt.html
+Disallow: /claude.html
+
+# Sitemap location
+Sitemap: https://sparkverse.thefirstspark.shop/sitemap.xml
