@@ -333,7 +333,7 @@
     .ptag-rs { border-color: #fb7185;        color: #fb7185; }
 
     /* ════════════════════════════════════════════════════
-       TOOL 2 — SOUL MAP GENERATOR
+       TOOL 2 — LIFE PATH SIGIL
     ════════════════════════════════════════════════════ */
     .sm-result { display: none; }
     .sm-result.show { display: block; }
@@ -346,6 +346,11 @@
     }
 
     .arch-info { flex: 1; min-width: 200px; }
+
+    .lp-label {
+      font-size: 0.62rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.2rem;
+    }
 
     .arch-name {
       font-size: clamp(1.6rem, 4vw, 2.1rem);
@@ -604,7 +609,7 @@
   <!-- ══════════════════════════════════ NAV ══════ -->
   <nav class="nav-tabs" role="tablist">
     <button class="nav-tab active" data-tool="mirror"   role="tab">✦ Spark Mirror</button>
-    <button class="nav-tab"        data-tool="soulmap"  role="tab">◈ Soul Map</button>
+    <button class="nav-tab"        data-tool="soulmap"  role="tab">◈ Life Path Sigil</button>
     <button class="nav-tab"        data-tool="observer" role="tab">◎ Observer → Player</button>
   </nav>
 
@@ -643,13 +648,13 @@
   </div>
 
   <!-- ══════════════════════════════════════════════
-       TOOL 2 — SOUL MAP GENERATOR
+       TOOL 2 — LIFE PATH SIGIL
   ══════════════════════════════════════════════════ -->
   <div class="tool-panel" id="panel-soulmap">
     <div class="card">
       <div class="card-label">Tool Two</div>
-      <h2>Soul Map Generator</h2>
-      <p class="sub">Enter your name, birthdate, and a current intention. Receive your symbolic identity profile — archetype, numerological keys, and a unique animated sigil you can download.</p>
+      <h2>Life Path Sigil</h2>
+      <p class="sub">Enter your name, birthdate, and a current intention. Receive your symbolic identity profile — Life Path, numerological keys, and a unique animated sigil you can download.</p>
 
       <div class="field">
         <label for="sm-name">Full Name</label>
@@ -665,15 +670,16 @@
           placeholder="What are you moving toward? What do you intend to create, release, or become?"></textarea>
       </div>
 
-      <button class="btn btn-primary" id="sm-btn">◈ Generate Soul Map</button>
+      <button class="btn btn-primary" id="sm-btn">◈ Generate My Sigil</button>
     </div>
 
     <!-- Result card -->
     <div class="card sm-result" id="sm-result">
-      <div class="card-label">◈ Your Soul Map</div>
+      <div class="card-label">◈ Your Life Path</div>
       <div class="arch-grid">
 
         <div class="arch-info">
+          <div class="lp-label">Life Path</div>
           <div class="arch-name"  id="sm-arch-name"></div>
           <div class="arch-title" id="sm-arch-title"></div>
           <div class="num-chips"  id="sm-chips"></div>
@@ -1034,8 +1040,10 @@ const SparkMirror = (() => {
 
 
 /* ──────────────────────────────────────────────────────────────
-   MODULE: SOUL MAP GENERATOR (Tool 2)
-   Calculates numerological profile → archetype + animated SVG sigil.
+   MODULE: LIFE PATH SIGIL (Tool 2)
+   Calculates numerological profile → Life Path + animated SVG sigil.
+   NOTE: 'archetype' is reserved for the 12 Archetype Wheel nodes. This tool
+   surfaces a Life Path name, which is a different layer of the canon.
 ────────────────────────────────────────────────────────────── */
 const SoulMap = (() => {
 
@@ -1076,12 +1084,12 @@ const SoulMap = (() => {
     return reduce(words + (letter.charCodeAt(0) - 64));
   };
 
-  /* ── Archetype data (indexed by life-path number) ── */
+  /* ── Life Path data (canonical names, per soul_map_generator.LIFE_PATH_MEANINGS) ── */
   const ARCH = {
-    1:  { name:'The Pioneer',       title:'Initiator · Creator · Original',
+    1:  { name:'The Initiator',       title:'First-Mover · Creator · Original',
           desc:'You are a first-mover. Your soul carries the frequency of pure beginning — the impulse before the form. You are here to initiate, lead from originality, and trust that your singular vision is itself the map.',
           quals:['Courage to begin','Original perspective','Creative force','Leadership through authenticity','The power of the solo path'] },
-    2:  { name:'The Weaver',        title:'Connector · Intuitive · Harmonizer',
+    2:  { name:'The Diplomat',        title:'Connector · Intuitive · Harmonizer',
           desc:'You feel the threads between people, ideas, and moments that others miss. Your gift is not force but resonance — you bring things together not by pushing, but by being the field in which connection becomes natural.',
           quals:['Deep empathy','Intuitive pattern-sensing','Peace-making','Collaborative intelligence','Sacred sensitivity'] },
     3:  { name:'The Transmitter',   title:'Communicator · Artist · Channel',
@@ -1090,28 +1098,28 @@ const SoulMap = (() => {
     4:  { name:'The Architect',     title:'Builder · Foundation · Stabilizer',
           desc:'You build what lasts. Your soul understands that great things require great groundwork — and you carry the discipline, patience, and structural intelligence to create foundations that will hold.',
           quals:['Methodical mastery','Reliable presence','Long-term vision','The gift of structure','Sacred discipline'] },
-    5:  { name:'The Explorer',      title:'Freedom · Catalyst · Change-Maker',
+    5:  { name:'The Liberator',      title:'Freedom · Change · Loop-Breaker',
           desc:'You are here to move — through space, ideas, experiences, and edges. You are a catalyst who loosens what is fixed and opens what is closed, simply by being present.',
           quals:['Dynamic adaptability','Fearless curiosity','Liberation energy','Multi-dimensional intelligence','The gift of the edge'] },
-    6:  { name:'The Guardian',      title:'Nurturer · Healer · Harmonizer',
+    6:  { name:'The Calibrator',      title:'Nurturer · Healer · Harmonizer',
           desc:'Love is your first language. You sense what is needed before it is spoken, and your gift is the capacity to create conditions in which others flourish. You are here to build the sacred and the beautiful.',
           quals:['Unconditional care','Healing presence','Aesthetic intelligence','Community-building','The wisdom of the heart'] },
-    7:  { name:'The Mystic',        title:'Seeker · Philosopher · Inner Knower',
+    7:  { name:'The Decoder',        title:'Seeker · Philosopher · Inner Knower',
           desc:'You live at the interface between the visible and invisible. You are pulled toward depth — toward the question inside the question, the pattern inside the pattern. Your gift is the willingness to go all the way in.',
           quals:['Deep analysis','Spiritual discernment','The inner compass','Sacred solitude','Wisdom beyond logic'] },
-    8:  { name:'The Manifestor',    title:'Builder · Activator · Power Bearer',
+    8:  { name:'The Materializer',    title:'Builder · Activator · Power Bearer',
           desc:'You carry the frequency of material mastery and purposeful power. You understand that resources and systems are not separate from spirit — they are spirit in form. Your gift is the capacity to make vision tangible.',
           quals:['Strategic intelligence','Abundance consciousness','Purposeful power','Executive vision','The alchemy of matter'] },
-    9:  { name:'The Humanitarian',  title:'Visionary · Integrator · World Server',
+    9:  { name:'The Integrator',  title:'Visionary · Synthesist · World Server',
           desc:'You have lived many lives within this one. The breadth of your awareness and empathy makes you uniquely positioned to serve the whole, not just the part.',
           quals:['Universal compassion','Integrative wisdom','Completion energy','The long view','Service as purpose'] },
-    11: { name:'The Illuminator',   title:'Master Intuitive · Lightbringer',
+    11: { name:'Master Intuitive',   title:'Signal Receiver · Lightbringer',
           desc:'You are a bridge between realms. The 11 carries a double charge — the tension of opposites held in one field. Your life may have been intense, but that intensity has been sharpening you as an instrument of awakening.',
           quals:['Visionary insight','Spiritual sensitivity','Inspirational presence','The gift of seeing through','Master of the in-between'] },
-    22: { name:'The Master Builder',title:'Architect of Worlds · Sacred Constructor',
+    22: { name:'Master Builder',title:'Architect of Worlds · Sacred Constructor',
           desc:'You are here to build systems and movements that last beyond a single lifetime. Your vision is not small — and neither is your responsibility. The 22 carries the weight and glory of making the invisible permanent.',
           quals:['Monumental vision','Practical mysticism','Structural mastery','Leadership through service','The alchemy of scale'] },
-    33: { name:'The Blessing',      title:'Master Teacher · Healing Presence',
+    33: { name:'Master Teacher',      title:'Space Holder · Healing Presence',
           desc:'You embody the highest expression of unconditional love made fully conscious. Your presence alone shifts fields. You are here not to teach doctrine but to demonstrate, through your being, what love in form looks like.',
           quals:['Embodied compassion','Selfless service','Healing mastery','Transformational presence','The living teaching'] },
   };
@@ -1258,14 +1266,14 @@ const SoulMap = (() => {
       cx.fillStyle = '#6b6b8a';
       cx.font = '10px monospace';
       cx.textAlign = 'center';
-      cx.fillText('THE FIRST SPARK  ·  SOUL MAP', 210, 38);
+      cx.fillText('THE FIRST SPARK  ·  LIFE PATH SIGIL', 210, 38);
 
       // Name
       cx.fillStyle = '#f5c842';
       cx.font = '700 20px "Segoe UI",sans-serif';
       cx.fillText(name.toUpperCase(), 210, 70);
 
-      // Archetype
+      // Life Path name
       cx.fillStyle = '#ddddf5';
       cx.font = '400 14px "Segoe UI",sans-serif';
       cx.fillText(archName, 210, 96);
@@ -1280,7 +1288,7 @@ const SoulMap = (() => {
 
       URL.revokeObjectURL(url);
       const a = document.createElement('a');
-      a.download = `soul-map-${name.toLowerCase().replace(/\s+/g,'-')}.png`;
+      a.download = `life-path-sigil-${name.toLowerCase().replace(/\s+/g,'-')}.png`;
       a.href = c.toDataURL('image/png');
       a.click();
     };
@@ -1294,7 +1302,7 @@ const SoulMap = (() => {
     const intent = $('sm-intention').value.trim();
 
     if (!name || !date) {
-      alert('Please enter your name and birthdate to generate your Soul Map.');
+      alert('Please enter your name and birthdate to generate your sigil.');
       return;
     }
 
