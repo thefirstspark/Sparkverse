@@ -1,0 +1,555 @@
+/* ============================================================
+   SPARKVERSE HUB — Cartoon Brutalist Theme
+   Extracted from sparkverse.html and overhauled.
+   Flat colors + hard ink borders + chunky drop shadows.
+   Zero gradients, by design.
+   ============================================================ */
+
+:root {
+    /* Flat palette */
+    --ink: #0b0d1a;
+    --paper: #fffdf5;
+    --void: #141833;
+    --panel: #1d2348;
+    --mint: #0aff9d;
+    --pink: #ff5df0;
+    --red: #ff4757;
+    --orange: #ff9f1c;
+    --green: #51e04d;
+    --cyan: #45d7ff;
+    --yellow: #ffd23f;
+    --muted: #b6bce0;
+
+    /* Brutalist tokens */
+    --border-w: 4px;
+    --shadow: 6px 6px 0 var(--ink);
+    --shadow-sm: 4px 4px 0 var(--ink);
+    --radius: 14px;
+
+    /* Path colors (flat) */
+    --path-mirror: #ff5df0;
+    --path-glitch: #ff4757;
+    --path-fire: #ff9f1c;
+    --path-garden: #51e04d;
+    --path-source: #45d7ff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Baloo 2', 'Segoe UI', system-ui, sans-serif;
+    background: var(--void);
+    color: var(--mint);
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+/* ---------- Starfield ---------- */
+.stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    transform: rotate(45deg);
+    animation: twinkle 3s infinite;
+}
+
+.star.dot {
+    border-radius: 50%;
+    transform: none;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
+/* ---------- Layout ---------- */
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+}
+
+/* ---------- Token display (fixed pill) ---------- */
+.token-display {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: var(--mint);
+    color: var(--ink);
+    border: var(--border-w) solid var(--ink);
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    box-shadow: var(--shadow-sm);
+    z-index: 100;
+}
+
+.token-display .sprk-label {
+    opacity: 0.75;
+    font-size: 0.8em;
+}
+
+/* ---------- Header ---------- */
+header {
+    text-align: center;
+    margin-bottom: 44px;
+    animation: pop-in 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.display-title {
+    font-family: 'Luckiest Guy', 'Baloo 2', system-ui, sans-serif;
+    font-size: clamp(2.6rem, 7vw, 4.4rem);
+    line-height: 1;
+    letter-spacing: 1px;
+    color: var(--yellow);
+    text-shadow: 4px 4px 0 var(--ink);
+    margin-bottom: 12px;
+}
+
+.tagline {
+    color: var(--paper);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Affinity badge + retake */
+.affinity-zone {
+    margin-top: 18px;
+    min-height: 48px;
+}
+
+.path-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border: var(--border-w) solid var(--ink);
+    border-radius: 999px;
+    color: var(--ink);
+    font-family: 'Luckiest Guy', 'Baloo 2', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 8px;
+}
+
+.path-trait {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-style: italic;
+}
+
+.retake-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+}
+
+/* ---------- How It Works panel ---------- */
+.earn-tokens {
+    background: var(--yellow);
+    color: var(--ink);
+    border: var(--border-w) solid var(--ink);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin: 0 0 44px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.earn-tokens h2 {
+    font-family: 'Luckiest Guy', 'Baloo 2', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.earn-tokens p {
+    font-weight: 600;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* ---------- Galaxy grid ---------- */
+.galaxy {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.planet {
+    background: var(--paper);
+    color: var(--ink);
+    border: var(--border-w) solid var(--ink);
+    border-radius: var(--radius);
+    padding: 24px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.planet-accent {
+    width: 64px;
+    height: 8px;
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    margin-bottom: 16px;
+    background: var(--planet-color, var(--mint));
+}
+
+.planet-emoji {
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.planet h3 {
+    font-family: 'Luckiest Guy', 'Baloo 2', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.planet-desc {
+    color: #44475f;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.planet-status {
+    margin-top: auto;
+    width: 100%;
+    padding-top: 14px;
+}
+
+.free-badge {
+    display: inline-block;
+    background: var(--green);
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    box-shadow: 3px 3px 0 var(--ink);
+}
+
+.planet:hover,
+.planet:focus-visible {
+    transform: translate(-3px, -3px);
+    box-shadow: 10px 10px 0 var(--ink);
+    outline: none;
+}
+
+.planet:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* ---------- Modals ---------- */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 13, 26, 0.88);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--paper);
+    color: var(--ink);
+    border: var(--border-w) solid var(--ink);
+    border-radius: var(--radius);
+    padding: 36px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 84vh;
+    overflow-y: auto;
+    box-shadow: 8px 8px 0 var(--ink);
+    text-align: center;
+    animation: pop-in 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+.modal-content h2 {
+    font-family: 'Luckiest Guy', 'Baloo 2', sans-serif;
+    font-size: 1.9rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.modal-sub {
+    color: #44475f;
+    font-weight: 600;
+    margin: 12px 0 18px;
+}
+
+/* Quiz questions */
+.quiz-question {
+    margin: 18px 0;
+    text-align: left;
+}
+
+.quiz-question label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+.chunky-select {
+    width: 100%;
+    padding: 12px 14px;
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230b0d1a' stroke-width='4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 13px 18px;
+    border: var(--border-w) solid var(--ink);
+    border-radius: 12px;
+    font-family: 'Luckiest Guy', 'Baloo 2', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    color: var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    margin-top: 14px;
+}
+
+.btn:hover,
+.btn:focus-visible {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 var(--ink);
+    outline: none;
+}
+
+.btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--ink);
+}
+
+.btn-primary {
+    background: var(--mint);
+}
+
+.btn-yellow {
+    background: var(--yellow);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--ink);
+}
+
+.btn-small {
+    width: auto;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    border-width: 3px;
+    box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* Planet modal content */
+.content-section {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 18px 0;
+    text-align: left;
+    box-shadow: 3px 3px 0 var(--ink);
+}
+
+.content-section h3 {
+    font-family: 'Luckiest Guy', 'Baloo 2', sans-serif;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+}
+
+.topic-chip {
+    display: inline-block;
+    background: var(--cyan);
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    padding: 4px 14px;
+    margin: 4px 4px 0 0;
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: 2px 2px 0 var(--ink);
+}
+
+.free-panel {
+    background: var(--green);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: left;
+    box-shadow: 3px 3px 0 var(--ink);
+    margin: 16px 0;
+}
+
+.free-panel strong {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.free-panel small {
+    opacity: 0.85;
+    font-weight: 600;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--paper);
+    color: var(--ink);
+    border: var(--border-w) solid var(--ink);
+    border-radius: 12px;
+    padding: 15px 24px;
+    font-weight: 800;
+    box-shadow: var(--shadow);
+    z-index: 2000;
+    animation: slide-in 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast.out {
+    animation: slide-out 0.25s ease-in both;
+}
+
+@keyframes slide-out {
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+/* ---------- Focus visibility ---------- */
+:focus-visible {
+    outline: 3px dashed var(--yellow);
+    outline-offset: 2px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .container {
+        padding: 28px 16px 48px;
+    }
+
+    .display-title {
+        font-size: 2.6rem;
+    }
+
+    .token-display {
+        top: 10px;
+        right: 10px;
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+
+    .earn-tokens {
+        padding: 22px 18px;
+    }
+
+    .galaxy {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .modal-content {
+        padding: 26px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .galaxy {
+        grid-template-columns: 1fr;
+    }
+
+    .tagline {
+        font-size: 1rem;
+    }
+
+    .token-display {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+
+    .modal {
+        padding: 12px;
+    }
+
+    .modal-content {
+        padding: 22px 16px;
+        max-height: 88vh;
+    }
+
+    .toast {
+        right: 12px;
+        left: 12px;
+        bottom: 16px;
+        text-align: center;
+    }
+}
