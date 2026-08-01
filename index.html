@@ -82,6 +82,11 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(251,191,36,.35)}
 .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--ghost-white)}
 .btn-secondary:hover{border-color:var(--cosmic-cyan);color:var(--cosmic-cyan)}
+.sponsor-section{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1rem 1.5rem 7rem;text-align:center}
+.sponsor-section h2{font-family:Orbitron,sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.35em;text-transform:uppercase}
+.sponsor-section p{font-size:.78rem;color:var(--dim);letter-spacing:.08em;max-width:32rem}
+.sponsor-card{width:100%;max-width:600px;border-radius:1rem;overflow:hidden;border:1px solid rgba(236,72,153,.35);box-shadow:0 0 40px rgba(236,72,153,.18);background:#fff}
+.sponsor-card iframe{display:block;width:100%;height:225px;border:0}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:1rem 2rem 1.4rem;display:flex;justify-content:center;gap:2.5rem;background:linear-gradient(to top,rgba(5,5,8,.98),transparent)}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:.35rem;color:var(--dim);text-decoration:none;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
 .nav-item.active,.nav-item:hover{color:var(--ghost-white)}
@@ -109,6 +114,13 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
     <div class="planet planet-echo" onclick="openModal('echo')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">ECHO CHAMBER</div></div></div>
     <div class="planet planet-genesis" onclick="openModal('genesis')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">GENESIS</div></div></div>
   </div>
+  <section class="sponsor-section">
+    <h2 class="gradient-text">Fuel the Spark</h2>
+    <p>The Sparkverse is built in the open. Sponsor the mission and keep the cosmos expanding.</p>
+    <div class="sponsor-card">
+      <iframe src="https://github.com/sponsors/thefirstspark/card" title="Sponsor thefirstspark" height="225" width="600" loading="lazy"></iframe>
+    </div>
+  </section>
 </main>
 <nav class="bottom-nav">
   <a href="#" class="nav-item active"><span class="nav-icon">◉</span><span>Galaxy</span></a>
