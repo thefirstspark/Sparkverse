@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="UPDATE_WITH_YOUR_VERIFICATION_CODE">
+    <title>Selector Interface — Reality Tuner</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-UPDATE_WITH_YOUR_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-UPDATE_WITH_YOUR_ID');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f4d 50%, #0f0a2e 100%);
+            color: #e0e6ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 16px;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        /* LEFT PANEL — TUNING CONTROLS */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            background: rgba(20, 25, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .control-group {
+            border-bottom: 1px solid rgba(100, 150, 255, 0.1);
+            padding-bottom: 16px;
+        }
+
+        .control-group:last-child {
+            border-bottom: none;
+        }
+
+        .control-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #a0a8ff;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .control-value {
+            font-size: 24px;
+            color: #6db3ff;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #6db3ff, #9d4edd);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6db3ff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(109, 179, 255, 0.6);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6db3ff;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(109, 179, 255, 0.6);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            background: rgba(109, 179, 255, 0.1);
+            color: #6db3ff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: rgba(109, 179, 255, 0.2);
+            box-shadow: 0 0 15px rgba(109, 179, 255, 0.3);
+        }
+
+        button.active {
+            background: rgba(109, 179, 255, 0.3);
+            box-shadow: 0 0 20px rgba(109, 179, 255, 0.5);
+        }
+
+        /* CENTER PANEL — VISUALIZATION */
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #frequencyCanvas, #branchCanvas {
+            background: radial-gradient(circle at 50% 50%, rgba(20, 30, 70, 0.9), rgba(10, 10, 40, 0.95));
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            border-radius: 12px;
+            flex: 1;
+            cursor: crosshair;
+        }
+
+        .canvas-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            padding: 0 8px;
+            margin-top: -8px;
+        }
+
+        /* RIGHT PANEL — STATE & METRICS */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            background: rgba(20, 25, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .state-box {
+            background: rgba(109, 179, 255, 0.05);
+            border: 1px solid rgba(109, 179, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .state-box h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #a0a8ff;
+            margin-bottom: 8px;
+        }
+
+        .state-item {
+            font-size: 13px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .state-item .label {
+            color: #8090c0;
+        }
+
+        .state-item .value {
+            color: #6db3ff;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .branch-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .branch-item {
+            padding: 8px;
+            background: rgba(157, 78, 221, 0.05);
+            border-left: 2px solid #9d4edd;
+            margin-bottom: 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .branch-item .probability {
+            color: #9d4edd;
+            font-weight: bold;
+        }
+
+        .branch-item .state {
+            color: #6db3ff;
+            font-size: 11px;
+        }
+
+        /* TITLE */
+        .header {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-bottom: 4px;
+            color: #e0e6ff;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            text-transform: uppercase;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(100, 150, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(109, 179, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(109, 179, 255, 0.5);
+        }
+
+        .resonance-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(109, 179, 255, 0.1);
+            border: 1px solid rgba(109, 179, 255, 0.3);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        .resonance-bar {
+            width: 120px;
+            height: 4px;
+            background: rgba(109, 179, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .resonance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6db3ff, #9d4edd);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px rgba(109, 179, 255, 0.6);
+        }
+
+        /* ===== TABLET & MOBILE shared (<=1024px) ===== */
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .header {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                padding: 20px 20px 8px;
+                text-align: center;
+            }
+
+            .container {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                height: auto;
+                padding: 12px 20px 20px;
+            }
+
+            .left-panel {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .center-panel {
+                grid-column: 1 / -1;
+                grid-row: 1;
+            }
+
+            .right-panel {
+                grid-column: 2;
+                grid-row: 2;
+            }
+
+            #frequencyCanvas, #branchCanvas {
+                min-height: 200px;
+            }
+
+            .resonance-indicator {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin: 0 20px 20px;
+            }
+        }
+
+        /* ===== MOBILE (<=640px) ===== */
+        @media (max-width: 640px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .left-panel {
+                grid-column: 1;
+                grid-row: 2;
+                padding: 16px;
+            }
+
+            .center-panel {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .right-panel {
+                grid-column: 1;
+                grid-row: 3;
+                padding: 16px;
+            }
+
+            #frequencyCanvas, #branchCanvas {
+                min-height: 180px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                letter-spacing: 1px;
+            }
+
+            .header p {
+                font-size: 10px;
+            }
+
+            .control-value {
+                font-size: 20px;
+            }
+
+            .button-group {
+                flex-wrap: wrap;
+            }
+
+            button {
+                padding: 8px 6px;
+                font-size: 11px;
+            }
+
+            .resonance-indicator {
+                margin: 0 12px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- SPRK TOKEN GATE -->
+<style>
+  .spark-gate{font-family:'Space Mono',monospace;background:linear-gradient(135deg,#12121a 0%,#0a0a0f 100%);border:1px solid #d4af3740;border-radius:8px;padding:20px 24px;margin:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:9999}
+  .spark-gate-info{display:flex;align-items:center;gap:16px}
+  .spark-gate-icon{font-size:32px}
+  .spark-gate-text h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f7f8fa;margin:0 0 4px 0}
+  .spark-gate-text p{font-size:0.85rem;color:#f7f8fa80;margin:0}
+  .spark-gate-cost{color:#22d3ee;font-weight:700}
+  .spark-gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .spark-gate-btn{padding:10px 20px;font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;text-decoration:none;border-radius:4px;transition:all 0.2s ease;cursor:pointer;border:none}
+  .spark-gate-btn-primary{background:#d4af37;color:#0a0a0f}
+  .spark-gate-btn-primary:hover{background:#22d3ee}
+  .spark-gate-btn-secondary{background:transparent;border:1px solid #8b5cf6;color:#8b5cf6}
+  .spark-gate-btn-secondary:hover{background:#8b5cf680;color:#f7f8fa}
+  @media(max-width:600px){.spark-gate{flex-direction:column;text-align:center}.spark-gate-info{flex-direction:column}.spark-gate-actions{width:100%;justify-content:center}}
+</style>
+<div class="spark-gate" data-tool-id="selector-interface">
+  <div class="spark-gate-info">
+    <span class="spark-gate-icon">🔒</span>
+    <div class="spark-gate-text">
+      <h3>Unlock Selector Interface</h3>
+      <p>This tool costs <span class="spark-gate-cost">15 $SPRK</span> tokens</p>
+    </div>
+  </div>
+  <div class="spark-gate-actions">
+    <a href="https://sparkverse.thefirstspark.shop/tokens.html" class="spark-gate-btn spark-gate-btn-primary">Get Tokens</a>
+    <a href="mailto:kate@thefirstspark.shop?subject=Token%20Unlock%20Request%20-%20selector-interface&body=Hi%20Kate,%0A%0AI%20have%20tokens%20and%20would%20like%20to%20unlock%20Selector%20Interface.%0A%0AMy%20purchase%20email:%20%0AMy%20Whop%20username:%20%0A%0AThanks!" class="spark-gate-btn spark-gate-btn-secondary">I Have Tokens</a>
+  </div>
+</div>
+<!-- END SPRK TOKEN GATE -->
+    <div class="header">
+        <h1>⚡ Selector Interface</h1>
+        <p>Reality Tuning Engine — One Logic, Infinite Branches</p>
+    </div>
+
+    <div class="container">
+        <!-- LEFT PANEL: TUNING CONTROLS -->
+        <div class="left-panel">
+            <div class="control-group">
+                <label class="control-label">Frequency (Hz)</label>
+                <div class="control-value" id="freqValue">432</div>
+                <input type="range" id="frequencySlider" min="100" max="800" value="432" step="1">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Resonance (Amplitude)</label>
+                <div class="control-value" id="ampValue">50%</div>
+                <input type="range" id="amplitudeSlider" min="0" max="100" value="50" step="1">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Intention Coherence</label>
+                <div class="control-value" id="coherenceValue">0.75</div>
+                <input type="range" id="coherenceSlider" min="0" max="100" value="75" step="1">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Consensus Reality Weight</label>
+                <div class="control-value" id="consensusValue">60%</div>
+                <input type="range" id="consensusSlider" min="0" max="100" value="60" step="1">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Branch Depth (Simulation)</label>
+                <div class="control-value" id="depthValue">5</div>
+                <input type="range" id="depthSlider" min="1" max="10" value="5" step="1">
+            </div>
+
+            <div class="control-group">
+                <div class="button-group">
+                    <button id="playBtn" class="active">⚡ Tune</button>
+                    <button id="resetBtn">Reset</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Multi-Selector Mode</label>
+                <div class="button-group">
+                    <button id="soloBtn" class="active">Solo</button>
+                    <button id="dualBtn">Entangle</button>
+                    <button id="cosmicBtn">Consensus</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Guide</label>
+                <p style="font-size: 12px; line-height: 1.5; color: #8090c0;">
+                    Adjust frequency and resonance to shift which probability branch renders. Watch the visualization respond in real-time. Intention coherence determines signal strength. Higher consensus weight locks reality into the mass-tuned average.
+                </p>
+            </div>
+        </div>
+
+        <!-- CENTER PANEL: VISUALIZATIONS -->
+        <div class="center-panel">
+            <canvas id="frequencyCanvas"></canvas>
+            <div class="canvas-label">Frequency Waveform — Your Tuning Signal</div>
+            
+            <canvas id="branchCanvas"></canvas>
+            <div class="canvas-label">Probability Field — Active Branches Rendering</div>
+        </div>
+
+        <!-- RIGHT PANEL: STATE & METRICS -->
+        <div class="right-panel">
+            <div class="state-box">
+                <h4>Active Selector State</h4>
+                <div class="state-item">
+                    <span class="label">Tuning Status</span>
+                    <span class="value" id="tuningStatus">Passive</span>
+                </div>
+                <div class="state-item">
+                    <span class="label">Signal Strength</span>
+                    <span class="value" id="signalStrength">Low</span>
+                </div>
+                <div class="state-item">
+                    <span class="label">Reality Lock</span>
+                    <span class="value" id="realityLock">Loose</span>
+                </div>
+            </div>
+
+            <div class="state-box">
+                <h4>Probability Distribution</h4>
+                <div class="branch-list" id="branchList"></div>
+            </div>
+
+            <div class="state-box">
+                <h4>System Load</h4>
+                <div class="state-item">
+                    <span class="label">Active Branches</span>
+                    <span class="value" id="activeBranches">3</span>
+                </div>
+                <div class="state-item">
+                    <span class="label">Field Coherence</span>
+                    <span class="value" id="fieldCoherence">72%</span>
+                </div>
+                <div class="state-item">
+                    <span class="label">Entanglement Depth</span>
+                    <span class="value" id="entanglementDepth">0</span>
+                </div>
+            </div>
+
+            <div class="state-box">
+                <h4>Mode</h4>
+                <div class="state-item">
+                    <span class="label">Selector Count</span>
+                    <span class="value" id="selectorCount">1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="resonance-indicator">
+        <div style="color: #6db3ff; font-weight: bold;">Resonance Level</div>
+        <div class="resonance-bar">
+            <div class="resonance-fill" id="resonanceFill"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // SELECTOR INTERFACE ENGINE
+        // ============================================
+
+        class SelectorEngine {
+            constructor() {
+                this.frequency = 432;
+                this.amplitude = 50;
+                this.coherence = 0.75;
+                this.consensus = 0.60;
+                this.depth = 5;
+                this.isPlaying = false;
+                this.mode = 'solo'; // solo, entangle, consensus
+                this.time = 0;
+                this.branches = [];
+                this.audioContext = null;
+                this.oscillator = null;
+                this.analyser = null;
+                this.dataArray = null;
+            }
+
+            initAudio() {
+                if (this.audioContext) return;
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                this.oscillator = this.audioContext.createOscillator();
+                this.analyser = this.audioContext.createAnalyser();
+                const gainNode = this.audioContext.createGain();
+                
+                this.oscillator.connect(gainNode);
+                gainNode.connect(this.analyser);
+                this.analyser.connect(this.audioContext.destination);
+                
+                this.oscillator.type = 'sine';
+                this.oscillator.frequency.value = this.frequency;
+                gainNode.gain.value = this.amplitude / 200;
+                
+                this.analyser.fftSize = 2048;
+                this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                
+                this.oscillator.start();
+            }
+
+            play() {
+                if (!this.audioContext) this.initAudio();
+                this.isPlaying = true;
+            }
+
+            stop() {
+                this.isPlaying = false;
+                if (this.oscillator) {
+                    this.oscillator.frequency.value = this.frequency;
+                }
+            }
+
+            updateFrequency(freq) {
+                this.frequency = freq;
+                if (this.oscillator) {
+                    this.oscillator.frequency.setTargetAtTime(freq, this.audioContext.currentTime, 0.1);
+                }
+            }
+
+            updateAmplitude(amp) {
+                this.amplitude = amp;
+            }
+
+            updateCoherence(coh) {
+                this.coherence = coh / 100;
+            }
+
+            updateConsensus(cons) {
+                this.consensus = cons / 100;
+            }
+
+            updateDepth(d) {
+                this.depth = d;
+                this.generateBranches();
+            }
+
+            generateBranches() {
+                this.branches = [];
+                const baseProb = 1 / (this.depth + 1);
+                
+                for (let i = 0; i <= this.depth; i++) {
+                    let probability = baseProb * (1 + Math.sin(i * this.coherence));
+                    probability = Math.max(0.01, Math.min(0.99, probability));
+                    
+                    const consensus = this.consensus;
+                    const personal = 1 - this.consensus;
+                    const adjustedProb = probability * personal + 0.5 * consensus;
+                    
+                    this.branches.push({
+                        id: i,
+                        probability: adjustedProb,
+                        frequency: this.frequency + (i * 20 - this.depth * 10), // Frequency spread
+                        state: this.getBranchState(i),
+                        energy: Math.sin(this.time + i) * 0.5 + 0.5
+                    });
+                }
+                
+                // Normalize probabilities
+                const sum = this.branches.reduce((a, b) => a + b.probability, 0);
+                this.branches.forEach(b => b.probability /= sum);
+            }
+
+            getBranchState(id) {
+                const states = ['Dormant', 'Emerging', 'Stable', 'Active', 'Dominant'];
+                const index = Math.floor((id / (this.depth + 1)) * states.length);
+                return states[Math.min(index, states.length - 1)];
+            }
+
+            update() {
+                this.time += 0.01;
+                this.generateBranches();
+            }
+
+            getSignalStrength() {
+                const coherence = this.coherence;
+                const amplitude = this.amplitude / 100;
+                const strength = coherence * amplitude;
+                
+                if (strength < 0.25) return 'Weak';
+                if (strength < 0.5) return 'Moderate';
+                if (strength < 0.75) return 'Strong';
+                return 'Intense';
+            }
+
+            getRealityLock() {
+                const lock = this.consensus + (this.amplitude / 200);
+                if (lock < 0.33) return 'Loose';
+                if (lock < 0.66) return 'Fluid';
+                return 'Locked';
+            }
+        }
+
+        // ============================================
+        // VISUALIZATION ENGINE
+        // ============================================
+
+        const engine = new SelectorEngine();
+        const freqCanvas = document.getElementById('frequencyCanvas');
+        const branchCanvas = document.getElementById('branchCanvas');
+        const freqCtx = freqCanvas.getContext('2d');
+        const branchCtx = branchCanvas.getContext('2d');
+
+        function resizeCanvases() {
+            freqCanvas.width = freqCanvas.offsetWidth;
+            freqCanvas.height = freqCanvas.offsetHeight;
+            branchCanvas.width = branchCanvas.offsetWidth;
+            branchCanvas.height = branchCanvas.offsetHeight;
+        }
+
+        function drawFrequencyWaveform() {
+            const width = freqCanvas.width;
+            const height = freqCanvas.height;
+
+            // Clear
+            freqCtx.fillStyle = 'rgba(10, 20, 50, 0.1)';
+            freqCtx.fillRect(0, 0, width, height);
+
+            // Draw grid
+            freqCtx.strokeStyle = 'rgba(109, 179, 255, 0.1)';
+            freqCtx.lineWidth = 1;
+            for (let i = 0; i < 5; i++) {
+                const y = (height / 4) * i;
+                freqCtx.beginPath();
+                freqCtx.moveTo(0, y);
+                freqCtx.lineTo(width, y);
+                freqCtx.stroke();
+            }
+
+            // Draw waveform
+            const frequency = engine.frequency / 100;
+            const amplitude = (engine.amplitude / 100) * (height / 4);
+            const coherenceScale = engine.coherence;
+
+            freqCtx.strokeStyle = 'rgba(109, 179, 255, 0.8)';
+            freqCtx.lineWidth = 2;
+            freqCtx.beginPath();
+
+            for (let x = 0; x < width; x++) {
+                const wavelength = (width / frequency);
+                const phase = (x / wavelength) + engine.time;
+                const y = (height / 2) + Math.sin(phase * Math.PI * 2) * amplitude * coherenceScale;
+                
+                if (x === 0) freqCtx.moveTo(x, y);
+                else freqCtx.lineTo(x, y);
+            }
+
+            freqCtx.stroke();
+
+            // Draw second harmonic (weaker)
+            freqCtx.strokeStyle = 'rgba(157, 78, 221, 0.4)';
+            freqCtx.lineWidth = 1;
+            freqCtx.beginPath();
+
+            for (let x = 0; x < width; x++) {
+                const wavelength = (width / frequency) / 2;
+                const phase = (x / wavelength) + engine.time * 2;
+                const y = (height / 2) + Math.sin(phase * Math.PI * 2) * amplitude * 0.3 * coherenceScale;
+                
+                if (x === 0) freqCtx.moveTo(x, y);
+                else freqCtx.lineTo(x, y);
+            }
+
+            freqCtx.stroke();
+        }
+
+        function drawProbabilityField() {
+            const width = branchCanvas.width;
+            const height = branchCanvas.height;
+
+            // Clear with gradient
+            const gradient = branchCtx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, Math.sqrt(width * width + height * height) / 2);
+            gradient.addColorStop(0, 'rgba(50, 80, 150, 0.1)');
+            gradient.addColorStop(1, 'rgba(10, 10, 40, 0.2)');
+            branchCtx.fillStyle = gradient;
+            branchCtx.fillRect(0, 0, width, height);
+
+            // Draw probability branches as circles
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const baseRadius = Math.min(width, height) / 8;
+
+            engine.branches.forEach((branch, i) => {
+                const angle = (i / engine.branches.length) * Math.PI * 2;
+                const distance = baseRadius * 3;
+                
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                const probability = branch.probability;
+                const radius = baseRadius * (0.5 + probability * 2);
+                const alpha = probability * 0.8;
+                
+                // Main branch circle
+                branchCtx.fillStyle = `rgba(109, 179, 255, ${alpha * 0.3})`;
+                branchCtx.strokeStyle = `rgba(109, 179, 255, ${alpha})`;
+                branchCtx.lineWidth = 2;
+                branchCtx.beginPath();
+                branchCtx.arc(x, y, radius, 0, Math.PI * 2);
+                branchCtx.fill();
+                branchCtx.stroke();
+
+                // Inner glow
+                if (probability > 0.15) {
+                    branchCtx.fillStyle = `rgba(109, 179, 255, ${alpha * 0.15})`;
+                    branchCtx.beginPath();
+                    branchCtx.arc(x, y, radius * 0.6, 0, Math.PI * 2);
+                    branchCtx.fill();
+                }
+
+                // Connection to center (root)
+                branchCtx.strokeStyle = `rgba(157, 78, 221, ${alpha * 0.3})`;
+                branchCtx.lineWidth = 1;
+                branchCtx.beginPath();
+                branchCtx.moveTo(centerX, centerY);
+                branchCtx.lineTo(x, y);
+                branchCtx.stroke();
+            });
+
+            // Central selector (self)
+            branchCtx.fillStyle = 'rgba(109, 179, 255, 0.6)';
+            branchCtx.strokeStyle = 'rgba(157, 78, 221, 0.8)';
+            branchCtx.lineWidth = 2;
+            branchCtx.beginPath();
+            branchCtx.arc(centerX, centerY, 12, 0, Math.PI * 2);
+            branchCtx.fill();
+            branchCtx.stroke();
+
+            // Pulsing ring
+            const pulseSize = 8 + Math.sin(engine.time * 5) * 3;
+            branchCtx.strokeStyle = `rgba(109, 179, 255, ${0.4 + Math.sin(engine.time * 5) * 0.3})`;
+            branchCtx.lineWidth = 1;
+            branchCtx.beginPath();
+            branchCtx.arc(centerX, centerY, pulseSize, 0, Math.PI * 2);
+            branchCtx.stroke();
+        }
+
+        function updateUI() {
+            // Left panel values
+            document.getElementById('freqValue').textContent = engine.frequency;
+            document.getElementById('ampValue').textContent = engine.amplitude + '%';
+            document.getElementById('coherenceValue').textContent = engine.coherence.toFixed(2);
+            document.getElementById('consensusValue').textContent = (engine.consensus * 100).toFixed(0) + '%';
+            document.getElementById('depthValue').textContent = engine.depth;
+
+            // Right panel states
+            document.getElementById('tuningStatus').textContent = engine.isPlaying ? 'Active' : 'Passive';
+            document.getElementById('signalStrength').textContent = engine.getSignalStrength();
+            document.getElementById('realityLock').textContent = engine.getRealityLock();
+
+            // Probability distribution
+            const branchList = document.getElementById('branchList');
+            branchList.innerHTML = engine.branches.slice(0, 5).map(b => 
+                `<div class="branch-item">
+                    <div class="probability">${(b.probability * 100).toFixed(1)}%</div>
+                    <div class="state">${b.state}</div>
+                </div>`
+            ).join('');
+
+            // System metrics
+            document.getElementById('activeBranches').textContent = engine.branches.filter(b => b.probability > 0.05).length;
+            document.getElementById('fieldCoherence').textContent = (engine.coherence * 100).toFixed(0) + '%';
+            document.getElementById('entanglementDepth').textContent = engine.mode === 'solo' ? '0' : (engine.mode === 'entangle' ? '1' : '∞');
+            document.getElementById('selectorCount').textContent = engine.mode === 'solo' ? '1' : (engine.mode === 'entangle' ? '2' : '∞');
+
+            // Resonance indicator
+            const resonanceLevel = (engine.amplitude / 100) * (engine.coherence);
+            document.getElementById('resonanceFill').style.width = (resonanceLevel * 100) + '%';
+        }
+
+        function animate() {
+            engine.update();
+            drawFrequencyWaveform();
+            drawProbabilityField();
+            updateUI();
+            requestAnimationFrame(animate);
+        }
+
+        // ============================================
+        // EVENT HANDLERS
+        // ============================================
+
+        document.getElementById('frequencySlider').addEventListener('input', (e) => {
+            engine.updateFrequency(parseInt(e.target.value));
+        });
+
+        document.getElementById('amplitudeSlider').addEventListener('input', (e) => {
+            engine.updateAmplitude(parseInt(e.target.value));
+        });
+
+        document.getElementById('coherenceSlider').addEventListener('input', (e) => {
+            engine.updateCoherence(parseInt(e.target.value));
+        });
+
+        document.getElementById('consensusSlider').addEventListener('input', (e) => {
+            engine.updateConsensus(parseInt(e.target.value));
+        });
+
+        document.getElementById('depthSlider').addEventListener('input', (e) => {
+            engine.updateDepth(parseInt(e.target.value));
+        });
+
+        document.getElementById('playBtn').addEventListener('click', function() {
+            if (engine.isPlaying) {
+                engine.stop();
+                this.classList.remove('active');
+                this.textContent = '▶ Tune';
+            } else {
+                engine.play();
+                this.classList.add('active');
+                this.textContent = '⏸ Active';
+            }
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            document.getElementById('frequencySlider').value = 432;
+            document.getElementById('amplitudeSlider').value = 50;
+            document.getElementById('coherenceSlider').value = 75;
+            document.getElementById('consensusSlider').value = 60;
+            document.getElementById('depthSlider').value = 5;
+            
+            engine.updateFrequency(432);
+            engine.updateAmplitude(50);
+            engine.updateCoherence(75);
+            engine.updateConsensus(60);
+            engine.updateDepth(5);
+        });
+
+        // Mode buttons
+        ['soloBtn', 'dualBtn', 'cosmicBtn'].forEach(btnId => {
+            document.getElementById(btnId).addEventListener('click', function() {
+                document.querySelectorAll('.left-panel .button-group:nth-child(8) button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (btnId === 'soloBtn') engine.mode = 'solo';
+                else if (btnId === 'dualBtn') engine.mode = 'entangle';
+                else engine.mode = 'consensus';
+            });
+        });
+
+        // Canvas interaction
+        [freqCanvas, branchCanvas].forEach(canvas => {
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Calculate frequency adjustment
+                const freqShift = Math.floor((x / rect.width) * 300 - 150);
+                const newFreq = Math.max(100, Math.min(800, engine.frequency + freqShift));
+                document.getElementById('frequencySlider').value = newFreq;
+                engine.updateFrequency(newFreq);
+                
+                // Calculate amplitude adjustment
+                const ampShift = Math.floor(((rect.height - y) / rect.height) * 80 - 40);
+                const newAmp = Math.max(0, Math.min(100, engine.amplitude + ampShift));
+                document.getElementById('amplitudeSlider').value = newAmp;
+                engine.updateAmplitude(newAmp);
+            });
+        });
+
+        // Initial setup
+        resizeCanvases();
+        engine.generateBranches();
+        animate();
+
+        // Responsive
+        window.addEventListener('resize', resizeCanvases);
+    </script>
+<script src="https://sparkverse.thefirstspark.shop/spark-auth.js"></script>
+<script>SparkAuth.applyGate();</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Base — The Sparkverse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0a0f; --panel:#11111a; --gold:#d4af37; --purple:#8b5cf6;
+    --cyan:#22d3ee; --ember:#ff6b35; --ink:#e8e8ef; --mute:#7a7a8c; --line:rgba(255,255,255,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--black);color:var(--ink);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;position:relative}
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .glow{position:fixed;border-radius:50%;filter:blur(120px);opacity:.25;z-index:0;pointer-events:none}
+  .glow.g1{width:480px;height:480px;background:var(--purple);top:-120px;left:-100px}
+  .glow.g2{width:420px;height:420px;background:var(--cyan);bottom:-140px;right:-120px}
+  .glow.g3{width:300px;height:300px;background:var(--ember);top:40%;left:55%;opacity:.12}
+  .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:72px 24px 96px}
+  .badge{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);padding:8px 16px;border-radius:2px;display:inline-block;opacity:0;animation:rise .8s ease forwards .1s}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(48px,9vw,104px);line-height:.95;letter-spacing:-.01em;margin:26px 0 0;background:linear-gradient(110deg,var(--ink) 30%,var(--gold) 70%,var(--ember));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:rise .9s ease forwards .25s}
+  .lede{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.6vw,28px);color:var(--mute);max-width:620px;margin-top:22px;line-height:1.4;opacity:0;animation:rise .9s ease forwards .4s}
+  .lede b{color:var(--ink);font-style:normal;font-weight:500}
+  .start{margin:48px 0 64px;border:1px solid var(--line);border-radius:4px;background:linear-gradient(180deg,rgba(212,175,55,.05),transparent);padding:28px 30px;opacity:0;animation:rise .9s ease forwards .55s}
+  .start .k{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .step{display:flex;gap:14px;align-items:flex-start}
+  .step .n{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--purple);line-height:1;min-width:34px}
+  .step p{font-size:13px;line-height:1.55;color:var(--ink)}
+  .step p span{color:var(--mute)}
+  .section-k{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--mute);margin-bottom:22px;display:flex;align-items:center;gap:14px}
+  .section-k::after{content:"";flex:1;height:1px;background:var(--line)}
+  .doors{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .door{position:relative;display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:30px 30px 28px;overflow:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s;opacity:0;animation:rise .8s ease forwards}
+  .door::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .35s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(139,92,246,.14),transparent 60%)}
+  .door:hover{transform:translateY(-5px);border-color:rgba(212,175,55,.45);box-shadow:0 20px 50px -20px rgba(139,92,246,.5)}
+  .door:hover::before{opacity:1}
+  .door .fn{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+  .door h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;line-height:1.05;margin-bottom:10px}
+  .door p{font-size:13px;line-height:1.6;color:var(--mute);max-width:36ch}
+  .door .arw{margin-top:18px;font-size:13px;color:var(--gold);display:inline-flex;align-items:center;gap:8px;transition:gap .3s}
+  .door:hover .arw{gap:14px}
+  .door.primary{border-color:rgba(212,175,55,.4);background:linear-gradient(165deg,rgba(212,175,55,.08),var(--panel))}
+  .door.primary .fn{color:var(--gold)}
+  .door.wide{grid-column:1 / -1}
+  .deeper{margin-top:18px;display:flex;flex-wrap:wrap;gap:12px}
+  .chip{text-decoration:none;color:var(--ink);font-size:12px;letter-spacing:.04em;border:1px solid var(--line);border-radius:30px;padding:11px 18px;transition:border-color .3s,color .3s,background .3s;background:rgba(255,255,255,.02)}
+  .chip:hover{border-color:var(--cyan);color:var(--cyan)}
+  footer{margin-top:72px;border-top:1px solid var(--line);padding-top:30px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:center}
+  .socials{display:flex;flex-wrap:wrap;gap:18px}
+  .socials a{color:var(--mute);text-decoration:none;font-size:12px;letter-spacing:.08em;transition:color .3s}
+  .socials a:hover{color:var(--gold)}
+  .sig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--mute)}
+  .sig b{color:var(--gold);font-style:normal;font-weight:500}
+  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  .d1{animation-delay:.6s}.d2{animation-delay:.7s}.d3{animation-delay:.8s}.d4{animation-delay:.9s}.d5{animation-delay:1s}
+  @media(max-width:720px){.steps{grid-template-columns:1fr;gap:16px}.doors{grid-template-columns:1fr}.wrap{padding:48px 18px 72px}}
+</style>
+<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/3f69bab8ef6446338dce0b642/00b83e9d1853cf9c1078884a5.js");</script>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+<div class="wrap">
+  <span class="badge">You're in · Welcome to the Sparkverse</span>
+  <h1>Home Base.</h1>
+  <p class="lede">You didn't buy a subscription. You picked up a <b>controller</b>. This is the menu screen — everything you have access to lives behind one of these doors.</p>
+  <div class="start">
+    <div class="k">Start here — 3 moves</div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><p>Open the chatroom and say hey. <span>This is where the Sparked actually talk.</span></p></div>
+      <div class="step"><div class="n">2</div><p>Pull your Soul Map. <span>Your coordinate system. Everything downstream reads from it.</span></p></div>
+      <div class="step"><div class="n">3</div><p>Bookmark this page. <span>Lost? Come back here. This is base.</span></p></div>
+    </div>
+  </div>
+  <div class="section-k">Your doors</div>
+  <div class="doors">
+    <a class="door primary wide d1" href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener">
+      <div class="fn">The Lounge · your home inside Whop</div>
+      <h3>Enter the Sparkverse</h3>
+      <p>Your tier, your content, your tools — all gated and waiting here. When in doubt, this is the front desk.</p>
+      <span class="arw">Walk in →</span>
+    </a>
+    <a class="door d2" href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener">
+      <div class="fn">Real-time · Whop Chat</div>
+      <h3>The Chatroom</h3>
+      <p>Live conversation, questions, signal-sharing. The community breathes here. Drop in daily.</p>
+      <span class="arw">Open chat →</span>
+    </a>
+    <a class="door d3" href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener">
+      <div class="fn">Run anytime · hosted on Whop</div>
+      <h3>Your Tools</h3>
+      <p>70+ browser-native instruments — sigil forges, codices, generators. Built to be used, not admired.</p>
+      <span class="arw">Open tools →</span>
+    </a>
+    <a class="door d4" href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener">
+      <div class="fn">New drops land here · Whop Forums</div>
+      <h3>The Drops</h3>
+      <p>Fresh lore, framework releases, rituals, and Book Zero chapters. Check it when you get the ping.</p>
+      <span class="arw">See what's new →</span>
+    </a>
+    <a class="door d5" href="https://thefirstspark.shop" target="_blank" rel="noopener">
+      <div class="fn">Decode the pattern · the shop</div>
+      <h3>Get a Soul Map</h3>
+      <p>Not a horoscope. A debugging tool for the operating system you're already running. Code <b style="color:var(--ember)">SOULMAPME</b>.</p>
+      <span class="arw">Map me →</span>
+    </a>
+  </div>
+  <div class="section-k" style="margin-top:54px">Go deeper</div>
+  <div class="deeper">
+    <a class="chip" href="free-tools.html">8 Free Tools</a>
+    <a class="chip" href="welcometothesparkverse.html">Welcome to the Sparkverse</a>
+    <a class="chip" href="origin.html">Origin Story</a>
+    <a class="chip" href="book-zero-tour.html">Book Zero</a>
+  </div>
+  <footer>
+    <div class="socials">
+      <a href="https://x.com/OGplayerone" target="_blank" rel="noopener">X / @OGplayerone</a>
+      <a href="https://instagram.com/therealfirstspark" target="_blank" rel="noopener">IG / @therealfirstspark</a>
+      <a href="https://youtube.com/@therealfirstspark" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://tiktok.com/@sparkedone" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://streamelements.com/kjpthefirstspark/tip" target="_blank" rel="noopener">Tip the stream</a>
+    </div>
+    <div class="sig">Reality is programmable. <b>You're holding the controller.</b></div>
+  </footer>
+</div>
+<script>
+  const c=document.getElementById('stars'),x=c.getContext('2d');let w,h,stars;
+  function init(){w=c.width=innerWidth;h=c.height=innerHeight;stars=Array.from({length:Math.min(150,Math.floor(w*h/9000))},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,a:Math.random(),s:Math.random()*.015+.003}));}
+  function draw(){x.clearRect(0,0,w,h);for(const st of stars){st.a+=st.s;const o=(Math.sin(st.a)+1)/2*.8+.1;x.beginPath();x.arc(st.x,st.y,st.r,0,7);x.fillStyle='rgba(232,232,239,'+o+')';x.fill();}requestAnimationFrame(draw);}
+  init();draw();addEventListener('resize',init);
+  document.querySelectorAll('.door').forEach(d=>{d.addEventListener('mousemove',e=>{const r=d.getBoundingClientRect();d.style.setProperty('--mx',(e.clientX-r.left)+'px');d.style.setProperty('--my',(e.clientY-r.top)+'px');});});
+</script>
+<script src="spark-mailchimp-config.js"></script>
+<script src="spark-mailchimp-popup.js" defer></script>
+</body>
+</html>

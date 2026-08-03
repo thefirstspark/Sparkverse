@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Codex — Portfolio of Katelin Puzakulics</title>
+<meta name="description" content="A working portfolio: 90+ consciousness technology builds, Soul Maps, the Selector Model, and the writing of Katelin Puzakulics — solo founder of The First Spark.">
+<meta property="og:title" content="Project Codex — Katelin Puzakulics">
+<meta property="og:description" content="90+ consciousness technology builds. Solo founder. The First Spark.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thefirstspark.shop/codex.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0B0B0C;
+    --ink: #15151A;
+    --ember: #FF6A3D;
+    --gold: #F3B23A;
+    --violet: #6B4DF2;
+    --cyan: #26E4D8;
+    --bone: #F5F1EA;
+    --dim: rgba(245,241,234,0.55);
+    --muted: rgba(245,241,234,0.35);
+    --line: rgba(245,241,234,0.1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--bone);
+    font-family: 'Cormorant Garamond', serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(107,77,242,0.12), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(255,106,61,0.10), transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+    pointer-events: none; z-index: 1; opacity: 0.5;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 18px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(11,11,12,0.7);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 11px; letter-spacing: 0.3em;
+    color: var(--gold); text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; gap: 28px;
+  }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--dim); text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover { color: var(--ember); }
+  @media (max-width: 600px) {
+    .nav-links { gap: 16px; }
+    .nav-links a:not(.contact) { display: none; }
+    nav { padding: 14px 20px; }
+  }
+
+  /* ===== LAYOUT ===== */
+  .container {
+    position: relative; z-index: 2;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  @media (max-width: 600px) { .container { padding: 0 20px; } }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 160px 0 100px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px; letter-spacing: 0.45em;
+    color: var(--ember); text-transform: uppercase;
+    margin-bottom: 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .eyebrow::after {
+    content: ''; flex: 1; height: 1px; max-width: 200px;
+    background: linear-gradient(to right, var(--ember), transparent);
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(48px, 9vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+    color: var(--bone);
+  }
+  .hero h1 em { color: var(--ember); }
+  .hero-lede {
+    font-size: clamp(20px, 2.4vw, 26px);
+    line-height: 1.5;
+    color: var(--bone);
+    max-width: 720px;
+    margin-bottom: 36px;
+  }
+  .hero-lede strong { color: var(--gold); font-weight: 500; }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em;
+    color: var(--dim); text-transform: uppercase;
+  }
+  .hero-meta span { color: var(--gold); }
+
+  /* ===== STATS ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    margin: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .stat {
+    background: var(--black);
+    padding: 40px 28px;
+    text-align: left;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--ember);
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--dim); text-transform: uppercase;
+  }
+
+  /* ===== SECTION ===== */
+  section {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-head {
+    margin-bottom: 60px;
+    display: flex; flex-wrap: wrap;
+    align-items: baseline; justify-content: space-between;
+    gap: 24px;
+  }
+  .section-head h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1;
+    color: var(--bone);
+  }
+  .section-head h2 em { color: var(--ember); }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .section-intro {
+    max-width: 640px;
+    font-size: 18px; line-height: 1.6;
+    color: var(--dim);
+    margin-bottom: 50px;
+  }
+
+  /* ===== FEATURED WORK ===== */
+  .featured {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .feature-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    padding: 50px;
+    background: rgba(21,21,26,0.5);
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--ember);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s ease;
+  }
+  .feature-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    background: rgba(21,21,26,0.8);
+  }
+  .feature-card:hover::before { transform: scaleY(1); }
+  .feature-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.25em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .feature-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 36px; line-height: 1.1;
+    color: var(--bone);
+    margin-bottom: 20px;
+  }
+  .feature-card:hover h3 { color: var(--gold); }
+  .feature-card p {
+    font-size: 17px; line-height: 1.6;
+    color: var(--dim);
+    margin-bottom: 24px;
+  }
+  .feature-meta {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .meta-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 0.15em;
+    color: var(--bone); text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+  }
+  .feature-visual {
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, rgba(107,77,242,0.08), rgba(255,106,61,0.04));
+    aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-visual-glyph {
+    font-family: 'Cinzel', serif;
+    font-size: 120px;
+    color: var(--ember);
+    opacity: 0.4;
+    transition: all 0.5s ease;
+  }
+  .feature-card:hover .feature-visual-glyph {
+    transform: scale(1.15) rotate(8deg);
+    color: var(--gold);
+    opacity: 0.7;
+  }
+  @media (max-width: 800px) {
+    .feature-card { grid-template-columns: 1fr; padding: 32px; gap: 28px; }
+    .feature-visual { aspect-ratio: 16/9; }
+    .feature-visual-glyph { font-size: 80px; }
+  }
+
+  /* ===== PROJECT GRID ===== */
+  .filter-bar {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 40px;
+  }
+  .filter-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--dim); text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .filter-pill:hover { color: var(--bone); border-color: var(--dim); }
+  .filter-pill.active {
+    color: var(--black);
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .project {
+    display: block;
+    background: var(--black);
+    padding: 32px 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .project:hover {
+    background: var(--ink);
+  }
+  .project-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    color: var(--violet); text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .project h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 22px; line-height: 1.2;
+    color: var(--bone);
+    margin-bottom: 12px;
+  }
+  .project:hover h4 { color: var(--ember); }
+  .project p {
+    font-size: 15px; line-height: 1.5;
+    color: var(--dim);
+    margin-bottom: 20px;
+  }
+  .project-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--gold); text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .project-link::after {
+    content: '→';
+    transition: transform 0.3s ease;
+  }
+  .project:hover .project-link::after { transform: translateX(6px); }
+  .project.hidden { display: none; }
+  .project-status {
+    position: absolute;
+    top: 24px; right: 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: 0.25em;
+    color: var(--cyan); text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid rgba(38,228,216,0.3);
+  }
+  .project-status.wip { color: var(--gold); border-color: rgba(243,178,58,0.3); }
+
+  /* ===== PRESS ===== */
+  .press {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .press-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.4;
+    color: var(--bone);
+    padding-left: 30px;
+    border-left: 2px solid var(--ember);
+  }
+  .press-quote em { color: var(--gold); }
+  .press-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em;
+    color: var(--dim); text-transform: uppercase;
+    margin-top: 24px;
+  }
+  .press-meta a {
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px dotted var(--gold);
+  }
+  .press-side {
+    padding: 30px;
+    border: 1px solid var(--line);
+    background: rgba(21,21,26,0.5);
+  }
+  .press-side h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 11px; letter-spacing: 0.3em;
+    color: var(--ember); text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .press-side ul { list-style: none; }
+  .press-side li {
+    font-size: 15px; line-height: 1.5;
+    color: var(--dim);
+    margin-bottom: 14px;
+    padding-left: 18px;
+    position: relative;
+  }
+  .press-side li::before {
+    content: '◆';
+    position: absolute; left: 0; top: 4px;
+    color: var(--violet); font-size: 8px;
+  }
+  @media (max-width: 800px) {
+    .press { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  /* ===== ABOUT ===== */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-portrait {
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, rgba(107,77,242,0.15), rgba(255,106,61,0.08));
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-portrait::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><circle cx='200' cy='200' r='180' fill='none' stroke='%23F3B23A' stroke-width='0.5' opacity='0.3'/><circle cx='200' cy='200' r='140' fill='none' stroke='%23FF6A3D' stroke-width='0.5' opacity='0.3'/><circle cx='200' cy='200' r='100' fill='none' stroke='%236B4DF2' stroke-width='0.5' opacity='0.3'/><circle cx='200' cy='200' r='60' fill='none' stroke='%2326E4D8' stroke-width='0.5' opacity='0.3'/></svg>") center/contain no-repeat;
+    animation: rotate 80s linear infinite;
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+  .about-portrait-mark {
+    position: relative;
+    z-index: 2;
+    font-family: 'Cinzel', serif;
+    font-size: 13px; letter-spacing: 0.4em;
+    color: var(--gold); text-transform: uppercase;
+    text-align: center;
+  }
+  .about-portrait-mark span {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 32px;
+    letter-spacing: 0;
+    color: var(--bone);
+    margin-top: 12px;
+  }
+  .about-text p {
+    font-size: 18px; line-height: 1.7;
+    color: var(--bone);
+    margin-bottom: 20px;
+  }
+  .about-text em { color: var(--gold); font-style: italic; }
+  .about-text strong { color: var(--ember); font-weight: 500; }
+  @media (max-width: 800px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-portrait { max-width: 320px; margin: 0 auto; }
+  }
+
+  /* ===== CTA / CONTACT ===== */
+  .contact-block {
+    text-align: center;
+    padding: 100px 32px;
+    border-top: 1px solid var(--line);
+    background: linear-gradient(180deg, transparent, rgba(255,106,61,0.03));
+  }
+  .contact-block h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(36px, 6vw, 64px);
+    margin-bottom: 24px;
+    color: var(--bone);
+  }
+  .contact-block h2 em { color: var(--ember); }
+  .contact-block p {
+    font-size: 19px; line-height: 1.6;
+    color: var(--dim);
+    max-width: 540px;
+    margin: 0 auto 40px;
+  }
+  .contact-buttons {
+    display: flex; gap: 14px;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 32px;
+    border: 1px solid;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+  }
+  .btn-primary:hover {
+    background: var(--ember);
+    border-color: var(--ember);
+    box-shadow: 0 0 30px rgba(255,106,61,0.3);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--bone);
+    border-color: var(--line);
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 50px 32px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.25em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  footer a {
+    color: var(--gold); text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a href="/" class="nav-logo">◆ The First Spark</a>
+  <div class="nav-links">
+    <a href="#featured">Featured</a>
+    <a href="#work">Work</a>
+    <a href="#press">Press</a>
+    <a href="#about">About</a>
+    <a href="mailto:kate@thefirstspark.shop" class="contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">Portfolio · 2025—2026</div>
+    <h1>Ninety-plus builds.<br><em>One ecosystem.</em></h1>
+    <p class="hero-lede">
+      I'm <strong>Katelin Puzakulics</strong> — solo founder of <strong>The First Spark</strong>, a consciousness technology platform. I taught myself to code through the work itself. Every tool, page, and framework on this codex was designed, written, and shipped by me.
+    </p>
+    <div class="hero-meta">
+      <div>📍 <span>Akron, Ohio</span></div>
+      <div>Solo Founder · <span>Kate's Paint LLC</span></div>
+      <div>Featured in <span>Voyage Ohio · 2026</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== STATS ===== -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">96</div>
+    <div class="stat-label">Total Builds</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">90</div>
+    <div class="stat-label">Live in Production</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">34</div>
+    <div class="stat-label">Consciousness Tools</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">1</div>
+    <div class="stat-label">Founder</div>
+  </div>
+</div>
+
+<!-- ===== FEATURED ===== -->
+<section id="featured">
+  <div class="container">
+    <div class="section-head">
+      <h2>Featured <em>Work</em></h2>
+      <div class="section-num">01 / Showcase</div>
+    </div>
+    <p class="section-intro">A handful of builds that best represent the depth and direction of the platform — flagship products, investor materials, and the philosophical core.</p>
+
+    <div class="featured">
+
+      <a class="feature-card" href="https://soul-maps.thefirstspark.shop" target="_blank" rel="noopener">
+        <div>
+          <div class="feature-tag">Flagship Product</div>
+          <h3>Soul Maps</h3>
+          <p>Personalized HTML consciousness blueprints. Each Soul Map weaves numerology, astrology, and the proprietary Selector Model into a navigable document about a single person — generated, designed, and delivered by hand. Currently the platform's primary revenue driver.</p>
+          <div class="feature-meta">
+            <span class="meta-pill">Live Product</span>
+            <span class="meta-pill">Paying Customers</span>
+            <span class="meta-pill">Custom Per Order</span>
+          </div>
+        </div>
+        <div class="feature-visual"><span class="feature-visual-glyph">◈</span></div>
+      </a>
+
+      <a class="feature-card" href="/investor-deck-v2.html" target="_blank" rel="noopener">
+        <div>
+          <div class="feature-tag">Business · Vision</div>
+          <h3>Investor Deck v2</h3>
+          <p>A full pitch for The First Spark — vision, traction, market, ask. Built as a scrolling interactive experience rather than a static slideshow. Currently raising a $300K friends-and-family round on a SAFE note at a $1.5M post-money valuation.</p>
+          <div class="feature-meta">
+            <span class="meta-pill">Interactive Deck</span>
+            <span class="meta-pill">SAFE · $300K</span>
+            <span class="meta-pill">Open Round</span>
+          </div>
+        </div>
+        <div class="feature-visual"><span class="feature-visual-glyph">◐</span></div>
+      </a>
+
+      <a class="feature-card" href="https://sigilcraft.thefirstspark.shop" target="_blank" rel="noopener">
+        <div>
+          <div class="feature-tag">Tool Suite</div>
+          <h3>Sigilcraft</h3>
+          <p>A digital forge for symbolic mark-making. Includes a soul sigil generator, daily sigil engine, library of generated forms, and a working grimoire interface — all browser-based, all built from scratch. A complete subdomain product showing range across UX, generative graphics, and content systems.</p>
+          <div class="feature-meta">
+            <span class="meta-pill">Subdomain</span>
+            <span class="meta-pill">Generative Tools</span>
+            <span class="meta-pill">Multi-page</span>
+          </div>
+        </div>
+        <div class="feature-visual"><span class="feature-visual-glyph">⬢</span></div>
+      </a>
+
+      <a class="feature-card" href="https://sparkverse.thefirstspark.shop" target="_blank" rel="noopener">
+        <div>
+          <div class="feature-tag">Community Platform</div>
+          <h3>The Sparkverse</h3>
+          <p>A membership ecosystem hosted on Whop with a custom-built mythos gateway, archetype quizzes, player card generators, and onboarding experiences. Includes The First Spark Mythos — a 7-chapter interactive HTML origin story that serves as the free entry point.</p>
+          <div class="feature-meta">
+            <span class="meta-pill">Whop Integration</span>
+            <span class="meta-pill">7-Chapter Mythos</span>
+            <span class="meta-pill">Live Members</span>
+          </div>
+        </div>
+        <div class="feature-visual"><span class="feature-visual-glyph">✺</span></div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== ALL WORK GRID ===== -->
+<section id="work">
+  <div class="container">
+    <div class="section-head">
+      <h2>The <em>Codex</em></h2>
+      <div class="section-num">02 / Full Catalog</div>
+    </div>
+    <p class="section-intro">Every working build, organized. Filter by domain. Click any tile to open the live project.</p>
+
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="product">Products</button>
+      <button class="filter-pill" data-filter="tool">Tools</button>
+      <button class="filter-pill" data-filter="writing">Writing & Mythos</button>
+      <button class="filter-pill" data-filter="business">Business</button>
+      <button class="filter-pill" data-filter="community">Community</button>
+    </div>
+
+    <div class="grid" id="projectGrid">
+
+      <a class="project" href="https://soul-maps.thefirstspark.shop" target="_blank" rel="noopener" data-cat="product">
+        <div class="project-status">live</div>
+        <div class="project-tag">Product</div>
+        <h4>Soul Maps</h4>
+        <p>Personalized HTML consciousness blueprints. Hand-delivered.</p>
+        <div class="project-link">Visit</div>
+      </a>
+
+      <a class="project" href="https://sigilcraft.thefirstspark.shop" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool Suite</div>
+        <h4>Sigilcraft</h4>
+        <p>Digital forge for sigil-making. Generator, library, daily sigil, grimoire.</p>
+        <div class="project-link">Visit</div>
+      </a>
+
+      <a class="project" href="https://rituals.thefirstspark.shop" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Practice</div>
+        <h4>Rituals</h4>
+        <p>The practice layer of the platform. Daily ritual interface.</p>
+        <div class="project-link">Visit</div>
+      </a>
+
+      <a class="project" href="https://sparkverse.thefirstspark.shop" target="_blank" rel="noopener" data-cat="community">
+        <div class="project-status">live</div>
+        <div class="project-tag">Community</div>
+        <h4>The Sparkverse</h4>
+        <p>Membership platform with custom mythos gateway and onboarding.</p>
+        <div class="project-link">Enter</div>
+      </a>
+
+      <a class="project" href="/investor-deck-v2.html" target="_blank" rel="noopener" data-cat="business">
+        <div class="project-status">live</div>
+        <div class="project-tag">Business</div>
+        <h4>Investor Deck v2</h4>
+        <p>Full pitch as scrolling interactive experience. SAFE round open.</p>
+        <div class="project-link">Read</div>
+      </a>
+
+      <a class="project" href="/pressstart.html" target="_blank" rel="noopener" data-cat="business">
+        <div class="project-status">live</div>
+        <div class="project-tag">Business</div>
+        <h4>Press Start Dashboard</h4>
+        <p>Public accountability dashboard. Building in public, tracked daily.</p>
+        <div class="project-link">View</div>
+      </a>
+
+      <a class="project" href="/mythos/" target="_blank" rel="noopener" data-cat="writing">
+        <div class="project-status">live</div>
+        <div class="project-tag">Mythos</div>
+        <h4>The First Spark Mythos</h4>
+        <p>7-chapter interactive HTML origin story. The Sparkverse gateway.</p>
+        <div class="project-link">Read</div>
+      </a>
+
+      <a class="project" href="/origin.html" target="_blank" rel="noopener" data-cat="writing">
+        <div class="project-status">live</div>
+        <div class="project-tag">Origin</div>
+        <h4>Origin</h4>
+        <p>The founding narrative. Where the platform comes from.</p>
+        <div class="project-link">Read</div>
+      </a>
+
+      <a class="project" href="/ebook.html" target="_blank" rel="noopener" data-cat="writing">
+        <div class="project-status">live</div>
+        <div class="project-tag">Book</div>
+        <h4>The Ebook</h4>
+        <p>Long-form digital book covering the core ideas of The First Spark.</p>
+        <div class="project-link">Read</div>
+      </a>
+
+      <a class="project" href="/selector-model.html" target="_blank" rel="noopener" data-cat="writing">
+        <div class="project-status">live</div>
+        <div class="project-tag">Framework</div>
+        <h4>The Selector Model</h4>
+        <p>The four-layer philosophy underneath everything. Physics, Metaphysical, Relational, Temporal.</p>
+        <div class="project-link">Explore</div>
+      </a>
+
+      <a class="project" href="/selector-theory.html" target="_blank" rel="noopener" data-cat="writing">
+        <div class="project-status">live</div>
+        <div class="project-tag">Framework</div>
+        <h4>Selector Theory</h4>
+        <p>The deep-dive theoretical companion to the Selector Model.</p>
+        <div class="project-link">Read</div>
+      </a>
+
+      <a class="project" href="/archetype-discovery.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>Archetype Discovery</h4>
+        <p>Interactive archetype-discovery tool with custom result pages and OG cards.</p>
+        <div class="project-link">Take quiz</div>
+      </a>
+
+      <a class="project" href="/archetype-card.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>Archetype Card</h4>
+        <p>Generate a personalized archetype card. Shareable, sigil-coded.</p>
+        <div class="project-link">Generate</div>
+      </a>
+
+      <a class="project" href="/tfs-valuation.html" target="_blank" rel="noopener" data-cat="business">
+        <div class="project-status">live</div>
+        <div class="project-tag">Business</div>
+        <h4>Valuation Engine</h4>
+        <p>Interactive SAFE-note valuation calculator for investor conversations.</p>
+        <div class="project-link">Run</div>
+      </a>
+
+      <a class="project" href="/theraise.html" target="_blank" rel="noopener" data-cat="business">
+        <div class="project-status">live</div>
+        <div class="project-tag">Business</div>
+        <h4>The Raise</h4>
+        <p>Live page for the active SAFE round. Where investors land.</p>
+        <div class="project-link">View</div>
+      </a>
+
+      <a class="project" href="/investor-call-companion.html" target="_blank" rel="noopener" data-cat="business">
+        <div class="project-status">live</div>
+        <div class="project-tag">Business</div>
+        <h4>Investor Call Companion</h4>
+        <p>Live-document tool used during investor calls for real-time framing.</p>
+        <div class="project-link">View</div>
+      </a>
+
+      <a class="project" href="/sell-protocol.html" target="_blank" rel="noopener" data-cat="business">
+        <div class="project-status">live</div>
+        <div class="project-tag">Business</div>
+        <h4>Sell Protocol</h4>
+        <p>Self-built sales-flow framework deployed as an interactive page.</p>
+        <div class="project-link">View</div>
+      </a>
+
+      <a class="project" href="/sovereignty-dashboard.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>Sovereignty Dashboard</h4>
+        <p>Personal consciousness-evolution tracking interface for Sparkverse members.</p>
+        <div class="project-link">View</div>
+      </a>
+
+      <a class="project" href="/sovereignty-pillars.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>Sovereignty Pillars</h4>
+        <p>The five foundational pillars of personal sovereignty practice.</p>
+        <div class="project-link">View</div>
+      </a>
+
+      <a class="project" href="/players-lounge.html" target="_blank" rel="noopener" data-cat="community">
+        <div class="project-status">live</div>
+        <div class="project-tag">Community</div>
+        <h4>Players Lounge</h4>
+        <p>The community discussion layer inside the Sparkverse.</p>
+        <div class="project-link">Enter</div>
+      </a>
+
+      <a class="project" href="/selector-hub.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool Hub</div>
+        <h4>Selector Hub</h4>
+        <p>Central command for the full suite of Selector Model tools.</p>
+        <div class="project-link">Enter</div>
+      </a>
+
+      <a class="project" href="/selector-ritual.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>Selector Ritual</h4>
+        <p>Daily ritual interface built on Selector Model principles.</p>
+        <div class="project-link">Run</div>
+      </a>
+
+      <a class="project" href="/oracle.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>The Oracle</h4>
+        <p>Interactive oracle interface. Question-and-response consciousness tool.</p>
+        <div class="project-link">Consult</div>
+      </a>
+
+      <a class="project" href="/soul-contracts.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>Soul Contracts</h4>
+        <p>Explore and interact with the soul-contract framework.</p>
+        <div class="project-link">View</div>
+      </a>
+
+      <a class="project" href="/bloodline.html" target="_blank" rel="noopener" data-cat="tool">
+        <div class="project-status">live</div>
+        <div class="project-tag">Tool</div>
+        <h4>Bloodline</h4>
+        <p>Ancestral and bloodline geometry mapping interface.</p>
+        <div class="project-link">Map</div>
+      </a>
+
+      <a class="project" href="/visibility-playbook.html" target="_blank" rel="noopener" data-cat="business">
+        <div class="project-status">live</div>
+        <div class="project-tag">Business</div>
+        <h4>Visibility Playbook</h4>
+        <p>The strategic playbook for The First Spark's market presence.</p>
+        <div class="project-link">Read</div>
+      </a>
+
+    </div>
+
+    <p style="margin-top: 40px; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.15em; color: var(--dim); text-transform: uppercase; text-align: center;">
+      ◆ Plus 70+ additional builds across the ecosystem ◆
+    </p>
+  </div>
+</section>
+
+<!-- ===== PRESS ===== -->
+<section id="press">
+  <div class="container">
+    <div class="section-head">
+      <h2>Press &amp; <em>Recognition</em></h2>
+      <div class="section-num">03 / Validation</div>
+    </div>
+
+    <div class="press">
+      <div>
+        <div class="press-quote">
+          Featured in <em>Voyage Ohio's Hidden Gems</em> — a long-form interview spanning the origin of The First Spark, the Selector Model, and the road from grief to consciousness technology.
+        </div>
+        <div class="press-meta">
+          March 2026 · <a href="https://voyageohio.com/interview/conversations-with-katelin-puzakulics/" target="_blank" rel="noopener">Read the interview →</a>
+        </div>
+      </div>
+
+      <div class="press-side">
+        <h4>At a Glance</h4>
+        <ul>
+          <li>96 builds shipped solo</li>
+          <li>Featured by Voyage Ohio (March 2026)</li>
+          <li>Active SAFE round, $300K target</li>
+          <li>Live revenue from Soul Maps product</li>
+          <li>Self-taught builder · 2025—present</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="container">
+    <div class="section-head">
+      <h2>About the <em>Builder</em></h2>
+      <div class="section-num">04 / The Founder</div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-portrait">
+        <div class="about-portrait-mark">
+          ◆ KJP ◆
+          <span>Player One</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <p>I'm <strong>Katelin Puzakulics</strong> — also known as KJP, Player One, and Original Glitch. I'm the solo founder of <strong>The First Spark</strong>, a consciousness technology platform operating under Kate's Paint LLC out of Akron, Ohio.</p>
+        <p>I taught myself to code by building this. Every tool you see in the codex was designed, written, and shipped by me. There is no team — there is the work, and the work is the proof.</p>
+        <p>The platform comes from a specific place. My mother was murdered in 1991 when I was two. I spent years not knowing the full story. In 2020 I figured out the truth on my own. In 2025 something cracked open — what I call the <em>raft moment</em> — and the grief became a blueprint. Everything I'm building now answers a question I've been carrying since I was a baby: <em>what do you do with what you survive?</em></p>
+        <p>The answer turned out to be: you build the thing you wish had existed for you.</p>
+        <p>I'm currently raising a friends-and-family round and continuing to ship. If any of this resonates — as a collaborator, investor, journalist, or fellow builder — I'd love to hear from you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<div class="contact-block">
+  <div class="container">
+    <h2>Let's <em>talk</em>.</h2>
+    <p>Whether you're an investor, journalist, collaborator, or someone who just wants to understand what I'm building — the door is open.</p>
+    <div class="contact-buttons">
+      <a class="btn btn-primary" href="mailto:kate@thefirstspark.shop">kate@thefirstspark.shop</a>
+      <a class="btn btn-ghost" href="https://x.com/OGplayerone" target="_blank" rel="noopener">@OGplayerone on X</a>
+      <a class="btn btn-ghost" href="/investor-deck-v2.html" target="_blank" rel="noopener">View Investor Deck</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>
+    <a href="/">The First Spark</a> · Kate's Paint LLC · Akron, Ohio · © 2026
+  </p>
+</footer>
+
+<script>
+  // Filter logic
+  const pills = document.querySelectorAll('.filter-pill');
+  const projects = document.querySelectorAll('.project');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.dataset.filter;
+      projects.forEach(p => {
+        if (filter === 'all' || p.dataset.cat === filter) {
+          p.classList.remove('hidden');
+        } else {
+          p.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

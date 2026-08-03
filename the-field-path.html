@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Field — Path of the Harmonizer | The First Spark</title>
+<meta name="description" content="The Field is the harmonizer — the relational stabilizer who holds the room together. One of the Five Paths in the Selector Model.">
+<meta property="og:title" content="The Field — Path of the Harmonizer">
+<meta property="og:description" content="Greens operate on the Relational layer. They keep the web alive. Without them, the system fragments.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://thefirstspark.shop/the-field-path.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --core-black:#0a0a0f;
+  --void:#000;
+  --ember:#ff6b35;
+  --signal-gold:#d4af37;
+  --mystic-violet:#8b5cf6;
+  --glitch-cyan:#22d3ee;
+  --field-green:#34d399;
+  --field-green-deep:#10b981;
+  --field-green-glow:rgba(52,211,153,0.15);
+  --text-soft:#e5e7eb;
+  --text-dim:#9ca3af;
+  --serif:'Cormorant Garamond',serif;
+  --mono:'Space Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--core-black);color:var(--text-soft);font-family:var(--serif);font-size:18px;line-height:1.7;min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 30%, var(--field-green-glow) 0%, transparent 40%),radial-gradient(circle at 80% 70%, rgba(139,92,246,0.08) 0%, transparent 40%),linear-gradient(180deg, var(--core-black) 0%, #0f1614 50%, var(--core-black) 100%);z-index:-2}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(52,211,153,0.04) 1px, transparent 1px),linear-gradient(90deg, rgba(52,211,153,0.04) 1px, transparent 1px);background-size:50px 50px;z-index:-1;pointer-events:none}
+nav{padding:24px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(52,211,153,0.15);position:sticky;top:0;background:rgba(10,10,15,0.85);backdrop-filter:blur(12px);z-index:100}
+nav .logo{font-family:var(--mono);font-size:14px;letter-spacing:0.2em;color:var(--field-green);text-decoration:none;text-transform:uppercase}
+nav .links{display:flex;gap:28px;align-items:center}
+nav .links a{color:var(--text-dim);text-decoration:none;font-family:var(--mono);font-size:12px;letter-spacing:0.15em;text-transform:uppercase;transition:color 0.2s}
+nav .links a:hover{color:var(--field-green)}
+nav .cta{background:transparent;border:1px solid var(--field-green);color:var(--field-green);padding:8px 18px;font-family:var(--mono);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none}
+nav .cta:hover{background:var(--field-green);color:var(--core-black)}
+.hero{padding:120px 40px 80px;text-align:center;max-width:1100px;margin:0 auto;position:relative}
+.path-label{font-family:var(--mono);font-size:12px;letter-spacing:0.3em;color:var(--field-green);text-transform:uppercase;margin-bottom:24px}
+.path-symbol{width:120px;height:120px;margin:0 auto 32px;display:flex;align-items:center;justify-content:center;position:relative}
+.path-symbol svg{width:100%;height:100%;filter:drop-shadow(0 0 24px var(--field-green));animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:0.9}50%{transform:scale(1.05);opacity:1}}
+h1{font-family:var(--serif);font-size:clamp(48px,8vw,96px);font-weight:300;line-height:1;margin-bottom:24px;letter-spacing:-0.02em}
+h1 .accent{background:linear-gradient(135deg, var(--field-green) 0%, var(--field-green-deep) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:italic}
+.tagline{font-size:24px;color:var(--text-dim);font-weight:300;font-style:italic;max-width:700px;margin:0 auto 48px}
+.quick-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px;max-width:900px;margin:0 auto;padding:32px;border:1px solid rgba(52,211,153,0.2);background:rgba(52,211,153,0.03)}
+.stat{text-align:left}
+.stat-label{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-size:18px;color:var(--field-green);font-weight:500}
+section{max-width:1000px;margin:0 auto;padding:80px 40px}
+.section-label{font-family:var(--mono);font-size:11px;letter-spacing:0.3em;color:var(--field-green);text-transform:uppercase;margin-bottom:16px}
+h2{font-family:var(--serif);font-size:clamp(36px,5vw,56px);font-weight:300;line-height:1.1;margin-bottom:32px;letter-spacing:-0.01em}
+h2 .accent{color:var(--field-green);font-style:italic}
+h3{font-family:var(--serif);font-size:28px;font-weight:400;color:var(--field-green);margin-bottom:16px;letter-spacing:-0.01em}
+p{margin-bottom:20px;color:var(--text-soft)}
+p.lead{font-size:22px;color:var(--text-soft);font-weight:300}
+.purpose-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:48px}
+.purpose-card{padding:32px;border:1px solid rgba(52,211,153,0.2);background:rgba(52,211,153,0.02);transition:all 0.3s;position:relative}
+.purpose-card:hover{border-color:var(--field-green);background:rgba(52,211,153,0.05);transform:translateY(-4px)}
+.purpose-card .num{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;color:var(--field-green);margin-bottom:16px}
+.purpose-card h4{font-family:var(--serif);font-size:24px;font-weight:500;margin-bottom:12px;color:var(--text-soft)}
+.purpose-card p{font-size:16px;margin:0;color:var(--text-dim)}
+.duality{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:48px}
+.duality-col{padding:40px;border:1px solid rgba(52,211,153,0.2);background:rgba(0,0,0,0.3)}
+.duality-col.shadow{border-color:rgba(139,92,246,0.3)}
+.duality-col h4{font-family:var(--mono);font-size:12px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px;color:var(--field-green)}
+.duality-col.shadow h4{color:var(--mystic-violet)}
+.duality-col ul{list-style:none;padding:0}
+.duality-col li{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:17px;color:var(--text-soft);position:relative;padding-left:24px}
+.duality-col li::before{content:'◆';position:absolute;left:0;color:var(--field-green);font-size:10px;top:16px}
+.duality-col.shadow li::before{color:var(--mystic-violet)}
+.duality-col li:last-child{border-bottom:none}
+.layer-box{margin-top:48px;padding:48px;border:1px solid var(--field-green);background:linear-gradient(135deg, rgba(52,211,153,0.08) 0%, rgba(16,185,129,0.03) 100%);position:relative}
+.layer-box .selector-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;color:var(--field-green);text-transform:uppercase;margin-bottom:12px}
+.practice-list{margin-top:48px;display:grid;gap:16px}
+.practice{padding:24px 32px;border-left:2px solid var(--field-green);background:rgba(52,211,153,0.04);display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.practice-num{font-family:var(--mono);font-size:32px;color:var(--field-green);font-weight:700;line-height:1}
+.practice-content h4{font-family:var(--serif);font-size:22px;font-weight:500;margin-bottom:8px;color:var(--text-soft)}
+.practice-content p{margin:0;font-size:16px;color:var(--text-dim)}
+.cta-block{text-align:center;padding:80px 40px;margin:80px auto 0;max-width:800px;border-top:1px solid rgba(52,211,153,0.2);border-bottom:1px solid rgba(52,211,153,0.2)}
+.cta-block h3{font-size:36px;margin-bottom:16px;color:var(--text-soft)}
+.cta-block h3 .accent{color:var(--field-green);font-style:italic}
+.cta-block p{font-size:18px;color:var(--text-dim);margin-bottom:32px}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{padding:14px 32px;font-family:var(--mono);font-size:12px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-block}
+.btn-primary{background:var(--field-green);color:var(--core-black);border:1px solid var(--field-green)}
+.btn-primary:hover{background:transparent;color:var(--field-green)}
+.btn-secondary{background:transparent;color:var(--field-green);border:1px solid var(--field-green)}
+.btn-secondary:hover{background:var(--field-green);color:var(--core-black)}
+.quote{margin:80px auto;max-width:800px;padding:0 40px;text-align:center}
+.quote blockquote{font-family:var(--serif);font-size:32px;font-weight:300;font-style:italic;line-height:1.4;color:var(--text-soft);margin-bottom:24px}
+.quote blockquote::before{content:'"';color:var(--field-green);font-size:48px}
+.quote blockquote::after{content:'"';color:var(--field-green);font-size:48px}
+.quote cite{font-family:var(--mono);font-size:11px;letter-spacing:0.3em;color:var(--field-green);text-transform:uppercase;font-style:normal}
+footer{border-top:1px solid rgba(52,211,153,0.15);padding:40px;text-align:center;margin-top:80px}
+footer p{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;margin:0}
+footer a{color:var(--field-green);text-decoration:none}
+@media(max-width:768px){nav{padding:16px 20px;flex-wrap:wrap;gap:12px}nav .links{gap:16px}nav .links a:not(.cta){display:none}section{padding:60px 24px}.hero{padding:60px 24px 40px}.duality{grid-template-columns:1fr}.layer-box{padding:32px 24px}.practice{grid-template-columns:1fr;gap:8px}.quote blockquote{font-size:24px}}
+@media print{body{background:#fff;color:#000}body::before,body::after{display:none}nav,.cta-block{display:none}*{color:#000 !important}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="logo">◆ The First Spark</a>
+  <div class="links">
+    <a href="/five-paths-explorer.html">All Paths</a>
+    <a href="/selector-theory.html">Selector Model</a>
+    <a href="/sparkverse-hub.html">Sparkverse</a>
+    <a href="/players-lounge.html" class="cta">Players Lounge</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="path-label">// PATH 03 — THE RELATIONAL LAYER</div>
+  <div class="path-symbol">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#34d399" stroke-width="1" opacity="0.4"/>
+      <circle cx="50" cy="50" r="28" fill="none" stroke="#34d399" stroke-width="1" opacity="0.6"/>
+      <circle cx="50" cy="50" r="16" fill="none" stroke="#34d399" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="4" fill="#34d399"/>
+      <line x1="50" y1="10" x2="50" y2="90" stroke="#34d399" stroke-width="0.5" opacity="0.3"/>
+      <line x1="10" y1="50" x2="90" y2="50" stroke="#34d399" stroke-width="0.5" opacity="0.3"/>
+      <line x1="22" y1="22" x2="78" y2="78" stroke="#34d399" stroke-width="0.5" opacity="0.3"/>
+      <line x1="78" y1="22" x2="22" y2="78" stroke="#34d399" stroke-width="0.5" opacity="0.3"/>
+    </svg>
+  </div>
+  <h1>The <span class="accent">Field</span></h1>
+  <p class="tagline">The harmonizer. The room-holder. The one who keeps the web alive.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="stat-label">Color</div><div class="stat-value">Field Green</div></div>
+    <div class="stat"><div class="stat-label">Layer</div><div class="stat-value">Relational</div></div>
+    <div class="stat"><div class="stat-label">Function</div><div class="stat-value">Harmonize</div></div>
+    <div class="stat"><div class="stat-label">Element</div><div class="stat-value">Air / Mesh</div></div>
+  </div>
+</section>
+<section>
+  <div class="section-label">// CORE PURPOSE</div>
+  <h2>To hold the <span class="accent">container</span> steady enough that everything inside it can heal.</h2>
+  <p class="lead">Where Purples navigate transformation and Masters orchestrate the full stack, the Field operates on a different frequency entirely. They are environmental coherence. They are the relational mesh that keeps the system from fragmenting.</p>
+  <p>A Field walks into a tense room and ten minutes later everyone is laughing. Not because they performed peace — but because their nervous system literally regulated everyone else's. This is not personality. This is a function. Co-regulation as a superpower.</p>
+  <p>If Purples are the soul-level zoom-in and Masters are the architectural zoom-out, Fields are the connective tissue between every node. They see the <em>whole system</em>, not the individual players. They sense when something is off before anyone names it. They reset the room without asking permission — because nobody knew they were being calibrated.</p>
+</section>
+<section>
+  <div class="section-label">// THE FOUR FUNCTIONS</div>
+  <h2>What a Field <span class="accent">actually does</span></h2>
+  <div class="purpose-grid">
+    <div class="purpose-card"><div class="num">01 / SENSE</div><h4>Read the temperature</h4><p>Walks into any space and instantly clocks the energetic state. Who's activated. Who's withdrawn. What's underneath the surface conversation.</p></div>
+    <div class="purpose-card"><div class="num">02 / STABILIZE</div><h4>Anchor the system</h4><p>Their regulated nervous system becomes the reference signal others sync to. Presence alone shifts the room before a word is spoken.</p></div>
+    <div class="purpose-card"><div class="num">03 / TRANSLATE</div><h4>Bridge the disconnect</h4><p>Sees what each person is actually saying underneath what they're saying. Natural mediators. Make peace possible without forcing it.</p></div>
+    <div class="purpose-card"><div class="num">04 / HOLD</div><h4>Keep the container intact</h4><p>While Purples transform and Masters direct, Fields hold the space stable enough that the work can happen. Without them, everything fractures.</p></div>
+  </div>
+</section>
+<section>
+  <div class="section-label">// SELECTOR MODEL POSITION</div>
+  <div class="layer-box">
+    <div class="selector-tag">// LAYER 03 — RELATIONAL</div>
+    <h3>The Field operates primarily on the Relational layer of the Selector Model</h3>
+    <p>The Selector Model has four layers: Physics, Metaphysical, Relational, and Temporal. Fields live in the third — the layer that governs how consciousness nodes interact, entrain, regulate, and exchange information with each other.</p>
+    <p>While all paths touch the Relational layer, Fields are <em>natives</em> there. They read it instinctively the way Physics-layer types read material reality. Energetic dynamics are not subtle to them. They are obvious.</p>
+    <p style="margin-bottom:0">This is why Fields struggle in environments where the relational mesh is degraded — toxic workplaces, fractured families, isolated digital spaces. They are wired to clean the field. When the field cannot be cleaned, they suffer.</p>
+  </div>
+</section>
+<section>
+  <div class="section-label">// GIFTS &amp; SHADOWS</div>
+  <h2>The <span class="accent">light and the trap</span></h2>
+  <div class="duality">
+    <div class="duality-col">
+      <h4>The Gift</h4>
+      <ul>
+        <li>Natural healers, mediators, group anchors</li>
+        <li>Nervous system regulation as a service</li>
+        <li>Reads people accurately without judgment</li>
+        <li>Creates safety so others can be honest</li>
+        <li>Sees the whole web, not just the threads</li>
+        <li>Makes peace possible without forcing it</li>
+        <li>Holds space for transformation without controlling it</li>
+      </ul>
+    </div>
+    <div class="duality-col shadow">
+      <h4>The Shadow</h4>
+      <ul>
+        <li>Absorbs what isn't theirs to carry</li>
+        <li>Loses self in service of the room</li>
+        <li>Codependency wired in if not consciously managed</li>
+        <li>Becomes the emotional sponge until depleted</li>
+        <li>Suppresses own needs to maintain harmony</li>
+        <li>Resentment builds underneath the smile</li>
+        <li>Conflict-avoidance disguised as peacemaking</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="section-label">// FIELD PRACTICES</div>
+  <h2>Daily protocols for <span class="accent">staying clean</span></h2>
+  <div class="practice-list">
+    <div class="practice"><div class="practice-num">01</div><div class="practice-content"><h4>Field Audit (morning)</h4><p>Before engaging anyone, scan: What's mine? What did I pick up overnight? What needs to be released before I open the gate?</p></div></div>
+    <div class="practice"><div class="practice-num">02</div><div class="practice-content"><h4>Container Closure (evening)</h4><p>Close the day with intentional release. Anything absorbed that wasn't yours — return it. You are not a permanent storage facility.</p></div></div>
+    <div class="practice"><div class="practice-num">03</div><div class="practice-content"><h4>The "Whose Is This?" Check</h4><p>When a feeling arrives unexpectedly, ask: did this start in me? Or did I receive it? Fields confuse received signal with original signal constantly.</p></div></div>
+    <div class="practice"><div class="practice-num">04</div><div class="practice-content"><h4>Sovereignty Reps</h4><p>Practice saying no when the room wants yes. Practice staying when the room wants you to fix. Your value is not your output.</p></div></div>
+    <div class="practice"><div class="practice-num">05</div><div class="practice-content"><h4>Solitude as Maintenance</h4><p>Not a luxury. Not selfish. Mandatory. A Field who doesn't get alone time becomes a contaminated field. You owe people your clean signal, not your depleted one.</p></div></div>
+  </div>
+</section>
+<div class="quote">
+  <blockquote>Purples transform. Masters orchestrate. Fields hold. Without the one who keeps the container intact, nothing the others build will last.</blockquote>
+  <cite>— The Selector Model, Chapter 7</cite>
+</div>
+<section>
+  <div class="section-label">// IF YOU ARE A FIELD</div>
+  <h2>Your work is <span class="accent">not optional</span></h2>
+  <p class="lead">Every system needs a stabilizer. Every family, every team

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The First Spark — Daily Ops & Video Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0B0B0C;
+  --ember: #FF6A3D;
+  --gold: #F3B23A;
+  --violet: #6B4DF2;
+  --cyan: #26E4D8;
+  --surface: #111113;
+  --surface2: #1a1a1f;
+  --text: #e8e8ec;
+  --dim: #88889a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(107,77,242,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107,77,242,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(107,77,242,0.2);
+}
+
+header .tag { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); margin-bottom: 16px; }
+header h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 700; color: var(--gold); line-height: 1.1; margin-bottom: 12px; }
+header .subtitle { color: var(--dim); font-size: 13px; }
+
+.tabs { display: flex; gap: 0; margin-bottom: 40px; border-bottom: 2px solid var(--surface2); overflow-x: auto; }
+.tab { padding: 12px 20px; cursor: pointer; color: var(--dim); font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid transparent; transition: all 0.3s; white-space: nowrap; background: none; border-top: none; border-left: none; border-right: none; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--ember); border-bottom-color: var(--ember); }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--gold); margin-bottom: 24px; }
+h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--cyan); margin-bottom: 12px; margin-top: 32px; }
+
+.time-block { background: var(--surface); border-left: 3px solid var(--violet); padding: 20px 24px; margin-bottom: 16px; border-radius: 0 8px 8px 0; }
+.time-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+
+.task-list { list-style: none; padding: 0; }
+.task-list li { padding: 8px 0; padding-left: 24px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.task-list li::before { content: '\25B8'; position: absolute; left: 4px; color: var(--ember); }
+
+.video-card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 12px; padding: 28px; margin-bottom: 20px; transition: border-color 0.3s; }
+.video-card:hover { border-color: var(--violet); }
+.video-card .label { display: inline-block; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; margin-bottom: 12px; }
+.label.hook { background: rgba(255,106,61,0.15); color: var(--ember); }
+.label.story { background: rgba(107,77,242,0.15); color: var(--violet); }
+.label.teach { background: rgba(38,228,216,0.15); color: var(--cyan); }
+.label.proof { background: rgba(243,178,58,0.15); color: var(--gold); }
+.label.sell { background: rgba(255,106,61,0.25); color: var(--ember); }
+.video-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--text); margin-bottom: 12px; }
+.video-card .beats { color: var(--dim); font-size: 13px; }
+.video-card .beats strong { color: var(--text); font-weight: 400; }
+
+.callout { background: rgba(107,77,242,0.08); border: 1px solid rgba(107,77,242,0.2); border-radius: 8px; padding: 20px 24px; margin: 24px 0; font-size: 13px; color: var(--dim); }
+.callout strong { color: var(--violet); }
+.callout.ember { background: rgba(255,106,61,0.08); border-color: rgba(255,106,61,0.2); }
+.callout.ember strong { color: var(--ember); }
+
+.weekly-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+.day-card { background: var(--surface); border-radius: 8px; padding: 16px; border-top: 3px solid var(--violet); }
+.day-card.mon { border-top-color: var(--ember); }
+.day-card.tue { border-top-color: var(--gold); }
+.day-card.wed { border-top-color: var(--cyan); }
+.day-card.thu { border-top-color: var(--violet); }
+.day-card.fri { border-top-color: var(--ember); }
+.day-card.sat { border-top-color: var(--gold); }
+.day-card.sun { border-top-color: var(--dim); }
+.day-card .day-name { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+.day-card.mon .day-name { color: var(--ember); }
+.day-card.tue .day-name { color: var(--gold); }
+.day-card.wed .day-name { color: var(--cyan); }
+.day-card.thu .day-name { color: var(--violet); }
+.day-card.fri .day-name { color: var(--ember); }
+.day-card.sat .day-name { color: var(--gold); }
+.day-card.sun .day-name { color: var(--dim); }
+.day-card p { font-size: 12px; color: var(--dim); line-height: 1.6; }
+
+.metric-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0; }
+.metric { background: var(--surface); border-radius: 8px; padding: 20px; text-align: center; }
+.metric .number { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 700; color: var(--gold); }
+.metric .label-text { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--dim); margin-top: 4px; }
+
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--violet), transparent); margin: 40px 0; }
+
+.rules-block { background: var(--surface); border-radius: 10px; padding: 24px; margin-bottom: 16px; overflow: hidden; }
+.rules-block .rule-num { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; color: var(--ember); float: left; margin-right: 16px; line-height: 1; }
+.rules-block p { color: var(--dim); margin-bottom: 6px; }
+.rules-block p:first-of-type { color: var(--text); font-size: 15px; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="tag">Operations Playbook</div>
+  <h1>The Sell Protocol</h1>
+  <div class="subtitle">90-Day Daily Ops Plan + Video Playbook for The First Spark</div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPanel('daily', this)">Daily Rhythm</button>
+  <button class="tab" onclick="showPanel('weekly', this)">Weekly Cadence</button>
+  <button class="tab" onclick="showPanel('videos', this)">Video Scripts</button>
+  <button class="tab" onclick="showPanel('metrics', this)">90-Day Targets</button>
+  <button class="tab" onclick="showPanel('rules', this)">Rules of Engagement</button>
+</div>
+
+<!-- ===== DAILY RHYTHM ===== -->
+<div id="daily" class="panel active">
+<h2>The Daily Rhythm</h2>
+<p style="color:var(--dim); margin-bottom:24px;">Same structure every day. Variations come from the weekly theme. This is the machine.</p>
+
+<div class="time-block" style="border-left-color:var(--ember)">
+  <div class="time-label" style="color:var(--ember)">Morning Block &mdash; 30 min (before anything else)</div>
+  <ul class="task-list">
+    <li><strong>1 video recorded.</strong> 60-90 seconds max. Phone, natural light, no script &mdash; just the talking points from the Video Playbook tab. Post to X and TikTok.</li>
+    <li><strong>1 X post.</strong> A thought, a hot take, a question. Not a promo. Something someone wants to reply to or repost.</li>
+    <li><strong>Check DMs.</strong> Reply to every single one. Conversations convert. Funnels don't.</li>
+  </ul>
+</div>
+
+<div class="time-block" style="border-left-color:var(--gold)">
+  <div class="time-label" style="color:var(--gold)">Midday Block &mdash; 90 min (the money hours)</div>
+  <ul class="task-list">
+    <li><strong>Soul Map work.</strong> Either (a) build a client's map, (b) create a public demo Soul Map to post as content, or (c) do outreach to someone who might want one.</li>
+    <li><strong>3 outbound DMs or comments.</strong> Not spam. Find people talking about consciousness, astrology, self-discovery, simulation theory &mdash; engage genuinely, then mention what you do when it's natural.</li>
+    <li><strong>1 piece of ecosystem content.</strong> Drop something in the Sparkverse Whop community, even if it's just a prompt or a thought. Keep the space alive.</li>
+  </ul>
+</div>
+
+<div class="time-block" style="border-left-color:var(--cyan)">
+  <div class="time-label" style="color:var(--cyan)">Evening Block &mdash; 30 min (compound interest)</div>
+  <ul class="task-list">
+    <li><strong>Engage on 10 posts</strong> in your niche on X. Real comments, not emoji spam. Ask questions. Add perspective. Be the person people start recognizing.</li>
+    <li><strong>Log the day.</strong> What did you post? Who did you talk to? Any leads? Track in your Press Start dashboard. What gets measured gets done.</li>
+    <li><strong>Queue tomorrow's video topic</strong> from the playbook so you wake up knowing exactly what to record.</li>
+  </ul>
+</div>
+
+<div class="callout">
+  <strong>Non-negotiable:</strong> No building new tools during selling hours. The Codex has 90+ tools. The product is done enough. If you feel the urge to build, channel it into a Soul Map for a real person instead.
+</div>
+</div>
+
+<!-- ===== WEEKLY CADENCE ===== -->
+<div id="weekly" class="panel">
+<h2>Weekly Cadence</h2>
+<p style="color:var(--dim); margin-bottom:24px;">Each day has a content theme so you never wonder "what do I post about?"</p>
+
+<div class="weekly-grid">
+  <div class="day-card mon"><div class="day-name">Monday</div><p><strong>Philosophy Drop.</strong> One consciousness reframe. Text post + video. "What if free will is a feature, not a bug?"</p></div>
+  <div class="day-card tue"><div class="day-name">Tuesday</div><p><strong>Tool Spotlight.</strong> Show one of your 90+ tools in action. Screen record or quick walkthrough. Make people say "wait, you built that?"</p></div>
+  <div class="day-card wed"><div class="day-name">Wednesday</div><p><strong>Soul Map Day.</strong> Share a public/demo decode. Show the visual, explain one layer. This is your product in motion.</p></div>
+  <div class="day-card thu"><div class="day-name">Thursday</div><p><strong>Founder Story.</strong> Raw. Real. Something from the build, the investigation, motherhood, the hustle. This is what makes people follow YOU not just a brand.</p></div>
+  <div class="day-card fri"><div class="day-name">Friday</div><p><strong>Community Call.</strong> Ask a question. Run a poll. Invite people into the Sparkverse. Feature a member. Make it feel like something you want to be part of.</p></div>
+  <div class="day-card sat"><div class="day-name">Saturday</div><p><strong>Behind the Code.</strong> Show the GitHub, the late-night builds, the process. Devs and creators love this. Different audience, same ecosystem.</p></div>
+  <div class="day-card sun"><div class="day-name">Sunday</div><p><strong>Rest + Reflect.</strong> Optional post. If you do, make it soft. Gratitude, a lesson from the week, a quiet thought. Or just be with Devon and Mason.</p></div>
+</div>
+
+<h3>Weekly Milestones</h3>
+<ul class="task-list">
+  <li><strong>7 videos posted</strong> (one per day Mon-Sun or Mon-Sat)</li>
+  <li><strong>1 Soul Map completed or demoed</strong></li>
+  <li><strong>15+ outbound conversations</strong> (DMs, comments, replies)</li>
+  <li><strong>1 Sparkverse community post</strong> that invites engagement</li>
+  <li><strong>Sunday evening:</strong> review what worked, set next week's video topics</li>
+</ul>
+</div>
+
+<!-- ===== VIDEO SCRIPTS ===== -->
+<div id="videos" class="panel">
+<h2>Video Script Concepts</h2>
+<p style="color:var(--dim); margin-bottom:8px;">These aren't scripts to read. They're <strong style="color:var(--text)">beat sheets</strong> &mdash; hit the points in your own words, your own energy. 60-90 seconds each.</p>
+<p style="color:var(--dim); margin-bottom:32px;">Mix the categories. Never post the same type twice in a row.</p>
+
+<div class="video-card">
+  <span class="label hook">Hook</span>
+  <h4>"I Decoded My Dead Mother's Murder Using Pattern Recognition"</h4>
+  <div class="beats">
+    <strong>Open:</strong> When I was two, my mother was murdered. The case went cold. I reopened it myself in 2018.<br><br>
+    <strong>Middle:</strong> Talk about approaching it like debugging &mdash; looking for the patterns everyone missed. You found the answer during COVID week in 2020, alone. Don't give the full story &mdash; leave the gap. Say "I built an entire platform from what I learned about how patterns work."<br><br>
+    <strong>Close:</strong> "The same pattern recognition that solved a murder case is what powers every tool I build. That's not metaphor. That's The First Spark."<br><br>
+    <strong>CTA:</strong> "Link in bio if you want to see what consciousness technology actually looks like."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label teach">Teach</span>
+  <h4>"Your Personality Test Is Lying to You"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "Every personality test you've ever taken is describing symptoms, not source code."<br><br>
+    <strong>Middle:</strong> Riff on how most tools describe what you do &mdash; a Soul Map decodes why you're wired to do it. It's the difference between reading an error message and reading the actual code that threw it. You're not an "INFJ" &mdash; you're running a specific pattern stack that produces INFJ-like behavior.<br><br>
+    <strong>Close:</strong> "When you see the actual architecture, the symptoms start making sense. That's what a Soul Map does."<br><br>
+    <strong>CTA:</strong> "I hand-decode these. DM me 'MAP' if you want yours."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label story">Story</span>
+  <h4>"I Built 90 Apps With No CS Degree and No Funding"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "Everyone asks me what language I code in. The answer is: I don't. Not traditionally."<br><br>
+    <strong>Middle:</strong> Talk about being self-taught through AI collaboration. You didn't go to a bootcamp. You sat down with a problem and figured it out, over and over, until you had 90+ interactive tools in a live ecosystem. Mention the Codex. Be real about the grind, the late nights after Devon and Mason are asleep.<br><br>
+    <strong>Close:</strong> "The barrier isn't skill. It's the decision to sit down and not get up until it works."<br><br>
+    <strong>CTA:</strong> "Peep the Codex &mdash; thefirstspark.shop/codex.html &mdash; and tell me which tool hits different."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label proof">Proof</span>
+  <h4>"Let Me Show You What a Soul Map Actually Looks Like"</h4>
+  <div class="beats">
+    <strong>Open:</strong> Hold up your phone or show a screen with a Soul Map on it. "This is a Soul Map. Not a chart. Not a reading. A decoded map of someone's consciousness architecture."<br><br>
+    <strong>Middle:</strong> Walk through one section &mdash; just one layer. Point at the visual):  "See this node here? That's where their pattern of self-sabotage lives &mdash; and look what it's connected to."<br><br>
+    <strong>Close:</strong> "Every single one of these is hand-decoded. No templates. No copy-paste. Your map doesn't look like anyone else's."<br><br>
+    <strong>CTA:</strong> "DM me if you want to see yours."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label hook">Hook</span>
+  <h4>"Reality Is Programmable and I Can Prove It"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "What if the thing you call 'your life' is running on patterns you never chose? And you can rewrite them?"<br><br>
+    <strong>Middle:</strong> Talk about the Selector Model &mdash; your four-layer consciousness framework. Don't over-explain. Just introduce the concept: there are layers to how you process reality, and most people are only operating on one or two.<br><br>
+    <strong>Close:</strong> "I'm not selling you enlightenment. I'm showing you the architecture. What you do with it is your call."<br><br>
+    <strong>CTA:</strong> "The First Spark. Link in bio."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label story">Story</span>
+  <h4>"Being a Solo Founder and Mom Hits Different at 2 AM"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "It's 2 AM. Kids are finally asleep. This is when I build."<br><br>
+    <strong>Middle:</strong> Be honest about what the solo founder life actually looks like when you're also raising two boys. No glamorization, no pity. Just the reality. The tradeoffs. The moments where you question it. And the moments where you see something work and remember why.<br><br>
+    <strong>Close:</strong> "I'm not building this because it's easy. I'm building it because it's mine. And because my kids are going to see what it looks like when you don't quit."<br><br>
+    <strong>CTA:</strong> None needed. This one builds loyalty, not clicks.
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label sell">Sell</span>
+  <h4>"Here's What $33/Month Gets You in the Sparkverse"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "People keep asking what the Sparkverse actually is. Let me show you."<br><br>
+    <strong>Middle:</strong> Quick walkthrough of what Players Lounge members get &mdash; the tools, the community, the Soul Map access, the philosophy drops. Frame it as a laboratory, not a course. "This isn't a membership where you watch videos. It's a workspace for people who think reality is programmable."<br><br>
+    <strong>Close:</strong> "Thirty-three dollars a month. No contracts. No upsells. Just the tools and the people."<br><br>
+    <strong>CTA:</strong> "Link in bio. Come build with us."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label teach">Teach</span>
+  <h4>"The Pattern You Keep Repeating Has a Name"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "That thing you keep doing? The relationship pattern, the money pattern, the self-sabotage loop? It has a name. And it has a structure."<br><br>
+    <strong>Middle:</strong> Patterns aren't random &mdash; they're running code. Most people try to change the output without looking at the code. That's why therapy, affirmations, and willpower alone don't stick for everyone. The missing piece is seeing the architecture.<br><br>
+    <strong>Close:</strong> "You can't debug what you can't see. A Soul Map makes it visible."<br><br>
+    <strong>CTA:</strong> "DM me 'PATTERN' and I'll tell you which map would fit."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label proof">Proof</span>
+  <h4>"I Got Featured in Voyage Ohio &mdash; Here's the Real Story"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "So Voyage Ohio just published a piece on me as a Hidden Gem. And I almost didn't apply."<br><br>
+    <strong>Middle:</strong> Talk about imposter syndrome hitting different when you're a self-taught founder from Akron building consciousness tech. Why you almost didn't put yourself out there. What it felt like to see it live. Normalize visibility for your audience.<br><br>
+    <strong>Close:</strong> "If you're building something weird and real, put yourself out there. The right people are looking for exactly what you made."<br><br>
+    <strong>CTA:</strong> "Follow for more of whatever this is."
+  </div>
+</div>
+
+<div class="video-card">
+  <span class="label hook">Hook</span>
+  <h4>"What If Astrology Is Just Bad Documentation?"</h4>
+  <div class="beats">
+    <strong>Open:</strong> "Hot take: astrology isn't wrong. It's just poorly documented source code."<br><br>
+    <strong>Middle:</strong> Ancient systems were mapping real patterns but didn't have the language of code or systems thinking. A Soul Map takes the same raw inputs and decodes them like a developer would &mdash; with structure, logic, and precision instead of vibes.<br><br>
+    <strong>Close:</strong> "I'm not anti-astrology. I'm pro-upgrade."<br><br>
+    <strong>CTA:</strong> "Comment your sign and I'll tell you what a Soul Map would actually show instead."
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<h3>Bonus: X Post Ideas (Text Only)</h3>
+<div class="callout">
+  <strong>Use these as daily X posts to pair with your video days:</strong><br><br>
+  &bull; "Manifestation is just debugging your belief system. Change my mind."<br><br>
+  &bull; "You don't need another personality test. You need to see the code that's running underneath all of them."<br><br>
+  &bull; "Built my 90th interactive tool today. No CS degree. No funding. Just a laptop and a refusal to quit."<br><br>
+  &bull; "The thing about patterns is they don't care if you believe in them. They run anyway."<br><br>
+  &bull; "Free will is a feature, not a bug. Discuss."<br><br>
+  &bull; "What pattern keeps showing up in your life that you still haven't named?"<br><br>
+  &bull; "My mom was murdered when I was two. I solved the case myself 27 years later using pattern recognition. Then I built a company on it."<br><br>
+  &bull; "Stop consuming content about consciousness and start experimenting with it."<br><br>
+  &bull; "Thirty-three dollars a month to access 90+ consciousness tools, a decoded Soul Map, and a community of people who think reality is programmable. No guru. No fluff. Just the lab."
+</div>
+</div>
+
+<!-- ===== 90-DAY TARGETS ===== -->
+<div id="metrics" class="panel">
+<h2>90-Day Targets</h2>
+<p style="color:var(--dim); margin-bottom:24px;">These are your scoreboard. Check them every Sunday night. Be honest.</p>
+
+<div class="metric-row">
+  <div class="metric"><div class="number">100</div><div class="label-text">X Followers Added</div></div>
+  <div class="metric"><div class="number" style="color:var(--ember)">50</div><div class="label-text">Sparkverse Members</div></div>
+  <div class="metric"><div class="number" style="color:var(--cyan)">10</div><div class="label-text">Paid Members</div></div>
+  <div class="metric"><div class="number" style="color:var(--violet)">12</div><div class="label-text">Soul Maps Sold</div></div>
+</div>
+
+<div class="metric-row">
+  <div class="metric"><div class="number">90</div><div class="label-text">Videos Posted</div></div>
+  <div class="metric"><div class="number" style="color:var(--ember)">90</div><div class="label-text">X Posts</div></div>
+  <div class="metric"><div class="number" style="color:var(--cyan)">270</div><div class="label-text">Outbound DMs</div></div>
+  <div class="metric"><div class="number" style="color:var(--violet)">$1K+</div><div class="label-text">Revenue Target</div></div>
+</div>
+
+<h3>Monthly Breakdown</h3>
+
+<div class="time-block" style="border-left-color:var(--ember)">
+  <div class="time-label" style="color:var(--ember)">Month 1 &mdash; Foundation</div>
+  <ul class="task-list">
+    <li>Post every single day (video + text). No gaps. Build the habit and the algorithm.</li>
+    <li>Complete 3-4 Soul Maps (paid or demo). Use demos as content.</li>
+    <li>Email all 17 current members personally. Ask what they want.</li>
+    <li>Hit 30 Sparkverse members (free is fine &mdash; grow the base).</li>
+    <li>DM 90 people total (3/day). Not pitching &mdash; connecting.</li>
+  </ul>
+</div>
+
+<div class="time-block" style="border-left-color:var(--gold)">
+  <div class="time-label" style="color:var(--gold)">Month 2 &mdash; Conversion</div>
+  <ul class="task-list">
+    <li>Start converting free members to Players Lounge ($33/month). Target: 5 paid.</li>
+    <li>Launch a "Soul Map of the Week" content series &mdash; one public decode every Wednesday.</li>
+    <li>Serialize 3-4 chapters of the novel on Whop or Substack. Each chapter is a content event.</li>
+    <li>Set a deadline on the Alvin/SAFE note. Close or move on.</li>
+    <li>Explore Wefunder/Republic as a backup fundraise path.</li>
+  </ul>
+</div>
+
+<div class="time-block" style="border-left-color:var(--cyan)">
+  <div class="time-label" style="color:var(--cyan)">Month 3 &mdash; Scale</div>
+  <ul class="task-list">
+    <li>Hit 50 total members, 10 paid. Revenue approaching $330/month recurring.</li>
+    <li>Have 12+ Soul Maps completed. Build a portfolio page.</li>
+    <li>Evaluate channels: double down on what's working, cut what isn't.</li>
+    <li>Launch the OG Spark lifetime tier push &mdash; target 2-3 sales ($519 each).</li>
+    <li>Begin planning Month 4-6 based on real data.</li>
+  </ul>
+</div>
+
+<div class="callout ember">
+  <strong>Revenue math at 90 days (conservative):</strong><br><br>
+  10 Players Lounge members &times; $33/month = $330/month recurring<br>
+  3 OG Spark lifetime sales &times; $519 = $1,557 one-time<br>
+  12 Soul Maps at variable pricing = $600&ndash;$1,200<br><br>
+  <strong>Total 90-day range: $2,000 &ndash; $3,500+</strong><br><br>
+  This isn't life-changing money yet. But it's proof of concept, it's momentum, and it's the foundation that makes a fundraise or community round credible.
+</div>
+</div>
+
+<!-- ===== RULES OF ENGAGEMENT ===== -->
+<div id="rules" class="panel">
+<h2>Rules of Engagement</h2>
+<p style="color:var(--dim); margin-bottom:32px;">Print these. Tape them to your wall. Read them when you want to build tool #91 instead of sending that DM.</p>
+
+<div class="rules-block">
+  <div class="rule-num">01</div>
+  <p>Sell before you build.</p>
+  <p>If it doesn't have a buyer waiting, it doesn't get built. Every new tool or feature must respond to a real request or proven need. The Codex is deep enough. Now sell what's in it.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">02</div>
+  <p>One video a day. No exceptions for 90 days.</p>
+  <p>Not polished. Not perfect. Just posted. The algorithm rewards consistency. Your face, your voice, your story &mdash; that's the product people buy first.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">03</div>
+  <p>Conversations over funnels.</p>
+  <p>DMs convert. Automated sequences don't &mdash; not at this stage. Talk to people like humans. Ask questions. Listen. Then invite them in when it's natural.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">04</div>
+  <p>The Soul Map is your lead product. Treat it like one.</p>
+  <p>Stop treating Soul Maps like a side offering. Every demo is content. Every delivery is a testimonial opportunity. Every decode is a reason someone follows you.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">05</div>
+  <p>Ice box the token. Ice box the NFTs. Ice box the motorhome.</p>
+  <p>$SPRK, NFT Soul Maps, the Mobile Spark Station &mdash; all beautiful visions. All distractions at pre-revenue. Write them on a 2028 board and protect your focus.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">06</div>
+  <p>Log everything. Every day.</p>
+  <p>Use Press Start. Use a notebook. Use a napkin. Track who you talked to, what you posted, what responses you got, and what money came in.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">07</div>
+  <p>Be the face. Always.</p>
+  <p>People don't buy platforms from strangers. Your story &mdash; the murder investigation, the solo founder grind, the consciousness philosophy, motherhood &mdash; is your unfair advantage.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">08</div>
+  <p>Don't inflate. Ever.</p>
+  <p>17 free members is 17 free members. Own the real number. Build from the real number. People respect founders who tell the truth about where they are.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">09</div>
+  <p>Revenue first. Fundraise second.</p>
+  <p>Even $330/month in recurring revenue changes the fundraise conversation completely. Investors fund traction, not potential. Every dollar of revenue is worth more than every slide in the deck.</p>
+  <div style="clear:both"></div>
+</div>
+
+<div class="rules-block">
+  <div class="rule-num">10</div>
+  <p>Right here. Right now.</p>
+  <p>Not tomorrow. Not after the next tool. Not after the perfect launch. The product is built. The story is real. The only thing between here and there is daily action. Press start.</p>
+  <div style="clear:both"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

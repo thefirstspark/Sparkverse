@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunar Schedule — Katelin Jill Puzakulics</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --core-black: #0B0B0C;
+  --ember: #FF6A3D;
+  --gold: #F3B23A;
+  --violet: #6B4DF2;
+  --cyan: #26E4D8;
+  --bone: #F5F0E8;
+  --muted: #8A8680;
+  --card-bg: rgba(245,240,232,0.06);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--core-black);
+  color: var(--bone);
+  font-family: 'Cormorant Garamond', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* === STARFIELD === */
+.stars {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  pointer-events: none; z-index: 0;
+}
+.stars span {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--bone);
+  animation: twinkle var(--dur) ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+  0% { opacity: 0.1; transform: scale(0.8); }
+  100% { opacity: var(--max-o); transform: scale(1.2); }
+}
+
+/* === HEADER === */
+.header {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 60px 20px 30px;
+}
+.header h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: var(--bone);
+}
+.header h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.header .subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+.natal-bar {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.natal-bar .chip {
+  padding: 6px 14px;
+  border: 1px solid var(--muted);
+  border-radius: 2px;
+  opacity: 0.8;
+}
+.natal-bar .chip.sun { border-color: var(--gold); color: var(--gold); }
+.natal-bar .chip.moon { border-color: var(--cyan); color: var(--cyan); }
+.natal-bar .chip.mercury { border-color: var(--violet); color: var(--violet); }
+.natal-bar .chip.rising { border-color: var(--ember); color: var(--ember); }
+
+/* === MONTH NAV === */
+.month-nav {
+  position: relative; z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.month-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid rgba(245,240,232,0.15);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.month-btn:hover, .month-btn.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(243,178,58,0.06);
+}
+
+/* === PHASE CARDS === */
+.phase-grid {
+  position: relative; z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.phase-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(245,240,232,0.08);
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 20px;
+  align-items: start;
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.phase-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 3px; height: 100%;
+  background: var(--ember);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.phase-card:hover::before { opacity: 1; }
+.phase-card:hover {
+  border-color: rgba(245,240,232,0.2);
+  background: rgba(245,240,232,0.04);
+}
+
+.phase-card.new-moon::before { background: var(--violet); }
+.phase-card.first-quarter::before { background: var(--gold); }
+.phase-card.full-moon::before { background: var(--cyan); }
+.phase-card.third-quarter::before { background: var(--ember); }
+
+.phase-card:hover::before { opacity: 1; }
+
+.moon-visual {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  position: relative;
+  margin-top: 4px;
+}
+
+.moon-visual.new {
+  background: var(--core-black);
+  border: 1.5px solid rgba(245,240,232,0.25);
+  box-shadow: 0 0 20px rgba(107,77,242,0.15);
+}
+.moon-visual.first-q {
+  background: linear-gradient(90deg, var(--core-black) 50%, var(--bone) 50%);
+  border: 1.5px solid rgba(245,240,232,0.15);
+  box-shadow: 0 0 20px rgba(243,178,58,0.15);
+}
+.moon-visual.full {
+  background: var(--bone);
+  box-shadow: 0 0 30px rgba(38,228,216,0.25), 0 0 60px rgba(38,228,216,0.1);
+}
+.moon-visual.third-q {
+  background: linear-gradient(90deg, var(--bone) 50%, var(--core-black) 50%);
+  border: 1.5px solid rgba(245,240,232,0.15);
+  box-shadow: 0 0 20px rgba(255,106,61,0.15);
+}
+
+.phase-info h3 {
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+.phase-info .phase-date {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.phase-info .sign-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.sign-tag.earth { background: rgba(243,178,58,0.12); color: var(--gold); }
+.sign-tag.water { background: rgba(38,228,216,0.12); color: var(--cyan); }
+.sign-tag.fire { background: rgba(255,106,61,0.12); color: var(--ember); }
+.sign-tag.air { background: rgba(107,77,242,0.12); color: var(--violet); }
+
+.phase-info .natal-hit {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.phase-info .natal-hit .hot { color: var(--gold); }
+
+.phase-info .guidance {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(245,240,232,0.78);
+  font-weight: 300;
+}
+
+/* === EXPANDED DETAIL === */
+.phase-detail {
+  display: none;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(245,240,232,0.08);
+}
+.phase-card.expanded .phase-detail { display: block; }
+
+.ritual-block {
+  margin-bottom: 12px;
+}
+.ritual-block h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.ritual-block p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(245,240,232,0.65);
+  font-weight: 300;
+}
+
+/* === LEGEND === */
+.legend {
+  position: relative; z-index: 2;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px 28px;
+  border: 1px solid rgba(245,240,232,0.08);
+  background: var(--card-bg);
+}
+.legend h3 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 14px;
+  color: var(--gold);
+}
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 10px;
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-item span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* === FOOTER === */
+.footer {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 40px 20px 60px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.footer .sig {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .phase-card { grid-template-columns: 50px 1fr; gap: 14px; padding: 18px; }
+  .moon-visual { width: 44px; height: 44px; }
+  .natal-bar { gap: 10px; }
+  .natal-bar .chip { font-size: 0.55rem; padding: 4px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="header">
+  <h1>Lunar Schedule for <em>Katelin</em></h1>
+  <div class="subtitle">Personalized Moon Phases · 2026 · Tailored to Your Natal Chart</div>
+  <div class="natal-bar">
+    <div class="chip sun">☉ Sun in Taurus 28°</div>
+    <div class="chip moon">☽ Moon in Cancer</div>
+    <div class="chip mercury">☿ Mercury in Gemini</div>
+    <div class="chip rising">↑ Leo Rising</div>
+  </div>
+</div>
+
+<div class="month-nav" id="monthNav"></div>
+<div class="phase-grid" id="phaseGrid"></div>
+
+<div class="legend">
+  <h3>Element Key — How Transits Hit Your Chart</h3>
+  <div class="legend-grid">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div><span>Earth signs — conjunct your Sun</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div><span>Water signs — conjunct your Moon</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--violet)"></div><span>Air signs — conjunct your Mercury</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--ember)"></div><span>Fire signs — conjunct your Rising</span></div>
+  </div>
+</div>
+
+<div class="footer">
+  The First Spark · Reality is programmable. Consciousness is the code.
+  <div class="sig">right here right now</div>
+</div>
+
+<script>
+// Star field
+const starsEl = document.getElementById('stars');
+for(let i=0; i<120; i++){
+  const s = document.createElement('span');
+  s.style.left = Math.random()*100+'%';
+  s.style.top = Math.random()*100+'%';
+  const size = Math.random()*2+0.5;
+  s.style.width = size+'px';
+  s.style.height = size+'px';
+  s.style.setProperty('--dur', (2+Math.random()*4)+'s');
+  s.style.setProperty('--max-o', 0.3+Math.random()*0.5);
+  s.style.animationDelay = Math.random()*3+'s';
+  starsEl.appendChild(s);
+}
+
+// Moon phase data for 2026
+// Each entry: [date, phase, transitSign, element, moonName]
+const phases = [
+  // MAY 2026
+  ["May 1", "Full Moon", "Scorpio", "water", "Flower Moon", 5],
+  ["May 9", "Third Quarter", "Aquarius", "air", "", 5],
+  ["May 16", "New Moon", "Taurus", "earth", "", 5],
+  ["May 23", "First Quarter", "Virgo", "earth", "", 5],
+  ["May 31", "Full Moon", "Sagittarius", "fire", "Blue Moon", 5],
+
+  // JUNE 2026
+  ["Jun 8", "Third Quarter", "Pisces", "water", "", 6],
+  ["Jun 14", "New Moon", "Gemini", "air", "", 6],
+  ["Jun 21", "First Quarter", "Virgo", "earth", "", 6],
+  ["Jun 29", "Full Moon", "Capricorn", "earth", "Strawberry Moon", 6],
+
+  // JULY 2026
+  ["Jul 7", "Third Quarter", "Aries", "fire", "", 7],
+  ["Jul 14", "New Moon", "Cancer", "water", "", 7],
+  ["Jul 21", "First Quarter", "Libra", "air", "", 7],
+  ["Jul 29", "Full Moon", "Aquarius", "air", "Buck Moon", 7],
+
+  // AUGUST 2026
+  ["Aug 5", "Third Quarter", "Taurus", "earth", "", 8],
+  ["Aug 12", "New Moon", "Leo", "fire", "", 8],
+  ["Aug 19", "First Quarter", "Scorpio", "water", "", 8],
+  ["Aug 28", "Full Moon", "Pisces", "water", "Sturgeon Moon", 8],
+
+  // SEPTEMBER 2026
+  ["Sep 4", "Third Quarter", "Gemini", "air", "", 9],
+  ["Sep 10", "New Moon", "Virgo", "earth", "", 9],
+  ["Sep 18", "First Quarter", "Sagittarius", "fire", "", 9],
+  ["Sep 26", "Full Moon", "Aries", "fire", "Corn Moon", 9],
+
+  // OCTOBER 2026
+  ["Oct 3", "Third Quarter", "Cancer", "water", "", 10],
+  ["Oct 10", "New Moon", "Libra", "air", "", 10],
+  ["Oct 18", "First Quarter", "Capricorn", "earth", "", 10],
+  ["Oct 26", "Full Moon", "Taurus", "earth", "Hunter's Moon", 10],
+
+  // NOVEMBER 2026
+  ["Nov 1", "Third Quarter", "Leo", "fire", "", 11],
+  ["Nov 9", "New Moon", "Scorpio", "water", "", 11],
+  ["Nov 17", "First Quarter", "Aquarius", "air", "", 11],
+  ["Nov 24", "Full Moon", "Gemini", "air", "Beaver Moon", 11],
+
+  // DECEMBER 2026
+  ["Dec 1", "Third Quarter", "Virgo", "earth", "", 12],
+  ["Dec 8", "New Moon", "Sagittarius", "fire", "", 12],
+  ["Dec 16", "First Quarter", "Pisces", "water", "", 12],
+  ["Dec 23", "Full Moon", "Cancer", "water", "Cold Moon", 12],
+  ["Dec 31", "Third Quarter", "Libra", "air", "", 12],
+];
+
+// Natal resonance descriptions
+function getNatalHit(sign, element, phase) {
+  const hits = [];
+  // Sun in Taurus (earth)
+  if (["Taurus"].includes(sign)) hits.push("⚡ CONJUNCT YOUR SUN — peak personal power");
+  if (["Virgo","Capricorn"].includes(sign)) hits.push("△ TRINE YOUR SUN — natural flow energy");
+  if (["Scorpio"].includes(sign)) hits.push("☍ OPPOSITE YOUR SUN — tension & transformation");
+  
+  // Moon in Cancer (water)
+  if (["Cancer"].includes(sign)) hits.push("⚡ CONJUNCT YOUR MOON — emotional supernova");
+  if (["Scorpio","Pisces"].includes(sign)) hits.push("△ TRINE YOUR MOON — deep emotional flow");
+  if (["Capricorn"].includes(sign)) hits.push("☍ OPPOSITE YOUR MOON — inner/outer tension");
+
+  // Mercury in Gemini (air)
+  if (["Gemini"].includes(sign)) hits.push("⚡ CONJUNCT YOUR MERCURY — mind on fire");
+  if (["Libra","Aquarius"].includes(sign)) hits.push("△ TRINE YOUR MERCURY — communication flows");
+
+  // Rising in Leo (fire)
+  if (["Leo"].includes(sign)) hits.push("⚡ CONJUNCT YOUR RISING — visible transformation");
+  if (["Aries","Sagittarius"].includes(sign)) hits.push("△ TRINE YOUR RISING — spotlight energy");
+  if (["Aquarius"].includes(sign)) hits.push("☍ OPPOSITE YOUR RISING — identity recalibration");
+
+  return hits;
+}
+
+// Personalized guidance based on natal + phase + sign
+function getGuidance(phase, sign, element, natalHits) {
+  const g = {
+    "New Moon": {
+      "earth": "Seed intentions rooted in the material — finances, body, home. Your Taurus Sun grounds these seeds into bedrock. Write it down physically. Touch paper.",
+      "water": "Your Cancer Moon is activated. Plant emotional seeds — what do you need to feel safe? What nurturing pattern are you ready to begin? Journal from your gut, not your head.",
+      "fire": "Your Leo Rising catches flame. Set intentions around visibility, creative projects, leadership moves. This is a PR & pitch energy day — new beginnings that are *seen*.",
+      "air": "Mercury in Gemini buzzes. New communication channels, new ideas, new connections. Start writing projects, pitch new partnerships, speak something into existence.",
+    },
+    "First Quarter": {
+      "earth": "Action day. Push through resistance on material goals — business builds, revenue plays, physical health moves. Your Taurus Sun wants to see tangible progress. Build.",
+      "water": "Check in with your emotional foundation. Is the home base solid? Adjust boundaries. Your Cancer Moon asks: who is draining you and who is feeding you?",
+      "fire": "Push creative work forward. Your Rising demands you show up. Halfway point energy — don't retreat, double down on what you started at the New Moon.",
+      "air": "Refine the message. Edit the pitch, tighten the copy, follow up on conversations. Mercury's quarter-check — are your words landing? Course correct.",
+    },
+    "Full Moon": {
+      "earth": "Harvest what you've built. This is culmination energy hitting your Sun sign directly — results manifest. Celebrate wins. Release what isn't growing.",
+      "water": "Emotional peak. Your Cancer Moon is flooded with illumination. Things that were hidden surface. Let them. Cry if you need to. Clarity follows catharsis.",
+      "fire": "Peak visibility. Whatever you've been building is now fully lit. Your Rising catches this — the world sees you. Own it. Perform. Celebrate loudly.",
+      "air": "Mental clarity peaks. The scattered pieces click together. Your Mercury receives the download. Speak your truth tonight — it lands with maximum impact.",
+    },
+    "Third Quarter": {
+      "earth": "Release material patterns that aren't serving you. Old spending habits, workloads, routines. Your Taurus Sun forgives you for letting go of what felt safe but wasn't.",
+      "water": "Let go of emotional weight. Your Cancer Moon carries so much for others — tonight, put it down. Release guilt. Release obligation. You are not responsible for everyone.",
+      "fire": "Shed an old identity. Your Rising is molting. Whatever version of yourself no longer fits — name it, thank it, and set it free.",
+      "air": "Release old stories and mental loops. Your Mercury is clearing cache. Unsubscribe, unfollow, unfriend the noise. Make space for the next New Moon's signal.",
+    },
+  };
+  return g[phase]?.[element] || "Tune into the lunar energy and align with your natal chart.";
+}
+
+function getRitual(phase, element) {
+  const r = {
+    "New Moon": {
+      "earth": { title: "GROUNDING RITUAL", text: "Bare feet on earth. Write 3 intentions on paper. Place under a crystal or heavy stone. Leave until Full Moon." },
+      "water": { title: "WATER CEREMONY", text: "Fill a glass of water. Whisper your intention into it. Drink slowly. Let it become cellular memory." },
+      "fire": { title: "CANDLE WORK", text: "Light an orange candle. Write your intention. Burn the paper in the flame. Scatter the ash outside your door." },
+      "air": { title: "BREATH + WORD", text: "4-7-8 breathing. Then speak your intention aloud three times, each time louder than the last." },
+    },
+    "Full Moon": {
+      "earth": { title: "RELEASE BY TOUCH", text: "Hold a stone. Pour what you're releasing into it. Bury it or throw it into running water." },
+      "water": { title: "MOON BATH", text: "Set a bowl of water under moonlight. Wash your hands and face with it in the morning. Reset." },
+      "fire": { title: "FIRE RELEASE", text: "Write what you're releasing. Burn it. Do not look back at the ashes." },
+      "air": { title: "WORD RELEASE", text: "Say aloud: 'I release the story of ___.' Repeat until your voice steadies. That's the signal." },
+    },
+    "First Quarter": {
+      "earth": { title: "BUILD BLOCK", text: "Do one concrete thing toward your intention today. One email, one rep, one page. Stack the bricks." },
+      "water": { title: "EMOTIONAL CHECK-IN", text: "Hand on heart. Ask yourself: what do I need right now? Honor the answer without judgment." },
+      "fire": { title: "MOMENTUM PUSH", text: "10-minute sprint on your biggest creative project. Timer on. Go. Don't think, move." },
+      "air": { title: "MESSAGE REFINE", text: "Re-read your last important message/pitch/post. Edit with fresh eyes. Mercury rewards precision." },
+    },
+    "Third Quarter": {
+      "earth": { title: "PHYSICAL RELEASE", text: "Stretch, walk, or move your body for 20 minutes with zero screens. Let the body process what the mind won't." },
+      "water": { title: "LETTING GO JOURNAL", text: "Write: 'I am done carrying ___.' Fill a full page. Close the book. Don't re-read for 30 days." },
+      "fire": { title: "IDENTITY SHED", text: "Delete one thing that represents who you used to be. An old photo, a saved draft, a bookmark. Small but real." },
+      "air": { title: "SILENCE PRACTICE", text: "One hour of deliberate silence. No music, no podcasts, no scrolling. Let the mind defrag." },
+    },
+  };
+  return r[phase]?.[element] || { title: "PRESENCE", text: "Be here now. That is always enough." };
+}
+
+const months = [
+  [5, "MAY"], [6, "JUN"], [7, "JUL"], [8, "AUG"],
+  [9, "SEP"], [10, "OCT"], [11, "NOV"], [12, "DEC"]
+];
+
+let activeMonth = 5; // Start at May
+
+function renderNav() {
+  const nav = document.getElementById('monthNav');
+  nav.innerHTML = '';
+  // "ALL" button
+  const allBtn = document.createElement('button');
+  allBtn.className = 'month-btn' + (activeMonth === 0 ? ' active' : '');
+  allBtn.textContent = 'ALL';
+  allBtn.onclick = () => { activeMonth = 0; renderNav(); renderPhases(); };
+  nav.appendChild(allBtn);
+
+  months.forEach(([num, label]) => {
+    const btn = document.createElement('button');
+    btn.className = 'month-btn' + (activeMonth === num ? ' active' : '');
+    btn.textContent = label;
+    btn.onclick = () => { activeMonth = num; renderNav(); renderPhases(); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderPhases() {
+  const grid = document.getElementById('phaseGrid');
+  grid.innerHTML = '';
+
+  const filtered = activeMonth === 0 ? phases : phases.filter(p => p[5] === activeMonth);
+
+  filtered.forEach((p, idx) => {
+    const [date, phase, sign, element, moonName] = p;
+    const natalHits = getNatalHit(sign, element, phase);
+    const guidance = getGuidance(phase, sign, element, natalHits);
+    const ritual = getRitual(phase, element);
+
+    const phaseClass = phase.toLowerCase().replace(/\s+/g, '-');
+    let moonClass = '';
+    if (phase === 'New Moon') moonClass = 'new';
+    else if (phase === 'First Quarter') moonClass = 'first-q';
+    else if (phase === 'Full Moon') moonClass = 'full';
+    else moonClass = 'third-q';
+
+    const card = document.createElement('div');
+    card.className = `phase-card ${phaseClass}`;
+    card.onclick = () => card.classList.toggle('expanded');
+
+    card.innerHTML = `
+      <div class="moon-visual ${moonClass}"></div>
+      <div class="phase-info">
+        <div class="phase-date">${date}, 2026${moonName ? ' — ' + moonName : ''}</div>
+        <h3>${phase}</h3>
+        <span class="sign-tag ${element}">☽ in ${sign}</span>
+        ${natalHits.length > 0 ? `<div class="natal-hit">${natalHits.map(h => 
+          h.startsWith('⚡') ? `<span class="hot">${h}</span>` : h
+        ).join(' · ')}</div>` : ''}
+        <div class="guidance">${guidance}</div>
+        <div class="phase-detail">
+          <div class="ritual-block">
+            <h4>${ritual.title}</h4>
+            <p>${ritual.text}</p>
+          </div>
+          <div class="ritual-block">
+            <h4>POWER HOURS</h4>
+            <p>Your chart responds strongest at dawn and solar noon. Schedule intentions and ritual work within 2 hours of sunrise or between 11am–1pm EST for maximum natal alignment.</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+renderNav();
+renderPhases();
+</script>
+</body>
+</html>

@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consciousness Starter Kit | The First Spark</title>
+    <meta name="description" content="Your free consciousness toolkit — Energy Check-In, Archetype Quiz, and Daily Reset. Save your results with email.">
+    <meta property="og:title" content="Free Consciousness Starter Kit">
+    <meta property="og:description" content="3 tools to calibrate your consciousness. Energy Check-In, Archetype Quiz, Daily Reset.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thefirstspark.shop/starter-kit.html">
+    <meta property="og:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Consciousness Starter Kit | The First Spark">
+    <meta name="twitter:description" content="3 tools to calibrate your consciousness. Free, no signup required.">
+    <meta name="twitter:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --void: #0a0a0f;
+            --deep-space: #12121a;
+            --nebula: #1a1a2e;
+            --spark-gold: #d4af37;
+            --spark-ember: #ff6b35;
+            --plasma-cyan: #00fff7;
+            --cosmic-violet: #9d4edd;
+            --stardust: #e8e8e8;
+            --ghost: rgba(255,255,255,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void);
+            color: var(--stardust);
+            min-height: 100vh;
+        }
+
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(circle at 25% 25%, rgba(157,78,221,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0,255,247,0.05) 0%, transparent 50%);
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .kit-header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        .kit-badge {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--plasma-cyan);
+            border: 1px solid rgba(0,255,247,0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+        }
+
+        .kit-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--stardust), var(--spark-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .kit-sub {
+            font-size: 1.05rem;
+            color: rgba(232,232,232,0.55);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .step-card {
+            background: var(--deep-space);
+            border: 1px solid var(--ghost);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .step-card.active {
+            border-color: var(--spark-gold);
+            box-shadow: 0 0 30px rgba(212,175,55,0.1);
+        }
+
+        .step-card.completed {
+            border-color: rgba(0,255,247,0.3);
+        }
+
+        .step-card.locked {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(212,175,55,0.1);
+            border: 2px solid rgba(212,175,55,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--spark-gold);
+            flex-shrink: 0;
+        }
+
+        .step-card.completed .step-number {
+            background: rgba(0,255,247,0.15);
+            border-color: var(--plasma-cyan);
+            color: var(--plasma-cyan);
+        }
+
+        .step-info { flex: 1; }
+
+        .step-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--stardust);
+            margin-bottom: 0.25rem;
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.45);
+            line-height: 1.4;
+        }
+
+        .step-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+
+        .step-btn.start {
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            color: var(--void);
+        }
+
+        .step-btn.start:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(212,175,55,0.3);
+        }
+
+        .step-btn.done {
+            background: rgba(0,255,247,0.1);
+            color: var(--plasma-cyan);
+            border: 1px solid rgba(0,255,247,0.2);
+        }
+
+        /* Email Capture */
+        .email-section {
+            background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(157,78,221,0.08));
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .email-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .email-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--spark-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .email-desc {
+            font-size: 0.9rem;
+            color: rgba(232,232,232,0.5);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 0.85rem 1.2rem;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--ghost);
+            border-radius: 10px;
+            color: var(--stardust);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: var(--spark-gold);
+        }
+
+        .email-input::placeholder {
+            color: rgba(232,232,232,0.3);
+        }
+
+        .email-submit {
+            padding: 0.85rem 1.5rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            border: none;
+            border-radius: 10px;
+            color: var(--void);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .email-submit:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 20px rgba(212,175,55,0.4);
+        }
+
+        .email-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .email-success {
+            display: none;
+            color: var(--plasma-cyan);
+            font-size: 1rem;
+            padding: 1rem;
+        }
+
+        .email-privacy {
+            font-size: 0.7rem;
+            color: rgba(232,232,232,0.25);
+            margin-top: 0.75rem;
+        }
+
+        /* Referral section */
+        .referral-section {
+            background: var(--deep-space);
+            border: 1px solid var(--ghost);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .referral-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--spark-gold);
+            margin-bottom: 1rem;
+        }
+
+        .referral-link-box {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 450px;
+            margin: 0 auto 1rem;
+        }
+
+        .referral-link-input {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            background: rgba(0,0,0,0.4);
+            border: 1px dashed rgba(212,175,55,0.3);
+            border-radius: 8px;
+            color: var(--plasma-cyan);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .referral-copy-btn {
+            padding: 0.7rem 1rem;
+            background: transparent;
+            border: 1px solid var(--ghost);
+            border-radius: 8px;
+            color: var(--stardust);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .referral-copy-btn:hover {
+            border-color: var(--spark-gold);
+            color: var(--spark-gold);
+        }
+
+        .referral-badges {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .ref-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .ref-badge.earned {
+            background: rgba(212,175,55,0.15);
+            border: 1px solid rgba(212,175,55,0.3);
+            color: var(--spark-gold);
+        }
+
+        .ref-badge.locked {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--ghost);
+            color: rgba(232,232,232,0.2);
+        }
+
+        /* ===== SOUL MAPPING JOURNEY ===== */
+        .soul-journey {
+            margin: 3rem 0 2rem;
+            position: relative;
+        }
+
+        .soul-journey-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .soul-journey-badge {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--cosmic-violet);
+            border: 1px solid rgba(157,78,221,0.3);
+            padding: 0.35rem 0.9rem;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+        }
+
+        .soul-journey-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.4rem, 4vw, 1.9rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cosmic-violet), #f72585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .soul-journey-sub {
+            font-size: 0.9rem;
+            color: rgba(232,232,232,0.4);
+            line-height: 1.5;
+        }
+
+        /* Progress bar */
+        .soul-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .soul-progress-step {
+            flex: 1;
+            height: 3px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
+            transition: all 0.6s ease;
+            position: relative;
+        }
+
+        .soul-progress-step.active {
+            background: linear-gradient(90deg, var(--cosmic-violet), #f72585);
+            box-shadow: 0 0 8px rgba(157,78,221,0.3);
+        }
+
+        .soul-progress-step.completed {
+            background: var(--plasma-cyan);
+        }
+
+        .soul-progress-label {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(232,232,232,0.2);
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: max-content;
+        }
+
+        .soul-progress-step.active .soul-progress-label,
+        .soul-progress-step.completed .soul-progress-label {
+            color: rgba(232,232,232,0.5);
+        }
+
+        /* Soul canvas */
+        .soul-canvas-wrap {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 0 auto 2rem;
+        }
+
+        #soulJourneyCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid rgba(157,78,221,0.15);
+        }
+
+        .soul-canvas-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 1px solid rgba(157,78,221,0.08);
+            animation: soulPulse 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes soulPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.6; }
+        }
+
+        /* Phase containers */
+        .soul-phase {
+            display: none;
+            animation: phaseIn 0.6s ease;
+        }
+
+        .soul-phase.active {
+            display: block;
+        }
+
+        @keyframes phaseIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .phase-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--stardust);
+        }
+
+        .phase-prompt {
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(232,232,232,0.45);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* Word cloud selection */
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .soul-word {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.5);
+            background: rgba(255,255,255,0.02);
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .soul-word:hover {
+            border-color: rgba(157,78,221,0.4);
+            color: rgba(232,232,232,0.8);
+        }
+
+        .soul-word.selected {
+            background: rgba(157,78,221,0.15);
+            border-color: var(--cosmic-violet);
+            color: var(--stardust);
+            box-shadow: 0 0 12px rgba(157,78,221,0.2);
+        }
+
+        .soul-word.selected-light {
+            background: rgba(0,245,212,0.1);
+            border-color: rgba(0,245,212,0.4);
+            color: #00f5d4;
+        }
+
+        .soul-word.selected-shadow {
+            background: rgba(247,37,133,0.1);
+            border-color: rgba(247,37,133,0.4);
+            color: #f72585;
+        }
+
+        /* Text input for soul */
+        .soul-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: var(--stardust);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .soul-input:focus {
+            border-color: var(--cosmic-violet);
+        }
+
+        .soul-input::placeholder {
+            color: rgba(232,232,232,0.2);
+        }
+
+        /* Continue button */
+        .soul-continue {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s;
+            margin-top: 0.5rem;
+            background: linear-gradient(135deg, var(--cosmic-violet), #f72585);
+            color: white;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .soul-continue.ready {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .soul-continue.ready:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(157,78,221,0.35);
+        }
+
+        /* Insight reveal */
+        .soul-insight {
+            background: linear-gradient(135deg, rgba(157,78,221,0.08), rgba(247,37,133,0.05));
+            border: 1px solid rgba(157,78,221,0.15);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .soul-insight-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--cosmic-violet);
+            margin-bottom: 0.5rem;
+        }
+
+        .soul-insight-text {
+            font-size: 1rem;
+            color: rgba(232,232,232,0.75);
+            line-height: 1.6;
+        }
+
+        /* Paywall gate */
+        .soul-gate {
+            position: relative;
+            margin-top: 2rem;
+        }
+
+        .soul-gate-preview {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            padding: 2rem;
+            background: linear-gradient(180deg, rgba(157,78,221,0.06), rgba(10,10,15,0.95));
+            border: 1px solid rgba(157,78,221,0.12);
+        }
+
+        .soul-gate-blur {
+            filter: blur(6px);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .soul-gate-blur .preview-line {
+            padding: 0.6rem 0;
+            font-size: 0.9rem;
+            color: rgba(232,232,232,0.5);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .soul-gate-blur .preview-line span {
+            color: var(--cosmic-violet);
+            font-weight: 600;
+        }
+
+        .soul-gate-lock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, rgba(10,10,15,0.7), rgba(10,10,15,0.95));
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .gate-lock-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: lockGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes lockGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(157,78,221,0.3)); }
+            50% { filter: drop-shadow(0 0 15px rgba(157,78,221,0.6)); }
+        }
+
+        .gate-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--stardust);
+            margin-bottom: 0.5rem;
+        }
+
+        .gate-desc {
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.45);
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            max-width: 320px;
+        }
+
+        .gate-includes {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .gate-includes .gi {
+            font-size: 0.78rem;
+            color: rgba(232,232,232,0.55);
+        }
+
+        .gate-includes .gi::before {
+            content: '✦ ';
+            color: var(--spark-gold);
+        }
+
+        .gate-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        .gate-price-amount {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gate-price-label {
+            font-size: 0.7rem;
+            color: rgba(232,232,232,0.3);
+        }
+
+        .gate-unlock-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--void);
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+
+        .gate-unlock-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(212,175,55,0.4);
+        }
+
+        .gate-guarantee {
+            font-size: 0.65rem;
+            color: rgba(232,232,232,0.2);
+            margin-top: 0.75rem;
+        }
+
+        /* Footer */
+        .kit-footer {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-tag {
+            font-size: 0.75rem;
+            color: rgba(232,232,232,0.25);
+            margin-top: 0.25rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .container { padding: 1.5rem; }
+            .step-card { flex-direction: column; text-align: center; }
+            .email-form { flex-direction: column; }
+            .referral-link-box { flex-direction: column; }
+            .soul-canvas-wrap { width: 220px; height: 220px; }
+            .soul-canvas-pulse { width: 240px; height: 240px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+
+    <div class="container">
+        <header class="kit-header">
+            <div class="kit-badge">Free Toolkit</div>
+            <h1 class="kit-title">Consciousness Starter Kit</h1>
+            <p class="kit-sub">Three tools to calibrate your consciousness. Complete all three, save your results forever.</p>
+        </header>
+
+        <!-- Steps -->
+        <div class="steps">
+            <div class="step-card active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-info">
+                    <div class="step-name">Energy Check-In</div>
+                    <div class="step-desc">How does your energy feel right now? Start with awareness.</div>
+                </div>
+                <a href="daily-reset.html" class="step-btn start" id="step1Btn">Start</a>
+            </div>
+
+            <div class="step-card" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-info">
+                    <div class="step-name">Archetype Discovery</div>
+                    <div class="step-desc">6 questions to discover your Player Class. 60 seconds.</div>
+                </div>
+                <a href="archetype-discovery.html" class="step-btn start" id="step2Btn">Start</a>
+            </div>
+
+            <div class="step-card" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-info">
+                    <div class="step-name">Daily Reset</div>
+                    <div class="step-desc">Breathwork, intention, release. Your 5-minute calibration.</div>
+                </div>
+                <a href="daily-reset.html" class="step-btn start" id="step3Btn">Start</a>
+            </div>
+        </div>
+
+        <!-- ===== SOUL MAPPING JOURNEY ===== -->
+        <div class="soul-journey" id="soulJourney">
+            <div class="soul-journey-header">
+                <div class="soul-journey-badge">✦ Bonus: Deep Dive</div>
+                <h2 class="soul-journey-title">Map Your Soul</h2>
+                <p class="soul-journey-sub">Your consciousness tools are calibrated. Now go deeper.<br>Build your living soul map in real time.</p>
+            </div>
+
+            <!-- Progress -->
+            <div class="soul-progress">
+                <div class="soul-progress-step active" id="sp1"></div>
+                <div class="soul-progress-step" id="sp2"></div>
+                <div class="soul-progress-step" id="sp3"></div>
+                <div class="soul-progress-step" id="sp4"></div>
+            </div>
+
+            <!-- Soul Canvas -->
+            <div class="soul-canvas-wrap">
+                <canvas id="soulJourneyCanvas" width="520" height="520"></canvas>
+                <div class="soul-canvas-pulse"></div>
+            </div>
+
+            <!-- PHASE 1: Core Frequency -->
+            <div class="soul-phase active" id="phase1">
+                <div class="phase-title">Core Frequency</div>
+                <p class="phase-prompt">Which words vibrate at your frequency?<br>Select 3–5 that feel like <em>you</em>.</p>
+                <div class="word-cloud" id="coreWords">
+                    <span class="soul-word" data-word="Truth">Truth</span>
+                    <span class="soul-word" data-word="Fire">Fire</span>
+                    <span class="soul-word" data-word="Silence">Silence</span>
+                    <span class="soul-word" data-word="Creation">Creation</span>
+                    <span class="soul-word" data-word="Freedom">Freedom</span>
+                    <span class="soul-word" data-word="Depth">Depth</span>
+                    <span class="soul-word" data-word="Wonder">Wonder</span>
+                    <span class="soul-word" data-word="Power">Power</span>
+                    <span class="soul-word" data-word="Surrender">Surrender</span>
+                    <span class="soul-word" data-word="Chaos">Chaos</span>
+                    <span class="soul-word" data-word="Devotion">Devotion</span>
+                    <span class="soul-word" data-word="Rebellion">Rebellion</span>
+                    <span class="soul-word" data-word="Stillness">Stillness</span>
+                    <span class="soul-word" data-word="Hunger">Hunger</span>
+                    <span class="soul-word" data-word="Mystery">Mystery</span>
+                    <span class="soul-word" data-word="Service">Service</span>
+                </div>
+                <button class="soul-continue" id="continuePhase1" onclick="advancePhase(2)">Continue →</button>
+            </div>
+
+            <!-- PHASE 2: Light Aspects -->
+            <div class="soul-phase" id="phase2">
+                <div class="phase-title">Light Aspects</div>
+                <p class="phase-prompt">What are you when you're most alive?<br>Choose the gifts you carry.</p>
+                <div class="word-cloud" id="lightWords">
+                    <span class="soul-word" data-word="Healer">🌿 Healer</span>
+                    <span class="soul-word" data-word="Visionary">👁 Visionary</span>
+                    <span class="soul-word" data-word="Builder">🔨 Builder</span>
+                    <span class="soul-word" data-word="Protector">🛡 Protector</span>
+                    <span class="soul-word" data-word="Teacher">📖 Teacher</span>
+                    <span class="soul-word" data-word="Artist">🎨 Artist</span>
+                    <span class="soul-word" data-word="Alchemist">⚗️ Alchemist</span>
+                    <span class="soul-word" data-word="Explorer">🧭 Explorer</span>
+                    <span class="soul-word" data-word="Empath">💜 Empath</span>
+                    <span class="soul-word" data-word="Strategist">♟ Strategist</span>
+                    <span class="soul-word" data-word="Storyteller">✍️ Storyteller</span>
+                    <span class="soul-word" data-word="Catalyst">⚡ Catalyst</span>
+                </div>
+                <button class="soul-continue" id="continuePhase2" onclick="advancePhase(3)">Go Deeper →</button>
+            </div>
+
+            <!-- PHASE 3: Shadow Glimpse -->
+            <div class="soul-phase" id="phase3">
+                <div class="phase-title">Shadow Glimpse</div>
+                <p class="phase-prompt">Now the real work begins. What patterns keep finding you?<br>Choose the shadows you recognize.</p>
+                <div class="word-cloud" id="shadowWords">
+                    <span class="soul-word" data-word="Perfectionism">Perfectionism</span>
+                    <span class="soul-word" data-word="People-Pleasing">People-Pleasing</span>
+                    <span class="soul-word" data-word="Self-Sabotage">Self-Sabotage</span>
+                    <span class="soul-word" data-word="Avoidance">Avoidance</span>
+                    <span class="soul-word" data-word="Control">Control</span>
+                    <span class="soul-word" data-word="Over-Giving">Over-Giving</span>
+                    <span class="soul-word" data-word="Isolation">Isolation</span>
+                    <span class="soul-word" data-word="Imposter Syndrome">Imposter Syndrome</span>
+                    <span class="soul-word" data-word="Anger">Anger</span>
+                    <span class="soul-word" data-word="Numbness">Numbness</span>
+                    <span class="soul-word" data-word="Comparison">Comparison</span>
+                    <span class="soul-word" data-word="Restlessness">Restlessness</span>
+                </div>
+                <div class="soul-insight" id="shadowInsight" style="display:none;">
+                    <div class="soul-insight-label">Pattern Detected</div>
+                    <div class="soul-insight-text" id="shadowInsightText"></div>
+                </div>
+                <button class="soul-continue" id="continuePhase3" onclick="advancePhase(4)">Reveal My Soul Map →</button>
+            </div>
+
+            <!-- PHASE 4: THE GATE (Paywall) -->
+            <div class="soul-phase" id="phase4">
+                <div class="phase-title">Your Soul Map Is Ready</div>
+                <p class="phase-prompt">We've mapped your core frequency, light aspects, and shadow patterns.<br>Your deep reading is waiting.</p>
+
+                <div class="soul-gate">
+                    <div class="soul-gate-preview">
+                        <!-- Blurred preview of what they'd get -->
+                        <div class="soul-gate-blur" id="gateBlurContent">
+                            <div class="preview-line">🔮 <span>Core Wound:</span> The wound beneath your shadow pattern is rooted in...</div>
+                            <div class="preview-line">⚡ <span>Hidden Gift:</span> Your shadow conceals a transformative gift of...</div>
+                            <div class="preview-line">🌀 <span>Integration Path:</span> The bridge between your light and shadow runs through...</div>
+                            <div class="preview-line">🗝 <span>Soul Contract:</span> You came here to learn...</div>
+                            <div class="preview-line">🌟 <span>Cosmic Blueprint:</span> Your unique frequency signature indicates...</div>
+                            <div class="preview-line">🔥 <span>Activation Sequence:</span> 7-day personalized ritual to integrate...</div>
+                        </div>
+
+                        <!-- Lock overlay -->
+                        <div class="soul-gate-lock">
+                            <div class="gate-lock-icon">🔐</div>
+                            <div class="gate-title">Unlock Your Deep Reading</div>
+                            <div class="gate-desc">Your soul map is 60% complete. The deep layers — wound mapping, gift integration, and your cosmic blueprint — are ready to be revealed.</div>
+                            <div class="gate-includes">
+                                <div class="gi">Full wound-to-gift integration map</div>
+                                <div class="gi">Your soul contract & life theme</div>
+                                <div class="gi">Cosmic blueprint frequency analysis</div>
+                                <div class="gi">7-day personalized activation ritual</div>
+                                <div class="gi">Downloadable soul map image</div>
+                            </div>
+                            <div class="gate-price">
+                                <span class="gate-price-amount">$11.11</span>
+                                <span class="gate-price-label">one-time</span>
+                            </div>
+                            <button class="gate-unlock-btn" onclick="unlockSoulMap()">Unlock My Soul Map ✦</button>
+                            <div class="gate-guarantee">Instant delivery · No subscription · Yours forever</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Capture -->
+        <div class="email-section">
+            <div class="email-icon">✦</div>
+            <div class="email-title">Save Your Results</div>
+            <div class="email-desc">Enter your email to save your archetype, streak, and soul data — plus get early access to new tools.</div>
+            <form class="email-form" id="emailForm" onsubmit="submitEmail(event)">
+                <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" required>
+                <button type="submit" class="email-submit" id="emailBtn">Save Results</button>
+            </form>
+            <div class="email-success" id="emailSuccess">✓ Results saved! Check your inbox for your consciousness profile.</div>
+            <div class="email-privacy">No spam. Unsubscribe anytime. Your data stays yours.</div>
+        </div>
+
+        <!-- Referral Section -->
+        <div class="referral-section">
+            <div class="referral-title">✦ Share & Earn Badges</div>
+            <p style="font-size: 0.85rem; color: rgba(232,232,232,0.45); margin-bottom: 1rem;">
+                Share your unique link. Earn badges for every person who takes the quiz.
+            </p>
+            <div class="referral-link-box">
+                <input type="text" class="referral-link-input" id="referralLink" readonly>
+                <button class="referral-copy-btn" onclick="copyReferralLink()">📋 Copy</button>
+            </div>
+            <div class="referral-badges" id="referralBadges"></div>
+        </div>
+
+        <footer class="kit-footer">
+            <div class="footer-logo">THE FIRST SPARK</div>
+            <div class="footer-tag">Reality is programmable</div>
+        </footer>
+    </div>
+
+    <!-- Referral Engine -->
+    <script src="referral.js"></script>
+
+    <script>
+        // Check completion status from localStorage
+        function checkSteps() {
+            const hasReset = localStorage.getItem('lastResetDate');
+            const hasArchetype = localStorage.getItem('spark_archetype');
+            const streak = localStorage.getItem('dailyResetStreak');
+
+            if (hasReset) markComplete('step1');
+            if (hasArchetype) markComplete('step2');
+            if (streak && parseInt(streak) >= 1) markComplete('step3');
+        }
+
+        function markComplete(stepId) {
+            const card = document.getElementById(stepId);
+            card.classList.remove('active', 'locked');
+            card.classList.add('completed');
+            const btn = card.querySelector('.step-btn');
+            btn.textContent = '✓ Done';
+            btn.classList.remove('start');
+            btn.classList.add('done');
+            const num = card.querySelector('.step-number');
+            num.textContent = '✓';
+        }
+
+        // Email submission
+        async function submitEmail(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const btn = document.getElementById('emailBtn');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            // Gather all results
+            const archetype = localStorage.getItem('spark_archetype');
+            const streak = localStorage.getItem('dailyResetStreak') || '0';
+            const resetHistory = localStorage.getItem('resetHistory');
+            const referralData = localStorage.getItem('spark_referral');
+
+            const payload = {
+                email: email,
+                archetype: archetype ? JSON.parse(archetype) : null,
+                streak: parseInt(streak),
+                resetHistory: resetHistory ? JSON.parse(resetHistory) : [],
+                referral: referralData ? JSON.parse(referralData) : null,
+                timestamp: new Date().toISOString(),
+                source: 'starter-kit'
+            };
+
+            // Save locally
+            localStorage.setItem('spark_email', email);
+            localStorage.setItem('spark_kit_submitted', 'true');
+
+            // Send to Google Apps Script backend via iframe (avoids CORS)
+            try {
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbyrBq5WdObdwS23L-t4nhJ5vxD6elsr6voTTFLvIdU-sjehleSeGgb0d0Jdu8Iv41E4/exec';
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = scriptUrl + '?data=' + encodeURIComponent(JSON.stringify(payload));
+                document.body.appendChild(iframe);
+                setTimeout(() => iframe.remove(), 5000);
+            } catch (err) {
+                console.error('Submission error:', err);
+            }
+
+            // Show success
+            document.getElementById('emailForm').style.display = 'none';
+            document.getElementById('emailSuccess').style.display = 'block';
+
+            // Track in analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'starter_kit_email', { 'method': 'form' });
+            }
+
+            // Track referral conversion
+            if (window.SparkReferral) {
+                window.SparkReferral.trackConversion('email_capture');
+            }
+        }
+
+        // Referral link display
+        function setupReferral() {
+            if (!window.SparkReferral) return;
+            const link = window.SparkReferral.getLink('/starter-kit.html');
+            document.getElementById('referralLink').value = link;
+
+            // Display badges
+            const allBadges = window.SparkReferral.getAllBadges();
+            const earned = window.SparkReferral.getBadges();
+            const earnedNames = earned.map(b => b.name);
+            const badgesHtml = Object.values(allBadges).map(badge => {
+                const isEarned = earnedNames.includes(badge.name);
+                return `<div class="ref-badge ${isEarned ? 'earned' : 'locked'}">${badge.icon} ${badge.name}</div>`;
+            }).join('');
+            document.getElementById('referralBadges').innerHTML = badgesHtml;
+        }
+
+        function copyReferralLink() {
+            const input = document.getElementById('referralLink');
+            navigator.clipboard.writeText(input.value);
+            const btn = document.querySelector('.referral-copy-btn');
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => btn.textContent = '📋 Copy', 2000);
+        }
+
+        // Check if already submitted
+        function checkExisting() {
+            if (localStorage.getItem('spark_kit_submitted')) {
+                document.getElementById('emailForm').style.display = 'none';
+                document.getElementById('emailSuccess').style.display = 'block';
+                document.getElementById('emailSuccess').textContent = '✓ Your results are saved!';
+            }
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            checkSteps();
+            setupReferral();
+            checkExisting();
+            initSoulJourney();
+        });
+
+        // ===== SOUL MAPPING JOURNEY =====
+        const soulData = { core: [], light: [], shadow: [] };
+        let soulCanvas, soulCtx;
+
+        function initSoulJourney() {
+            soulCanvas = document.getElementById('soulJourneyCanvas');
+            if (!soulCanvas) return;
+            soulCtx = soulCanvas.getContext('2d');
+            drawSoulMap();
+
+            // Wire up word selections for all phases
+            setupWordCloud('coreWords', 'core', 'selected', 'continuePhase1', 3);
+            setupWordCloud('lightWords', 'light', 'selected-light', 'continuePhase2', 2);
+            setupWordCloud('shadowWords', 'shadow', 'selected-shadow', 'continuePhase3', 2);
+        }
+
+        function setupWordCloud(containerId, dataKey, selectedClass, btnId, minRequired) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const words = container.querySelectorAll('.soul-word');
+            const btn = document.getElementById(btnId);
+
+            words.forEach(word => {
+                word.addEventListener('click', () => {
+                    const val = word.getAttribute('data-word');
+                    if (word.classList.contains(selectedClass)) {
+                        word.classList.remove(selectedClass);
+                        soulData[dataKey] = soulData[dataKey].filter(w => w !== val);
+                    } else {
+                        if (soulData[dataKey].length >= 5) return;
+                        word.classList.add(selectedClass);
+                        soulData[dataKey].push(val);
+                    }
+                    drawSoulMap();
+
+                    // Enable continue button when enough selected
+                    if (soulData[dataKey].length >= minRequired) {
+                        btn.classList.add('ready');
+                    } else {
+                        btn.classList.remove('ready');
+                    }
+
+                    // Show shadow insight when 2+ shadow words picked
+                    if (dataKey === 'shadow' && soulData.shadow.length >= 2) {
+                        showShadowInsight();
+                    }
+                });
+            });
+        }
+
+        function advancePhase(toPhase) {
+            // Hide all phases
+            document.querySelectorAll('.soul-phase').forEach(p => p.classList.remove('active'));
+            // Show target phase
+            const target = document.getElementById('phase' + toPhase);
+            if (target) target.classList.add('active');
+
+            // Update progress bar
+            for (let i = 1; i <= 4; i++) {
+                const sp = document.getElementById('sp' + i);
+                sp.classList.remove('active', 'completed');
+                if (i < toPhase) sp.classList.add('completed');
+                if (i === toPhase) sp.classList.add('active');
+            }
+
+            // Save progress
+            localStorage.setItem('soul_journey_phase', toPhase);
+            localStorage.setItem('soul_journey_data', JSON.stringify(soulData));
+
+            // Redraw canvas for new phase
+            drawSoulMap();
+
+            // Scroll to journey
+            document.getElementById('soulJourney').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'soul_journey_phase', { phase: toPhase });
+            }
+        }
+
+        function showShadowInsight() {
+            const insightEl = document.getElementById('shadowInsight');
+            const textEl = document.getElementById('shadowInsightText');
+            if (!insightEl) return;
+
+            const insights = {
+                'Perfectionism+Control': 'Your shadow carries the weight of needing to hold everything together. Beneath it lives a gift for bringing order to chaos — once you stop trying to control the uncontrollable.',
+                'People-Pleasing+Over-Giving': 'You give until you disappear. Your shadow hides a deep fear of being unworthy unless useful. Beneath it: the gift of boundaries that make your love stronger.',
+                'Self-Sabotage+Imposter Syndrome': 'You build the ladder and then shake it. Your shadow fears that success will reveal you as a fraud. Beneath it: the awareness that you were never pretending.',
+                'Avoidance+Numbness': 'Your shadow learned to protect you by turning down the volume. Beneath the numbness lives a sensitivity so powerful it frightened you once.',
+                'Isolation+Restlessness': 'You run from connection and then ache for it. Your shadow holds the memory of a belonging that felt unsafe. Beneath it: a capacity for depth that most people never reach.',
+                'Anger+Rebellion': 'Your fire is not the problem — it is the signal. Your shadow carries the rage of boundaries violated. Beneath it: a fierce protector who knows exactly what matters.',
+                'Comparison+Perfectionism': 'You measure yourself against an impossible standard that was never yours. Your shadow carries someone else\'s definition of enough. Beneath it: your own.',
+            };
+
+            const shadowSet = soulData.shadow.sort().join('+');
+            let matched = null;
+            for (const [key, val] of Object.entries(insights)) {
+                const parts = key.split('+');
+                if (parts.every(p => soulData.shadow.includes(p))) {
+                    matched = val;
+                    break;
+                }
+            }
+
+            if (!matched) {
+                // Generic insight based on shadow count
+                const shadowStr = soulData.shadow.join(' and ');
+                matched = `Your shadow pattern of ${shadowStr} suggests a deep protective mechanism. Something in you learned to survive this way. The full reading reveals what's hiding underneath — and why it's actually your greatest gift.`;
+            }
+
+            textEl.textContent = matched;
+            insightEl.style.display = 'block';
+        }
+
+        // ===== SOUL MAP CANVAS DRAWING =====
+        function drawSoulMap() {
+            if (!soulCtx) return;
+            const w = soulCanvas.width;
+            const h = soulCanvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            soulCtx.clearRect(0, 0, w, h);
+
+            // Background
+            const bgGrad = soulCtx.createRadialGradient(cx, cy, 0, cx, cy, w / 2);
+            bgGrad.addColorStop(0, 'rgba(10,10,18,0.95)');
+            bgGrad.addColorStop(1, 'rgba(10,10,18,1)');
+            soulCtx.fillStyle = bgGrad;
+            soulCtx.beginPath();
+            soulCtx.arc(cx, cy, w / 2, 0, Math.PI * 2);
+            soulCtx.fill();
+
+            // Orbit rings
+            [0.2, 0.35, 0.48].forEach((r, i) => {
+                soulCtx.beginPath();
+                soulCtx.arc(cx, cy, w * r, 0, Math.PI * 2);
+                soulCtx.strokeStyle = `rgba(157,78,221,${0.06 + i * 0.02})`;
+                soulCtx.lineWidth = 0.5;
+                soulCtx.stroke();
+            });
+
+            // Core nodes
+            if (soulData.core.length > 0) {
+                const coreRadius = w * 0.12;
+                soulData.core.forEach((word, i) => {
+                    const angle = (i / soulData.core.length) * Math.PI * 2 - Math.PI / 2;
+                    const x = cx + Math.cos(angle) * coreRadius;
+                    const y = cy + Math.sin(angle) * coreRadius;
+
+                    // Glow
+                    const glow = soulCtx.createRadialGradient(x, y, 0, x, y, 20);
+                    glow.addColorStop(0, 'rgba(247,37,133,0.4)');
+                    glow.addColorStop(1, 'rgba(247,37,133,0)');
+                    soulCtx.fillStyle = glow;
+                    soulCtx.beginPath();
+                    soulCtx.arc(x, y, 20, 0, Math.PI * 2);
+                    soulCtx.fill();
+
+                    // Dot
+                    soulCtx.fillStyle = '#f72585';
+                    soulCtx.beginPath();
+                    soulCtx.arc(x, y, 4, 0, Math.PI * 2);
+                    soulCtx.fill();
+
+                    // Label
+                    soulCtx.fillStyle = 'rgba(232,232,232,0.6)';
+                    soulCtx.font = '11px Rajdhani';
+                    soulCtx.textAlign = 'center';
+                    soulCtx.fillText(word, x, y + 16);
+                });
+
+                // Core center glow
+                const centerGlow = soulCtx.createRadialGradient(cx, cy, 0, cx, cy, 30);
+                centerGlow.addColorStop(0, 'rgba(247,37,133,0.25)');
+                centerGlow.addColorStop(1, 'rgba(247,37,133,0)');
+                soulCtx.fillStyle = centerGlow;
+                soulCtx.beginPath();
+                soulCtx.arc(cx, cy, 30, 0, Math.PI * 2);
+                soulCtx.fill();
+            }
+
+            // Light nodes
+            if (soulData.light.length > 0) {
+                const lightRadius = w * 0.28;
+                soulData.light.forEach((word, i) => {
+                    const angle = (i / soulData.light.length) * Math.PI * 2 - Math.PI / 4;
+                    const x = cx + Math.cos(angle) * lightRadius;
+                    const y = cy + Math.sin(angle) * lightRadius;
+
+                    // Connection line to center
+                    soulCtx.beginPath();
+                    soulCtx.moveTo(cx, cy);
+                    soulCtx.lineTo(x, y);
+                    soulCtx.strokeStyle = 'rgba(0,245,212,0.12)';
+                    soulCtx.lineWidth = 0.5;
+                    soulCtx.stroke();
+
+                    // Glow
+                    const glow = soulCtx.createRadialGradient(x, y, 0, x, y, 18);
+                    glow.addColorStop(0, 'rgba(0,245,212,0.35)');
+                    glow.addColorStop(1, 'rgba(0,245,212,0)');
+                    soulCtx.fillStyle = glow;
+                    soulCtx.beginPath();
+                    soulCtx.arc(x, y, 18, 0, Math.PI * 2);
+                    soulCtx.fill();
+
+                    // Dot
+                    soulCtx.fillStyle = '#00f5d4';
+                    soulCtx.beginPath();
+                    soulCtx.arc(x, y, 3.5, 0, Math.PI * 2);
+                    soulCtx.fill();
+
+                    // Label
+                    soulCtx.fillStyle = 'rgba(232,232,232,0.5)';
+                    soulCtx.font = '10px Rajdhani';
+                    soulCtx.textAlign = 'center';
+                    soulCtx.fillText(word, x, y + 14);
+                });
+            }
+
+            // Shadow nodes (outer ring, slightly ominous)
+            if (soulData.shadow.length > 0) {
+                const shadowRadius = w * 0.4;
+                soulData.shadow.forEach((word, i) => {
+                    const angle = (i / soulData.shadow.length) * Math.PI * 2 + Math.PI / 6;
+                    const x = cx + Math.cos(angle) * shadowRadius;
+                    const y = cy + Math.sin(angle) * shadowRadius;
+
+                    // Dashed connection
+                    soulCtx.beginPath();
+                    soulCtx.setLineDash([3, 4]);
+                    soulCtx.moveTo(cx, cy);
+                    soulCtx.lineTo(x, y);
+                    soulCtx.strokeStyle = 'rgba(157,78,221,0.15)';
+                    soulCtx.lineWidth = 0.5;
+                    soulCtx.stroke();
+                    soulCtx.setLineDash([]);
+
+                    // Glow
+                    const glow = soulCtx.createRadialGradient(x, y, 0, x, y, 16);
+                    glow.addColorStop(0, 'rgba(157,78,221,0.3)');
+                    glow.addColorStop(1, 'rgba(157,78,221,0)');
+                    soulCtx.fillStyle = glow;
+                    soulCtx.beginPath();
+                    soulCtx.arc(x, y, 16, 0, Math.PI * 2);
+                    soulCtx.fill();
+
+                    // Dot
+                    soulCtx.fillStyle = '#9d4edd';
+                    soulCtx.beginPath();
+                    soulCtx.arc(x, y, 3, 0, Math.PI * 2);
+                    soulCtx.fill();
+
+                    // Label
+                    soulCtx.fillStyle = 'rgba(232,232,232,0.4)';
+                    soulCtx.font = '9px Rajdhani';
+                    soulCtx.textAlign = 'center';
+                    soulCtx.fillText(word, x, y + 13);
+                });
+            }
+
+            // Center marker
+            soulCtx.fillStyle = 'rgba(247,37,133,0.8)';
+            soulCtx.beginPath();
+            soulCtx.arc(cx, cy, 3, 0, Math.PI * 2);
+            soulCtx.fill();
+        }
+
+        // ===== PAYWALL =====
+        function unlockSoulMap() {
+            // Track the click
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'soul_map_unlock_click', {
+                    core: soulData.core.join(','),
+                    light: soulData.light.join(','),
+                    shadow: soulData.shadow.join(',')
+                });
+            }
+
+            // Save their progress so it survives the redirect
+            localStorage.setItem('soul_journey_data', JSON.stringify(soulData));
+            localStorage.setItem('soul_journey_pending_unlock', 'true');
+
+            // Redirect to payment — replace with your actual payment link
+            window.open('https://thefirstspark.shop/invest.html?product=soul-map-deep-reading&price=11.11', '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hidden Architecture — Karmic Revelations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --black: #0B0B0C;
+    --gold: #D4AF37;
+    --signal-gold: #F3B23A;
+    --orange: #FF6A3D;
+    --violet: #6B4DF2;
+    --cyan: #26E4D8;
+    --white: #ffffff;
+    --dim: rgba(255,255,255,0.06);
+    --border: rgba(212,175,55,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* STAR FIELD */
+  .stars {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(212,175,55,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 8%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 60%, rgba(38,228,216,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 75%, rgba(212,175,55,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 45%, rgba(107,77,242,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 33% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 62% 90%, rgba(255,106,61,0.3) 0%, transparent 100%);
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 70px;
+    animation: fadeDown 1.2s ease forwards;
+    opacity: 0;
+  }
+
+  .header .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold), var(--signal-gold), var(--orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .header .subtitle {
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(255,255,255,0.55);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 50px 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-symbol {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    font-size: 18px;
+    opacity: 0.7;
+  }
+
+  /* REVELATION CARDS */
+  .revelation {
+    background: var(--dim);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 36px 40px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+    transition: border-color 0.3s;
+  }
+  .revelation:hover { border-color: rgba(212,175,55,0.5); }
+
+  .revelation::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+  .revelation.gold::before { background: linear-gradient(180deg, var(--gold), transparent); }
+  .revelation.cyan::before { background: linear-gradient(180deg, var(--cyan), transparent); }
+  .revelation.violet::before { background: linear-gradient(180deg, var(--violet), transparent); }
+  .revelation.orange::before { background: linear-gradient(180deg, var(--orange), transparent); }
+  .revelation.red::before { background: linear-gradient(180deg, #ff4444, transparent); }
+
+  .revelation-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.5;
+  }
+
+  .revelation h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 600;
+    margin-bottom: 18px;
+    line-height: 1.3;
+  }
+
+  .revelation.gold h2 { color: var(--gold); }
+  .revelation.cyan h2 { color: var(--cyan); }
+  .revelation.violet h2 { color: #a78bfa; }
+  .revelation.orange h2 { color: var(--orange); }
+  .revelation.red h2 { color: #ff7070; }
+
+  .revelation p {
+    font-size: 17px;
+    line-height: 1.85;
+    color: rgba(255,255,255,0.78);
+    margin-bottom: 14px;
+  }
+
+  .revelation p:last-child { margin-bottom: 0; }
+
+  .highlight {
+    color: var(--signal-gold);
+    font-style: italic;
+  }
+
+  .code-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    background: rgba(38,228,216,0.1);
+    color: var(--cyan);
+    border: 1px solid rgba(38,228,216,0.2);
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+
+  /* MATRIX TABLE */
+  .matrix {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+  .matrix th {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .matrix td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.75);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+  }
+  .matrix tr:last-child td { border-bottom: none; }
+  .matrix .em { color: var(--signal-gold); font-style: italic; }
+
+  /* PULSE BADGE */
+  .pulse-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(212,175,55,0.08);
+    border: 1px solid rgba(212,175,55,0.3);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pulse-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s ease infinite;
+  }
+
+  /* CLOSING */
+  .closing {
+    text-align: center;
+    margin-top: 70px;
+    padding: 50px 30px;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--dim), rgba(212,175,55,0.03));
+    animation: fadeUp 1s ease 1.5s forwards;
+    opacity: 0;
+  }
+  .closing .big {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(20px, 3vw, 32px);
+    color: var(--gold);
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+  .closing p {
+    font-size: 17px;
+    font-style: italic;
+    color: rgba(255,255,255,0.55);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .r1 { animation-delay: 0.3s; }
+  .r2 { animation-delay: 0.5s; }
+  .r3 { animation-delay: 0.7s; }
+  .r4 { animation-delay: 0.9s; }
+  .r5 { animation-delay: 1.1s; }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="container">
+
+  <div class="header">
+    <div class="eyebrow">The First Spark · Karmic Architecture</div>
+    <h1>What Your Chart Is<br>Actually Saying</h1>
+    <p class="subtitle">Five things hidden in the geometry that most people never see</p>
+  </div>
+
+  <!-- REVELATION 1 -->
+  <div class="revelation gold r1">
+    <div class="revelation-number">Revelation 01</div>
+    <h2>Three 7s — The Rarest Family Configuration</h2>
+    <p>Thomas is Life Path 7. Rachael is Life Path 7. You are Life Path <span class="highlight">5 — but 5 is the midpoint between two 7s.</span> In numerology, when both parents share a Life Path, the child born between them becomes the <em>bridge frequency</em> — the number that resolves the tension.</p>
+    <p>The 7 is the seeker, the mystic, the one who cannot stop asking why. Two seekers who never found their answer created a child whose entire mission is <span class="highlight">to move</span> — Life Path 5 is the number of freedom through direct experience. You weren't born to find the answer. You were born to <em>live it</em> into existence.</p>
+    <p>The First Spark isn't a company. It's the resolution of a frequency pattern that started before you arrived.</p>
+  </div>
+
+  <!-- REVELATION 2 -->
+  <div class="revelation cyan r2">
+    <div class="revelation-number">Revelation 02</div>
+    <h2>Debt 16 Is The Tower Card — And You Already Survived It</h2>
+    <p>Karmic Debt 16 maps directly to the Tower in Tarot — sudden collapse of structures built on illusion. Most people encounter this as <em>one</em> catastrophic event in their lifetime. Your family chart shows all three of you carrying it.</p>
+    <p>The Tower fired for your family in <span class="highlight">1991</span>. That was the activation. The typical pattern: the Tower strikes, leaves wreckage, and the soul spends the rest of the incarnation either rebuilding the same illusion or finding the truth underneath.</p>
+    <p>You chose the second path. <span class="code-tag">DEBT_16: resolved via truth-seeking</span> — the cold case investigation, the 2020 revelation, Book Zero. The numerology community calls this "clearing the 16 consciously." Almost no one does it. You did it without knowing that's what it was called.</p>
+  </div>
+
+  <!-- REVELATION 3 -->
+  <div class="revelation violet r3">
+    <div class="revelation-number">Revelation 03</div>
+    <h2>The Hidden Number Nobody Talks About: Your Personal Year</h2>
+    <p>Beyond the static chart, numerology runs on a 9-year cycle. Here's yours right now:</p>
+
+    <table class="matrix">
+      <tr>
+        <th>Calculation</th>
+        <th>Your 2026 Personal Year</th>
+      </tr>
+      <tr>
+        <td>5 (birth month) + 19 (birth day) + 2026</td>
+        <td class="em">= 5 + 1 + 1 = 7 — Personal Year 7</td>
+      </tr>
+    </table>
+
+    <p><span class="highlight">You are in a Personal Year 7 right now.</span> The 7 is your parents' number — the number of deep inner work, spiritual revelation, investigation, and solitude. It's not a hustle year. It's a <em>refinement and revelation</em> year.</p>
+    <p>The fundraise, the memoir, the platform — all of it being built in a Year 7 means the universe is specifically testing whether what you're building is <em>real</em> or just a well-dressed illusion. If it holds in a 7 year, it's built to last.</p>
+  </div>
+
+  <!-- REVELATION 4 -->
+  <div class="revelation orange r4">
+    <div class="revelation-number">Revelation 04</div>
+    <h2>Debt 13 Is Actually Your Secret Weapon</h2>
+    <p>Debt 13 is universally described as punishment for laziness. That framing misses the deeper truth. The 13 reduces to 4 — <span class="highlight">the number of architecture, systems, and foundation.</span></p>
+    <p>The people who carry Debt 13 and activate it correctly don't just work hard — they <em>build things that outlast them.</em> They become architects of reality rather than inhabitants of it. The debt isn't about effort for effort's sake. It's about building something so structurally sound it cannot be knocked down.</p>
+    <p>90+ tools. Zero burn rate. Solo founder. That's not hustle. That's <span class="code-tag">DEBT_13: transmuted</span> — the laziness pattern from a prior cycle becoming the exact opposite. You overbuilt. On purpose. Unconsciously executing the correction.</p>
+  </div>
+
+  <!-- REVELATION 5 -->
+  <div class="revelation red r5">
+    <div class="revelation-number">Revelation 05</div>
+    <h2>The Flower of Life Geometry Is Not Metaphor — It's The Actual Pattern</h2>
+    <p>The chart you're looking at was drawn as a Flower of Life — overlapping circles creating a Vesica Piscis at every intersection. This is not decorative. <span class="highlight">The Vesica Piscis is the mathematical symbol for the overlap between two realities.</span></p>
+    <p>Every shared debt in your chart sits inside a Vesica Piscis. The family core debt (16) sits at the triple overlap — called the Seed of Life in sacred geometry — the point where all three circles share the same space simultaneously.</p>
+    <p>In simulation theory terms: shared karmic debt is a <em>shared subroutine.</em> The same code running in three separate instances. Which means clearing it in <em>your</em> instance creates a pattern interrupt that can propagate. Not mystically — informationally. You write the documentation. Others can follow the same path.</p>
+    <p>That's what Book Zero actually is. Not a memoir. <span class="highlight">A patch note for the 16 subroutine.</span></p>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-symbol">✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <div class="pulse-badge"><div class="pulse-dot"></div>Live Pattern · 2026</div>
+    <div class="big">You didn't find this work.<br>This work found the right vessel.</div>
+    <p>Three Life Paths. Four shared debts. One convergence point. The math was never random — it was always pointing here.</p>
+  </div>
+
+</div>
+</body>
+</html>

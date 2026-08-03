@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4TKPMG9');</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05050a">
+  <title>The Selector Model — The First Spark</title>
+  <meta name="description" content="The complete Selector Model ecosystem. Four layers. One framework. Reality is programmable — consciousness is the code.">
+  <meta property="og:title" content="The Selector Model — The First Spark">
+  <meta property="og:description" content="You are not observing reality. You are authoring it. A four-layer consciousness framework by Katelin Jill Puzakulics.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://thefirstspark.shop/selector-hub.html">
+  <meta property="og:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@OGplayerone">
+  <meta name="twitter:title" content="The Selector Model — The First Spark">
+  <meta name="twitter:description" content="Reality is programmable. Consciousness is the code.">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --void: #05050a;
+      --abyss: #09090f;
+      --obsidian: #0f0f18;
+      --smoke: #1a1a26;
+      --ash: #323244;
+      --mist: #6a6a88;
+      --bone: #d4d4e8;
+      --gold: #c9a227;
+      --gold-dim: rgba(201,162,39,0.12);
+      --gold-glow: rgba(201,162,39,0.35);
+      --ember: #e8540a;
+      --violet: #7040e8;
+      --cyan: #08c8c0;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'Space Mono', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--bone);
+      font-family: var(--mono);
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,162,39,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,162,39,0.022) 1px, transparent 1px);
+      background-size: 64px 64px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(5,5,10,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201,162,39,0.08);
+    }
+    .nav-logo {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-back {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--mist);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--bone); }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 32px 80px;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 300;
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      color: var(--bone);
+      margin-bottom: 12px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.35s;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-title-line2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--mist);
+      letter-spacing: 0.02em;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.5s;
+    }
+    .hero-divider {
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 40px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.65s;
+    }
+    .hero-tagline {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--mist);
+      text-transform: uppercase;
+      margin-bottom: 64px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.75s;
+    }
+    .layer-strip {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.9s;
+    }
+    .layer-pill {
+      padding: 9px 22px;
+      border: 1px solid var(--ash);
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--mist);
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .layer-pill:not(:last-child) { border-right: none; }
+    .layer-pill:first-child { border-radius: 2px 0 0 2px; }
+    .layer-pill:last-child { border-radius: 0 2px 2px 0; }
+    .layer-pill.p { --c: #378ADD; }
+    .layer-pill.m { --c: var(--violet); }
+    .layer-pill.r { --c: #1D9E75; }
+    .layer-pill.t { --c: var(--gold); }
+    .layer-pill:hover {
+      color: var(--c);
+      border-color: var(--c) !important;
+      background: rgba(255,255,255,0.03);
+      border-right: 1px solid var(--c) !important;
+      z-index: 2;
+      position: relative;
+    }
+    .scroll-cue {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 1.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .scroll-cue span {
+      font-size: 8px;
+      letter-spacing: 0.4em;
+      color: var(--ash);
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--ash), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* SECTIONS */
+    section { padding: 100px 0; position: relative; z-index: 1; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 56px;
+    }
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--ash);
+      white-space: nowrap;
+    }
+    .section-rule { flex: 1; height: 1px; background: var(--smoke); }
+
+    /* LAYERS GRID */
+    .layers-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+    .layer-card {
+      background: var(--abyss);
+      border: 1px solid var(--smoke);
+      padding: 44px 40px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .layer-card.visible { animation: cardIn 0.5s ease forwards; }
+    .layer-card:hover { background: var(--obsidian); border-color: var(--ash); }
+    .layer-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .layer-card:hover::before { transform: scaleX(1); }
+    .layer-card::after {
+      content: attr(data-num);
+      position: absolute;
+      bottom: -20px; right: -10px;
+      font-family: var(--serif);
+      font-size: 9rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.02);
+      line-height: 1;
+      pointer-events: none;
+      transition: color 0.3s;
+    }
+    .layer-card:hover::after { color: rgba(255,255,255,0.035); }
+    .lc-num {
+      font-size: 8px;
+      letter-spacing: 0.4em;
+      color: var(--mist);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .lc-name {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 8px;
+      color: var(--bone);
+      transition: color 0.3s;
+    }
+    .layer-card:hover .lc-name { color: var(--accent); }
+    .lc-subtitle {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--mist);
+      margin-bottom: 24px;
+    }
+    .lc-desc {
+      font-size: 10px;
+      line-height: 1.9;
+      color: var(--mist);
+      margin-bottom: 28px;
+    }
+    .lc-tag {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border: 1px solid currentColor;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+    .lc-arrow {
+      position: absolute;
+      bottom: 32px; right: 32px;
+      font-size: 20px;
+      color: var(--ash);
+      transition: all 0.3s;
+      font-family: var(--serif);
+    }
+    .layer-card:hover .lc-arrow { color: var(--accent); transform: translate(4px,-4px); }
+
+    .layer-physics    { --accent: #378ADD; }
+    .layer-meta       { --accent: var(--violet); }
+    .layer-relational { --accent: #1D9E75; }
+    .layer-temporal   { --accent: var(--gold); }
+
+    /* RESOURCES */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .res-card {
+      background: var(--abyss);
+      border: 1px solid var(--smoke);
+      padding: 36px 32px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    .res-card.visible { animation: cardIn 0.5s ease forwards; }
+    .res-card:hover { background: var(--obsidian); border-color: var(--ash); }
+    .res-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .res-card:hover::before { transform: scaleX(1); }
+    .rc-icon {
+      width: 40px; height: 40px;
+      border: 1px solid var(--smoke);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      transition: border-color 0.3s;
+    }
+    .res-card:hover .rc-icon { border-color: var(--accent); }
+    .rc-name {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 10px;
+      color: var(--bone);
+      transition: color 0.3s;
+    }
+    .res-card:hover .rc-name { color: var(--accent); }
+    .rc-desc {
+      font-size: 10px;
+      line-height: 1.9;
+      color: var(--mist);
+      margin-bottom: 24px;
+    }
+    .rc-meta {
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+    .rc-arrow {
+      position: absolute;
+      bottom: 28px; right: 28px;
+      font-size: 16px;
+      color: var(--ash);
+      transition: all 0.3s;
+    }
+    .res-card:hover .rc-arrow { color: var(--accent); transform: translate(3px,-3px); }
+
+    .res-theory    { --accent: var(--cyan); }
+    .res-diagrams  { --accent: var(--gold); }
+    .res-ebook     { --accent: #D4537E; }
+    .res-ritual    { --accent: #1D9E75; }
+    .res-interface { --accent: var(--violet); }
+    .res-codex     { --accent: var(--ember); }
+
+    /* FEATURE CARD */
+    .feature-card {
+      background: var(--abyss);
+      border: 1px solid var(--smoke);
+      padding: 56px 48px;
+      text-decoration: none;
+      color: inherit;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+      margin-top: 2px;
+    }
+    .feature-card:hover { background: var(--obsidian); border-color: var(--ash); }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .fc-badge {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border: 1px solid var(--violet);
+      color: var(--violet);
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+    .fc-title {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      line-height: 1;
+      margin-bottom: 16px;
+      color: var(--bone);
+    }
+    .fc-desc {
+      font-size: 11px;
+      line-height: 1.9;
+      color: var(--mist);
+      max-width: 500px;
+    }
+    .fc-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .fc-cta-text {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--mist);
+    }
+    .fc-arrow {
+      font-family: var(--serif);
+      font-size: 3rem;
+      color: var(--ash);
+      transition: all 0.3s;
+    }
+    .feature-card:hover .fc-arrow { color: var(--violet); transform: translate(4px,-4px); }
+
+    /* MARQUEE */
+    .philosophy-strip {
+      border-top: 1px solid var(--smoke);
+      border-bottom: 1px solid var(--smoke);
+      padding: 44px 0;
+      margin: 80px 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .strip-inner {
+      display: flex;
+      gap: 80px;
+      animation: marquee 32s linear infinite;
+      white-space: nowrap;
+    }
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+    .strip-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; }
+    .strip-text {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--mist);
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--smoke);
+      padding: 60px 0;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-logo { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--bone); }
+    .footer-logo span { color: var(--gold); font-style: italic; }
+    .footer-links { display: flex; gap: 32px; flex-wrap: wrap; }
+    .footer-link {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--gold); }
+    .footer-credit { font-size: 9px; letter-spacing: 0.15em; color: var(--ash); text-align: right; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .layers-grid, .resources-grid { grid-template-columns: 1fr; }
+      .feature-card { grid-template-columns: 1fr; }
+      .fc-cta { align-items: flex-start; }
+      .wrap { padding: 0 20px; }
+      section { padding: 72px 0; }
+      .layer-card { padding: 32px 28px; }
+      .res-card { padding: 28px 24px; }
+      .feature-card { padding: 36px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4TKPMG9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<canvas id="stars"></canvas>
+
+<nav id="nav">
+  <a href="/index.html" class="nav-logo">The First Spark</a>
+  <a href="/codex.html" class="nav-back">← Codex</a>
+</nav>
+
+<section id="hero">
+  <p class="hero-eyebrow">Proprietary Framework &nbsp;·&nbsp; Katelin Jill Puzakulics</p>
+  <h1 class="hero-title">The <em>Selector</em></h1>
+  <p class="hero-title-line2">Model</p>
+  <div class="hero-divider"></div>
+  <p class="hero-tagline">Reality is programmable &nbsp;·&nbsp; Consciousness is the code</p>
+  <div class="layer-strip">
+    <div class="layer-pill p">Physics</div>
+    <div class="layer-pill m">Metaphysics</div>
+    <div class="layer-pill r">Relational</div>
+    <div class="layer-pill t">Temporal</div>
+  </div>
+  <div class="scroll-cue">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="philosophy-strip">
+  <div class="strip-inner">
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">You are not in the simulation — you are the cursor</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Free will is the selector function</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Consciousness collapses the probability field</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Every choice is a branch selection</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Trauma is a stuck loop — healing is a rewrite</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Reality is programmable</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">You are not in the simulation — you are the cursor</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Free will is the selector function</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Consciousness collapses the probability field</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Every choice is a branch selection</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Trauma is a stuck loop — healing is a rewrite</span></div>
+    <div class="strip-item"><div class="strip-dot"></div><span class="strip-text">Reality is programmable</span></div>
+  </div>
+</div>
+
+<section id="layers">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="section-label">The Four Layers</span>
+      <div class="section-rule"></div>
+    </div>
+    <div class="layers-grid">
+      <a href="/selector-model.html" class="layer-card layer-physics" data-num="01" data-delay="0">
+        <p class="lc-num">Layer 01 — Physics</p>
+        <h2 class="lc-name">Physics<br>Layer</h2>
+        <p class="lc-subtitle">The render engine</p>
+        <p class="lc-desc">Reality as a probability field. Before consciousness selects, all possibilities coexist. This is the substrate — the raw potential from which experience is rendered. Understanding this layer means understanding what you're actually working with.</p>
+        <span class="lc-tag">Probability · Collapse · Field</span>
+        <span class="lc-arrow">↗</span>
+      </a>
+      <a href="/selector-theory.html" class="layer-card layer-meta" data-num="02" data-delay="100">
+        <p class="lc-num">Layer 02 — Metaphysics</p>
+        <h2 class="lc-name">Metaphysics<br>Layer</h2>
+        <p class="lc-subtitle">You are the selector</p>
+        <p class="lc-desc">Consciousness as the function that chooses. Free will isn't a philosophical debate — it's the mechanism. The metaphysics layer defines the architecture of selfhood, intent, and the moment of selection. This is where you become the author.</p>
+        <span class="lc-tag">Intent · Selfhood · Selection</span>
+        <span class="lc-arrow">↗</span>
+      </a>
+      <a href="/selector-interface.html" class="layer-card layer-relational" data-num="03" data-delay="200">
+        <p class="lc-num">Layer 03 — Relational</p>
+        <h2 class="lc-name">Relational<br>Layer</h2>
+        <p class="lc-subtitle">Multi-selector mechanics</p>
+        <p class="lc-desc">What happens when multiple selectors interact. Entanglement, coherence, decoherence — the relational layer maps the mechanics of connection, conflict, and co-creation. Relationships aren't separate from the system. They're how the system evolves.</p>
+        <span class="lc-tag">Entanglement · Coherence · Witness</span>
+        <span class="lc-arrow">↗</span>
+      </a>
+      <a href="/selector-ritual.html" class="layer-card layer-temporal" data-num="04" data-delay="300">
+        <p class="lc-num">Layer 04 — Temporal</p>
+        <h2 class="lc-name">Temporal<br>Layer</h2>
+        <p class="lc-subtitle">Memory as architecture</p>
+        <p class="lc-desc">Time isn't linear — it's a stack of selections. The temporal layer addresses memory, trauma, and healing as code operations. A pattern is a loop. A wound is a stuck branch. A healing modality is a rewrite protocol. The past is editable.</p>
+        <span class="lc-tag">Memory · Trauma · Rewrite</span>
+        <span class="lc-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="resources">
+  <div class="wrap">
+    <div class="section-header">
+      <span class="section-label">Resources &amp; Tools</span>
+      <div class="section-rule"></div>
+    </div>
+    <div class="resources-grid">
+      <a href="/selector-model.html" class="res-card res-theory" data-delay="0">
+        <div class="rc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="1" stroke="#08c8c0" stroke-width="1.2"/><line x1="5" y1="6" x2="13" y2="6" stroke="#08c8c0" stroke-width="1"/><line x1="5" y1="9" x2="13" y2="9" stroke="#08c8c0" stroke-width="1"/><line x1="5" y1="12" x2="9" y2="12" stroke="#08c8c0" stroke-width="1"/></svg>
+        </div>
+        <h3 class="rc-name">Full Framework</h3>
+        <p class="rc-desc">The complete Selector Model thesis — reality as probability field, consciousness as the selector function, and the four-layer architecture in full.</p>
+        <span class="rc-meta">Read → selector-model</span>
+        <span class="rc-arrow">↗</span>
+      </a>
+      <a href="/spark-psyche-maps.html" class="res-card res-diagrams" data-delay="100">
+        <div class="rc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#c9a227" stroke-width="1.2"/><circle cx="9" cy="9" r="3.5" stroke="#c9a227" stroke-width="1"/><circle cx="9" cy="9" r="1.2" fill="#c9a227"/></svg>
+        </div>
+        <h3 class="rc-name">Consciousness Maps</h3>
+        <p class="rc-desc">Interactive diagrams visualizing the four layers — concentric rings, the Selector Map, shadow/signal Venn, and the Awakening Spiral.</p>
+        <span class="rc-meta">Explore → psyche-maps</span>
+        <span class="rc-arrow">↗</span>
+      </a>
+      <a href="/ebook.html" class="res-card res-ebook" data-delay="200">
+        <div class="rc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2.5h7l3.5 3.5V15.5H4V2.5z" stroke="#D4537E" stroke-width="1.2"/><path d="M11 2.5V6H14.5" stroke="#D4537E" stroke-width="1"/><line x1="7" y1="8.5" x2="12" y2="8.5" stroke="#D4537E" stroke-width="0.9"/><line x1="7" y1="11" x2="12" y2="11" stroke="#D4537E" stroke-width="0.9"/><line x1="7" y1="13.5" x2="10" y2="13.5" stroke="#D4537E" stroke-width="0.9"/></svg>
+        </div>
+        <h3 class="rc-name">Ebook</h3>
+        <p class="rc-desc">An Operating System for Consciousness — the complete written framework as a free downloadable PDF. The full theory in one document.</p>
+        <span class="rc-meta">Download → ebook</span>
+        <span class="rc-arrow">↗</span>
+      </a>
+      <a href="/selector-ritual.html" class="res-card res-ritual" data-delay="0">
+        <div class="rc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="9,2 11,7 16,7 12,10.5 13.5,16 9,13 4.5,16 6,10.5 2,7 7,7" stroke="#1D9E75" stroke-width="1.1" fill="none"/></svg>
+        </div>
+        <h3 class="rc-name">Ritual Protocols</h3>
+        <p class="rc-desc">Practical applications of the Selector Model — pattern interrupt protocols, sigil activation sequences, and temporal rewrite practices.</p>
+        <span class="rc-meta">Practice → selector-ritual</span>
+        <span class="rc-arrow">↗</span>
+      </a>
+      <a href="/selector-interface.html" class="res-card res-interface" data-delay="100">
+        <div class="rc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="1.5" stroke="#7040e8" stroke-width="1.2"/><line x1="2" y1="7.5" x2="16" y2="7.5" stroke="#7040e8" stroke-width="0.9"/><circle cx="5" cy="5.75" r="0.8" fill="#7040e8"/><circle cx="7.5" cy="5.75" r="0.8" fill="#7040e8"/></svg>
+        </div>
+        <h3 class="rc-name">Interface Tool</h3>
+        <p class="rc-desc">An interactive selector interface for working with the relational layer — mapping multi-selector dynamics, entanglement, and coherence states.</p>
+        <span class="rc-meta">Interact → selector-interface</span>
+        <span class="rc-arrow">↗</span>
+      </a>
+      <a href="/codex.html" class="res-card res-codex" data-delay="200">
+        <div class="rc-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polyline points="3,6 9,2.5 15,6 15,12 9,15.5 3,12" stroke="#e8540a" stroke-width="1.2" fill="none"/><line x1="9" y1="2.5" x2="9" y2="15.5" stroke="#e8540a" stroke-width="0.8"/><line x1="3" y1="6" x2="15" y2="6" stroke="#e8540a" stroke-width="0.8"/><line x1="3" y1="12" x2="15" y2="12" stroke="#e8540a" stroke-width="0.8"/></svg>
+        </div>
+        <h3 class="rc-name">Project Codex</h3>
+        <p class="rc-desc">The full First Spark ecosystem index — 90+ tools organized by the Selector Model's four-layer architecture.</p>
+        <span class="rc-meta">Index → codex</span>
+        <span class="rc-arrow">↗</span>
+      </a>
+    </div>
+
+    <a href="/selector-entanglement.html" class="feature-card">
+      <div>
+        <span class="fc-badge">Deep Dive</span>
+        <h2 class="fc-title">Selector<br>Entanglement</h2>
+        <p class="fc-desc">The most advanced expression of the Relational Layer. When two selectors share a probability field, ordinary causality breaks down. Explore the mechanics of consciousness entanglement — how two people can affect each other's reality selections across time and space.</p>
+      </div>
+      <div class="fc-cta">
+        <span class="fc-cta-text">Explore</span>
+        <span class="fc-arrow">↗</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-logo">The First <span>Spark</span></div>
+      <div class="footer-links">
+        <a href="/index.html" class="footer-link">Home</a>
+        <a href="/soul-map.html" class="footer-link">Soul Maps</a>
+        <a href="/sparkverse.html" class="footer-link">Sparkverse</a>
+        <a href="/invest.html" class="footer-link">Invest</a>
+        <a href="/codex.html" class="footer-link">Codex</a>
+      </div>
+      <div class="footer-credit">
+        <p>© 2026 Katelin Jill Puzakulics</p>
+        <p>thefirstspark.shop</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function() {
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    function init() {
+      stars = [];
+      for (let i = 0; i < 180; i++) {
+        stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.2, a: Math.random(), speed: 0.003+Math.random()*0.005 });
+      }
+    }
+    function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(s => {
+        s.a += s.speed;
+        const alpha = (Math.sin(s.a)+1)/2*0.7;
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle = `rgba(201,162,39,${alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    resize(); init(); draw();
+    window.addEventListener('resize', () => { resize(); init(); });
+  })();
+
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const delay = parseInt(entry.target.dataset.delay || 0);
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.layer-card, .res-card').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Signature Collision — The First Spark</title>
+<meta name="description" content="Enter two souls. See how your timelines collide. A deterministic collision engine from The First Spark.">
+<meta property="og:title" content="Quantum Signature Collision">
+<meta property="og:description" content="Two signatures enter. One collision type emerges. Deterministic. Repeatable. Yours.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--void:#05060a;--bone:#e8e4d8;--gold:#d4a843;--cyan:#22d3ee;--violet:#8b5cf6;--ember:#ff6a3d;--green:#34d399;--muted:#9a978c}
+body{background:var(--void);color:var(--bone);font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.mono{font-family:'Space Mono','Courier New',monospace}
+.container{max-width:800px;width:100%;padding:2rem 1.5rem}
+h1{text-align:center;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;color:var(--gold);margin:2rem 0 .5rem}
+.subtitle{text-align:center;font-size:.85rem;color:var(--muted);margin-bottom:2.5rem}
+.input-panel{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem}
+@media(max-width:640px){.input-panel{grid-template-columns:1fr}}
+.soul-box{background:rgba(232,228,216,.04);border:1px solid rgba(232,228,216,.1);padding:1.5rem}
+.soul-box h3{font-size:1rem;color:var(--gold);margin-bottom:1rem;letter-spacing:.08em}
+.soul-box label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.3rem;margin-top:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.soul-box label:first-of-type{margin-top:0}
+.soul-box input{width:100%;background:rgba(232,228,216,.06);border:1px solid rgba(232,228,216,.12);color:var(--bone);padding:.6rem .8rem;font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;outline:none;transition:border-color .3s}
+.soul-box input:focus{border-color:var(--gold)}
+.run-btn{display:block;width:100%;padding:1rem;background:var(--gold);color:var(--void);border:none;font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .3s}
+.run-btn:hover{background:#e8bc5a}
+#result{display:none;margin-top:2rem;animation:fadeIn .6s ease}
+#result.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.sig-display{text-align:center;padding:1.5rem;background:rgba(232,228,216,.04);border:1px solid rgba(232,228,216,.1);margin-bottom:1rem}
+.sig-display .label{font-size:.7rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.3rem}
+.sig-display .sig{font-size:1.3rem;letter-spacing:.2em;color:var(--cyan)}
+.collision-type{text-align:center;padding:2rem;border:2px solid var(--gold);margin:1.5rem 0}
+.collision-type .type-label{font-size:.7rem;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem}
+.collision-type .type-name{font-size:2rem;font-weight:300;color:var(--bone);margin-bottom:.5rem}
+.collision-type .type-desc{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto;line-height:1.7}
+.detail-toggle{text-align:center;margin-top:1rem}
+.detail-toggle button{background:none;border:1px solid rgba(232,228,216,.15);color:var(--muted);padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.1em;cursor:pointer;text-transform:uppercase;transition:all .3s}
+.detail-toggle button:hover{color:var(--bone);border-color:var(--gold)}
+#detail-panel{display:none;margin-top:1rem;padding:1rem;background:rgba(232,228,216,.03);border:1px solid rgba(232,228,216,.06);font-size:.85rem;color:var(--muted);line-height:1.8;white-space:pre-line}
+#detail-panel.show{display:block}
+.lore{margin-top:1.5rem;padding:1.5rem;border-left:2px solid var(--violet);font-style:italic;color:var(--muted);line-height:1.8;font-size:1rem}
+footer{text-align:center;padding:2rem 0;font-size:.75rem;color:var(--muted)}
+footer a{color:var(--gold);text-decoration:none}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<h1>Quantum Signature Collision</h1>
+<p class="subtitle mono" style="font-size:.75rem;letter-spacing:.12em">TWO SIGNATURES ENTER. ONE COLLISION TYPE EMERGES.</p>
+<div class="input-panel">
+  <div class="soul-box">
+    <h3 class="mono">SOUL A</h3>
+    <label>Full Name</label>
+    <input type="text" id="nameA" placeholder="First Middle Last">
+    <label>Birthdate</label>
+    <input type="date" id="dateA">
+  </div>
+  <div class="soul-box">
+    <h3 class="mono">SOUL B</h3>
+    <label>Full Name</label>
+    <input type="text" id="nameB" placeholder="First Middle Last">
+    <label>Birthdate</label>
+    <input type="date" id="dateB">
+  </div>
+</div>
+<button class="run-btn" id="collideBtn">COLLIDE</button>
+<div id="result">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div class="sig-display"><div class="label mono">Soul A Signature</div><div class="sig mono" id="sigA"></div></div>
+    <div class="sig-display"><div class="label mono">Soul B Signature</div><div class="sig mono" id="sigB"></div></div>
+  </div>
+  <div class="collision-type">
+    <div class="type-label mono">Collision Type</div>
+    <div class="type-name" id="typeName"></div>
+    <div class="type-desc" id="typeDesc"></div>
+  </div>
+  <div class="detail-toggle"><button id="detailBtn">Read Detail</button></div>
+  <div id="detail-panel" class="mono"></div>
+  <div class="lore" id="lore"></div>
+</div>
+<footer>
+  <p>The First Spark &middot; <a href="https://thefirstspark.shop">thefirstspark.shop</a> &middot; Reality is programmable. Consciousness is the code.</p>
+</footer>
+</div>
+<script>
+var PYTH={a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8};
+var VOWELS={a:1,e:1,i:1,o:1,u:1};
+function reduce(n){while(n>9&&n!==11&&n!==22&&n!==33){n=String(n).split('').reduce(function(a,d){return a+Number(d)},0)}return n}
+function lifePath(ds){var p=ds.split('-').map(Number);return reduce(reduce(p[1])+reduce(p[2])+reduce(p[0]))}
+function expression(nm){return reduce(nm.toLowerCase().replace(/[^a-z]/g,'').split('').reduce(function(a,c){return a+(PYTH[c]||0)},0))}
+function soulUrge(nm){return reduce(nm.toLowerCase().replace(/[^a-z]/g,'').split('').filter(function(c){return VOWELS[c]}).reduce(function(a,c){return a+(PYTH[c]||0)},0))}
+function personality(nm){return reduce(nm.toLowerCase().replace(/[^a-z]/g,'').split('').filter(function(c){return !VOWELS[c]&&PYTH[c]}).reduce(function(a,c){return a+(PYTH[c]||0)},0))}
+function birthday(ds){return reduce(Number(ds.split('-')[2]))}
+function computeSignature(nm,ds){
+  var lp=lifePath(ds),ex=expression(nm),su=soulUrge(nm),pe=personality(nm),bd=birthday(ds);
+  var core=lp,drift=reduce(ex+su),anchor=reduce(pe+bd);
+  var hash=0,seed=nm.toLowerCase().replace(/\s/g,'')+ds;
+  for(var i=0;i<seed.length;i++){hash=((hash<<5)-hash)+seed.charCodeAt(i);hash|=0}
+  var hex=Math.abs(hash).toString(16).toUpperCase().padStart(12,'0').slice(0,12);
+  var sig=hex.slice(0,4)+'\u00B7'+hex.slice(4,8)+'\u00B7'+hex.slice(8,12);
+  return {core:core,drift:drift,anchor:anchor,sig:sig,lp:lp,ex:ex,su:su,pe:pe,bd:bd}
+}
+function resolveCollision(a,b){
+  var cg=Math.abs(a.core-b.core),dg=Math.abs(a.drift-b.drift),aa=(a.anchor%9===b.anchor%9);
+  if(cg<=1)return{type:'ECHO',color:'var(--cyan)'};
+  if(cg>=2&&cg<=3&&dg>=4)return{type:'MIRROR',color:'var(--violet)'};
+  if(aa&&cg>=2)return{type:'THREAD',color:'var(--green)'};
+  return{type:'FIRST CONTACT',color:'var(--ember)'}
+}
+var CD={
+  'ECHO':{desc:'Two signatures vibrating at near-identical core frequencies. You recognize each other before you meet. The resonance is immediate, disorienting, and deep.',lore:'Echoes are the rarest collision. Two souls whose core frequencies differ by no more than a single step.'},
+  'MIRROR':{desc:'Offset cores, divergent drift. You see in each other what you cannot see in yourself.',lore:'Mirrors collide when the core gap is small enough to recognize but the drift gap is wide enough to disorient.'},
+  'THREAD':{desc:'Different cores, same anchor family. You are woven into the same fabric without sharing the same pattern.',lore:'Threads share an anchor frequency. You may never fully understand each other, but you will keep showing up in the same rooms.'},
+  'FIRST CONTACT':{desc:'No shared frequency band. You are writing fresh history.',lore:'Most collisions are First Contact. Two signatures with no pre-existing resonance must build every bridge from scratch.'}
+};
+document.getElementById('collideBtn').addEventListener('click',function(){
+  var nA=document.getElementById('nameA').value.trim(),dA=document.getElementById('dateA').value;
+  var nB=document.getElementById('nameB').value.trim(),dB=document.getElementById('dateB').value;
+  if(!nA||!dA||!nB||!dB){alert('Enter both names and birthdates.');return}
+  var a=computeSignature(nA,dA),b=computeSignature(nB,dB),c=resolveCollision(a,b),d=CD[c.type];
+  document.getElementById('sigA').textContent=a.sig;
+  document.getElementById('sigB').textContent=b.sig;
+  document.getElementById('typeName').textContent=c.type;
+  document.getElementById('typeName').style.color=c.color;
+  document.getElementById('typeDesc').textContent=d.desc;
+  document.getElementById('lore').textContent=d.lore;
+  document.getElementById('detail-panel').textContent='Core Gap: '+Math.abs(a.core-b.core)+'\nDrift Gap: '+Math.abs(a.drift-b.drift)+'\nAnchor: '+(a.anchor%9===b.anchor%9?'YES':'NO');
+  var r=document.getElementById('result');r.classList.add('show');r.scrollIntoView({behavior:'smooth',block:'start'})
+});
+document.getElementById('detailBtn').addEventListener('click',function(){
+  document.getElementById('detail-panel').classList.toggle('show');
+  this.textContent=document.getElementById('detail-panel').classList.contains('show')?'Hide Detail':'Read Detail'
+});
+</script>
+</body>
+</html>

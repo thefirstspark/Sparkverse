@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacred Geometry • Programmable Code Explorer | The First Spark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --void: #0a0a0f;
+            --gold: #f4d03f;
+            --teal: #00d4ff;
+            --indigo: #6366f1;
+        }
+        
+        body {
+            background: #0a0a0f;
+            color: #e2e8f0;
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .cosmic-bg {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0f 70%);
+        }
+        
+        .section-header {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.025em;
+        }
+
+        .sacred-canvas {
+            border: 1px solid rgba(244, 208, 63, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            background: #0a0a0f;
+            image-rendering: crisp-edges;
+        }
+
+        .glow-gold {
+            box-shadow: 0 0 15px rgba(244, 208, 63, 0.3);
+        }
+
+        .glow-teal {
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .pattern-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .pattern-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .math {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .spark-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .cosmic-text {
+            background: linear-gradient(90deg, #f4d03f, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-active {
+            color: #f4d03f;
+            border-bottom: 2px solid #f4d03f;
+        }
+
+        .geometry-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        .canvas-container {
+            position: relative;
+        }
+        
+        .canvas-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(244,208,63,0.03) 0%, transparent 50%);
+            pointer-events: none;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0f] text-slate-200">
+    <!-- Header -->
+    <div class="border-b border-white/10 bg-[#0a0a0f]/95 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-x-4">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#f4d03f] via-[#00d4ff] to-[#6366f1] flex items-center justify-center">
+                    <i class="fa-solid fa-infinity text-[#0a0a0f] text-2xl"></i>
+                </div>
+                <div>
+                    <div class="font-semibold text-2xl tracking-tighter section-header">SACRED GEOMETRY</div>
+                    <div class="text-xs text-slate-500 -mt-1">PROGRAMMABLE CODE EXPLORER</div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-3 text-sm">
+                <div class="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 flex items-center gap-x-2 text-xs">
+                    <div class="w-2 h-2 bg-[#f4d03f] rounded-full animate-pulse"></div>
+                    <span class="text-slate-400">For The First Spark • Sparkverse Pattern Recognition</span>
+                </div>
+                <a href="https://thefirstspark.shop" target="_blank" 
+                   class="px-5 py-2 rounded-2xl border border-white/20 hover:bg-white/5 transition-colors text-sm flex items-center gap-x-2">
+                    <span>Visit thefirstspark.shop</span>
+                    <i class="fa-solid fa-external-link-alt text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 pt-10 pb-20">
+        <!-- Intro -->
+        <div class="max-w-3xl mb-12">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1 rounded-full bg-white/5 border border-white/10 text-xs tracking-[2px] mb-4">
+                <i class="fa-solid fa-atom"></i>
+                <span>REALITY IS PROGRAMMABLE • CONSCIOUSNESS IS THE CODE</span>
+            </div>
+            
+            <h1 class="text-6xl font-semibold tracking-tighter section-header leading-none mb-4">
+                Explore Sacred Geometry<br>
+                <span class="cosmic-text">in Code</span>
+            </h1>
+            
+            <p class="text-xl text-slate-400 max-w-lg">
+                These are the visual languages of creation. Hexagonal lattices, golden spirals, and the blueprints of form itself — 
+                rendered interactively. Touch, awaken, integrate into your Sparkverse playgrounds, sigils, or consciousness tools.
+            </p>
+            
+            <div class="flex items-center gap-x-4 mt-6">
+                <button onclick="document.getElementById('flower-section').scrollIntoView({ behavior: 'smooth' })" 
+                        class="px-6 py-3 rounded-2xl bg-white text-[#0a0a0f] font-medium flex items-center gap-x-2 hover:bg-[#f4d03f] transition-all active:scale-[0.985]">
+                    <span>Start with Flower of Life</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button onclick="sparkBurst()" 
+                        class="px-6 py-3 rounded-2xl border border-white/30 hover:bg-white/5 transition-all flex items-center gap-x-2">
+                    <i class="fa-solid fa-magic"></i>
+                    <span>Summon Sparks</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Visual Inspirations -->
+        <div class="mb-16">
+            <div class="flex items-end justify-between mb-5">
+                <div>
+                    <div class="text-xs tracking-[3px] text-slate-500 mb-1">VISUAL ANCHORS</div>
+                    <div class="text-2xl font-semibold tracking-tight">Cosmic Renderings</div>
+                </div>
+                <div class="text-xs text-slate-500">Grok Imagine • The First Spark aesthetic</div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Flower of Life visual -->
+                <div class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-[4/3] bg-black">
+                    <img src="/home/workdir/artifacts/imagine_images/e8uEv.jpg" alt="Cosmic Flower of Life" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all">
+                    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/80"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <div class="text-sm font-medium">Flower of Life</div>
+                        <div class="text-xs text-slate-400">The seed of all form • Hexagonal lattice of creation</div>
+                    </div>
+                </div>
+                
+                <!-- Metatron -->
+                <div class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-[4/3] bg-black">
+                    <img src="/home/workdir/artifacts/imagine_images/28102.jpg" alt="Cosmic Metatron's Cube" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all">
+                    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/80"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <div class="text-sm font-medium">Metatron's Cube</div>
+                        <div class="text-xs text-slate-400">Blueprints of the Platonic Solids • From the Flower</div>
+                    </div>
+                </div>
+                
+                <!-- Golden Spiral -->
+                <div class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-[4/3] bg-black">
+                    <img src="/home/workdir/artifacts/imagine_images/KprWl.jpg" alt="Golden Ratio Fibonacci Spiral" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all">
+                    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/80"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <div class="text-sm font-medium">Golden Spiral</div>
+                        <div class="text-xs text-slate-400">φ ≈ 1.618 • Growth code of nature &amp; consciousness</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GOLDEN RATIO & FIBONACCI SPIRAL -->
+        <div id="spiral-section" class="mb-16 pattern-card bg-[#111114] border border-white/10 rounded-3xl p-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-5/12">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <div class="px-3 py-1 rounded-full bg-[#f4d03f]/10 text-[#f4d03f] text-xs font-medium tracking-widest">GROWTH CODE</div>
+                        <div class="text-xs text-slate-500">FIBONACCI • φ</div>
+                    </div>
+                    
+                    <h2 class="text-4xl font-semibold tracking-tighter section-header mb-3">Golden Ratio Spiral</h2>
+                    
+                    <p class="text-slate-400 mb-6">
+                        The mathematical heartbeat of growth. Each quarter-turn square follows the Fibonacci sequence; 
+                        the curve approximates the golden ratio <span class="math">φ = (1 + √5)/2 ≈ 1.618</span>. 
+                        Nature's preferred expansion code — galaxies, shells, consciousness unfolding.
+                    </p>
+                    
+                    <div class="space-y-4 text-sm">
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <div class="text-xs text-slate-500 mb-1">KEY MATH</div>
+                                <div class="font-mono text-xs bg-black/40 p-3 rounded-xl border border-white/10">
+                                    Fib(n) / Fib(n-1) → φ<br>
+                                    r(θ) = a · φ^(θ / (π/2))
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-slate-500 mb-1">IN SPARKVERSE</div>
+                                <div class="text-xs leading-relaxed text-slate-400">
+                                    Use as animated lobby background, sigil growth animation, or timeline expansion visual in Consciousness Playground.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-7/12">
+                    <div class="canvas-container">
+                        <canvas id="spiral-canvas" width="620" height="620" class="sacred-canvas w-full max-w-[620px] mx-auto glow-gold"></canvas>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-3 mt-4 justify-center">
+                        <div class="flex items-center gap-x-2 bg-white/5 rounded-2xl px-4 py-2 text-sm">
+                            <label class="text-xs text-slate-400">Iterations</label>
+                            <input type="range" id="spiral-iter" min="5" max="18" value="12" step="1" 
+                                   class="w-24 accent-[#f4d03f]" oninput="drawSpiral()">
+                            <span id="spiral-iter-val" class="font-mono text-xs w-6 text-right">12</span>
+                        </div>
+                        
+                        <button onclick="animateSpiral()" 
+                                class="px-5 py-2 rounded-2xl bg-[#f4d03f] text-[#0a0a0f] text-sm font-medium flex items-center gap-x-2 hover:bg-white transition-all">
+                            <i class="fa-solid fa-play mr-1"></i> <span>ANIMATE GROWTH</span>
+                        </button>
+                        
+                        <button onclick="resetSpiral()" 
+                                class="px-5 py-2 rounded-2xl border border-white/30 hover:bg-white/5 text-sm flex items-center gap-x-2">
+                            <i class="fa-solid fa-redo"></i> <span>Reset</span>
+                        </button>
+                        
+                        <button onclick="sparkOnCanvas('spiral-canvas')" 
+                                class="px-4 py-2 rounded-2xl border border-white/20 hover:bg-white/5 text-sm flex items-center gap-x-2">
+                            <i class="fa-solid fa-magic"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FLOWER OF LIFE -->
+        <div id="flower-section" class="mb-16 pattern-card bg-[#111114] border border-white/10 rounded-3xl p-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-5/12">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <div class="px-3 py-1 rounded-full bg-[#00d4ff]/10 text-[#00d4ff] text-xs font-medium tracking-widest">HEXAGONAL LATTICE</div>
+                        <div class="text-xs text-slate-500">SEED → FLOWER</div>
+                    </div>
+                    
+                    <h2 class="text-4xl font-semibold tracking-tighter section-header mb-3">Flower of Life</h2>
+                    
+                    <p class="text-slate-400 mb-6">
+                        The foundational pattern of creation. Built from overlapping circles on a precise hexagonal grid. 
+                        Contains the Seed of Life, Vesica Piscis, and the geometric seed for all Platonic solids via Metatron's Cube.
+                    </p>
+                    
+                    <div class="mb-6">
+                        <div class="text-xs text-slate-500 mb-2">CONSTRUCTION (adapted for code)</div>
+                        <div class="text-xs bg-black/40 p-4 rounded-2xl border border-white/10 font-mono leading-relaxed text-slate-300">
+                            directions = [<br>
+                            &nbsp;&nbsp;[r, 0], [r/2, √3·r/2], [-r/2, √3·r/2],<br>
+                            &nbsp;&nbsp;[-r, 0], [-r/2, -√3·r/2], [r/2, -√3·r/2]<br>
+                            ]<br>
+                            Frontier growth by layer • Precise √3 spacing
+                        </div>
+                    </div>
+                    
+                    <div class="text-xs text-slate-400">
+                        Perfect for Pattern Recognition Trainer, sigil base layers, or interactive "awaken the geometry" modules in Sparkverse.
+                    </div>
+                </div>
+                
+                <div class="lg:w-7/12">
+                    <div class="canvas-container">
+                        <canvas id="flower-canvas" width="620" height="620" class="sacred-canvas w-full max-w-[620px] mx-auto glow-teal"></canvas>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+                        <div class="flex items-center gap-x-2 bg-white/5 rounded-2xl px-4 py-2 text-sm">
+                            <label class="text-xs text-slate-400">Layers</label>
+                            <input type="range" id="flower-layers" min="1" max="6" value="3" step="1" 
+                                   class="w-24 accent-[#00d4ff]" oninput="drawFlower()">
+                            <span id="flower-layers-val" class="font-mono text-xs w-4 text-right">3</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-x-2">
+                            <label class="flex items-center gap-x-2 text-sm cursor-pointer">
+                                <input type="checkbox" id="flower-connections" checked onchange="drawFlower()" class="accent-[#00d4ff]">
+                                <span class="text-xs">Show connections</span>
+                            </label>
+                        </div>
+                        
+                        <button onclick="drawFlower()" 
+                                class="px-5 py-2 rounded-2xl bg-[#00d4ff] text-[#0a0a0f] text-sm font-medium flex items-center gap-x-2 hover:bg-white transition-all">
+                            <i class="fa-solid fa-sync mr-1"></i> <span>REDRAW</span>
+                        </button>
+                        
+                        <button onclick="sparkOnCanvas('flower-canvas')" 
+                                class="px-4 py-2 rounded-2xl border border-white/20 hover:bg-white/5 text-sm flex items-center gap-x-2">
+                            <i class="fa-solid fa-magic"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <div onclick="expandFlower()" class="inline-flex cursor-pointer items-center text-xs px-4 py-1 rounded-full border border-white/20 hover:bg-white/5 transition-colors">
+                            <i class="fa-solid fa-expand mr-2"></i> <span>Expand to fuller Flower (more layers + arcs)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- METATRON'S CUBE -->
+        <div id="metatron-section" class="mb-16 pattern-card bg-[#111114] border border-white/10 rounded-3xl p-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-5/12">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <div class="px-3 py-1 rounded-full bg-[#6366f1]/10 text-[#6366f1] text-xs font-medium tracking-widest">FROM FLOWER TO FORM</div>
+                    </div>
+                    
+                    <h2 class="text-4xl font-semibold tracking-tighter section-header mb-3">Metatron's Cube</h2>
+                    
+                    <p class="text-slate-400 mb-6">
+                        The Flower of Life extended and connected. The lines between circle centers reveal the five Platonic solids 
+                        (tetrahedron, cube, octahedron, dodecahedron, icosahedron) — the primal building blocks of 3D reality.
+                    </p>
+                    
+                    <div class="text-xs text-slate-400 mb-4">
+                        In code: Generate Flower centers → connect pairs at harmonic distances (or full mesh) → the cube and star geometries emerge naturally.
+                    </div>
+                    
+                    <div class="text-xs bg-black/40 p-4 rounded-2xl border border-white/10">
+                        <span class="text-[#6366f1]">Sparkverse use:</span> 3D lobby architecture wireframes, sacred tech sigils, 
+                        "collapse protocol" visual when observer interacts with geometry.
+                    </div>
+                </div>
+                
+                <div class="lg:w-7/12">
+                    <div class="canvas-container">
+                        <canvas id="metatron-canvas" width="620" height="620" class="sacred-canvas w-full max-w-[620px] mx-auto" style="box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);"></canvas>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap justify-center gap-3">
+                        <div class="flex items-center gap-x-2 bg-white/5 rounded-2xl px-4 py-2 text-sm">
+                            <label class="text-xs text-slate-400">Line Density</label>
+                            <input type="range" id="metatron-density" min="1" max="5" value="3" step="1" 
+                                   class="w-24 accent-[#6366f1]" oninput="drawMetatron()">
+                            <span id="metatron-density-val" class="font-mono text-xs w-4">3</span>
+                        </div>
+                        
+                        <button onclick="drawMetatron()" 
+                                class="px-5 py-2 rounded-2xl bg-[#6366f1] text-white text-sm font-medium flex items-center gap-x-2 hover:bg-white hover:text-[#0a0a0f] transition-all">
+                            <i class="fa-solid fa-sync mr-1"></i> <span>REBUILD CUBE</span>
+                        </button>
+                        
+                        <button onclick="sparkOnCanvas('metatron-canvas')" 
+                                class="px-4 py-2 rounded-2xl border border-white/20 hover:bg-white/5 text-sm flex items-center gap-x-2">
+                            <i class="fa-solid fa-magic"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integration Ideas -->
+        <div class="bg-[#111114] border border-white/10 rounded-3xl p-8 mb-12">
+            <div class="max-w-2xl">
+                <div class="text-xs tracking-[3px] text-slate-500 mb-2">INTEGRATION PATHS</div>
+                <h3 class="text-2xl font-semibold tracking-tight mb-4">Bring These Patterns into The First Spark</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="p-4 bg-black/30 rounded-2xl border border-white/10">
+                        <div class="font-medium mb-1 flex items-center gap-x-2"><i class="fa-solid fa-play text-[#f4d03f]"></i> Interactive Playground</div>
+                        <div class="text-slate-400 text-xs">Add these canvases as modules in Consciousness Playground or new Chamber. Click = awaken layer / summon spark.</div>
+                    </div>
+                    <div class="p-4 bg-black/30 rounded-2xl border border-white/10">
+                        <div class="font-medium mb-1 flex items-center gap-x-2"><i class="fa-solid fa-magic text-[#00d4ff]"></i> Sigil &amp; Render Engine</div>
+                        <div class="text-slate-400 text-xs">Base layer for custom soul sigils. Export SVG/PNG. Combine with glitch effects for "fracture awakening".</div>
+                    </div>
+                    <div class="p-4 bg-black/30 rounded-2xl border border-white/10">
+                        <div class="font-medium mb-1 flex items-center gap-x-2"><i class="fa-solid fa-cube text-[#6366f1]"></i> Sparkverse Lobby</div>
+                        <div class="text-slate-400 text-xs">Use Metatron / Flower as living architecture wireframes. Orbiting elements, interactive sacred geometry doors.</div>
+                    </div>
+                    <div class="p-4 bg-black/30 rounded-2xl border border-white/10">
+                        <div class="font-medium mb-1 flex items-center gap-x-2"><i class="fa-solid fa-chart-line text-[#f4d03f]"></i> Pattern Recognition Trainer</div>
+                        <div class="text-slate-400 text-xs">Extend the 8 Core Patterns with these generators. Train perception on live code versions.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-slate-500">
+            Built for Katelin / The First Spark • Reality as programmable code • Touch the geometry to remember
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent-gold', '#f4d03f');
+            // Any additional config if needed
+        }
+        
+        // Global spark particles system
+        let globalSparks = [];
+        
+        function createSpark(x, y, canvasRect) {
+            return {
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 3,
+                vy: (Math.random() - 0.5) * 3,
+                life: 40 + Math.random() * 30,
+                size: 2 + Math.random() * 3,
+                hue: Math.random() > 0.5 ? 45 : 190 // gold or teal
+            };
+        }
+        
+        function updateAndDrawSparks(ctx, canvas) {
+            ctx.save();
+            for (let i = globalSparks.length - 1; i >= 0; i--) {
+                const s = globalSparks[i];
+                s.x += s.vx;
+                s.y += s.vy;
+                s.life--;
+                s.vx *= 0.98;
+                s.vy *= 0.98;
+                
+                if (s.life <= 0) {
+                    globalSparks.splice(i, 1);
+                    continue;
+                }
+                
+                const alpha = s.life / 60;
+                ctx.fillStyle = s.hue === 45 ? 
+                    `rgba(244, 208, 63, ${alpha})` : 
+                    `rgba(0, 212, 255, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size * (s.life / 50), 0, Math.PI * 2);
+                ctx.fill();
+                
+                // subtle trail
+                if (Math.random() > 0.6) {
+                    ctx.fillStyle = s.hue === 45 ? 
+                        `rgba(244, 208, 63, ${alpha * 0.3})` : 
+                        `rgba(0, 212, 255, ${alpha * 0.3})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x - s.vx * 1.5, s.y - s.vy * 1.5, s.size * 0.6, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            ctx.restore();
+        }
+        
+        function sparkBurst(count = 25) {
+            const canvases = ['spiral-canvas', 'flower-canvas', 'metatron-canvas'];
+            canvases.forEach(id => {
+                const canvas = document.getElementById(id);
+                if (!canvas) return;
+                const rect = canvas.getBoundingClientRect();
+                for (let i = 0; i < count; i++) {
+                    const x = rect.left + Math.random() * rect.width;
+                    const y = rect.top + Math.random() * rect.height;
+                    // Add to global for animation loop
+                    globalSparks.push({
+                        x: x - rect.left + (Math.random() - 0.5) * 40,
+                        y: y - rect.top + (Math.random() - 0.5) * 40,
+                        vx: (Math.random() - 0.5) * 4,
+                        vy: (Math.random() - 0.5) * 4,
+                        life: 35 + Math.random() * 25,
+                        size: 1.5 + Math.random() * 2.5,
+                        hue: Math.random() > 0.6 ? 45 : 190
+                    });
+                }
+            });
+            
+            // Trigger redraw on all
+            setTimeout(() => {
+                drawSpiral();
+                drawFlower();
+                drawMetatron();
+            }, 50);
+        }
+        
+        function sparkOnCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            for (let i = 0; i < 18; i++) {
+                globalSparks.push({
+                    x: centerX + (Math.random() - 0.5) * 180,
+                    y: centerY + (Math.random() - 0.5) * 180,
+                    vx: (Math.random() - 0.5) * 5,
+                    vy: (Math.random() - 0.5) * 5,
+                    life: 28 + Math.random() * 22,
+                    size: 2 + Math.random() * 2,
+                    hue: Math.random() > 0.5 ? 45 : 190
+                });
+            }
+            
+            // Redraw the specific canvas
+            if (canvasId === 'spiral-canvas') drawSpiral();
+            else if (canvasId === 'flower-canvas') drawFlower();
+            else if (canvasId === 'metatron-canvas') drawMetatron();
+        }
+        
+        // ============ GOLDEN SPIRAL ============
+        let spiralAnimationFrame = null;
+        let spiralGrowing = false;
+        
+        function drawSpiral(iterations = null) {
+            const canvas = document.getElementById('spiral-canvas');
+            const ctx = canvas.getContext('2d', { alpha: true });
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            // Subtle cosmic background dots
+            ctx.fillStyle = 'rgba(255,255,255,0.04)';
+            for (let i = 0; i < 120; i++) {
+                const x = Math.random() * w;
+                const y = Math.random() * h;
+                ctx.fillRect(x, y, 1, 1);
+            }
+            
+            const iters = iterations || parseInt(document.getElementById('spiral-iter').value) || 12;
+            document.getElementById('spiral-iter-val').textContent = iters;
+            
+            const centerX = w / 2;
+            const centerY = h / 2;
+            const baseSize = Math.min(w, h) * 0.038;
+            
+            // Fibonacci sequence
+            let fib = [1, 1];
+            for (let i = 2; i < iters + 3; i++) {
+                fib.push(fib[i-1] + fib[i-2]);
+            }
+            
+            ctx.strokeStyle = '#f4d03f';
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = 'rgba(244, 208, 63, 0.6)';
+            ctx.shadowBlur = 8;
+            
+            let x = centerX;
+            let y = centerY;
+            let direction = 0; // 0 right, 1 up, 2 left, 3 down
+            let currentSize = baseSize;
+            
+            // Draw squares + arcs (Fibonacci spiral approximation)
+            for (let i = 0; i < iters; i++) {
+                const size = fib[i] * currentSize;
+                
+                // Square
+                ctx.strokeRect(x, y, size, size);
+                
+                // Quarter circle arc in the "growth" corner
+                ctx.beginPath();
+                const arcRadius = size;
+                
+                if (direction === 0) { // right - arc from bottom-left of square? Standard fib spiral positioning
+                    // Better positioning logic for classic spiral
+                    ctx.arc(x + size, y + size, arcRadius, Math.PI, Math.PI * 1.5); // top-left quarter? Adjust
+                } else if (direction === 1) {
+                    ctx.arc(x, y + size, arcRadius, Math.PI * 1.5, Math.PI * 2);
+                } else if (direction === 2) {
+                    ctx.arc(x, y, arcRadius, 0, Math.PI * 0.5);
+                } else {
+                    ctx.arc(x + size, y, arcRadius, Math.PI * 0.5, Math.PI);
+                }
+                ctx.stroke();
+                
+                // Move to next position
+                if (direction === 0) { // right -> next up
+                    y -= size;
+                    direction = 1;
+                } else if (direction === 1) { // up -> left
+                    x -= size;
+                    direction = 2;
+                } else if (direction === 2) { // left -> down
+                    y += size;
+                    direction = 3;
+                } else { // down -> right
+                    x += size;
+                    direction = 0;
+                }
+                
+                // Subtle inner glow on later iterations
+                if (i > iters - 5) {
+                    ctx.shadowBlur = 14;
+                    ctx.strokeStyle = '#00d4ff';
+                    ctx.lineWidth = 1.2;
+                    // Redraw small arc or square highlight
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, size * 0.6, 0, Math.PI * 2 * (i / iters));
+                    ctx.stroke();
+                    ctx.strokeStyle = '#f4d03f';
+                    ctx.lineWidth = 2.5;
+                    ctx.shadowBlur = 8;
+                }
+            }
+            
+            ctx.shadowBlur = 0;
+            
+            // Center spark point
+            ctx.fillStyle = '#f4d03f';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Update global sparks overlay
+            updateAndDrawSparks(ctx, canvas);
+        }
+        
+        function animateSpiral() {
+            if (spiralGrowing) return;
+            spiralGrowing = true;
+            
+            const canvas = document.getElementById('spiral-canvas');
+            const slider = document.getElementById('spiral-iter');
+            const startIter = parseInt(slider.value);
+            let current = 4;
+            
+            slider.value = current;
+            
+            function step() {
+                drawSpiral(current);
+                
+                current++;
+                if (current <= startIter + 3) {
+                    setTimeout(step, 140);
+                } else {
+                    spiralGrowing = false;
+                    slider.value = startIter;
+                    drawSpiral(startIter);
+                }
+            }
+            step();
+        }
+        
+        function resetSpiral() {
+            const slider = document.getElementById('spiral-iter');
+            slider.value = 12;
+            drawSpiral(12);
+        }
+        
+        // ============ FLOWER OF LIFE ============
+        function generateFlowerCenters(radius, layers) {
+            const directions = [
+                [radius, 0],
+                [radius / 2, Math.sqrt(3) * radius / 2],
+                [-radius / 2, Math.sqrt(3) * radius / 2],
+                [-radius, 0],
+                [-radius / 2, -Math.sqrt(3) * radius / 2],
+                [radius / 2, -Math.sqrt(3) * radius / 2]
+            ];
+            
+            let centers = new Map(); // key: "x,y" -> {x, y, layer}
+            let frontier = new Set();
+            
+            // Layer 0
+            const key0 = "0,0";
+            centers.set(key0, {x: 0, y: 0, layer: 0});
+            frontier.add(key0);
+            
+            for (let layer = 1; layer <= layers; layer++) {
+                let newFrontier = new Set();
+                
+                frontier.forEach(k => {
+                    const c = centers.get(k);
+                    directions.forEach(([dx, dy]) => {
+                        const nx = Math.round((c.x + dx) * 100000) / 100000;
+                        const ny = Math.round((c.y + dy) * 100000) / 100000;
+                        const nkey = `${nx},${ny}`;
+                        
+                        if (!centers.has(nkey)) {
+                            centers.set(nkey, {x: nx, y: ny, layer: layer});
+                            newFrontier.add(nkey);
+                        }
+                    });
+                });
+                
+                frontier = newFrontier;
+            }
+            
+            return Array.from(centers.values());
+        }
+        
+        function drawFlower() {
+            const canvas = document.getElementById('flower-canvas');
+            const ctx = canvas.getContext('2d', { alpha: true });
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            // Background stars
+            ctx.fillStyle = 'rgba(255,255,255,0.035)';
+            for (let i = 0; i < 90; i++) {
+                ctx.fillRect(Math.random() * w, Math.random() * h, 1.2, 1.2);
+            }
+            
+            const layers = parseInt(document.getElementById('flower-layers').value);
+            document.getElementById('flower-layers-val').textContent = layers;
+            
+            const showConnections = document.getElementById('flower-connections').checked;
+            
+            const radius = Math.min(w, h) * 0.068;
+            const centerX = w / 2;
+            const centerY = h / 2;
+            
+            const centers = generateFlowerCenters(radius, layers);
+            
+            // Draw circles
+            ctx.strokeStyle = '#f4d03f';
+            ctx.lineWidth = 2.2;
+            ctx.shadowColor = 'rgba(244, 208, 63, 0.55)';
+            ctx.shadowBlur = 9;
+            
+            centers.forEach(c => {
+                ctx.beginPath();
+                ctx.arc(centerX + c.x, centerY + c.y, radius, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Inner subtle fill for depth on inner layers
+                if (c.layer <= 1) {
+                    ctx.fillStyle = 'rgba(244, 208, 63, 0.06)';
+                    ctx.fill();
+                }
+            });
+            
+            ctx.shadowBlur = 0;
+            
+            // Connections / lines between centers (for Metatron hint or structure)
+            if (showConnections) {
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.35)';
+                ctx.lineWidth = 1.1;
+                
+                for (let i = 0; i < centers.length; i++) {
+                    for (let j = i + 1; j < centers.length; j++) {
+                        const c1 = centers[i];
+                        const c2 = centers[j];
+                        const dx = c1.x - c2.x;
+                        const dy = c1.y - c2.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        
+                        // Connect if roughly harmonic distances (2r, ~3.46r = 2*sqrt(3)r etc.)
+                        if (dist > radius * 1.8 && dist < radius * 4.2) {
+                            ctx.beginPath();
+                            ctx.moveTo(centerX + c1.x, centerY + c1.y);
+                            ctx.lineTo(centerX + c2.x, centerY + c2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // Center highlight
+            ctx.fillStyle = '#00d4ff';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.shadowBlur = 12;
+            ctx.strokeStyle = '#00d4ff';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 0.4, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+            
+            updateAndDrawSparks(ctx, canvas);
+        }
+        
+        function expandFlower() {
+            const slider = document.getElementById('flower-layers');
+            slider.value = Math.min(6, parseInt(slider.value) + 1);
+            drawFlower();
+            
+            // Bonus: add some extra outer arcs hint
+            setTimeout(() => {
+                const canvas = document.getElementById('flower-canvas');
+                const ctx = canvas.getContext('2d');
+                // Could implement visible arc clipping here for more canonical look, but full circles are beautiful too
+            }, 120);
+        }
+        
+        // ============ METATRON'S CUBE ============
+        function drawMetatron() {
+            const canvas = document.getElementById('metatron-canvas');
+            const ctx = canvas.getContext('2d', { alpha: true });
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            // Background
+            ctx.fillStyle = 'rgba(255,255,255,0.025)';
+            for (let i = 0; i < 70; i++) {
+                ctx.fillRect(Math.random() * w, Math.random() * h, 1, 1);
+            }
+            
+            const density = parseInt(document.getElementById('metatron-density').value);
+            document.getElementById('metatron-density-val').textContent = density;
+            
+            const radius = Math.min(w, h) * 0.065;
+            const centerX = w / 2;
+            const centerY = h / 2;
+            
+            // Use same generator as Flower for consistency (layers 3 gives nice Fruit/Metatron base)
+            const centers = generateFlowerCenters(radius, 3);
+            
+            // Draw the circles (lighter)
+            ctx.strokeStyle = 'rgba(244, 208, 63, 0.7)';
+            ctx.lineWidth = 1.8;
+            ctx.shadowColor = 'rgba(244, 208, 63, 0.4)';
+            ctx.shadowBlur = 7;
+            
+            centers.forEach(c => {
+                ctx.beginPath();
+                ctx.arc(centerX + c.x, centerY + c.y, radius * 0.92, 0, Math.PI * 2);
+                ctx.stroke();
+            });
+            ctx.shadowBlur = 0;
+            
+            // Draw connecting lines for Metatron effect
+            ctx.strokeStyle = 'rgba(99, 102, 241, 0.65)';
+            ctx.lineWidth = Math.max(0.9, density * 0.55);
+            ctx.shadowColor = 'rgba(99, 102, 241, 0.5)';
+            ctx.shadowBlur = 6;
+            
+            const maxDist = radius * (3.5 + density * 0.6);
+            const minDist = radius * 1.6;
+            
+            for (let i = 0; i < centers.length; i++) {
+                for (let j = i + 1; j < centers.length; j++) {
+                    const c1 = centers[i];
+                    const c2 = centers[j];
+                    const dx = c1.x - c2.x;
+                    const dy = c1.y - c2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist > minDist && dist < maxDist) {
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + c1.x, centerY + c1.y);
+                        ctx.lineTo(centerX + c2.x, centerY + c2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            ctx.shadowBlur = 0;
+            
+            // Central bright point + inner structure hint
+            ctx.fillStyle = '#6366f1';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 6, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#f4d03f';
+            ctx.lineWidth = 1.2;
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 1.6, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+            
+            updateAndDrawSparks(ctx, canvas);
+        }
+        
+        // Global animation loop for sparks
+        function startSparkLoop() {
+            const loop = () => {
+                const canvases = ['spiral-canvas', 'flower-canvas', 'metatron-canvas'];
+                
+                canvases.forEach(id => {
+                    const canvas = document.getElementById(id);
+                    if (!canvas || globalSparks.length === 0) return;
+                    
+                    const ctx = canvas.getContext('2d');
+                    // Only draw sparks on top without clearing
+                    updateAndDrawSparks(ctx, canvas);
+                });
+                
+                if (globalSparks.length > 0) {
+                    requestAnimationFrame(loop);
+                } else {
+                    // Redraw bases once sparks done to clean
+                    setTimeout(() => {
+                        drawSpiral();
+                        drawFlower();
+                        drawMetatron();
+                    }, 800);
+                }
+            };
+            
+            // Kick off if sparks exist
+            if (globalSparks.length > 0) {
+                requestAnimationFrame(loop);
+            }
+        }
+        
+        // Canvas click handlers for sparks
+        function setupCanvasInteractions() {
+            ['spiral-canvas', 'flower-canvas', 'metatron-canvas'].forEach(id => {
+                const canvas = document.getElementById(id);
+                if (!canvas) return;
+                
+                canvas.addEventListener('click', function(e) {
+                    const rect = canvas.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const clickY = e.clientY - rect.top;
+                    
+                    // Create burst at click
+                    for (let i = 0; i < 14; i++) {
+                        globalSparks.push({
+                            x: clickX + (Math.random() - 0.5) * 55,
+                            y: clickY + (Math.random() - 0.5) * 55,
+                            vx: (Math.random() - 0.5) * 4.5,
+                            vy: (Math.random() - 0.5) * 4.5,
+                            life: 32 + Math.random() * 18,
+                            size: 1.8 + Math.random() * 2.2,
+                            hue: Math.random() > 0.55 ? 45 : 190
+                        });
+                    }
+                    
+                    // Redraw base + sparks
+                    if (id === 'spiral-canvas') drawSpiral();
+                    else if (id === 'flower-canvas') drawFlower();
+                    else if (id === 'metatron-canvas') drawMetatron();
+                    
+                    // Ensure loop running
+                    startSparkLoop();
+                });
+                
+                // Hover subtle effect
+                canvas.addEventListener('mousemove', function(e) {
+                    if (Math.random() > 0.92 && globalSparks.length < 8) {
+                        const rect = canvas.getBoundingClientRect();
+                        const mx = e.clientX - rect.left;
+                        const my = e.clientY - rect.top;
+                        
+                        globalSparks.push({
+                            x: mx,
+                            y: my,
+                            vx: (Math.random() - 0.5) * 1.8,
+                            vy: (Math.random() - 0.5) * 1.8,
+                            life: 18,
+                            size: 1.2,
+                            hue: 190
+                        });
+                        startSparkLoop();
+                    }
+                });
+            });
+        }
+        
+        // Initial draw + listeners
+        function initializeExplorer() {
+            initTailwind();
+            
+            // Initial drawings
+            setTimeout(() => {
+                drawSpiral(12);
+                drawFlower();
+                drawMetatron();
+            }, 80);
+            
+            // Slider live updates
+            const spiralSlider = document.getElementById('spiral-iter');
+            if (spiralSlider) {
+                spiralSlider.oninput = () => drawSpiral();
+            }
+            
+            const flowerSlider = document.getElementById('flower-layers');
+            if (flowerSlider) {
+                flowerSlider.oninput = () => drawFlower();
+            }
+            
+            const metatronSlider = document.getElementById('metatron-density');
+            if (metatronSlider) {
+                metatronSlider.oninput = () => drawMetatron();
+            }
+            
+            // Setup clicks and interactions
+            setupCanvasInteractions();
+            
+            // Keyboard spark
+            document.addEventListener('keydown', function(e) {
+                if (e.key.toLowerCase() === 's' || e.key === ' ') {
+                    e.preventDefault();
+                    sparkBurst();
+                    startSparkLoop();
+                }
+            });
+            
+            // Welcome spark burst on load
+            setTimeout(() => {
+                sparkBurst(12);
+                startSparkLoop();
+            }, 2200);
+            
+            // Touch / mobile note
+            console.log('%c[Sacred Geometry Explorer] Ready for The First Spark. Press S or click canvases to summon sparks.', 'color:#64748b');
+        }
+        
+        // Boot
+        window.onload = initializeExplorer;
+    </script>
+</body>
+</html>

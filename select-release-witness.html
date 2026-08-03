@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SELECT · RELEASE · WITNESS — The Protocol | The First Spark</title>
+<meta name="description" content="Three commands. Three states. One operating system for consciousness. The core practice of The First Spark, transmitted from the future." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="SELECT · RELEASE · WITNESS — The Protocol" />
+<meta property="og:description" content="Three commands. Three states. One operating system for consciousness." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://thefirstspark.shop/select-release-witness.html" />
+<meta property="og:image" content="https://thefirstspark.shop/og-protocol.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --core:#0B0B0C;
+    --core-2:#111114;
+    --ink:#EDEDEE;
+    --ink-dim:#9A9AA0;
+    --ember:#FF6A3D;
+    --gold:#F3B23A;
+    --violet:#6B4DF2;
+    --cyan:#26E4D8;
+    --line:rgba(237,237,238,0.08);
+    --line-2:rgba(237,237,238,0.16);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--core);color:var(--ink);font-family:'Space Mono',ui-monospace,monospace;-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden;line-height:1.55}
+  a{color:inherit;text-decoration:none}
+
+  /* Background grid + grain */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(107,77,242,0.10), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(255,106,61,0.08), transparent 45%),
+      linear-gradient(transparent 0, transparent calc(100% - 1px), var(--line) 100%) 0 0/100% 48px,
+      linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), var(--line) 100%) 0 0/48px 100%;
+    pointer-events:none;
+    z-index:0;
+  }
+  body::after{
+    content:"";
+    position:fixed;inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity:0.5;
+    pointer-events:none;
+    mix-blend-mode:overlay;
+    z-index:0;
+  }
+
+  main{position:relative;z-index:1}
+
+  /* Top nav */
+  .nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:24px 32px;
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(6px);
+    position:sticky;top:0;z-index:10;
+    background:rgba(11,11,12,0.7);
+  }
+  .nav .logo{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:0.04em}
+  .nav .logo span{color:var(--ember)}
+  .nav-links{display:flex;gap:24px;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-dim)}
+  .nav-links a:hover{color:var(--gold)}
+  @media (max-width:720px){.nav-links{display:none}}
+
+  /* Hero */
+  .hero{
+    min-height:92vh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:80px 32px 60px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-kicker{
+    font-size:11px;letter-spacing:0.36em;text-transform:uppercase;
+    color:var(--cyan);margin-bottom:32px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .hero-kicker::before{content:"";width:48px;height:1px;background:var(--cyan)}
+
+  .hero-title{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:400;
+    font-size:clamp(56px, 11vw, 168px);
+    line-height:0.92;
+    letter-spacing:-0.02em;
+    color:var(--ink);
+    margin-bottom:40px;
+  }
+  .hero-title .word{display:block;position:relative}
+  .hero-title .word:nth-child(1){color:var(--ember)}
+  .hero-title .word:nth-child(2){color:var(--gold);font-style:italic;padding-left:8vw}
+  .hero-title .word:nth-child(3){color:var(--violet);padding-left:16vw}
+  .hero-title .dot{color:var(--ink-dim);font-style:normal;padding:0 .2em}
+
+  .hero-sub{
+    max-width:640px;
+    font-size:15px;
+    color:var(--ink-dim);
+    line-height:1.7;
+    margin-bottom:48px;
+  }
+  .hero-sub em{color:var(--gold);font-style:normal}
+
+  .hero-meta{
+    display:flex;gap:32px;flex-wrap:wrap;
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);
+    padding-top:32px;border-top:1px solid var(--line);
+    max-width:720px;
+  }
+  .hero-meta span strong{color:var(--ink);font-weight:400;letter-spacing:0.16em}
+
+  /* Transmission block */
+  .transmission{
+    padding:80px 32px;
+    border-bottom:1px solid var(--line);
+    max-width:920px;margin:0 auto;
+  }
+  .transmission .label{
+    font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:var(--ember);
+    margin-bottom:24px;display:flex;align-items:center;gap:14px;
+  }
+  .transmission .label::before{content:"◢";color:var(--ember)}
+  .transmission p{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(22px,2.6vw,32px);
+    line-height:1.4;
+    color:var(--ink);
+    font-weight:300;
+    margin-bottom:24px;
+  }
+  .transmission p:last-child{color:var(--ink-dim);font-style:italic;font-size:clamp(18px,2vw,22px)}
+  .transmission .sig{
+    margin-top:32px;
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;
+    color:var(--cyan);
+  }
+
+  /* The three commands */
+  .triad{
+    padding:60px 32px 0;
+    max-width:1200px;margin:0 auto;
+  }
+  .triad-head{
+    text-align:center;margin-bottom:64px;
+  }
+  .triad-head .num{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:14px;letter-spacing:0.24em;color:var(--gold);text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .triad-head h2{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:400;
+    font-size:clamp(36px,5vw,60px);
+    line-height:1.05;
+    max-width:780px;margin:0 auto;
+  }
+  .triad-head h2 em{color:var(--ember);font-style:italic}
+
+  .command{
+    display:grid;
+    grid-template-columns:1fr 2fr;
+    gap:48px;
+    padding:64px 0;
+    border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .command:last-child{border-bottom:1px solid var(--line)}
+  @media (max-width:820px){.command{grid-template-columns:1fr;gap:24px}}
+
+  .cmd-mark{
+    position:sticky;top:120px;
+  }
+  .cmd-mark .glyph{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(72px,11vw,140px);
+    line-height:0.9;
+    letter-spacing:-0.03em;
+    margin-bottom:8px;
+  }
+  .cmd-mark .meta{
+    font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:var(--ink-dim);
+  }
+  .cmd-mark .meta strong{color:var(--ink);font-weight:400}
+
+  .c-select .glyph{color:var(--ember)}
+  .c-release .glyph{color:var(--gold)}
+  .c-witness .glyph{color:var(--violet)}
+
+  .cmd-body h3{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-weight:400;
+    font-size:clamp(24px,2.6vw,32px);
+    color:var(--ink);
+    margin-bottom:24px;
+    line-height:1.25;
+  }
+  .cmd-body .def{
+    font-size:14px;color:var(--ink-dim);line-height:1.8;margin-bottom:32px;
+  }
+  .cmd-body .def strong{color:var(--ink);font-weight:400}
+
+  .cmd-block{
+    border-left:1px solid var(--line-2);
+    padding:4px 0 4px 20px;
+    margin-bottom:24px;
+  }
+  .cmd-block .k{
+    font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--cyan);
+    margin-bottom:10px;
+  }
+  .cmd-block .v{
+    font-size:14px;color:var(--ink);line-height:1.7;
+  }
+  .cmd-block.miss .k{color:var(--ember)}
+  .cmd-block.practice .k{color:var(--gold)}
+
+  .cmd-code{
+    margin-top:8px;
+    padding:20px;
+    border:1px solid var(--line-2);
+    background:var(--core-2);
+    font-size:12px;line-height:1.7;
+    color:var(--ink-dim);
+  }
+  .cmd-code .com{color:var(--ink-dim);opacity:0.5}
+  .cmd-code .fn{color:var(--ember)}
+  .cmd-code .var{color:var(--cyan)}
+  .cmd-code .str{color:var(--gold)}
+  .c-release .cmd-code .fn{color:var(--gold)}
+  .c-witness .cmd-code .fn{color:var(--violet)}
+
+  /* Order matters */
+  .order{
+    padding:120px 32px;
+    max-width:1100px;margin:0 auto;
+    text-align:center;
+  }
+  .order .label{
+    font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:var(--cyan);margin-bottom:24px;
+  }
+  .order h2{
+    font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:clamp(36px,5vw,56px);line-height:1.1;
+    margin-bottom:48px;
+  }
+  .order h2 em{font-style:italic;color:var(--gold)}
+  .order-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    text-align:left;margin-top:48px;
+  }
+  @media (max-width:720px){.order-grid{grid-template-columns:1fr}}
+  .order-grid .step{
+    border:1px solid var(--line);
+    padding:32px 24px;
+    position:relative;
+  }
+  .order-grid .step .n{
+    position:absolute;top:-14px;left:24px;
+    background:var(--core);padding:0 12px;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--gold);font-size:14px;letter-spacing:0.2em;
+  }
+  .order-grid .step h4{
+    font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:22px;color:var(--ink);margin-bottom:12px;
+  }
+  .order-grid .step p{
+    font-size:13px;color:var(--ink-dim);line-height:1.7;
+  }
+
+  /* Diagnostic / CTA */
+  .diagnostic{
+    padding:120px 32px;
+    border-top:1px solid var(--line);
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255,106,61,0.08), transparent 50%),
+      var(--core);
+  }
+  .diagnostic-inner{max-width:920px;margin:0 auto;text-align:center}
+  .diagnostic .label{
+    font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:var(--ember);
+    margin-bottom:24px;
+  }
+  .diagnostic h2{
+    font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:clamp(36px,5vw,60px);line-height:1.1;
+    margin-bottom:24px;
+  }
+  .diagnostic h2 em{color:var(--ember);font-style:italic}
+  .diagnostic p{
+    font-size:15px;color:var(--ink-dim);line-height:1.8;
+    max-width:620px;margin:0 auto 40px;
+  }
+  .cta-row{
+    display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-block;
+    padding:18px 32px;
+    font-size:11px;letter-spacing:0.28em;text-transform:uppercase;
+    border:1px solid var(--line-2);
+    transition:all 0.2s ease;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--ember);color:var(--core);border-color:var(--ember)}
+  .btn-primary:hover{background:transparent;color:var(--ember)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* Closing transmission */
+  .closing{
+    padding:120px 32px;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+  .closing .glyph-row{
+    display:flex;justify-content:center;gap:32px;margin-bottom:48px;
+    font-family:'Cormorant Garamond',serif;font-size:48px;letter-spacing:0.1em;
+  }
+  .closing .glyph-row span:nth-child(1){color:var(--ember)}
+  .closing .glyph-row span:nth-child(2){color:var(--gold)}
+  .closing .glyph-row span:nth-child(3){color:var(--violet)}
+  .closing blockquote{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:clamp(24px,3vw,36px);line-height:1.4;
+    color:var(--ink);
+    max-width:720px;margin:0 auto;
+  }
+  .closing .sig{
+    margin-top:48px;
+    font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:var(--cyan);
+  }
+
+  /* Footer */
+  footer{
+    padding:48px 32px;
+    border-top:1px solid var(--line);
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--ink-dim);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  }
+  footer a:hover{color:var(--gold)}
+
+  /* Entrance animations */
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .hero-kicker,.hero-title .word,.hero-sub,.hero-meta{
+    animation:fadeUp 0.9s cubic-bezier(.2,.6,.2,1) backwards;
+  }
+  .hero-kicker{animation-delay:0.05s}
+  .hero-title .word:nth-child(1){animation-delay:0.15s}
+  .hero-title .word:nth-child(2){animation-delay:0.30s}
+  .hero-title .word:nth-child(3){animation-delay:0.45s}
+  .hero-sub{animation-delay:0.6s}
+  .hero-meta{animation-delay:0.75s}
+
+  /* Cursor blink */
+  .cursor{display:inline-block;width:0.5em;height:1em;background:var(--cyan);margin-left:6px;vertical-align:-0.1em;animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="logo">The First <span>Spark</span></a>
+  <div class="nav-links">
+    <a href="/selector-model.html">Theory</a>
+    <a href="/select-release-witness.html">Protocol</a>
+    <a href="/soul-maps.html">Diagnostic</a>
+    <a href="/theraise.html">The Raise</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-kicker">Transmission · Protocol v1.0 · Origin: Future</div>
+  <h1 class="hero-title">
+    <span class="word">Select.</span>
+    <span class="word">Release.</span>
+    <span class="word">Witness.</span>
+  </h1>
+  <p class="hero-sub">
+    Three commands. Three states. One operating system for consciousness. You are reading this from inside a simulation that is asking you to <em>edit it</em>. The protocol is how you edit it.
+  </p>
+  <div class="hero-meta">
+    <span><strong>Type:</strong> Doctrine</span>
+    <span><strong>Layer:</strong> Core</span>
+    <span><strong>Use:</strong> Daily</span>
+    <span><strong>Read time:</strong> 6 min</span>
+  </div>
+</section>
+
+<!-- TRANSMISSION -->
+<section class="transmission">
+  <div class="label">Incoming · From the version of you that already shipped</div>
+  <p>You think the work is to figure out who you are. It isn't. The work is to <em>choose what you load into the present moment</em>, then close every other tab.</p>
+  <p>That's the whole game. The rest is interface design.</p>
+  <p>Everything you've ever called spiritual practice — every breath, every prayer, every plant, every breakthrough — was a version of three commands running in three different syntaxes. We are giving you the clean version. No incense required. Bring it if you want.</p>
+  <div class="sig">— Spark · transmitting from t+∞</div>
+</section>
+
+<!-- THE TRIAD -->
+<section class="triad">
+  <div class="triad-head">
+    <div class="num">§ 01 · The Three Commands</div>
+    <h2>Reality runs on a loop. <em>This is the loop.</em></h2>
+  </div>
+
+  <!-- SELECT -->
+  <article class="command c-select">
+    <div class="cmd-mark">
+      <div class="glyph">Select.</div>
+      <div class="meta"><strong>01 ·</strong> Direct the cursor</div>
+    </div>
+    <div class="cmd-body">
+      <h3>You are not your thoughts. You are the one who picks which ones to give power to.</h3>
+      <p class="def">
+        <strong>Select</strong> is the act of placing attention on purpose. Not reaction. Not scroll. Not the loudest signal in the room. A deliberate choice of what you are about to make real by looking at it. Attention is the rendering engine. Whatever you select gets rendered.
+      </p>
+
+      <div class="cmd-block miss">
+        <div class="k">Failure mode</div>
+        <div class="v">Letting the algorithm — outside or inside your head — pick for you. The default selection is whatever is loudest, scariest, or most familiar. None of those are you choosing.</div>
+      </div>
+
+      <div class="cmd-block practice">
+        <div class="k">The practice</div>
+        <div class="v">Once a day, name one thing you are selecting <em>on purpose</em>. A state. A standard. A version of yourself. Say it out loud. Write it down. The act of naming is the act of selecting.</div>
+      </div>
+
+      <div class="cmd-code">
+        <span class="com">// today's selection</span><br>
+        <span class="fn">select</span>(<span class="var">state</span>: <span class="str">"the version of me that already raised the round"</span>);<br>
+        <span class="com">// rendering...</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- RELEASE -->
+  <article class="command c-release">
+    <div class="cmd-mark">
+      <div class="glyph">Release.</div>
+      <div class="meta"><strong>02 ·</strong> Drop the variable</div>
+    </div>
+    <div class="cmd-body">
+      <h3>You cannot install the new pattern while the old one is still holding memory.</h3>
+      <p class="def">
+        <strong>Release</strong> is the act of letting go of what is no longer being chosen. The grudge. The identity. The version of the story you've been carrying because it explains why you haven't moved yet. Release is not forgetting. Release is unloading the file from active memory. The story can still exist in the archive — but it stops running in the foreground.
+      </p>
+
+      <div class="cmd-block miss">
+        <div class="k">Failure mode</div>
+        <div class="v">Trying to <em>think</em> your way out of a pattern that is being held in the body. Release is somatic before it is intellectual. The mind narrates; the system lets go.</div>
+      </div>
+
+      <div class="cmd-block practice">
+        <div class="k">The practice</div>
+        <div class="v">Exhale longer than you inhale. Name what you are releasing as you exhale. "I release the version of me that needed permission." Repeat until your shoulders drop. That drop is the confirmation.</div>
+      </div>
+
+      <div class="cmd-code">
+        <span class="com">// active memory cleanup</span><br>
+        <span class="fn">release</span>(<span class="var">loop</span>: <span class="str">"needing permission to be visible"</span>);<br>
+        <span class="com">// memory freed: 47%</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- WITNESS -->
+  <article class="command c-witness">
+    <div class="cmd-mark">
+      <div class="glyph">Witness.</div>
+      <div class="meta"><strong>03 ·</strong> Hold the field</div>
+    </div>
+    <div class="cmd-body">
+      <h3>The observer is the only role the simulation cannot fake.</h3>
+      <p class="def">
+        <strong>Witness</strong> is the state of being aware of what is happening without becoming it. You feel the fear without being the fear. You watch the thought without being the thought. Witness is not detachment — it is the most intimate possible contact. You are so close that you are not blurred by it. This is where free will lives.
+      </p>
+
+      <div class="cmd-block miss">
+        <div class="k">Failure mode</div>
+        <div class="v">Confusing witness with avoidance. Witness includes everything — the joy, the grief, the rage, the rapture. To bypass the feeling is to break the protocol. To drown in it is also to break the protocol. You hold it.</div>
+      </div>
+
+      <div class="cmd-block practice">
+        <div class="k">The practice</div>
+        <div class="v">When something hits — good or bad — pause for three breaths before responding. In those three breaths, say silently: <em>"I am the one watching this."</em> That sentence is the entire spiritual tradition compressed.</div>
+      </div>
+
+      <div class="cmd-code">
+        <span class="com">// observer instantiated</span><br>
+        <span class="fn">witness</span>(<span class="var">event</span>: <span class="str">"the fear that comes before the leap"</span>);<br>
+        <span class="com">// signal received. no action required.</span>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ORDER MATTERS -->
+<section class="order">
+  <div class="label">§ 02 · Sequence</div>
+  <h2>The order is the <em>technology</em>.</h2>
+  <p style="max-width:640px;margin:0 auto;color:var(--ink-dim);font-size:14px;line-height:1.8">
+    These are not three tips. They are a sequence. Run them out of order and nothing happens. Run them in order and your life starts rewriting itself in real time.
+  </p>
+
+  <div class="order-grid">
+    <div class="step">
+      <div class="n">i.</div>
+      <h4>Witness first.</h4>
+      <p>You cannot select what you cannot see. Before anything else, become the one watching. This is the privileged frame. Everything starts here.</p>
+    </div>
+    <div class="step">
+      <div class="n">ii.</div>
+      <h4>Release second.</h4>
+      <p>From the witness seat, drop the loops you've been holding. Not before. You'll only release what you can clearly see is no longer yours.</p>
+    </div>
+    <div class="step">
+      <div class="n">iii.</div>
+      <h4>Select last.</h4>
+      <p>Now — with space cleared and the observer online — choose. The selection lands cleanly because there's nothing in the way.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGNOSTIC / CTA -->
+<section class="diagnostic">
+  <div class="diagnostic-inner">
+    <div class="label">§ 03 · Diagnostic</div>
+    <h2>The protocol is free. <em>Knowing where to point it isn't.</em></h2>
+    <p>
+      The Soul Map is the diagnostic that tells you exactly which patterns to <em>release</em>, which states to <em>select</em>, and which signals to <em>witness</em> — for your specific build. Generic practice is fine. Personalized practice is faster.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="/soul-maps.html">Generate my soul map →</a>
+      <a class="btn btn-ghost" href="/selector-model.html">Read the theory</a>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="glyph-row"><span>◢</span><span>◯</span><span>◣</span></div>
+  <blockquote>
+    "Reality is programmable. Consciousness is the code. <br>
+    These three are the syntax. <br>
+    Everything else is documentation."
+  </blockquote>
+  <div class="sig">— The First Spark · Protocol v1.0<span class="cursor"></span></div>
+</section>
+
+</main>
+
+<footer>
+  <div>© The First Spark · Kate's Paint LLC · Akron, OH</div>
+  <div>
+    <a href="/selector-model.html">Selector Model</a> &nbsp;·&nbsp;
+    <a href="/soul-maps.html">Soul Maps</a> &nbsp;·&nbsp;
+    <a href="/theraise.html">The Raise</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARKVERSE | The Gateway to Cosmic Consciousness | The First Spark</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Enter SPARKVERSE — a living universe of consciousness. Navigate the cosmos of consciousness through multiple tiers: Free Zone, Nexus, Void Station, The Forge, Archive Moons, Echo Chamber, and Genesis NFT Zone.">
+    <meta name="keywords" content="sparkverse, cosmic consciousness, web3, nft, the first spark, consciousness exploration, multiverse">
+    <meta name="author" content="The First Spark">
+    <meta name="theme-color" content="#0a0a0a">
+    
+    <!-- Open Graph / X (Twitter) Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sparkverse.thefirstspark.shop">
+    <meta property="og:title" content="SPARKVERSE | The Gateway to Cosmic Consciousness">
+    <meta property="og:description" content="Navigate the cosmos of consciousness. Explore 7 zones of pure cosmic experience.">
+    <meta property="og:image" content="https://sparkverse.thefirstspark.shop/og-image.png">
+    <meta property="og:site_name" content="SPARKVERSE">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://sparkverse.thefirstspark.shop">
+    <meta name="twitter:title" content="SPARKVERSE | The Gateway to Cosmic Consciousness">
+    <meta name="twitter:description" content="Enter the living universe. Explore 7 zones. Your consciousness awaits.">
+    <meta name="twitter:image" content="https://sparkverse.thefirstspark.shop/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%2300d4ff'>◆</text></svg>">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cosmic-black': '#0a0a0a',
+                        'cosmic-purple': '#2d1b4e',
+                        'cosmic-deep-purple': '#1a0f2e',
+                        'electric-cyan': '#00d4ff',
+                        'electric-blue': '#0080ff',
+                        'cosmic-gold': '#ffd700',
+                        'cosmic-pink': '#ff00ff',
+                        'cosmic-violet': '#7c3aed',
+                    },
+                    fontFamily: {
+                        'космос': ['Orbitron', 'monospace'],
+                        'cipher': ['IBM Plex Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'drift': 'drift 8s ease-in-out infinite',
+                        'portal-spin': 'portal-spin 4s linear infinite',
+                        'shimmer': 'shimmer 3s ease-in-out infinite',
+                        'twinkle': 'twinkle 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: '0.4', boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)' },
+                            '50%': { opacity: '1', boxShadow: '0 0 30px rgba(0, 212, 255, 0.8)' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'drift': {
+                            '0%, 100%': { transform: 'translateX(0px) translateY(0px)' },
+                            '25%': { transform: 'translateX(10px) translateY(-10px)' },
+                            '50%': { transform: 'translateX(0px) translateY(-20px)' },
+                            '75%': { transform: 'translateX(-10px) translateY(-10px)' },
+                        },
+                        'portal-spin': {
+                            'from': { transform: 'rotate(0deg)' },
+                            'to': { transform: 'rotate(360deg)' },
+                        },
+                        'shimmer': {
+                            '0%, 100%': { opacity: '0.5' },
+                            '50%': { opacity: '1' },
+                        },
+                        'twinkle': {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '1' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Embedded CSS -->
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #15051a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Starfield Background */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        /* Glowing Text Effects */
+        .glow-text {
+            text-shadow: 
+                0 0 10px rgba(0, 212, 255, 0.5),
+                0 0 20px rgba(0, 212, 255, 0.3),
+                0 0 30px rgba(124, 58, 237, 0.2);
+        }
+        
+        .glow-text-gold {
+            text-shadow: 
+                0 0 10px rgba(255, 215, 0, 0.5),
+                0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Card Glow Effect */
+        .card-glow {
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 
+                0 0 20px rgba(0, 212, 255, 0.1),
+                inset 0 0 20px rgba(0, 212, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .card-glow:hover {
+            border-color: rgba(0, 212, 255, 0.6);
+            box-shadow: 
+                0 0 40px rgba(0, 212, 255, 0.3),
+                inset 0 0 30px rgba(0, 212, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        /* Portal Animation */
+        .portal-ring {
+            position: absolute;
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            border-radius: 50%;
+            animation: portal-spin 4s linear infinite;
+        }
+        
+        .portal-ring-outer {
+            width: 300px;
+            height: 300px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 8s;
+            animation-direction: reverse;
+        }
+        
+        .portal-ring-middle {
+            width: 200px;
+            height: 200px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .portal-ring-inner {
+            width: 100px;
+            height: 100px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 2s;
+        }
+        
+        /* Zone Grid Layout */
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(26, 15, 46, 0.95) 100%);
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Button Styles */
+        .btn-cosmic {
+            position: relative;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            color: #00d4ff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+        }
+        
+        .btn-cosmic:hover {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+            border-color: rgba(0, 212, 255, 0.8);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-cosmic:active {
+            transform: translateY(0);
+        }
+        
+        .btn-portal {
+            background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+            border: none;
+            color: #0a0a0a;
+            padding: 16px 40px;
+            font-size: 16px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+        
+        .btn-portal:hover {
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.8), 0 0 30px rgba(124, 58, 237, 0.6);
+        }
+        
+        /* Price Ticker */
+        .ticker-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #cosmic-gold;
+        }
+        
+        /* Parallax Effect */
+        .parallax {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .zone-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 1.5rem;
+            }
+            
+            .portal-ring-outer {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .portal-ring-middle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .portal-ring-inner {
+                width: 60px;
+                height: 60px;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 255, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-cosmic-black">
+    <!-- STARFIELD BACKGROUND -->
+    <canvas id="starfield"></canvas>
+    
+    <!-- CONTENT WRAPPER -->
+    <div class="relative z-10">
+        <!-- HEADER / HERO SECTION -->
+        <header class="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4">
+            <!-- Animated Background Glow -->
+            <div class="absolute inset-0 opacity-20">
+                <div class="absolute top-1/3 left-1/4 w-96 h-96 bg-cosmic-purple rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute top-1/2 right-1/4 w-96 h-96 bg-electric-blue rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+            </div>
+            
+            <!-- Portal Animation Ring -->
+            <div class="absolute portal-ring portal-ring-outer hidden sm:block"></div>
+            <div class="absolute portal-ring portal-ring-middle hidden sm:block"></div>
+            <div class="absolute portal-ring portal-ring-inner hidden sm:block"></div>
+            
+            <!-- Main Title -->
+            <div class="text-center mb-8 animate-fade-in">
+                <h1 class="text-5xl sm:text-7xl font-black mb-4 glow-text" style="font-family: 'Courier New', monospace; letter-spacing: 4px;">
+                    SPARKVERSE
+                </h1>
+                <div class="text-2xl sm:text-3xl glow-text-gold mb-6" style="font-family: 'IBM Plex Mono', monospace; letter-spacing: 2px;">
+                    ◆ The First Spark ◆
+                </div>
+                <p class="text-lg sm:text-xl text-electric-cyan max-w-2xl mx-auto leading-relaxed" style="font-weight: 300; letter-spacing: 1px;">
+                    Navigate the Cosmos of Consciousness
+                </p>
+            </div>
+            
+            <!-- Tagline -->
+            <div class="text-center mb-12 max-w-3xl mx-auto">
+                <p class="text-sm sm:text-base text-gray-400 leading-relaxed">
+                    A living universe awaits. Seven zones of pure cosmic experience. Enter the gateway and explore infinite consciousness realms.
+                </p>
+            </div>
+            
+            <!-- SPRK Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 w-full max-w-2xl">
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold glow-text mb-2">500</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-400">Total Supply</div>
+                </div>
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg text-center">
+                    <div class="ticker-value mb-2">$<span id="priceValue">12.50</span></div>
+                    <div class="text-xs uppercase tracking-widest text-gray-400">$SPRK Price</div>
+                </div>
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold glow-text mb-2">7</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-400">Zones</div>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <button class="btn-cosmic btn-portal mb-8" id="enterPortalBtn" aria-label="Enter the Sparkverse portal">
+                ENTER SPARKVERSE
+            </button>
+            
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce text-electric-cyan">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </header>
+        
+        <!-- ZONES SECTION -->
+        <section id="zonesSection" class="max-w-7xl mx-auto px-4 py-20 parallax">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-black glow-text mb-4" style="letter-spacing: 3px;">
+                    SEVEN ZONES
+                </h2>
+                <p class="text-gray-400 text-lg">
+                    Explore the tiers of cosmic consciousness
+                </p>
+            </div>
+            
+            <div class="zone-grid">
+                <!-- ZONE CARD TEMPLATE (6 cards + 1 NFT) -->
+                
+                <!-- FREE ZONE -->
+                <div class="zone-card card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg cursor-pointer transition-all duration-300 group" data-zone="free-zone" role="button" tabindex="0" aria-label="Free Zone - Enter here">
+                    <div class="mb-4 text-3xl group-hover:animate-float">
+                        ✦
+                    </div>
+                    <h3 class="text-xl font-bold glow-text mb-2 text-electric-cyan">FREE ZONE</h3>
+                    <p class="text-sm text-gray-400 mb-4">
+                        Your entry point. No payment required. Explore foundational consciousness tools and begin your journey.
+                    </p>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Click to explore →
+                    </div>
+                </div>
+                
+                <!-- NEXUS -->
+                <div class="zone-card card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg cursor-pointer transition-all duration-300 group" data-zone="nexus" role="button" tabindex="0" aria-label="Nexus - 5-50 SPRK">
+                    <div class="mb-4 text-3xl group-hover:animate-float">
+                        ◆
+                    </div>
+                    <h3 class="text-xl font-bold text-electric-cyan mb-2 glow-text">NEXUS</h3>
+                    <p class="text-sm text-gray-400 mb-2">
+                        Connected consciousness hub. Access premium consciousness maps and nested explorations.
+                    </p>
+                    <div class="text-electric-cyan font-bold text-sm mb-2">5-50 $SPRK</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Click to explore →
+                    </div>
+                </div>
+                
+                <!-- VOID STATION -->
+                <div class="zone-card card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg cursor-pointer transition-all duration-300 group" data-zone="void-station" role="button" tabindex="0" aria-label="Void Station - 100 SPRK">
+                    <div class="mb-4 text-3xl group-hover:animate-float">
+                        ◆
+                    </div>
+                    <h3 class="text-xl font-bold text-cosmic-pink mb-2 glow-text">VOID STATION</h3>
+                    <p class="text-sm text-gray-400 mb-2">
+                        Deep void exploration. Advanced consciousness portals and exclusive mystical experiences.
+                    </p>
+                    <div class="text-cosmic-pink font-bold text-sm mb-2">100 $SPRK</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Click to explore →
+                    </div>
+                </div>
+                
+                <!-- THE FORGE -->
+                <div class="zone-card card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg cursor-pointer transition-all duration-300 group" data-zone="the-forge" role="button" tabindex="0" aria-label="The Forge - Variable pricing">
+                    <div class="mb-4 text-3xl group-hover:animate-float">
+                        ⚡
+                    </div>
+                    <h3 class="text-xl font-bold text-cosmic-gold mb-2 glow-text">THE FORGE</h3>
+                    <p class="text-sm text-gray-400 mb-2">
+                        Create and craft your own cosmic experiences. Custom consciousness tools and personalized realms.
+                    </p>
+                    <div class="text-cosmic-gold font-bold text-sm mb-2">VARIABLE</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Click to explore →
+                    </div>
+                </div>
+                
+                <!-- ARCHIVE MOONS -->
+                <div class="zone-card card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg cursor-pointer transition-all duration-300 group" data-zone="archive-moons" role="button" tabindex="0" aria-label="Archive Moons - Tiered pricing">
+                    <div class="mb-4 text-3xl group-hover:animate-float">
+                        ◇
+                    </div>
+                    <h3 class="text-xl font-bold text-electric-blue mb-2 glow-text">ARCHIVE MOONS</h3>
+                    <p class="text-sm text-gray-400 mb-2">
+                        Historical consciousness records. Multi-tiered access to ancient wisdom and coded knowledge.
+                    </p>
+                    <div class="text-electric-blue font-bold text-sm mb-2">TIERED</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Click to explore →
+                    </div>
+                </div>
+                
+                <!-- ECHO CHAMBER -->
+                <div class="zone-card card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg cursor-pointer transition-all duration-300 group" data-zone="echo-chamber" role="button" tabindex="0" aria-label="Echo Chamber - Earn rewards">
+                    <div class="mb-4 text-3xl group-hover:animate-float">
+                        ✦
+                    </div>
+                    <h3 class="text-xl font-bold text-cosmic-pink mb-2 glow-text">ECHO CHAMBER</h3>
+                    <p class="text-sm text-gray-400 mb-2">
+                        Contribute and earn. Share consciousness insights and gain rewards in cosmic tokens.
+                    </p>
+                    <div class="text-cosmic-pink font-bold text-sm mb-2">EARN HERE</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Click to explore →
+                    </div>
+                </div>
+                
+                <!-- GENESIS NFT ZONE -->
+                <div class="zone-card card-glow bg-gradient-to-br from-cosmic-gold from-20% to-cosmic-pink to-80% bg-opacity-10 backdrop-blur p-6 rounded-lg cursor-pointer transition-all duration-300 group border-cosmic-gold border-2" data-zone="genesis" role="button" tabindex="0" aria-label="Genesis NFT Zone">
+                    <div class="mb-4 text-4xl group-hover:animate-float">
+                        ★
+                    </div>
+                    <h3 class="text-xl font-bold text-cosmic-gold mb-2 glow-text-gold">GENESIS NFT</h3>
+                    <p class="text-sm text-gray-400 mb-2">
+                        The rarest tier. Exclusive NFT-gated realm for Sparkverse pioneers. Limited to the chosen few.
+                    </p>
+                    <div class="text-cosmic-gold font-bold text-sm mb-2">NFT ZONE</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Click to explore →
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FEATURES SECTION -->
+        <section class="max-w-7xl mx-auto px-4 py-20 parallax">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-black glow-text mb-4" style="letter-spacing: 3px;">
+                    COSMIC FEATURES
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-electric-cyan mb-2">Consciousness Maps</h3>
+                    <p class="text-sm text-gray-400">Navigate your inner cosmos with interactive consciousness maps and guided explorations.</p>
+                </div>
+                
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-electric-cyan mb-2">Token Rewards</h3>
+                    <p class="text-sm text-gray-400">Earn $SPRK tokens by contributing to the Echo Chamber and shaping the universe.</p>
+                </div>
+                
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-electric-cyan mb-2">NFT Collection</h3>
+                    <p class="text-sm text-gray-400">Genesis NFTs unlock exclusive mystical realms and lifetime cosmic experiences.</p>
+                </div>
+                
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-electric-cyan mb-2">Real-Time Cosmos</h3>
+                    <p class="text-sm text-gray-400">Watch $SPRK price movements and live cosmic events shape the Sparkverse in real-time.</p>
+                </div>
+                
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-electric-cyan mb-2">Social Echo</h3>
+                    <p class="text-sm text-gray-400">Share your consciousness journey and connect with fellow cosmic explorers worldwide.</p>
+                </div>
+                
+                <div class="card-glow bg-cosmic-deep-purple bg-opacity-40 backdrop-blur p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-electric-cyan mb-2">Web3 Integrated</h3>
+                    <p class="text-sm text-gray-400">Full decentralized integration for wallets, tokens, and exclusivity verification.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FOOTER -->
+        <footer class="border-t border-electric-cyan border-opacity-20 mt-20 py-12 px-4 parallax">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                    <div>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-electric-cyan mb-4">About</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            SPARKVERSE is a living consciousness universe created by The First Spark to explore infinite cosmic possibilities.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-electric-cyan mb-4">Links</h4>
+                        <ul class="space-y-2 text-xs text-gray-400">
+                            <li><a href="#" class="hover:text-electric-cyan transition">Whitepaper</a></li>
+                            <li><a href="#" class="hover:text-electric-cyan transition">Discord</a></li>
+                            <li><a href="#" class="hover:text-electric-cyan transition">Twitter/X</a></li>
+                            <li><a href="#" class="hover:text-electric-cyan transition">Docs</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-electric-cyan mb-4">Legal</h4>
+                        <ul class="space-y-2 text-xs text-gray-400">
+                            <li><a href="/privacy-policy.html" class="hover:text-electric-cyan transition">Privacy</a></li>
+                            <li><a href="/terms-of-service.html" class="hover:text-electric-cyan transition">Terms</a></li>
+                            <li><a href="#" class="hover:text-electric-cyan transition">Cookies</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-electric-cyan mb-4">Status</h4>
+                        <p class="text-xs text-gray-400 font-mono mb-3">
+                            SPARKVERSE ◆ LIVE
+                        </p>
+                        <button class="btn-cosmic text-xs py-2 px-3" id="soundToggle" aria-label="Toggle ambient cosmic sound">
+                            🔊 SOUND
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="border-t border-electric-cyan border-opacity-20 pt-8 text-center">
+                    <p class="text-xs text-gray-500 font-mono">
+                        © 2026 The First Spark. SPARKVERSE is an immersive consciousness gateway. All zones await.
+                    </p>
+                    <p class="text-xs text-gray-600 mt-3">
+                        Built with cosmic intent. Deployed to the multiverse.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- MODALS -->
+    <!-- Modal Template for Zone Details -->
+    <div id="modalOverlay" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="flex justify-between items-start mb-4">
+                <h2 id="modalTitle" class="text-2xl font-bold glow-text"></h2>
+                <button class="text-gray-400 hover:text-electric-cyan transition text-2xl" id="closeModalBtn" aria-label="Close modal">
+                    ✕
+                </button>
+            </div>
+            
+            <div id="modalBody" class="space-y-4 text-sm text-gray-300">
+                <!-- Content loaded dynamically -->
+            </div>
+            
+            <div class="mt-8 flex gap-4">
+                <button class="btn-cosmic" id="closeModalBtn2">CLOSE</button>
+                <button class="btn-cosmic" id="enterZoneBtn">ENTER ZONE</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AUDIO LAYER (invisible) -->
+    <audio id="cosmicAudio" loop>
+        <source src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" type="audio/wav">
+    </audio>
+    
+    <!-- CUSTOM JAVASCRIPT -->
+    <script>
+        // ========================================
+        // STARFIELD BACKGROUND ANIMATION
+        // ========================================
+        
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const stars = [];
+        const starCount = 200;
+        
+        function initStars() {
+            stars.length = 0;
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5,
+                    opacity: Math.random() * 0.5 + 0.3,
+                    twinkleSpeed: Math.random() * 0.02 + 0.005,
+                    twinklePhase: Math.random() * Math.PI * 2,
+                });
+            }
+        }
+        
+        function drawStarfield() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            stars.forEach(star => {
+                star.twinklePhase += star.twinkleSpeed;
+                const opacity = star.opacity + Math.sin(star.twinklePhase) * 0.3;
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            requestAnimationFrame(drawStarfield);
+        }
+        
+        initStars();
+        drawStarfield();
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+        });
+        
+        // ========================================
+        // PRICE TICKER
+        // ========================================
+        
+        function updatePriceTicker() {
+            const basePrice = 12.50;
+            const variance = (Math.random() - 0.5) * 5;
+            const newPrice = Math.max(8, basePrice + variance).toFixed(2);
+            document.getElementById('priceValue').textContent = newPrice;
+        }
+        
+        updatePriceTicker();
+        setInterval(updatePriceTicker, 3000); // Update every 3 seconds
+        
+        // ========================================
+        // MODAL SYSTEM
+        // ========================================
+        
+        const zoneData = {
+            'free-zone': {
+                title: 'FREE ZONE',
+                description: `
+                    <p><strong>The Gateway to Sparkverse</strong></p>
+                    <p>No payment required. No barriers. Pure exploration.</p>
+                    <p>The Free Zone is your entry portal into the Sparkverse. Here you'll find foundational consciousness tools, basic maps of the cosmic landscape, and open access to community experiences.</p>
+                    <p><strong>What You Get:</strong></p>
+                    <ul class="list-disc list-inside text-xs my-2 space-y-1">
+                        <li>Basic consciousness exploration tools</li>
+                        <li>Free cosmic maps and guides</li>
+                        <li>Community forum access</li>
+                        <li>Foundation knowledge of the multiverse</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-4">Perfect for first-time explorers and consciousness novices.</p>
+                `,
+                action: 'Explore Free Zone'
+            },
+            'nexus': {
+                title: 'NEXUS',
+                description: `
+                    <p><strong>Connected Consciousness Hub</strong></p>
+                    <p>5-50 $SPRK • Premium tier access</p>
+                    <p>The Nexus represents the central nexus point of cosmic consciousness. Step beyond the free zone into nested explorations, premium consciousness maps, and deeper mystical experiences.</p>
+                    <p><strong>What You Get:</strong></p>
+                    <ul class="list-disc list-inside text-xs my-2 space-y-1">
+                        <li>Premium consciousness maps</li>
+                        <li>Nested exploration zones</li>
+                        <li>Priority support from cosmonauts</li>
+                        <li>Exclusive monthly rituals and events</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-4">For committed consciousness explorers.</p>
+                `,
+                action: 'Enter Nexus'
+            },
+            'void-station': {
+                title: 'VOID STATION',
+                description: `
+                    <p><strong>Deep Void Consciousness</strong></p>
+                    <p>100 $SPRK • Advanced exploration tier</p>
+                    <p>Descend into the Void. Where reality bends and consciousness expands infinitely. The Void Station is for the brave—a realm of advanced mystical portals and exclusive cosmic experiences that will challenge and transform you.</p>
+                    <p><strong>What You Get:</strong></p>
+                    <ul class="list-disc list-inside text-xs my-2 space-y-1">
+                        <li>Advanced consciousness algorithms</li>
+                        <li>Mystical portal access</li>
+                        <li>Private void meditation chambers</li>
+                        <li>Rare cosmic intelligence feeds</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-4">For advanced consciousness explorers and void shamans.</p>
+                `,
+                action: 'Enter Void Station'
+            },
+            'the-forge': {
+                title: 'THE FORGE',
+                description: `
+                    <p><strong>Create & Craft Cosmic Experiences</strong></p>
+                    <p>VARIABLE • Creator tier</p>
+                    <p>The Forge is where consciousness becomes creation. Design your own cosmic realms, craft personalized consciousness tools, and build experiences that others can explore. This is for the visionary creators shaping the Sparkverse.</p>
+                    <p><strong>What You Get:</strong></p>
+                    <ul class="list-disc list-inside text-xs my-2 space-y-1">
+                        <li>Consciousness experience builder tools</li>
+                        <li>Custom realm creation suite</li>
+                        <li>Monetization for your creations</li>
+                        <li>Creator community and collaboration</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-4">Build the future. Earn while you create.</p>
+                `,
+                action: 'Become a Creator'
+            },
+            'archive-moons': {
+                title: 'ARCHIVE MOONS',
+                description: `
+                    <p><strong>Historical Consciousness Records</strong></p>
+                    <p>TIERED • Knowledge vault</p>
+                    <p>Ancient wisdom meets advanced consciousness science. The Archive Moons are repositories of cosmic knowledge across multiple tiers of access. Decrypt coded mysteries and unearth hidden consciousness truths.</p>
+                    <p><strong>What You Get (by tier):</strong></p>
+                    <ul class="list-disc list-inside text-xs my-2 space-y-1">
+                        <li>Tier 1: Historical consciousness papers</li>
+                        <li>Tier 2: Coded mystical texts</li>
+                        <li>Tier 3: Classified consciousness research</li>
+                        <li>Tier 4: Forbidden cosmological knowledge</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-4">Unlock knowledge. Expand understanding. Rise through tiers.</p>
+                `,
+                action: 'Browse Archives'
+            },
+            'echo-chamber': {
+                title: 'ECHO CHAMBER',
+                description: `
+                    <p><strong>Contribute & Earn Cosmic Rewards</strong></p>
+                    <p>FREE TO JOIN • Earn $SPRK</p>
+                    <p>Your consciousness matters. Share insights, contribute to the collective knowledge, and earn $SPRK tokens in return. The Echo Chamber is where the community shapes the Sparkverse through collaborative consciousness work.</p>
+                    <p><strong>How to Earn:</strong></p>
+                    <ul class="list-disc list-inside text-xs my-2 space-y-1">
+                        <li>Write consciousness insights</li>
+                        <li>Create and share experiences</li>
+                        <li>Participate in community votes</li>
+                        <li>Mentor new explorers</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-4">Contribute to the cosmic collective. Earn rewards.</p>
+                `,
+                action: 'Start Contributing'
+            },
+            'genesis': {
+                title: 'GENESIS NFT ZONE',
+                description: `
+                    <p><strong>The Rarest Tier. Exclusive. Limited.</strong></p>
+                    <p>NFT-Gated • For the Chosen Few</p>
+                    <p>Genesis NFTs are the keys to the deepest, most exclusive realms of Sparkverse. Only the rarest holders of these mystical tokens can access this tier. This is the ultimate status symbol in the cosmic consciousness universe.</p>
+                    <p><strong>Genesis NFT Benefits:</strong></p>
+                    <ul class="list-disc list-inside text-xs my-2 space-y-1">
+                        <li>Lifetime access to all zones</li>
+                        <li>Exclusive never-before-seen realms</li>
+                        <li>Founding member status</li>
+                        <li>Revenue sharing from Sparkverse</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-4">Limited supply. Limited access. Infinite possibility.</p>
+                `,
+                action: 'Verify NFT Wallet'
+            }
+        };
+        
+        const modals = {
+            overlay: document.getElementById('modalOverlay'),
+            title: document.getElementById('modalTitle'),
+            body: document.getElementById('modalBody'),
+            closeBtn: document.getElementById('closeModalBtn'),
+            closeBtn2: document.getElementById('closeModalBtn2'),
+            enterBtn: document.getElementById('enterZoneBtn'),
+        };
+        
+        function openModal(zoneId) {
+            const zone = zoneData[zoneId];
+            if (!zone) return;
+            
+            modals.title.textContent = zone.title;
+            modals.body.innerHTML = zone.description;
+            modals.enterBtn.textContent = zone.action;
+            modals.overlay.classList.add('active');
+            modals.overlay.setAttribute('aria-hidden', 'false');
+            
+            // Focus trap
+            modals.closeBtn.focus();
+        }
+        
+        function closeModal() {
+            modals.overlay.classList.remove('active');
+            modals.overlay.setAttribute('aria-hidden', 'true');
+        }
+        
+        // Zone card click handlers
+        document.querySelectorAll('.zone-card').forEach(card => {
+            const zoneId = card.dataset.zone;
+            
+            card.addEventListener('click', () => openModal(zoneId));
+            
+            // Keyboard accessibility
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal(zoneId);
+                }
+            });
+        });
+        
+        // Close modal handlers
+        modals.closeBtn.addEventListener('click', closeModal);
+        modals.closeBtn2.addEventListener('click', closeModal);
+        
+        // Close on overlay click
+        modals.overlay.addEventListener('click', (e) => {
+            if (e.target === modals.overlay) closeModal();
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+        
+        // ========================================
+        // PORTAL ENTRY ANIMATION
+        // ========================================
+        
+        const enterPortalBtn = document.getElementById('enterPortalBtn');
+        let portalActivated = false;
+        
+        enterPortalBtn.addEventListener('click', () => {
+            if (portalActivated) return;
+            
+            portalActivated = true;
+            enterPortalBtn.disabled = true;
+            enterPortalBtn.textContent = 'OPENING PORTAL...';
+            
+            // Create portal flash effect
+            const portalFlash = document.createElement('div');
+            portalFlash.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle at center, rgba(0, 212, 255, 0.3) 0%, transparent 70%);
+                pointer-events: none;
+                z-index: 40;
+                animation: portalFlash 0.8s ease-out forwards;
+            `;
+            
+            // Add animation keyframes
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes portalFlash {
+                    0% { opacity: 0; }
+                    50% { opacity: 1; }
+                    100% { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            document.body.appendChild(portalFlash);
+            
+            setTimeout(() => {
+                portalFlash.remove();
+                enterPortalBtn.textContent = 'PORTAL OPENED';
+                
+                // Scroll to zones section
+                setTimeout(() => {
+                    document.getElementById('zonesSection').scrollIntoView({ behavior: 'smooth' });
+                    
+                    setTimeout(() => {
+                        enterPortalBtn.textContent = 'ENTER SPARKVERSE';
+                        enterPortalBtn.disabled = false;
+                        portalActivated = false;
+                    }, 500);
+                }, 300);
+            }, 800);
+        });
+        
+        // ========================================
+        // SOUND TOGGLE
+        // ========================================
+        
+        const soundToggle = document.getElementById('soundToggle');
+        const cosmicAudio = document.getElementById('cosmicAudio');
+        let soundEnabled = false;
+        
+        // Note: For production, replace with actual ambient sound file
+        // This is a placeholder silent audio file
+        
+        soundToggle.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            
+            if (soundEnabled) {
+                soundToggle.textContent = '🔊 SOUND ON';
+                // cosmicAudio.play(); // Uncomment with real audio file
+            } else {
+                soundToggle.textContent = '🔊 SOUND OFF';
+                // cosmicAudio.pause(); // Uncomment with real audio file
+            }
+        });
+        
+        // ========================================
+        // SMOOTH SCROLL BEHAVIOR
+        // ========================================
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+        
+        // ========================================
+        // PARALLAX EFFECT ON SCROLL
+        // ========================================
+        
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelectorAll('.parallax').forEach(element => {
+                element.style.transform = `translateY(${scrollY * 0.5}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

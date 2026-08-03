@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Visibility Playbook | The First Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --core-black: #0a0a0f;
+            --deep-space: #0B0B0C;
+            --gold: #d4af37;
+            --purple: #8b5cf6;
+            --cyan: #22d3ee;
+            --ember: #FF6A3D;
+            --text-primary: #e8e8e8;
+            --text-dim: #888;
+            --grid-line: rgba(139, 92, 246, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--core-black);
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated star background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            padding-top: 40px;
+        }
+        
+        .tagline {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+        
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--gold), var(--ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+        
+        /* Core Problem Block */
+        .core-problem {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(34, 211, 238, 0.05));
+            border: 1px solid var(--purple);
+            padding: 40px;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .core-problem::before {
+            content: 'CORE TRUTH';
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: var(--core-black);
+            padding: 0 12px;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--purple);
+        }
+        
+        .core-problem p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+        
+        .core-problem strong {
+            color: var(--cyan);
+        }
+        
+        /* Phase Navigation */
+        .phase-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phase-btn {
+            background: transparent;
+            border: 1px solid var(--text-dim);
+            color: var(--text-dim);
+            padding: 12px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .phase-btn:hover, .phase-btn.active {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Phase Sections */
+        .phase {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .phase.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .phase-header {
+            margin-bottom: 40px;
+        }
+        
+        .phase-number {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: var(--ember);
+            margin-bottom: 8px;
+        }
+        
+        .phase-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        
+        .phase-timing {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        
+        /* Steps */
+        .step {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--purple);
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -1px;
+            left: -3px;
+            background: var(--purple);
+            color: var(--core-black);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        
+        .step h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            margin-left: 40px;
+            color: var(--text-primary);
+        }
+        
+        .step p, .step li {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            color: var(--text-dim);
+        }
+        
+        .step ul {
+            list-style: none;
+            margin: 16px 0;
+        }
+        
+        .step li {
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .step li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--cyan);
+        }
+        
+        /* Script blocks */
+        .script-block {
+            background: rgba(34, 211, 238, 0.05);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            padding: 24px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        
+        .script-block::before {
+            content: 'SCRIPT';
+            display: block;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            margin-bottom: 12px;
+            font-style: normal;
+        }
+        
+        /* Template blocks */
+        .template {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 24px;
+            margin: 20px 0;
+        }
+        
+        .template::before {
+            content: 'POST TEMPLATE';
+            display: block;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+        
+        .template p {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.9;
+        }
+        
+        /* Action items */
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.2s ease;
+        }
+        
+        .checkbox.checked {
+            background: var(--gold);
+        }
+        
+        .checkbox.checked::after {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--core-black);
+            font-size: 14px;
+            height: 100%;
+        }
+        
+        .action-text {
+            font-size: 0.85rem;
+        }
+        
+        .action-text .day {
+            color: var(--ember);
+            font-weight: 700;
+        }
+        
+        /* Subreddit tags */
+        .subreddit-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        
+        .subreddit {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--purple);
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            color: var(--purple);
+        }
+        
+        /* Weekly rhythm table */
+        .rhythm-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.8rem;
+        }
+        
+        .rhythm-table th {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        
+        .rhythm-table td {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-dim);
+        }
+        
+        .rhythm-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        /* Final section */
+        .remember {
+            text-align: center;
+            padding: 60px 40px;
+            margin-top: 60px;
+            background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.1));
+            border-top: 1px solid var(--purple);
+        }
+        
+        .remember h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+        
+        .remember p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+        
+        .remember .highlight {
+            color: var(--cyan);
+        }
+        
+        .mantra {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            opacity: 0.7;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+        }
+        
+        /* Progress indicator */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--cyan));
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 16px;
+            }
+            
+            .step {
+                padding: 24px 16px;
+            }
+            
+            .phase-btn {
+                padding: 10px 14px;
+                font-size: 0.65rem;
+            }
+            
+            .rhythm-table {
+                font-size: 0.7rem;
+            }
+            
+            .rhythm-table th, .rhythm-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="stars" id="stars"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <div class="tagline">The First Spark // Operations Manual</div>
+            <h1>THE VISIBILITY PLAYBOOK</h1>
+            <p class="subtitle">How to Get Seen When You're Building a Movement, Not a Product</p>
+        </header>
+        
+        <div class="core-problem">
+            <p>You're not invisible. You're <strong>inaudible</strong> — speaking a language people haven't learned yet, in places where no one's listening for it.</p>
+            <p style="margin-top: 16px;">This playbook fixes that. Not by changing what you're saying, but by <strong>finding the ears already tuned to this frequency</strong> and <strong>meeting them where they're already asking questions</strong>.</p>
+        </div>
+        
+        <nav class="phase-nav">
+            <button class="phase-btn active" data-phase="1">Phase 1: Find</button>
+            <button class="phase-btn" data-phase="2">Phase 2: Create</button>
+            <button class="phase-btn" data-phase="3">Phase 3: Participate</button>
+            <button class="phase-btn" data-phase="4">Phase 4: Convert</button>
+            <button class="phase-btn" data-phase="5">Phase 5: Sustain</button>
+            <button class="phase-btn" data-phase="6">Quick Start</button>
+        </nav>
+        
+        <!-- PHASE 1 -->
+        <section class="phase active" id="phase1">
+            <div class="phase-header">
+                <div class="phase-number">PHASE 01</div>
+                <h2 class="phase-title">Find Your People</h2>
+                <div class="phase-timing">Week 1-2</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Interview Your Existing Sparks</h3>
+                <p>Your 17 free Spark members are GOLD. They already found you somehow. Find out why.</p>
+                
+                <div class="script-block">
+                    Hey [name] — I'm working on something and I realized I never asked you this directly: What were you looking for when you found The First Spark? Like what was going on in your life or your head that made you click "join"?<br><br>
+                    No wrong answer. Just trying to understand what draws people here.
+                </div>
+                
+                <p><strong>Track their answers. Look for patterns:</strong></p>
+                <ul>
+                    <li>What pain were they in?</li>
+                    <li>What question were they asking?</li>
+                    <li>What words do THEY use to describe it?</li>
+                </ul>
+                <p><strong style="color: var(--cyan);">Output:</strong> A document with their exact language. This becomes your marketing vocabulary.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Find Where Seekers Already Gather</h3>
+                <p>Show up where people are ALREADY questioning reality, identity, simulation theory, consciousness, feeling "different."</p>
+                
+                <p style="margin-top: 16px;"><strong>Subreddits to infiltrate (don't spam — participate genuinely):</strong></p>
+                <div class="subreddit-grid">
+                    <span class="subreddit">r/SimulationTheory</span>
+                    <span class="subreddit">r/awakened</span>
+                    <span class="subreddit">r/Existentialism</span>
+                    <span class="subreddit">r/lawofattraction</span>
+                    <span class="subreddit">r/spirituality</span>
+                    <span class="subreddit">r/numerology</span>
+                    <span class="subreddit">r/INTP</span>
+                    <span class="subreddit">r/INFJ</span>
+                    <span class="subreddit">r/Glitch_in_the_Matrix</span>
+                    <span class="subreddit">r/soulnexus</span>
+                    <span class="subreddit">r/C_S_T</span>
+                </div>
+                
+                <p><strong>Action:</strong></p>
+                <ul>
+                    <li>Spend 30 minutes/day for 2 weeks just READING these spaces</li>
+                    <li>Note the questions that keep coming up</li>
+                    <li>Note the posts that get traction</li>
+                    <li>Note the language patterns</li>
+                </ul>
+                <p style="color: var(--ember);">Do NOT post links to your stuff yet. Just absorb.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Map the 3am Google Searches</h3>
+                <p>What would YOUR people type at 3am when they can't sleep because reality feels wrong?</p>
+                <ul>
+                    <li>"why do I feel like I'm living the wrong life"</li>
+                    <li>"what does it mean when patterns keep repeating"</li>
+                    <li>"am I in a simulation"</li>
+                    <li>"why does nothing feel real anymore"</li>
+                    <li>"how to find your purpose when nothing makes sense"</li>
+                    <li>"why do I keep attracting the same situations"</li>
+                </ul>
+                <p><strong>Action:</strong> Google these phrases. See what comes up. Note the gaps — what's NOT being answered well? That's your content opportunity.</p>
+            </div>
+        </section>
+        
+        <!-- PHASE 2 -->
+        <section class="phase" id="phase2">
+            <div class="phase-header">
+                <div class="phase-number">PHASE 02</div>
+                <h2 class="phase-title">Create the Doorways</h2>
+                <div class="phase-timing">Week 2-4</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>The Doorway Content Formula</h3>
+                <p>You need content that meets people WHERE THEY ARE, not where you are.</p>
+                <ul>
+                    <li><strong>1.</strong> Name a feeling they already have (but haven't articulated)</li>
+                    <li><strong>2.</strong> Validate it (you're not crazy)</li>
+                    <li><strong>3.</strong> Offer a small reframe (one piece of your framework)</li>
+                    <li><strong>4.</strong> Leave them wanting more (no CTA, just a hook)</li>
+                </ul>
+                <p style="color: var(--ember); margin-top: 16px;">You are NOT explaining the Selector Model.<br>You are NOT pitching Soul Maps.<br>You ARE planting seeds that make them think "who is this person?"</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">5</div>
+                <h3>Write 10 Doorway Posts for X</h3>
+                
+                <div class="template">
+                    <p><strong>The "You're Not Crazy" Post:</strong></p>
+                    <p>That thing where you feel like you're watching your life from outside it?<br><br>
+                    Like you're running a script someone else wrote?<br><br>
+                    That's not dissociation. That's recognition.<br><br>
+                    You're starting to see the code.</p>
+                </div>
+                
+                <div class="template">
+                    <p><strong>The Pattern Naming Post:</strong></p>
+                    <p>Every relationship ends the same way.<br>
+                    Every job burns out at the 18-month mark.<br>
+                    Every city starts to feel wrong after a year.<br><br>
+                    It's not bad luck.<br>
+                    It's an unresolved loop in your operating system.<br><br>
+                    The pattern isn't the problem. It's the diagnostic.</p>
+                </div>
+                
+                <div class="template">
+                    <p><strong>The Reality Reframe:</strong></p>
+                    <p>What if "finding yourself" isn't the goal?<br><br>
+                    What if you're not lost at all — you're just running outdated code that keeps pointing you toward someone else's destination?<br><br>
+                    You don't need to find yourself.<br>
+                    You need to debug yourself.</p>
+                </div>
+                
+                <div class="template">
+                    <p><strong>The Hot Take:</strong></p>
+                    <p>Free will isn't freedom from influence.<br>
+                    Free will is choosing which influences to compile.<br><br>
+                    You're always running code.<br>
+                    The question is whose.</p>
+                </div>
+                
+                <div class="template">
+                    <p><strong>The Question Post:</strong></p>
+                    <p>Real question:<br><br>
+                    When did you first realize that the life you were living wasn't actually yours?<br><br>
+                    There's usually a moment. A glitch. A crack where the light got in.<br><br>
+                    What was yours?</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">6</div>
+                <h3>Create One Cornerstone Thread</h3>
+                <p>Your "I've been thinking about this for years" manifesto. 8-12 tweets long.</p>
+                <ul>
+                    <li><strong>Hook:</strong> A provocative statement</li>
+                    <li><strong>The before:</strong> What you used to believe</li>
+                    <li><strong>The crack:</strong> What broke that belief (your story)</li>
+                    <li><strong>The download:</strong> What you now understand</li>
+                    <li><strong>The framework:</strong> One-line summary</li>
+                    <li><strong>The invitation:</strong> "If this resonates, I'm building something"</li>
+                </ul>
+                <p style="color: var(--gold); margin-top: 16px;"><strong>Post this and pin it.</strong></p>
+            </div>
+        </section>
+        
+        <!-- PHASE 3 -->
+        <section class="phase" id="phase3">
+            <div class="phase-header">
+                <div class="phase-number">PHASE 03</div>
+                <h2 class="phase-title">Participate, Don't Broadcast</h2>
+                <div class="phase-timing">Week 3-6</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">7</div>
+                <h3>The Reddit Credibility Strategy</h3>
+                <p><strong>Goal:</strong> Become a recognized voice in 2-3 subreddits. NOT as a marketer. As a genuine participant who happens to have interesting things to say.</p>
+                
+                <p style="margin-top: 16px;"><strong>Daily action (30 min/day):</strong></p>
+                <ul>
+                    <li>Sort by "new" in your target subreddits</li>
+                    <li>Find 2-3 posts where you have a REAL answer</li>
+                    <li>Leave thoughtful, generous comments (no links)</li>
+                    <li>Use your framework language naturally but don't name-drop yourself</li>
+                </ul>
+                
+                <p style="margin-top: 16px;"><strong>Examples of good comments:</strong></p>
+                <ul>
+                    <li>"I keep having the same fight with every partner" → Comment about pattern loops and running inherited code</li>
+                    <li>"Is any of this real?" → Comment about simulation architecture and consciousness as the operating system</li>
+                    <li>"How do I find my purpose?" → Reframe around debugging vs. discovering</li>
+                </ul>
+                
+                <p style="color: var(--cyan); margin-top: 16px;"><strong>The key:</strong> GIVE VALUE. Don't tease. Don't pitch. Just be so helpful that people click your profile.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">8</div>
+                <h3>The X Engagement Strategy</h3>
+                <p><strong>Daily action (20-30 min/day):</strong></p>
+                <ul>
+                    <li>Find 5 accounts in your space — spirituality, consciousness, simulation theory, human design, astrology, philosophy</li>
+                    <li>Engage meaningfully — Quote-tweet with your own take. Reply with something that adds to the conversation.</li>
+                    <li>Do NOT just say "great post!" — Add a reframe, a question, a counterpoint</li>
+                </ul>
+                
+                <p style="margin-top: 16px;"><strong>Accounts to start engaging with:</strong></p>
+                <ul>
+                    <li>Simulation theory accounts</li>
+                    <li>Philosophical/consciousness accounts</li>
+                    <li>Astrology accounts that go DEEP (not surface horoscope stuff)</li>
+                    <li>Entrepreneurs talking about inner work</li>
+                    <li>Ex-religious folks processing spirituality</li>
+                </ul>
+                
+                <p style="color: var(--gold); margin-top: 16px;"><strong>The flywheel:</strong> Their audience sees your replies → clicks your profile → sees your pinned thread → follows or visits site</p>
+            </div>
+        </section>
+        
+        <!-- PHASE 4 -->
+        <section class="phase" id="phase4">
+            <div class="phase-header">
+                <div class="phase-number">PHASE 04</div>
+                <h2 class="phase-title">The Conversion Path</h2>
+                <div class="phase-timing">Week 5-8</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">9</div>
+                <h3>Create One Free Entry Point</h3>
+                <p>You need ONE free thing that captures seekers and brings them into your world.</p>
+                
+                <div class="template" style="border-color: rgba(139, 92, 246, 0.5); background: rgba(139, 92, 246, 0.05);">
+                    <p style="color: var(--purple);"><strong>Option A: The Reality Audit</strong></p>
+                    <p>A 5-question interactive quiz that gives them a "pattern diagnosis" based on their answers.</p>
+                    <p style="margin-top: 12px;">• "Your dominant loop is: The Abandonment Spiral"<br>
+                    • "Your operating system is running: Scarcity Code 3.1"<br>
+                    • Ends with: "Want the full map? Soul Maps show you the whole system."</p>
+                </div>
+                
+                <div class="template" style="border-color: rgba(34, 211, 238, 0.5); background: rgba(34, 211, 238, 0.05);">
+                    <p style="color: var(--cyan);"><strong>Option B: The Code Sample</strong></p>
+                    <p>A free mini soul map — just their Life Path number with your framework interpretation.</p>
+                    <p style="margin-top: 12px;">• Enter birthdate<br>
+                    • Get one page of insight<br>
+                    • CTA: "This is layer one. The full map goes seven layers deep."</p>
+                </div>
+                
+                <div class="template" style="border-color: rgba(212, 175, 55, 0.5); background: rgba(212, 175, 55, 0.05);">
+                    <p style="color: var(--gold);"><strong>Option C: The Ritual</strong></p>
+                    <p>A free downloadable "Pattern Interrupt Protocol" — a one-page ritual guide.</p>
+                    <p style="margin-top: 12px;">• Email capture to download<br>
+                    • Auto-sequence after (3 emails nurturing to Soul Maps)</p>
+                </div>
+                
+                <p style="margin-top: 24px;"><strong>Recommendation:</strong> Option A or B — something interactive that gives them a TASTE of being seen by your system.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">10</div>
+                <h3>Set Up the Email Nurture</h3>
+                <p>When someone joins, they should get this sequence:</p>
+                
+                <div class="script-block" style="border-color: rgba(212, 175, 55, 0.5);">
+                    <span style="color: var(--gold);">EMAIL 1 — THE WELCOME</span><br><br>
+                    You found this for a reason.<br><br>
+                    Not because you saw an ad. Not because an algorithm served you up.<br><br>
+                    Because something in you is ready to see the code.<br><br>
+                    I'm Kate. I build consciousness technology — tools that help you debug the patterns running your life.<br><br>
+                    Over the next few days, I'm going to share some of what I've learned. Not theory. Pattern recognition from the inside.<br><br>
+                    For now: What's the one pattern in your life that keeps repeating no matter what you do?<br><br>
+                    Just reply. I read everything.
+                </div>
+                
+                <div class="script-block" style="border-color: rgba(34, 211, 238, 0.5);">
+                    <span style="color: var(--cyan);">EMAIL 2 (DAY 2) — THE WORLDVIEW</span><br><br>
+                    Here's what I believe:<br><br>
+                    You're not broken. You're not lost. You're not behind.<br><br>
+                    You're running code — inherited from your family, your culture, your past lives, your cosmic architecture.<br><br>
+                    Some of that code serves you. Some of it is a virus someone else installed.<br><br>
+                    The work isn't to "heal." The work is to see the code clearly enough to choose what runs.<br><br>
+                    That's what I do. That's what Soul Maps are for.<br><br>
+                    More tomorrow.
+                </div>
+                
+                <div class="script-block" style="border-color: rgba(139, 92, 246, 0.5);">
+                    <span style="color: var(--purple);">EMAIL 3 (DAY 4) — THE ORIGIN STORY</span><br><br>
+                    In 2020, during COVID week, I discovered who murdered my mother.<br><br>
+                    [Your story]<br><br>
+                    That's when the code broke. That's when I started building.<br><br>
+                    Now I make maps for other people's code.<br><br>
+                    [Soft CTA to Soul Maps]
+                </div>
+                
+                <div class="script-block" style="border-color: rgba(255, 106, 61, 0.5);">
+                    <span style="color: var(--ember);">EMAIL 4 (DAY 7) — THE INVITATION</span><br><br>
+                    Some people read these emails and think "interesting."<br>
+                    Some people read these emails and think "finally, someone said it."<br><br>
+                    If you're in the second group, here's where we go deeper:<br><br>
+                    [Soul Maps CTA]<br>
+                    [Sparkverse CTA]<br><br>
+                    No pressure. The door is open when you're ready.
+                </div>
+            </div>
+        </section>
+        
+        <!-- PHASE 5 -->
+        <section class="phase" id="phase5">
+            <div class="phase-header">
+                <div class="phase-number">PHASE 05</div>
+                <h2 class="phase-title">The Content Flywheel</h2>
+                <div class="phase-timing">Ongoing</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">11</div>
+                <h3>The Weekly Rhythm</h3>
+                
+                <table class="rhythm-table">
+                    <thead>
+                        <tr>
+                            <th>DAY</th>
+                            <th>ACTION</th>
+                            <th>TIME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Monday</td>
+                            <td>Write 2-3 X posts (schedule for week)</td>
+                            <td>45 min</td>
+                        </tr>
+                        <tr>
+                            <td>Tuesday</td>
+                            <td>Reddit engagement (comment on 5+ posts)</td>
+                            <td>30 min</td>
+                        </tr>
+                        <tr>
+                            <td>Wednesday</td>
+                            <td>X engagement (reply/quote-tweet 10 accounts)</td>
+                            <td>30 min</td>
+                        </tr>
+                        <tr>
+                            <td>Thursday</td>
+                            <td>Reddit engagement</td>
+                            <td>30 min</td>
+                        </tr>
+                        <tr>
+                            <td>Friday</td>
+                            <td>X engagement + post one doorway post</td>
+                            <td>30 min</td>
+                        </tr>
+                        <tr>
+                            <td>Saturday</td>
+                            <td>Write one longer piece (thread, newsletter, or community post)</td>
+                            <td>60 min</td>
+                        </tr>
+                        <tr>
+                            <td>Sunday</td>
+                            <td>Rest or catch-up</td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p style="margin-top: 16px; color: var(--gold);"><strong>Total: ~4 hours/week</strong></p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">12</div>
+                <h3>The Metrics That Matter</h3>
+                <p>Don't obsess over follower count. Track:</p>
+                <ul>
+                    <li><strong style="color: var(--cyan);">Profile visits</strong> (X analytics) — Are people curious enough to click?</li>
+                    <li><strong style="color: var(--cyan);">Link clicks</strong> (to thefirstspark.shop) — Are they going deeper?</li>
+                    <li><strong style="color: var(--cyan);">Email signups</strong> — Are they giving you permission to continue?</li>
+                    <li><strong style="color: var(--cyan);">Replies/DMs</strong> — Are you creating resonance?</li>
+                    <li><strong style="color: var(--cyan);">Conversion to paid</strong> — Are the right people finding you?</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- PHASE 6: QUICK START -->
+        <section class="phase" id="phase6">
+            <div class="phase-header">
+                <div class="phase-number">QUICK START</div>
+                <h2 class="phase-title">The First 7 Days</h2>
+                <div class="phase-timing">Start Now</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">!</div>
+                <h3>Your Checklist</h3>
+                <p>Click to track your progress:</p>
+                
+                <div style="margin-top: 24px;">
+                    <div class="action-item">
+                        <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <span class="action-text"><span class="day">Day 1:</span> DM all 17 Sparks with the interview question</span>
+                    </div>
+                    <div class="action-item">
+                        <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <span class="action-text"><span class="day">Day 2:</span> Join 5 subreddits, spend 30 min reading</span>
+                    </div>
+                    <div class="action-item">
+                        <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <span class="action-text"><span class="day">Day 3:</span> Write your pinned thread, post it</span>
+                    </div>
+                    <div class="action-item">
+                        <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <span class="action-text"><span class="day">Day 4:</span> Write 5 doorway posts, schedule them</span>
+                    </div>
+                    <div class="action-item">
+                        <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <span class="action-text"><span class="day">Day 5:</span> Engage on Reddit (5 thoughtful comments)</span>
+                    </div>
+                    <div class="action-item">
+                        <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <span class="action-text"><span class="day">Day 6:</span> Engage on X (10 replies/quote-tweets)</span>
+                    </div>
+                    <div class="action-item">
+                        <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                        <span class="action-text"><span class="day">Day 7:</span> Review Spark interview answers, note the patterns</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="remember">
+            <h2>REMEMBER</h2>
+            <p>You're not invisible.</p>
+            <p>You're just broadcasting on a frequency <span class="highlight">most people haven't tuned into yet</span>.</p>
+            <p>Your job isn't to be louder.</p>
+            <p>It's to <span class="highlight">find the ones already listening</span>.</p>
+            <p style="margin-top: 24px;"><strong>They're out there, Kate.</strong></p>
+            <p><strong>Let's go get them.</strong></p>
+            
+            <div class="mantra">"REALITY IS PROGRAMMABLE. CONSCIOUSNESS IS THE CODE."</div>
+        </div>
+        
+        <footer>
+            THE FIRST SPARK // VISIBILITY PLAYBOOK // APRIL 2026
+        </footer>
+    </div>
+    
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.opacity = Math.random() * 0.5 + 0.3;
+            starsContainer.appendChild(star);
+        }
+        
+        // Phase navigation
+        const phaseButtons = document.querySelectorAll('.phase-btn');
+        const phases = document.querySelectorAll('.phase');
+        
+        phaseButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const phaseNum = btn.dataset.phase;
+                
+                phaseButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                phases.forEach(p => p.classList.remove('active'));
+                document.getElementById('phase' + phaseNum).classList.add('active');
+                
+                // Update progress bar
+                const progress = (parseInt(phaseNum) / 6) * 100;
+                document.getElementById('progressBar').style.width = progress + '%';
+            });
+        });
+        
+        // Initialize progress bar
+        document.getElementById('progressBar').style.width = '16.67%';
+    </script>
+</body>
+</html>

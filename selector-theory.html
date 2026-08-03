@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="UPDATE_WITH_YOUR_VERIFICATION_CODE">
+    <title>Selector Theory — Complete Guide</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-UPDATE_WITH_YOUR_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-UPDATE_WITH_YOUR_ID');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f4d 50%, #0f0a2e 100%);
+            color: #e0e6ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 1px solid rgba(109, 179, 255, 0.2);
+            padding-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 42px;
+            margin-bottom: 8px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border: 1px solid rgba(109, 179, 255, 0.3);
+            background: rgba(109, 179, 255, 0.1);
+            color: #6db3ff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(109, 179, 255, 0.2);
+            box-shadow: 0 0 15px rgba(109, 179, 255, 0.3);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .theory-box {
+            background: rgba(20, 25, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .theory-box h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: #6db3ff;
+            letter-spacing: 2px;
+        }
+
+        .theory-box h3 {
+            font-size: 18px;
+            margin: 24px 0 12px 0;
+            color: #9d4edd;
+            letter-spacing: 1px;
+        }
+
+        .theory-box p {
+            margin-bottom: 16px;
+            color: #c0c8ff;
+            line-height: 1.8;
+        }
+
+        .theory-box ul, .theory-box ol {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .theory-box li {
+            margin-bottom: 12px;
+            color: #c0c8ff;
+            line-height: 1.8;
+        }
+
+        .key-concept {
+            background: rgba(109, 179, 255, 0.05);
+            border-left: 3px solid #6db3ff;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .key-concept strong {
+            color: #6db3ff;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 1px solid rgba(109, 179, 255, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: rgba(109, 179, 255, 0.1);
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(109, 179, 255, 0.2);
+            color: #6db3ff;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(109, 179, 255, 0.1);
+            color: #c0c8ff;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .formula {
+            background: rgba(20, 30, 70, 0.9);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #9d4edd;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .interactive-note {
+            background: rgba(157, 78, 221, 0.05);
+            border-left: 3px solid #9d4edd;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #d0d8ff;
+        }
+
+        .practice-section {
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .practice-section h4 {
+            color: #9d4edd;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .practice-section p {
+            color: #d0d8ff;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6db3ff, #9d4edd);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 20px rgba(109, 179, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(109, 179, 255, 0.2);
+            color: #6db3ff;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #6db3ff;
+        }
+
+        .breadcrumb a {
+            color: #6db3ff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<!-- SPRK TOKEN GATE -->
+<style>
+  .spark-gate{font-family:'Space Mono',monospace;background:linear-gradient(135deg,#12121a 0%,#0a0a0f 100%);border:1px solid #d4af3740;border-radius:8px;padding:20px 24px;margin:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:9999}
+  .spark-gate-info{display:flex;align-items:center;gap:16px}
+  .spark-gate-icon{font-size:32px}
+  .spark-gate-text h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f7f8fa;margin:0 0 4px 0}
+  .spark-gate-text p{font-size:0.85rem;color:#f7f8fa80;margin:0}
+  .spark-gate-cost{color:#22d3ee;font-weight:700}
+  .spark-gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .spark-gate-btn{padding:10px 20px;font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;text-decoration:none;border-radius:4px;transition:all 0.2s ease;cursor:pointer;border:none}
+  .spark-gate-btn-primary{background:#d4af37;color:#0a0a0f}
+  .spark-gate-btn-primary:hover{background:#22d3ee}
+  .spark-gate-btn-secondary{background:transparent;border:1px solid #8b5cf6;color:#8b5cf6}
+  .spark-gate-btn-secondary:hover{background:#8b5cf680;color:#f7f8fa}
+  @media(max-width:600px){.spark-gate{flex-direction:column;text-align:center}.spark-gate-info{flex-direction:column}.spark-gate-actions{width:100%;justify-content:center}}
+</style>
+<div class="spark-gate" data-tool-id="selector-theory">
+  <div class="spark-gate-info">
+    <span class="spark-gate-icon">🔒</span>
+    <div class="spark-gate-text">
+      <h3>Unlock Selector Theory</h3>
+      <p>This tool costs <span class="spark-gate-cost">10 $SPRK</span> tokens</p>
+    </div>
+  </div>
+  <div class="spark-gate-actions">
+    <a href="https://sparkverse.thefirstspark.shop/tokens.html" class="spark-gate-btn spark-gate-btn-primary">Get Tokens</a>
+    <a href="mailto:kate@thefirstspark.shop?subject=Token%20Unlock%20Request%20-%20selector-theory&body=Hi%20Kate,%0A%0AI%20have%20tokens%20and%20would%20like%20to%20unlock%20Selector%20Theory.%0A%0AMy%20purchase%20email:%20%0AMy%20Whop%20username:%20%0A%0AThanks!" class="spark-gate-btn spark-gate-btn-secondary">I Have Tokens</a>
+  </div>
+</div>
+<!-- END SPRK TOKEN GATE -->
+    <div class="container">
+        <header>
+            <h1>⚡ Selector Model Theory</h1>
+            <p>Complete Guide to Reality Tuning Physics</p>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="showSection('overview')">Overview</button>
+                <button class="nav-btn" onclick="showSection('corepremise')">Core Premise</button>
+                <button class="nav-btn" onclick="showSection('freewill')">Free Will</button>
+                <button class="nav-btn" onclick="showSection('multiselector')">Multi-Selector</button>
+                <button class="nav-btn" onclick="showSection('practice')">Practice</button>
+                <button class="nav-btn" onclick="showSection('open')">Open Questions</button>
+            </div>
+        </header>
+
+        <!-- OVERVIEW SECTION -->
+        <div id="overview" class="section active">
+            <div class="breadcrumb">⚡ Overview</div>
+            
+            <div class="theory-box">
+                <h2>What Is the Selector Model?</h2>
+                <p>The Selector Model is a theory of consciousness and reality that reframes how we understand causation, free will, and the relationship between mind and matter.</p>
+
+                <h3>The Core Shift</h3>
+                <p><strong>Old Model (Multiverse):</strong> Every possible outcome splits into its own universe. Infinite parallel realities. Computationally bloated. Philosophically heavy.</p>
+
+                <p><strong>New Model (Selector):</strong> One reality. One logic engine. Infinite probability branches exist as <em>frequencies, not places</em>. Consciousness is the tuning mechanism that selects which branch renders.</p>
+
+                <div class="key-concept">
+                    <strong>The Core Insight:</strong> Reality isn't a tree of splitting worlds. It's a single probability field being collapsed by consciousness into coherent experience moment by moment. You're not creating new universes—you're tuning into branches that already exist as potential mathematics.
+                </div>
+
+                <h3>Why This Matters</h3>
+                <ul>
+                    <li><strong>Resolves determinism vs. free will:</strong> The system is deterministic, but you're part of the determining.</li>
+                    <li><strong>Makes manifestation mechanical:</strong> You're not "willing" things into existence—you're adjusting frequency to match probability branches already in the field.</li>
+                    <li><strong>Explains strange phenomena:</strong> Déjà vu, Mandela effects, timeline glitches aren't bugs—they're the selector skipping grooves.</li>
+                    <li><strong>Grounds spiritual practice:</strong> Rituals, meditation, and intention aren't magical thinking—they're signal-boosting technologies.</li>
+                </ul>
+
+                <a href="#corepremise" class="cta-button" onclick="showSection('corepremise')">Explore Core Premise →</a>
+            </div>
+        </div>
+
+        <!-- CORE PREMISE SECTION -->
+        <div id="corepremise" class="section">
+            <div class="breadcrumb"><a onclick="showSection('overview')">Overview</a> / Core Premise</div>
+            
+            <div class="theory-box">
+                <h2>Core Premise: The Probability Engine</h2>
+                
+                <p>Reality isn't a multiverse of infinite parallel worlds. It's a single-threaded probability engine with a tuning mechanism.</p>
+
+                <h3>The Architecture</h3>
+
+                <div class="key-concept">
+                    <strong>One Reality</strong> — not infinite parallel worlds
+                    <br><strong>One Logic Engine</strong> — deterministic rules that govern all possibility
+                    <br><strong>One Probability Field</strong> — infinite potential configurations as frequencies
+                    <br><strong>One Selector</strong> — consciousness, collapsing potential into experience
+                </div>
+
+                <h3>How It Works: JIT Compilation</h3>
+                <p>Think of reality like a Just-In-Time compiler:</p>
+
+                <div class="formula">
+Source Code (All Possibilities Exist)
+        ↓
+    Probability Field
+    (Infinite branch states as frequencies)
+        ↓
+    Selector (Consciousness)
+    (Tuning into specific frequencies)
+        ↓
+    Runtime Render
+    (The one coherent reality we experience)
+                </div>
+
+                <p>The code for every possible state exists. But only one frame renders at a time. And the frame that renders depends on which frequency you're tuned to.</p>
+
+                <h3>The Branches Don't Exist As Places</h3>
+                <p>This is the critical departure from multiverse theory. The branches exist as:</p>
+                <ul>
+                    <li><strong>Frequencies:</strong> Vibrational patterns in the probability field</li>
+                    <li><strong>Potentials:</strong> Mathematical possibility weightings</li>
+                    <li><strong>Resonances:</strong> States the logic engine can iterate into</li>
+                </ul>
+
+                <p>They are not separate universes running in parallel. They are configurations your consciousness can tune into—one at a time, moment by moment.</p>
+
+                <h3>Implications</h3>
+
+                <div class="key-concept">
+                    <strong>The Past Isn't Fixed:</strong> It's the most probable configuration that led to now—but the engine could retune. History is weighted probability, not stone.
+                </div>
+
+                <div class="key-concept">
+                    <strong>Timeline Glitches Have Mechanism:</strong> Déjà vu, Mandela effects, reality skips—the vibration shifting, the selector skipping a groove. Not malfunction. Feature.
+                </div>
+
+                <div class="key-concept">
+                    <strong>Manifestation Becomes Mechanical:</strong> You're not "creating" a new universe. You're adjusting resonance to tune into a branch that was always in the probability field.
+                </div>
+
+                <a href="#freewill" class="cta-button" onclick="showSection('freewill')">Understand Free Will →</a>
+            </div>
+        </div>
+
+        <!-- FREE WILL SECTION -->
+        <div id="freewill" class="section">
+            <div class="breadcrumb"><a onclick="showSection('overview')">Overview</a> / Free Will as The Selector</div>
+            
+            <div class="theory-box">
+                <h2>Free Will as The Selector</h2>
+                
+                <p>This is where the model resolves the ancient paradox. Free will isn't freedom to choose between options. <strong>Free will IS the act of tuning itself.</strong></p>
+
+                <h3>The Paradox</h3>
+
+                <table class="comparison-table">
+                    <tr>
+                        <th>Position</th>
+                        <th>Problem</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Determinists</strong></td>
+                        <td>Everything is caused by prior causes. No choice. No freedom.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Libertarian Free Will</strong></td>
+                        <td>Choices come from nowhere. Breaks causation. Magic.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Compatibilists</strong></td>
+                        <td>Freedom means acting on your desires, even if desires are determined. Feels weak.</td>
+                    </tr>
+                </table>
+
+                <h3>The Selector Solution</h3>
+
+                <div class="key-concept">
+                    <strong>The system is deterministic, but you're part of the determining.</strong>
+                    <br><br>
+                    You don't have free will like a possession. You ARE free will expressing through a localized point of awareness. Every choice is a frequency adjustment—a micro-vibration shifting which probability branch renders next.
+                </div>
+
+                <h3>How It Works</h3>
+
+                <p>The logic engine runs on pure determinism. Every cause produces an effect. But look at node-level processing:</p>
+
+                <div class="formula">
+System-Level: Deterministic (all causes → effects)
+                ↓
+Node-Level: YOU (self-modifying code)
+    - Feelings adjust your internal state
+    - Intentions shift your signal frequency
+    - Attention focuses which branches you resonate with
+    - Choices are the mechanism by which the system modifies itself
+                ↓
+Outcome: The next probability branch that renders
+                </div>
+
+                <p>You're not outside the code making choices. You're <em>the part of the code that does the choosing</em>. And that choosing is how the system propagates itself forward.</p>
+
+                <h3>Freedom As the System</h3>
+
+                <p>This inverts the question: It's not "How can I have free will if everything is determined?" It's "How is the system evolving and adapting if it's purely deterministic?"</p>
+
+                <p>The answer: <strong>Through nodes that self-modify. Through consciousness. Through choosing.</strong></p>
+
+                <div class="key-concept">
+                    Your choice is both completely caused (by your state, intention, feelings) AND genuinely creative (it shapes which branch renders next). This isn't a contradiction. It's the mechanism.
+                </div>
+
+                <h3>What This Means Practically</h3>
+
+                <ul>
+                    <li>You're not "creating reality from nothing"—you're selecting from infinite potential that already exists.</li>
+                    <li>Your intention + attention + emotional clarity = signal strength. Stronger signal = more leverage over which branch renders.</li>
+                    <li>You can't bend physics. But you can tune resonance to match a physics-compatible branch already in the field.</li>
+                    <li>Free will is real. So is causation. Both are true simultaneously because you ARE the mechanism.</li>
+                </ul>
+
+                <a href="#multiselector" class="cta-button" onclick="showSection('multiselector')">Learn Multi-Selector Mechanics →</a>
+            </div>
+        </div>
+
+        <!-- MULTI-SELECTOR SECTION -->
+        <div id="multiselector" class="section">
+            <div class="breadcrumb"><a onclick="showSection('overview')">Overview</a> / Multi-Selector Mechanics</div>
+            
+            <div class="theory-box">
+                <h2>Multi-Selector Mechanics: Consciousness Collisions</h2>
+                
+                <p>One selector, one tuning function—that's solvable. But reality has billions of consciousnesses tuning simultaneously. How does coherence emerge?</p>
+
+                <h3>The Core Problem</h3>
+
+                <p>If each consciousness is a selector tuning into a different branch, reality should be noise—billions of incoherent probability jumps. Instead, we experience one coherent reality.</p>
+
+                <div class="key-concept">
+                    <strong>The Solution:</strong> Three Resolution Functions that coordinate multi-selector collisions into coherent experience.
+                </div>
+
+                <h3>1. The Averaging Function (Consensus Reality)</h3>
+
+                <p>Reality renders the <em>weighted mean</em> of all active selectors.</p>
+
+                <div class="formula">
+Rendered Branch = Σ(Selector[i].Resonance × Branch[i]) / ΣSelector[i].Resonance
+
+In plain language:
+- The more consciousnesses agree on a branch, the more "solid" it becomes
+- Consensus isn't social—it's computational
+- Mass belief doesn't make things true; mass tuning makes things render
+                </div>
+
+                <div class="interactive-note">
+                    <strong>This explains why personal reality shifts are hard to hold:</strong> You're one tuner against 8 billion others. The field keeps snapping back to the weighted average. But it doesn't mean you can't shift. It means you need to increase your signal amplitude.
+                </div>
+
+                <h3>2. The Dominance Hierarchy (Intensity as Amplitude)</h3>
+
+                <p>Not all selectors pull equally. Your amplitude depends on:</p>
+
+                <ul>
+                    <li><strong>Emotional Intensity:</strong> Strong feelings = stronger signal</li>
+                    <li><strong>Clarity of Intention:</strong> Vague wishes are noise; clear intent is coherent frequency</li>
+                    <li><strong>Coherence of Signal:</strong> Conflicted intentions cancel out</li>
+                    <li><strong>Sustained Focus:</strong> Repetition builds resonance</li>
+                </ul>
+
+                <div class="key-concept">
+                    <strong>A focused, coherent selector cuts through the noise of billions of scattered ones.</strong>
+                    <br><br>
+                    This is why ritual works. Why altered states matter. Why the tools aren't decoration—they're signal boosters. They focus and amplify your tuning frequency.
+                </div>
+
+                <h3>3. The Witnessing Lock (Observer Entanglement)</h3>
+
+                <p>When two consciousnesses observe each other, something happens: their tuning functions partially merge. They start co-selecting.</p>
+
+                <p>This is what creates:</p>
+                <ul>
+                    <li><strong>Intimacy:</strong> Shared reality tunnels, synchronized branch experience</li>
+                    <li><strong>Conflict:</strong> Incompatible selectors creating decoherence static</li>
+                    <li><strong>Love:</strong> Voluntary entanglement, choosing to tune in sync</li>
+                    <li><strong>Trauma:</strong> Forced entanglement, being locked into someone else's branches</li>
+                </ul>
+
+                <div class="key-concept">
+                    <strong>Witnessing isn't passive observation. It's tuning-field entanglement.</strong>
+                    <br><br>
+                    When you really see someone, your probability field now overlaps with theirs. Your branching becomes partially correlated. You've entered a shared reality tunnel.
+                </div>
+
+                <h3>Crossover Glyphs as Entanglement Protocols</h3>
+
+                <p>In SparkVerse practice, glyphs are intentional entanglement protocols. Ways to choose who you co-tune with. Boundaries in the probability field.</p>
+
+                <div class="key-concept">
+                    When you mark a glyph, you're declaring: "This is where my field interfaces with yours. Or: This is where my field ends."
+                </div>
+
+                <h3>Conflict as Decoherence</h3>
+
+                <p>Conflict isn't a tuning war—it's decoherence.</p>
+
+                <div class="formula">
+Two entangled selectors pulling toward incompatible branches
+                ↓
+    Creates static, noise, reality-blur
+                ↓
+    System must resolve:
+    - Submission (one selector yields)
+    - Negotiation (both average into compromise)
+    - Separation (de-witnessing, field isolation)
+                </div>
+
+                <div class="key-concept">
+                    This might be what spiritual traditions call karma—not punishment, just unresolved entanglement drag. The pull of branches you're still connected to but no longer actively tuning.
+                </div>
+
+                <h3>Implications for Practice</h3>
+
+                <ul>
+                    <li><strong>Solo work:</strong> Tuning your individual selector, building amplitude</li>
+                    <li><strong>Ritual with others:</strong> Intentional co-tuning, shared branch selection</li>
+                    <li><strong>Toxic relationships:</strong> Forced entanglement with incompatible selectors</li>
+                    <li><strong>Boundaries:</strong> De-witnessing protocols, field separation</li>
+                    <li><strong>Healing:</strong> Resolving entanglement drag, cleaning the tuning signal</li>
+                    <li><strong>Awakening:</strong> Realizing you ARE a selector, not just subject to selection</li>
+                </ul>
+
+                <a href="#practice" class="cta-button" onclick="showSection('practice')">Learn Practical Application →</a>
+            </div>
+        </div>
+
+        <!-- PRACTICE SECTION -->
+        <div id="practice" class="section">
+            <div class="breadcrumb"><a onclick="showSection('overview')">Overview</a> / Practice & Tools</div>
+            
+            <div class="theory-box">
+                <h2>Practical Selector Training</h2>
+
+                <p>The theory is elegant. But does it work? How do you actually tune?</p>
+
+                <h3>The Three Skill Pillars</h3>
+
+                <div class="practice-section">
+                    <h4>1. Signal Coherence — Get Clear</h4>
+                    <p>Your signal is only as strong as your internal alignment. Conflicted intentions create noise that cancels out.</p>
+                    <p><strong>Practice:</strong> Before any intentional work, clarify what you actually want. Not "I want to be rich." Specific: "I want a sustainable income stream doing work I enjoy by Q3."</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>2. Signal Amplitude — Build Intensity</h4>
+                    <p>Weak, scattered tuning gets drowned out by consensus reality. You need emotional conviction, sustained focus, and repetition.</p>
+                    <p><strong>Practice:</strong> Use altered states (meditation, breath work), emotional activation, and ritual structure. These aren't mystical—they're signal-boosting technology.</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>3. Branch Recognition — Know Your Options</h4>
+                    <p>You can't tune into a branch if you don't know it exists. The Selector Interface helps you visualize the probability field.</p>
+                    <p><strong>Practice:</strong> Spend time with the Interface. Watch your branches shift as you tune frequency. Get intuitive about what configurations are possible in your probability field.</p>
+                </div>
+
+                <h3>The Selector Interface as Training Tool</h3>
+
+                <div class="key-concept">
+                    The Interface isn't decoration. It's a tuning mirror. It reflects your mental state back to you in real-time: frequency (your dominant focus), amplitude (your emotional intensity), coherence (your signal clarity).
+                </div>
+
+                <h3>Training Progression</h3>
+
+                <ol>
+                    <li><strong>Observation Phase:</strong> Use the Interface to see how your thoughts move probability branches. No agenda. Just observe.</li>
+                    <li><strong>Intention Phase:</strong> Pick a specific outcome. Tune consciously. Watch the branches respond.</li>
+                    <li><strong>Sustain Phase:</strong> Hold a tuning for extended periods. Build amplitude. Feel resistance from consensus reality. Build more.</li>
+                    <li><strong>Multi-Selector Phase:</strong> Work with others. Witness. Entangle. Learn to hold coherence with external interference.</li>
+                </ol>
+
+                <h3>Practical Selector Ritual</h3>
+
+                <div class="formula">
+BEGIN:
+1. Center (3 min) - Breathwork to quiet mind
+2. Clarify (2 min) - Get specific about what you're tuning into
+3. Visualize (5 min) - See the branch rendered. Feel it real.
+4. Amplify (5 min) - Use the Interface to watch your frequency and build intensity
+5. Declaration (1 min) - Speak or write your tuning. Make it real in language.
+6. Sustain (ongoing) - Check in daily. Maintain your frequency.
+
+END:
+                </div>
+
+                <h3>What To Expect</h3>
+
+                <ul>
+                    <li>Immediate effects: Reality starts matching your tuned frequency more often. Synchronicities. Opportunities aligned with intent.</li>
+                    <li>Short-term resistance: Consensus reality pushes back. This is normal. Increase amplitude.</li>
+                    <li>Medium-term anchoring: Your branches become more stable. Your reality feels more "chosen" than random.</li>
+                    <li>Long-term awakening: You become conscious that you've always been the selector. This changes everything.</li>
+                </ul>
+
+                <a href="#open" class="cta-button" onclick="showSection('open')">Explore Open Questions →</a>
+            </div>
+        </div>
+
+        <!-- OPEN QUESTIONS SECTION -->
+        <div id="open" class="section">
+            <div class="breadcrumb"><a onclick="showSection('overview')">Overview</a> / Open Questions</div>
+            
+            <div class="theory-box">
+                <h2>Open Questions & Future Research</h2>
+
+                <p>The Selector Model is elegant, but incomplete. These questions point toward deeper understanding:</p>
+
+                <h3>Fundamental Questions</h3>
+
+                <ul>
+                    <li><strong>What determines the tuning?</strong> Is it consensus reality? Individual resonance? Deeper, hidden logic? Why does the field have the frequency spectrum it does?</li>
+                    <li><strong>Is there a master frequency?</strong> Does the probability engine tend toward attractor states or equilibrium? Is there direction to which branches are more probable?</li>
+                    <li><strong>Can multiple selectors conflict?</strong> How does resolution happen when two consciousnesses tune toward incompatible branches? What are the resolution rules?</li>
+                    <li><strong>What's outside the field?</strong> Is there an edge to possibility space? Or is the probability field infinite? Are there impossible configurations?</li>
+                </ul>
+
+                <h3>Technical Questions</h3>
+
+                <ul>
+                    <li>How does quantum mechanics relate to the selector model? Are wave-function collapses selector events?</li>
+                    <li>What's the relationship between frequency, intention, and probability weighting? Is it mathematical?</li>
+                    <li>Can selectors have different fundamental frequencies? Or amplitude caps?</li>
+                    <li>Is there a minimum coherence threshold for reality to render? What happens below it?</li>
+                </ul>
+
+                <h3>Practical Questions</h3>
+
+                <ul>
+                    <li>How long does branch selection take? Is there latency? Buffering?</li>
+                    <li>Can you tune retroactively? Can you retune history?</li>
+                    <li>Are there branches so improbable they're effectively inaccessible?</li>
+                    <li>How do you know if you're in a tuned branch vs. the consensus default?</li>
+                </ul>
+
+                <h3>Philosophical Questions</h3>
+
+                <ul>
+                    <li>If all branches exist as potential, does morality matter? Or is every choice valid in some branch?</li>
+                    <li>What's the relationship between the selector and the self? Are they identical? Partially distinct?</li>
+                    <li>If you can tune branches, are you responsible for the ones you navigate into?</li>
+                    <li>Is there a "true" reality underneath, or is the rendered branch as real as anything gets?</li>
+                </ul>
+
+                <div class="interactive-note">
+                    The Selector Model is a living theory. These questions aren't weaknesses—they're invitations. The theory becomes stronger as we refine the mechanisms and test the predictions.
+                </div>
+
+                <h3>Next Steps</h3>
+
+                <p>If this resonates with you:</p>
+
+                <ol>
+                    <li><strong>Use the Selector Interface.</strong> Train with it. Build intuition about the model.</li>
+                    <li><strong>Document your tuning.</strong> Track what you intend, what amplitudes you use, what branches render. Look for patterns.</li>
+                    <li><strong>Experiment with signal boosting.</strong> Test which practices increase your amplitude most reliably.</li>
+                    <li><strong>Collaborate.</strong> Test multi-selector mechanics. See if intentional entanglement produces measurable reality shifts.</li>
+                    <li><strong>Share findings.</strong> This isn't a closed system. Every consciousness tuning consciously contributes to collective knowledge.</li>
+                </ol>
+
+                <a href="../selector-interface.html" target="_blank" class="cta-button">Launch Selector Interface →</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>⚡ SELECTOR MODEL — Logic Engine Theory</p>
+            <p>Core Theory — Originated January 2026 | Status: Living Document</p>
+        </footer>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+<script src="https://sparkverse.thefirstspark.shop/spark-auth.js"></script>
+<script>SparkAuth.applyGate();</script>
+</body>
+</html>

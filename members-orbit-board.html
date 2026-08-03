@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K4TKPMG9');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050508">
+    <title>Sparkverse Members Orbit Board</title>
+    <meta name="description" content="Tools, maps, and community for people who know reality is programmable. Built from lived truth.">
+    <meta name="facebook-domain-verification" content="5cz1minfp6hkdht48gujoo3gjibrkl" />
+    <meta name="p:domain_verify" content="46b8440e13cfadfd6dca4cdb2e82ec7c"/>
+    <meta property="og:title" content="The First Spark — Consciousness Technology">
+    <meta property="og:description" content="Tools, maps, and community for people who know reality is programmable.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thefirstspark.shop">
+    <meta property="og:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The First Spark — Consciousness Technology">
+    <meta name="twitter:description" content="Tools, maps, and community for people who know reality is programmable.">
+    <meta name="twitter:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --void:   #050508;
+            --spark:  #fbbf24;
+            --nebula: #8b5cf6;
+            --cyan:   #22d3ee;
+            --white:  rgba(255,255,255,0.92);
+            --dim:    rgba(255,255,255,0.4);
+            --dimmer: rgba(255,255,255,0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--void);
+            font-family: 'Space Mono', 'Courier New', monospace;
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* ─── COSMOS CANVAS ─── */
+        #cosmos {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ─── LAYOUT ─── */
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* ─── NAV ─── */
+        #nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 20px 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background .4s, border-color .4s;
+            border-bottom: 1px solid transparent;
+        }
+        #nav.scrolled {
+            background: rgba(5,5,8,.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-color: rgba(251,191,36,.1);
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: .9rem;
+            letter-spacing: .2em;
+            text-decoration: none;
+            color: var(--spark);
+            text-shadow: 0 0 20px rgba(251,191,36,.4);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-invest {
+            font-size: .58em;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--dim);
+            text-decoration: none;
+            transition: color .2s;
+        }
+        .nav-invest:hover { color: var(--white); }
+
+        .nav-cta {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            padding: 10px 22px;
+            border: 1px solid var(--spark);
+            color: var(--spark);
+            text-decoration: none;
+            transition: background .2s, color .2s, box-shadow .2s;
+        }
+        .nav-cta:hover {
+            background: var(--spark);
+            color: var(--void);
+            box-shadow: 0 0 24px rgba(251,191,36,.45);
+        }
+
+        /* ─── HERO ─── */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 140px 0 100px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-size: .55em;
+            letter-spacing: .45em;
+            text-transform: uppercase;
+            border: 1px solid rgba(251,191,36,.3);
+            color: var(--spark);
+            padding: 5px 18px;
+            margin-bottom: 36px;
+            animation: badgePulse 3.5s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%,100% { box-shadow: 0 0 8px rgba(251,191,36,.1); }
+            50%      { box-shadow: 0 0 28px rgba(251,191,36,.4); }
+        }
+
+        .hero-headline {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.8rem, 8vw, 6rem);
+            letter-spacing: .04em;
+            line-height: 1.0;
+            margin-bottom: 28px;
+            color: var(--white);
+        }
+        .hero-headline span {
+            display: block;
+            background: linear-gradient(135deg, var(--spark), var(--nebula));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: clamp(.85rem, 1.8vw, 1rem);
+            color: var(--dim);
+            line-height: 1.85;
+            max-width: 560px;
+            margin-bottom: 16px;
+        }
+
+        .hero-story {
+            font-size: .78em;
+            font-style: italic;
+            color: rgba(255,255,255,.25);
+            margin-bottom: 44px;
+            letter-spacing: .04em;
+        }
+
+        .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+        .btn-p {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            padding: 16px 34px;
+            background: var(--spark);
+            color: var(--void);
+            text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+            display: inline-block;
+        }
+        .btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(251,191,36,.45); }
+
+        .btn-g {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            padding: 15px 34px;
+            border: 1px solid var(--dimmer);
+            color: var(--dim);
+            text-decoration: none;
+            transition: border-color .2s, color .2s;
+            display: inline-block;
+        }
+        .btn-g:hover { border-color: var(--nebula); color: var(--white); }
+
+        .scroll-hint {
+            margin-top: 70px;
+            font-size: .5em;
+            letter-spacing: .35em;
+            color: rgba(255,255,255,.15);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .scroll-hint::after {
+            content: '';
+            display: block;
+            width: 1px; height: 40px;
+            background: linear-gradient(180deg, rgba(255,255,255,.15), transparent);
+            animation: drop 2.2s ease-in-out infinite;
+        }
+        @keyframes drop { 0%,100%{opacity:.2;} 50%{opacity:1;} }
+
+        /* ─── DIVIDER ─── */
+        .divider-line {
+            position: relative;
+            z-index: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--nebula), var(--spark), transparent);
+            opacity: .35;
+        }
+
+        /* ─── SECTIONS ─── */
+        section {
+            padding: 90px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sec-label {
+            font-size: .55em;
+            letter-spacing: .45em;
+            text-transform: uppercase;
+            color: var(--spark);
+            opacity: .65;
+            margin-bottom: 14px;
+        }
+
+        .sec-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: .06em;
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+
+        .sec-sub {
+            font-size: .82em;
+            color: var(--dim);
+            line-height: 1.8;
+            max-width: 520px;
+            margin-bottom: 52px;
+        }
+
+        /* ─── CARDS (3 only) ─── */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        @media(max-width: 680px) {
+            .cards { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            padding: 32px 26px;
+            border: 1px solid var(--dimmer);
+            background: rgba(255,255,255,.02);
+            text-decoration: none;
+            display: block;
+            transition: transform .25s, border-color .25s, box-shadow .25s;
+        }
+        .card:hover { transform: translateY(-4px); }
+
+        .card.gold  { border-color: rgba(251,191,36,.25); }
+        .card.purple{ border-color: rgba(139,92,246,.25); }
+        .card.cyan  { border-color: rgba(34,211,238,.25); }
+        .card.ember { border-color: rgba(255,106,61,.25); }
+
+        .card.gold:hover  { border-color: var(--spark);  box-shadow: 0 8px 32px rgba(251,191,36,.15); }
+        .card.purple:hover{ border-color: var(--nebula); box-shadow: 0 8px 32px rgba(139,92,246,.15); }
+        .card.cyan:hover  { border-color: var(--cyan);   box-shadow: 0 8px 32px rgba(34,211,238,.15); }
+        .card.ember:hover { border-color: #FF6A3D;       box-shadow: 0 8px 32px rgba(255,106,61,.15); }
+
+        .card-icon {
+            font-size: 1.6em;
+            margin-bottom: 16px;
+            opacity: .7;
+        }
+
+        .card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .card.gold   .card-name { color: var(--spark); }
+        .card.purple .card-name { color: var(--nebula); }
+        .card.cyan   .card-name { color: var(--cyan); }
+        .card.ember  .card-name { color: #FF6A3D; }
+
+        .card-desc {
+            font-size: .75em;
+            color: var(--dim);
+            line-height: 1.75;
+        }
+
+        .card-tag {
+            margin-top: 18px;
+            font-size: .55em;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            opacity: .45;
+        }
+
+        /* Cards with preview images */
+        .card.has-preview {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        .card-preview {
+            width: 90px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+        .card:hover .card-preview {
+            opacity: 1;
+        }
+        .card.gold .card-preview { box-shadow: 0 4px 16px rgba(251,191,36,.2); }
+        .card.purple .card-preview { box-shadow: 0 4px 16px rgba(139,92,246,.2); }
+        .card.cyan .card-preview { box-shadow: 0 4px 16px rgba(34,211,238,.2); }
+        .card.ember .card-preview { box-shadow: 0 4px 16px rgba(255,106,61,.2); }
+        
+        /* Novel cover is taller */
+        .card-preview.book-cover {
+            width: 70px;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .card-content {
+            flex: 1;
+            min-width: 0;
+        }
+        @media(max-width: 520px) {
+            .card.has-preview { flex-direction: column; text-align: center; }
+            .card-preview { width: 120px; height: 80px; }
+            .card-preview.book-cover { width: 80px; height: 115px; }
+        }
+
+        /* ─── SOUL MAP CALLOUT ─── */
+        .soul-callout {
+            border: 1px solid rgba(251,191,36,.3);
+            background: rgba(251,191,36,.03);
+            padding: 48px 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .soul-callout-left { flex: 1; min-width: 260px; }
+
+        .soul-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.3rem, 3vw, 1.9rem);
+            font-weight: 900;
+            letter-spacing: .06em;
+            color: var(--spark);
+            margin-bottom: 12px;
+        }
+
+        .soul-desc {
+            font-size: .8em;
+            color: var(--dim);
+            line-height: 1.8;
+            margin-bottom: 16px;
+            max-width: 400px;
+        }
+
+        .soul-meta {
+            font-size: .58em;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: rgba(251,191,36,.45);
+        }
+
+        .soul-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.4rem, 6vw, 3.8rem);
+            font-weight: 900;
+            color: var(--spark);
+            text-shadow: 0 0 40px rgba(251,191,36,.3);
+            white-space: nowrap;
+        }
+
+        /* ─── INVESTOR BRIEF ─── */
+        .invest-brief {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .invest-brief .sec-label { margin-bottom: 20px; }
+        .invest-text {
+            font-size: .82em;
+            color: var(--dim);
+            line-height: 1.9;
+            max-width: 480px;
+            margin: 0 auto 28px;
+        }
+        .invest-link {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .6rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--spark);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(251,191,36,.3);
+            padding-bottom: 2px;
+            transition: border-color .2s;
+        }
+        .invest-link:hover { border-color: var(--spark); }
+
+        /* ─── LIVE COUNTERS ─── */
+        .counters {
+            display: flex;
+            justify-content: center;
+            gap: clamp(20px, 5vw, 60px);
+            flex-wrap: wrap;
+            padding: 50px 0;
+        }
+        .counter-item { text-align: center; }
+        .counter-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 900;
+            color: var(--spark);
+            text-shadow: 0 0 30px rgba(251,191,36,.25);
+        }
+        .counter-label {
+            font-size: .5em;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-top: 6px;
+        }
+
+        /* ─── TESTIMONIALS ─── */
+        .testimonials {
+            padding: 70px 0;
+        }
+        .testimonial-track {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px 0 20px;
+            scrollbar-width: none;
+        }
+        .testimonial-track::-webkit-scrollbar { display: none; }
+        .testimonial-card {
+            flex: 0 0 280px;
+            scroll-snap-align: center;
+            background: rgba(255,255,255,.02);
+            border: 1px solid var(--dimmer);
+            border-radius: 14px;
+            padding: 28px 24px;
+            transition: border-color .3s;
+        }
+        .testimonial-card:hover { border-color: rgba(251,191,36,.25); }
+        .testimonial-quote {
+            font-size: .78em;
+            color: var(--dim);
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+        .testimonial-author {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .5rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--spark);
+            opacity: .6;
+        }
+        .testimonial-role {
+            font-size: .55em;
+            color: rgba(255,255,255,.15);
+            margin-top: 2px;
+        }
+
+        /* ─── PRESS KIT ─── */
+        .press-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+        .press-highlights {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .press-stat {
+            text-align: center;
+        }
+        .press-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 700;
+            color: var(--white);
+        }
+        .press-stat-label {
+            font-size: .5em;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-top: 4px;
+        }
+        .press-cta {
+            display: inline-block;
+            margin-top: 36px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: .6rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--spark);
+            text-decoration: none;
+            border: 1px solid rgba(251,191,36,.3);
+            padding: 12px 28px;
+            border-radius: 6px;
+            transition: all .3s;
+        }
+        .press-cta:hover {
+            background: rgba(251,191,36,.08);
+            border-color: var(--spark);
+        }
+
+        /* ─── FEATURED IN ─── */
+        .featured-in {
+            text-align: center;
+            padding: 50px 0;
+            background: rgba(251,191,36,.02);
+            border-top: 1px solid rgba(251,191,36,.08);
+            border-bottom: 1px solid rgba(251,191,36,.08);
+        }
+        .featured-in-label {
+            font-size: .5em;
+            letter-spacing: .4em;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-bottom: 24px;
+        }
+        .featured-in-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255,255,255,.03);
+            border: 1px solid rgba(251,191,36,.15);
+            border-radius: 12px;
+            padding: 24px 36px;
+            text-decoration: none;
+            transition: all .3s;
+        }
+        .featured-in-card:hover {
+            border-color: var(--spark);
+            box-shadow: 0 8px 32px rgba(251,191,36,.12);
+            transform: translateY(-2px);
+        }
+        .featured-in-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--spark);
+            letter-spacing: .1em;
+        }
+        .featured-in-text {
+            text-align: left;
+        }
+        .featured-in-title {
+            font-size: .7em;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+        .featured-in-date {
+            font-size: .55em;
+            color: var(--dim);
+            letter-spacing: .15em;
+        }
+
+        /* ─── SELECTOR THESIS SECTION ─── */
+        #selector-thesis {
+            background: rgba(139,92,246,.04);
+            border-top: 1px solid rgba(139,92,246,.12);
+            border-bottom: 1px solid rgba(139,92,246,.12);
+        }
+        .thesis-container {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .thesis-header {
+            margin-bottom: 44px;
+        }
+        .thesis-ctas {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ─── FEEL IT SECTION ─── */
+        .feel-it {
+            position: relative;
+            z-index: 1;
+            padding: 80px 0;
+        }
+        .feel-it-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .feel-it-canvas-wrap {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            border: 1px solid var(--dimmer);
+            margin-bottom: 16px;
+            overflow: hidden;
+            cursor: crosshair;
+            background: rgba(5,5,8,.9);
+        }
+        #feelCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .feel-it-hint {
+            text-align: center;
+            font-size: .5em;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.2);
+            margin-bottom: 48px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        .feel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        @media(max-width: 580px) {
+            .feel-grid { grid-template-columns: 1fr; }
+        }
+        .feel-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 36px 20px;
+            border: 1px solid var(--dimmer);
+            background: rgba(255,255,255,.015);
+            text-decoration: none;
+            overflow: hidden;
+            transition: transform .25s, border-color .25s, box-shadow .25s;
+        }
+        .feel-card:hover { transform: translateY(-4px); }
+        .feel-card.fc-gold { border-color: rgba(251,191,36,.2); }
+        .feel-card.fc-cyan { border-color: rgba(34,211,238,.2); }
+        .feel-card.fc-pink { border-color: rgba(255,0,150,.2); }
+        .feel-card.fc-gold:hover { border-color: var(--spark); box-shadow: 0 8px 32px rgba(251,191,36,.18); }
+        .feel-card.fc-cyan:hover { border-color: var(--cyan); box-shadow: 0 8px 32px rgba(34,211,238,.18); }
+        .feel-card.fc-pink:hover { border-color: #ff0096; box-shadow: 0 8px 32px rgba(255,0,150,.18); }
+
+        .feel-card-anim {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        /* Playground 1 — orbiting dots */
+        .fc-gold .feel-card-anim::before,
+        .fc-gold .feel-card-anim::after {
+            content: '';
+            position: absolute;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--spark);
+            top: 50%; left: 50%;
+            animation: orbit 3s linear infinite;
+        }
+        .fc-gold .feel-card-anim::after {
+            background: var(--nebula);
+            animation-delay: -1.5s;
+            width: 6px; height: 6px;
+        }
+        @keyframes orbit {
+            0%   { transform: translate(-50%,-50%) rotate(0deg) translateX(22px) rotate(0deg); }
+            100% { transform: translate(-50%,-50%) rotate(360deg) translateX(22px) rotate(-360deg); }
+        }
+        /* Playground 2 — pulsing layers */
+        .fc-cyan .feel-card-anim::before,
+        .fc-cyan .feel-card-anim::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1.5px solid var(--cyan);
+            animation: layerPulse 2.5s ease-in-out infinite;
+        }
+        .fc-cyan .feel-card-anim::after {
+            inset: 10px;
+            border-color: var(--nebula);
+            animation-delay: -0.8s;
+        }
+        @keyframes layerPulse {
+            0%,100% { transform: scale(.85); opacity:.4; }
+            50% { transform: scale(1.1); opacity:1; }
+        }
+        /* Wall — spray effect */
+        .fc-pink .feel-card-anim {
+            background: radial-gradient(circle at 60% 40%, rgba(255,0,150,.6) 0%, rgba(255,0,150,.2) 30%, transparent 60%),
+                        radial-gradient(circle at 35% 65%, rgba(0,255,255,.4) 0%, rgba(0,255,255,.15) 25%, transparent 50%);
+            border-radius: 50%;
+            animation: sprayGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes sprayGlow {
+            0% { filter: blur(2px) brightness(0.8); transform: scale(.95); }
+            100% { filter: blur(3px) brightness(1.3); transform: scale(1.05); }
+        }
+
+        .feel-card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .fc-gold .feel-card-title { color: var(--spark); }
+        .fc-cyan .feel-card-title { color: var(--cyan); }
+        .fc-pink .feel-card-title { color: #ff0096; }
+        .feel-card-desc {
+            font-size: .72em;
+            color: var(--dim);
+            line-height: 1.7;
+            max-width: 200px;
+        }
+        .feel-card-enter {
+            margin-top: 16px;
+            font-size: .5em;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            opacity: 0;
+            color: var(--white);
+            transition: opacity .25s;
+        }
+        .feel-card:hover .feel-card-enter { opacity: .7; }
+
+        /* Tools card — ember variant */
+        .feel-card.fc-ember { border-color: rgba(255,106,61,.2); }
+        .feel-card.fc-ember:hover { border-color: #FF6A3D; box-shadow: 0 8px 32px rgba(255,106,61,.18); }
+        .fc-ember .feel-card-title { color: #FF6A3D; }
+        .fc-ember .feel-card-anim {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+        }
+        .fc-ember .feel-card-anim .tool-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            animation: toolPop 2s ease-in-out infinite;
+        }
+        .fc-ember .feel-card-anim .tool-dot:nth-child(1) { background: #fbbf24; animation-delay: 0s; }
+        .fc-ember .feel-card-anim .tool-dot:nth-child(2) { background: #8b5cf6; animation-delay: 0.3s; }
+        .fc-ember .feel-card-anim .tool-dot:nth-child(3) { background: #22d3ee; animation-delay: 0.6s; }
+        .fc-ember .feel-card-anim .tool-dot:nth-child(4) { background: #ff0096; animation-delay: 0.9s; }
+        .fc-ember .feel-card-anim .tool-dot:nth-child(5) { background: #FF6A3D; animation-delay: 1.2s; }
+        @keyframes toolPop {
+            0%,100% { transform: scale(.7); opacity:.4; }
+            50% { transform: scale(1.2); opacity:1; }
+        }
+        .tool-links {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 0;
+            text-align: left;
+            width: 100%;
+        }
+        .tool-links li {
+            margin: 6px 0;
+        }
+        .tool-links a {
+            font-size: .62em;
+            letter-spacing: .1em;
+            color: var(--dim);
+            text-decoration: none;
+            transition: color .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tool-links a:hover { color: var(--white); }
+        .tool-links .tl-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 50px 0 36px;
+            text-align: center;
+            border-top: 1px solid var(--dimmer);
+        }
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: .85rem;
+            letter-spacing: .2em;
+            color: var(--spark);
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 14px;
+            opacity: .7;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            font-size: .55em;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.2);
+            text-decoration: none;
+            transition: color .2s;
+        }
+        .footer-links a:hover { color: var(--dim); }
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .footer-socials a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 50%;
+            color: rgba(255,255,255,.35);
+            text-decoration: none;
+            transition: all .25s;
+        }
+        .footer-socials a:hover {
+            border-color: var(--spark);
+            color: var(--spark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(251,191,36,.2);
+        }
+        .footer-socials svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .footer-copy {
+            font-size: .55em;
+            color: rgba(255,255,255,.12);
+            letter-spacing: .15em;
+        }
+
+        /* ===== NOVEL SHOWCASE ===== */
+        .novel-showcase {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .novel-showcase-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            background: linear-gradient(135deg, rgba(20,20,30,0.7), rgba(30,20,40,0.7));
+            border: 1px solid rgba(236, 72, 153, 0.25);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            box-shadow:
+                0 0 60px rgba(236, 72, 153, 0.15),
+                0 0 120px rgba(139, 92, 246, 0.08);
+        }
+
+        .novel-cover-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .novel-cover-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 360px;
+            background: radial-gradient(ellipse, rgba(236, 72, 153, 0.3), rgba(139, 92, 246, 0.15), transparent 70%);
+            filter: blur(30px);
+            animation: coverGlow 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes coverGlow {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .novel-cover-img {
+            position: relative;
+            z-index: 1;
+            width: 220px;
+            border-radius: 0.75rem;
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.6),
+                0 0 20px rgba(236, 72, 153, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .novel-cover-img:hover {
+            transform: scale(1.04) translateY(-4px);
+            box-shadow:
+                0 12px 40px rgba(0,0,0,0.7),
+                0 0 30px rgba(236, 72, 153, 0.5),
+                0 0 60px rgba(139, 92, 246, 0.2);
+        }
+
+        .novel-info {
+            flex: 1;
+        }
+
+        .novel-tagline {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.35em;
+            color: var(--hot-pink);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .novel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+            text-shadow:
+                0 0 20px rgba(236, 72, 153, 0.4),
+                0 0 40px rgba(139, 92, 246, 0.2);
+        }
+
+        .novel-subtitle {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .novel-description {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 2rem;
+        }
+
+        .novel-description em {
+            color: var(--hot-pink);
+            font-style: italic;
+        }
+
+        .btn-purchase {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--hot-pink), var(--nebula-purple), var(--cosmic-cyan));
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 0.75rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            animation: btnGradient 3s ease infinite;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn-purchase:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow:
+                0 8px 30px rgba(236, 72, 153, 0.5),
+                0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .novel-showcase-inner {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+                gap: 2rem;
+            }
+
+            .novel-cover-img {
+                width: 180px;
+            }
+
+            .novel-cover-glow {
+                width: 220px;
+                height: 300px;
+            }
+
+            .btn-purchase {
+                padding: 0.875rem 2rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ─── SPARKVERSE ORBIT BOARD ─── */
+        .board-page {
+            position: relative;
+            z-index: 1;
+            padding: 130px 0 72px;
+        }
+
+        .board-page .wrap,
+        .route-section .wrap,
+        footer .wrap {
+            max-width: 1240px;
+        }
+
+        .board-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+            gap: 32px;
+            align-items: start;
+        }
+
+        .board-copy {
+            max-width: 620px;
+        }
+
+        .board-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding: 8px 16px;
+            border: 1px solid rgba(251,191,36,.24);
+            background: rgba(251,191,36,.05);
+            color: var(--spark);
+            font-size: .58rem;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+        }
+
+        .board-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 7vw, 6.2rem);
+            line-height: .93;
+            letter-spacing: .05em;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .board-title span {
+            display: block;
+            background: linear-gradient(135deg, #fff4d6 0%, var(--spark) 32%, #ff7a3d 54%, var(--nebula) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .board-sub {
+            max-width: 560px;
+            font-size: .92rem;
+            line-height: 1.95;
+            color: rgba(255,255,255,.7);
+            margin-bottom: 18px;
+        }
+
+        .board-note {
+            font-size: .72rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.28);
+            margin-bottom: 32px;
+        }
+
+        .board-ctas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .board-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .board-meta-chip {
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(255,255,255,.03);
+            font-size: .58rem;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.45);
+        }
+
+        .board-aside {
+            position: relative;
+            overflow: hidden;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: linear-gradient(180deg, rgba(10,12,20,.88), rgba(5,6,10,.75));
+            -webkit-backdrop-filter: blur(18px);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 20px 70px rgba(0,0,0,.35);
+        }
+
+        .board-aside::before {
+            content: '';
+            position: absolute;
+            inset: -40% auto auto -10%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(251,191,36,.18), transparent 70%);
+            pointer-events: none;
+        }
+
+        .aside-label {
+            font-size: .55rem;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+            color: var(--spark);
+            margin-bottom: 12px;
+        }
+
+        .aside-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.35rem;
+            line-height: 1.35;
+            margin-bottom: 14px;
+        }
+
+        .aside-text {
+            font-size: .78rem;
+            color: rgba(255,255,255,.66);
+            line-height: 1.9;
+            margin-bottom: 24px;
+        }
+
+        .signal-list {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .signal-item {
+            display: grid;
+            grid-template-columns: 92px 1fr;
+            gap: 14px;
+            align-items: start;
+            padding: 12px 0;
+            border-top: 1px solid rgba(255,255,255,.08);
+        }
+
+        .signal-item:last-child {
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .signal-kicker {
+            font-size: .54rem;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: rgba(251,191,36,.55);
+        }
+
+        .signal-value {
+            font-size: .74rem;
+            color: rgba(255,255,255,.74);
+            line-height: 1.75;
+        }
+
+        .launch-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .launch-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255,255,255,.08);
+            color: rgba(255,255,255,.74);
+            text-decoration: none;
+            font-size: .68rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            background: rgba(255,255,255,.03);
+            transition: transform .2s, border-color .2s, color .2s, background .2s;
+        }
+
+        .launch-link:hover {
+            transform: translateX(4px);
+            border-color: rgba(251,191,36,.34);
+            color: var(--white);
+            background: rgba(251,191,36,.05);
+        }
+
+        .orbit-shell {
+            position: relative;
+            z-index: 1;
+            min-height: 780px;
+            margin-top: 44px;
+            border: 1px solid rgba(255,255,255,.08);
+            background:
+                radial-gradient(circle at 18% 18%, rgba(251,191,36,.09), transparent 24%),
+                radial-gradient(circle at 82% 24%, rgba(139,92,246,.1), transparent 30%),
+                radial-gradient(circle at 50% 78%, rgba(34,211,238,.08), transparent 28%),
+                linear-gradient(180deg, rgba(10,12,20,.76), rgba(5,6,10,.9));
+            overflow: hidden;
+            box-shadow: inset 0 0 60px rgba(255,255,255,.02), 0 28px 80px rgba(0,0,0,.42);
+        }
+
+        .orbit-shell::before,
+        .orbit-shell::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .orbit-shell::before {
+            background-image:
+                linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+            background-size: 110px 110px;
+            -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.08));
+            mask-image: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.08));
+            opacity: .35;
+        }
+
+        .orbit-shell::after {
+            background: radial-gradient(circle at center, transparent 42%, rgba(0,0,0,.35) 100%);
+        }
+
+        .board-hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .hud-chip {
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(5,6,10,.42);
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+            font-size: .54rem;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.4);
+        }
+
+        .orbit-field {
+            position: absolute;
+            inset: 0;
+            transform: translate(var(--shiftX, 0px), var(--shiftY, 0px));
+            transition: transform .35s ease-out;
+        }
+
+        .constellation-lines {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: .42;
+            pointer-events: none;
+        }
+
+        .constellation-lines line {
+            stroke: rgba(255,255,255,.18);
+            stroke-width: .16;
+            stroke-dasharray: 1.6 1.8;
+        }
+
+        .constellation-lines circle {
+            fill: rgba(255,255,255,.5);
+        }
+
+        .orbit-rings {
+            position: absolute;
+            inset: 12% 10%;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.07);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orbit-rings.ring-2 {
+            inset: 22% 21%;
+            border-color: rgba(251,191,36,.08);
+        }
+
+        .orbit-rings.ring-3 {
+            inset: 34% 34%;
+            border-color: rgba(139,92,246,.08);
+        }
+
+        .planet {
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            width: var(--size);
+            height: var(--size);
+            z-index: 2;
+            color: var(--white);
+            text-decoration: none;
+            filter: drop-shadow(0 0 24px var(--glow));
+            transform: translate(-50%, -50%);
+        }
+
+        .planet-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            animation: orbitalFloat var(--floatDur, 11s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            transition: transform .25s ease, filter .25s ease;
+        }
+
+        .planet:hover .planet-body,
+        .planet:focus-visible .planet-body {
+            transform: scale(1.08);
+            filter: saturate(1.18);
+        }
+
+        .planet-ring,
+        .planet-ring::after,
+        .planet-ring::before {
+            position: absolute;
+            border-radius: 50%;
+            content: '';
+        }
+
+        .planet-ring {
+            inset: -9%;
+            border: 1px solid rgba(255,255,255,.18);
+            transform: rotate(var(--ringTilt, 18deg));
+            animation: ringSpin calc(var(--floatDur, 11s) * 1.8) linear infinite;
+        }
+
+        .planet-ring::before {
+            inset: 16%;
+            border: 1px solid rgba(255,255,255,.08);
+        }
+
+        .planet-ring::after {
+            width: 11px;
+            height: 11px;
+            top: 18%;
+            left: 72%;
+            background: rgba(255,255,255,.8);
+            box-shadow: 0 0 16px rgba(255,255,255,.4);
+        }
+
+        .planet-core {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 34% 28%, rgba(255,255,255,.92) 0%, rgba(255,255,255,.3) 12%, var(--planet-a) 24%, var(--planet-b) 68%, rgba(5,6,10,.96) 100%);
+            box-shadow: inset -18px -22px 40px rgba(0,0,0,.45), inset 14px 12px 30px rgba(255,255,255,.08), 0 0 34px var(--glow);
+        }
+
+        .planet-badge {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 10px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(5,6,10,.72);
+            font-size: .46rem;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.55);
+            white-space: nowrap;
+        }
+
+        .planet-label {
+            position: absolute;
+            inset: auto 16% 14%;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .planet-name {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(.62rem, 1vw, .82rem);
+            font-weight: 700;
+            line-height: 1.35;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0,0,0,.5);
+        }
+
+        .planet-note {
+            display: block;
+            margin-top: 6px;
+            font-size: .56rem;
+            letter-spacing: .12em;
+            color: rgba(255,255,255,.72);
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0,0,0,.6);
+        }
+
+        .planet-tooltip {
+            position: absolute;
+            left: 50%;
+            bottom: -58px;
+            transform: translateX(-50%) translateY(8px);
+            width: max-content;
+            max-width: 220px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(5,6,10,.84);
+            font-size: .64rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,.72);
+            letter-spacing: .08em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease, transform .2s ease;
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            text-transform: uppercase;
+        }
+
+        .planet:hover .planet-tooltip,
+        .planet:focus-visible .planet-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .atmosphere-atoms {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .atom {
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.08);
+            opacity: .55;
+            animation: atomDrift var(--dur, 12s) ease-in-out infinite;
+        }
+
+        .atom::before,
+        .atom::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.08);
+        }
+
+        .atom::before {
+            transform: rotate(64deg) scale(.84);
+        }
+
+        .atom::after {
+            transform: rotate(-64deg) scale(.88);
+        }
+
+        .atom i {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 7px;
+            height: 7px;
+            margin: -3.5px 0 0 -3.5px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.9);
+            box-shadow: 0 0 18px rgba(255,255,255,.32);
+        }
+
+        .atom-a { left: 10%; top: 18%; width: 72px; height: 72px; animation-duration: 13s; }
+        .atom-b { left: 84%; top: 16%; width: 88px; height: 88px; animation-duration: 15s; }
+        .atom-c { left: 18%; top: 76%; width: 64px; height: 64px; animation-duration: 12s; }
+        .atom-d { left: 90%; top: 78%; width: 78px; height: 78px; animation-duration: 16s; }
+        .atom-e { left: 52%; top: 54%; width: 54px; height: 54px; animation-duration: 11s; }
+
+        .planet-soul {
+            --x: 18%;
+            --y: 24%;
+            --size: 156px;
+            --planet-a: #ffc857;
+            --planet-b: #ff5a1f;
+            --glow: rgba(255,200,87,.42);
+            --delay: -1.3s;
+            --floatDur: 11s;
+            --lift: -18px;
+            --ringTilt: 22deg;
+        }
+
+        .planet-lounge {
+            --x: 50%;
+            --y: 15%;
+            --size: 168px;
+            --planet-a: #7df9ff;
+            --planet-b: #1e90ff;
+            --glow: rgba(125,249,255,.34);
+            --delay: -2.4s;
+            --floatDur: 13s;
+            --lift: -14px;
+            --ringTilt: -18deg;
+        }
+
+        .planet-sparkverse {
+            --x: 80%;
+            --y: 24%;
+            --size: 146px;
+            --planet-a: #b794ff;
+            --planet-b: #5322b8;
+            --glow: rgba(183,148,255,.4);
+            --delay: -.8s;
+            --floatDur: 10s;
+            --lift: -16px;
+            --ringTilt: 14deg;
+        }
+
+        .planet-archetype {
+            --x: 15%;
+            --y: 50%;
+            --size: 126px;
+            --planet-a: #ff9d5c;
+            --planet-b: #762e07;
+            --glow: rgba(255,157,92,.32);
+            --delay: -2.1s;
+            --floatDur: 12s;
+            --lift: -12px;
+            --ringTilt: -22deg;
+        }
+
+        .planet-selector {
+            --x: 38%;
+            --y: 42%;
+            --size: 136px;
+            --planet-a: #ffe79a;
+            --planet-b: #88600d;
+            --glow: rgba(255,231,154,.32);
+            --delay: -3.4s;
+            --floatDur: 14s;
+            --lift: -20px;
+            --ringTilt: 28deg;
+        }
+
+        .planet-oracle {
+            --x: 64%;
+            --y: 42%;
+            --size: 124px;
+            --planet-a: #ff74c8;
+            --planet-b: #6f0f4f;
+            --glow: rgba(255,116,200,.34);
+            --delay: -1.7s;
+            --floatDur: 12.5s;
+            --lift: -13px;
+            --ringTilt: -12deg;
+        }
+
+        .planet-genesis {
+            --x: 85%;
+            --y: 55%;
+            --size: 144px;
+            --planet-a: #ff7be5;
+            --planet-b: #4a1351;
+            --glow: rgba(255,123,229,.34);
+            --delay: -2.8s;
+            --floatDur: 13.5s;
+            --lift: -17px;
+            --ringTilt: 18deg;
+        }
+
+        .planet-reset {
+            --x: 28%;
+            --y: 70%;
+            --size: 116px;
+            --planet-a: #7df9ff;
+            --planet-b: #0d4851;
+            --glow: rgba(125,249,255,.26);
+            --delay: -.6s;
+            --floatDur: 11.5s;
+            --lift: -11px;
+            --ringTilt: -26deg;
+        }
+
+        .planet-member {
+            --x: 55%;
+            --y: 68%;
+            --size: 132px;
+            --planet-a: #f8f0dc;
+            --planet-b: #57514a;
+            --glow: rgba(248,240,220,.28);
+            --delay: -1.2s;
+            --floatDur: 12.8s;
+            --lift: -14px;
+            --ringTilt: 24deg;
+        }
+
+        .planet-invest {
+            --x: 78%;
+            --y: 78%;
+            --size: 118px;
+            --planet-a: #ffc857;
+            --planet-b: #53340c;
+            --glow: rgba(255,200,87,.28);
+            --delay: -3.1s;
+            --floatDur: 15s;
+            --lift: -15px;
+            --ringTilt: -16deg;
+        }
+
+        .route-section {
+            position: relative;
+            z-index: 1;
+            padding: 0 0 80px;
+        }
+
+        .route-frame {
+            border: 1px solid rgba(255,255,255,.08);
+            background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+            padding: 32px;
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: end;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .route-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .route-copy {
+            max-width: 420px;
+            font-size: .78rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,.66);
+        }
+
+        .route-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .route-card {
+            padding: 26px 24px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(5,6,10,.55);
+        }
+
+        .route-card-tag {
+            font-size: .52rem;
+            letter-spacing: .32em;
+            text-transform: uppercase;
+            color: var(--spark);
+            margin-bottom: 10px;
+        }
+
+        .route-card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .96rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .route-card-copy {
+            font-size: .74rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,.66);
+            margin-bottom: 18px;
+        }
+
+        .route-card-link {
+            font-size: .6rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--spark);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(251,191,36,.35);
+            padding-bottom: 2px;
+        }
+
+        @keyframes orbitalFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(var(--lift, -14px)); }
+        }
+
+        @keyframes ringSpin {
+            from { transform: rotate(var(--ringTilt, 18deg)); }
+            to { transform: rotate(calc(var(--ringTilt, 18deg) + 360deg)); }
+        }
+
+        @keyframes atomDrift {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(.96); }
+            50% { transform: translate3d(0, -18px, 0) scale(1.03); }
+        }
+
+        @media(max-width: 1100px) {
+            .board-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .board-aside {
+                order: 2;
+            }
+        }
+
+        @media(max-width: 900px) {
+            .route-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .planet-tooltip {
+                display: none;
+            }
+        }
+
+        @media(max-width: 680px) {
+            .board-page {
+                padding-top: 108px;
+            }
+
+            .board-title {
+                font-size: clamp(2.5rem, 12vw, 4.2rem);
+            }
+
+            .board-meta {
+                gap: 10px;
+            }
+
+            .board-aside,
+            .route-frame {
+                padding: 22px;
+            }
+
+            .orbit-shell {
+                min-height: 980px;
+            }
+
+            .planet {
+                width: calc(var(--size) * .76);
+                height: calc(var(--size) * .76);
+            }
+
+            .planet-badge {
+                top: -16px;
+                font-size: .42rem;
+            }
+
+            .planet-name {
+                font-size: .54rem;
+            }
+
+            .planet-note {
+                font-size: .48rem;
+            }
+
+            .hud-chip:last-child {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4TKPMG9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <canvas id="cosmos"></canvas>
+
+            <nav id="nav">
+                <a href="/" class="nav-logo">THE FIRST SPARK</a>
+                <div class="nav-right">
+                    <a href="#routes" class="nav-invest">Member Routes</a>
+                    <a href="member-hub.html" class="nav-cta">Member Hub →</a>
+                </div>
+            </nav>
+
+            <main class="board-page">
+                <section>
+                    <div class="wrap board-layout">
+                        <div class="board-copy">
+                            <div class="board-kicker">001 &nbsp; Sparkverse Orbit Board</div>
+                            <h1 class="board-title">Member orbit board.<span>Planet edition.</span></h1>
+                            <p class="board-sub">You are inside. Atoms drift. Worlds pulse. Click the planet you need right now and jump straight to tools, upgrades, lore, and deeper layers.</p>
+                            <p class="board-sub">This page is built for post-join momentum: less scrolling, more portals. Tap a planet. Enter the route. Keep moving.</p>
+                            <div class="board-note">Choose your orbit. Upgrade what calls you. Enter deeper layers.</div>
+                            <div class="board-ctas">
+                                <a href="member-hub.html" class="btn-p">Open Member Hub →</a>
+                                <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener" class="btn-g">Claim Your Soul Map</a>
+                                <a href="#orbit-board" class="btn-g">Scan The Planets</a>
+                            </div>
+                            <div class="board-meta">
+                                <div class="board-meta-chip">57+ tools shipped</div>
+                                <div class="board-meta-chip">$22 soul maps live</div>
+                                <div class="board-meta-chip">Member routes + lore + prototypes</div>
+                            </div>
+                        </div>
+
+                        <aside class="board-aside">
+                            <div class="aside-label">002 &nbsp; Signal Readout</div>
+                            <h2 class="aside-title">Not a menu. A sky full of conversion paths.</h2>
+                            <p class="aside-text">The best Sparkverse pages already feel like places. The board makes that literal: every destination gets its own world, its own color signature, and its own reason to click.</p>
+                            <div class="signal-list">
+                                <div class="signal-item">
+                                    <div class="signal-kicker">Join</div>
+                                    <div class="signal-value">Free community entry with rituals, drops, and a path into the paid ecosystem.</div>
+                                </div>
+                                <div class="signal-item">
+                                    <div class="signal-kicker">Pay</div>
+                                    <div class="signal-value">Soul maps, the novel, and high-intent product pages get premium planet placement.</div>
+                                </div>
+                                <div class="signal-item">
+                                    <div class="signal-kicker">Linger</div>
+                                    <div class="signal-value">Interactive tools and internal hubs keep people moving instead of bouncing.</div>
+                                </div>
+                            </div>
+                            <div class="launch-list">
+                                <a class="launch-link" href="member-hub.html"><span>Member Hub</span><span>Open</span></a>
+                                <a class="launch-link" href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener"><span>Soul Map Checkout</span><span>$22</span></a>
+                                <a class="launch-link" href="https://whop.com/checkout/plan_hW8GlMaVgyLCu" target="_blank" rel="noopener"><span>The Genesis</span><span>Buy</span></a>
+                                <a class="launch-link" href="selector-hub.html"><span>Selector Hub</span><span>Enter</span></a>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+
+                <section id="orbit-board">
+                    <div class="wrap">
+                        <div class="orbit-shell" id="orbitBoard">
+                            <div class="board-hud">
+                                <div class="hud-chip">003 &nbsp; Tap any planet</div>
+                                <div class="hud-chip">Sparkverse traffic board</div>
+                            </div>
+
+                            <div class="orbit-field" id="orbitField">
+                                <div class="orbit-rings"></div>
+                                <div class="orbit-rings ring-2"></div>
+                                <div class="orbit-rings ring-3"></div>
+
+                                <div class="atmosphere-atoms" aria-hidden="true">
+                                    <span class="atom atom-a"><i></i></span>
+                                    <span class="atom atom-b"><i></i></span>
+                                    <span class="atom atom-c"><i></i></span>
+                                    <span class="atom atom-d"><i></i></span>
+                                    <span class="atom atom-e"><i></i></span>
+                                </div>
+
+                                <svg class="constellation-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                    <line x1="18" y1="24" x2="38" y2="42"></line>
+                                    <line x1="38" y1="42" x2="50" y2="15"></line>
+                                    <line x1="50" y1="15" x2="80" y2="24"></line>
+                                    <line x1="15" y1="50" x2="38" y2="42"></line>
+                                    <line x1="38" y1="42" x2="64" y2="42"></line>
+                                    <line x1="64" y1="42" x2="85" y2="55"></line>
+                                    <line x1="28" y1="70" x2="55" y2="68"></line>
+                                    <line x1="55" y1="68" x2="78" y2="78"></line>
+                                    <line x1="18" y1="24" x2="15" y2="50"></line>
+                                    <line x1="80" y1="24" x2="85" y2="55"></line>
+                                    <circle cx="18" cy="24" r=".45"></circle>
+                                    <circle cx="50" cy="15" r=".45"></circle>
+                                    <circle cx="80" cy="24" r=".45"></circle>
+                                    <circle cx="15" cy="50" r=".45"></circle>
+                                    <circle cx="38" cy="42" r=".45"></circle>
+                                    <circle cx="64" cy="42" r=".45"></circle>
+                                    <circle cx="85" cy="55" r=".45"></circle>
+                                    <circle cx="28" cy="70" r=".45"></circle>
+                                    <circle cx="55" cy="68" r=".45"></circle>
+                                    <circle cx="78" cy="78" r=".45"></circle>
+                                </svg>
+
+                                <a class="planet planet-soul" href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener" aria-label="Open Soul Maps checkout">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Pay Once</span>
+                                        <span class="planet-label"><span class="planet-name">Soul Maps</span><span class="planet-note">$22 decode</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">Hand-decoded numerology, astrology, and soul questions.</span>
+                                </a>
+
+                                <a class="planet planet-lounge" href="https://whop.com/sparkverse-511c/spark-acces/" target="_blank" rel="noopener" aria-label="Join the Sparkverse community">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Community</span>
+                                        <span class="planet-label"><span class="planet-name">Players Lounge</span><span class="planet-note">community gate</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">Free entry point into the ecosystem with upgrades behind it.</span>
+                                </a>
+
+                                <a class="planet planet-sparkverse" href="https://sparkverse.thefirstspark.shop" target="_blank" rel="noopener" aria-label="Open the Sparkverse prototype">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Prototype</span>
+                                        <span class="planet-label"><span class="planet-name">Sparkverse</span><span class="planet-note">live interface</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">The live orbital prototype with more places to wander.</span>
+                                </a>
+
+                                <a class="planet planet-archetype" href="archetype-discovery.html" aria-label="Open archetype discovery">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Quiz</span>
+                                        <span class="planet-label"><span class="planet-name">Archetype</span><span class="planet-note">discover your type</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">Low-friction self-discovery page that warms visitors fast.</span>
+                                </a>
+
+                                <a class="planet planet-selector" href="selector-hub.html" aria-label="Open the selector hub">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Framework</span>
+                                        <span class="planet-label"><span class="planet-name">Selector Hub</span><span class="planet-note">model + command center</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">Core IP, brand mythology, and the logic underneath the world.</span>
+                                </a>
+
+                                <a class="planet planet-oracle" href="oracle.html" aria-label="Open the oracle portal">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Oracle</span>
+                                        <span class="planet-label"><span class="planet-name">Oracle Portal</span><span class="planet-note">ask and receive</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">A spiritual utility page that keeps the atmosphere mystical and sticky.</span>
+                                </a>
+
+                                <a class="planet planet-genesis" href="https://whop.com/checkout/plan_hW8GlMaVgyLCu" target="_blank" rel="noopener" aria-label="Purchase The Genesis novel">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Lore</span>
+                                        <span class="planet-label"><span class="planet-name">The Genesis</span><span class="planet-note">buy the novel</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">The fiction layer. Origin story. Direct purchase path.</span>
+                                </a>
+
+                                <a class="planet planet-reset" href="daily-reset.html" aria-label="Open the daily reset">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Ritual</span>
+                                        <span class="planet-label"><span class="planet-name">Daily Reset</span><span class="planet-note">return to center</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">Fast ritual entry point for repeat visits and habit formation.</span>
+                                </a>
+
+                                <a class="planet planet-member" href="member-hub.html" aria-label="Open the member hub">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Hub</span>
+                                        <span class="planet-label"><span class="planet-name">Member Hub</span><span class="planet-note">everything collected</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">Navigation spine for people who already want more of everything.</span>
+                                </a>
+
+                                <a class="planet planet-invest" href="investor-deck-v2.html" aria-label="Open the investor deck">
+                                    <span class="planet-body">
+                                        <span class="planet-ring"></span>
+                                        <span class="planet-core"></span>
+                                        <span class="planet-badge">Raise</span>
+                                        <span class="planet-label"><span class="planet-name">Investor Deck</span><span class="planet-note">$200k open</span></span>
+                                    </span>
+                                    <span class="planet-tooltip">Investor route with the current raise terms and core narrative.</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <section class="route-section" id="routes">
+                <div class="wrap">
+                    <div class="route-frame">
+                        <div class="route-header">
+                            <div>
+                                <div class="board-kicker">004 &nbsp; Fast Routes</div>
+                                <h2 class="route-title">Three strong gravity wells.</h2>
+                            </div>
+                            <p class="route-copy">If you do not want to browse the full galaxy, these are the cleanest member actions: open your hub, buy, or go deeper into the system.</p>
+                        </div>
+                        <div class="route-grid">
+                            <div class="route-card">
+                                <div class="route-card-tag">Home Base</div>
+                                <div class="route-card-title">Member Hub</div>
+                                <div class="route-card-copy">Your base layer for tools, drops, and all active routes in one place.</div>
+                                <a class="route-card-link" href="member-hub.html">Open member hub →</a>
+                            </div>
+                            <div class="route-card">
+                                <div class="route-card-tag">Pay</div>
+                                <div class="route-card-title">Soul Map Checkout</div>
+                                <div class="route-card-copy">Direct offer with immediate clarity. Good for visitors who already feel the signal and want the product now.</div>
+                                <a class="route-card-link" href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener">Claim a map →</a>
+                            </div>
+                            <div class="route-card">
+                                <div class="route-card-tag">Lore</div>
+                                <div class="route-card-title">The Genesis</div>
+                                <div class="route-card-copy">Narrative entry point for people who fall in love with worlds first and products second.</div>
+                                <a class="route-card-link" href="https://whop.com/checkout/plan_hW8GlMaVgyLCu" target="_blank" rel="noopener">Buy the novel →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <div class="wrap">
+                    <a href="/" class="footer-logo">THE FIRST SPARK</a>
+                    <div class="footer-links">
+                                <a href="member-hub.html">Member Hub</a>
+                        <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener">Soul Maps</a>
+                        <a href="selector-hub.html">Selector Hub</a>
+                        <a href="investor-deck-v2.html">Invest</a>
+                    </div>
+                    <div class="footer-socials">
+                        <a href="https://x.com/OGplayerone" target="_blank" rel="noopener" title="X / Twitter">
+                            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://instagram.com/therealfirstspark" target="_blank" rel="noopener" title="Instagram">
+                            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="https://youtube.com/@therealfirstspark" target="_blank" rel="noopener" title="YouTube">
+                            <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                    </div>
+                    <div class="footer-copy">© 2026 The First Spark &nbsp;·&nbsp; Orbit board active &nbsp;·&nbsp; Akron, Ohio</div>
+                </div>
+            </footer>
+
+            <script>
+            (function(){
+                const nav = document.getElementById('nav');
+                const board = document.getElementById('orbitBoard');
+                const field = document.getElementById('orbitField');
+                const canvas = document.getElementById('cosmos');
+                const ctx = canvas.getContext('2d');
+
+                let width = 0;
+                let height = 0;
+                let time = 0;
+                let stars = [];
+                let atoms = [];
+                let glows = [];
+                let pointerX = 0;
+                let pointerY = 0;
+                let pointerActive = false;
+
+                function resize() {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                    buildScene();
+                }
+
+                function rand(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                function buildScene() {
+                    const starCount = Math.max(70, Math.min(180, Math.floor((width * height) / 14000)));
+                    const atomCount = width < 768 ? 5 : 9;
+
+                    stars = Array.from({ length: starCount }, () => ({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        size: rand(0.4, 1.8),
+                        alpha: rand(0.15, 0.85),
+                        pulse: rand(0.4, 1.8),
+                        drift: rand(0.06, 0.25)
+                    }));
+
+                    atoms = Array.from({ length: atomCount }, () => ({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: rand(16, 40),
+                        orbit: rand(16, 34),
+                        angle: rand(0, Math.PI * 2),
+                        speed: rand(0.004, 0.01),
+                        driftX: rand(8, 24),
+                        driftY: rand(6, 18),
+                        hue: [251, 191, 36, 0.16],
+                        alt: [139, 92, 246, 0.16],
+                        seed: rand(0, Math.PI * 2)
+                    }));
+
+                    glows = [
+                        { x: width * 0.16, y: height * 0.2, radius: Math.min(width, height) * 0.32, color: 'rgba(251,191,36,0.11)' },
+                        { x: width * 0.78, y: height * 0.24, radius: Math.min(width, height) * 0.38, color: 'rgba(139,92,246,0.13)' },
+                        { x: width * 0.54, y: height * 0.72, radius: Math.min(width, height) * 0.34, color: 'rgba(34,211,238,0.08)' }
+                    ];
+                }
+
+                function drawGlows() {
+                    glows.forEach((glow, index) => {
+                        const offsetX = pointerActive ? (pointerX - width / 2) * 0.008 * (index + 1) : 0;
+                        const offsetY = pointerActive ? (pointerY - height / 2) * 0.008 * (index + 1) : 0;
+                        const gradient = ctx.createRadialGradient(glow.x + offsetX, glow.y + offsetY, 0, glow.x + offsetX, glow.y + offsetY, glow.radius);
+                        gradient.addColorStop(0, glow.color);
+                        gradient.addColorStop(1, 'transparent');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, width, height);
+                    });
+                }
+
+                function drawStars() {
+                    stars.forEach((star, index) => {
+                        const alpha = star.alpha + Math.sin(time * star.pulse + index) * 0.2;
+                        const y = (star.y + Math.sin(time * star.drift + index) * 4 + height) % height;
+                        ctx.beginPath();
+                        ctx.arc(star.x, y, star.size, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(255,255,255,' + Math.max(0.08, alpha) + ')';
+                        ctx.fill();
+                    });
+                }
+
+                function drawAtom(atom, index) {
+                    const driftX = Math.sin(time * 0.6 + atom.seed) * atom.driftX;
+                    const driftY = Math.cos(time * 0.45 + atom.seed) * atom.driftY;
+                    const x = atom.x + driftX;
+                    const y = atom.y + driftY;
+
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(time * 0.2 + atom.seed);
+                    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+                    ctx.lineWidth = 1;
+
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, atom.radius, atom.radius * 0.48, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, atom.radius, atom.radius * 0.48, Math.PI / 3, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, atom.radius, atom.radius * 0.48, -Math.PI / 3, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    const nucleus = ctx.createRadialGradient(0, 0, 0, 0, 0, atom.radius * 0.4);
+                    nucleus.addColorStop(0, 'rgba(255,255,255,0.85)');
+                    nucleus.addColorStop(0.4, 'rgba(251,191,36,0.4)');
+                    nucleus.addColorStop(1, 'rgba(251,191,36,0)');
+                    ctx.fillStyle = nucleus;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, atom.radius * 0.35, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for (let i = 0; i < 3; i++) {
+                        const angle = atom.angle + i * ((Math.PI * 2) / 3) + index;
+                        const ex = Math.cos(angle) * atom.orbit;
+                        const ey = Math.sin(angle) * atom.orbit * 0.48;
+                        ctx.beginPath();
+                        ctx.arc(ex, ey, 2.1, 0, Math.PI * 2);
+                        ctx.fillStyle = i === 1 ? 'rgba(139,92,246,0.9)' : 'rgba(125,249,255,0.9)';
+                        ctx.fill();
+                    }
+
+                    ctx.restore();
+                    atom.angle += atom.speed;
+                }
+
+                function drawAmbientPlanets() {
+                    const planets = [
+                        { x: width * 0.09, y: height * 0.74, r: 34, color: 'rgba(255,200,87,0.08)' },
+                        { x: width * 0.88, y: height * 0.64, r: 46, color: 'rgba(139,92,246,0.1)' }
+                    ];
+
+                    planets.forEach((planet, index) => {
+                        const pulse = Math.sin(time * 0.9 + index) * 4;
+                        const gradient = ctx.createRadialGradient(planet.x, planet.y, 0, planet.x, planet.y, planet.r + 28);
+                        gradient.addColorStop(0, planet.color);
+                        gradient.addColorStop(0.45, planet.color);
+                        gradient.addColorStop(1, 'transparent');
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(planet.x, planet.y, planet.r + pulse, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                }
+
+                function draw() {
+                    ctx.clearRect(0, 0, width, height);
+                    time += 0.01;
+                    drawGlows();
+                    drawStars();
+                    drawAmbientPlanets();
+                    atoms.forEach(drawAtom);
+                    requestAnimationFrame(draw);
+                }
+
+                window.addEventListener('resize', resize);
+                window.addEventListener('scroll', () => {
+                    nav.classList.toggle('scrolled', window.scrollY > 32);
+                });
+
+                window.addEventListener('mousemove', event => {
+                    pointerX = event.clientX;
+                    pointerY = event.clientY;
+                    pointerActive = true;
+                    if (field && board) {
+                        const rect = board.getBoundingClientRect();
+                        const localX = ((event.clientX - rect.left) / rect.width) - 0.5;
+                        const localY = ((event.clientY - rect.top) / rect.height) - 0.5;
+                        field.style.setProperty('--shiftX', (localX * 20).toFixed(2) + 'px');
+                        field.style.setProperty('--shiftY', (localY * 20).toFixed(2) + 'px');
+                    }
+                });
+
+                window.addEventListener('mouseleave', () => {
+                    pointerActive = false;
+                    if (field) {
+                        field.style.setProperty('--shiftX', '0px');
+                        field.style.setProperty('--shiftY', '0px');
+                    }
+                });
+
+                resize();
+                draw();
+                nav.classList.toggle('scrolled', window.scrollY > 32);
+            })();
+            </script>

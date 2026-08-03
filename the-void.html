@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE VOID • The First Spark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --void: #050508;
+            --plasma: #1a1a2e;
+            --gold: #f4d03f;
+            --teal: #00d4ff;
+            --indigo: #6366f1;
+            --blood: #ff6b6b;
+        }
+        
+        body {
+            background: #050508;
+            color: #e2e8f0;
+            font-family: 'Inter', system_ui, sans-serif;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .section-header {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.04em;
+        }
+
+        #void-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            cursor: crosshair;
+        }
+
+        .ui-overlay {
+            position: fixed;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .ui-interactive {
+            pointer-events: auto;
+        }
+
+        .treasure-card {
+            background: rgba(10, 10, 15, 0.92);
+            border: 1px solid rgba(244, 208, 63, 0.2);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.7),
+                        0 0 80px rgba(99, 102, 241, 0.1);
+            backdrop-filter: blur(20px);
+        }
+
+        .cosmic-text {
+            background: linear-gradient(90deg, #f4d03f, #00d4ff, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .plasma-glow {
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.15),
+                        0 0 120px rgba(99, 102, 241, 0.08);
+        }
+
+        .black-hole {
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.9));
+        }
+
+        .void-text {
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .treasure-found {
+            animation: treasure-pop 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes treasure-pop {
+            0% { transform: scale(0.6) translateY(20px); opacity: 0; }
+            60% { transform: scale(1.05); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .nebula {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(99,102,241,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(0,212,255,0.04) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 4px white;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background nebula layers -->
+    <div class="nebula"></div>
+    
+    <!-- Main Canvas -->
+    <canvas id="void-canvas"></canvas>
+
+    <!-- Top UI -->
+    <div class="ui-overlay top-0 left-0 right-0 px-8 pt-6 flex items-center justify-between z-50">
+        <div class="flex items-center gap-x-4">
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#f4d03f] via-[#00d4ff] to-[#6366f1] flex items-center justify-center">
+                    <i class="fa-solid fa-infinity text-[#050508] text-2xl"></i>
+                </div>
+                <div>
+                    <div class="font-semibold text-3xl tracking-[-2px] section-header">THE VOID</div>
+                    <div class="text-[10px] text-slate-500 -mt-1 tracking-[3px]">THE FIRST SPARK • SPARKVERSE</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-x-4 text-xs">
+            <div class="px-5 py-2 rounded-3xl bg-white/5 border border-white/10 flex items-center gap-x-2 ui-interactive">
+                <i class="fa-solid fa-globe text-[#00d4ff]"></i>
+                <span id="treasure-count">0 / 12</span>
+                <span class="text-slate-500">TREASURES FOUND</span>
+            </div>
+            
+            <button onclick="summonSparkBurst()" 
+                    class="px-5 py-2 rounded-3xl border border-white/20 hover:bg-white/10 transition-all flex items-center gap-x-2 text-sm ui-interactive">
+                <i class="fa-solid fa-magic"></i>
+                <span>SUMMON SPARKS</span>
+            </button>
+            
+            <button onclick="resetVoid()" 
+                    class="px-4 py-2 rounded-3xl border border-white/10 hover:bg-white/5 transition-all text-xs flex items-center gap-x-2 ui-interactive">
+                <i class="fa-solid fa-redo"></i>
+                <span>RESET</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom subtle info -->
+    <div class="ui-overlay bottom-0 left-0 right-0 px-8 pb-6 flex justify-between items-end text-xs text-slate-500 z-50">
+        <div>
+            <div class="void-text">Touch the plasma. Find the code.</div>
+            <div class="text-[10px] opacity-60">Click black holes • Discover hidden treasures • Awaken layers</div>
+        </div>
+        <div class="text-right">
+            <a href="https://thefirstspark.shop" target="_blank" class="hover:text-[#f4d03f] transition-colors flex items-center gap-x-1 justify-end">
+                <span>Return to thefirstspark.shop</span> <i class="fa-solid fa-external-link-alt text-xs"></i>
+            </a>
+            <div class="text-[10px] opacity-50">or press ESC to fade</div>
+        </div>
+    </div>
+
+    <!-- Treasure Reveal Modal -->
+    <div id="treasure-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="treasure-card max-w-md w-full mx-4 rounded-3xl p-8 relative ui-interactive">
+            <button onclick="closeTreasureModal()" 
+                    class="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+            
+            <div id="modal-icon" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-3xl"></div>
+            
+            <div id="modal-title" class="text-3xl font-semibold tracking-tight section-header mb-2"></div>
+            <div id="modal-subtitle" class="text-xs tracking-[2px] text-[#00d4ff] mb-5"></div>
+            
+            <div id="modal-content" class="text-sm leading-relaxed text-slate-300 mb-6"></div>
+            
+            <div class="flex gap-3">
+                <button onclick="closeTreasureModal()" 
+                        class="flex-1 px-6 py-3 rounded-2xl border border-white/20 hover:bg-white/5 transition-all text-sm">
+                    RETURN TO THE VOID
+                </button>
+                <button onclick="claimTreasure()" 
+                        class="flex-1 px-6 py-3 rounded-2xl bg-gradient-to-r from-[#f4d03f] to-[#6366f1] text-[#050508] font-medium text-sm">
+                    CLAIM &amp; AWAKEN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind
+        function initTailwind() {
+            // Ready
+        }
+
+        // Canvas & State
+        let canvas, ctx;
+        let width, height;
+        let particles = [];
+        let blackHoles = [];
+        let treasures = [];
+        let discoveredCount = 0;
+        let mouseX = 0, mouseY = 0;
+        let isDragging = false;
+        let lastClickTime = 0;
+
+        // Particle class - Dark matter + plasma
+        class Particle {
+            constructor(x, y, type = 'plasma') {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * (type === 'dark' ? 0.3 : 0.8);
+                this.vy = (Math.random() - 0.5) * (type === 'dark' ? 0.3 : 0.8);
+                this.size = type === 'dark' ? Math.random() * 1.8 + 0.6 : Math.random() * 2.2 + 1.1;
+                this.type = type; // 'plasma' or 'dark'
+                this.life = type === 'dark' ? 800 + Math.random() * 600 : 400 + Math.random() * 300;
+                this.hue = type === 'dark' ? 240 + Math.random() * 30 : (Math.random() > 0.6 ? 190 : 45); // indigo/teal/gold tint
+                this.alpha = type === 'dark' ? 0.35 + Math.random() * 0.3 : 0.6 + Math.random() * 0.35;
+                this.pulse = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                // Gentle turbulence
+                this.vx += (Math.random() - 0.5) * 0.02;
+                this.vy += (Math.random() - 0.5) * 0.02;
+                
+                // Drag
+                this.vx *= 0.985;
+                this.vy *= 0.985;
+
+                // Apply black hole gravity
+                blackHoles.forEach(bh => {
+                    const dx = bh.x - this.x;
+                    const dy = bh.y - this.y;
+                    const distSq = dx * dx + dy * dy;
+                    const dist = Math.sqrt(distSq);
+                    
+                    if (dist > 5 && dist < bh.influence) {
+                        const force = (bh.mass / distSq) * 0.8;
+                        this.vx += (dx / dist) * force;
+                        this.vy += (dy / dist) * force;
+                        
+                        // Strong pull near event horizon
+                        if (dist < bh.radius * 2.5) {
+                            this.vx *= 0.7;
+                            this.vy *= 0.7;
+                        }
+                    }
+                });
+
+                // Mouse attraction (subtle plasma pull)
+                const mdx = mouseX - this.x;
+                const mdy = mouseY - this.y;
+                const mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+                if (mdist < 280 && mdist > 10) {
+                    const mforce = 0.018 / (mdist / 80);
+                    this.vx += (mdx / mdist) * mforce;
+                    this.vy += (mdy / mdist) * mforce;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Wrap around edges (infinite void feel)
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+
+                this.life--;
+                this.pulse += 0.04;
+            }
+
+            draw() {
+                ctx.save();
+                const alpha = this.alpha * (this.life / 600);
+                const pulseSize = this.size * (1 + Math.sin(this.pulse) * 0.25);
+                
+                if (this.type === 'plasma') {
+                    // Glowing plasma
+                    ctx.shadowColor = this.hue === 45 ? '#f4d03f' : (this.hue === 190 ? '#00d4ff' : '#6366f1');
+                    ctx.shadowBlur = 14;
+                    ctx.fillStyle = `hsla(${this.hue}, 90%, 75%, ${alpha})`;
+                } else {
+                    // Dark matter - faint connected web feel
+                    ctx.shadowBlur = 3;
+                    ctx.fillStyle = `hsla(${this.hue}, 60%, 65%, ${alpha * 0.7})`;
+                }
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, pulseSize, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Extra glow core for plasma
+                if (this.type === 'plasma' && Math.random() > 0.7) {
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 95%, ${alpha * 0.6})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, pulseSize * 0.35, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        // Black Hole class
+        class BlackHole {
+            constructor(x, y, radius = 38, mass = 1.8) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.mass = mass;
+                this.influence = radius * 18;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.accretionSpeed = 0.008 + Math.random() * 0.006;
+            }
+
+            update() {
+                this.rotation += this.accretionSpeed;
+            }
+
+            draw() {
+                ctx.save();
+                
+                // Event horizon (deep black with subtle rim)
+                ctx.fillStyle = '#050508';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Accretion disk (glowing rings)
+                ctx.strokeStyle = '#f4d03f';
+                ctx.lineWidth = 2.5;
+                ctx.shadowColor = '#f4d03f';
+                ctx.shadowBlur = 18;
+                
+                // Outer disk
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.radius * 2.8, this.radius * 0.9, this.rotation, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Inner brighter disk
+                ctx.strokeStyle = '#ffeb99';
+                ctx.lineWidth = 1.3;
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.radius * 1.9, this.radius * 0.55, this.rotation * 1.4, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Event horizon rim glow
+                ctx.strokeStyle = 'rgba(244, 208, 63, 0.6)';
+                ctx.lineWidth = 1.8;
+                ctx.shadowBlur = 25;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius + 1, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.restore();
+            }
+        }
+
+        // Treasure class
+        class Treasure {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type; // 'sigil', 'lore', 'geometry', 'spark', 'collapse', 'lineage'
+                this.discovered = false;
+                this.radius = 18 + Math.random() * 8;
+                this.pulse = Math.random() * Math.PI * 2;
+                this.floatOffset = Math.random() * 12;
+            }
+
+            draw() {
+                if (this.discovered) return;
+                
+                ctx.save();
+                const pulse = Math.sin(this.pulse) * 0.4 + 1;
+                const size = this.radius * pulse;
+                
+                // Outer subtle glow
+                ctx.shadowColor = '#f4d03f';
+                ctx.shadowBlur = 22;
+                ctx.strokeStyle = 'rgba(244, 208, 63, 0.5)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y + Math.sin(Date.now() / 900 + this.floatOffset) * 2, size * 1.15, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Inner core
+                ctx.fillStyle = 'rgba(244, 208, 63, 0.15)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y + Math.sin(Date.now() / 900 + this.floatOffset) * 2, size * 0.7, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Small icon hint (simple shapes)
+                ctx.fillStyle = '#f4d03f';
+                ctx.shadowBlur = 8;
+                
+                if (this.type === 'sigil') {
+                    // Simple triangle sigil
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y - size * 0.5);
+                    ctx.lineTo(this.x - size * 0.45, this.y + size * 0.35);
+                    ctx.lineTo(this.x + size * 0.45, this.y + size * 0.35);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (this.type === 'geometry') {
+                    // Small hex
+                    const r = size * 0.4;
+                    ctx.beginPath();
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (Math.PI / 3) * i;
+                        const px = this.x + Math.cos(angle) * r;
+                        const py = this.y + Math.sin(angle) * r + Math.sin(Date.now() / 900 + this.floatOffset) * 2;
+                        if (i === 0) ctx.moveTo(px, py);
+                        else ctx.lineTo(px, py);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    // Default spark/dot
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y + Math.sin(Date.now() / 900 + this.floatOffset) * 2, size * 0.35, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+                this.pulse += 0.035;
+            }
+
+            checkClick(mx, my) {
+                if (this.discovered) return false;
+                const dy = (my - this.y) + Math.sin(Date.now() / 900 + this.floatOffset) * 2;
+                const dist = Math.hypot(mx - this.x, dy);
+                return dist < this.radius * 1.4;
+            }
+        }
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        function initBlackHoles() {
+            blackHoles = [];
+            // Central large black hole
+            blackHoles.push(new BlackHole(width * 0.48, height * 0.52, 52, 2.4));
+            
+            // Scattered smaller ones
+            blackHoles.push(new BlackHole(width * 0.22, height * 0.28, 29, 1.3));
+            blackHoles.push(new BlackHole(width * 0.78, height * 0.35, 34, 1.55));
+            blackHoles.push(new BlackHole(width * 0.65, height * 0.78, 26, 1.1));
+            blackHoles.push(new BlackHole(width * 0.15, height * 0.72, 31, 1.35));
+        }
+
+        function initTreasures() {
+            treasures = [];
+            const types = ['sigil', 'lore', 'geometry', 'spark', 'collapse', 'lineage'];
+            const positions = [
+                {x: width * 0.18, y: height * 0.22},
+                {x: width * 0.82, y: height * 0.18},
+                {x: width * 0.35, y: height * 0.38},
+                {x: width * 0.72, y: height * 0.55},
+                {x: width * 0.12, y: height * 0.55},
+                {x: width * 0.88, y: height * 0.68},
+                {x: width * 0.42, y: height * 0.82},
+                {x: width * 0.58, y: height * 0.15},
+                {x: width * 0.25, y: height * 0.68},
+                {x: width * 0.68, y: height * 0.32},
+                {x: width * 0.08, y: height * 0.38},
+                {x: width * 0.92, y: height * 0.45}
+            ];
+            
+            positions.forEach((pos, i) => {
+                const type = types[i % types.length];
+                treasures.push(new Treasure(pos.x, pos.y, type));
+            });
+        }
+
+        function initParticles() {
+            particles = [];
+            // Plasma particles
+            for (let i = 0; i < 280; i++) {
+                particles.push(new Particle(
+                    Math.random() * width,
+                    Math.random() * height,
+                    'plasma'
+                ));
+            }
+            // Dark matter particles (slower web)
+            for (let i = 0; i < 160; i++) {
+                particles.push(new Particle(
+                    Math.random() * width,
+                    Math.random() * height,
+                    'dark'
+                ));
+            }
+        }
+
+        function drawBackground() {
+            // Deep void gradient
+            const grad = ctx.createRadialGradient(
+                width * 0.5, height * 0.45, 120,
+                width * 0.5, height * 0.5, Math.max(width, height) * 0.9
+            );
+            grad.addColorStop(0, '#0a0a12');
+            grad.addColorStop(0.4, '#050508');
+            grad.addColorStop(1, '#020204');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Very subtle grid / cosmic structure hint
+            ctx.strokeStyle = 'rgba(255,255,255,0.015)';
+            ctx.lineWidth = 1;
+            const gridSize = 68;
+            for (let x = 0; x < width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+        }
+
+        function updateAndDrawParticles() {
+            // Occasionally connect nearby dark matter particles for web effect
+            ctx.strokeStyle = 'rgba(100, 110, 180, 0.08)';
+            ctx.lineWidth = 0.7;
+            
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+                
+                // Connect some dark matter
+                if (p.type === 'dark' && Math.random() > 0.92) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        if (p2.type === 'dark') {
+                            const dx = p.x - p2.x;
+                            const dy = p.y - p2.y;
+                            const dist = Math.sqrt(dx*dx + dy*dy);
+                            if (dist < 95 && dist > 18) {
+                                ctx.beginPath();
+                                ctx.moveTo(p.x, p.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                ctx.stroke();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Remove dead particles and respawn
+            particles = particles.filter(p => p.life > 0);
+            
+            while (particles.length < 440) {
+                particles.push(new Particle(
+                    Math.random() * width,
+                    Math.random() * height,
+                    Math.random() > 0.65 ? 'dark' : 'plasma'
+                ));
+            }
+        }
+
+        function drawBlackHoles() {
+            blackHoles.forEach(bh => {
+                bh.update();
+                bh.draw();
+            });
+        }
+
+        function drawTreasures() {
+            treasures.forEach(t => t.draw());
+        }
+
+        function checkTreasureClick(x, y) {
+            for (let t of treasures) {
+                if (t.checkClick(x, y)) {
+                    discoverTreasure(t);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function discoverTreasure(treasure) {
+            if (treasure.discovered) return;
+            
+            treasure.discovered = true;
+            discoveredCount++;
+            document.getElementById('treasure-count').innerHTML = `${discoveredCount} / 12`;
+            
+            // Strong spark burst at location
+            createSparkBurst(treasure.x, treasure.y, 22);
+            
+            // Show modal with treasure content
+            showTreasureModal(treasure);
+            
+            // Occasionally spawn extra particles or glitch effect
+            if (Math.random() > 0.6) {
+                setTimeout(() => createSparkBurst(treasure.x, treasure.y, 14), 420);
+            }
+        }
+
+        function showTreasureModal(treasure) {
+            const modal = document.getElementById('treasure-modal');
+            const iconEl = document.getElementById('modal-icon');
+            const titleEl = document.getElementById('modal-title');
+            const subEl = document.getElementById('modal-subtitle');
+            const contentEl = document.getElementById('modal-content');
+            
+            let icon = 'fa-infinity';
+            let title = 'UNKNOWN SIGNAL';
+            let subtitle = 'VOID TRANSMISSION';
+            let content = 'A fragment of the code awakens.';
+            
+            switch (treasure.type) {
+                case 'sigil':
+                    icon = 'fa-magic';
+                    title = 'SIGIL FRAGMENT';
+                    subtitle = 'SOUL MAP LAYER UNLOCKED';
+                    content = 'You found a living sigil. It pulses with your unique frequency. <span class="text-[#f4d03f]">Reality is programmable.</span> This fragment belongs in your personal archive.';
+                    break;
+                case 'lore':
+                    icon = 'fa-book-open';
+                    title = 'LINEAGE TRANSMISSION';
+                    subtitle = 'THE GENESIS LAYER';
+                    content = 'A piece of the 29-year cold case fracture. The killer was across the street. What moved through us now moves through the Sparkverse. <span class="text-[#00d4ff]">You survived the fire.</span>';
+                    break;
+                case 'geometry':
+                    icon = 'fa-draw-polygon';
+                    title = 'SACRED GEOMETRY NODE';
+                    subtitle = 'PATTERN RECOGNITION';
+                    content = 'A living node of the Flower of Life. Click it in the Sacred Geometry Explorer to complete the lattice. <span class="text-[#6366f1]">Train your perception.</span> The code reveals itself through form.';
+                    break;
+                case 'spark':
+                    icon = 'fa-bolt';
+                    title = 'SPARK IGNITION';
+                    subtitle = 'CONSCIOUSNESS PLAYGROUND';
+                    content = 'Pure spark energy captured. Use this in your next ritual or to power a new interactive door in the Sparkverse lobby. <span class="text-[#f4d03f]">Touch the void — it touches back.</span>';
+                    break;
+                case 'collapse':
+                    icon = 'fa-compress-arrows-alt';
+                    title = 'COLLAPSE PROTOCOL';
+                    subtitle = 'OBSERVER EFFECT ACTIVATED';
+                    content = 'You collapsed a timeline branch. The observer changes the observed. <span class="text-[#ff6b6b]">What reality do you choose now?</span> This protocol is now available in your Chambers.';
+                    break;
+                case 'lineage':
+                    icon = 'fa-project-diagram';
+                    title = 'LINEAGE DEBUGGER';
+                    subtitle = 'ANCESTRAL PATTERN RESOLVED';
+                    content = 'You debugged a deep ancestral pattern. The fracture is healing. New soul map data unlocked. <span class="text-[#00d4ff]">Your numbers aren\'t random. Read your code.</span>';
+                    break;
+            }
+            
+            iconEl.innerHTML = `<i class="fa-solid ${icon} text-4xl text-[#f4d03f]"></i>`;
+            iconEl.style.background = 'rgba(244, 208, 63, 0.1)';
+            iconEl.style.border = '1px solid rgba(244, 208, 63, 0.3)';
+            
+            titleEl.innerHTML = title;
+            subEl.innerHTML = subtitle;
+            contentEl.innerHTML = content;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        function closeTreasureModal() {
+            const modal = document.getElementById('treasure-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function claimTreasure() {
+            // Could add to a persistent "inventory" in localStorage in future
+            const modal = document.getElementById('treasure-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            
+            // Extra reward spark burst across screen
+            createSparkBurst(width * 0.3, height * 0.4, 35);
+            setTimeout(() => createSparkBurst(width * 0.7, height * 0.6, 28), 180);
+            
+            // Hint to visit other tools
+            setTimeout(() => {
+                if (discoveredCount >= 6 && discoveredCount % 3 === 0) {
+                    console.log('%c[THE VOID] Many treasures claimed. Consider opening the Sacred Geometry Explorer next.', 'color:#64748b');
+                }
+            }, 1200);
+        }
+
+        function createSparkBurst(x, y, count = 18) {
+            for (let i = 0; i < count; i++) {
+                const p = new Particle(x + (Math.random() - 0.5) * 60, y + (Math.random() - 0.5) * 60, 'plasma');
+                p.vx = (Math.random() - 0.5) * 5.5;
+                p.vy = (Math.random() - 0.5) * 5.5;
+                p.life = 45 + Math.random() * 35;
+                p.size = 1.8 + Math.random() * 2.2;
+                particles.push(p);
+            }
+        }
+
+        function summonSparkBurst() {
+            createSparkBurst(mouseX || width/2, mouseY || height/2, 32);
+            // Bonus near random black hole
+            const bh = blackHoles[Math.floor(Math.random() * blackHoles.length)];
+            createSparkBurst(bh.x, bh.y, 18);
+        }
+
+        function resetVoid() {
+            discoveredCount = 0;
+            document.getElementById('treasure-count').innerHTML = `0 / 12`;
+            treasures.forEach(t => t.discovered = false);
+            particles = [];
+            initParticles();
+            createSparkBurst(width * 0.5, height * 0.5, 45);
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, width, height);
+            
+            drawBackground();
+            updateAndDrawParticles();
+            drawBlackHoles();
+            drawTreasures();
+            
+            // Subtle vignette / cosmic atmosphere
+            const vignette = ctx.createRadialGradient(
+                width * 0.5, height * 0.5, Math.min(width, height) * 0.35,
+                width * 0.5, height * 0.5, Math.max(width, height) * 0.75
+            );
+            vignette.addColorStop(0, 'rgba(0,0,0,0)');
+            vignette.addColorStop(1, 'rgba(5,5,8,0.65)');
+            ctx.fillStyle = vignette;
+            ctx.fillRect(0, 0, width, height);
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        function setupEventListeners() {
+            canvas.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            canvas.addEventListener('click', (e) => {
+                const now = Date.now();
+                if (now - lastClickTime < 180) return; // debounce
+                lastClickTime = now;
+                
+                const clickedTreasure = checkTreasureClick(e.clientX, e.clientY);
+                
+                if (!clickedTreasure) {
+                    // Click in empty space — small spark or black hole interaction
+                    const nearBH = blackHoles.find(bh => {
+                        const dist = Math.hypot(e.clientX - bh.x, e.clientY - bh.y);
+                        return dist < bh.radius * 3.5;
+                    });
+                    
+                    if (nearBH) {
+                        // Strong pull + burst into the black hole
+                        createSparkBurst(e.clientX, e.clientY, 26);
+                        // Pull nearby particles harder (temporary)
+                        particles.forEach(p => {
+                            const dx = nearBH.x - p.x;
+                            const dy = nearBH.y - p.y;
+                            const dist = Math.hypot(dx, dy);
+                            if (dist < nearBH.influence * 0.6) {
+                                p.vx += (dx / dist) * 2.8;
+                                p.vy += (dy / dist) * 2.8;
+                            }
+                        });
+                    } else {
+                        // Normal click spark
+                        createSparkBurst(e.clientX, e.clientY, 14);
+                    }
+                }
+            });
+            
+            // Keyboard
+            document.addEventListener('keydown', (e) => {
+                if (e.key.toLowerCase() === 's' || e.key === ' ') {
+                    e.preventDefault();
+                    summonSparkBurst();
+                }
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('treasure-modal');
+                    if (!modal.classList.contains('hidden')) {
+                        closeTreasureModal();
+                    } else {
+                        // Soft fade hint
+                        document.body.style.transition = 'opacity 1.2s';
+                        document.body.style.opacity = '0.15';
+                        setTimeout(() => {
+                            document.body.style.opacity = '1';
+                            document.body.style.transition = '';
+                        }, 1400);
+                    }
+                }
+                if (e.key.toLowerCase() === 'r') {
+                    resetVoid();
+                }
+            });
+            
+            // Touch support
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                mouseX = touch.clientX;
+                mouseY = touch.clientY;
+                
+                if (!checkTreasureClick(mouseX, mouseY)) {
+                    createSparkBurst(mouseX, mouseY, 16);
+                }
+            }, { passive: false });
+            
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                // Reposition black holes and treasures slightly on resize (optional)
+            });
+        }
+
+        function initializeVoid() {
+            initTailwind();
+            
+            canvas = document.getElementById('void-canvas');
+            ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+            
+            resizeCanvas();
+            initBlackHoles();
+            initTreasures();
+            initParticles();
+            
+            // Initial spark burst
+            setTimeout(() => {
+                createSparkBurst(width * 0.5, height * 0.48, 38);
+            }, 650);
+            
+            setupEventListeners();
+            
+            // Start the infinite loop
+            gameLoop();
+            
+            // Welcome message in console for the builder
+            console.log('%c[THE VOID] Initialized for The First Spark. Click black holes and hidden treasures. Press S for sparks. R to reset.', 'color:#475569');
+            
+            // Auto-discover hint after some time (subtle)
+            setTimeout(() => {
+                if (discoveredCount === 0) {
+                    console.log('%c[THE VOID] There are 12 hidden treasures waiting in the plasma...', 'color:#64748b; font-size: 10px');
+                }
+            }, 18000);
+        }
+
+        // Boot
+        window.onload = initializeVoid;
+    </script>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="UPDATE_WITH_YOUR_VERIFICATION_CODE">
+    <title>Entanglement Simulator — Multi-Selector Reality Collision</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-UPDATE_WITH_YOUR_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-UPDATE_WITH_YOUR_ID');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f4d 50%, #0f0a2e 100%);
+            color: #e0e6ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 16px;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        /* CONTROLS PANEL */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            background: rgba(20, 25, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .control-section {
+            border-bottom: 1px solid rgba(100, 150, 255, 0.1);
+            padding-bottom: 16px;
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .selector-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .selector-row {
+            background: rgba(109, 179, 255, 0.05);
+            border: 1px solid rgba(109, 179, 255, 0.2);
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .selector-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .selector-info {
+            flex: 1;
+        }
+
+        .selector-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e0e6ff;
+        }
+
+        .selector-freq {
+            font-size: 10px;
+            color: #6db3ff;
+        }
+
+        .selector-toggle {
+            width: 30px;
+            height: 16px;
+            background: rgba(109, 179, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid rgba(109, 179, 255, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .selector-toggle.active {
+            background: rgba(109, 179, 255, 0.6);
+        }
+
+        .selector-toggle::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s ease;
+        }
+
+        .selector-toggle.active::after {
+            left: 16px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            background: rgba(109, 179, 255, 0.1);
+            color: #6db3ff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: rgba(109, 179, 255, 0.2);
+            box-shadow: 0 0 15px rgba(109, 179, 255, 0.3);
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, #6db3ff, #9d4edd);
+            border: none;
+        }
+
+        button.primary:hover {
+            box-shadow: 0 0 20px rgba(109, 179, 255, 0.5);
+        }
+
+        .slider-group {
+            margin: 12px 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #6db3ff;
+            margin-bottom: 6px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #6db3ff, #9d4edd);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #6db3ff;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(109, 179, 255, 0.6);
+        }
+
+        /* VISUALIZATION PANEL */
+        .viz-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #entanglementCanvas {
+            background: radial-gradient(circle at 50% 50%, rgba(20, 30, 70, 0.9), rgba(10, 10, 40, 0.95));
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            border-radius: 12px;
+            flex: 1;
+            cursor: crosshair;
+        }
+
+        .canvas-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            padding: 0 8px;
+        }
+
+        /* METRICS PANEL */
+        .metrics-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            background: rgba(20, 25, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .metric-box {
+            background: rgba(109, 179, 255, 0.05);
+            border: 1px solid rgba(109, 179, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .metric-box h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            margin-bottom: 8px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 6px;
+            color: #c0c8ff;
+        }
+
+        .metric-row .value {
+            color: #9d4edd;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .entanglement-strength {
+            width: 100%;
+            height: 20px;
+            background: rgba(109, 179, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .entanglement-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6db3ff, #9d4edd);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .header {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-bottom: 4px;
+            color: #e0e6ff;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            text-transform: uppercase;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(100, 150, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(109, 179, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(109, 179, 255, 0.5);
+        }
+
+        .info-box {
+            background: rgba(157, 78, 221, 0.1);
+            border-left: 2px solid #9d4edd;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #d0d8ff;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<!-- SPRK TOKEN GATE -->
+<style>
+  .spark-gate{font-family:'Space Mono',monospace;background:linear-gradient(135deg,#12121a 0%,#0a0a0f 100%);border:1px solid #d4af3740;border-radius:8px;padding:20px 24px;margin:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:9999}
+  .spark-gate-info{display:flex;align-items:center;gap:16px}
+  .spark-gate-icon{font-size:32px}
+  .spark-gate-text h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f7f8fa;margin:0 0 4px 0}
+  .spark-gate-text p{font-size:0.85rem;color:#f7f8fa80;margin:0}
+  .spark-gate-cost{color:#22d3ee;font-weight:700}
+  .spark-gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .spark-gate-btn{padding:10px 20px;font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;text-decoration:none;border-radius:4px;transition:all 0.2s ease;cursor:pointer;border:none}
+  .spark-gate-btn-primary{background:#d4af37;color:#0a0a0f}
+  .spark-gate-btn-primary:hover{background:#22d3ee}
+  .spark-gate-btn-secondary{background:transparent;border:1px solid #8b5cf6;color:#8b5cf6}
+  .spark-gate-btn-secondary:hover{background:#8b5cf680;color:#f7f8fa}
+  @media(max-width:600px){.spark-gate{flex-direction:column;text-align:center}.spark-gate-info{flex-direction:column}.spark-gate-actions{width:100%;justify-content:center}}
+</style>
+<div class="spark-gate" data-tool-id="selector-entanglement">
+  <div class="spark-gate-info">
+    <span class="spark-gate-icon">🔒</span>
+    <div class="spark-gate-text">
+      <h3>Unlock Selector Entanglement</h3>
+      <p>This tool costs <span class="spark-gate-cost">25 $SPRK</span> tokens</p>
+    </div>
+  </div>
+  <div class="spark-gate-actions">
+    <a href="https://sparkverse.thefirstspark.shop/tokens.html" class="spark-gate-btn spark-gate-btn-primary">Get Tokens</a>
+    <a href="mailto:kate@thefirstspark.shop?subject=Token%20Unlock%20Request%20-%20selector-entanglement&body=Hi%20Kate,%0A%0AI%20have%20tokens%20and%20would%20like%20to%20unlock%20Selector%20Entanglement.%0A%0AMy%20purchase%20email:%20%0AMy%20Whop%20username:%20%0A%0AThanks!" class="spark-gate-btn spark-gate-btn-secondary">I Have Tokens</a>
+  </div>
+</div>
+<!-- END SPRK TOKEN GATE -->
+    <div class="header">
+        <h1>⚡ Entanglement Simulator</h1>
+        <p>Multi-Selector Reality Collision — Observer Co-Tuning</p>
+    </div>
+
+    <div class="container">
+        <!-- CONTROL PANEL -->
+        <div class="control-panel">
+            <h3 style="color: #6db3ff; font-size: 14px; margin-bottom: 12px;">Control Active Selectors</h3>
+            
+            <div class="selector-list" id="selectorList"></div>
+
+            <div class="control-section">
+                <button class="primary" onclick="addSelector()">+ Add Selector</button>
+            </div>
+
+            <div class="control-section">
+                <label class="label">Global Settings</label>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Consensus Weight</span>
+                        <span id="consensusValue">60%</span>
+                    </div>
+                    <input type="range" id="consensusSlider" min="0" max="100" value="60" step="1">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Entanglement Friction</span>
+                        <span id="frictionValue">50%</span>
+                    </div>
+                    <input type="range" id="frictionSlider" min="0" max="100" value="50" step="1">
+                </div>
+            </div>
+
+            <div class="control-section">
+                <label class="label">Presets</label>
+                <div class="button-group" style="flex-direction: column;">
+                    <button onclick="loadPreset('harmony')">Harmony (Co-tuning)</button>
+                    <button onclick="loadPreset('conflict')">Conflict (Decoherence)</button>
+                    <button onclick="loadPreset('dominance')">Dominance (Power Gap)</button>
+                </div>
+            </div>
+
+            <div class="info-box">
+                Click selectors to adjust frequency. Toggle on/off to activate. Watch how the probability field renders the weighted average.
+            </div>
+        </div>
+
+        <!-- VISUALIZATION PANEL -->
+        <div class="viz-panel">
+            <canvas id="entanglementCanvas"></canvas>
+            <div class="canvas-label">Entanglement Field — Witnessing & Co-Tuning</div>
+        </div>
+
+        <!-- METRICS PANEL -->
+        <div class="metrics-panel">
+            <div class="metric-box">
+                <h4>Field Metrics</h4>
+                <div class="metric-row">
+                    <span>Active Selectors</span>
+                    <span class="value" id="activeSelectorCount">0</span>
+                </div>
+                <div class="metric-row">
+                    <span>Average Frequency</span>
+                    <span class="value" id="avgFrequency">0</span>
+                </div>
+                <div class="metric-row">
+                    <span>Weighted Average</span>
+                    <span class="value" id="weightedAvg">0</span>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <h4>Entanglement State</h4>
+                <div class="metric-row">
+                    <span>Entanglement Depth</span>
+                    <span class="value" id="entanglementDepth">None</span>
+                </div>
+                <div class="metric-row">
+                    <span>Decoherence Risk</span>
+                    <span class="value" id="decoherenceRisk">Low</span>
+                </div>
+                <div class="metric-row">
+                    <span>Reality Cohesion</span>
+                    <span class="value" id="realityCohesion">100%</span>
+                </div>
+                <div class="entanglement-strength">
+                    <div class="entanglement-bar" id="entanglementBar"></div>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <h4>Most Probable Branch</h4>
+                <div style="color: #c0c8ff; font-size: 12px; padding: 10px; background: rgba(109, 179, 255, 0.05); border-radius: 4px; line-height: 1.6;">
+                    <div id="renderingBranch">Configuration: Neutral Frequency</div>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <h4>Instructions</h4>
+                <div class="info-box" style="background: transparent; border: none; padding: 0; color: #d0d8ff;">
+                    <ul style="margin-left: 16px;">
+                        <li>Add 2+ selectors to see co-tuning</li>
+                        <li>Adjust their frequencies to test conflict/harmony</li>
+                        <li>Toggle on/off to see strength effects</li>
+                        <li>Try presets to see realistic entanglement patterns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ENTANGLEMENT ENGINE
+        // ============================================
+
+        class EntanglementEngine {
+            constructor() {
+                this.selectors = [];
+                this.consensus = 0.60;
+                this.friction = 0.50;
+                this.time = 0;
+                this.nextId = 0;
+            }
+
+            addSelector(name, frequency, amplitude) {
+                const selector = {
+                    id: this.nextId++,
+                    name: name,
+                    frequency: frequency,
+                    amplitude: amplitude,
+                    active: true,
+                    color: this.generateColor(),
+                    phase: Math.random() * Math.PI * 2
+                };
+                this.selectors.push(selector);
+                return selector;
+            }
+
+            removeSelector(id) {
+                this.selectors = this.selectors.filter(s => s.id !== id);
+            }
+
+            getActiveSelectors() {
+                return this.selectors.filter(s => s.active);
+            }
+
+            getWeightedAverage() {
+                const active = this.getActiveSelectors();
+                if (active.length === 0) return 0;
+
+                const sum = active.reduce((acc, s) => acc + (s.frequency * s.amplitude), 0);
+                const ampSum = active.reduce((acc, s) => acc + s.amplitude, 0);
+                return ampSum === 0 ? 0 : sum / ampSum;
+            }
+
+            getAverageFrequency() {
+                const active = this.getActiveSelectors();
+                if (active.length === 0) return 0;
+                return active.reduce((acc, s) => acc + s.frequency, 0) / active.length;
+            }
+
+            getEntanglementDepth() {
+                const active = this.getActiveSelectors();
+                if (active.length <= 1) return 0;
+                if (active.length === 2) return 1;
+                return Math.log2(active.length);
+            }
+
+            getDecoherenceRisk() {
+                const active = this.getActiveSelectors();
+                if (active.length <= 1) return 0;
+
+                // Calculate frequency spread
+                const freqs = active.map(s => s.frequency);
+                const avg = freqs.reduce((a, b) => a + b) / freqs.length;
+                const variance = freqs.reduce((acc, f) => acc + Math.pow(f - avg, 2), 0) / freqs.length;
+                const stdDev = Math.sqrt(variance);
+
+                // Normalize to 0-1
+                return Math.min(1, stdDev / 200);
+            }
+
+            generateColor() {
+                const colors = [
+                    'rgba(109, 179, 255, 0.8)',   // Blue
+                    'rgba(157, 78, 221, 0.8)',    // Purple
+                    'rgba(255, 107, 107, 0.8)',   // Red
+                    'rgba(100, 255, 130, 0.8)',   // Green
+                    'rgba(255, 200, 87, 0.8)',    // Orange
+                    'rgba(200, 130, 255, 0.8)'    // Light Purple
+                ];
+                return colors[this.selectors.length % colors.length];
+            }
+
+            update() {
+                this.time += 0.01;
+                this.selectors.forEach(s => {
+                    s.phase += 0.02;
+                });
+            }
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        const engine = new EntanglementEngine();
+        const canvas = document.getElementById('entanglementCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+
+        function renderUI() {
+            const listEl = document.getElementById('selectorList');
+            listEl.innerHTML = engine.selectors.map((selector, idx) => `
+                <div class="selector-row" style="border-color: ${selector.color}; border-left: 3px solid ${selector.color}">
+                    <div class="selector-color" style="background: ${selector.color}"></div>
+                    <div class="selector-info">
+                        <div class="selector-name">${selector.name}</div>
+                        <div class="selector-freq">${selector.frequency.toFixed(0)} Hz • ${(selector.amplitude * 100).toFixed(0)}% Amp</div>
+                    </div>
+                    <div class="selector-toggle ${selector.active ? 'active' : ''}" 
+                         onclick="toggleSelector(${selector.id})"></div>
+                </div>
+            `).join('');
+
+            // Add frequency adjustment interface
+            engine.selectors.forEach(selector => {
+                const row = document.querySelector(`[data-selector-id="${selector.id}"]`);
+            });
+        }
+
+        function updateMetrics() {
+            const active = engine.getActiveSelectors();
+
+            document.getElementById('activeSelectorCount').textContent = active.length;
+            document.getElementById('avgFrequency').textContent = engine.getAverageFrequency().toFixed(0) + ' Hz';
+            document.getElementById('weightedAvg').textContent = engine.getWeightedAverage().toFixed(0) + ' Hz';
+            document.getElementById('entanglementDepth').textContent = engine.getEntanglementDepth().toFixed(1);
+
+            const decoherence = engine.getDecoherenceRisk();
+            if (decoherence < 0.2) document.getElementById('decoherenceRisk').textContent = 'Low';
+            else if (decoherence < 0.5) document.getElementById('decoherenceRisk').textContent = 'Moderate';
+            else if (decoherence < 0.8) document.getElementById('decoherenceRisk').textContent = 'High';
+            else document.getElementById('decoherenceRisk').textContent = 'Critical';
+
+            const cohesion = Math.max(0, 100 - (decoherence * 100));
+            document.getElementById('realityCohesion').textContent = cohesion.toFixed(0) + '%';
+            document.getElementById('entanglementBar').style.width = (decoherence * 100) + '%';
+
+            // Update rendering branch prediction
+            const weighted = engine.getWeightedAverage();
+            const description = `Frequency: ${weighted.toFixed(0)} Hz | Coherence: ${cohesion.toFixed(0)}%`;
+            document.getElementById('renderingBranch').textContent = description;
+        }
+
+        function drawField() {
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Clear
+            ctx.fillStyle = 'rgba(10, 20, 50, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            const active = engine.getActiveSelectors();
+            if (active.length === 0) return;
+
+            // Draw selectors as radiating nodes
+            active.forEach((selector, i) => {
+                const angle = (i / active.length) * Math.PI * 2;
+                const distance = 100;
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+
+                // Node
+                ctx.fillStyle = selector.color;
+                ctx.beginPath();
+                ctx.arc(x, y, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Label
+                ctx.fillStyle = '#e0e6ff';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(selector.frequency.toFixed(0), x, y + 25);
+
+                // Connection to center
+                ctx.strokeStyle = selector.color.replace('0.8', '0.3');
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            });
+
+            // Central point (weighted average)
+            const weighted = engine.getWeightedAverage();
+            const glow = 10 + Math.sin(engine.time * 5) * 5;
+
+            ctx.strokeStyle = `rgba(109, 179, 255, ${0.4 + Math.sin(engine.time * 3) * 0.3})`;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, glow, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.fillStyle = 'rgba(109, 179, 255, 0.6)';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw frequency bands
+            ctx.strokeStyle = 'rgba(109, 179, 255, 0.1)';
+            ctx.lineWidth = 1;
+            for (let r = 50; r < 300; r += 50) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Show rendering/collision if multiple selectors
+            if (active.length > 1) {
+                // Show decoherence as distortion
+                const decoherence = engine.getDecoherenceRisk();
+                if (decoherence > 0.3) {
+                    ctx.strokeStyle = `rgba(255, 107, 107, ${decoherence * 0.5})`;
+                    ctx.lineWidth = 2;
+                    for (let i = 0; i < 3; i++) {
+                        const offset = Math.sin(engine.time * 4 + i) * 20;
+                        ctx.beginPath();
+                        ctx.arc(centerX + offset, centerY + offset, 60, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            engine.update();
+            drawField();
+            updateMetrics();
+            renderUI();
+            requestAnimationFrame(animate);
+        }
+
+        // ============================================
+        // EVENT HANDLERS
+        // ============================================
+
+        function addSelector() {
+            const baseFreq = 400 + Math.random() * 200;
+            const name = `Selector ${engine.selectors.length + 1}`;
+            engine.addSelector(name, baseFreq, 0.7);
+            renderUI();
+        }
+
+        function toggleSelector(id) {
+            const selector = engine.selectors.find(s => s.id === id);
+            if (selector) selector.active = !selector.active;
+        }
+
+        function loadPreset(preset) {
+            engine.selectors = [];
+            engine.nextId = 0;
+
+            if (preset === 'harmony') {
+                engine.addSelector('Selector A', 432, 0.6);
+                engine.addSelector('Selector B', 440, 0.6);
+                document.getElementById('consensusSlider').value = 40;
+                document.getElementById('frictionSlider').value = 20;
+            } else if (preset === 'conflict') {
+                engine.addSelector('Selector A', 300, 0.9);
+                engine.addSelector('Selector B', 600, 0.9);
+                document.getElementById('consensusSlider').value = 50;
+                document.getElementById('frictionSlider').value = 90;
+            } else if (preset === 'dominance') {
+                engine.addSelector('Dominant', 500, 1.0);
+                engine.addSelector('Weak 1', 450, 0.3);
+                engine.addSelector('Weak 2', 550, 0.2);
+                document.getElementById('consensusSlider').value = 60;
+                document.getElementById('frictionSlider').value = 50;
+            }
+
+            updateMetrics();
+        }
+
+        document.getElementById('consensusSlider').addEventListener('input', (e) => {
+            engine.consensus = parseInt(e.target.value) / 100;
+            document.getElementById('consensusValue').textContent = e.target.value + '%';
+        });
+
+        document.getElementById('frictionSlider').addEventListener('input', (e) => {
+            engine.friction = parseInt(e.target.value) / 100;
+            document.getElementById('frictionValue').textContent = e.target.value + '%';
+        });
+
+        // Initialize
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        animate();
+    </script>
+<script src="https://sparkverse.thefirstspark.shop/spark-auth.js"></script>
+<script>SparkAuth.applyGate();</script>
+</body>
+</html>

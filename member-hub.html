@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Hub — The First Spark</title>
+    <meta name="description" content="Your personalized home base inside The First Spark. Log in with Whop to access your tools, tier, and community.">
+    <meta property="og:title" content="Member Hub — The First Spark">
+    <meta property="og:url" content="https://thefirstspark.shop/member-hub.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --void:    #050508;
+            --panel:   #0d0d14;
+            --panel2:  #111118;
+            --spark:   #fbbf24;
+            --cyan:    #22d3ee;
+            --nebula:  #8b5cf6;
+            --ember:   #f97316;
+            --green:   #34d399;
+            --white:   rgba(255,255,255,0.92);
+            --dim:     rgba(255,255,255,0.4);
+            --dimmer:  rgba(255,255,255,0.07);
+            --border:  rgba(251,191,36,0.15);
+            --border2: rgba(255,255,255,0.08);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--void);
+            font-family: 'Space Mono', 'Courier New', monospace;
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* LOADING */
+        #state-loading {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .loader-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .7rem; font-weight: 900;
+            letter-spacing: .3em; color: var(--spark); opacity: .6;
+        }
+        .loader-spin {
+            width: 36px; height: 36px;
+            border: 2px solid var(--dimmer);
+            border-top-color: var(--spark);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-msg { font-size: .55rem; letter-spacing: .2em; color: var(--dim); }
+
+        /* LOGIN GATE */
+        #state-login {
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        #state-login::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 30% 40%, rgba(251,191,36,.05) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 70% 60%, rgba(139,92,246,.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .gate-inner {
+            position: relative; z-index: 1;
+            width: 100%; max-width: 460px; text-align: center;
+        }
+        .gate-badge {
+            display: inline-block; font-size: .44rem;
+            letter-spacing: .45em; text-transform: uppercase;
+            border: 1px solid rgba(251,191,36,.3); color: var(--spark);
+            padding: 5px 18px; margin-bottom: 28px;
+        }
+        .gate-logo {
+            font-family: 'Orbitron', sans-serif; font-weight: 900;
+            font-size: clamp(1.1rem, 4vw, 1.6rem); letter-spacing: .15em;
+            color: var(--spark); text-shadow: 0 0 40px rgba(251,191,36,.25);
+            margin-bottom: 10px;
+        }
+        .gate-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(.85rem, 2.5vw, 1.1rem); font-weight: 700;
+            letter-spacing: .05em; color: var(--white); margin-bottom: 16px;
+        }
+        .gate-sub {
+            font-size: .65rem; color: var(--dim);
+            line-height: 1.7; max-width: 360px;
+            margin: 0 auto 36px;
+        }
+        .gate-features {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 8px; margin-bottom: 36px; text-align: left;
+        }
+        .gate-feature {
+            background: var(--panel); border: 1px solid var(--border2);
+            border-radius: 8px; padding: 12px 14px;
+            font-size: .58rem; color: var(--dim);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .gate-feature .gf-icon { font-size: 1rem; flex-shrink: 0; }
+        .gate-feature strong { color: var(--white); display: block; font-size: .6rem; margin-bottom: 2px; }
+        .btn-whop {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, var(--spark) 0%, #f59e0b 100%);
+            color: #050508; font-family: 'Orbitron', sans-serif;
+            font-size: .6rem; font-weight: 700; letter-spacing: .12em;
+            text-transform: uppercase; padding: 16px 32px;
+            border: none; border-radius: 8px; cursor: pointer;
+            transition: transform .15s, box-shadow .15s;
+            text-decoration: none; width: 100%; justify-content: center;
+            margin-bottom: 14px;
+        }
+        .btn-whop:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(251,191,36,.35); }
+        .btn-whop svg { width: 18px; height: 18px; fill: #050508; }
+        .gate-secondary-link {
+            font-size: .52rem; color: var(--dim);
+            text-decoration: none; letter-spacing: .1em; transition: color .2s;
+        }
+        .gate-secondary-link:hover { color: var(--spark); }
+        .gate-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 16px 0; font-size: .48rem;
+            letter-spacing: .2em; color: rgba(255,255,255,.15);
+        }
+        .gate-divider::before, .gate-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--border2);
+        }
+        .auth-error {
+            background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3);
+            border-radius: 8px; padding: 12px 16px; font-size: .58rem;
+            color: rgba(252,165,165,.9); margin-bottom: 20px;
+            text-align: left; line-height: 1.6;
+        }
+
+        /* HUB NAV */
+        #state-hub { display: none; }
+        .hub-nav {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(5,5,8,.97); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px; display: flex; align-items: center; gap: 16px;
+        }
+        .hub-nav-logo {
+            font-family: 'Orbitron', sans-serif; font-weight: 900;
+            font-size: .65rem; letter-spacing: .2em; color: var(--spark);
+            text-decoration: none; text-shadow: 0 0 16px rgba(251,191,36,.3); flex-shrink: 0;
+        }
+        .hub-nav-sep { width: 1px; height: 20px; background: var(--border2); flex-shrink: 0; }
+        .hub-nav-label {
+            font-size: .48rem; letter-spacing: .35em;
+            text-transform: uppercase; color: var(--dim); flex-shrink: 0;
+        }
+        .hub-nav-spacer { flex: 1; }
+        .hub-nav-tier {
+            font-size: .46rem; letter-spacing: .2em; text-transform: uppercase;
+            padding: 4px 12px; border-radius: 20px; font-weight: 700; flex-shrink: 0;
+        }
+        .hub-nav-tier.tier-free    { background: rgba(255,255,255,.07); color: var(--dim); border: 1px solid var(--border2); }
+        .hub-nav-tier.tier-players { background: rgba(251,191,36,.12);  color: var(--spark); border: 1px solid rgba(251,191,36,.3); }
+        .hub-nav-tier.tier-og      { background: rgba(139,92,246,.15);  color: #c4b5fd; border: 1px solid rgba(139,92,246,.35); }
+        .hub-nav-user { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .hub-nav-avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: var(--panel2); border: 1px solid var(--border);
+            object-fit: cover; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .65rem; color: var(--spark); overflow: hidden;
+        }
+        .hub-nav-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .hub-nav-name {
+            font-size: .55rem; color: var(--white); letter-spacing: .05em;
+            max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .hub-nav-logout {
+            font-size: .46rem; letter-spacing: .15em; text-transform: uppercase;
+            color: var(--dim); background: none; border: 1px solid var(--border2);
+            padding: 5px 12px; cursor: pointer; font-family: 'Space Mono', monospace;
+            transition: color .2s, border-color .2s; border-radius: 4px; flex-shrink: 0;
+        }
+        .hub-nav-logout:hover { color: var(--white); border-color: var(--dim); }
+        @media (max-width: 600px) {
+            .hub-nav { padding: 10px 14px; gap: 10px; }
+            .hub-nav-name, .hub-nav-sep, .hub-nav-label { display: none; }
+        }
+
+        /* WRAP */
+        .wrap { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+
+        /* HERO */
+        .hub-hero { padding: 48px 0 36px; border-bottom: 1px solid var(--border); }
+        .hub-hero-inner { display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap; }
+        .hub-hero-text { flex: 1; min-width: 240px; }
+        .hub-welcome-badge {
+            display: inline-block; font-size: .44rem; letter-spacing: .4em;
+            text-transform: uppercase; border: 1px solid rgba(251,191,36,.25);
+            color: var(--spark); padding: 4px 14px; margin-bottom: 16px;
+        }
+        .hub-welcome-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.3rem, 4vw, 2.1rem); font-weight: 900;
+            letter-spacing: .04em; color: var(--white); margin-bottom: 8px; line-height: 1.2;
+        }
+        .hub-welcome-name span {
+            background: linear-gradient(135deg, var(--spark), var(--nebula));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hub-welcome-sub { font-size: .65rem; color: var(--dim); line-height: 1.7; margin-bottom: 20px; }
+        .hub-hero-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+        .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+        .hero-stat-val { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--spark); }
+        .hero-stat-lbl { font-size: .46rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
+
+        /* XP CARD */
+        .xp-card {
+            background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 22px 24px; min-width: 260px; flex-shrink: 0;
+        }
+        .xp-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .xp-rank-name { font-family: 'Orbitron', sans-serif; font-size: .75rem; font-weight: 700; color: var(--spark); }
+        .xp-rank-num { font-size: .52rem; color: var(--dim); }
+        .xp-bar-wrap { background: var(--dimmer); border-radius: 4px; height: 7px; overflow: hidden; margin-bottom: 8px; }
+        .xp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--spark), var(--nebula)); border-radius: 4px; transition: width .6s ease; }
+        .xp-bar-labels { display: flex; justify-content: space-between; font-size: .46rem; color: var(--dim); }
+        .xp-mini-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border2);
+        }
+        .xp-mini-stat { text-align: center; }
+        .xp-mini-val { font-family: 'Orbitron', sans-serif; font-size: .9rem; font-weight: 700; color: var(--spark); }
+        .xp-mini-lbl { font-size: .44rem; letter-spacing: .15em; text-transform: uppercase; color: var(--dim); margin-top: 2px; }
+
+        /* SECTION */
+        .sec-wrap { padding: 44px 0; }
+        .sec-label { font-size: .46rem; letter-spacing: .4em; text-transform: uppercase; color: var(--spark); margin-bottom: 8px; }
+        .sec-title { font-family: 'Orbitron', sans-serif; font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 700; letter-spacing: .05em; color: var(--white); margin-bottom: 6px; }
+        .sec-sub { font-size: .65rem; color: var(--dim); line-height: 1.7; margin-bottom: 26px; }
+        .divider-line { height: 1px; background: linear-gradient(90deg, transparent, var(--border) 50%, transparent); }
+
+        /* TIER CARDS */
+        .tier-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tier-card {
+            background: var(--panel); border: 1px solid var(--border2);
+            border-radius: 12px; padding: 24px 22px; position: relative;
+            transition: border-color .25s, transform .2s;
+        }
+        .tier-card:hover { border-color: rgba(251,191,36,.3); transform: translateY(-2px); }
+        .tier-card.active-tier { border-color: var(--spark); }
+        .tier-card.active-tier::before {
+            content: 'YOUR TIER'; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+            font-size: .42rem; letter-spacing: .3em;
+            background: var(--spark); color: var(--void); padding: 3px 14px; font-weight: 700;
+        }
+        .tier-card.og-tier { border-color: rgba(139,92,246,.4); }
+        .tier-card.og-tier.active-tier { border-color: #c4b5fd; }
+        .tier-card.og-tier.active-tier::before { background: #8b5cf6; color: #fff; }
+        .tier-icon { font-size: 1.6rem; margin-bottom: 12px; }
+        .tier-name { font-family: 'Orbitron', sans-serif; font-size: .8rem; font-weight: 700; letter-spacing: .12em; color: var(--white); margin-bottom: 4px; }
+        .tier-price { font-size: 1.2rem; font-weight: 700; color: var(--spark); margin-bottom: 14px; }
+        .tier-price small { font-size: .55rem; color: var(--dim); font-weight: 400; }
+        .tier-features { list-style: none; margin-bottom: 20px; }
+        .tier-features li { font-size: .6rem; color: var(--dim); padding: 5px 0; border-bottom: 1px solid var(--dimmer); display: flex; gap: 8px; align-items: flex-start; }
+        .tier-features li:last-child { border-bottom: none; }
+        .tier-features li .chk { color: var(--spark); flex-shrink: 0; }
+        .tier-features li .lock { color: rgba(255,255,255,.18); flex-shrink: 0; }
+        .tier-btn { display: block; text-align: center; font-family: 'Orbitron', sans-serif; font-size: .52rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 12px; text-decoration: none; transition: all .2s; border-radius: 6px; }
+        .tier-btn-primary { background: var(--spark); color: var(--void); }
+        .tier-btn-primary:hover { box-shadow: 0 0 20px rgba(251,191,36,.4); }
+        .tier-btn-og { background: var(--nebula); color: #fff; }
+        .tier-btn-og:hover { box-shadow: 0 0 20px rgba(139,92,246,.4); }
+        .tier-btn-current { background: var(--dimmer); border: 1px solid var(--border); color: var(--dim); pointer-events: none; }
+        .tier-btn-outline { border: 1px solid var(--border2); color: var(--dim); }
+        .tier-btn-outline:hover { border-color: var(--spark); color: var(--spark); }
+
+        /* TOOL GRID */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 12px; }
+        .tool-card { background: var(--panel); border: 1px solid var(--border2); border-radius: 10px; padding: 16px 14px; text-decoration: none; display: flex; flex-direction: column; gap: 5px; transition: border-color .2s, transform .15s; }
+        .tool-card:hover { border-color: rgba(251,191,36,.3); transform: translateY(-2px); }
+        .tool-card.tool-dashed { border-style: dashed; }
+        .tool-icon { font-size: 1.3rem; }
+        .tool-name { font-size: .68rem; font-weight: 700; color: var(--white); letter-spacing: .04em; }
+        .tool-desc { font-size: .56rem; color: var(--dim); line-height: 1.5; }
+        .tool-tag { font-size: .45rem; letter-spacing: .2em; text-transform: uppercase; color: var(--spark); margin-top: 4px; }
+
+        /* RITUALS */
+        .ritual-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 14px; }
+        .ritual-card { background: var(--panel); border: 1px solid var(--border2); border-radius: 10px; padding: 20px 18px; transition: border-color .2s; }
+        .ritual-card:hover { border-color: rgba(251,191,36,.25); }
+        .ritual-title { font-family: 'Orbitron', sans-serif; font-size: .72rem; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+        .ritual-desc { font-size: .6rem; color: var(--dim); line-height: 1.6; margin-bottom: 14px; }
+        .ritual-btn { display: inline-block; font-family: 'Orbitron', sans-serif; font-size: .5rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 9px 18px; background: linear-gradient(135deg, var(--spark), var(--ember)); color: var(--void); border: none; border-radius: 6px; cursor: pointer; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+        .ritual-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(251,191,36,.3); }
+        .ritual-badge { display: inline-block; font-size: .46rem; letter-spacing: .2em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; background: rgba(251,191,36,.1); color: var(--spark); text-decoration: none; }
+        .ritual-badge.locked { background: var(--dimmer); color: rgba(255,255,255,.2); }
+        .path-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-bottom: 28px; }
+        .path-btn { background: var(--panel); border: 1px solid var(--border2); border-radius: 8px; padding: 12px 8px; text-align: center; cursor: pointer; font-size: .6rem; color: var(--dim); transition: all .2s; font-family: 'Space Mono', monospace; }
+        .path-btn:hover { border-color: rgba(139,92,246,.4); color: var(--white); }
+        .path-btn.active { border-color: var(--nebula); background: rgba(139,92,246,.1); color: var(--white); }
+        .activity-log { background: var(--panel); border: 1px solid var(--border2); border-radius: 10px; padding: 18px; }
+        .activity-entry { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--dimmer); font-size: .6rem; }
+        .activity-entry:last-child { border-bottom: none; }
+        .activity-entry .xp-gain { color: var(--spark); font-weight: 700; }
+        .activity-empty { text-align: center; color: var(--dim); font-size: .58rem; padding: 18px 0; font-style: italic; }
+
+        /* COMMUNITY */
+        .community-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 14px; }
+        .community-card { background: var(--panel); border: 1px solid var(--border2); border-radius: 10px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, transform .15s; }
+        .community-card:hover { border-color: rgba(251,191,36,.25); transform: translateY(-2px); }
+        .community-card-icon { font-size: 1.8rem; }
+        .community-card-title { font-family: 'Orbitron', sans-serif; font-size: .72rem; font-weight: 700; color: var(--white); }
+        .community-card-desc { font-size: .6rem; color: var(--dim); line-height: 1.6; flex: 1; }
+        .community-btn { display: inline-block; text-align: center; font-family: 'Orbitron', sans-serif; font-size: .5rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 10px 16px; text-decoration: none; border-radius: 6px; transition: all .2s; background: linear-gradient(135deg, var(--spark), var(--ember)); color: var(--void); margin-top: auto; }
+        .community-btn:hover { box-shadow: 0 4px 16px rgba(251,191,36,.3); }
+        .community-btn.ghost { background: var(--dimmer); color: var(--dim); border: 1px solid var(--border2); }
+        .community-btn.ghost:hover { border-color: var(--dim); color: var(--white); box-shadow: none; }
+        .community-btn.og-btn { background: linear-gradient(135deg, var(--nebula), #6d28d9); color: #fff; }
+        .community-btn.og-btn:hover { box-shadow: 0 4px 16px rgba(139,92,246,.35); }
+
+        /* FOOTER */
+        .hub-footer { padding: 36px 0 24px; border-top: 1px solid var(--border); text-align: center; }
+        .hub-footer-logo { font-family: 'Orbitron', sans-serif; font-size: .65rem; font-weight: 900; letter-spacing: .2em; color: var(--spark); text-decoration: none; opacity: .5; display: inline-block; margin-bottom: 10px; }
+        .hub-footer-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
+        .hub-footer-links a { font-size: .48rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.18); text-decoration: none; transition: color .2s; }
+        .hub-footer-links a:hover { color: var(--dim); }
+        .hub-footer-copy { font-size: .46rem; letter-spacing: .12em; color: rgba(255,255,255,.1); }
+
+        @media (max-width: 600px) {
+            .hub-hero-inner { flex-direction: column; }
+            .xp-card { min-width: unset; width: 100%; }
+            .gate-features { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STATE: LOADING -->
+<div id="state-loading">
+    <div class="loader-logo">THE FIRST SPARK</div>
+    <div class="loader-spin"></div>
+    <div class="loader-msg">Verifying session…</div>
+</div>
+
+<!-- STATE: LOGIN GATE -->
+<div id="state-login">
+    <div class="gate-inner">
+        <div class="gate-badge">◈ &nbsp; Member Hub &nbsp; ◈</div>
+        <div class="gate-logo">THE FIRST SPARK</div>
+        <h1 class="gate-title">Your home base inside the Sparkverse.</h1>
+        <p class="gate-sub">60+ consciousness tools. Daily rituals. Live community. All in one place — connected to your Whop membership.</p>
+
+        <div id="auth-error-banner" class="auth-error" style="display:none"></div>
+
+        <div class="gate-features">
+            <div class="gate-feature">
+                <span class="gf-icon">🧰</span>
+                <div><strong>60+ Tools</strong> — Free to access. Oracle, Journal, Soul Map + more.</div>
+            </div>
+            <div class="gate-feature">
+                <span class="gf-icon">⚡</span>
+                <div><strong>XP &amp; Rituals</strong>Track streaks, earn ranks, level up your practice.</div>
+            </div>
+            <div class="gate-feature">
+                <span class="gf-icon">💬</span>
+                <div><strong>Community</strong>Players Lounge, OG Circle &amp; Free Lobby on Whop.</div>
+            </div>
+            <div class="gate-feature">
+                <span class="gf-icon">👑</span>
+                <div><strong>Your Real Tier</strong>Hub reads your Whop membership automatically.</div>
+            </div>
+        </div>
+
+        <button class="btn-whop" onclick="whopLogin()">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 6.5l-2 7h-1.5l-1.5-4.5-1.5 4.5H8.5l-2-7H8l1.25 5 1.5-5h1.5l1.5 5 1.25-5H16.5z"/></svg>
+            Connect with Whop →
+        </button>
+
+        <div class="gate-divider">OR</div>
+        <a href="https://whop.com/sparkverse-511c/" target="_blank" class="gate-secondary-link">
+            Don’t have an account? Join free on Whop →
+        </a>
+    </div>
+</div>
+
+<!-- STATE: HUB DASHBOARD -->
+<div id="state-hub">
+
+    <nav class="hub-nav">
+        <a href="/" class="hub-nav-logo">THE FIRST SPARK</a>
+        <div class="hub-nav-sep"></div>
+        <span class="hub-nav-label">◈ Member Hub</span>
+        <div class="hub-nav-spacer"></div>
+        <span class="hub-nav-tier tier-free" id="nav-tier-badge">FREE</span>
+        <div class="hub-nav-user">
+            <div class="hub-nav-avatar" id="nav-avatar">◈</div>
+            <span class="hub-nav-name" id="nav-name">Member</span>
+        </div>
+        <button class="hub-nav-logout" onclick="whopLogout()">Log Out</button>
+    </nav>
+
+    <div class="hub-hero">
+        <div class="wrap">
+            <div class="hub-hero-inner">
+                <div class="hub-hero-text">
+                    <div class="hub-welcome-badge">◈ &nbsp; Welcome Back</div>
+                    <h1 class="hub-welcome-name">Hey, <span id="hero-name">Spark</span>.</h1>
+                    <p class="hub-welcome-sub" id="hero-sub">You’re in. Everything you need is right here.</p>
+                    <div class="hub-hero-stats">
+                        <div class="hero-stat">
+                            <span class="hero-stat-val" id="stat-xp">0</span>
+                            <span class="hero-stat-lbl">XP Earned</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-val" id="stat-rituals">0</span>
+                            <span class="hero-stat-lbl">Press Starts</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-val" id="stat-ships">0</span>
+                            <span class="hero-stat-lbl">Save Rings</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-card">
+                    <div class="xp-card-header">
+                        <span class="xp-rank-name" id="xp-rank">Ember</span>
+                        <span class="xp-rank-num" id="xp-count-label">0 XP</span>
+                    </div>
+                    <div class="xp-bar-wrap">
+                        <div class="xp-bar-fill" id="xp-bar" style="width:0%"></div>
+                    </div>
+                    <div class="xp-bar-labels">
+                        <span id="xp-current-lbl">Ember</span>
+                        <span id="xp-next-lbl">→ Flame at 34 XP</span>
+                    </div>
+                    <div class="xp-mini-stats">
+                        <div class="xp-mini-stat">
+                            <div class="xp-mini-val" id="xs-xp">0</div>
+                            <div class="xp-mini-lbl">XP</div>
+                        </div>
+                        <div class="xp-mini-stat">
+                            <div class="xp-mini-val" id="xs-ps">0</div>
+                            <div class="xp-mini-lbl">Starts</div>
+                        </div>
+                        <div class="xp-mini-stat">
+                            <div class="xp-mini-val" id="xs-sr">0</div>
+                            <div class="xp-mini-lbl">Rings</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider-line"></div>
+
+    <!-- YOUR MEMBERSHIP -->
+    <section class="sec-wrap">
+        <div class="wrap">
+            <div class="sec-label">◈ &nbsp; Your Membership</div>
+            <h2 class="sec-title">Your Tier.</h2>
+            <p class="sec-sub">Your current access level, loaded directly from your Whop account.</p>
+            <div class="tier-summary">
+                <div class="tier-card" id="tier-card-free">
+                    <div class="tier-icon">🆓</div>
+                    <div class="tier-name">Free Spark</div>
+                    <div class="tier-price">$0 <small>/ forever</small></div>
+                    <ul class="tier-features">
+                        <li><span class="chk">✓</span> All 60+ consciousness tools</li>
+                        <li><span class="chk">✓</span> Daily Reset ritual</li>
+                        <li><span class="chk">✓</span> Oracle guidance (unlimited)</li>
+                        <li><span class="chk">✓</span> Journal (AI-guided)</li>
+                        <li><span class="chk">✓</span> Archetype discovery</li>
+                        <li><span class="chk">✓</span> Ebook + Survival Guide</li>
+                        <li><span class="lock">🔒</span> Players Lounge access</li>
+                        <li><span class="lock">🔒</span> Live group rituals</li>
+                    </ul>
+                    <span class="tier-btn tier-btn-current" id="tier-cta-free">Current Plan</span>
+                </div>
+                <div class="tier-card" id="tier-card-players">
+                    <div class="tier-icon">🎮</div>
+                    <div class="tier-name">Players Lounge</div>
+                    <div class="tier-price">$33 <small>/ month</small></div>
+                    <ul class="tier-features">
+                        <li><span class="chk">✓</span> Everything in Free</li>
+                        <li><span class="chk">✓</span> Magnetic Quiet (11-min ritual)</li>
+                        <li><span class="chk">✓</span> Sigilcraft Workbook</li>
+                        <li><span class="chk">✓</span> Monthly live ritual with KJP</li>
+                        <li><span class="chk">✓</span> Private Players Lounge feed</li>
+                        <li><span class="chk">✓</span> Early access to new drops</li>
+                        <li><span class="chk">✓</span> Direct community chat</li>
+                        <li><span class="lock">🔒</span> Lifetime vault access</li>
+                    </ul>
+                    <a href="https://whop.com/sparkverse-511c/spark-acces/" target="_blank" class="tier-btn tier-btn-primary" id="tier-cta-players">Join Players →</a>
+                </div>
+                <div class="tier-card og-tier" id="tier-card-og">
+                    <div class="tier-icon">👑</div>
+                    <div class="tier-name">OG Spark</div>
+                    <div class="tier-price">$519 <small>/ lifetime</small></div>
+                    <ul class="tier-features">
+                        <li><span class="chk">✓</span> Everything in Players Lounge</li>
+                        <li><span class="chk">✓</span> Lifetime vault access</li>
+                        <li><span class="chk">✓</span> OG Spark Genesis NFT</li>
+                        <li><span class="chk">✓</span> 1:1 reading with KJP</li>
+                        <li><span class="chk">✓</span> All future drops free</li>
+                        <li><span class="chk">✓</span> Founding member status</li>
+                        <li><span class="chk">✓</span> Private Telegram channel</li>
+                        <li><span class="chk">✓</span> Co-creation rights</li>
+                    </ul>
+                    <a href="https://whop.com/sparkverse-511c/og-spark-lifetime-access/" target="_blank" class="tier-btn tier-btn-og" id="tier-cta-og">Become OG →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-line"></div>
+
+    <!-- QUICK START -->
+    <section class="sec-wrap">
+        <div class="wrap">
+            <div class="sec-label">◈ &nbsp; Quick Start</div>
+            <h2 class="sec-title">Start Here.</h2>
+            <p class="sec-sub">Six tools to begin with. Free. Instant. No extra steps.</p>
+            <div class="tools-grid">
+                <a href="/ebook.html" class="tool-card">
+                    <div class="tool-icon">📖</div>
+                    <div class="tool-name">The First Spark Ebook</div>
+                    <div class="tool-desc">Foundation philosophy. Where everything begins.</div>
+                    <div class="tool-tag">Free · 20 min read</div>
+                </a>
+                <a href="/oracle.html" class="tool-card">
+                    <div class="tool-icon">🔮</div>
+                    <div class="tool-name">Ask the Oracle</div>
+                    <div class="tool-desc">Instant consciousness guidance. Pattern-recognized wisdom.</div>
+                    <div class="tool-tag">Free · Instant</div>
+                </a>
+                <a href="/journal.html" class="tool-card">
+                    <div class="tool-icon">📋</div>
+                    <div class="tool-name">Daily Journal</div>
+                    <div class="tool-desc">AI-guided prompts. Reflect daily, track patterns.</div>
+                    <div class="tool-tag">Free · 10 min/day</div>
+                </a>
+                <a href="/daily-reset.html" class="tool-card">
+                    <div class="tool-icon">🌅</div>
+                    <div class="tool-name">Daily Reset</div>
+                    <div class="tool-desc">5-minute morning ritual. Breathwork &amp; intention.</div>
+                    <div class="tool-tag">Free · Daily</div>
+                </a>
+                <a href="/soul-map.html" class="tool-card">
+                    <div class="tool-icon">🪷</div>
+                    <div class="tool-name">Soul Map</div>
+                    <div class="tool-desc">Visualize your inner landscape. Map consciousness.</div>
+                    <div class="tool-tag">Free · Interactive</div>
+                </a>
+                <a href="/archetype-discovery.html" class="tool-card">
+                    <div class="tool-icon">🧬</div>
+                    <div class="tool-name">Archetype Discovery</div>
+                    <div class="tool-desc">Find your signal. Discover the code you're running.</div>
+                    <div class="tool-tag">Free · Quiz</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-line"></div>
+
+    <!-- FULL TOOL LIBRARY -->
+    <section class="sec-wrap">
+        <div class="wrap">
+            <div class="sec-label">◈ &nbsp; Tool Library</div>
+            <h2 class="sec-title">All 60+ Tools.</h2>
+            <p class="sec-sub">Every tool lives right here. No external app required.</p>
+            <div class="tools-grid">
+                <a href="/pressstart.html" class="tool-card">
+                    <div class="tool-icon">⚡</div>
+                    <div class="tool-name">Press Start</div>
+                    <div class="tool-desc">33 breaths. 1 minute of presence. The entry ritual.</div>
+                    <div class="tool-tag">Free · Core Ritual</div>
+                </a>
+                <a href="/karma-calculator.html" class="tool-card">
+                    <div class="tool-icon">⚖️</div>
+                    <div class="tool-name">Karma Calculator</div>
+                    <div class="tool-desc">Debug your karmic loop. Find the pattern.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/spark-battle-arena.html" class="tool-card">
+                    <div class="tool-icon">⚔️</div>
+                    <div class="tool-name">Spark Battle Arena</div>
+                    <div class="tool-desc">Challenge a friend. Archetypes collide.</div>
+                    <div class="tool-tag">Free · Multiplayer</div>
+                </a>
+                <a href="/sigil.html" class="tool-card">
+                    <div class="tool-icon">🜟</div>
+                    <div class="tool-name">Sigil Craft</div>
+                    <div class="tool-desc">Create your sacred geometry sigil.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/five-paths-explorer.html" class="tool-card">
+                    <div class="tool-icon">🗺️</div>
+                    <div class="tool-name">Five Paths Explorer</div>
+                    <div class="tool-desc">Mirror, Glitch, Fire, Garden, Source.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/lunar-wisdom.html" class="tool-card">
+                    <div class="tool-icon">🌙</div>
+                    <div class="tool-name">Lunar Wisdom</div>
+                    <div class="tool-desc">Align with lunar cycles. Navigate by the moon.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/consciousness-explorer-all-models.html" class="tool-card">
+                    <div class="tool-icon">🧠</div>
+                    <div class="tool-name">Consciousness Explorer</div>
+                    <div class="tool-desc">Multi-model consciousness map.</div>
+                    <div class="tool-tag">Free · Deep</div>
+                </a>
+                <a href="/intention-setter.html" class="tool-card">
+                    <div class="tool-icon">🎯</div>
+                    <div class="tool-name">Intention Setter</div>
+                    <div class="tool-desc">Set your signal. Anchor your reality.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/energy-checkin.html" class="tool-card">
+                    <div class="tool-icon">🔋</div>
+                    <div class="tool-name">Energy Check-In</div>
+                    <div class="tool-desc">Scan your current field. Name the frequency.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/pause-chamber.html" class="tool-card">
+                    <div class="tool-icon">⏸️</div>
+                    <div class="tool-name">Pause Chamber</div>
+                    <div class="tool-desc">Emergency decompression. Reset now.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/soul-contracts.html" class="tool-card">
+                    <div class="tool-icon">📜</div>
+                    <div class="tool-name">Soul Contracts</div>
+                    <div class="tool-desc">Map the agreements you made before this life.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/tools.html" class="tool-card tool-dashed">
+                    <div class="tool-icon">✦</div>
+                    <div class="tool-name">See All 60+ Tools</div>
+                    <div class="tool-desc">Full tool galaxy. Browse everything by category.</div>
+                    <div class="tool-tag">Free · Full Library</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-line"></div>
+
+    <!-- DAILY RITUALS -->
+    <section class="sec-wrap">
+        <div class="wrap">
+            <div class="sec-label">◈ &nbsp; Daily Practice</div>
+            <h2 class="sec-title">Your Rituals.</h2>
+            <p class="sec-sub">Track XP. Build streaks. Level up your rank.</p>
+            <div style="margin-bottom:20px;">
+                <p style="font-size:.56rem; color:var(--dim); margin-bottom:10px; letter-spacing:.1em;">SELECT YOUR PATH</p>
+                <div class="path-grid">
+                    <div class="path-btn" data-path="mirror">🪷 Mirror</div>
+                    <div class="path-btn" data-path="glitch">⚡ Glitch</div>
+                    <div class="path-btn" data-path="fire">🔥 Fire</div>
+                    <div class="path-btn" data-path="garden">🌱 Garden</div>
+                    <div class="path-btn" data-path="source">🌀 Source</div>
+                </div>
+            </div>
+            <div class="ritual-grid">
+                <div class="ritual-card">
+                    <div class="ritual-title">⚡ Press Start</div>
+                    <div class="ritual-desc">33 breaths or 1 minute of focused presence. The entry point that anchors everything. Do this first. Do this every day.</div>
+                    <button class="ritual-btn" onclick="logRitual()">Complete Ritual &nbsp; +33 XP</button>
+                </div>
+                <div class="ritual-card">
+                    <div class="ritual-title">💫 Save Ring</div>
+                    <div class="ritual-desc">Log what you actually shipped. Not plans — completed work only. Every ring counts.</div>
+                    <button class="ritual-btn" onclick="logShipment()">Log What You Shipped &nbsp; +55 XP</button>
+                </div>
+                <div class="ritual-card" id="ritual-magnetic">
+                    <div class="ritual-title">🔮 Magnetic Quiet</div>
+                    <div class="ritual-desc">11-minute practice to call back scattered energy and stabilize your field. Players Lounge ritual.</div>
+                    <a href="https://whop.com/sparkverse-511c/spark-acces/" target="_blank" class="ritual-badge locked" id="ritual-magnetic-cta">Unlock in Players Lounge →</a>
+                </div>
+            </div>
+            <div style="margin-top:24px;">
+                <p style="font-size:.56rem; letter-spacing:.3em; text-transform:uppercase; color:var(--dim); margin-bottom:10px;">Recent Activity</p>
+                <div class="activity-log">
+                    <div id="activity-log">
+                        <div class="activity-empty">No activity yet. Complete your first Press Start to begin.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-line"></div>
+
+    <!-- COMMUNITY -->
+    <section class="sec-wrap">
+        <div class="wrap">
+            <div class="sec-label">◈ &nbsp; Community</div>
+            <h2 class="sec-title">Connect with the Collective.</h2>
+            <p class="sec-sub">Thousands of Sparked Ones are doing the work alongside you.</p>
+            <div class="community-grid">
+                <div class="community-card">
+                    <div class="community-card-icon">💬</div>
+                    <div class="community-card-title">Players Lounge</div>
+                    <div class="community-card-desc">The main community hub. Live drops, group rituals, direct access to KJP. $33/month or upgrade to OG for lifetime access.</div>
+                    <a href="https://whop.com/sparkverse-511c/spark-acces/" target="_blank" class="community-btn" id="community-cta-players">Join for $33/mo →</a>
+                </div>
+                <div class="community-card">
+                    <div class="community-card-icon">👑</div>
+                    <div class="community-card-title">OG Spark Circle</div>
+                    <div class="community-card-desc">Founding members. Private Telegram. Co-creation rights. 1:1 with KJP. You become part of the origin story.</div>
+                    <a href="https://whop.com/sparkverse-511c/og-spark-lifetime-access/" target="_blank" class="community-btn og-btn" id="community-cta-og">Claim Lifetime Access →</a>
+                </div>
+                <div class="community-card">
+                    <div class="community-card-icon">🌐</div>
+                    <div class="community-card-title">Free Lobby</div>
+                    <div class="community-card-desc">No charge, no catch. Browse announcements, see what's dropping, get a feel for the community.</div>
+                    <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" class="community-btn ghost">Enter Free Lobby →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-line"></div>
+
+    <!-- DEEP DIVES -->
+    <section class="sec-wrap">
+        <div class="wrap">
+            <div class="sec-label">◈ &nbsp; Deep Dives</div>
+            <h2 class="sec-title">Go Deeper.</h2>
+            <p class="sec-sub">Long-form content, systems, and the origin story behind all of it.</p>
+            <div class="tools-grid">
+                <a href="/ebook.html" class="tool-card">
+                    <div class="tool-icon">📖</div>
+                    <div class="tool-name">The First Spark Ebook</div>
+                    <div class="tool-desc">Start here. The core philosophy.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/players_guide_to_survival.html" class="tool-card">
+                    <div class="tool-icon">🎮</div>
+                    <div class="tool-name">Player's Guide to Survival</div>
+                    <div class="tool-desc">First principles for staying awake in a system designed to put you to sleep.</div>
+                    <div class="tool-tag">Free</div>
+                </a>
+                <a href="/spark-protocol.html" class="tool-card">
+                    <div class="tool-icon">⚡</div>
+                    <div class="tool-name">The Spark Protocol</div>
+                    <div class="tool-desc">Full interactive ritual system. The complete activation sequence.</div>
+                    <div class="tool-tag">Free · Interactive</div>
+                </a>
+                <a href="https://whop.com/sparkverse-511c/the-first-spark-genesis-of-the-sparkverse-the-novel/" target="_blank" class="tool-card">
+                    <div class="tool-icon">🌌</div>
+                    <div class="tool-name">Genesis — The Novel</div>
+                    <div class="tool-desc">The origin story. Where consciousness technology meets fiction.</div>
+                    <div class="tool-tag">New Release</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="hub-footer">
+        <div class="wrap">
+            <a href="/" class="hub-footer-logo">THE FIRST SPARK</a>
+            <div class="hub-footer-links">
+                <a href="/">Home</a>
+                <a href="/tools.html">All Tools</a>
+                <a href="/oracle.html">Oracle</a>
+                <a href="/soul-map.html">Soul Map</a>
+                <a href="https://whop.com/sparkverse-511c/spark-acces/" target="_blank">Players Lounge</a>
+                <a href="/privacy-policy.html">Privacy</a>
+                <a href="/terms-of-service.html">Terms</a>
+            </div>
+            <div class="hub-footer-copy">© 2026 The First Spark &nbsp;·&nbsp; Built by Katelin &nbsp;·&nbsp; Akron, Ohio</div>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+/* =============================================================
+   WHOP OAUTH — PKCE CONFIGURATION
+   -------------------------------------------------------------
+   App ID: app_SPUYaOFKHxKqYa
+   The redirect_uri is computed dynamically from the current page
+   (window.location.origin + pathname). This must EXACTLY match
+   a registered redirect URI for this App in the Whop dashboard
+   (dev.whop.com or your OAuth Apps settings).
+   Example to register: https://thefirstspark.shop/member-hub.html
+   For local dev you can also register e.g. http://localhost:5500/member-hub.html
+============================================================= */
+const WHOP_CLIENT_ID = 'app_SPUYaOFKHxKqYa';
+const REDIRECT_URI   = window.location.origin + window.location.pathname;
+const WHOP_AUTH_URL  = 'https://api.whop.com/oauth/authorize';
+const WHOP_TOKEN_URL = 'https://api.whop.com/oauth/token';
+const WHOP_API       = 'https://api.whop.com/v5';
+
+/* Plan route keywords that map to each tier.
+   Find these in your Whop dashboard under Products. */
+const PLAN_IDS = {
+    og:      ['og-spark', 'og_spark', 'lifetime'],
+    players: ['spark-acces', 'spark_acces', 'players']
+};
+
+/* ---- PKCE helpers ---------------------------------------- */
+function genVerifier() {
+    const a = new Uint8Array(32);
+    crypto.getRandomValues(a);
+    return btoa(String.fromCharCode(...a))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+async function genChallenge(v) {
+    const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v));
+    return btoa(String.fromCharCode(...new Uint8Array(d)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+/* ---- OAuth flow ------------------------------------------ */
+async function whopLogin() {
+    const verifier  = genVerifier();
+    const challenge = await genChallenge(verifier);
+    const state     = genVerifier().substring(0, 16);
+    sessionStorage.setItem('pkce_verifier', verifier);
+    sessionStorage.setItem('oauth_state',   state);
+    const p = new URLSearchParams({
+        response_type: 'code', client_id: WHOP_CLIENT_ID,
+        redirect_uri: REDIRECT_URI, scope: 'openid profile email',
+        state, code_challenge: challenge, code_challenge_method: 'S256'
+    });
+    window.location.href = WHOP_AUTH_URL + '?' + p;
+}
+
+async function handleCallback(code, retState) {
+    const verifier = sessionStorage.getItem('pkce_verifier');
+    const state    = sessionStorage.getItem('oauth_state');
+    if (!verifier) { showLogin('Session expired. Please try again.'); return; }
+    if (state && retState && state !== retState) {
+        showLogin('State mismatch — please try again.'); return;
+    }
+    showLoading('Signing you in…');
+    try {
+        const res  = await fetch(WHOP_TOKEN_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                grant_type: 'authorization_code', client_id: WHOP_CLIENT_ID,
+                redirect_uri: REDIRECT_URI, code, code_verifier: verifier
+            })
+        });
+        const data = await res.json();
+        if (data.access_token) {
+            localStorage.setItem('whop_token',   data.access_token);
+            if (data.refresh_token) localStorage.setItem('whop_refresh', data.refresh_token);
+            sessionStorage.removeItem('pkce_verifier');
+            sessionStorage.removeItem('oauth_state');
+            window.history.replaceState({}, '', window.location.pathname);
+            await initDashboard(data.access_token);
+        } else {
+            let errMsg = data.error_description || data.error || 'Authentication failed.';
+            if (data.error === 'invalid_request' || /redirect|uri|url/i.test(errMsg)) {
+                errMsg += '<br><br>Redirect URI problem — make sure <code>' + REDIRECT_URI + '</code> is registered in the Whop OAuth app settings.';
+            }
+            showLogin(errMsg);
+        }
+    } catch (err) {
+        console.error('Token exchange failed:', err);
+        showLogin('Could not complete sign-in. Please try again. If the problem persists, contact support.');
+    }
+}
+
+async function fetchWhopUser(token) {
+    const r = await fetch(WHOP_API + '/me', { headers: { Authorization: 'Bearer ' + token } });
+    if (!r.ok) throw new Error('/me ' + r.status);
+    return r.json();
+}
+async function fetchMemberships(token) {
+    const r = await fetch(WHOP_API + '/memberships?per_page=20', { headers: { Authorization: 'Bearer ' + token } });
+    if (!r.ok) return { data: [] };
+    return r.json();
+}
+function getItemRoute(item) {
+    return (
+        (item.product && item.product.route) ||
+        (item.plan && item.plan.route) ||
+        (item.access_pass && item.access_pass.route) || ''
+    ).toLowerCase();
+}
+function detectTier(m) {
+    if (!m || !m.data || !m.data.length) return 'free';
+    for (const item of m.data) {
+        if (!item.valid) continue;
+        const route = getItemRoute(item);
+        if (PLAN_IDS.og.some(k => route.includes(k)))      return 'og';
+        if (PLAN_IDS.players.some(k => route.includes(k))) return 'players';
+    }
+    if (m.data.some(i => i.valid)) return 'players';
+    return 'free';
+}
+
+async function initDashboard(token) {
+    showLoading('Loading your hub…');
+    try {
+        const [user, memberships] = await Promise.all([fetchWhopUser(token), fetchMemberships(token)]);
+        renderDashboard(user, detectTier(memberships));
+    } catch (e) {
+        console.error(e);
+        localStorage.removeItem('whop_token');
+        showLogin('Session expired. Please sign in again.');
+    }
+}
+
+function renderDashboard(user, tier) {
+    const firstName = (user.name || user.username || 'Spark').split(' ')[0];
+    document.getElementById('hero-name').textContent = firstName;
+    document.getElementById('nav-name').textContent  = firstName;
+    document.getElementById('hero-sub').textContent  = tierSubline(tier);
+
+    const avatarEl = document.getElementById('nav-avatar');
+    const avatarUrl = user.profile_pic_url || user.avatar_url || '';
+    if (avatarUrl) {
+        const img = document.createElement('img');
+        img.src = avatarUrl; img.alt = firstName;
+        img.onerror = function() { avatarEl.textContent = firstName.charAt(0).toUpperCase(); };
+        avatarEl.innerHTML = ''; avatarEl.appendChild(img);
+    } else {
+        avatarEl.textContent = firstName.charAt(0).toUpperCase();
+    }
+
+    applyTier(tier);
+    initGameData(user.id || user.username || 'anon');
+
+    document.getElementById('state-loading').style.display = 'none';
+    document.getElementById('state-hub').style.display     = 'block';
+    document.getElementById('state-login').style.display   = 'none';
+}
+
+function tierSubline(t) {
+    if (t === 'og')      return 'OG Spark member. Lifetime access. All tools, all community, always.';
+    if (t === 'players') return 'Players Lounge member. Live rituals, community & more unlocked.';
+    return 'Free Spark member. Every tool is accessible — go deep.';
+}
+
+function applyTier(tier) {
+    const badge = document.getElementById('nav-tier-badge');
+    badge.className = 'hub-nav-tier';
+    if (tier === 'og')           { badge.textContent = '◈ OG SPARK';  badge.classList.add('tier-og'); }
+    else if (tier === 'players') { badge.textContent = '◈ PLAYERS';   badge.classList.add('tier-players'); }
+    else                          { badge.textContent = '◈ FREE';       badge.classList.add('tier-free'); }
+
+    document.getElementById('tier-card-' + tier).classList.add('active-tier');
+
+    if (tier === 'players' || tier === 'og') {
+        const pc = document.getElementById('tier-cta-players');
+        if (pc) { pc.textContent = '✓ Active Plan'; pc.classList.replace('tier-btn-primary', 'tier-btn-current'); pc.removeAttribute('href'); }
+        const mCta = document.getElementById('ritual-magnetic-cta');
+        if (mCta) { mCta.textContent = 'Open Magnetic Quiet →'; mCta.classList.remove('locked'); }
+        const cp = document.getElementById('community-cta-players');
+        if (cp) cp.textContent = '→ Enter Players Lounge';
+    }
+    if (tier === 'og') {
+        const oc = document.getElementById('tier-cta-og');
+        if (oc) { oc.textContent = '✓ Lifetime Active'; oc.classList.replace('tier-btn-og', 'tier-btn-current'); oc.removeAttribute('href'); }
+        const co = document.getElementById('community-cta-og');
+        if (co) co.textContent = '→ Enter OG Circle';
+    }
+}
+
+function whopLogout() {
+    localStorage.removeItem('whop_token');
+    localStorage.removeItem('whop_refresh');
+    showLogin();
+}
+
+function showLoading(msg) {
+    document.getElementById('state-loading').style.display = 'flex';
+    document.getElementById('state-login').style.display   = 'none';
+    document.getElementById('state-hub').style.display     = 'none';
+    const el = document.querySelector('.loader-msg');
+    if (el && msg) el.textContent = msg;
+}
+function showLogin(err) {
+    document.getElementById('state-loading').style.display = 'none';
+    document.getElementById('state-login').style.display   = 'flex';
+    document.getElementById('state-hub').style.display     = 'none';
+    const b = document.getElementById('auth-error-banner');
+    b.style.display = err ? 'block' : 'none';
+    if (err) b.innerHTML = err;
+}
+function showError(msg) {
+    const b = document.getElementById('auth-error-banner');
+    b.innerHTML = msg; b.style.display = 'block';
+}
+
+/* ---- Gamification ---------------------------------------- */
+const RANKS = [
+    { name: 'Ember',  xp: 0,   label: '→ Flame at 34 XP'   },
+    { name: 'Flame',  xp: 34,  label: '→ Torch at 109 XP'  },
+    { name: 'Torch',  xp: 109, label: '→ Beacon at 334 XP' },
+    { name: 'Beacon', xp: 334, label: '→ Signal at 778 XP' },
+    { name: 'Signal', xp: 778, label: '✦ Max Rank'         }
+];
+let GAME_KEY = 'sparkUserData', userData = null;
+
+function initGameData(uid) {
+    GAME_KEY = 'sparkUserData_' + uid;
+    try {
+        userData = JSON.parse(localStorage.getItem(GAME_KEY)) || { xp: 0, pressStarts: 0, saveRings: 0, path: null, activity: [] };
+    } catch (e) {
+        userData = { xp: 0, pressStarts: 0, saveRings: 0, path: null, activity: [] };
+    }
+    document.querySelectorAll('.path-btn').forEach(btn => {
+        btn.addEventListener('click', function() { userData.path = this.dataset.path; updateDisplay(); });
+    });
+    updateDisplay();
+}
+function getRank(xp) {
+    for (let i = RANKS.length - 1; i >= 0; i--) if (xp >= RANKS[i].xp) return RANKS[i];
+    return RANKS[0];
+}
+function updateDisplay() {
+    if (!userData) return;
+    const rank = getRank(userData.xp);
+    document.getElementById('stat-xp').textContent      = userData.xp;
+    document.getElementById('stat-rituals').textContent  = userData.pressStarts;
+    document.getElementById('stat-ships').textContent    = userData.saveRings;
+    document.getElementById('xp-rank').textContent       = rank.name;
+    document.getElementById('xp-count-label').textContent = userData.xp + ' XP';
+    document.getElementById('xp-current-lbl').textContent = rank.name;
+    document.getElementById('xp-next-lbl').textContent    = rank.label;
+    document.getElementById('xs-xp').textContent          = userData.xp;
+    document.getElementById('xs-ps').textContent          = userData.pressStarts;
+    document.getElementById('xs-sr').textContent          = userData.saveRings;
+    const idx = RANKS.findIndex(r => r.name === rank.name);
+    const next = RANKS[Math.min(idx + 1, RANKS.length - 1)];
+    const pct  = rank.name === 'Signal' ? 100 : Math.min(100, Math.round(((userData.xp - rank.xp) / (next.xp - rank.xp)) * 100));
+    document.getElementById('xp-bar').style.width = pct + '%';
+    const logEl = document.getElementById('activity-log');
+    if (userData.activity.length) {
+        logEl.innerHTML = userData.activity.slice(-8).reverse().map(e =>
+            '<div class="activity-entry"><span>' + e.action + '</span><span class="xp-gain">+' + e.xp + ' XP</span></div>'
+        ).join('');
+    } else {
+        logEl.innerHTML = '<div class="activity-empty">No activity yet. Complete your first Press Start to begin.</div>';
+    }
+    document.querySelectorAll('.path-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.path === userData.path));
+    localStorage.setItem(GAME_KEY, JSON.stringify(userData));
+}
+function logRitual() {
+    if (!userData) return;
+    userData.pressStarts++;
+    userData.xp += 33;
+    userData.activity.push({ action: '⚡ Completed Press Start', xp: 33 });
+    updateDisplay();
+    const btn = document.querySelector('[onclick="logRitual()"]');
+    if (btn) { const o = btn.textContent; btn.textContent = '✨ Done! +33 XP'; setTimeout(() => btn.textContent = o, 1800); }
+}
+function logShipment() {
+    if (!userData) return;
+    const s = prompt('What did you ship today?');
+    if (s && s.trim()) {
+        userData.saveRings++;
+        userData.xp += 55;
+        userData.activity.push({ action: '💫 Shipped: ' + s.trim().substring(0, 40), xp: 55 });
+        updateDisplay();
+    }
+}
+
+/* ---- Boot ------------------------------------------------ */
+(async function boot() {
+    const p     = new URLSearchParams(window.location.search);
+    const code  = p.get('code');
+    const error = p.get('error');
+    const state = p.get('state');
+    if (error) {
+        window.history.replaceState({}, '', window.location.pathname);
+        let msg = p.get('error_description') || 'Auth error: ' + error;
+        if (error === 'invalid_request' || (msg && /redirect|url|uri/i.test(msg))) {
+            msg += '<br><br><strong>Fix:</strong> In your Whop dashboard, register this exact URL as a Redirect URI for the OAuth app:<br>' +
+                   '<code style="background:#111;font-size:0.9em;padding:2px 6px;">' + window.location.origin + window.location.pathname + '</code>';
+        }
+        showLogin(msg);
+        return;
+    }
+    if (code)  { await handleCallback(code, state); return; }
+    const token = localStorage.getItem('whop_token');
+    if (token)  { await initDashboard(token); return; }
+    showLogin();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8 Free Tools — The Sparkverse</title>
+  <meta name="description" content="Eight free consciousness tools from The Sparkverse. No email, no signup. Drops and community live in the Lobby.">
+  <meta property="og:title" content="8 Free Sparkverse Tools">
+  <meta property="og:description" content="Play free. No email required. Join the Lobby for drops, chat, and builds.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://thefirstspark.shop/free-tools.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #05060a;
+      --bone: #f4ede0;
+      --gold: #ffc857;
+      --violet: #b794ff;
+      --magnetic: #9d6bff;
+      --ash: #6b6a6e;
+      --line: rgba(183, 148, 255, 0.2);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--void);
+      color: var(--bone);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(900px 500px at 15% 0%, rgba(157, 107, 255, 0.18), transparent 60%),
+        radial-gradient(700px 500px at 90% 20%, rgba(255, 200, 87, 0.08), transparent 55%);
+    }
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 64px 24px 96px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--violet);
+      border: 1px solid var(--line);
+      padding: 8px 14px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 8vw, 72px);
+      font-weight: 600;
+      line-height: 1;
+      margin-bottom: 16px;
+      background: linear-gradient(110deg, var(--bone) 20%, var(--gold) 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .lede {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--ash);
+      max-width: 560px;
+      line-height: 1.45;
+      margin-bottom: 40px;
+    }
+    .lobby-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 28px;
+      border: 1px solid rgba(255, 200, 87, 0.35);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(157, 107, 255, 0.1), rgba(255, 200, 87, 0.05));
+      margin-bottom: 48px;
+    }
+    .lobby-banner p {
+      flex: 1;
+      min-width: 220px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .lobby-banner strong { color: var(--gold); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--magnetic), var(--violet));
+      color: var(--void);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(157, 107, 255, 0.45);
+    }
+    .btn-ghost {
+      border: 1px solid var(--line);
+      color: var(--bone);
+    }
+    .btn-ghost:hover { border-color: var(--violet); color: var(--violet); }
+    .section-k {
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-k::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .tool {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .tool:hover {
+      transform: translateY(-4px);
+      border-color: rgba(183, 148, 255, 0.5);
+      box-shadow: 0 16px 40px -16px rgba(157, 107, 255, 0.35);
+    }
+    .tool .num {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--violet);
+      margin-bottom: 10px;
+    }
+    .tool h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .tool p {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--ash);
+      margin-bottom: 14px;
+    }
+    .tool .arrow {
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+    }
+    footer {
+      margin-top: 64px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--ash);
+    }
+    footer a { color: var(--violet); text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+  </style>
+  <script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/3f69bab8ef6446338dce0b642/00b83e9d1853cf9c1078884a5.js");</script>
+</head>
+<body>
+  <div class="wrap">
+    <span class="badge">No email · No signup</span>
+    <h1>8 Free Tools</h1>
+    <p class="lede">Play in the open. When you want drops, build logs, chat, and the full tool library — that's the Lobby.</p>
+
+    <div class="lobby-banner">
+      <p><strong>The Lobby</strong> is where transmissions land, SaaS builds ship, and the community talks. Free Whop membership — takes 30 seconds.</p>
+      <a class="btn btn-primary" href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener">Enter the Lobby →</a>
+      <a class="btn btn-ghost" href="homebase.html">Already a member?</a>
+    </div>
+
+    <div class="section-k">Pick a tool</div>
+    <div class="grid">
+      <a class="tool" href="archetype-discovery.html">
+        <div class="num">01</div>
+        <h2>Archetype Discovery</h2>
+        <p>60-second quiz. Find your consciousness archetype.</p>
+        <span class="arrow">Take the quiz →</span>
+      </a>
+      <a class="tool" href="archetype-card.html">
+        <div class="num">02</div>
+        <h2>Player Card</h2>
+        <p>Generate a shareable artifact of your Sparkverse identity.</p>
+        <span class="arrow">Build your card →</span>
+      </a>
+      <a class="tool" href="spark-battle-arena.html">
+        <div class="num">03</div>
+        <h2>Battle Arena</h2>
+        <p>Two cards enter. Challenge a friend.</p>
+        <span class="arrow">Enter the arena →</span>
+      </a>
+      <a class="tool" href="daily-reset.html">
+        <div class="num">04</div>
+        <h2>Daily Reset</h2>
+        <p>5-minute consciousness calibration. Breath, intention, release.</p>
+        <span class="arrow">Start reset →</span>
+      </a>
+      <a class="tool" href="numbers.html">
+        <div class="num">05</div>
+        <h2>Numbers</h2>
+        <p>Explore numerology meanings. Your code is already running.</p>
+        <span class="arrow">Read the numbers →</span>
+      </a>
+      <a class="tool" href="spark-psyche-maps.html">
+        <div class="num">06</div>
+        <h2>Maps of Consciousness</h2>
+        <p>Visual psyche mapping — the DNA of the Sparkverse.</p>
+        <span class="arrow">Explore maps →</span>
+      </a>
+      <a class="tool" href="origin.html">
+        <div class="num">07</div>
+        <h2>Origin Story</h2>
+        <p>The foundational mythos. Where it all started.</p>
+        <span class="arrow">Read origin →</span>
+      </a>
+      <a class="tool" href="lunar-wisdom.html">
+        <div class="num">08</div>
+        <h2>Lunar Wisdom</h2>
+        <p>Moon phases, cosmic truths, and sacred timing.</p>
+        <span class="arrow">Check the moon →</span>
+      </a>
+    </div>
+
+    <footer>
+      <span>© The First Spark · Reality is programmable.</span>
+      <span>
+        <a href="/#movement">The Movement</a> ·
+        <a href="spark-interns.html">Spark Interns</a> ·
+        <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener">Lobby</a> ·
+        <a href="https://thefirstspark.shop/soul-maps-sales.html">Soul Maps</a>
+      </span>
+    </footer>
+  </div>
+  <script src="spark-mailchimp-config.js"></script>
+  <script src="spark-mailchimp-popup.js" defer></script>
+</body>
+</html>

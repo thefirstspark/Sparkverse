@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Your Archetype? | The First Spark</title>
+    <meta name="description" content="6 questions. One identity. Discover your Player Class in the Sparkverse — free consciousness archetype quiz.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="What's Your Archetype? Take the Quiz">
+    <meta property="og:description" content="6 questions. One identity. Discover your Player Class in the Sparkverse.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thefirstspark.shop/discover.html">
+    <meta property="og:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="What's Your Archetype? Take the Quiz">
+    <meta name="twitter:description" content="6 questions. One identity. Discover your Player Class in the Sparkverse.">
+    <meta name="twitter:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --void: #0a0a0f;
+            --deep-space: #12121a;
+            --spark-gold: #d4af37;
+            --spark-ember: #ff6b35;
+            --plasma-cyan: #00fff7;
+            --cosmic-violet: #9d4edd;
+            --stardust: #e8e8e8;
+            --ghost: rgba(255,255,255,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void);
+            color: var(--stardust);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-layer::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 200vmax; height: 200vmax;
+            transform: translate(-50%, -50%);
+            background:
+                radial-gradient(circle at 30% 30%, rgba(157,78,221,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(0,255,247,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%);
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Sigil */
+        .sigil {
+            width: 90px; height: 90px;
+            margin-bottom: 2rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .sigil svg {
+            width: 100%; height: 100%;
+            filter: drop-shadow(0 0 25px var(--spark-gold));
+        }
+
+        /* Headline */
+        .headline {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--stardust), var(--spark-gold), var(--spark-ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .subheadline {
+            font-size: 1.2rem;
+            color: rgba(232,232,232,0.65);
+            max-width: 420px;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Archetype Grid */
+        .archetype-preview {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .archetype-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--ghost);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.5);
+            animation: chipFade 0.6s ease backwards;
+        }
+
+        .archetype-chip:nth-child(1) { animation-delay: 0.1s; }
+        .archetype-chip:nth-child(2) { animation-delay: 0.2s; }
+        .archetype-chip:nth-child(3) { animation-delay: 0.3s; }
+        .archetype-chip:nth-child(4) { animation-delay: 0.4s; }
+        .archetype-chip:nth-child(5) { animation-delay: 0.5s; }
+        .archetype-chip:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes chipFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chip-icon { font-size: 1.1rem; }
+
+        /* CTA Button */
+        .cta-btn {
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            border: none;
+            border-radius: 14px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--void);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -60%;
+            width: 200%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: rotate(25deg);
+            animation: btnShine 3s ease-in-out infinite;
+        }
+
+        @keyframes btnShine {
+            0%, 100% { left: -60%; }
+            50% { left: 60%; }
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 15px 50px rgba(212,175,55,0.4);
+        }
+
+        .cta-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(232,232,232,0.35);
+            margin-top: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            margin-top: 3rem;
+            padding: 1.5rem 2rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--ghost);
+            border-radius: 12px;
+            max-width: 400px;
+        }
+
+        .proof-counter {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            color: var(--spark-gold);
+            font-weight: 700;
+        }
+
+        .proof-label {
+            font-size: 0.85rem;
+            color: rgba(232,232,232,0.45);
+            margin-top: 0.25rem;
+        }
+
+        /* Footer */
+        .viral-footer {
+            margin-top: 3rem;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, var(--spark-gold), var(--spark-ember));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-tagline {
+            font-size: 0.75rem;
+            color: rgba(232,232,232,0.25);
+            margin-top: 0.25rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .container { padding: 1.5rem; }
+            .archetype-chip { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
+            .cta-btn { padding: 1rem 2rem; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+
+    <div class="container">
+        <div class="sigil">
+            <svg viewBox="0 0 100 100" fill="none">
+                <polygon points="50,5 95,75 5,75" stroke="url(#goldG)" stroke-width="2" fill="none"/>
+                <polygon points="50,95 5,25 95,25" stroke="url(#cyanG)" stroke-width="2" fill="none" opacity="0.5"/>
+                <circle cx="50" cy="50" r="15" stroke="url(#goldG)" stroke-width="2" fill="none"/>
+                <circle cx="50" cy="50" r="5" fill="#d4af37"/>
+                <defs>
+                    <linearGradient id="goldG" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#d4af37"/>
+                        <stop offset="100%" stop-color="#ff6b35"/>
+                    </linearGradient>
+                    <linearGradient id="cyanG" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00fff7"/>
+                        <stop offset="100%" stop-color="#9d4edd"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <h1 class="headline">What's Your Archetype?</h1>
+        <p class="subheadline">Six questions. One identity. Discover your Player Class in the Sparkverse — it takes 60 seconds.</p>
+
+        <div class="archetype-preview">
+            <div class="archetype-chip"><span class="chip-icon">🔮</span> Signal Architect</div>
+            <div class="archetype-chip"><span class="chip-icon">🧭</span> Pathfinder</div>
+            <div class="archetype-chip"><span class="chip-icon">⚡</span> Pulse Generator</div>
+            <div class="archetype-chip"><span class="chip-icon">🔥</span> Quantum Alchemist</div>
+            <div class="archetype-chip"><span class="chip-icon">🌉</span> Bridgewalker</div>
+            <div class="archetype-chip"><span class="chip-icon">✨</span> Signal Catalyst</div>
+        </div>
+
+        <a href="archetype-discovery.html" class="cta-btn">
+            Take the Quiz ✦
+        </a>
+        <div class="cta-meta">Free · 60 seconds · No signup required</div>
+
+        <div class="social-proof">
+            <div class="proof-counter" id="proofCounter">0</div>
+            <div class="proof-label">archetypes discovered</div>
+        </div>
+
+        <footer class="viral-footer">
+            <div class="footer-logo">THE FIRST SPARK</div>
+            <div class="footer-tagline">Reality is programmable</div>
+        </footer>
+    </div>
+
+    <script src="referral.js"></script>
+    <script>
+        // Animated counter (localStorage-based)
+        function animateCounter() {
+            let count = parseInt(localStorage.getItem('archetype_quiz_count') || '0');
+            // Seed with a base number for social proof
+            const displayCount = count + 847;
+            const counter = document.getElementById('proofCounter');
+            let current = 0;
+            const step = Math.max(1, Math.floor(displayCount / 60));
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= displayCount) {
+                    current = displayCount;
+                    clearInterval(timer);
+                }
+                counter.textContent = current.toLocaleString();
+            }, 20);
+        }
+
+        document.addEventListener('DOMContentLoaded', animateCounter);
+    </script>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Players Guide to Survival | OG Spark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 100%);
+            color: #e0e0e0;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #ff6b9d;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #ff6b9d;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #00d4ff;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .og-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b9d 0%, #00d4ff 100%);
+            color: black;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .intro-section {
+            background: rgba(255, 107, 157, 0.05);
+            border-left: 4px solid #ff6b9d;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+
+        .intro-section p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #333;
+            padding-bottom: 0;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            cursor: pointer;
+            font-family: 'Monaco', monospace;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            border-bottom: none;
+        }
+
+        .tab-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ff6b9d 0%, #00d4ff 100%);
+            color: black;
+            border-color: #ff6b9d;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .skill-section {
+            margin-bottom: 50px;
+        }
+
+        .skill-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 4px solid #00d4ff;
+            transition: all 0.3s ease;
+        }
+
+        .skill-header:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .skill-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            min-width: 50px;
+        }
+
+        .skill-title {
+            flex: 1;
+        }
+
+        .skill-title h3 {
+            color: #00d4ff;
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .skill-level {
+            display: inline-block;
+            background: #ff6b9d;
+            color: black;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .skill-body {
+            display: none;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.03);
+            border-left: 4px solid #00d4ff;
+            margin-top: 10px;
+        }
+
+        .skill-body.open {
+            display: block;
+        }
+
+        .skill-body h4 {
+            color: #ff6b9d;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .skill-body ul, .skill-body ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .skill-body li {
+            margin-bottom: 8px;
+        }
+
+        .value-matrix {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border: 1px solid #00d4ff;
+        }
+
+        .value-item {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .value-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .value-label {
+            color: #ff6b9d;
+            font-weight: bold;
+        }
+
+        .value-desc {
+            color: #e0e0e0;
+        }
+
+        .leadership-trait {
+            background: rgba(255, 107, 157, 0.05);
+            border-left: 4px solid #ff6b9d;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 2px;
+        }
+
+        .leadership-trait h4 {
+            color: #ff6b9d;
+            margin-bottom: 8px;
+        }
+
+        .calculator {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 20px;
+            border: 2px solid #00d4ff;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .calc-input {
+            margin-bottom: 15px;
+        }
+
+        .calc-input label {
+            display: block;
+            color: #00d4ff;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .calc-input input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            color: #fff;
+            font-family: 'Monaco', monospace;
+            border-radius: 2px;
+        }
+
+        .calc-button {
+            background: linear-gradient(135deg, #ff6b9d 0%, #00d4ff 100%);
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Monaco', monospace;
+            transition: transform 0.2s;
+        }
+
+        .calc-button:hover {
+            transform: scale(1.05);
+        }
+
+        .calc-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 107, 157, 0.1);
+            border-left: 4px solid #ff6b9d;
+            display: none;
+        }
+
+        .calc-result.show {
+            display: block;
+        }
+
+        .challenge-box {
+            background: rgba(255, 107, 157, 0.08);
+            border: 2px dashed #ff6b9d;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .challenge-box h4 {
+            color: #ff6b9d;
+            margin-bottom: 10px;
+        }
+
+        .quest-item {
+            background: rgba(0, 212, 255, 0.03);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quest-item:hover {
+            background: rgba(0, 212, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .quest-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            border-color: #4CAF50;
+        }
+
+        .quest-item::before {
+            content: "☐ ";
+            color: #00d4ff;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .quest-item.completed::before {
+            content: "☑ ";
+            color: #4CAF50;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid #333;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .level-up {
+            background: linear-gradient(135deg, #ff6b9d 0%, #00d4ff 100%);
+            color: black;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .tabs { flex-direction: column; }
+            .tab-btn { width: 100%; }
+            .value-item { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>A PLAYERS GUIDE TO SURVIVAL</h1>
+            <div class="subtitle">Master the Art of Barter, Leadership & Consciousness-Based Resilience</div>
+            <div class="og-badge">🔥 OG SPARK EXCLUSIVE 🔥</div>
+        </header>
+
+        <div class="intro-section">
+            <p><strong>REALITY CHECK:</strong> The old economy is recoding itself. Currency flows differently. Trust becomes currency. Skills become tradeable assets. This guide teaches you to play the game—not as it was, but as it's becoming.</p>
+            <p>You're not just surviving. You're leveling up. The framework below is your quest map.</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'barter')">⚖️ BARTER MASTERY</button>
+            <button class="tab-btn" onclick="switchTab(event, 'leadership')">👑 LEADERSHIP</button>
+            <button class="tab-btn" onclick="switchTab(event, 'consciousness')">🧠 CONSCIOUSNESS EDGE</button>
+            <button class="tab-btn" onclick="switchTab(event, 'quests')">📋 SURVIVAL QUESTS</button>
+        </div>
+
+        <!-- BARTER TAB -->
+        <div id="barter" class="tab-content active">
+            <h2 style="color: #00d4ff; margin-bottom: 30px;">⚖️ THE ART OF BARTER</h2>
+            
+            <div class="intro-section">
+                <p>Barter isn't primitive. It's the future. When systems collapse, you don't need dollars—you need things people need. Master the syntax of exchange.</p>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">💎</div>
+                    <div class="skill-title">
+                        <h3>Value Assessment</h3>
+                        <span class="skill-level">FOUNDATION</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <p>Everything has value. The trick is knowing <em>whose</em> value framework you're operating in.</p>
+                    <h4>The Value Matrix</h4>
+                    <div class="value-matrix">
+                        <div class="value-item">
+                            <div class="value-label">Tangible Assets</div>
+                            <div class="value-desc">Food, water, tools, medicine. These are your foundation. In uncertainty, these ALWAYS have value.</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-label">Skills & Labor</div>
+                            <div class="value-desc">Carpentry, healing, teaching, cooking. Your hands and mind are the most portable assets. People trade for what they can't do.</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-label">Information</div>
+                            <div class="value-desc">Who knows what? Maps, contacts, patterns. Information becomes MORE valuable as institutions collapse.</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-label">Trust & Reputation</div>
+                            <div class="value-desc">Your word. Your track record. In decentralized systems, reputation IS your credit score.</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-label">Energy & Attention</div>
+                            <div class="value-desc">Your presence, your focus. Some people will trade for genuine engagement in a fragmented world.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">🔄</div>
+                    <div class="skill-title">
+                        <h3>The Barter Framework</h3>
+                        <span class="skill-level">INTERMEDIATE</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <h4>Rule #1: Know Your Surplus</h4>
+                    <p>What do you have that others need that you can afford to give? Start there.</p>
+                    
+                    <h4>Rule #2: Map the Network</h4>
+                    <p>Who needs what you have? Who has what you need? Draw the web. Information IS wealth in barter.</p>
+                    
+                    <h4>Rule #3: Establish Terms</h4>
+                    <ul>
+                        <li>1:1 direct swap (cleanest)</li>
+                        <li>Chit system (I owe you favor)</li>
+                        <li>Multi-way trade (3+ parties)</li>
+                        <li>Time-based barter (x hours for y goods)</li>
+                    </ul>
+
+                    <h4>Rule #4: Build Reputation</h4>
+                    <p>Honor every trade. Be known as someone who delivers. In barter economies, reputation compounds.</p>
+
+                    <div class="challenge-box">
+                        <h4>⚡ POWER MOVE</h4>
+                        <p>The most powerful traders aren't the ones with the most stuff—they're the connectors. They know who needs what and connect parties. Become a NODE in the network, not just a trader. Commission on facilitation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">📊</div>
+                    <div class="skill-title">
+                        <h3>Barter Value Calculator</h3>
+                        <span class="skill-level">TOOL</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <div class="calculator">
+                        <div class="calc-input">
+                            <label>What do you have? (describe)</label>
+                            <input type="text" id="you-have" placeholder="e.g., 50 lbs garden vegetables, carpentry skills">
+                        </div>
+                        <div class="calc-input">
+                            <label>What do you need? (describe)</label>
+                            <input type="text" id="you-need" placeholder="e.g., medical supplies, shelter materials">
+                        </div>
+                        <div class="calc-input">
+                            <label>Network size you can access (people)</label>
+                            <input type="number" id="network-size" placeholder="10" value="10">
+                        </div>
+                        <button class="calc-button" onclick="calculateBarterValue()">ANALYZE TRADE POTENTIAL</button>
+                        <div class="calc-result" id="barter-result">
+                            <p><strong>Your Trading Power:</strong> <span id="power-score">--</span></p>
+                            <p><strong>Suggested Strategy:</strong> <span id="strategy">--</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEADERSHIP TAB -->
+        <div id="leadership" class="tab-content">
+            <h2 style="color: #ff6b9d; margin-bottom: 30px;">👑 CONSCIOUSNESS-BASED LEADERSHIP</h2>
+            
+            <div class="intro-section">
+                <p>In uncertain times, people don't follow power—they follow presence. Leadership in the coming world is about coherence, not hierarchy.</p>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">🎯</div>
+                    <div class="skill-title">
+                        <h3>The Leadership Framework</h3>
+                        <span class="skill-level">FOUNDATION</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <p>Real leadership is about <em>coherence</em>—your frequency, your clarity, your alignment.</p>
+                    
+                    <div class="leadership-trait">
+                        <h4>Clarity Over Authority</h4>
+                        <p>Know what you're building toward. People follow vision, not titles. In decentralized times, your ability to articulate the direction IS your leadership credential.</p>
+                    </div>
+
+                    <div class="leadership-trait">
+                        <h4>Trust Over Control</h4>
+                        <p>You can't control what's coming. But you can be trustworthy. Show up. Deliver. Be predictable in your integrity. Trust is the only currency that survives systemic collapse.</p>
+                    </div>
+
+                    <div class="leadership-trait">
+                        <h4>Resilience Over Comfort</h4>
+                        <p>A real leader doesn't break when things get hard—they adapt. Show your people you can think under pressure, stay calm in chaos, and find solutions when the map breaks.</p>
+                    </div>
+
+                    <div class="leadership-trait">
+                        <h4>Empower Over Manage</h4>
+                        <p>In the new paradigm, your role isn't to tell people what to do—it's to create conditions where people can do their best work. Give people agency. Build systems that scale without you.</p>
+                    </div>
+
+                    <div class="leadership-trait">
+                        <h4>Frequency Over Force</h4>
+                        <p>Your emotional state ripples. Your calm (or panic) sets the tone for your group. Master your own nervous system first. Your presence is your leadership tool.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">🤝</div>
+                    <div class="skill-title">
+                        <h3>Building Your Tribe</h3>
+                        <span class="skill-level">INTERMEDIATE</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <h4>The Tribe Stack (from center outward)</h4>
+                    <ul>
+                        <li><strong>Core (1-3 people):</strong> Your inner circle. Shared values. Complete alignment.</li>
+                        <li><strong>Inner Ring (5-15 people):</strong> Trusted collaborators. They know your vision and can execute autonomously.</li>
+                        <li><strong>Network (30-100+ people):</strong> Extended community. Different skills, perspectives, complementary assets.</li>
+                    </ul>
+
+                    <h4>How to Build</h4>
+                    <ol>
+                        <li>Define your vision clearly (what are you building?)</li>
+                        <li>Attract people who resonate with it (not everyone will)</li>
+                        <li>Give them a role that matters (everyone needs to feel essential)</li>
+                        <li>Create rituals that bind (regular connection, shared language)</li>
+                        <li>Show up consistently (leadership is presence)</li>
+                    </ol>
+
+                    <div class="level-up">
+                        KEY INSIGHT: Your tribe doesn't need to be big. It needs to be coherent. 5 aligned people outperform 50 misaligned ones.
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">📈</div>
+                    <div class="skill-title">
+                        <h3>Leadership in Crisis</h3>
+                        <span class="skill-level">ADVANCED</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <h4>When Everything Breaks, Do This:</h4>
+                    <ul>
+                        <li><strong>Stay calm first.</strong> Your nervous system is contagious.</li>
+                        <li><strong>Get clear on facts.</strong> What do we actually know vs. fear?</li>
+                        <li><strong>Make a decision.</strong> Any direction is better than paralysis.</li>
+                        <li><strong>Communicate it.</strong> Tell your people the situation and the plan.</li>
+                        <li><strong>Assign roles.</strong> Everyone needs to know what they're doing.</li>
+                        <li><strong>Check in.</strong> Adjust as you learn.</li>
+                        <li><strong>Celebrate small wins.</strong> Keep morale alive.</li>
+                    </ul>
+
+                    <div class="challenge-box">
+                        <h4>🎬 PRACTICE SCENARIO</h4>
+                        <p>Your supply chain breaks. What's your first move? Think through how you'd communicate this to your tribe WITHOUT panic, while maintaining trust. (Answer: Get clear on what you still have, what you need, who can help. Then tell your people exactly that.)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONSCIOUSNESS TAB -->
+        <div id="consciousness" class="tab-content">
+            <h2 style="color: #ff6b9d; margin-bottom: 30px;">🧠 THE CONSCIOUSNESS EDGE</h2>
+            
+            <div class="intro-section">
+                <p>Survival isn't just physical. Your consciousness IS your survival tool. The systems that get coded into your nervous system determine how you respond to chaos.</p>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">⚡</div>
+                    <div class="skill-title">
+                        <h3>Nervous System Mastery</h3>
+                        <span class="skill-level">FOUNDATION</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <p>Your nervous system is programmable. When you master it, you're not victims of circumstance—you're architects of response.</p>
+                    
+                    <h4>The Three States</h4>
+                    <ul>
+                        <li><strong>Calm & Clear (Vagal Tone):</strong> This is your power state. Creative problem-solving, strategic thinking, trust. PRACTICE getting here on purpose.</li>
+                        <li><strong>Alert & Focused (Sympathetic):</strong> Your action state. Necessary for execution, but draining if permanent. Use it, then recover.</li>
+                        <li><strong>Collapse (Dorsal Vagal):</strong> Shutdown. Freeze. This is the trap. Learn to recognize it and MOVE OUT of it.</li>
+                    </ul>
+
+                    <h4>Daily Practice (5 mins = change your code)</h4>
+                    <ol>
+                        <li>Breathe: 4 count in, 6 count out (activates calm)</li>
+                        <li>Feel: Notice your body. Where's tension?</li>
+                        <li>Anchor: What's one thing you're grateful for?</li>
+                        <li>Intend: Set your frequency for the day. "I am [calm/clear/ready]."</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">🔮</div>
+                    <div class="skill-title">
+                        <h3>Reality As Programmable</h3>
+                        <span class="skill-level">ADVANCED</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <p>This isn't woo. This is physics. Your attention shapes what you notice. What you notice becomes your reality. What your reality is shapes what you can create.</p>
+                    
+                    <h4>The Programming Loop</h4>
+                    <ol>
+                        <li><strong>What you believe</strong> determines what you perceive</li>
+                        <li><strong>What you perceive</strong> determines what you attempt</li>
+                        <li><strong>What you attempt</strong> determines what you manifest</li>
+                    </ol>
+
+                    <p style="margin-top: 20px;"><em>Example: If you believe survival is impossible, you won't notice opportunities. You won't attempt solutions. You'll manifest collapse. If you believe there are always options, you notice them, attempt them, and create resilience.</em></p>
+
+                    <div class="level-up">
+                        YOUR FIRST HACK: List 3 beliefs about yourself that are NOT serving you. Replace them consciously. Repeat for 30 days. Watch what shifts.
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-header" onclick="toggleSkill(this)">
+                    <div class="skill-icon">🪬</div>
+                    <div class="skill-title">
+                        <h3>Sacred Geometry of Success</h3>
+                        <span class="skill-level">MASTERY</span>
+                    </div>
+                </div>
+                <div class="skill-body">
+                    <p>There are patterns. In nature. In success. In collapse. Learning to SEE these patterns is learning to surf the wave instead of drown in it.</p>
+                    
+                    <h4>The Core Patterns</h4>
+                    <ul>
+                        <li><strong>Spirals:</strong> Everything cycles, but never back to the same place. You don't "go back to normal"—you spiral to a new normal.</li>
+                        <li><strong>Networks:</strong> Power flows through connection, not accumulation. Being at the CENTER of networks matters more than size.</li>
+                        <li><strong>Thresholds:</strong> Small shifts create big changes (tipping points). Know what threshold you're approaching.</li>
+                        <li><strong>Fractals:</strong> The pattern at scale 1 repeats at scale 1000. Your personal coherence = group coherence = community resilience.</li>
+                    </ul>
+
+                    <div class="challenge-box">
+                        <h4>🌀 PATTERN WORK</h4>
+                        <p>What pattern are you currently IN? Are you spiraling up or down? Who are you at the center of connecting? What threshold is your world approaching? Write these down. Your answer reveals your next move.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUESTS TAB -->
+        <div id="quests" class="tab-content">
+            <h2 style="color: #00d4ff; margin-bottom: 30px;">📋 YOUR SURVIVAL QUESTS</h2>
+            
+            <div class="intro-section">
+                <p>Reading is good. Doing is everything. Below are your quests. Start with Level 1. Check them off as you complete. Track your power-up.</p>
+            </div>
+
+            <h3 style="color: #ff6b9d; margin: 30px 0 15px 0;">LEVEL 1: FOUNDATION (Do These This Week)</h3>
+            <div class="quest-item" onclick="toggleQuest(this)">Map your current value. What do you have that others need?</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Identify 5 people in your network and what they're good at.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Make one deliberate trade or offer help without expecting return.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Do the 5-minute nervous system practice once a day for 3 days.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Write down 3 beliefs about yourself that are limiting. Rewrite them.</div>
+
+            <h3 style="color: #ff6b9d; margin: 30px 0 15px 0;">LEVEL 2: ADVANCEMENT (Next 30 Days)</h3>
+            <div class="quest-item" onclick="toggleQuest(this)">Complete 5 successful barters or skill exchanges.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Bring together 2 people who need each other. Facilitate the connection.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Build a one-page "Leadership Manifesto"—what you stand for.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Learn one new survival skill (first aid, water collection, food preservation).</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Do the nervous system practice daily. Track your mood shifts.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Identify one pattern you're in (spiral, cycle, threshold). Write about it.</div>
+
+            <h3 style="color: #ff6b9d; margin: 30px 0 15px 0;">LEVEL 3: MASTERY (Next 90 Days)</h3>
+            <div class="quest-item" onclick="toggleQuest(this)">Build your core tribe of 3-5 aligned people around a shared vision.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Create a barter network map with at least 20 people and their value.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Lead a group through one crisis scenario (even hypothetical). Track what you learned.</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Develop a resource resilience plan (food, water, medicine, shelter, knowledge).</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Document your personal consciousness evolution. What's changed?</div>
+            <div class="quest-item" onclick="toggleQuest(this)">Teach one person something you've learned from this guide.</div>
+
+            <div class="level-up" style="margin-top: 40px;">
+                FINAL BOSS QUEST: Create a system that doesn't depend on you. Build infrastructure that sustains your community even if you're not there. That's mastery.
+            </div>
+        </div>
+
+        <footer>
+            <p>A Players Guide to Survival | OG Spark Exclusive Content</p>
+            <p>Made for those who see the code. Who understand the coming paradigm. Who refuse to be victims of circumstance.</p>
+            <p style="margin-top: 15px;">Reality is programmable. You are the programmer.</p>
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(e, tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            e.target.classList.add('active');
+        }
+
+        function toggleSkill(element) {
+            const skillBody = element.nextElementSibling;
+            skillBody.classList.toggle('open');
+        }
+
+        function toggleQuest(element) {
+            element.classList.toggle('completed');
+        }
+
+        function calculateBarterValue() {
+            const youHave = document.getElementById('you-have').value;
+            const youNeed = document.getElementById('you-need').value;
+            const networkSize = parseInt(document.getElementById('network-size').value) || 10;
+
+            if (!youHave || !youNeed) {
+                alert('Fill in what you have and what you need!');
+                return;
+            }
+
+            // Simple scoring algorithm
+            const baseScore = youHave.split(' ').length * 5;
+            const networkMultiplier = Math.log(networkSize + 1) * 10;
+            const totalPower = Math.round(baseScore + networkMultiplier);
+
+            let strategy = '';
+            if (totalPower < 30) {
+                strategy = 'Start with direct 1:1 trades. Build reputation first. Then expand.';
+            } else if (totalPower < 60) {
+                strategy = 'You\'re ready to become a connector. Map the network. Facilitate trades. Commission on facilitation.';
+            } else {
+                strategy = 'Build a barter hub. You have the reach. Create the infrastructure. Become the node.';
+            }
+
+            document.getElementById('power-score').textContent = totalPower + ' POWER';
+            document.getElementById('strategy').textContent = strategy;
+            document.getElementById('barter-result').classList.add('show');
+        }
+    </script>
+</body>
+</html>

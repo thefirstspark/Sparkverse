@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#00d4ff">
+    <title>Spark Station | Pre-Launch Build</title>
+    <meta name="description" content="Follow the Spark Station build — a mobile workstation for consciousness tech, Book Zero tour, and the Hocking Hills land mission. Fuel the Spark or partner with us.">
+    <meta property="og:title" content="Spark Station — Pre-Launch Build">
+    <meta property="og:description" content="A mobile consciousness workstation on the road to Hocking Hills. Book Zero tour. Fuel the Spark.">
+    <meta property="og:url" content="https://thefirstspark.shop/spark-station-live.html">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --deep-space: #0a0a1a;
+            --dark-navy: #1a1a2e;
+            --electric-blue: #00d4ff;
+            --neon-cyan: #00ffff;
+            --neon-magenta: #ff00ff;
+            --neon-purple: #9d00ff;
+            --accent-gold: #ffd700;
+            --accent-orange: #ff6b35;
+            --white: #ffffff;
+            --gray-light: #e0e0e0;
+            --gray-mid: #808080;
+            --gray-dark: #2a2a2a;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --nav-height: 64px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 12px);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .starfield {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #starCanvas { width: 100%; height: 100%; display: block; }
+
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            z-index: 0;
+            pointer-events: none;
+            animation: drift 18s ease-in-out infinite;
+        }
+
+        .glow-orb.a { width: 280px; height: 280px; background: var(--neon-purple); top: 10%; left: -60px; }
+        .glow-orb.b { width: 220px; height: 220px; background: var(--electric-blue); bottom: 20%; right: -40px; animation-delay: -6s; }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -30px) scale(1.1); }
+        }
+
+        .page { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; }
+
+        /* Live status bar */
+        .live-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 16px;
+            background: rgba(10, 10, 26, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            color: var(--electric-blue);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+
+        .live-dot.building {
+            animation: pulse-build 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-build {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
+        }
+
+        .live-location {
+            font-size: 0.7rem;
+            color: var(--gray-mid);
+            text-align: right;
+            line-height: 1.3;
+        }
+
+        .live-location strong { color: var(--gray-light); display: block; }
+
+        /* Hero */
+        .hero {
+            padding: 28px 20px 24px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 6px 14px;
+            margin-bottom: 16px;
+            background: rgba(0, 212, 255, 0.06);
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.75rem;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--electric-blue) 50%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 0.95rem;
+            color: var(--gray-light);
+            margin-bottom: 22px;
+            max-width: 340px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .stat-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 8px;
+        }
+
+        .stat-pill .num {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            display: block;
+        }
+
+        .stat-pill .lbl {
+            font-size: 0.6rem;
+            color: var(--gray-mid);
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hero-proof {
+            margin: 20px 0 8px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            background: rgba(26, 26, 46, 0.5);
+            text-align: left;
+        }
+
+        .hero-proof img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-proof figcaption {
+            padding: 12px 14px;
+            font-size: 0.78rem;
+            color: var(--gray-light);
+            line-height: 1.5;
+        }
+
+        .hero-proof figcaption strong {
+            display: block;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: var(--electric-blue);
+            margin-bottom: 4px;
+        }
+
+        .build-log {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .log-entry {
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.12);
+            border-radius: 12px;
+            border-left: 3px solid var(--electric-blue);
+        }
+
+        .log-entry .log-date {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+
+        .log-entry .log-title {
+            font-size: 0.82rem;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .log-entry .log-body {
+            font-size: 0.76rem;
+            color: var(--gray-mid);
+            line-height: 1.5;
+        }
+
+        .amount-btn.unavailable {
+            display: none;
+        }
+
+        .fuel-tier-note {
+            font-size: 0.72rem;
+            color: var(--gray-mid);
+            text-align: center;
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--electric-blue), var(--neon-purple));
+            color: var(--black);
+            box-shadow: 0 4px 24px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover, .btn-primary:active {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 32px rgba(0, 212, 255, 0.45);
+        }
+
+        .btn-secondary {
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--electric-blue);
+            border: 2px solid rgba(0, 212, 255, 0.35);
+        }
+
+        .btn-secondary:hover, .btn-secondary:active {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--electric-blue);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            color: var(--black);
+        }
+
+        /* Sections */
+        section { padding: 0 20px 32px; }
+
+        .section-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--electric-blue);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+            color: var(--white);
+        }
+
+        .section-text {
+            font-size: 0.9rem;
+            color: var(--gray-light);
+            margin-bottom: 16px;
+        }
+
+        /* Vision cards */
+        .card-grid { display: flex; flex-direction: column; gap: 12px; }
+
+        .vision-card {
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 16px;
+            padding: 18px;
+            transition: border-color 0.25s;
+        }
+
+        .vision-card:active { border-color: rgba(0, 212, 255, 0.4); }
+
+        .vision-card .icon {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
+        .vision-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+            color: var(--neon-cyan);
+        }
+
+        .vision-card p {
+            font-size: 0.82rem;
+            color: var(--gray-light);
+            line-height: 1.55;
+        }
+
+        /* Route timeline */
+        .route-track {
+            position: relative;
+            padding-left: 28px;
+            margin-top: 8px;
+        }
+
+        .route-track::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--electric-blue), var(--neon-purple), var(--accent-gold));
+        }
+
+        .route-stop {
+            position: relative;
+            padding: 12px 0 12px 12px;
+        }
+
+        .route-stop::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 18px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--deep-space);
+            border: 2px solid var(--electric-blue);
+        }
+
+        .route-stop.active::before {
+            background: var(--electric-blue);
+            box-shadow: 0 0 12px var(--electric-blue);
+        }
+
+        .route-stop .stop-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.78rem;
+            color: var(--white);
+        }
+
+        .route-stop .stop-desc {
+            font-size: 0.75rem;
+            color: var(--gray-mid);
+            margin-top: 2px;
+        }
+
+        .route-stop.active .stop-name { color: var(--electric-blue); }
+
+        /* Funding progress */
+        .fund-meter {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 12px;
+        }
+
+        .fund-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .fund-header span:first-child {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+        }
+
+        .fund-header span:last-child {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .fund-note { font-size: 0.72rem; color: var(--gray-mid); }
+
+        /* Sponsorship */
+        .sponsor-strip {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .sponsor-strip::-webkit-scrollbar { display: none; }
+
+        .sponsor-slot {
+            flex: 0 0 140px;
+            height: 90px;
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            color: var(--gray-mid);
+            text-align: center;
+            padding: 10px;
+        }
+
+        .sponsor-slot.filled {
+            border-style: solid;
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        /* Workstation specs */
+        .spec-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .spec-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.84rem;
+            color: var(--gray-light);
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .spec-list li::before {
+            content: '◇';
+            color: var(--electric-blue);
+            flex-shrink: 0;
+        }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: stretch;
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            padding-bottom: var(--safe-bottom);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 481px) {
+            .bottom-nav { left: 50%; transform: translateX(-50%); border-radius: 16px 16px 0 0; }
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            padding: 10px 4px;
+            text-decoration: none;
+            color: var(--gray-mid);
+            font-size: 0.55rem;
+            letter-spacing: 0.5px;
+            font-family: 'Orbitron', monospace;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-item .nav-icon { font-size: 1.2rem; }
+
+        .nav-item.active, .nav-item:hover { color: var(--electric-blue); }
+
+        .nav-fuel {
+            flex: 1.2;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 107, 53, 0.15));
+            color: var(--accent-gold) !important;
+            border-left: 1px solid rgba(255, 215, 0, 0.2);
+            border-right: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            align-items: flex-end;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-sheet {
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--deep-space);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 20px 20px 0 0;
+            padding: 24px 20px calc(24px + var(--safe-bottom));
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .modal-subtitle {
+            font-size: 0.82rem;
+            color: var(--gray-mid);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: var(--white);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay { position: fixed; }
+
+        .modal-wrap { position: relative; width: 100%; max-width: 480px; }
+
+        /* Donation amounts */
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .amount-btn {
+            padding: 16px 8px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.25);
+            background: rgba(255, 215, 0, 0.06);
+            color: var(--accent-gold);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .amount-btn:hover, .amount-btn.selected {
+            border-color: var(--accent-gold);
+            background: rgba(255, 215, 0, 0.15);
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.2);
+        }
+
+        .amount-btn .fuel-label {
+            display: block;
+            font-size: 0.55rem;
+            font-weight: 400;
+            color: var(--gray-mid);
+            margin-top: 2px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .custom-amount {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .custom-amount span {
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px 0 0 10px;
+            font-family: 'Orbitron', monospace;
+            color: var(--accent-gold);
+        }
+
+        .custom-amount input {
+            flex: 1;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0 10px 10px 0;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .custom-amount input:focus { border-color: var(--accent-gold); }
+
+        /* Forms */
+        .form-group { margin-bottom: 14px; }
+
+        .form-group label {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--gray-mid);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--electric-blue);
+        }
+
+        .form-group textarea { min-height: 80px; resize: vertical; }
+
+        .form-group select option { background: var(--dark-navy); }
+
+        .thank-you {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .thank-you.show { display: block; }
+
+        .thank-you .spark { font-size: 2.5rem; margin-bottom: 12px; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.7rem;
+            color: var(--gray-mid);
+        }
+
+        footer a { color: var(--electric-blue); text-decoration: none; }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            color: var(--gray-mid);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .home-link:hover { color: var(--electric-blue); }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .form-error {
+            color: #ff6b6b;
+            font-size: 0.78rem;
+            text-align: center;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .form-error.show { display: block; }
+    </style>
+</head>
+<body>
+    <div class="starfield"><canvas id="starCanvas"></canvas></div>
+    <div class="glow-orb a"></div>
+    <div class="glow-orb b"></div>
+
+    <div class="page">
+        <div class="live-bar">
+            <div class="live-indicator">
+                <span class="live-dot building"></span>
+                <span>SPARK STATION</span>
+            </div>
+            <div class="live-location" id="liveLocation">
+                <strong>Pre-Launch</strong>
+                Follow the build
+            </div>
+        </div>
+
+        <header class="hero" id="top">
+            <div class="hero-badge">◇ MOBILE WORKSTATION — IN BUILD ◇</div>
+            <h1>Spark Station</h1>
+            <p class="hero-tagline">A rolling studio for building consciousness tools from the road — scouting Hocking Hills land, shipping weekly, powered by reciprocity.</p>
+
+            <figure class="hero-proof">
+                <img src="kateandrach91.jpg" alt="Katel and Rachael — The First Spark founders building Spark Station" width="480" height="200" loading="eager">
+                <figcaption>
+                    <strong>REAL BUILD · AKRON, OH</strong>
+                    Two founders, 50+ tools shipped, one van mission. This page tracks the road ahead — not a live feed yet.
+                </figcaption>
+            </figure>
+
+            <div class="hero-stats">
+                <div class="stat-pill">
+                    <span class="num">50+</span>
+                    <span class="lbl">Tools Built</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="num">5</span>
+                    <span class="lbl">Sacred Loops</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="num">1</span>
+                    <span class="lbl">Land Mission</span>
+                </div>
+            </div>
+
+            <div class="hero-ctas">
+                <button class="btn btn-gold" onclick="openModal('fuel')">⚡ Fuel the Spark</button>
+                <button class="btn btn-primary" onclick="openModal('tour')">Book Zero Tour</button>
+                <a href="#build-log" class="btn btn-secondary">Build Log</a>
+            </div>
+        </header>
+
+        <section id="build-log">
+            <div class="section-label">✦ BUILD LOG</div>
+            <h2 class="section-title">Week One</h2>
+            <p class="section-text">Honest updates as the station takes shape. No fake progress — just what's real.</p>
+
+            <div class="build-log">
+                <div class="log-entry">
+                    <div class="log-date">JUL 2026</div>
+                    <div class="log-title">Pre-launch page shipped</div>
+                    <div class="log-body">Spark Station landing page live on thefirstspark.shop. Fuel, tour booking, and partnership forms wired. Van conversion research underway.</div>
+                </div>
+                <div class="log-entry">
+                    <div class="log-date">JUN 2026</div>
+                    <div class="log-title">50+ tools in the ecosystem</div>
+                    <div class="log-body">Sparked Notes PWA, Soul Map, and the Sparkverse tool suite shipping from a home studio — proof the rolling workstation concept works before the wheels.</div>
+                </div>
+                <div class="log-entry">
+                    <div class="log-date">NOW</div>
+                    <div class="log-title">Hocking Hills land mission</div>
+                    <div class="log-body">Scouting acreage in Ohio — caves, forest, anchor point for the Five-Loop route. $85K goal covers conversion, solar, and scouting runway.</div>
+                </div>
+                <div class="log-entry">
+                    <div class="log-date">NEXT</div>
+                    <div class="log-title">Fuel tiers + partner outreach</div>
+                    <div class="log-body">Wire remaining Whop fuel products ($11–$333). Pitch RV, solar, and connectivity partners. First build-log photo from the road when wheels roll.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vision">
+            <a href="https://thefirstspark.shop" class="home-link">← The First Spark</a>
+            <div class="section-label">✦ THE VISION</div>
+            <h2 class="section-title">A Studio That Moves</h2>
+            <p class="section-text">Spark Station is a mobile consciousness workstation — an RV or van conversion that lets a single mother build full-time, host live experiences, and scout sacred land without waiting for a brick-and-mortar office.</p>
+
+            <div class="card-grid">
+                <div class="vision-card">
+                    <div class="icon">🛣️</div>
+                    <h3>Work From the Road</h3>
+                    <p>Solar power, Starlink, and a rolling dev studio. Code tools by day, park under stars by night. No extraction — just reciprocity in motion.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">🏔️</div>
+                    <h3>Hocking Hills Land Mission</h3>
+                    <p>Scouting acreage in Hocking Hills, Ohio — caves, forest, and sacred geometry on the ground. The station is the command center for finding home base.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">📖</div>
+                    <h3>Book Zero Tour</h3>
+                    <p>Live memoir readings, true-crime storytelling, and real-time writing from the road. Book a stop on the Zero Tour — virtual or in-person when we roll through your city.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">🧭</div>
+                    <h3>AI-Powered Soul Travel</h3>
+                    <p>Interactive soul maps, consciousness protocols, and guided inner navigation — built into the station experience. Travel inward while we travel outward.</p>
+                </div>
+            </div>
+
+            <div class="fund-meter">
+                <div class="fund-header">
+                    <span>CAMPAIGN GOAL</span>
+                    <span id="fundDisplay">$0 / $85K</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="fundProgress"></div>
+                </div>
+                <p class="fund-note">Pre-launch — fuel campaign opens as Whop tiers go live. Goal covers van/RV conversion, solar, mobile workstation, and Hocking Hills scouting runway.</p>
+            </div>
+        </section>
+
+        <section id="route">
+            <div class="section-label">✦ THE ROUTE</div>
+            <h2 class="section-title">Five-Loop Sacred Geometry Trip</h2>
+            <p class="section-text">When Spark Station launches, we follow the loops — land scouting woven with consciousness experiences at each node.</p>
+
+            <div class="route-track">
+                <div class="route-stop active">
+                    <div class="stop-name">Hocking Hills, OH</div>
+                    <div class="stop-desc">Land mission HQ · Cave systems · First anchor point</div>
+                </div>
+                <div class="route-stop">
+                    <div class="stop-name">Sedona, AZ</div>
+                    <div class="stop-desc">Vortex field work · Soul travel intensives</div>
+                </div>
+                <div class="route-stop">
+                    <div class="stop-name">Big Sur, CA</div>
+                    <div class="stop-desc">Coastal collapse protocols · Pacific edge</div>
+                </div>
+                <div class="route-stop">
+                    <div class="stop-name">Your City</div>
+                    <div class="stop-desc">Book Zero Tour stop · Request a visit</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="workstation">
+            <div class="section-label">✦ WORKSTATION</div>
+            <h2 class="section-title">Built for Building</h2>
+            <p class="section-text">Everything a consciousness-tech founder needs to ship from anywhere.</p>
+            <ul class="spec-list">
+                <li>Dual-monitor dev rig with offline-first tooling</li>
+                <li>Starlink + cellular failover for live streams</li>
+                <li>Solar + battery bank for off-grid coding sessions</li>
+                <li>Portable recording booth for Book Zero podcast</li>
+                <li>Soul Map kiosk — AI-guided inner navigation for guests</li>
+                <li>Pop-up consciousness lab at each loop stop</li>
+            </ul>
+            <a href="soul-map.html" class="btn btn-secondary" style="margin-top:16px">Try Soul Map →</a>
+        </section>
+
+        <section id="sponsor">
+            <div class="section-label">✦ PARTNERSHIP</div>
+            <h2 class="section-title">RV & Road Sponsors</h2>
+            <p class="section-text">Looking for an RV manufacturer, van conversion shop, solar company, or fuel partner who wants authentic storytelling — not influencer fluff. Real build logs. Real road. Real tools shipping weekly.</p>
+
+            <div class="sponsor-strip">
+                <div class="sponsor-slot">
+                    <span>🚐</span>
+                    <span>RV Partner<br>Open</span>
+                </div>
+                <div class="sponsor-slot">
+                    <span>☀️</span>
+                    <span>Solar Partner<br>Open</span>
+                </div>
+                <div class="sponsor-slot">
+                    <span>⛽</span>
+                    <span>Fuel Partner<br>Open</span>
+                </div>
+                <div class="sponsor-slot">
+                    <span>📡</span>
+                    <span>Connectivity<br>Open</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top:16px" onclick="openModal('sponsor')">Pitch a Partnership</button>
+        </section>
+
+        <section id="fuel-section">
+            <div class="section-label">✦ RECIPROCITY</div>
+            <h2 class="section-title">Fuel the Spark</h2>
+            <p class="section-text">Not a tip jar — a reciprocity engine. Your fuel powers van conversion, land scouting trips, and free consciousness tools for the community.</p>
+            <button class="btn btn-gold" onclick="openModal('fuel')">⚡ Choose Your Fuel Level</button>
+        </section>
+
+        <footer>
+            <p>◇ THE FIRST SPARK · Consciousness Technology</p>
+            <p style="margin-top:6px"><a href="mailto:kate@thefirstspark.shop">kate@thefirstspark.shop</a></p>
+            <p style="margin-top:10px"><a href="https://thefirstspark.shop">thefirstspark.shop</a></p>
+        </footer>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+        <a href="#vision" class="nav-item active" data-section="vision">
+            <span class="nav-icon">✦</span>
+            Vision
+        </a>
+        <a href="#route" class="nav-item" data-section="route">
+            <span class="nav-icon">🛣️</span>
+            Route
+        </a>
+        <button class="nav-item nav-fuel" onclick="openModal('fuel')">
+            <span class="nav-icon">⚡</span>
+            Fuel
+        </button>
+        <a href="#workstation" class="nav-item" data-section="workstation">
+            <span class="nav-icon">💻</span>
+            Station
+        </a>
+        <button class="nav-item" onclick="openModal('tour')">
+            <span class="nav-icon">📖</span>
+            Tour
+        </button>
+    </nav>
+
+    <!-- Fuel the Spark Modal -->
+    <div class="modal-overlay" id="fuelModal" onclick="closeModalOnOverlay(event, 'fuel')">
+        <div class="modal-wrap">
+            <div class="modal-sheet">
+                <div class="modal-handle"></div>
+                <button class="modal-close" onclick="closeModal('fuel')" aria-label="Close">×</button>
+                <h2 class="modal-title">⚡ Fuel the Spark</h2>
+                <p class="modal-subtitle">Every dollar moves the station closer to the road. Pick a fuel level — reciprocity, not extraction.</p>
+
+                <div id="fuelForm">
+                    <p class="fuel-tier-note">Checkout-ready tiers below. More fuel levels ($11–$333) coming to Whop soon.</p>
+                    <div class="amount-grid">
+                        <button class="amount-btn unavailable" data-amount="11" onclick="selectAmount(11)" hidden>
+                            $11
+                            <span class="fuel-label">Spark</span>
+                        </button>
+                        <button class="amount-btn selected" data-amount="33" onclick="selectAmount(33)">
+                            $33
+                            <span class="fuel-label">Players Lounge</span>
+                        </button>
+                        <button class="amount-btn unavailable" data-amount="77" onclick="selectAmount(77)" hidden>
+                            $77
+                            <span class="fuel-label">Loop fuel</span>
+                        </button>
+                        <button class="amount-btn unavailable" data-amount="111" onclick="selectAmount(111)" hidden>
+                            $111
+                            <span class="fuel-label">Road ready</span>
+                        </button>
+                        <button class="amount-btn unavailable" data-amount="333" onclick="selectAmount(333)" hidden>
+                            $333
+                            <span class="fuel-label">Station boost</span>
+                        </button>
+                        <button class="amount-btn" data-amount="519" onclick="selectAmount(519)">
+                            $519
+                            <span class="fuel-label">OG Spark · Lifetime</span>
+                        </button>
+                    </div>
+
+                    <div class="custom-amount">
+                        <span>$</span>
+                        <input type="number" id="customAmount" placeholder="Custom amount" min="1" oninput="selectCustomAmount()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email (for receipt & thank-you)</label>
+                        <input type="email" id="fuelEmail" placeholder="you@email.com">
+                    </div>
+
+                    <button class="btn btn-gold" id="fuelSubmitBtn" onclick="processDonation()">Continue to Checkout →</button>
+                    <p style="text-align:center;font-size:0.7rem;color:var(--gray-mid);margin-top:12px">
+                        Prefer membership? <a href="https://whop.com/sparkverse-511c/og-spark-lifetime-access/" target="_blank" rel="noopener" style="color:var(--accent-gold)">OG Spark ($519) →</a>
+                    </p>
+                </div>
+
+                <div class="thank-you" id="fuelThanks">
+                    <div class="spark">⚡</div>
+                    <h3 style="font-family:'Orbitron',monospace;margin-bottom:8px">Checkout Opening</h3>
+                    <p id="fuelThanksMsg" style="color:var(--gray-light);font-size:0.9rem">Your intent is logged. Complete payment in the new tab to fuel the station — reciprocity, not extraction.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Zero Tour Modal -->
+    <div class="modal-overlay" id="tourModal" onclick="closeModalOnOverlay(event, 'tour')">
+        <div class="modal-wrap">
+            <div class="modal-sheet">
+                <div class="modal-handle"></div>
+                <button class="modal-close" onclick="closeModal('tour')" aria-label="Close">×</button>
+                <h2 class="modal-title">📖 Book Zero Tour</h2>
+                <p class="modal-subtitle">Memoir readings, true-crime storytelling, and live writing — virtual or on the road.</p>
+
+                <div id="tourForm">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="tourName" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="tourEmail" placeholder="you@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tour Type</label>
+                        <select id="tourType">
+                            <option value="virtual">Virtual Reading / Q&A</option>
+                            <option value="in-person">In-Person (when route permits)</option>
+                            <option value="podcast">Podcast / Interview</option>
+                            <option value="writing">Live Writing Session</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Window</label>
+                        <input type="text" id="tourDate" placeholder="e.g. March 2026, flexible">
+                    </div>
+                    <div class="form-group">
+                        <label>City / Region (for in-person)</label>
+                        <input type="text" id="tourCity" placeholder="Optional">
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="tourMessage" placeholder="Tell us about your venue, audience, or idea..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="tourSubmitBtn" onclick="submitTour()">Request Booking →</button>
+                </div>
+
+                <div class="thank-you" id="tourThanks">
+                    <div class="spark">📖</div>
+                    <h3 style="font-family:'Orbitron',monospace;margin-bottom:8px">Request Sent</h3>
+                    <p style="color:var(--gray-light);font-size:0.9rem">We'll reach out at the email you provided. The road is being written.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sponsorship Modal -->
+    <div class="modal-overlay" id="sponsorModal" onclick="closeModalOnOverlay(event, 'sponsor')">
+        <div class="modal-wrap">
+            <div class="modal-sheet">
+                <div class="modal-handle"></div>
+                <button class="modal-close" onclick="closeModal('sponsor')" aria-label="Close">×</button>
+                <h2 class="modal-title">🚐 Partnership Pitch</h2>
+                <p class="modal-subtitle">RV companies, van builders, solar, fuel, connectivity — let's build something real together.</p>
+
+                <div id="sponsorForm">
+                    <div class="form-group">
+                        <label>Company / Brand</label>
+                        <input type="text" id="sponsorCompany" placeholder="Company name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="sponsorName" placeholder="Contact name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="sponsorEmail" placeholder="partnerships@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Partnership Type</label>
+                        <select id="sponsorType">
+                            <option value="rv">RV / Van Manufacturer or Dealer</option>
+                            <option value="conversion">Van Conversion Shop</option>
+                            <option value="solar">Solar / Power Systems</option>
+                            <option value="fuel">Fuel / Charging Network</option>
+                            <option value="connectivity">Starlink / Cellular / Tech</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>What are you proposing?</label>
+                        <textarea id="sponsorMessage" placeholder="Vehicle loan, build sponsorship, discount code for community, co-marketing..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="sponsorSubmitBtn" onclick="submitSponsor()">Send Partnership Inquiry →</button>
+                </div>
+
+                <div class="thank-you" id="sponsorThanks">
+                    <div class="spark">🤝</div>
+                    <h3 style="font-family:'Orbitron',monospace;margin-bottom:8px">Inquiry Received</h3>
+                    <p style="color:var(--gray-light);font-size:0.9rem">We'll review your pitch and respond within a few days. Let's put a station on the road.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ═══ CONFIG ═══ */
+        const CONFIG = {
+            email: 'kate@thefirstspark.shop',
+            notifyEmail: 'kjpthefirstspark@gmail.com',
+            formSubmitUrl: 'https://formsubmit.co/ajax/kjpthefirstspark@gmail.com',
+            /* Deploy spark-station-google-apps-script.js → paste Web App URL here */
+            googleSheetWebhook: '',
+            fundGoal: 85000,
+            fundRaised: 0,
+            foundingUrl: 'https://whop.com/sparkverse-511c/og-spark-lifetime-access/',
+            whopStoreUrl: 'https://whop.com/sparkverse-511c/',
+            /* Whop checkout links — add plan URLs as you create Fuel products in Whop */
+            paymentLinks: {
+                11: '',
+                33: 'https://whop.com/checkout/plan_tK6j1EOvwkAow',
+                77: '',
+                111: '',
+                333: '',
+                519: 'https://whop.com/sparkverse-511c/og-spark-lifetime-access/'
+            },
+            /* Optional: Stripe Payment Link for variable fuel amounts */
+            stripeFuelLink: '',
+            liveStatus: {
+                phase: 'Pre-Launch',
+                detail: 'Follow the build'
+            }
+        };
+
+        let selectedAmount = 33;
+
+        function createStarfield() {
+            const canvas = document.getElementById('starCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                stars = Array.from({ length: Math.floor((canvas.width * canvas.height) / 8000) }, () => ({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.3,
+                    speed: Math.random() * 2 + 0.5,
+                    phase: Math.random() * Math.PI * 2
+                }));
+            }
+
+            resize();
+            window.addEventListener('resize', resize);
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const time = Date.now() * 0.001;
+                stars.forEach(star => {
+                    const twinkle = (Math.sin(time * star.speed + star.phase) + 1) / 2;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${0.2 + twinkle * 0.6})`;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        function updateFundMeter() {
+            const raised = CONFIG.fundRaised;
+            const goal = CONFIG.fundGoal;
+            const pct = Math.min((raised / goal) * 100, 100);
+            document.getElementById('fundDisplay').textContent = `$${raised.toLocaleString()} / $${(goal / 1000).toFixed(0)}K`;
+            document.getElementById('fundProgress').style.width = pct + '%';
+        }
+
+        function updateLiveBar() {
+            const el = document.getElementById('liveLocation');
+            el.innerHTML = `<strong>${CONFIG.liveStatus.phase}</strong>${CONFIG.liveStatus.detail}`;
+        }
+
+        function openModal(id) {
+            resetModal(id);
+            document.getElementById(id + 'Modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id + 'Modal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function resetModal(id) {
+            const form = document.getElementById(id + 'Form');
+            const thanks = document.getElementById(id + 'Thanks');
+            if (form) form.style.display = '';
+            if (thanks) thanks.classList.remove('show');
+        }
+
+        function setButtonLoading(btnId, loading, label) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.disabled = loading;
+            if (loading) {
+                btn.dataset.originalText = btn.textContent;
+                btn.textContent = 'Sending...';
+            } else if (btn.dataset.originalText) {
+                btn.textContent = btn.dataset.originalText;
+            } else if (label) {
+                btn.textContent = label;
+            }
+        }
+
+        async function submitToBackend(formType, fields, subject) {
+            const sheetPayload = { formType, ...fields, source: 'spark-station-live' };
+
+            if (CONFIG.googleSheetWebhook) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = CONFIG.googleSheetWebhook + '?data=' + encodeURIComponent(JSON.stringify(sheetPayload));
+                document.body.appendChild(iframe);
+                setTimeout(() => iframe.remove(), 5000);
+
+                try {
+                    await fetch(CONFIG.googleSheetWebhook, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(sheetPayload)
+                    });
+                } catch (_) { /* iframe fallback handles CORS */ }
+            }
+
+            const formData = new FormData();
+            Object.entries(fields).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) formData.append(key, value);
+            });
+            formData.append('_subject', subject);
+            formData.append('_template', 'table');
+            formData.append('_captcha', 'false');
+
+            const response = await fetch(CONFIG.formSubmitUrl, {
+                method: 'POST',
+                headers: { Accept: 'application/json' },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Form submission failed');
+            }
+            return response.json();
+        }
+
+        function getPaymentUrl(amount) {
+            if (amount === 519) return CONFIG.paymentLinks[519] || CONFIG.foundingUrl;
+
+            const preset = CONFIG.paymentLinks[amount];
+            if (preset) return preset;
+
+            if (CONFIG.stripeFuelLink) {
+                return amount > 0
+                    ? `${CONFIG.stripeFuelLink}?__prefilled_amount=${amount * 100}`
+                    : CONFIG.stripeFuelLink;
+            }
+
+            return CONFIG.whopStoreUrl;
+        }
+
+        function closeModalOnOverlay(e, id) {
+            if (e.target.classList.contains('modal-overlay')) closeModal(id);
+        }
+
+        function selectAmount(amount) {
+            selectedAmount = amount;
+            document.getElementById('customAmount').value = '';
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.toggle('selected', parseInt(btn.dataset.amount) === amount);
+            });
+        }
+
+        function selectCustomAmount() {
+            const val = parseInt(document.getElementById('customAmount').value);
+            if (val > 0) {
+                selectedAmount = val;
+                document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('selected'));
+            }
+        }
+
+        async function processDonation() {
+            const custom = parseInt(document.getElementById('customAmount').value, 10);
+            const amount = custom > 0 ? custom : selectedAmount;
+            const email = document.getElementById('fuelEmail').value.trim();
+
+            if (!amount || amount < 1) {
+                alert('Please choose or enter a fuel amount.');
+                return;
+            }
+
+            setButtonLoading('fuelSubmitBtn', true);
+
+            try {
+                await submitToBackend('fuel', {
+                    amount: '$' + amount,
+                    email: email || '(not provided)',
+                    note: 'Fuel the Spark — spark-station-live'
+                }, `⚡ Fuel the Spark — $${amount}`);
+
+                const paymentUrl = getPaymentUrl(amount);
+                const hasDirectCheckout = CONFIG.paymentLinks[amount] || amount === 519 || CONFIG.stripeFuelLink;
+
+                document.getElementById('fuelForm').style.display = 'none';
+                document.getElementById('fuelThanks').classList.add('show');
+
+                const thanksMsg = document.getElementById('fuelThanksMsg');
+                if (hasDirectCheckout) {
+                    thanksMsg.textContent = 'Intent logged. Whop checkout is opening in a new tab — complete payment there to fuel the station.';
+                    window.open(paymentUrl, '_blank', 'noopener');
+                } else {
+                    thanksMsg.textContent = 'Intent logged. Whop store opened — pick Players Lounge ($33) or OG Spark ($519) to complete fuel.';
+                    window.open(CONFIG.whopStoreUrl, '_blank', 'noopener');
+                }
+
+                setTimeout(() => closeModal('fuel'), 2800);
+            } catch (error) {
+                alert('Something went wrong. Email ' + CONFIG.notifyEmail + ' to fuel the Spark.');
+            } finally {
+                setButtonLoading('fuelSubmitBtn', false);
+            }
+        }
+
+        async function submitTour() {
+            const name = document.getElementById('tourName').value.trim();
+            const email = document.getElementById('tourEmail').value.trim();
+            if (!name || !email) {
+                alert('Please enter your name and email.');
+                return;
+            }
+
+            const tourType = document.getElementById('tourType').value;
+            const preferredWindow = document.getElementById('tourDate').value;
+            const city = document.getElementById('tourCity').value;
+            const message = document.getElementById('tourMessage').value;
+
+            setButtonLoading('tourSubmitBtn', true);
+
+            try {
+                await submitToBackend('tour', {
+                    name,
+                    email,
+                    tourType,
+                    preferredWindow: preferredWindow || 'Flexible',
+                    city: city || 'N/A',
+                    message: message || '(none)'
+                }, `📖 Book Zero Tour — ${name}`);
+
+                document.getElementById('tourForm').style.display = 'none';
+                document.getElementById('tourThanks').classList.add('show');
+                setTimeout(() => closeModal('tour'), 3200);
+            } catch (error) {
+                alert('Submission failed. Email ' + CONFIG.notifyEmail + ' directly.');
+            } finally {
+                setButtonLoading('tourSubmitBtn', false);
+            }
+        }
+
+        async function submitSponsor() {
+            const company = document.getElementById('sponsorCompany').value.trim();
+            const name = document.getElementById('sponsorName').value.trim();
+            const email = document.getElementById('sponsorEmail').value.trim();
+            if (!company || !name || !email) {
+                alert('Please fill in company, name, and email.');
+                return;
+            }
+
+            const partnershipType = document.getElementById('sponsorType').value;
+            const message = document.getElementById('sponsorMessage').value;
+
+            setButtonLoading('sponsorSubmitBtn', true);
+
+            try {
+                await submitToBackend('sponsor', {
+                    company,
+                    name,
+                    email,
+                    partnershipType,
+                    message: message || '(none)'
+                }, `🚐 Spark Station Partnership — ${company}`);
+
+                document.getElementById('sponsorForm').style.display = 'none';
+                document.getElementById('sponsorThanks').classList.add('show');
+                setTimeout(() => closeModal('sponsor'), 3200);
+            } catch (error) {
+                alert('Submission failed. Email ' + CONFIG.notifyEmail + ' directly.');
+            } finally {
+                setButtonLoading('sponsorSubmitBtn', false);
+            }
+        }
+
+        document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    document.querySelectorAll('.nav-item[data-section]').forEach(n => {
+                        n.classList.toggle('active', n.dataset.section === id);
+                    });
+                }
+            });
+        }, { threshold: 0.3, rootMargin: '-80px 0px -40% 0px' });
+
+        sections.forEach(s => observer.observe(s));
+
+        createStarfield();
+        updateFundMeter();
+        updateLiveBar();
+    </script>
+</body>
+</html>

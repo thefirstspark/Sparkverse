@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Step Into The Probability Field — The First Spark</title>
+<meta name="description" content="A guided cinematic walk through the Selector Model: collapse probability, decode your signature, and find the door into the Sparkverse." />
+<meta property="og:title" content="Step Into The Probability Field" />
+<meta property="og:description" content="Reality is programmable. Consciousness is the code. Walk through the four layers and meet your selector signature." />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<style>
+  :root {
+    --bg-0: #07091c;
+    --bg-1: #0f1233;
+    --bg-2: #1a1f4d;
+    --ink: #e6ebff;
+    --dim: #a3acdc;
+    --blue: #6db3ff;
+    --violet: #9d4edd;
+    --magenta: #f72585;
+    --gold: #ffcb47;
+    --line: rgba(109, 179, 255, 0.22);
+    --glass: rgba(20, 25, 50, 0.55);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(157, 78, 221, 0.18), transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(109, 179, 255, 0.18), transparent 55%),
+      linear-gradient(135deg, var(--bg-0), var(--bg-1) 55%, var(--bg-0));
+    color: var(--ink);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ============ PROGRESS BAR ============ */
+  .progress {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: rgba(109, 179, 255, 0.08);
+    z-index: 50;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--blue), var(--violet), var(--magenta));
+    transition: width 0.6s ease;
+    box-shadow: 0 0 12px rgba(109, 179, 255, 0.5);
+  }
+
+  /* ============ TOP NAV ============ */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 28px;
+    z-index: 49;
+    pointer-events: none;
+  }
+  .topnav a, .topnav span { pointer-events: auto; }
+  .topnav .brand {
+    font-size: 11px; letter-spacing: 3px; color: var(--dim);
+    text-transform: uppercase; text-decoration: none;
+  }
+  .topnav .stage-label {
+    font-size: 11px; letter-spacing: 3px; color: var(--blue);
+    text-transform: uppercase;
+    background: var(--glass); border: 1px solid var(--line);
+    padding: 6px 14px; border-radius: 100px;
+    backdrop-filter: blur(8px);
+  }
+
+  /* ============ STAGE LAYOUT ============ */
+  .stage {
+    min-height: 100vh;
+    width: 100%;
+    display: none;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 24px 80px;
+  }
+  .stage.active { display: flex; }
+  .stage canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+    z-index: 1;
+  }
+  .stage .content {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    width: 100%;
+    text-align: center;
+  }
+  .stage .panel {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    backdrop-filter: blur(14px);
+    padding: 40px 36px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  /* ============ TYPOGRAPHY ============ */
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid var(--line);
+    background: rgba(109, 179, 255, 0.08);
+    border-radius: 100px;
+    font-size: 10px; letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, #fff, var(--blue) 60%, var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  h2 {
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 600;
+    margin-bottom: 14px;
+    letter-spacing: -0.3px;
+  }
+  h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px; }
+  .lede { font-size: clamp(16px, 1.6vw, 19px); color: var(--dim); line-height: 1.65; margin-bottom: 28px; }
+  .quiet { color: var(--dim); font-size: 13px; line-height: 1.6; }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600; font-size: 13px;
+    letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; cursor: pointer;
+    border: none; outline: none;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue), var(--violet));
+    color: white;
+    box-shadow: 0 8px 22px rgba(109, 179, 255, 0.25);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(109, 179, 255, 0.4); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .btn-ghost {
+    background: rgba(109, 179, 255, 0.06);
+    border: 1px solid var(--line);
+    color: var(--blue);
+  }
+  .btn-ghost:hover { background: rgba(109, 179, 255, 0.16); }
+  .btn-gold {
+    background: linear-gradient(135deg, #ffd86b, var(--gold));
+    color: #2a1f00;
+    box-shadow: 0 8px 22px rgba(255, 203, 71, 0.25);
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255, 203, 71, 0.45); }
+
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 28px; }
+
+  /* ============ FORM ============ */
+  .field-row {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 16px; justify-content: center;
+  }
+  .field {
+    flex: 1 1 200px;
+    background: rgba(7, 10, 28, 0.6);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .field:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(109, 179, 255, 0.18); }
+  .field::placeholder { color: rgba(163, 172, 220, 0.5); }
+
+  /* ============ STAGE 1 — counter ============ */
+  .counter {
+    display: inline-flex; gap: 12px; align-items: center;
+    background: var(--glass);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+    padding: 10px 18px;
+    border-radius: 100px;
+    font-size: 12px; letter-spacing: 2px;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+  .counter b { color: var(--blue); font-weight: 700; font-size: 14px; }
+
+  /* ============ STAGE 2 — toggle ============ */
+  .toggle-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin: 18px 0;
+    padding: 10px 18px;
+    border-radius: 100px;
+    background: var(--glass);
+    border: 1px solid var(--line);
+    cursor: pointer;
+    font-size: 12px; letter-spacing: 2px;
+    color: var(--ink);
+    text-transform: uppercase;
+    user-select: none;
+    backdrop-filter: blur(8px);
+  }
+  .toggle-pill .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    box-shadow: 0 0 6px transparent;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .toggle-pill.on .dot { background: var(--blue); box-shadow: 0 0 12px var(--blue); }
+  .toggle-pill.on { color: var(--blue); border-color: var(--blue); }
+
+  /* ============ STAGE 3 — signature reveal ============ */
+  .number-card {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 4px;
+    background: linear-gradient(135deg, rgba(109,179,255,0.1), rgba(157,78,221,0.1));
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 36px;
+    margin: 22px 0;
+  }
+  .number-card .num {
+    font-size: 64px; font-weight: 700;
+    background: linear-gradient(135deg, var(--blue), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+  .number-card .label {
+    font-size: 10px; letter-spacing: 4px;
+    color: var(--dim); text-transform: uppercase;
+  }
+  .number-card .meaning {
+    font-size: 14px; color: var(--ink);
+    margin-top: 10px;
+    max-width: 380px;
+    line-height: 1.5;
+  }
+
+  /* ============ STAGE 4 — relational ============ */
+  .ghosted-action {
+    color: var(--dim); font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; margin-top: 18px;
+  }
+
+  /* ============ STAGE 6 — doors ============ */
+  .doors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin: 32px 0;
+  }
+  .door {
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 26px 22px;
+    text-align: left;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .door:hover {
+    transform: translateY(-4px);
+    border-color: var(--blue);
+    box-shadow: 0 16px 40px rgba(109, 179, 255, 0.25);
+  }
+  .door .price {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 12px; letter-spacing: 2px;
+    color: var(--blue);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .door.gold {
+    background: linear-gradient(135deg, rgba(255,203,71,0.15), rgba(247,37,133,0.08));
+    border-color: rgba(255,203,71,0.45);
+  }
+  .door.gold:hover { box-shadow: 0 16px 40px rgba(255,203,71,0.3); border-color: var(--gold); }
+  .door.gold .price { color: var(--gold); }
+  .door .small { font-size: 13px; color: var(--dim); line-height: 1.5; }
+  .door .ribbon {
+    position: absolute; top: 12px; right: -28px;
+    transform: rotate(28deg);
+    background: var(--magenta); color: white;
+    font-size: 9px; letter-spacing: 2px; padding: 3px 30px;
+    text-transform: uppercase;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    text-align: center; padding: 28px;
+    font-size: 11px; letter-spacing: 2px;
+    color: rgba(163, 172, 220, 0.5);
+    text-transform: uppercase;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 600px) {
+    .stage { padding: 90px 16px 60px; }
+    .stage .panel { padding: 28px 20px; }
+    h1 { letter-spacing: 0; }
+    .topnav { padding: 14px 16px; }
+    .topnav .brand { font-size: 10px; letter-spacing: 2px; }
+    .number-card .num { font-size: 48px; }
+  }
+
+  /* ============ ANIMATION HELPERS ============ */
+  .fade-in { animation: fadeIn 0.8s ease both; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .pulse { animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="topnav">
+  <a href="selector-hub.html" class="brand">⚡ The First Spark / Selector</a>
+  <span class="stage-label" id="stageLabel">0 / 6 — Threshold</span>
+</div>
+
+<!-- ============ STAGE 0: THRESHOLD ============ -->
+<section class="stage active" id="stage-0" data-label="Threshold">
+  <canvas id="canvas-stars"></canvas>
+  <div class="content fade-in">
+    <div class="badge">⚡ Reality is loading</div>
+    <h1>You're not observing reality.<br>You're rendering it.</h1>
+    <p class="lede">
+      What if every moment of your life is a selection — collapsed from infinite possibility into one rendered frame? <br><br>
+      Step through. We'll show you the mechanism, then we'll show you yours.
+    </p>
+    <button class="btn btn-primary" data-next="1">Step In →</button>
+    <p class="quiet" style="margin-top: 18px;">5 minutes · interactive · no signup yet</p>
+  </div>
+</section>
+
+<!-- ============ STAGE 1: PROBABILITY FIELD ============ -->
+<section class="stage" id="stage-1" data-label="The Probability Field">
+  <canvas id="canvas-field"></canvas>
+  <div class="content">
+    <div class="panel fade-in">
+      <div class="badge">Stage 01 — The Probability Field</div>
+      <h2>Click anywhere. Watch what happens.</h2>
+      <p class="lede" style="margin-bottom: 8px;">
+        Before you act, every possibility exists at once. The instant your attention moves, one collapses into reality.<br>
+        <span style="color: var(--dim); font-size: 14px;">That is the entire game.</span>
+      </p>
+      <div class="counter">Selections made: <b id="selectionCount">0</b></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-next-1" data-next="2" disabled>Continue →</button>
+      </div>
+      <p class="quiet" id="hint-1" style="margin-top: 12px;">Make 3 selections to continue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 2: PHYSICS LAYER ============ -->
+<section class="stage" id="stage-2" data-label="Layer 1 — Physics">
+  <canvas id="canvas-slit"></canvas>
+  <div class="content">
+    <div class="panel fade-in">
+      <div class="badge">Layer 01 — Physics · The Raw Code</div>
+      <h2>The observer is not a witness.<br>The observer is the trigger.</h2>
+      <p class="lede">
+        For a hundred years physics has known this: particles act like waves until something looks. The Selector Model says that is not a glitch — that <em>is</em> the mechanism.
+      </p>
+      <div class="toggle-pill" id="observerToggle"><span class="dot"></span> Observer: OFF</div>
+      <p class="quiet">Toggle the observer. Watch the wave become a particle.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" data-next="3">Continue →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 3: METAPHYSICAL — LEAD CAPTURE 1 ============ -->
+<section class="stage" id="stage-3" data-label="Layer 2 — Metaphysical">
+  <canvas id="canvas-geometry"></canvas>
+  <div class="content">
+    <div class="panel fade-in">
+      <div class="badge">Layer 02 — Metaphysical · The Operating System</div>
+      <h2>Your selector has a signature.</h2>
+      <p class="lede">
+        Numerology. Astrology. The Chinese zodiac. They aren't superstitions — they are <strong>pattern interfaces</strong> for reading the operating system of probability. Your birth coordinates encode a starting configuration. Want to see the first byte of yours?
+      </p>
+
+      <form id="signatureForm" autocomplete="off" novalidate>
+        <div class="field-row">
+          <input class="field" type="text" name="firstname" id="fnInput" placeholder="First name" required>
+          <input class="field" type="date" name="birthdate" id="bdInput" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Reveal My Signature →</button>
+      </form>
+
+      <div id="signatureReveal" hidden>
+        <div class="number-card">
+          <span class="label">Your Life Path</span>
+          <span class="num" id="lifePathOut">—</span>
+          <span class="meaning" id="lifePathMeaning"></span>
+        </div>
+        <p class="lede" style="margin-top: 8px;">
+          That's <em>one</em> coordinate. Your full Soul Map decodes Life Path, Expression, Soul Urge, Personality, and Personal Year alongside your Western astrology and Chinese zodiac — delivered to your inbox in a single shareable map.
+        </p>
+        <div class="btn-row">
+          <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener" class="btn btn-gold" data-cta="soulmap-mid">Claim Your Soul Map — $22</a>
+          <button class="btn btn-ghost" data-next="4">Keep Going →</button>
+        </div>
+        <p class="quiet" style="margin-top: 14px;">One-time payment · Live URL in about 5 minutes</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 4: RELATIONAL ============ -->
+<section class="stage" id="stage-4" data-label="Layer 3 — Relational">
+  <canvas id="canvas-network"></canvas>
+  <div class="content">
+    <div class="panel fade-in">
+      <div class="badge">Layer 03 — Relational · The Network Effect</div>
+      <h2>You don't select alone.</h2>
+      <p class="lede">
+        Every consciousness near you bends your probability field. Some amplify. Some cancel. <em>Click anywhere outside this card</em> to add a node — watch how each one re-shapes your reality.
+      </p>
+      <p class="ghosted-action" id="nodeCount">Nodes connected: <b style="color: var(--blue);">1</b> (you)</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" data-next="5">Continue →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 5: TEMPORAL ============ -->
+<section class="stage" id="stage-5" data-label="Layer 4 — Temporal">
+  <canvas id="canvas-timeline"></canvas>
+  <div class="content">
+    <div class="panel fade-in">
+      <div class="badge">Layer 04 — Temporal · The Timeline Renderer</div>
+      <h2>The past is not behind you.<br>It's behind whichever selection you're running right now.</h2>
+      <p class="lede">
+        Drag the slider. Re-select. Different meaning collapses different futures.
+      </p>
+      <input type="range" min="0" max="100" value="50" id="timeSlider" style="width: 100%; max-width: 400px; margin: 18px 0;">
+      <p class="quiet">Past ←————→ Future</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" data-next="6">Render Me →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 6: THE RENDER (CONVERSION) ============ -->
+<section class="stage" id="stage-6" data-label="The Render">
+  <canvas id="canvas-render"></canvas>
+  <div class="content">
+    <div class="panel fade-in">
+      <div class="badge">⚡ Render Complete</div>
+      <h1>Claim Your Soul Map.</h1>
+      <p class="lede">
+        <span id="finalGreeting">You</span> just walked the model. You collapsed probability, you saw your signature start to surface, you watched your relational field shift, you re-selected your timeline.
+        <br><br>Now meet your full configuration.
+      </p>
+
+      <div class="doors" style="grid-template-columns: minmax(280px, 560px); justify-content: center;">
+        <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener" class="door gold" data-cta="soulmap-final">
+          <div class="ribbon">Yours</div>
+          <h3>Your Personal Soul Map</h3>
+          <p class="small">Your full numerological blueprint — Life Path, Expression, Soul Urge, Personality, and Personal Year — decoded alongside your Western astrology and Chinese zodiac. Live URL in about 5 minutes.</p>
+          <span class="price">$22 · Founders Edition</span>
+        </a>
+      </div>
+
+      <p class="quiet" style="text-align: center; margin: 18px 0 4px;">One-time payment</p>
+      <p class="quiet" style="text-align: center;">Want the long read first? <a href="selector-theory.html" style="color: var(--blue); text-decoration: none; border-bottom: 1px dashed var(--blue);">Read the Selector Model treatise →</a></p>
+
+      <div class="panel" style="margin-top: 24px; background: rgba(7,10,28,0.45); padding: 24px;">
+        <h3 style="margin-bottom: 8px;">Want your signature emailed to you?</h3>
+        <p class="quiet" style="margin-bottom: 14px;">Drop your email and we'll send your Life Path + a weekly Selector dispatch. No spam — leave any time.</p>
+        <form id="emailCapture">
+          <div class="field-row">
+            <input class="field" type="email" name="email" placeholder="email@yourdomain.com" required>
+            <button class="btn btn-primary" type="submit">Send My Signature</button>
+          </div>
+        </form>
+        <p id="captureStatus" class="quiet" style="margin-top: 10px;"></p>
+      </div>
+
+      <p class="quiet" style="margin-top: 28px;">⚡ Selector Playground v1.0 · The First Spark · <a href="selector-hub.html" style="color: var(--blue);">back to command center</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  thefirstspark.shop · @OGplayerone · I'm just me, Kjp.
+</footer>
+
+<script>
+/* ============================================================
+   STAGE NAVIGATION
+============================================================ */
+const TOTAL_STAGES = 7; // 0..6
+let currentStage = 0;
+const stages = Array.from(document.querySelectorAll('.stage'));
+const stageLabel = document.getElementById('stageLabel');
+const progressFill = document.getElementById('progressFill');
+
+function goTo(n) {
+  if (n < 0 || n > TOTAL_STAGES - 1) return;
+  stages[currentStage].classList.remove('active');
+  currentStage = n;
+  stages[currentStage].classList.add('active');
+  const label = stages[currentStage].dataset.label || '';
+  stageLabel.textContent = `${n} / ${TOTAL_STAGES - 1} — ${label}`;
+  progressFill.style.width = ((n / (TOTAL_STAGES - 1)) * 100) + '%';
+  // jump scroll to top, fade content
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  // run any per-stage init
+  if (stageInit[n]) stageInit[n]();
+  try { localStorage.setItem('selectorPlaygroundStage', n); } catch(e){}
+}
+
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-next]');
+  if (t) {
+    if (t.disabled) return;
+    goTo(parseInt(t.dataset.next, 10));
+  }
+});
+
+/* ============================================================
+   STAGE INIT REGISTRY
+============================================================ */
+const stageInit = {};
+
+/* ============================================================
+   CANVAS UTILS
+============================================================ */
+function fitCanvas(canvas) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return ctx;
+}
+
+/* ============================================================
+   STAGE 0 — STARFIELD
+============================================================ */
+(function starfield(){
+  const canvas = document.getElementById('canvas-stars');
+  let ctx, stars = [], W, H;
+  function init() {
+    ctx = fitCanvas(canvas);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    stars = [];
+    const count = Math.min(220, Math.floor((W * H) / 7000));
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.6 + 0.2,
+        a: Math.random() * 0.7 + 0.2,
+        v: (Math.random() - 0.5) * 0.05,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  function tick(t) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    for (const s of stars) {
+      const tw = 0.6 + 0.4 * Math.sin(t * 0.0015 + s.phase);
+      ctx.globalAlpha = s.a * tw;
+      ctx.fillStyle = `hsl(${220 + s.v * 200}, 80%, 80%)`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      s.y += s.v;
+      if (s.y < 0) s.y = H; else if (s.y > H) s.y = 0;
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', init);
+  init();
+  requestAnimationFrame(tick);
+})();
+
+/* ============================================================
+   STAGE 1 — PROBABILITY FIELD
+============================================================ */
+(function probField(){
+  const canvas = document.getElementById('canvas-field');
+  let ctx, W, H, particles = [], collapsing = null, collapseT = 0;
+  let selections = 0;
+  const REQUIRED = 3;
+  const countEl = document.getElementById('selectionCount');
+  const hintEl = document.getElementById('hint-1');
+  const nextBtn = document.getElementById('btn-next-1');
+
+  function init() {
+    ctx = fitCanvas(canvas);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    particles = [];
+    const N = Math.min(420, Math.floor((W * H) / 3500));
+    for (let i = 0; i < N; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        ox: Math.random() * W,
+        oy: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.8 + 0.4,
+        hue: 220 + Math.random() * 80,
+      });
+    }
+  }
+
+  function tick(t) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+
+    // collapse pulse
+    let pulseR = 0, pulseA = 0;
+    if (collapsing) {
+      collapseT += 1;
+      pulseR = collapseT * 6;
+      pulseA = Math.max(0, 1 - collapseT / 60);
+      if (collapseT > 60) { collapsing = null; collapseT = 0; }
+    }
+
+    for (const p of particles) {
+      if (collapsing) {
+        const dx = collapsing.x - p.x;
+        const dy = collapsing.y - p.y;
+        const d = Math.hypot(dx, dy) + 0.01;
+        const force = Math.min(80 / d, 6);
+        p.vx += (dx / d) * force * 0.05;
+        p.vy += (dy / d) * force * 0.05;
+      } else {
+        // gentle return to drift
+        p.vx += ((p.ox - p.x) * 0.0001) + (Math.random() - 0.5) * 0.02;
+        p.vy += ((p.oy - p.y) * 0.0001) + (Math.random() - 0.5) * 0.02;
+      }
+      p.vx *= 0.96; p.vy *= 0.96;
+      p.x += p.vx; p.y += p.vy;
+      // wrap
+      if (p.x < 0) p.x += W; if (p.x > W) p.x -= W;
+      if (p.y < 0) p.y += H; if (p.y > H) p.y -= H;
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = `hsla(${p.hue}, 90%, 70%, 0.9)`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    if (collapsing && pulseA > 0) {
+      ctx.globalAlpha = pulseA;
+      ctx.strokeStyle = '#f72585';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(collapsing.x, collapsing.y, pulseR, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+
+  canvas.addEventListener('click', (e) => {
+    if (!stages[1].classList.contains('active')) return;
+    const rect = canvas.getBoundingClientRect();
+    collapsing = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    collapseT = 0;
+    selections++;
+    countEl.textContent = selections;
+    if (selections >= REQUIRED) {
+      nextBtn.disabled = false;
+      hintEl.textContent = 'Each click was a real selection. Now feel that — every moment of your life is the same act.';
+    }
+  });
+  // touch
+  canvas.addEventListener('touchstart', (e) => {
+    if (!stages[1].classList.contains('active')) return;
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches[0];
+    collapsing = { x: t.clientX - rect.left, y: t.clientY - rect.top };
+    collapseT = 0;
+    selections++;
+    countEl.textContent = selections;
+    if (selections >= REQUIRED) {
+      nextBtn.disabled = false;
+      hintEl.textContent = 'Each tap was a real selection. Every moment of your life is the same act.';
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', init);
+  stageInit[1] = () => { init(); };
+  init();
+  requestAnimationFrame(tick);
+})();
+
+/* ============================================================
+   STAGE 2 — DOUBLE SLIT (simplified)
+============================================================ */
+(function slit(){
+  const canvas = document.getElementById('canvas-slit');
+  let ctx, W, H;
+  let observed = false;
+  let particles = [];
+  const toggle = document.getElementById('observerToggle');
+
+  toggle.addEventListener('click', () => {
+    observed = !observed;
+    toggle.classList.toggle('on', observed);
+    toggle.innerHTML = `<span class="dot"></span> Observer: ${observed ? 'ON — particles collapse' : 'OFF — wave behavior'}`;
+  });
+
+  function spawn() {
+    particles.push({
+      x: 20, y: H / 2 + (Math.random() - 0.5) * 30,
+      vx: 1.4 + Math.random() * 0.4,
+      vy: 0,
+      phase: Math.random() * Math.PI * 2,
+      hue: observed ? 320 : 200,
+      observed: observed,
+      r: 2.0
+    });
+    if (particles.length > 500) particles.shift();
+  }
+
+  function init() {
+    ctx = fitCanvas(canvas);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    particles = [];
+  }
+
+  function tick(t) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+
+    // draw barrier with two slits
+    const barrierX = W * 0.45;
+    const slitGap = 60;
+    const slitSize = 22;
+    ctx.fillStyle = 'rgba(109,179,255,0.25)';
+    ctx.fillRect(barrierX, 0, 4, H / 2 - slitGap / 2 - slitSize);
+    ctx.fillRect(barrierX, H / 2 - slitGap / 2 + slitSize, 4, slitGap - slitSize * 2);
+    ctx.fillRect(barrierX, H / 2 + slitGap / 2 + slitSize, 4, H - (H / 2 + slitGap / 2 + slitSize));
+    // detector
+    ctx.fillStyle = 'rgba(157,78,221,0.18)';
+    ctx.fillRect(W - 30, 0, 30, H);
+
+    if (Math.random() < 0.6) spawn();
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      // pre-barrier: straight wave
+      if (p.x < barrierX) {
+        if (!p.observed) p.y += Math.sin(t * 0.005 + p.phase) * 0.3;
+      } else {
+        // post-barrier
+        if (p.observed) {
+          // particle: straight line through whichever slit is closest
+        } else {
+          // wave: spread (interference simulation via sinusoid)
+          p.vy += Math.sin(t * 0.008 + p.phase) * 0.05;
+          p.y += p.vy;
+        }
+      }
+
+      // kill at slit if not aligned
+      if (Math.abs(p.x - barrierX) < 4) {
+        const slitTop1 = H / 2 - slitGap / 2 - slitSize;
+        const slitBot1 = H / 2 - slitGap / 2 + slitSize;
+        const slitTop2 = H / 2 + slitGap / 2 - slitSize;
+        const slitBot2 = H / 2 + slitGap / 2 + slitSize;
+        const inSlit1 = p.y > slitTop1 && p.y < slitBot1;
+        const inSlit2 = p.y > slitTop2 && p.y < slitBot2;
+        if (!inSlit1 && !inSlit2) { particles.splice(i, 1); continue; }
+      }
+
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = `hsl(${p.hue}, 90%, 70%)`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (p.x > W) particles.splice(i, 1);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', init);
+  stageInit[2] = () => { init(); };
+  init();
+  requestAnimationFrame(tick);
+})();
+
+/* ============================================================
+   STAGE 3 — SACRED GEOMETRY + LIFE PATH FORM
+============================================================ */
+(function geometry(){
+  const canvas = document.getElementById('canvas-geometry');
+  let ctx, W, H;
+  function init() {
+    ctx = fitCanvas(canvas);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+  }
+  function tick(t) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2, cy = H / 2;
+    const rings = 7;
+    for (let i = 0; i < rings; i++) {
+      const radius = 60 + i * 50;
+      const angle = t * 0.0002 + i * 0.4;
+      ctx.strokeStyle = `hsla(${220 + i * 15}, 80%, 70%, ${0.22 - i * 0.018})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      const sides = 6 + i;
+      for (let k = 0; k <= sides; k++) {
+        const a = angle + (k / sides) * Math.PI * 2;
+        const x = cx + Math.cos(a) * radius;
+        const y = cy + Math.sin(a) * radius;
+        if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', init);
+  stageInit[3] = () => { init(); };
+  init();
+  requestAnimationFrame(tick);
+
+  // form
+  const form = document.getElementById('signatureForm');
+  const reveal = document.getElementById('signatureReveal');
+  const fnInput = document.getElementById('fnInput');
+  const bdInput = document.getElementById('bdInput');
+  const lifePathOut = document.getElementById('lifePathOut');
+  const meaningOut = document.getElementById('lifePathMeaning');
+
+  const meanings = {
+    1: 'The Initiator. Your selector defaults to leadership and fresh starts. Blind spot: solo-running when collaboration would amplify you.',
+    2: 'The Bridge. Your selector defaults to harmonizing fields. Blind spot: shrinking when conflict would clarify you.',
+    3: 'The Signal. Your selector defaults to expression and broadcast. Blind spot: scattering across signals instead of compounding one.',
+    4: 'The Builder. Your selector defaults to structure and discipline. Blind spot: rigidity in fields that need to flow.',
+    5: 'The Edge. Your selector defaults to motion and reinvention. Blind spot: bolting before integration completes.',
+    6: 'The Tender. Your selector defaults to care and aesthetic order. Blind spot: over-tending fields that need to compost.',
+    7: 'The Seer. Your selector defaults to depth and inner architecture. Blind spot: retreating from the relational layer.',
+    8: 'The Architect. Your selector defaults to leverage and material rendering. Blind spot: confusing weight with wisdom.',
+    9: 'The Closer. Your selector defaults to completion and broadcast. Blind spot: identifying with the cycle that just ended.',
+    11: 'Master Vessel. Your selector runs at heightened amplitude — pattern reception is unusually clear. Blind spot: psychic noise.',
+    22: 'Master Builder. Your selector can ground vision into structure at scale. Blind spot: under-claiming the role.',
+    33: 'Master Healer. Your selector teaches by frequency. Blind spot: pouring into fields with no return path.'
+  };
+
+  function lifePath(dateStr) {
+    // dateStr = YYYY-MM-DD
+    const digits = dateStr.replace(/[^0-9]/g, '').split('').map(Number);
+    if (!digits.length) return null;
+    let n = digits.reduce((a, b) => a + b, 0);
+    while (n > 9 && n !== 11 && n !== 22 && n !== 33) {
+      n = n.toString().split('').map(Number).reduce((a, b) => a + b, 0);
+    }
+    return n;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fn = fnInput.value.trim();
+    const bd = bdInput.value;
+    if (!fn || !bd) return;
+    const n = lifePath(bd);
+    if (n == null) return;
+    lifePathOut.textContent = n;
+    meaningOut.textContent = meanings[n] || 'A rare configuration. Read the full Soul Map for full decoding.';
+    reveal.hidden = false;
+    // store for stage 6
+    try {
+      localStorage.setItem('sp_name', fn);
+      localStorage.setItem('sp_birth', bd);
+      localStorage.setItem('sp_lifepath', n);
+    } catch(e){}
+    document.getElementById('finalGreeting').textContent = `Hey ${fn} — you`;
+    form.style.display = 'none';
+  });
+})();
+
+/* ============================================================
+   STAGE 4 — RELATIONAL NETWORK
+============================================================ */
+(function network(){
+  const canvas = document.getElementById('canvas-network');
+  let ctx, W, H, nodes = [];
+  const countLabel = document.getElementById('nodeCount');
+
+  function init() {
+    ctx = fitCanvas(canvas);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    nodes = [{ x: W / 2, y: H / 2, r: 14, hue: 200, you: true, vx: 0, vy: 0 }];
+    updateLabel();
+  }
+
+  function updateLabel() {
+    countLabel.innerHTML = `Nodes connected: <b style="color: var(--blue);">${nodes.length}</b> ${nodes.length === 1 ? '(you)' : ''}`;
+  }
+
+  canvas.addEventListener('click', (e) => {
+    if (!stages[4].classList.contains('active')) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    nodes.push({ x, y, r: 8 + Math.random() * 4, hue: 280 + Math.random() * 60, vx: 0, vy: 0 });
+    updateLabel();
+  });
+
+  function tick(t) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+
+    // physics: spring repel + entanglement to "you"
+    const you = nodes[0];
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const d = Math.hypot(dx, dy) + 0.01;
+        const f = (60 - d) * 0.001;
+        a.vx -= (dx / d) * f * 2; a.vy -= (dy / d) * f * 2;
+        b.vx += (dx / d) * f * 2; b.vy += (dy / d) * f * 2;
+      }
+    }
+    for (let i = 1; i < nodes.length; i++) {
+      const n = nodes[i];
+      const dx = you.x - n.x, dy = you.y - n.y;
+      const d = Math.hypot(dx, dy);
+      n.vx += dx * 0.0008;
+      n.vy += dy * 0.0008;
+      // line
+      ctx.strokeStyle = `hsla(220, 80%, 70%, ${Math.max(0, 0.5 - d / 600)})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(you.x, you.y);
+      ctx.lineTo(n.x, n.y);
+      ctx.stroke();
+    }
+    for (const n of nodes) {
+      n.vx *= 0.92; n.vy *= 0.92;
+      n.x += n.vx; n.y += n.vy;
+      // glow
+      const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
+      grad.addColorStop(0, `hsla(${n.hue}, 90%, 70%, 0.8)`);
+      grad.addColorStop(1, `hsla(${n.hue}, 90%, 70%, 0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `hsl(${n.hue}, 90%, 75%)`;
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', init);
+  stageInit[4] = () => { init(); };
+  init();
+  requestAnimationFrame(tick);
+})();
+
+/* ============================================================
+   STAGE 5 — TEMPORAL TIMELINE
+============================================================ */
+(function timeline(){
+  const canvas = document.getElementById('canvas-timeline');
+  let ctx, W, H;
+  const slider = document.getElementById('timeSlider');
+  let pos = 50;
+  slider.addEventListener('input', () => { pos = parseInt(slider.value, 10); });
+
+  function init() {
+    ctx = fitCanvas(canvas);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+  }
+  function tick(t) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    const midY = H / 2;
+    // central axis
+    ctx.strokeStyle = 'rgba(109,179,255,0.25)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, midY); ctx.lineTo(W, midY); ctx.stroke();
+
+    // past cone (left)
+    const cx = (pos / 100) * W;
+    const branches = 18;
+    for (let i = 0; i < branches; i++) {
+      const ang = -Math.PI + (Math.random() - 0.5) * 0.4 + (i / branches) * Math.PI * 0.4 - 0.2;
+      const len = 80 + Math.random() * (W * 0.4);
+      const ex = cx + Math.cos(ang) * len;
+      const ey = midY + Math.sin(ang) * len;
+      ctx.strokeStyle = `hsla(220, 80%, 70%, ${0.08 + (Math.sin(t * 0.001 + i) + 1) * 0.06})`;
+      ctx.beginPath(); ctx.moveTo(cx, midY); ctx.lineTo(ex, ey); ctx.stroke();
+    }
+    // future cone (right)
+    for (let i = 0; i < branches; i++) {
+      const ang = (Math.random() - 0.5) * 0.4 + (i / branches) * Math.PI * 0.4 - 0.2;
+      const len = 80 + Math.random() * (W * 0.4);
+      const ex = cx + Math.cos(ang) * len;
+      const ey = midY + Math.sin(ang) * len;
+      ctx.strokeStyle = `hsla(${280 + i}, 80%, 70%, ${0.08 + (Math.sin(t * 0.001 + i) + 1) * 0.06})`;
+      ctx.beginPath(); ctx.moveTo(cx, midY); ctx.lineTo(ex, ey); ctx.stroke();
+    }
+    // present marker
+    const grad = ctx.createRadialGradient(cx, midY, 0, cx, midY, 50);
+    grad.addColorStop(0, 'rgba(247, 37, 133, 0.7)');
+    grad.addColorStop(1, 'rgba(247, 37, 133, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(cx, midY, 50, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f72585';
+    ctx.beginPath(); ctx.arc(cx, midY, 6, 0, Math.PI * 2); ctx.fill();
+
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', init);
+  stageInit[5] = () => { init(); };
+  init();
+  requestAnimationFrame(tick);
+})();
+
+/* ============================================================
+   STAGE 6 — RENDER + EMAIL CAPTURE
+============================================================ */
+(function render(){
+  const canvas = document.getElementById('canvas-render');
+  let ctx, W, H;
+  function init() {
+    ctx = fitCanvas(canvas);
+    const r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+  }
+  function tick(t) {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2, cy = H / 2;
+    for (let i = 0; i < 4; i++) {
+      const radius = 80 + i * 90 + Math.sin(t * 0.001 + i) * 6;
+      ctx.strokeStyle = `hsla(${i * 55 + 200}, 80%, 70%, ${0.32 - i * 0.07})`;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    // selector dot center
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.fill();
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', init);
+  stageInit[6] = () => {
+    init();
+    // hydrate greeting if user filled form
+    try {
+      const fn = localStorage.getItem('sp_name');
+      if (fn) document.getElementById('finalGreeting').textContent = `Hey ${fn} — you`;
+    } catch(e){}
+  };
+  init();
+  requestAnimationFrame(tick);
+
+  // email capture
+  const cap = document.getElementById('emailCapture');
+  const status = document.getElementById('captureStatus');
+  cap.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = cap.querySelector('input[type=email]').value.trim();
+    if (!email) return;
+    const payload = {
+      email,
+      name: localStorage.getItem('sp_name') || '',
+      birth: localStorage.getItem('sp_birth') || '',
+      lifepath: localStorage.getItem('sp_lifepath') || '',
+      ts: new Date().toISOString(),
+      source: 'selector-playground'
+    };
+    // try fetch to a configurable endpoint; fall back to mailto
+    const endpoint = window.SELECTOR_LEAD_ENDPOINT || '';
+    let ok = false;
+    if (endpoint) {
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        ok = res.ok;
+      } catch (_) { ok = false; }
+    }
+    if (!ok) {
+      // fallback: open mailto
+      const subject = encodeURIComponent('My Selector Signature');
+      const body = encodeURIComponent(`Send me my signature reading.\n\n${JSON.stringify(payload, null, 2)}`);
+      window.location.href = `mailto:kjpthefirstspark@gmail.com?subject=${subject}&body=${body}`;
+    }
+    status.textContent = 'Got it. Check your inbox in the next 24 hours.';
+    cap.querySelector('button').disabled = true;
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARKVERSE REALITY HACK CHEAT SHEET • The First Spark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=VT323&display=swap');
+        
+        body {
+            background: radial-gradient(circle at center, #0a0a1f 0%, #000000 100%);
+            color: #a5b4fc;
+            font-family: 'VT323', monospace;
+            overflow-x: hidden;
+        }
+        
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle, rgba(165,180,252,0.1) 0%, transparent 70%),
+                url('https://picsum.photos/id/1015/1920/1080') center/cover;
+            opacity: 0.15;
+            z-index: -1;
+            animation: nebula 120s linear infinite;
+        }
+        
+        @keyframes nebula {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1.05); }
+        }
+        
+        .sigil {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            filter: drop-shadow(0 0 20px #f59e0b);
+        }
+        
+        .sigil:hover {
+            transform: scale(1.15) rotate(5deg);
+            filter: drop-shadow(0 0 40px #fbbf24) brightness(1.3);
+        }
+        
+        .glitch {
+            animation: glitch 0.5s linear infinite;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(3px, -3px); }
+            60% { transform: translate(-2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        .spark {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fbbf24;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #f59e0b;
+            animation: sparkAnim 1.5s linear forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes sparkAnim {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0) translate(var(--dx), var(--dy)); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-8 relative">
+    <div class="cosmic-bg"></div>
+    
+    <div class="max-w-4xl w-full">
+        <!-- Header -->
+        <div class="text-center mb-12 border-b border-indigo-500/30 pb-8">
+            <div class="inline-flex items-center gap-3 mb-4">
+                <div onclick="triggerCentralSpark()" class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-red-600 flex items-center justify-center text-4xl cursor-pointer hover:scale-110 transition-transform shadow-[0_0_60px_#fbbf24]">✧</div>
+                <h1 class="text-6xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-amber-300 to-orange-400">REALITY HACK v0.1</h1>
+            </div>
+            <p class="text-xl text-indigo-300">SPARKVERSE EDITION • MIDWIFE YOUR AWAKENING</p>
+            <p class="text-sm mt-2 opacity-70">by The First Spark • @OGplayerone</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <!-- Quick Sigil Codex -->
+            <div class="md:col-span-5 space-y-8">
+                <div class="border border-indigo-500/40 bg-black/40 p-6 rounded-2xl backdrop-blur-sm">
+                    <h2 class="text-3xl mb-6 flex items-center gap-3">
+                        <span class="text-amber-400">⚡</span> SIGIL CODEX
+                    </h2>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- Sigil 1 -->
+                        <div onclick="activateSigil(this, 'Awaken')" class="sigil cursor-pointer group">
+                            <svg width="120" height="120" viewBox="0 0 120 120" class="mx-auto">
+                                <circle cx="60" cy="60" r="45" fill="none" stroke="#fbbf24" stroke-width="4" stroke-dasharray="8 12"/>
+                                <path d="M30 60 Q60 20 90 60 Q60 100 30 60" fill="none" stroke="#a5b4fc" stroke-width="8"/>
+                                <circle cx="60" cy="60" r="15" fill="#f59e0b"/>
+                            </svg>
+                            <p class="text-center mt-3 text-amber-300">AWAKEN</p>
+                            <p class="text-xs text-center opacity-60">"I remember who I am"</p>
+                        </div>
+                        
+                        <!-- Sigil 2 -->
+                        <div onclick="activateSigil(this, 'Flow')" class="sigil cursor-pointer group">
+                            <svg width="120" height="120" viewBox="0 0 120 120" class="mx-auto">
+                                <path d="M20 40 Q40 20 60 50 Q80 80 100 40" fill="none" stroke="#67e8f9" stroke-width="12" stroke-linecap="round"/>
+                                <circle cx="60" cy="60" r="25" fill="none" stroke="#c4d0ff" stroke-width="6"/>
+                            </svg>
+                            <p class="text-center mt-3 text-cyan-300">FLOW STATE</p>
+                            <p class="text-xs text-center opacity-60">"Reality bends to my intention"</p>
+                        </div>
+                        
+                        <!-- Sigil 3 -->
+                        <div onclick="activateSigil(this, 'Anchor')" class="sigil cursor-pointer group">
+                            <svg width="120" height="120" viewBox="0 0 120 120" class="mx-auto">
+                                <rect x="35" y="35" width="50" height="50" rx="10" fill="none" stroke="#f472b6" stroke-width="8"/>
+                                <path d="M60 20 L60 100" stroke="#fda4af" stroke-width="6"/>
+                            </svg>
+                            <p class="text-center mt-3 text-pink-300">EARTHSHIP ANCHOR</p>
+                            <p class="text-xs text-center opacity-60">"I ground the infinite here"</p>
+                        </div>
+                        
+                        <!-- Sigil 4 -->
+                        <div onclick="activateSigil(this, 'Glitch')" class="sigil cursor-pointer group">
+                            <svg width="120" height="120" viewBox="0 0 120 120" class="mx-auto">
+                                <path d="M30 30 L90 90 M30 90 L90 30" stroke="#f87171" stroke-width="12"/>
+                                <circle cx="60" cy="60" r="35" fill="none" stroke="#fca5a5" stroke-width="4" stroke-dasharray="4 8"/>
+                            </svg>
+                            <p class="text-center mt-3 text-red-300">GLITCH PORTAL</p>
+                            <p class="text-xs text-center opacity-60">"I step through the fracture"</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-xs leading-relaxed opacity-75 border-l-2 border-amber-400 pl-4">
+                    <strong>HOW TO CHARGE A SIGIL:</strong><br>
+                    1. Gaze softly until mind quiets<br>
+                    2. Trace with finger or breath<br>
+                    3. Speak intent aloud 3x<br>
+                    4. Release with laughter or spark visualization<br>
+                    <span class="text-amber-400">Repeat daily in Sparkverse lobby.</span>
+                </div>
+            </div>
+
+            <!-- Rituals & Hacks -->
+            <div class="md:col-span-7 space-y-6">
+                <h2 class="text-3xl flex items-center gap-3 border-b border-orange-500/30 pb-3">
+                    <span>🌌</span> RITUAL PROTOCOLS
+                </h2>
+                
+                <div class="space-y-8">
+                    <!-- Ritual 1 -->
+                    <div class="border border-teal-500/30 bg-black/30 p-6 rounded-xl hover:border-teal-400 transition-all group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-teal-400 text-lg">01 • DAILY SPARK IGNITION</div>
+                                <p class="mt-1">Morning alignment with the First Spark</p>
+                            </div>
+                            <button onclick="performRitual(1)" class="px-5 py-2 bg-teal-900 hover:bg-teal-700 text-xs rounded-full transition-colors">IGNITE</button>
+                        </div>
+                        <ul class="text-sm mt-4 space-y-1 opacity-80">
+                            <li>• Stand barefoot or visualize roots</li>
+                            <li>• Breathe 7x while tracing central sigil</li>
+                            <li>• Declare: "I am the spark that hacks the code"</li>
+                            <li>• End with 33 seconds of golden light visualization</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Ritual 2 -->
+                    <div class="border border-purple-500/30 bg-black/30 p-6 rounded-xl hover:border-purple-400 transition-all group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-purple-400 text-lg">02 • GLITCH RECODE</div>
+                                <p class="mt-1">For breaking limiting loops</p>
+                            </div>
+                            <button onclick="performRitual(2)" class="px-5 py-2 bg-purple-900 hover:bg-purple-700 text-xs rounded-full transition-colors">RECODE</button>
+                        </div>
+                        <ul class="text-sm mt-4 space-y-1 opacity-80">
+                            <li>• Find a mirror or reflective screen</li>
+                            <li>• Stare into your eyes until distortion appears</li>
+                            <li>• Draw Glitch sigil on fogged surface (or mentally)</li>
+                            <li>• Whisper reversed limiting belief</li>
+                            <li>• Laugh until the glitch settles into new pattern</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Ritual 3 -->
+                    <div class="border border-amber-500/30 bg-black/30 p-6 rounded-xl hover:border-amber-400 transition-all group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-amber-400 text-lg">03 • ORBITAL SYNCHRONIZATION</div>
+                                <p class="mt-1">Align with cosmic flows</p>
+                            </div>
+                            <button onclick="performRitual(3)" class="px-5 py-2 bg-amber-900 hover:bg-amber-700 text-xs rounded-full transition-colors">SYNCH</button>
+                        </div>
+                        <ul class="text-sm mt-4 space-y-1 opacity-80">
+                            <li>• Sit in center of sacred geometry (Flower of Life imagined)</li>
+                            <li>• Spin slowly or visualize orbiting</li>
+                            <li>• Chant "Spark • Flow • Anchor • Glitch" in rhythm</li>
+                            <li>• Feel the torus field expand from your heart</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Cheat Codes -->
+        <div class="mt-16 pt-8 border-t border-white/10 text-center text-xs opacity-60">
+            <div class="mb-4">QUICK HACKS</div>
+            <div class="flex flex-wrap justify-center gap-6 text-[10px]">
+                <div onclick="quickHack('breathe')" class="cursor-pointer hover:text-amber-300">BREATHE 4-7-8</div>
+                <div onclick="quickHack('mirror')" class="cursor-pointer hover:text-amber-300">MIRROR GAZE 60s</div>
+                <div onclick="quickHack('gratitude')" class="cursor-pointer hover:text-amber-300">3x GRATITUDE PULSE</div>
+                <div onclick="quickHack('void')" class="cursor-pointer hover:text-amber-300">ENTER THE VOID</div>
+            </div>
+            <p class="mt-8 text-[10px]">Save this page. Host it in the Sparkverse lobby. Charge it with your presence.</p>
+        </div>
+    </div>
+
+    <script>
+        function triggerCentralSpark() {
+            const body = document.body;
+            for (let i = 0; i < 60; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                spark.style.left = '50%';
+                spark.style.top = '30%';
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 80 + Math.random() * 200;
+                spark.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+                spark.style.setProperty('--dy', `${Math.sin(angle) * dist - 100}px`);
+                spark.style.animationDelay = `${Math.random() * 0.6}s`;
+                body.appendChild(spark);
+                setTimeout(() => spark.remove(), 2000);
+            }
+        }
+        
+        function activateSigil(el, intent) {
+            el.classList.add('glitch');
+            triggerCentralSpark();
+            
+            const msg = document.createElement('div');
+            msg.style.position = 'fixed';
+            msg.style.bottom = '40px';
+            msg.style.left = '50%';
+            msg.style.transform = 'translateX(-50%)';
+            msg.style.background = 'rgba(0,0,0,0.9)';
+            msg.style.color = '#fbbf24';
+            msg.style.padding = '12px 24px';
+            msg.style.borderRadius = '9999px';
+            msg.style.border = '1px solid #f59e0b';
+            msg.style.zIndex = '100';
+            msg.style.whiteSpace = 'nowrap';
+            msg.textContent = `SIGIL ${intent} CHARGED • REALITY SHIFTING...`;
+            document.body.appendChild(msg);
+            
+            setTimeout(() => {
+                msg.style.transition = 'all 0.6s';
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 600);
+            }, 1800);
+            
+            setTimeout(() => el.classList.remove('glitch'), 800);
+        }
+        
+        function performRitual(n) {
+            triggerCentralSpark();
+            let message = '';
+            if (n === 1) message = 'IGNITION COMPLETE • YOU ARE THE FIRST SPARK';
+            else if (n === 2) message = 'GLITCH INTEGRATED • NEW CODE RUNNING';
+            else if (n === 3) message = 'ORBITAL LOCK • COSMOS ALIGNED';
+            
+            const ritualMsg = document.createElement('div');
+            ritualMsg.style.position = 'fixed';
+            ritualMsg.style.top = '40%';
+            ritualMsg.style.left = '50%';
+            ritualMsg.style.transform = 'translate(-50%, -50%)';
+            ritualMsg.style.fontSize = '1.5rem';
+            ritualMsg.style.textAlign = 'center';
+            ritualMsg.style.color = '#67e8f9';
+            ritualMsg.style.textShadow = '0 0 30px currentColor';
+            ritualMsg.style.zIndex = '200';
+            ritualMsg.style.animation = 'glitch 1.2s';
+            ritualMsg.textContent = message;
+            document.body.appendChild(ritualMsg);
+            
+            setTimeout(() => ritualMsg.remove(), 2500);
+        }
+        
+        function quickHack(type) {
+            triggerCentralSpark();
+            console.log('%cReality hack activated: ' + type, 'color:#fbbf24; font-family:monospace');
+        }
+        
+        // Auto sparks
+        setInterval(() => {
+            if (Math.random() > 0.7) triggerCentralSpark();
+        }, 4000);
+        
+        // Tailwind script already included
+        console.log("%cWelcome to the Sparkverse Reality Hack Cheat Sheet\nBuilt for Katelin • The First Spark", "color:#a5b4fc; font-size:10px");
+    </script>
+</body>
+</html>

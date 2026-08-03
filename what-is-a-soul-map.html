@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050508">
+  <title>What Is a Soul Map? | The First Spark</title>
+  <meta name="description" content="A Soul Map is your personal coordinate system — numerology, natal chart, Chinese zodiac, and plain-English guidance on one private page you keep forever.">
+  <link rel="canonical" href="https://thefirstspark.shop/what-is-a-soul-map.html">
+  <meta property="og:title" content="What Is a Soul Map? | The First Spark">
+  <meta property="og:description" content="Your numbers. Your chart. Your next move. Full explanation of The First Spark Soul Map.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://thefirstspark.shop/what-is-a-soul-map.html">
+  <meta property="og:image" content="https://thefirstspark.shop/preview-soulmaps.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "What Is a Soul Map?",
+        "description": "A Soul Map is your personal coordinate system — numerology, natal chart, Chinese zodiac, and plain-English guidance on one private page you keep forever.",
+        "image": "https://thefirstspark.shop/preview-soulmaps.png",
+        "author": {
+          "@type": "Person",
+          "name": "Katelin Puzakulics"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "The First Spark",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://thefirstspark.shop/favicon-96x96.png"
+          }
+        },
+        "mainEntityOfPage": "https://thefirstspark.shop/what-is-a-soul-map.html"
+      },
+      {
+        "@type": "Product",
+        "name": "Soul Map — Founders Edition",
+        "description": "Personalized numerology and astrology soul map. Live private URL in about 5 minutes — yours to keep forever.",
+        "image": [
+          "https://thefirstspark.shop/preview-soulmaps.png",
+          "https://thefirstspark.shop/og-home.png"
+        ],
+        "brand": {
+          "@type": "Brand",
+          "name": "The First Spark"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "22.00",
+          "priceCurrency": "USD",
+          "url": "https://whop.com/checkout/plan_anQKP3Pzf1cGm",
+          "availability": "https://schema.org/InStock",
+          "priceValidUntil": "2027-12-31"
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void: #050508;
+      --spark: #fbbf24;
+      --nebula: #8b5cf6;
+      --cyan: #22d3ee;
+      --white: rgba(255,255,255,0.92);
+      --dim: rgba(255,255,255,0.58);
+      --dimmer: rgba(255,255,255,0.1);
+      --card: rgba(12,14,28,0.75);
+      --border: rgba(150,170,230,0.14);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--void);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    .bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 0%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(ellipse 50% 35% at 90% 30%, rgba(251,191,36,.08), transparent 50%),
+        radial-gradient(ellipse 40% 30% at 50% 100%, rgba(34,211,238,.08), transparent 55%);
+    }
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 28px;
+      background: rgba(5,5,8,.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: .8rem;
+      letter-spacing: .2em;
+      color: var(--spark);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .nav-links a {
+      font-size: .58rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      font-family: 'Orbitron', sans-serif;
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border: 1px solid var(--spark);
+      color: var(--spark);
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--spark); color: var(--void); }
+
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    .hero {
+      text-align: center;
+      padding: 72px 0 48px;
+    }
+    .kicker {
+      font-size: .58rem;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--spark);
+      opacity: .75;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      line-height: 1.12;
+      letter-spacing: .02em;
+      margin-bottom: 18px;
+    }
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(120deg, var(--spark), var(--nebula), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .lede {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      color: var(--dim);
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.5;
+    }
+    .cta-row {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .btn-p, .btn-g {
+      font-family: 'Orbitron', sans-serif;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-p { background: var(--spark); color: var(--void); }
+    .btn-p:hover { box-shadow: 0 8px 28px rgba(251,191,36,.4); }
+    .btn-g { border: 1px solid var(--dimmer); color: var(--dim); }
+    .btn-g:hover { border-color: var(--cyan); color: var(--white); }
+
+    section { padding: 56px 0; border-top: 1px solid var(--border); }
+    .label {
+      font-size: .52rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--spark);
+      opacity: .7;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 900;
+      letter-spacing: .04em;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .one-liner {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.25rem;
+      color: var(--dim);
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      nav { padding: 14px 16px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 20px;
+    }
+    .card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 8px;
+    }
+    .card p, .body p {
+      font-size: .78rem;
+      color: var(--dim);
+      line-height: 1.7;
+    }
+    .card .num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--spark);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stack { display: flex; flex-direction: column; gap: 14px; }
+    .row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    @media (max-width: 560px) {
+      .row { grid-template-columns: 1fr; gap: 4px; }
+    }
+    .row .key {
+      font-family: 'Orbitron', sans-serif;
+      font-size: .58rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--spark);
+      padding-top: 3px;
+    }
+    .row .val {
+      font-size: .8rem;
+      color: var(--dim);
+      line-height: 1.65;
+    }
+    .row .val strong { color: var(--white); font-weight: 400; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+    @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+    .step {
+      text-align: center;
+      padding: 24px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+    }
+    .step .n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: var(--nebula);
+      margin-bottom: 6px;
+    }
+    .step .t {
+      font-family: 'Orbitron', sans-serif;
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .step .d { font-size: .7rem; color: var(--dim); }
+
+    .quote {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: var(--spark);
+      border-left: 2px solid var(--cyan);
+      padding-left: 20px;
+      margin: 8px 0 0;
+      line-height: 1.4;
+    }
+
+    .final {
+      text-align: center;
+      padding: 72px 0 96px;
+      border-top: 1px solid var(--border);
+    }
+    .final h2 { margin-bottom: 10px; }
+    .final .one-liner { margin: 0 auto 28px; text-align: center; }
+
+    footer {
+      text-align: center;
+      padding: 28px 24px 48px;
+      font-size: .58rem;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.28);
+      position: relative; z-index: 1;
+    }
+    footer a { color: var(--cyan); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <nav>
+    <a href="/" class="nav-logo">THE FIRST SPARK</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/archetype-discovery.html">Archetype Quiz</a>
+      <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer">Freq Match</a>
+      <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener noreferrer" class="nav-cta">Get Map · $22</a>
+    </div>
+  </nav>
+
+  <header class="hero wrap">
+    <p class="kicker">Full explanation</p>
+    <h1>What is a<br><em>Soul Map?</em></h1>
+    <p class="lede">A private page that turns your birth data into a readable coordinate system — not a horoscope, not a vibe check.</p>
+    <div class="cta-row">
+      <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener noreferrer" class="btn-p">Get Yours · $22</a>
+      <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer" class="btn-g">Use Freq Match</a>
+    </div>
+  </header>
+
+  <!-- ONE SENTENCE -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ In one line</p>
+      <h2>Your existence, mapped as code.</h2>
+      <p class="one-liner">A Soul Map is a personalized HTML blueprint built from your birth name and birth date — numerology + natal astrology + Chinese zodiac — written so you can actually use it.</p>
+      <p class="quote">Not metaphors. Syntax.</p>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS / ISN'T -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ Clarity</p>
+      <h2>What it is. What it isn't.</h2>
+      <div class="grid-2" style="margin-top:20px;">
+        <div class="card">
+          <h3>It is</h3>
+          <p style="margin-top:10px;">
+            · A permanent private page<br>
+            · Built from your exact data<br>
+            · Core numbers + chart + cycles<br>
+            · Plain-English guidance<br>
+            · Yours to revisit forever
+          </p>
+        </div>
+        <div class="card">
+          <h3>It isn't</h3>
+          <p style="margin-top:10px;">
+            · A generic daily horoscope<br>
+            · A personality quiz<br>
+            · A subscription trap<br>
+            · Medical or financial advice<br>
+            · Someone else's template with your name
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S INSIDE -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ What's inside</p>
+      <h2>Every map covers these layers.</h2>
+      <p class="one-liner">46+ data points across three traditions — one readable document.</p>
+
+      <div class="stack">
+        <div class="row">
+          <div class="key">Life Path</div>
+          <div class="val"><strong>Your primary frequency.</strong> The main lesson and direction of this lifetime, calculated from your full birth date.</div>
+        </div>
+        <div class="row">
+          <div class="key">Expression</div>
+          <div class="val"><strong>How you transmit.</strong> The energy others experience when you show up — calculated from the letters in your full birth name.</div>
+        </div>
+        <div class="row">
+          <div class="key">Soul Urge</div>
+          <div class="val"><strong>What drives you underneath.</strong> The private want that steers decisions even when you don't name it. From the vowels in your name.</div>
+        </div>
+        <div class="row">
+          <div class="key">Personality</div>
+          <div class="val"><strong>What others receive first.</strong> The outer shell — how the world reads you before it knows you. From the consonants in your name.</div>
+        </div>
+        <div class="row">
+          <div class="key">Birthday</div>
+          <div class="val"><strong>Your gift frequency.</strong> The number of the day you arrived — a native talent that was online before you had language for it.</div>
+        </div>
+        <div class="row">
+          <div class="key">Maturity</div>
+          <div class="val"><strong>Your evolved self.</strong> The arc that comes online more fully in midlife — Life Path + Expression blended into a long-game number.</div>
+        </div>
+        <div class="row">
+          <div class="key">Hidden Passion</div>
+          <div class="val"><strong>The unconscious engine.</strong> The number that shows up most in your name — the drive that leaks sideways if you don't channel it on purpose.</div>
+        </div>
+        <div class="row">
+          <div class="key">Karmic Lessons</div>
+          <div class="val"><strong>What you came to learn.</strong> Numbers missing from your name — the skills this lifetime is here to install, not avoid.</div>
+        </div>
+        <div class="row">
+          <div class="key">Pinnacles</div>
+          <div class="val"><strong>Four life phases.</strong> Major themes across early years, building years, midlife, and late life — so you know what season you're in.</div>
+        </div>
+        <div class="row">
+          <div class="key">Challenges</div>
+          <div class="val"><strong>What you're here to master.</strong> Friction points that keep recycling until you learn the move. Named so you can stop fighting the wrong enemy.</div>
+        </div>
+        <div class="row">
+          <div class="key">Personal Year</div>
+          <div class="val"><strong>This year's weather.</strong> A 1–9 cycle that tells you whether this is a seed year, build year, harvest year, or release year.</div>
+        </div>
+        <div class="row">
+          <div class="key">12-Month Map</div>
+          <div class="val"><strong>Month-by-month focus.</strong> Each calendar month gets a number and a plain directive — what to prioritize right now.</div>
+        </div>
+        <div class="row">
+          <div class="key">Natal Chart</div>
+          <div class="val"><strong>Celestial coordinates.</strong> Sun, Moon, rising (when time is known), key planets, houses, and aspects — not fluff, placement as syntax.</div>
+        </div>
+        <div class="row">
+          <div class="key">Chinese Zodiac</div>
+          <div class="val"><strong>Animal + element.</strong> Your Eastern signature layered under the Western chart — another axis on the same coordinate system.</div>
+        </div>
+        <div class="row">
+          <div class="key">Soul Synthesis</div>
+          <div class="val"><strong>The whole triangle in plain English.</strong> How Life Path, Expression, and Soul Urge run together as one engine — plus what to watch for (debugging notes).</div>
+        </div>
+        <div class="row">
+          <div class="key">Color Codex</div>
+          <div class="val"><strong>Your map color.</strong> A visual identity tier tied to the proprietary Color Codex — how your map sits in the larger archive.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY IT MATTERS -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ Why it exists</p>
+      <h2>Most people walk past their own code.</h2>
+      <p class="one-liner">Your birth data isn't random decoration. It's a fixed input set. A Soul Map is the readable output.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="num">01</div>
+          <h3>Stop guessing</h3>
+          <p style="margin-top:8px;">Gifts, friction, and timing stop feeling like chaos. You get language for patterns you already live.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h3>Decide with a map</h3>
+          <p style="margin-top:8px;">Use Personal Year and monthly cycles when you hire, leave, launch, rest, or commit.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h3>Relate with signal</h3>
+          <p style="margin-top:8px;">Pair maps in <strong style="color:var(--white)">Freq Match</strong> — collide two charts, get a compatibility score.</p>
+        </div>
+        <div class="card">
+          <div class="num">04</div>
+          <h3>Keep the artifact</h3>
+          <p style="margin-top:8px;">Private URL. No app lock-in. Revisit when the season changes. One payment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ How it works</p>
+      <h2>Three steps. About 5 minutes.</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="n">①</div>
+          <div class="t">Checkout</div>
+          <div class="d">$22 one-time on Whop. No subscription.</div>
+        </div>
+        <div class="step">
+          <div class="n">②</div>
+          <div class="t">Submit data</div>
+          <div class="d">Full birth name + date. Time &amp; city if you have them.</div>
+        </div>
+        <div class="step">
+          <div class="n">③</div>
+          <div class="t">Get the live URL</div>
+          <div class="d">Private page in about 5 minutes. Yours forever.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREQ MATCH BRIDGE -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ Next layer</p>
+      <h2>Got a map? Match it.</h2>
+      <p class="one-liner">Freq Match collides two soul signatures — names + birth dates — into Player Cards and a compatibility score.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>What Freq Match does</h3>
+          <p style="margin-top:10px;">
+            · Two cards, one collision<br>
+            · Numerology + sun + Chinese zodiac<br>
+            · Weighted compatibility score<br>
+            · Dimensional breakdown + download
+          </p>
+        </div>
+        <div class="card">
+          <h3>Who uses it</h3>
+          <p style="margin-top:10px;">
+            · Partners checking resonance<br>
+            · Friends / collabs / teams<br>
+            · Family lines &amp; bloodlines<br>
+            · Anyone comparing two codes
+          </p>
+        </div>
+      </div>
+      <div class="cta-row" style="margin-top:28px; justify-content:flex-start;">
+        <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer" class="btn-p">Use Freq Match →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHETYPE BRIDGE -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ Your identity</p>
+      <h2>Numbers are the code. Archetype is the class.</h2>
+      <p class="one-liner">The Sparkverse Archetype Quiz takes six questions and returns your Player Class — the identity layer that sits on top of your Soul Map's numbers.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>What the quiz does</h3>
+          <p style="margin-top:10px;">
+            · Six questions, free, no signup<br>
+            · Resolves a primary + secondary class<br>
+            · Generates a shareable Player Card<br>
+            · Carries into every Sparkverse tool
+          </p>
+        </div>
+        <div class="card">
+          <h3>The six archetypes</h3>
+          <p style="margin-top:10px;">
+            · 🔮 Signal Architect — sees the system, redesigns it<br>
+            · 🧭 Pathfinder — goes first so others can follow<br>
+            · ⚡ Pulse Generator — powers the system when aligned<br>
+            · 🔥 Quantum Alchemist — turns collapse into fuel<br>
+            · 🌉 Bridgewalker — connects what would never meet<br>
+            · ✨ Signal Catalyst — wakes others up by existing loudly
+          </p>
+        </div>
+      </div>
+      <div class="cta-row" style="margin-top:28px; justify-content:flex-start;">
+        <a href="/archetype-discovery.html" class="btn-p">Take the Archetype Quiz →</a>
+        <a href="/archetype-card.html" class="btn-g">Generate Player Card</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORIGIN (short) -->
+  <section>
+    <div class="wrap">
+      <p class="label">◈ Origin</p>
+      <h2>Built from lived fracture.</h2>
+      <p class="one-liner">In 2020 a 29-year cold case cracked when DNA read what had sat in plain sight. That same instinct — read the code that was always there — became The First Spark.</p>
+      <p style="font-size:.78rem; color:var(--dim); max-width:560px;">
+        Katelin Jill Puzakulics builds consciousness technology in public: Soul Maps as the wedge product, Freq Match as the social layer, and 60+ tools around the Selector Model. Reality is programmable. Consciousness is the code.
+      </p>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <div class="final wrap">
+    <p class="label">◈ Ready</p>
+    <h2>Claim your map.</h2>
+    <p class="one-liner">One payment. No subscription. Private page. Keep it forever.</p>
+    <div class="cta-row">
+      <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener noreferrer" class="btn-p">Get Soul Map · $22</a>
+      <a href="https://soul-maps.thefirstspark.shop" target="_blank" rel="noopener noreferrer" class="btn-g">Browse Archive</a>
+      <a href="/archetype-discovery.html" class="btn-g">Archetype Quiz</a>
+      <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer" class="btn-g">Freq Match</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>The First Spark · For self-reflection. Not medical or financial advice.</p>
+    <p style="margin-top:10px;">
+      <a href="/">Home</a> ·
+      <a href="/archetype-discovery.html">Archetype Quiz</a> ·
+      <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer">Freq Match</a> ·
+      <a href="https://soul-maps.thefirstspark.shop" target="_blank" rel="noopener noreferrer">Archive</a>
+    </p>
+  </footer>
+</body>
+</html>

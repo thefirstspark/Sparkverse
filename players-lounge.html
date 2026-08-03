@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players Lounge™</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SKL8XQ51ZH');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #222222;
+            --text-primary: #e8e8e8;
+            --text-secondary: #888888;
+            --accent: #3a3a3a;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 60px 0;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .hero .intro {
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 24px;
+            color: var(--text-primary);
+        }
+
+        .hero .exclusivity {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            display: inline-block;
+        }
+
+        /* SECTION HEADERS */
+        .section-header {
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            text-transform: uppercase;
+        }
+
+        /* WHAT THIS IS / IS NOT */
+        .dual-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        @media (max-width: 600px) {
+            .dual-column {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .dual-column h3 {
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .dual-column ul {
+            list-style: none;
+        }
+
+        .dual-column li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .dual-column li:last-child {
+            border-bottom: none;
+        }
+
+        /* PROTOCOL */
+        .protocol-step {
+            margin-bottom: 36px;
+            padding-left: 24px;
+            border-left: 2px solid var(--accent);
+        }
+
+        .protocol-step .step-name {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .protocol-step .step-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .protocol-step .step-purpose {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* CONDITIONS */
+        .conditions-list {
+            list-style: none;
+        }
+
+        .conditions-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .conditions-list li::before {
+            content: "—";
+            margin-right: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* MIRROR */
+        .mirror-questions {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 4px;
+        }
+
+        .mirror-questions ol {
+            list-style: none;
+            counter-reset: mirror;
+        }
+
+        .mirror-questions li {
+            counter-increment: mirror;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+            display: flex;
+        }
+
+        .mirror-questions li::before {
+            content: counter(mirror) ".";
+            margin-right: 16px;
+            color: var(--text-secondary);
+            min-width: 24px;
+        }
+
+        .mirror-questions li:last-child {
+            border-bottom: none;
+        }
+
+        /* BETWEEN MOVES */
+        .framework-item {
+            margin-bottom: 28px;
+        }
+
+        .framework-item .label {
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .framework-item .field {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 16px 20px;
+            border-radius: 4px;
+            min-height: 48px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* CLOSE */
+        .close-section {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .close-section p {
+            max-width: 560px;
+            margin: 0 auto;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+        }
+
+        .trademark {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HERO -->
+        <section class="hero">
+            <h1>Players Lounge™</h1>
+            <p class="subtitle">Where players go between moves.</p>
+            <p class="intro">
+                This is not a community, a course, or a content stream. This is a private operating system for those who have outgrown noise, hustle culture, and the constant performance of ambition. A space to recalibrate clarity, stabilize identity, and move from stillness rather than urgency.
+            </p>
+            <p class="exclusivity">For those who already know they're in the game.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- WHAT THIS IS / IS NOT -->
+        <section>
+            <p class="section-header">Orientation</p>
+            <div class="dual-column">
+                <div>
+                    <h3>What This Is</h3>
+                    <ul>
+                        <li>A private mental space</li>
+                        <li>A decision-making framework</li>
+                        <li>An emotional regulation system</li>
+                        <li>A clarity protocol</li>
+                        <li>A place to return to center</li>
+                        <li>Strategic stillness</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>What This Is Not</h3>
+                    <ul>
+                        <li>Motivation or inspiration</li>
+                        <li>A community or group chat</li>
+                        <li>Productivity hacks</li>
+                        <li>Mindset affirmations</li>
+                        <li>Another thing to consume</li>
+                        <li>Performance theater</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- THE LOUNGE PROTOCOL -->
+        <section>
+            <p class="section-header">The Lounge Protocol</p>
+
+            <div class="protocol-step">
+                <p class="step-name">I. Arrival</p>
+                <p class="step-desc">Close the door. Set aside the last conversation, notification, demand.</p>
+                <p class="step-purpose">Purpose: Transition from external to internal operating mode.</p>
+            </div>
+
+            <div class="protocol-step">
+                <p class="step-name">II. Decompression</p>
+                <p class="step-desc">Notice what you're carrying. Name it without fixing it. Let the weight register.</p>
+                <p class="step-purpose">Purpose: Acknowledge the real load before attempting to move.</p>
+            </div>
+
+            <div class="protocol-step">
+                <p class="step-name">III. Signal Check</p>
+                <p class="step-desc">Separate noise from signal. What actually matters right now versus what feels urgent?</p>
+                <p class="step-purpose">Purpose: Restore accurate priority perception.</p>
+            </div>
+
+            <div class="protocol-step">
+                <p class="step-name">IV. Move Review</p>
+                <p class="step-desc">Assess recent moves without judgment. What worked? What didn't? What was learned?</p>
+                <p class="step-purpose">Purpose: Extract insight without self-punishment.</p>
+            </div>
+
+            <div class="protocol-step">
+                <p class="step-name">V. Exit Clean</p>
+                <p class="step-desc">Leave with one clear next action. No overwhelm. No backlog. One move.</p>
+                <p class="step-purpose">Purpose: Return to the game with precision, not panic.</p>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- THE INNER CONDITIONS -->
+        <section>
+            <p class="section-header">The Inner Conditions</p>
+            <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem;">
+                These conditions must be true inside the lounge. Not aspirations. Requirements.
+            </p>
+            <ul class="conditions-list">
+                <li>No urgency. Everything here moves at the pace of clarity.</li>
+                <li>No performance. Nothing here is for anyone else.</li>
+                <li>No persuasion. You are not selling yourself on anything.</li>
+                <li>No comparison. Other players are irrelevant in this room.</li>
+                <li>No multitasking. One thing receives your attention.</li>
+                <li>No self-punishment. Assessment without cruelty.</li>
+                <li>No shortcuts. The process is the point.</li>
+            </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- THE PLAYER'S MIRROR -->
+        <section>
+            <p class="section-header">The Player's Mirror</p>
+            <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem;">
+                Questions for honest self-assessment. Answer before the next move.
+            </p>
+            <div class="mirror-questions">
+                <ol>
+                    <li>Am I reacting or choosing?</li>
+                    <li>What am I avoiding by staying busy?</li>
+                    <li>If I do nothing for the next 48 hours, what actually breaks?</li>
+                    <li>Who am I trying to prove something to right now?</li>
+                    <li>What would the version of me who already won do next?</li>
+                </ol>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- BETWEEN MOVES PAGE -->
+        <section>
+            <p class="section-header">The Between-Moves Page</p>
+            <p style="color: var(--text-secondary); margin-bottom: 32px; font-size: 0.9rem;">
+                A reusable framework. Return here when transition is needed.
+            </p>
+
+            <div class="framework-item">
+                <p class="label">What just happened</p>
+                <div class="field">Name it without story.</div>
+            </div>
+
+            <div class="framework-item">
+                <p class="label">What matters now</p>
+                <div class="field">One thing. The real one.</div>
+            </div>
+
+            <div class="framework-item">
+                <p class="label">What can wait</p>
+                <div class="field">Everything else.</div>
+            </div>
+
+            <div class="framework-item">
+                <p class="label">What the body needs</p>
+                <div class="field">Water. Rest. Movement. Air.</div>
+            </div>
+
+            <div class="framework-item">
+                <p class="label">What the next move is NOT</p>
+                <div class="field">What would be reactive, performative, or premature.</div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- CLOSE -->
+        <section class="close-section">
+            <p>
+                The game doesn't stop. But you get to choose when you step away from the board. The lounge exists for this: a private room with no audience, no timeline, no pressure to perform your next move before it's ready. The players who last longest in this game are not the ones who move fastest. They are the ones who know when to be still, how to think clearly, and where to go to remember who they are between the noise. This is that place. Protect it.
+            </p>
+        </section>
+
+        <p class="trademark">Players Lounge™</p>
+
+    </div>
+</body>
+</html>

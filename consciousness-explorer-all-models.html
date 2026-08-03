@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CONSCIOUSNESS EXPLORER • All Models</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+    
+    body { font-family: 'Inter', sans-serif; }
+    .title-font { font-family: 'Space Grotesk', sans-serif; }
+    
+    .cosmic-bg {
+      background: linear-gradient(135deg, #0a0a2a 0%, #1a0b3d 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    canvas#stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+    .tab-active {
+      border-bottom: 4px solid #c084fc;
+      color: #c084fc;
+      box-shadow: 0 4px 15px -3px rgb(192 132 252);
+    }
+
+    .ladder-bar {
+      background: linear-gradient(to bottom, #f43f5e, #c026d3, #7c3aed, #6366f1, #22d3ee);
+    }
+
+    .wave {
+      animation: waveAnim 4s linear infinite;
+    }
+    @keyframes waveAnim {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .iceberg {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ===== SPARKLE ===== */
+
+    @keyframes shimmer {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    .shimmer-title {
+      background-image: linear-gradient(90deg, #a78bfa, #e0f2fe, #f0abfc, #67e8f9, #c084fc, #a78bfa) !important;
+      background-size: 300% auto !important;
+      animation: shimmer 5s linear infinite;
+    }
+
+    @keyframes pulseRing {
+      0%   { transform: scale(1); opacity: 0.65; }
+      100% { transform: scale(1.65); opacity: 0; }
+    }
+    .quiz-btn::before, .quiz-btn::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 24px;
+      border: 2px solid rgba(216, 180, 254, 0.65);
+      animation: pulseRing 2.5s ease-out infinite;
+      pointer-events: none;
+    }
+    .quiz-btn::after { animation-delay: 1.25s; }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .content-enter { animation: fadeSlideUp 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.88) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-animate { animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+    #aurora {
+      position: fixed;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.13) 0%, rgba(192,132,252,0.06) 40%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      left: 50%; top: 50%;
+      z-index: 0;
+      mix-blend-mode: screen;
+      transition: left 0.18s ease-out, top 0.18s ease-out;
+    }
+
+    @keyframes floatOrb {
+      0%   { transform: translateY(0vh); opacity: 0; }
+      5%   { opacity: 1; }
+      95%  { opacity: 0.7; }
+      100% { transform: translateY(-105vh); opacity: 0; }
+    }
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: floatOrb linear infinite;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes waterShimmer {
+      0%, 100% { opacity: 0.25; }
+      50%       { opacity: 0.55; }
+    }
+    .water-shimmer { animation: waterShimmer 3s ease-in-out infinite; }
+  </style>
+</head>
+<body class="cosmic-bg text-white min-h-screen pb-20">
+
+  <!-- Animated Canvas Background -->
+  <canvas id="stars"></canvas>
+
+  <!-- Header -->
+  <div class="max-w-6xl mx-auto px-6 pt-8 pb-4">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-violet-400 to-fuchsia-400 rounded-2xl flex items-center justify-center text-2xl shadow-lg">🧬</div>
+        <h1 class="title-font text-5xl font-bold tracking-tighter bg-clip-text text-transparent shimmer-title">
+          CONSCIOUSNESS EXPLORER
+        </h1>
+      </div>
+      <div class="flex gap-1 text-sm font-medium bg-white/10 backdrop-blur-xl px-2 py-2 rounded-3xl border border-white/10">
+        <button onclick="switchTab(0)" id="tab-0" class="tab px-6 py-2.5 rounded-3xl transition-all tab-active">Hawkins Map</button>
+        <button onclick="switchTab(1)" id="tab-1" class="tab px-6 py-2.5 rounded-3xl transition-all">Brainwaves</button>
+        <button onclick="switchTab(2)" id="tab-2" class="tab px-6 py-2.5 rounded-3xl transition-all">Freud Iceberg</button>
+        <button onclick="switchTab(3)" id="tab-3" class="tab px-6 py-2.5 rounded-3xl transition-all">Barrett 7 Levels</button>
+        <button onclick="switchTab(4)" id="tab-4" class="tab px-6 py-2.5 rounded-3xl transition-all">Multi-View</button>
+      </div>
+      <a href="#" onclick="location.reload()" class="text-xs flex items-center gap-1 text-violet-300 hover:text-white">
+        <i class="fa-solid fa-rotate"></i> RESET
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6" id="main-content">
+    <!-- Content injected by JS based on active tab -->
+  </div>
+
+  <!-- Floating Quiz -->
+  <div onclick="showQuizModal()"
+       class="quiz-btn fixed bottom-8 right-8 bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-2xl rounded-3xl px-7 py-5 flex items-center gap-4 cursor-pointer hover:scale-105 transition-all active:scale-95 z-50">
+    <i class="fa-solid fa-brain text-3xl"></i>
+    <div>
+      <div class="font-semibold text-lg">What’s your level?</div>
+      <div class="text-sm opacity-75">Quick multi-model quiz</div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" onclick="if(event.target===this)hideModal()" 
+       class="hidden fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center z-[9999]">
+    <div onclick="event.stopImmediatePropagation()" 
+         class="bg-gradient-to-br from-slate-900 to-violet-950 max-w-2xl w-full mx-4 rounded-3xl p-10 shadow-2xl max-h-[90vh] overflow-auto">
+      <div id="modal-content" class="space-y-8"></div>
+      <button onclick="hideModal()" 
+              class="mt-10 w-full py-4 text-sm font-semibold border border-white/30 hover:border-white/60 rounded-3xl transition-colors">
+        CLOSE & CONTINUE EXPLORING
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ============== DATA FOR ALL MODELS ==============
+    const models = {
+      hawkins: [
+        {id:20, name:"Shame", color:"#f43f5e", desc:"Feeling worthless, humiliation. Lowest vibration.", insight:"The energy of self-loathing."},
+        {id:30, name:"Guilt", color:"#e11d48", desc:"Blame, regret, self-punishment.", insight:"Often projected outward as anger."},
+        {id:50, name:"Apathy", color:"#9f1239", desc:"Hopelessness, helplessness.", insight:"'Nothing matters' state."},
+        {id:75, name:"Grief", color:"#c026d3", desc:"Sadness, mourning, loss.", insight:"Healing begins when felt fully."},
+        {id:100, name:"Fear", color:"#7e22ce", desc:"Anxiety, worry, paranoia.", insight:"The mind creates what it fears."},
+        {id:125, name:"Desire", color:"#6d28d9", desc:"Craving, addiction, greed.", insight:"Never satisfied."},
+        {id:150, name:"Anger", color:"#a78bfa", desc:"Rage, frustration, resentment.", insight:"High energy but destructive."},
+        {id:175, name:"Pride", color:"#c084fc", desc:"Inflated ego, defensiveness.", insight:"False confidence."},
+        {id:200, name:"Courage", color:"#22d3ee", desc:"Empowerment begins. Turning point.", insight:"The gateway to true power."},
+        {id:250, name:"Neutrality", color:"#67e8f9", desc:"Non-judgmental, flexible.", insight:"'It is what it is.'"},
+        {id:310, name:"Willingness", color:"#67e8f9", desc:"Optimism, cooperation.", insight:"Ready to grow."},
+        {id:350, name:"Acceptance", color:"#22d3ee", desc:"Forgiveness, harmony.", insight:"Peace with reality."},
+        {id:400, name:"Reason", color:"#a5f3fc", desc:"Logic, science, understanding.", insight:"Objective truth."},
+        {id:500, name:"Love", color:"#c084fc", desc:"Unconditional, radiant.", insight:"Sees the divine in all."},
+        {id:540, name:"Joy", color:"#e0f2fe", desc:"Bliss, serenity.", insight:"Effortless happiness."},
+        {id:600, name:"Peace", color:"#e0f2fe", desc:"Profound stillness.", insight:"Unity consciousness."},
+        {id:700, name:"Enlightenment", color:"#a5f3fc", desc:"Non-dual awareness.", insight:"Rare masters."}
+      ],
+      brainwaves: [
+        {name:"Delta", freq:"0.5–4 Hz", state:"Deep Sleep / Unconscious", desc:"Healing, regeneration, no awareness.", color:"#6366f1"},
+        {name:"Theta", freq:"4–8 Hz", state:"Meditation / Subconscious", desc:"Creativity, intuition, dreams.", color:"#8b5cf6"},
+        {name:"Alpha", freq:"8–13 Hz", state:"Relaxed Awareness", desc:"Calm, light meditation, bridge to subconscious.", color:"#a78bfa"},
+        {name:"Beta", freq:"13–30 Hz", state:"Focused Thinking", desc:"Alert, problem-solving, daily life.", color:"#c084fc"},
+        {name:"Gamma", freq:"30–100+ Hz", state:"Peak Consciousness", desc:"Insight, flow, unity, highest awareness.", color:"#e0f2fe"}
+      ],
+      freud: [
+        {name:"Conscious", level:"Tip", desc:"What you are aware of right now — thoughts, feelings, sensations.", color:"#22d3ee"},
+        {name:"Preconscious", level:"Shallow Water", desc:"Memories and knowledge that can be easily brought to awareness.", color:"#a78bfa"},
+        {name:"Unconscious", level:"Deep Base", desc:"Repressed desires, instincts, and hidden drives that shape behavior.", color:"#7c3aed"}
+      ],
+      barrett: [
+        {id:1, name:"Survival", desc:"Security, safety, basic needs. Fear-driven.", color:"#f43f5e"},
+        {id:2, name:"Relationship", desc:"Belonging, loyalty, approval-seeking.", color:"#e11d48"},
+        {id:3, name:"Self-Esteem", desc:"Performance, respect, achievement.", color:"#c026d3"},
+        {id:4, name:"Transformation", desc:"Self-actualization, growth, authenticity.", color:"#7c3aed"},
+        {id:5, name:"Internal Cohesion", desc:"Integrity, wholeness, inner peace.", color:"#6366f1"},
+        {id:6, name:"Making a Difference", desc:"Service to others, contribution.", color:"#22d3ee"},
+        {id:7, name:"Service", desc:"Legacy, universal love, higher purpose.", color:"#67e8f9"}
+      ]
+    }
+
+    // ============== TAB SYSTEM ==============
+    let currentTab = 0
+
+    function switchTab(tabIndex) {
+      currentTab = tabIndex
+      // Update active tab styling
+      document.querySelectorAll('.tab').forEach((t, i) => {
+        if (i === tabIndex) t.classList.add('tab-active')
+        else t.classList.remove('tab-active')
+      })
+      renderCurrentTab()
+    }
+
+    function renderCurrentTab() {
+      const container = document.getElementById('main-content')
+      let html = ''
+
+      if (currentTab === 0) {
+        // HAWKINS MAP
+        html = `
+          <div class="grid md:grid-cols-12 gap-10">
+            <div class="md:col-span-7">
+              <div class="bg-white/5 backdrop-blur-3xl rounded-3xl p-8 border border-white/10">
+                <h2 class="text-4xl font-semibold mb-8 flex items-center gap-4">
+                  <span>Hawkins Map of Consciousness</span>
+                  <span class="text-sm font-mono bg-white/10 px-3 py-1 rounded-2xl">20 → 1000</span>
+                </h2>
+                <div id="hawkins-ladder" class="space-y-3 max-h-[620px] overflow-y-auto pr-4"></div>
+              </div>
+            </div>
+            <div class="md:col-span-5 space-y-6">
+              <div class="bg-white/5 backdrop-blur-3xl rounded-3xl p-8 border border-white/10">
+                <h3 class="text-2xl font-medium mb-6">The Turning Point</h3>
+                <p class="text-lg leading-relaxed text-violet-200">Everything below <span class="text-[#22d3ee] font-bold">200</span> is powerless. Everything above is where life begins to transform. Click any rung to dive deeper.</p>
+              </div>
+              <div class="text-center py-6 text-violet-300 text-sm">Drag or scroll the ladder • Click any level</div>
+            </div>
+          </div>`
+      } 
+      else if (currentTab === 1) {
+        // BRAINWAVES
+        html = `
+          <div class="bg-white/5 backdrop-blur-3xl rounded-3xl p-10 border border-white/10">
+            <h2 class="text-4xl font-semibold mb-10 text-center">Brainwave States of Consciousness</h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6" id="brainwave-grid"></div>
+            
+            <!-- Animated Wave Visual -->
+            <div class="mt-16 bg-black/30 rounded-3xl p-8">
+              <div class="flex justify-between text-xs mb-4 text-violet-400"><span>DELTA</span><span>GAMMA</span></div>
+              <svg id="wave-svg" width="100%" height="180" viewBox="0 0 1200 180" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                <!-- Dynamic waves added by JS -->
+              </svg>
+            </div>
+          </div>`
+      } 
+      else if (currentTab === 2) {
+        // FREUD ICEBERG
+        html = `
+          <div class="bg-white/5 backdrop-blur-3xl rounded-3xl p-10 border border-white/10 max-w-4xl mx-auto">
+            <h2 class="text-4xl font-semibold mb-10 text-center">Freud’s Iceberg Model</h2>
+            <div class="relative h-96 flex justify-center items-end" id="iceberg-container">
+              <!-- Iceberg rendered by JS -->
+            </div>
+            <div class="grid grid-cols-3 gap-6 text-center mt-8 text-sm">
+              <div onclick="showFreudDetail(0)" class="cursor-pointer hover:scale-105 transition-all bg-white/10 rounded-2xl p-6">Conscious</div>
+              <div onclick="showFreudDetail(1)" class="cursor-pointer hover:scale-105 transition-all bg-white/10 rounded-2xl p-6">Preconscious</div>
+              <div onclick="showFreudDetail(2)" class="cursor-pointer hover:scale-105 transition-all bg-white/10 rounded-2xl p-6">Unconscious</div>
+            </div>
+          </div>`
+      } 
+      else if (currentTab === 3) {
+        // BARRETT 7 LEVELS
+        html = `
+          <div class="bg-white/5 backdrop-blur-3xl rounded-3xl p-8 border border-white/10">
+            <h2 class="text-4xl font-semibold mb-8">Richard Barrett’s 7 Levels of Consciousness</h2>
+            <div id="barrett-ladder" class="space-y-6"></div>
+          </div>`
+      } 
+      else if (currentTab === 4) {
+        // MULTI-VIEW / COMPARISON
+        html = `
+          <div class="bg-white/5 backdrop-blur-3xl rounded-3xl p-10 border border-white/10">
+            <h2 class="text-4xl font-semibold mb-8 text-center">Multi-Model Consciousness Radar</h2>
+            <p class="text-center mb-10 text-violet-200">See how the same moment in life can be interpreted through different lenses.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div class="text-center bg-gradient-to-br from-violet-900/50 to-transparent rounded-3xl p-6 border border-violet-400/30">
+                <div class="text-6xl mb-4">🧬</div>
+                <div class="font-semibold">Hawkins</div>
+                <div class="text-xs text-violet-400">Energy Scale 20-1000</div>
+              </div>
+              <div class="text-center bg-gradient-to-br from-blue-900/50 to-transparent rounded-3xl p-6 border border-cyan-400/30">
+                <div class="text-6xl mb-4">🌊</div>
+                <div class="font-semibold">Brainwaves</div>
+                <div class="text-xs text-cyan-400">Frequency States</div>
+              </div>
+              <div class="text-center bg-gradient-to-br from-purple-900/50 to-transparent rounded-3xl p-6 border border-purple-400/30">
+                <div class="text-6xl mb-4">🧊</div>
+                <div class="font-semibold">Freud</div>
+                <div class="text-xs text-purple-400">Layers of Mind</div>
+              </div>
+              <div class="text-center bg-gradient-to-br from-rose-900/50 to-transparent rounded-3xl p-6 border border-rose-400/30">
+                <div class="text-6xl mb-4">🌍</div>
+                <div class="font-semibold">Barrett</div>
+                <div class="text-xs text-rose-400">Personal Evolution</div>
+              </div>
+            </div>
+            <div class="mt-12 text-center text-violet-300 italic">"The same experience can live at Shame in Hawkins, Beta in brainwaves, Unconscious in Freud, and Survival in Barrett. Growth is moving upward in ALL models simultaneously."</div>
+          </div>`
+      }
+
+      container.innerHTML = html
+      container.classList.remove('content-enter')
+      void container.offsetWidth
+      container.classList.add('content-enter')
+      // Render the specific content inside each tab
+      if (currentTab === 0) renderHawkinsLadder()
+      if (currentTab === 1) renderBrainwaves()
+      if (currentTab === 2) renderIceberg()
+      if (currentTab === 3) renderBarrettLadder()
+    }
+
+    // ============== RENDER FUNCTIONS ==============
+    function renderHawkinsLadder() {
+      const container = document.getElementById('hawkins-ladder')
+      container.innerHTML = models.hawkins.map(l => `
+        <div onclick="showLevelDetail('hawkins', ${l.id})" class="group flex items-center gap-6 bg-white/5 hover:bg-white/10 rounded-3xl p-6 cursor-pointer transition-all border border-transparent hover:border-white/30 relative overflow-hidden">
+          <div class="absolute inset-y-0 left-0 w-1 opacity-60 group-hover:opacity-100 transition-opacity" style="background: linear-gradient(to bottom, transparent, ${l.color}, transparent);"></div>
+          <div class="w-14 h-14 flex-shrink-0 rounded-2xl flex items-center justify-center text-2xl font-bold border-4" style="background-color:${l.color}25; border-color:${l.color}; box-shadow: 0 0 14px ${l.color}45;">
+            ${l.id}
+          </div>
+          <div class="flex-1">
+            <div class="text-2xl font-semibold flex items-center gap-3">
+              ${l.name}
+              ${l.id === 200 ? '<span class="text-xs bg-cyan-400/20 text-cyan-300 px-2 py-0.5 rounded-full font-mono tracking-wide">★ GATEWAY</span>' : ''}
+            </div>
+            <div class="text-violet-300">${l.desc}</div>
+          </div>
+          <i class="fa-solid fa-arrow-right text-3xl opacity-30 group-hover:opacity-100 group-hover:translate-x-1 transition-all"></i>
+        </div>
+      `).join('')
+    }
+
+    function renderBrainwaves() {
+      const container = document.getElementById('brainwave-grid')
+      container.innerHTML = models.brainwaves.map((b, i) => `
+        <div onclick="showLevelDetail('brainwaves', ${i})" class="group bg-white/5 hover:bg-white/10 rounded-3xl p-6 cursor-pointer transition-all text-center border border-transparent hover:border-white/30">
+          <div class="text-5xl mb-4" style="color:${b.color}">${i+1}</div>
+          <div class="font-semibold text-xl">${b.name}</div>
+          <div class="text-xs font-mono tracking-widest text-violet-400">${b.freq}</div>
+          <div class="text-sm mt-2 opacity-80">${b.state}</div>
+          <div class="mt-6 text-xs text-left leading-snug">${b.desc}</div>
+        </div>
+      `).join('')
+
+      // Animate SVG waves
+      createAnimatedWaves()
+    }
+
+    function createAnimatedWaves() {
+      const svg = document.getElementById('wave-svg')
+      if (!svg) return
+      let wavesHTML = ''
+      const colors = ['#6366f1', '#8b5cf6', '#a78bfa', '#c084fc', '#e0f2fe']
+      for (let i = 0; i < 5; i++) {
+        wavesHTML += `
+          <path class="wave" d="M0 90 Q150 30 300 90 T600 90 T900 90 T1200 90" stroke="${colors[i]}" stroke-width="4" fill="none" opacity="${0.6 - i*0.1}" style="animation-delay: ${i*0.3}s"/>
+        `
+      }
+      svg.innerHTML = wavesHTML
+    }
+
+    function renderIceberg() {
+      const container = document.getElementById('iceberg-container')
+      container.innerHTML = `
+        <div class="relative w-96 h-full mx-auto flex flex-col justify-end">
+          <svg width="380" height="380" viewBox="0 0 380 380" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl">
+            <defs>
+              <radialGradient id="deepGlow" cx="50%" cy="80%" r="50%">
+                <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="iceGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.97"/>
+                <stop offset="65%" stop-color="#bae6fd" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.5"/>
+              </linearGradient>
+            </defs>
+            <!-- Deep underwater glow -->
+            <rect x="0" y="252" width="380" height="128" fill="url(#deepGlow)"/>
+            <!-- Iceberg body -->
+            <path d="M40 340 L190 40 L340 340 Z" fill="url(#iceGrad)"/>
+            <!-- Animated water surface shimmer -->
+            <rect x="0" y="244" width="380" height="14" rx="4" fill="#22d3ee" class="water-shimmer" opacity="0.35"/>
+            <rect x="0" y="250" width="380" height="6" rx="2" fill="#67e8f9" class="water-shimmer" opacity="0.2" style="animation-delay:1.5s"/>
+            <!-- Labels -->
+            <text x="190" y="128" text-anchor="middle" fill="#0f2a42" font-size="20" font-weight="700" font-family="Space Grotesk,Inter,sans-serif">CONSCIOUS</text>
+            <text x="190" y="205" text-anchor="middle" fill="#3d5a6e" font-size="15" font-weight="600" font-family="Inter,sans-serif">PRECONSCIOUS</text>
+            <text x="190" y="310" text-anchor="middle" fill="#e0e7ff" font-size="16" font-weight="600" font-family="Inter,sans-serif" opacity="0.75">UNCONSCIOUS</text>
+          </svg>
+          <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium text-cyan-300 tracking-widest">90% hidden below the surface</div>
+        </div>`
+    }
+
+    function renderBarrettLadder() {
+      const container = document.getElementById('barrett-ladder')
+      container.innerHTML = models.barrett.map(l => `
+        <div onclick="showLevelDetail('barrett', ${l.id})" class="group flex items-center gap-5 bg-white/5 hover:bg-white/10 rounded-3xl p-7 cursor-pointer transition-all relative overflow-hidden border border-transparent hover:border-white/20">
+          <div class="absolute inset-y-0 left-0 w-1 opacity-60 group-hover:opacity-100 transition-opacity" style="background: linear-gradient(to bottom, transparent, ${l.color}, transparent);"></div>
+          <div class="font-mono text-4xl w-12 font-bold flex-shrink-0" style="color:${l.color}; text-shadow: 0 0 14px ${l.color}60;">${l.id}</div>
+          <div class="flex-1">
+            <div class="text-2xl font-semibold">${l.name}</div>
+            <div class="text-violet-300">${l.desc}</div>
+          </div>
+          <i class="fa-solid fa-chevron-right opacity-20 group-hover:opacity-80 transition-opacity"></i>
+        </div>
+      `).join('')
+    }
+
+    // ============== DETAIL MODALS ==============
+    function openModal() {
+      const modal = document.getElementById('modal')
+      const panel = modal.querySelector('div')
+      modal.classList.remove('hidden')
+      modal.classList.add('flex')
+      panel.classList.remove('modal-animate')
+      void panel.offsetWidth
+      panel.classList.add('modal-animate')
+    }
+
+    window.showLevelDetail = function(model, id) {
+      let item
+      let title = ''
+
+      if (model === 'hawkins') {
+        item = models.hawkins.find(l => l.id === id)
+        title = `Level ${item.id} — ${item.name}`
+      } else if (model === 'brainwaves') {
+        item = models.brainwaves[id]
+        title = `${item.name} Waves • ${item.freq}`
+      } else if (model === 'barrett') {
+        item = models.barrett.find(l => l.id === id)
+        title = `Level ${item.id} — ${item.name}`
+      }
+
+      const modalContent = document.getElementById('modal-content')
+      modalContent.innerHTML = `
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-5xl font-bold">${title}</h2>
+          <div class="text-7xl opacity-30">${model === 'hawkins' || model === 'barrett' ? id : '🌊'}</div>
+        </div>
+        <p class="text-xl leading-relaxed">${item.desc}</p>
+        ${item.insight ? `<div class="mt-8 bg-white/10 rounded-2xl p-6 italic">${item.insight}</div>` : ''}
+      `
+      openModal()
+    }
+
+    window.showFreudDetail = function(index) {
+      const item = models.freud[index]
+      const modalContent = document.getElementById('modal-content')
+      document.getElementById('modal-content').innerHTML = `
+        <h2 class="text-4xl font-semibold mb-6">${item.name} Mind</h2>
+        <p class="text-xl">${item.desc}</p>
+        <div class="mt-12 text-xs uppercase tracking-widest text-violet-400">${item.level} of the iceberg</div>
+      `
+      openModal()
+    }
+
+    function hideModal() {
+      const modal = document.getElementById('modal')
+      modal.classList.add('hidden')
+      modal.classList.remove('flex')
+    }
+
+    // ============== QUIZ MODAL ==============
+    window.showQuizModal = function() {
+      const modalContent = document.getElementById('modal-content')
+      modalContent.innerHTML = `
+        <h2 class="text-4xl font-bold mb-8">Multi-Model Consciousness Quiz</h2>
+        <div id="quiz-questions" class="space-y-10"></div>
+        <button onclick="calculateMultiLevel()" class="mt-8 w-full py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-3xl text-xl font-semibold">CALCULATE MY LEVEL ACROSS ALL MODELS →</button>
+      `
+      renderQuizQuestions()
+      openModal()
+    }
+
+    let quizAnswers = []
+    const quizQuestions = [
+      {q: "How do you feel when facing uncertainty?", a: ["Overwhelmed / fearful", "Curious and open", "Completely at peace"]},
+      {q: "Your inner voice most often says…", a: ["I’m not enough", "I can figure this out", "Everything is perfect as it is"]},
+      {q: "When you meditate or relax, your mind feels…", a: ["Racing with thoughts", "Creative and dreamy", "Silent and expansive"]},
+      {q: "Your main motivation in life right now is…", a: ["Survival / security", "Growth / contribution", "Universal service / love"]},
+    ]
+
+    function renderQuizQuestions() {
+      const container = document.getElementById('quiz-questions')
+      container.innerHTML = quizQuestions.map((q, i) => `
+        <div>
+          <p class="font-medium mb-4">${q.q}</p>
+          <div class="space-y-3">
+            ${q.a.map((option, idx) => `
+              <button onclick="selectQuizAnswer(${i}, ${idx});" class="answer-btn w-full text-left px-6 py-5 rounded-3xl border border-white/10 hover:border-violet-400 transition-all ${quizAnswers[i]===idx ? 'bg-violet-500/30 border-violet-400' : ''}">
+                ${option}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')
+    }
+
+    window.selectQuizAnswer = function(i, idx) {
+      quizAnswers[i] = idx
+      renderQuizQuestions()
+    }
+
+    window.calculateMultiLevel = function() {
+      if (quizAnswers.length < 4) {
+        alert("Answer all questions to see your full consciousness profile ✨")
+        return
+      }
+      const score = quizAnswers.reduce((a, b) => a + b, 0)
+      
+      hideModal()
+      
+      // Show beautiful results
+      setTimeout(() => {
+        const modalContent = document.getElementById('modal-content')
+        document.getElementById(‘modal-content’).innerHTML = `
+          <h2 class="text-center text-5xl font-bold mb-10">Your Consciousness Profile</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="text-center">
+              <div class="text-7xl mb-3">🧬</div>
+              <div class="font-semibold">Hawkins ≈ ${180 + score * 110}</div>
+              <div class="text-sm text-emerald-400">Courage → Acceptance</div>
+            </div>
+            <div class="text-center">
+              <div class="text-7xl mb-3">🌊</div>
+              <div class="font-semibold">Brainwave</div>
+              <div class="text-sm text-cyan-400">Alpha / early Gamma</div>
+            </div>
+            <div class="text-center">
+              <div class="text-7xl mb-3">🧊</div>
+              <div class="font-semibold">Freud</div>
+              <div class="text-sm text-purple-400">Mostly Preconscious</div>
+            </div>
+            <div class="text-center">
+              <div class="text-7xl mb-3">🌍</div>
+              <div class="font-semibold">Barrett Level ${3 + Math.floor(score / 1.5)}</div>
+              <div class="text-sm text-rose-400">Transformation / Cohesion</div>
+            </div>
+          </div>
+          <p class="text-center mt-12 text-violet-200">You’re evolving. Every moment of awareness lifts you higher in every model.</p>
+        `
+        openModal()
+        quizAnswers = []
+      }, 400)
+    }
+
+    // ============== CANVAS STARS + PARTICLES ==============
+    function initStars() {
+      const canvas = document.getElementById('stars')
+      const ctx = canvas.getContext('2d')
+      let w = canvas.width = window.innerWidth
+      let h = canvas.height = window.innerHeight
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth
+        h = canvas.height = window.innerHeight
+      })
+
+      const starColors = ['245,245,255', '192,132,252', '34,211,238', '167,139,250', '240,171,252']
+      const stars = Array.from({length: 600}, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.5 + 0.3,
+        speed: Math.random() * 0.8 + 0.2,
+        color: starColors[Math.random() < 0.72 ? 0 : Math.floor(Math.random() * 5)]
+      }))
+
+      const shooters = Array.from({length: 3}, () => ({ active: false }))
+
+      function spawnShooter() {
+        const s = shooters.find(s => !s.active)
+        if (!s) return
+        s.x = Math.random() * w
+        s.y = Math.random() * h * 0.5
+        const a = (15 + Math.random() * 30) * Math.PI / 180
+        const spd = 10 + Math.random() * 8
+        s.vx = Math.cos(a) * spd
+        s.vy = Math.sin(a) * spd
+        s.maxLife = s.life = 60 + Math.random() * 50
+        s.color = Math.random() < 0.5 ? '192,132,252' : '103,232,249'
+        s.active = true
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h)
+        const t = Date.now() / 900
+
+        for (const s of stars) {
+          const a = Math.sin(t * s.speed) * 0.4 + 0.6
+          ctx.globalAlpha = a
+          ctx.fillStyle = `rgb(${s.color})`
+          ctx.beginPath()
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
+          ctx.fill()
+        }
+
+        ctx.globalAlpha = 1
+        for (const s of shooters) {
+          if (!s.active) continue
+          s.x += s.vx; s.y += s.vy; s.life--
+          if (s.life <= 0 || s.x > w + 60 || s.y > h + 60) { s.active = false; continue }
+          const a = s.life / s.maxLife
+          const tx = s.x - s.vx * 7, ty = s.y - s.vy * 7
+          const grad = ctx.createLinearGradient(tx, ty, s.x, s.y)
+          grad.addColorStop(0, 'transparent')
+          grad.addColorStop(1, `rgba(${s.color},${a})`)
+          ctx.strokeStyle = grad
+          ctx.lineWidth = 1.8
+          ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(s.x, s.y); ctx.stroke()
+          ctx.fillStyle = `rgba(255,255,255,${a})`
+          ctx.beginPath(); ctx.arc(s.x, s.y, 1.8, 0, Math.PI * 2); ctx.fill()
+        }
+        ctx.globalAlpha = 1
+        if (Math.random() < 0.007) spawnShooter()
+        requestAnimationFrame(draw)
+      }
+      draw()
+    }
+
+    // ============== BOOTSTRAP EVERYTHING ==============
+    window.onload = function() {
+      initStars()
+      renderCurrentTab()
+
+      // Mouse aurora
+      const aurora = document.createElement('div')
+      aurora.id = 'aurora'
+      document.body.appendChild(aurora)
+      document.addEventListener('mousemove', e => {
+        aurora.style.left = e.clientX + 'px'
+        aurora.style.top  = e.clientY + 'px'
+      })
+
+      // Floating orbs
+      const orbColors = ['rgba(139,92,246,0.4)', 'rgba(192,132,252,0.35)', 'rgba(34,211,238,0.3)', 'rgba(240,171,252,0.35)']
+      for (let i = 0; i < 6; i++) {
+        const orb = document.createElement('div')
+        orb.className = 'orb'
+        const sz = 20 + Math.random() * 55
+        orb.style.cssText = `width:${sz}px;height:${sz}px;background:radial-gradient(circle,${orbColors[i%4]} 0%,transparent 70%);left:${5+Math.random()*88}vw;bottom:-${sz}px;filter:blur(${sz*0.4}px);animation-duration:${18+Math.random()*18}s;animation-delay:${Math.random()*-32}s;z-index:0;`
+        document.body.appendChild(orb)
+      }
+
+      console.log('%c✅ Full Consciousness Explorer loaded with ALL models + animations!', 'background:#c084fc;color:#fff;padding:1px 4px;border-radius:2px')
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1279 @@
+<!--
+  ─────────────────────────────────────────────────────────────────────
+  WELCOME TO THE SPARKVERSE
+  The cosmic-disco entrance. Souls illuminate under violet frequency.
+  This is where they go "ahhhhhh — i see now."
+
+  KATE — quick notes:
+  • Personalize via URL: ?name=Alex   →  "Welcome, Alex"
+  • Replace UPGRADE_URL (bottom of <script>) with your Whop link.
+  • Drop a song path into AUDIO_URL if you want real music to play
+    when they tap TUNE IN. Anything in <source src=""> works.
+  • Tweak the activity feed names + the ancient truth lines freely.
+  ─────────────────────────────────────────────────────────────────────
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to the Sparkverse — The Door Just Opened</title>
+  <meta name="description" content="You crossed the threshold. The room is glowing violet. The music is already playing. Welcome home." />
+  <meta property="og:title" content="Welcome to the Sparkverse" />
+  <meta property="og:description" content="A cosmic disco of souls remembering. You're inside." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            void: '#05060a',
+            'void-2': '#0a0c14',
+            'void-3': '#10131c',
+            bone: '#f4ede0',
+            ember: '#ff5a1f',
+            gold: '#ffc857',
+            plasma: '#7df9ff',
+            violet: '#b794ff',
+            magnetic: '#9d6bff',
+            ash: '#6b6a6e',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --beat: 1.6s; /* the room's heartbeat */
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #05060a;
+      color: #f4ede0;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── ATMOSPHERIC BG LAYERS (always on) ─────────────────── */
+    .atmosphere {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(157, 107, 255, 0.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 30%, rgba(183, 148, 255, 0.16), transparent 60%),
+        radial-gradient(800px 600px at 50% 100%, rgba(255, 90, 31, 0.10), transparent 60%),
+        radial-gradient(600px 400px at 10% 85%, rgba(125, 249, 255, 0.10), transparent 60%);
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, -1%, 0) scale(1.05); }
+    }
+
+    /* code rain + starfield sit above atmosphere */
+    #codeRain, #stars {
+      position: fixed; inset: 0; pointer-events: none;
+    }
+    #codeRain { z-index: 1; opacity: 0.55; }
+    #stars    { z-index: 2; }
+
+    /* rotating light beams from above */
+    .beams {
+      position: fixed; top: -40vh; left: 50%; transform: translateX(-50%);
+      width: 200vw; height: 200vh;
+      z-index: 3; pointer-events: none; opacity: 0.55;
+      background:
+        conic-gradient(from 0deg at 50% 0%,
+          transparent 0deg,
+          rgba(183, 148, 255, 0.10) 8deg,
+          transparent 16deg,
+          transparent 60deg,
+          rgba(125, 249, 255, 0.08) 68deg,
+          transparent 76deg,
+          transparent 130deg,
+          rgba(255, 200, 87, 0.07) 138deg,
+          transparent 146deg,
+          transparent 220deg,
+          rgba(157, 107, 255, 0.10) 228deg,
+          transparent 236deg,
+          transparent 300deg,
+          rgba(125, 249, 255, 0.06) 308deg,
+          transparent 316deg,
+          transparent 360deg);
+      animation: spin 60s linear infinite;
+      mix-blend-mode: screen;
+    }
+    @keyframes spin { to { transform: translateX(-50%) rotate(360deg); } }
+
+    /* page sits above all of that */
+    .page { position: relative; z-index: 4; }
+
+    /* ── DISCO BALL (CSS only) ──────────────────────────────── */
+    .ball-wrap {
+      position: relative;
+      width: 220px; height: 220px;
+      margin: 0 auto;
+      filter: drop-shadow(0 0 60px rgba(157, 107, 255, 0.55));
+    }
+    .ball-wrap::before {
+      /* the hanging line */
+      content: '';
+      position: absolute; left: 50%; top: -80px; transform: translateX(-50%);
+      width: 1px; height: 80px;
+      background: linear-gradient(to bottom, transparent, rgba(244, 237, 224, 0.4));
+    }
+    .ball {
+      width: 100%; height: 100%; border-radius: 50%; position: relative;
+      background:
+        radial-gradient(circle at 30% 30%, #fff, transparent 18%),
+        radial-gradient(circle at 65% 25%, #fff, transparent 14%),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,.8), transparent 12%),
+        radial-gradient(circle at 20% 70%, rgba(255,255,255,.7), transparent 13%),
+        radial-gradient(circle at 50% 50%, rgba(183,148,255,.9), rgba(157,107,255,.6) 40%, #2a1a4d 80%);
+      box-shadow:
+        inset -30px -30px 60px rgba(0,0,0,.5),
+        inset 20px 20px 40px rgba(255,255,255,.15);
+      animation: ballSpin 14s linear infinite, ballPulse var(--beat) ease-in-out infinite;
+    }
+    /* grid of mirror tiles via repeating gradients */
+    .ball::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background:
+        repeating-linear-gradient(0deg,    transparent 0 14px, rgba(0,0,0,.25) 14px 15px),
+        repeating-linear-gradient(90deg,   transparent 0 14px, rgba(0,0,0,.25) 14px 15px);
+      mix-blend-mode: overlay;
+      opacity: 0.9;
+    }
+    /* moving glints */
+    .ball::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255,255,255,.9), transparent 6%),
+        radial-gradient(circle at 60% 20%, rgba(255,255,255,.8), transparent 5%),
+        radial-gradient(circle at 75% 65%, rgba(255,255,255,.9), transparent 5%),
+        radial-gradient(circle at 35% 75%, rgba(255,255,255,.8), transparent 5%);
+      animation: glints var(--beat) ease-in-out infinite alternate;
+      mix-blend-mode: screen;
+    }
+    @keyframes ballSpin { to { transform: rotate(360deg); } }
+    @keyframes ballPulse {
+      0%, 100% { box-shadow: inset -30px -30px 60px rgba(0,0,0,.5), inset 20px 20px 40px rgba(255,255,255,.15), 0 0 80px rgba(157,107,255,.35); }
+      50%      { box-shadow: inset -30px -30px 60px rgba(0,0,0,.5), inset 20px 20px 40px rgba(255,255,255,.25), 0 0 120px rgba(157,107,255,.7); }
+    }
+    @keyframes glints {
+      0%   { opacity: .5; transform: scale(1); }
+      100% { opacity: 1;  transform: scale(1.05); }
+    }
+
+    /* ── EQUALIZER BARS ─────────────────────────────────────── */
+    .eq {
+      display: inline-flex; align-items: end; gap: 4px; height: 36px;
+    }
+    .eq span {
+      width: 4px; background: linear-gradient(to top, #ff5a1f, #b794ff, #7df9ff);
+      border-radius: 2px;
+      animation: eqBar 0.9s ease-in-out infinite;
+    }
+    .eq span:nth-child(1) { animation-delay: -.1s; height: 60%; }
+    .eq span:nth-child(2) { animation-delay: -.3s; height: 90%; }
+    .eq span:nth-child(3) { animation-delay: -.5s; height: 40%; }
+    .eq span:nth-child(4) { animation-delay: -.2s; height: 80%; }
+    .eq span:nth-child(5) { animation-delay: -.6s; height: 55%; }
+    .eq span:nth-child(6) { animation-delay: -.4s; height: 75%; }
+    .eq span:nth-child(7) { animation-delay: -.8s; height: 45%; }
+    @keyframes eqBar {
+      0%, 100% { transform: scaleY(0.3); }
+      50%      { transform: scaleY(1); }
+    }
+    .eq.dim span { animation-play-state: paused; opacity: 0.35; transform: scaleY(0.3); }
+
+    /* ── COSMIC TEXT GRADIENT ───────────────────────────────── */
+    .magnetic-text {
+      background: linear-gradient(120deg, #b794ff 0%, #9d6bff 30%, #ff5a1f 65%, #ffc857 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 7s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+
+    /* ── GLASS PANELS ───────────────────────────────────────── */
+    .glass {
+      background: rgba(16, 19, 28, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(244, 237, 224, 0.08);
+    }
+    .glass-hover { transition: all .35s ease; }
+    .glass-hover:hover {
+      border-color: rgba(157, 107, 255, 0.45);
+      transform: translateY(-6px);
+      box-shadow: 0 18px 50px rgba(157, 107, 255, 0.18);
+    }
+
+    /* ── BUTTONS ────────────────────────────────────────────── */
+    .btn-magnetic {
+      background: linear-gradient(135deg, #9d6bff 0%, #b794ff 50%, #ff5a1f 100%);
+      background-size: 200% 200%;
+      color: #05060a;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      box-shadow: 0 10px 35px rgba(157, 107, 255, 0.45), inset 0 1px 0 rgba(255,255,255,.3);
+      transition: all .3s ease;
+    }
+    .btn-magnetic:hover {
+      transform: translateY(-3px) scale(1.02);
+      background-position: 100% 50%;
+      box-shadow: 0 16px 55px rgba(157, 107, 255, 0.65), inset 0 1px 0 rgba(255,255,255,.35);
+    }
+    .btn-ghost {
+      background: rgba(183, 148, 255, 0.06);
+      border: 1px solid rgba(183, 148, 255, 0.4);
+      color: #b794ff;
+      transition: all .3s ease;
+    }
+    .btn-ghost:hover {
+      background: rgba(183, 148, 255, 0.14);
+      border-color: rgba(183, 148, 255, 0.7);
+      box-shadow: 0 0 28px rgba(183, 148, 255, 0.3);
+    }
+
+    /* ── MICRO LABELS ───────────────────────────────────────── */
+    .micro {
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.36em;
+      font-size: 10px;
+      color: #6b6a6e;
+    }
+
+    /* ── SCROLL REVEAL ──────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* slow-bloom reveal for the "ahhhh" line */
+    .bloom {
+      opacity: 0; transform: scale(0.94); filter: blur(8px);
+      transition: opacity 1.6s ease, transform 1.6s ease, filter 1.6s ease;
+    }
+    .bloom.in { opacity: 1; transform: scale(1); filter: blur(0); }
+
+    /* ── PULSE DOT ──────────────────────────────────────────── */
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #b794ff;
+      box-shadow: 0 0 0 0 rgba(183, 148, 255, .6);
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0% { box-shadow: 0 0 0 0 rgba(183, 148, 255, .6); }
+      70% { box-shadow: 0 0 0 14px rgba(183, 148, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(183, 148, 255, 0); }
+    }
+
+    /* ── SOULS CONSTELLATION ────────────────────────────────── */
+    .soul {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #2a2940;
+      transition: background .6s ease, box-shadow .6s ease, transform .6s ease;
+    }
+    .soul.lit {
+      background: #b794ff;
+      box-shadow: 0 0 12px rgba(183, 148, 255, .9), 0 0 24px rgba(157, 107, 255, .55);
+      transform: scale(1.4);
+    }
+
+    /* ── FLOWER OF LIFE rotation ────────────────────────────── */
+    .fol { animation: folSpin 90s linear infinite; }
+    @keyframes folSpin { to { transform: rotate(360deg); } }
+
+    /* ── TUNE IN button active state ────────────────────────── */
+    .tuned .eq span { animation-duration: 0.55s; }
+    .tuned .ball { animation-duration: 9s, calc(var(--beat) * 0.7); }
+
+    /* ── BIT OF GRAIN for atmosphere ────────────────────────── */
+    .grain::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 3;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      opacity: 0.45; mix-blend-mode: overlay;
+    }
+
+    /* responsive ball */
+    @media (max-width: 640px) {
+      .ball-wrap { width: 160px; height: 160px; }
+      .ball-wrap::before { top: -50px; height: 50px; }
+    }
+  </style>
+  <script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/3f69bab8ef6446338dce0b642/00b83e9d1853cf9c1078884a5.js");</script>
+</head>
+<body class="grain">
+
+  <!-- ── ATMOSPHERIC LAYERS ─────────────────────────────────── -->
+  <div class="atmosphere"></div>
+  <canvas id="codeRain"></canvas>
+  <canvas id="stars"></canvas>
+  <div class="beams"></div>
+
+  <!-- hidden audio (paste a real URL into <source src=""> for sound) -->
+  <audio id="roomAudio" loop preload="none">
+    <source src="" type="audio/mpeg" />
+  </audio>
+
+  <div class="page">
+
+  <!-- ── NAV ────────────────────────────────────────────────── -->
+  <nav class="sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 group">
+        <span class="micro" style="color:#b794ff;">◐ the sparkverse</span>
+      </a>
+      <span class="micro hidden sm:inline">conscious code in motion</span>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════
+       01 · THE ENTRANCE
+       ══════════════════════════════════════════════════════════ -->
+  <header class="relative min-h-[100svh] flex items-center justify-center px-6 py-20">
+    <div class="text-center max-w-4xl mx-auto">
+
+      <!-- the ball -->
+      <div class="ball-wrap mb-12 reveal">
+        <div class="ball"></div>
+      </div>
+
+      <p class="micro mb-6 reveal" style="color:#b794ff;">◊ you crossed the threshold ◊</p>
+
+      <h1 class="font-serif font-light italic text-5xl sm:text-7xl lg:text-8xl leading-[1.02] tracking-tight mb-8 reveal">
+        Welcome to the<br/>
+        <span class="magnetic-text not-italic font-normal">Sparkverse</span>,<br/>
+        <span id="memberName" class="magnetic-text">friend</span>.
+      </h1>
+
+      <p class="font-serif italic text-xl sm:text-2xl text-bone/75 max-w-2xl mx-auto mb-4 reveal">
+        The door just closed behind you.<br/>
+        The music is already playing.
+      </p>
+
+      <p class="micro mb-10 reveal" style="color:#9d6bff;">·  conscious code in motion  ·</p>
+
+      <!-- equalizer + tune in -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-10 reveal">
+        <button id="tuneInBtn" class="btn-magnetic px-8 py-4 rounded-full text-base inline-flex items-center gap-3">
+          <span class="eq dim" id="eq">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </span>
+          <span id="tuneInLabel">Tune In</span>
+        </button>
+
+        <button id="bookmarkBtn" class="btn-ghost px-7 py-4 rounded-full text-base inline-flex items-center gap-2">
+          ✦ Bookmark your seat
+        </button>
+      </div>
+
+      <div class="inline-flex items-center gap-3 text-sm text-ash reveal">
+        <span class="pulse-dot"></span>
+        <span>You arrived <span id="joinedAgo" class="text-violet font-mono">just now</span> · <span id="liveMembers" class="text-bone font-mono">1,247</span> souls on the floor</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       02 · THE AHHH MOMENT
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-32 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="micro mb-8 bloom" style="color:#7df9ff;">001 — the remembering</p>
+
+      <h2 class="font-serif italic font-light text-5xl sm:text-7xl lg:text-8xl leading-[1.05] bloom">
+        <span class="text-bone/40">ohhhh.</span><br/>
+        <span class="magnetic-text">you remember now.</span>
+      </h2>
+
+      <div class="mt-16 max-w-2xl mx-auto space-y-6 text-lg sm:text-xl font-serif italic text-bone/70 leading-relaxed">
+        <p class="bloom">This isn't a community. It's a room you've already been in — in another life, in another body, under a different sky.</p>
+        <p class="bloom">The music is the same. The faces are the same. The frequency is the same.</p>
+        <p class="bloom"><span class="text-violet not-italic font-sans font-medium tracking-wide">You just forgot.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       03 · SOULS ILLUMINATING (constellation)
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="micro mb-4" style="color:#b794ff;">002 — the field is glowing</p>
+        <h2 class="font-serif italic font-light text-4xl sm:text-6xl leading-tight">
+          Every soul here<br/>
+          <span class="magnetic-text not-italic font-normal">lights the next one.</span>
+        </h2>
+        <p class="text-bone/55 font-serif italic text-lg mt-5 max-w-xl mx-auto">Watch them wake. Each dot is a member alive in the field right now.</p>
+      </div>
+
+      <!-- constellation grid -->
+      <div class="glass rounded-3xl p-8 sm:p-12 reveal">
+        <div id="souls" class="grid grid-cols-12 sm:grid-cols-20 gap-3 sm:gap-4 justify-items-center"></div>
+        <div class="flex items-center justify-between mt-8 text-xs font-mono text-ash">
+          <span><span id="litCount" class="text-violet">0</span> illuminated</span>
+          <span class="hidden sm:inline">◐ live field</span>
+          <span><span class="text-bone">∞</span> capacity</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       04 · ANCIENT TRUTHS  (sacred geometry + SELECT · RELEASE · WITNESS)
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-32 px-6 overflow-hidden">
+    <!-- flower of life behind -->
+    <svg class="fol absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.13]" width="900" height="900" viewBox="-150 -150 300 300" fill="none" stroke="#b794ff" stroke-width="0.5">
+      <g>
+        <circle cx="0" cy="0" r="40"/>
+        <circle cx="40" cy="0" r="40"/>
+        <circle cx="-40" cy="0" r="40"/>
+        <circle cx="20" cy="34.64" r="40"/>
+        <circle cx="-20" cy="34.64" r="40"/>
+        <circle cx="20" cy="-34.64" r="40"/>
+        <circle cx="-20" cy="-34.64" r="40"/>
+        <circle cx="80" cy="0" r="40"/>
+        <circle cx="-80" cy="0" r="40"/>
+        <circle cx="40" cy="69.28" r="40"/>
+        <circle cx="-40" cy="69.28" r="40"/>
+        <circle cx="40" cy="-69.28" r="40"/>
+        <circle cx="-40" cy="-69.28" r="40"/>
+        <circle cx="60" cy="34.64" r="40"/>
+        <circle cx="-60" cy="34.64" r="40"/>
+        <circle cx="60" cy="-34.64" r="40"/>
+        <circle cx="-60" cy="-34.64" r="40"/>
+        <circle cx="0" cy="69.28" r="40"/>
+        <circle cx="0" cy="-69.28" r="40"/>
+        <circle cx="0" cy="0" r="120" stroke-width="0.8"/>
+      </g>
+    </svg>
+
+    <div class="relative max-w-5xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="micro mb-4" style="color:#ffc857;">003 — ancient truths</p>
+        <h2 class="font-serif italic font-light text-4xl sm:text-6xl leading-tight">
+          What the old ones knew —<br/>
+          <span class="magnetic-text not-italic font-normal">we're just remembering.</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass glass-hover rounded-2xl p-8 text-center reveal">
+          <div class="micro mb-4" style="color:#7df9ff;">verb one</div>
+          <div class="text-5xl mb-4">◉</div>
+          <h3 class="font-serif italic text-3xl text-plasma mb-3">Select</h3>
+          <p class="text-bone/65 font-serif text-lg leading-relaxed">Choose the reality you want to inhabit. The future is not given — it is <em class="text-bone/90">picked</em>.</p>
+        </div>
+        <div class="glass glass-hover rounded-2xl p-8 text-center reveal">
+          <div class="micro mb-4" style="color:#b794ff;">verb two</div>
+          <div class="text-5xl mb-4">◌</div>
+          <h3 class="font-serif italic text-3xl text-violet mb-3">Release</h3>
+          <p class="text-bone/65 font-serif text-lg leading-relaxed">Let the old timeline fall away. What you stop holding is what stops holding <em class="text-bone/90">you</em>.</p>
+        </div>
+        <div class="glass glass-hover rounded-2xl p-8 text-center reveal">
+          <div class="micro mb-4" style="color:#ffc857;">verb three</div>
+          <div class="text-5xl mb-4">◎</div>
+          <h3 class="font-serif italic text-3xl text-gold mb-3">Witness</h3>
+          <p class="text-bone/65 font-serif text-lg leading-relaxed">Stay awake while the new one arrives. You are the one who saw it <em class="text-bone/90">first</em>.</p>
+        </div>
+      </div>
+
+      <p class="text-center mt-14 font-serif italic text-2xl text-bone/55 reveal">
+        AZURA is the zero point.<br/>
+        <span class="text-violet">You</span> are the selector.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       05 · PULL YOUR VERB — interactive Selector ritual
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-28 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="micro mb-5 reveal" style="color:#b794ff;">004 — your first move inside</p>
+      <h2 class="font-serif italic font-light text-4xl sm:text-6xl leading-tight mb-6 reveal">
+        Pull your verb<br/>
+        <span class="magnetic-text not-italic font-normal">for right now.</span>
+      </h2>
+      <p class="font-serif italic text-lg text-bone/65 mb-10 reveal">
+        The Selector Model only works if you use it.<br/>
+        Tap once. Take what comes.
+      </p>
+
+      <button type="button" id="pullVerbBtn" class="btn-magnetic px-9 py-4 rounded-full text-base inline-flex items-center gap-3 reveal">
+        ◐ Pull a verb
+      </button>
+
+      <div id="verbResult" class="mt-12 opacity-0 transition-opacity duration-700">
+        <div class="glass rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+          <div id="verbGlow" class="absolute inset-0 pointer-events-none transition-all duration-700"></div>
+          <div class="relative">
+            <p id="verbLabel" class="micro mb-4">your verb</p>
+            <div id="verbGlyph" class="text-7xl mb-4">◐</div>
+            <h3 id="verbName" class="font-serif italic text-5xl sm:text-6xl mb-5">—</h3>
+            <p id="verbTeaching" class="font-serif italic text-xl text-bone/80 max-w-xl mx-auto leading-relaxed">—</p>
+            <p class="micro mt-8" style="color:#6b6a6e;">pull again any time · the room will answer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       06 · FREE INSIDE THE SPARKVERSE — actual offerings
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <p class="micro mb-4" style="color:#7df9ff;">005 — open to you right now</p>
+        <h2 class="font-serif italic font-light text-4xl sm:text-6xl leading-tight">
+          What the free door <span class="magnetic-text not-italic font-normal">already gives you.</span>
+        </h2>
+        <p class="text-bone/60 mt-5 font-serif italic text-lg max-w-xl mx-auto">No tricks, no preview-mode tease. These are real and yours from this moment.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <a href="#" class="glass glass-hover rounded-2xl p-7 reveal block">
+          <div class="text-3xl mb-4 text-violet">◐</div>
+          <h3 class="font-serif italic text-2xl text-violet mb-2">The Selector Codex</h3>
+          <p class="text-sm text-bone/65 leading-relaxed">The full framework — Physics, Metaphysical, Relational, Temporal layers. The map under everything we do here.</p>
+          <p class="micro mt-5" style="color:#b794ff;">→ open the codex</p>
+        </a>
+
+        <a href="https://soul-maps.thefirstspark.shop" class="glass glass-hover rounded-2xl p-7 reveal block">
+          <div class="text-3xl mb-4 text-plasma">◉</div>
+          <h3 class="font-serif italic text-2xl text-plasma mb-2">Soul Map Preview</h3>
+          <p class="text-sm text-bone/65 leading-relaxed">See yours. Full numerology + astrology + Selector layers, generated in real time. Sample the depth before you order the full reading.</p>
+          <p class="micro mt-5" style="color:#7df9ff;">→ preview your map</p>
+        </a>
+
+        <a href="#" class="glass glass-hover rounded-2xl p-7 reveal block">
+          <div class="text-3xl mb-4 text-gold">✦</div>
+          <h3 class="font-serif italic text-2xl text-gold mb-2">The Sigil of the Week</h3>
+          <p class="text-sm text-bone/65 leading-relaxed">A new sigil drops every Sunday. Pull it, sit with it, watch the week rearrange around it. Free to download.</p>
+          <p class="micro mt-5" style="color:#ffc857;">→ pull this week's</p>
+        </a>
+
+        <a href="#" class="glass glass-hover rounded-2xl p-7 reveal block">
+          <div class="text-3xl mb-4 text-ember">⚡</div>
+          <h3 class="font-serif italic text-2xl text-ember mb-2">Frequency Drops</h3>
+          <p class="text-sm text-bone/65 leading-relaxed">Short voice notes from Kate — what's moving, what to track, what to release. Lands in your inbox when the field shifts.</p>
+          <p class="micro mt-5" style="color:#ff5a1f;">→ subscribe</p>
+        </a>
+
+        <a href="#" class="glass glass-hover rounded-2xl p-7 reveal block">
+          <div class="text-3xl mb-4 text-violet">◌</div>
+          <h3 class="font-serif italic text-2xl text-violet mb-2">The Open Lobby</h3>
+          <p class="text-sm text-bone/65 leading-relaxed">Real conversation with the room. Players, free joiners, kate — same channel. Show up, be seen.</p>
+          <p class="micro mt-5" style="color:#b794ff;">→ enter</p>
+        </a>
+
+        <a href="#" class="glass glass-hover rounded-2xl p-7 reveal block">
+          <div class="text-3xl mb-4 text-plasma">◎</div>
+          <h3 class="font-serif italic text-2xl text-plasma mb-2">The Sparkverse Atlas</h3>
+          <p class="text-sm text-bone/65 leading-relaxed">Every tool. Every truth. Every page of this universe — 57 and counting. Open the index and wander.</p>
+          <p class="micro mt-5" style="color:#7df9ff;">→ walk the atlas</p>
+        </a>
+      </div>
+
+      <!-- live activity feed -->
+      <div class="glass rounded-3xl p-7 sm:p-9 mt-14 reveal">
+        <div class="flex items-center justify-between mb-7">
+          <div>
+            <p class="micro mb-1" style="color:#b794ff;">live in the field</p>
+            <h3 class="font-serif italic text-2xl">Right this minute</h3>
+          </div>
+          <span class="inline-flex items-center gap-2 text-xs text-violet font-mono">
+            <span class="pulse-dot"></span> the room is moving
+          </span>
+        </div>
+        <ul class="space-y-2" id="activityFeed"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       07 · TWO DOORS — free vs paid, no spreadsheet
+       ══════════════════════════════════════════════════════════ -->
+  <section id="inner-circle" class="relative py-32 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="micro mb-4" style="color:#ffc857;">006 — two doors</p>
+        <h2 class="font-serif italic font-light text-4xl sm:text-6xl leading-tight">
+          You're standing in one room.<br/>
+          <span class="magnetic-text not-italic font-normal">There's a second.</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 reveal">
+        <!-- Free door -->
+        <div class="glass rounded-3xl p-8 sm:p-10 relative">
+          <div class="absolute top-6 right-6 micro">where you are</div>
+          <div class="text-5xl mb-5 text-violet">◐</div>
+          <h3 class="font-serif italic text-3xl text-violet mb-6">The Open Room</h3>
+          <ul class="space-y-3 font-serif italic text-lg text-bone/75 leading-relaxed">
+            <li>· The Selector Codex, free to read</li>
+            <li>· The Soul Map preview tool</li>
+            <li>· The Sigil of the Week</li>
+            <li>· Frequency drops from Kate</li>
+            <li>· The open lobby — full conversation</li>
+            <li>· The Sparkverse Atlas</li>
+          </ul>
+          <p class="text-sm text-ash mt-7 font-mono">already yours · stay as long as you want</p>
+        </div>
+
+        <!-- Inner door -->
+        <div class="glass rounded-3xl p-8 sm:p-10 relative bg-gradient-to-b from-violet/12 to-transparent border-violet/30">
+          <div class="absolute top-6 right-6 micro" style="color:#ffc857;">★ paid players</div>
+          <div class="text-5xl mb-5 text-gold">✦</div>
+          <h3 class="font-serif italic text-3xl text-gold mb-6">The Inner Chamber</h3>
+          <ul class="space-y-3 font-serif italic text-lg text-bone/85 leading-relaxed">
+            <li>· Your <strong class="not-italic font-sans font-medium text-gold">full</strong> Soul Map — every layer, every year</li>
+            <li>· The complete sigil library + new drops 72hrs early</li>
+            <li>· Players-only weekly live with Kate</li>
+            <li>· 1-on-1 initiation call when you arrive</li>
+            <li>· Private channels: #signals · #inner-court · #real-talk</li>
+            <li>· Direct line to Kate — a real reply, not a queue</li>
+          </ul>
+          <a href="#" class="upgrade-link btn-magnetic px-7 py-3 rounded-full text-sm inline-flex items-center gap-2 mt-7">
+            ✦ Step through this door
+          </a>
+          <p class="text-xs text-ash mt-4 font-mono">cancel anytime · the room stays open behind you</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       08 · VOICES — Sparkverse-specific
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <p class="micro mb-4" style="color:#b794ff;">007 — overheard in the field</p>
+        <h2 class="font-serif italic font-light text-4xl sm:text-6xl leading-tight">
+          What the field <span class="magnetic-text not-italic font-normal">does to people.</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="glass glass-hover rounded-2xl p-7 reveal">
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://i.pravatar.cc/80?img=12" alt="" class="w-12 h-12 rounded-full border border-violet/40" />
+            <div>
+              <p class="font-bold text-sm">Marcus L.</p>
+              <p class="text-xs text-ash font-mono">player · soul map ordered</p>
+            </div>
+          </div>
+          <div class="text-gold mb-3 text-sm">★★★★★</div>
+          <p class="text-base text-bone/75 font-serif italic leading-relaxed">"I pulled SELECT on a Tuesday. By Friday I'd quit the job I'd been white-knuckling for three years. The map was right about all of it."</p>
+        </div>
+
+        <div class="glass glass-hover rounded-2xl p-7 reveal">
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://i.pravatar.cc/80?img=47" alt="" class="w-12 h-12 rounded-full border border-violet/40" />
+            <div>
+              <p class="font-bold text-sm">Sarah K.</p>
+              <p class="text-xs text-ash font-mono">player · 6mo in</p>
+            </div>
+          </div>
+          <div class="text-gold mb-3 text-sm">★★★★★</div>
+          <p class="text-base text-bone/75 font-serif italic leading-relaxed">"The sigil of the week is the only piece of internet I still trust. I print it. I put it on the fridge. It works."</p>
+        </div>
+
+        <div class="glass glass-hover rounded-2xl p-7 reveal">
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://i.pravatar.cc/80?img=33" alt="" class="w-12 h-12 rounded-full border border-violet/40" />
+            <div>
+              <p class="font-bold text-sm">Diego R.</p>
+              <p class="text-xs text-ash font-mono">player · soul map year 1</p>
+            </div>
+          </div>
+          <div class="text-gold mb-3 text-sm">★★★★★</div>
+          <p class="text-base text-bone/75 font-serif italic leading-relaxed">"The Selector Model is the first framework that didn't make me dumber the more I learned it. AZURA is the zero point, and I finally feel like one."</p>
+        </div>
+
+        <div class="glass glass-hover rounded-2xl p-7 reveal">
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://i.pravatar.cc/80?img=68" alt="" class="w-12 h-12 rounded-full border border-violet/40" />
+            <div>
+              <p class="font-bold text-sm">Priya M.</p>
+              <p class="text-xs text-ash font-mono">player · 4mo in</p>
+            </div>
+          </div>
+          <div class="text-gold mb-3 text-sm">★★★★★</div>
+          <p class="text-base text-bone/75 font-serif italic leading-relaxed">"Kate's violet field is real. I don't know how else to say it. I open this page and my whole nervous system exhales."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       09 · SPARKVERSE BY THE NUMBERS — real stats
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <p class="micro mb-4">008 — the universe, in numbers</p>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass rounded-2xl p-7 text-center reveal">
+          <div class="text-4xl sm:text-5xl font-serif italic magnetic-text">57+</div>
+          <p class="micro mt-3">tools shipped</p>
+        </div>
+        <div class="glass rounded-2xl p-7 text-center reveal">
+          <div class="text-4xl sm:text-5xl font-serif italic magnetic-text">4</div>
+          <p class="micro mt-3">selector layers</p>
+        </div>
+        <div class="glass rounded-2xl p-7 text-center reveal">
+          <div class="text-4xl sm:text-5xl font-serif italic magnetic-text">1</div>
+          <p class="micro mt-3">zero point · azura</p>
+        </div>
+        <div class="glass rounded-2xl p-7 text-center reveal">
+          <div class="text-4xl sm:text-5xl font-serif italic magnetic-text">∞</div>
+          <p class="micro mt-3">selections available</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       09 · THE INVITATION (final CTA)
+       ══════════════════════════════════════════════════════════ -->
+  <section class="relative py-32 px-6 overflow-hidden">
+    <!-- mini ball -->
+    <div class="ball-wrap mb-12 reveal" style="width:110px;height:110px;">
+      <div class="ball"></div>
+    </div>
+
+    <div class="relative max-w-3xl mx-auto text-center reveal">
+      <p class="micro mb-5" style="color:#ffc857;">008 — the invitation</p>
+      <h2 class="font-serif italic font-light text-5xl sm:text-7xl leading-tight tracking-tight mb-8">
+        The mirror ball<br/>
+        <span class="magnetic-text not-italic font-normal">is still spinning.</span>
+      </h2>
+      <p class="font-serif italic text-xl sm:text-2xl text-bone/70 mb-12 max-w-xl mx-auto">
+        You felt it the second you walked in.<br/>
+        Now step closer to the center.
+      </p>
+      <a href="#" class="upgrade-link btn-magnetic px-10 py-5 rounded-full text-lg inline-flex items-center gap-3">
+        ✦ Step Into the Inner Circle ✦
+      </a>
+      <p class="text-xs text-ash mt-6 font-mono">cancel anytime · 7-day refund · the door does not lock behind you</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════════════════ -->
+  <footer class="border-t border-bone/5 py-12 px-6 relative">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="micro" style="color:#b794ff;">◐ the sparkverse</span>
+        <span class="micro hidden sm:inline">© 2026 · the first spark</span>
+      </div>
+
+      <nav class="flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-sm text-bone/55 font-serif italic">
+        <a href="#" class="hover:text-violet transition">discord</a>
+        <a href="#" class="hover:text-violet transition">x · @OGplayerone</a>
+        <a href="#" class="hover:text-violet transition">zora</a>
+        <a href="#" class="hover:text-violet transition">support</a>
+        <a href="#" class="hover:text-violet transition">terms</a>
+        <a href="#" class="hover:text-violet transition">privacy</a>
+      </nav>
+
+      <p class="text-xs text-ash font-mono">made under a purple moon · ✦</p>
+    </div>
+  </footer>
+
+  </div><!-- /.page -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCRIPTS
+       ══════════════════════════════════════════════════════════ -->
+  <script>
+    // ╔═══════════════════════════════════════════════════════╗
+    // ║  EDIT ME                                              ║
+    // ╠═══════════════════════════════════════════════════════╣
+    // ║  Whop paid product checkout URL                       ║
+    const UPGRADE_URL = 'https://whop.com/sparkverse-511c/the-sparkverse-lobby/';
+    // ║  Optional: mp3 URL for "Tune In" (loops). Leave ''   ║
+    // ║  to use built-in cosmic room synth.                    ║
+    const AUDIO_URL   = '';
+    // ╚═══════════════════════════════════════════════════════╝
+
+    // wire all upgrade links
+    document.querySelectorAll('.upgrade-link').forEach(a => {
+      if (UPGRADE_URL && UPGRADE_URL !== '#') a.href = UPGRADE_URL;
+    });
+
+    // ── personalize via ?name= URL param ─────────────────────
+    (function personalize() {
+      const params = new URLSearchParams(window.location.search);
+      let name = (params.get('name') || params.get('member') || '').trim();
+      if (name) {
+        name = name.replace(/[^a-zA-Z0-9\s\-']/g, '').slice(0, 30);
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        document.getElementById('memberName').textContent = name;
+        document.title = `Welcome, ${name} — The Sparkverse`;
+      } else {
+        document.getElementById('memberName').textContent = 'friend';
+      }
+    })();
+
+    // ── joined X ago ─────────────────────────────────────────
+    (function joinedAgo() {
+      const key = 'spark_join_ts';
+      let ts = parseInt(sessionStorage.getItem(key), 10);
+      if (!ts) { ts = Date.now(); sessionStorage.setItem(key, ts); }
+      const label = document.getElementById('joinedAgo');
+      function render() {
+        const sec = Math.floor((Date.now() - ts) / 1000);
+        if (sec < 30) label.textContent = 'just now';
+        else if (sec < 60) label.textContent = `${sec} seconds ago`;
+        else if (sec < 3600) label.textContent = `${Math.floor(sec/60)} minute${Math.floor(sec/60)===1?'':'s'} ago`;
+        else label.textContent = `${Math.floor(sec/3600)} hour${Math.floor(sec/3600)===1?'':'s'} ago`;
+      }
+      render();
+      setInterval(render, 15000);
+    })();
+
+    // ── live ticker ──────────────────────────────────────────
+    (function liveTicker() {
+      const el = document.getElementById('liveMembers');
+      let n = 1247;
+      setInterval(() => {
+        n += Math.floor(Math.random() * 7) - 3;
+        n = Math.max(1200, Math.min(1320, n));
+        el.textContent = n.toLocaleString();
+      }, 4000);
+    })();
+
+    // ── Sparkverse activity feed ─────────────────────────────
+    (function activity() {
+      const feed = document.getElementById('activityFeed');
+      const items = [
+        { who: 'Alex M.',   what: 'pulled SELECT and ordered a soul map',  when: '2m ago',  icon: '◉', tint: 'text-plasma' },
+        { who: 'Jordan T.', what: 'downloaded this week\'s sigil',         when: '4m ago',  icon: '✦', tint: 'text-gold' },
+        { who: 'Riley P.',  what: 'opened the Selector Codex',             when: '7m ago',  icon: '◐', tint: 'text-violet' },
+        { who: 'Sam N.',    what: 'previewed their soul map',              when: '11m ago', icon: '◎', tint: 'text-plasma' },
+        { who: 'Casey W.',  what: 'stepped into the inner chamber',        when: '14m ago', icon: '✦', tint: 'text-gold' },
+        { who: 'Morgan J.', what: 'pulled RELEASE for the first time',     when: '18m ago', icon: '◌', tint: 'text-violet' },
+        { who: 'Ari L.',    what: 'said hello in the open lobby',          when: '22m ago', icon: '◇', tint: 'text-plasma' },
+        { who: 'Sage R.',   what: 'tuned in to a frequency drop',          when: '27m ago', icon: '⚡', tint: 'text-ember' },
+      ];
+      feed.innerHTML = items.map(i => `
+        <li class="flex items-center gap-4 p-3 rounded-xl hover:bg-violet/5 transition">
+          <span class="w-10 h-10 rounded-full bg-void-3 border border-violet/20 flex items-center justify-center text-xl ${i.tint}">${i.icon}</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm"><span class="font-bold ${i.tint}">${i.who}</span> <span class="text-bone/70 font-serif italic">${i.what}</span></p>
+            <p class="text-xs text-ash font-mono">${i.when}</p>
+          </div>
+        </li>
+      `).join('');
+    })();
+
+    // ── PULL YOUR VERB ritual (Selector Model in action) ─────
+    (function pullVerb() {
+      const btn      = document.getElementById('pullVerbBtn');
+      const result   = document.getElementById('verbResult');
+      const glow     = document.getElementById('verbGlow');
+      const glyph    = document.getElementById('verbGlyph');
+      const name     = document.getElementById('verbName');
+      const label    = document.getElementById('verbLabel');
+      const teaching = document.getElementById('verbTeaching');
+
+      const verbs = [
+        {
+          name: 'Select',
+          glyph: '◉',
+          color: '#7df9ff',
+          glow: 'radial-gradient(circle at center, rgba(125, 249, 255, 0.18), transparent 70%)',
+          label: 'verb one · the choice',
+          teachings: [
+            'Something is asking to be picked today. You already know which one. Pick it before the day picks for you.',
+            'The future is not given — it is chosen. Choose the version of yourself that walks like she already has it.',
+            'You don\'t need more information. You need to select. The data was always under the decision, not before it.',
+            'Pick the room you actually want to be in. The other one will keep running without you. That\'s fine.',
+          ],
+        },
+        {
+          name: 'Release',
+          glyph: '◌',
+          color: '#b794ff',
+          glow: 'radial-gradient(circle at center, rgba(183, 148, 255, 0.22), transparent 70%)',
+          label: 'verb two · the letting',
+          teachings: [
+            'What you stop holding is what stops holding you. Name the thing. Open the hand.',
+            'The old timeline is asking to be thanked, not punished. Bow to it. Then leave the room.',
+            'Releasing isn\'t losing. It\'s clearing the channel so the next signal can land cleanly.',
+            'You\'re carrying something that wasn\'t even yours to begin with. Set it down. Watch the air change.',
+          ],
+        },
+        {
+          name: 'Witness',
+          glyph: '◎',
+          color: '#ffc857',
+          glow: 'radial-gradient(circle at center, rgba(255, 200, 87, 0.18), transparent 70%)',
+          label: 'verb three · the seeing',
+          teachings: [
+            'Stay awake while the new one arrives. You are the one who saw it first — and the seeing is what makes it real.',
+            'Don\'t fix it today. Don\'t name it today. Just look at it. The witnessing is the work.',
+            'The field is moving around you right now. You don\'t have to push. You have to notice.',
+            'You\'re not behind. You\'re mid-incarnation of something that wanted you to see it land.',
+          ],
+        },
+      ];
+
+      let lastIdx = -1;
+
+      btn.addEventListener('click', () => {
+        // avoid pulling the same verb back-to-back
+        let idx;
+        do { idx = Math.floor(Math.random() * verbs.length); } while (idx === lastIdx);
+        lastIdx = idx;
+        const v = verbs[idx];
+
+        // fade out, swap, fade in
+        result.style.opacity = '0';
+        setTimeout(() => {
+          glow.style.background = v.glow;
+          glyph.textContent = v.glyph;
+          glyph.style.color = v.color;
+          name.textContent = v.name;
+          name.style.color = v.color;
+          label.textContent = v.label;
+          label.style.color = v.color;
+          teaching.textContent = v.teachings[Math.floor(Math.random() * v.teachings.length)];
+          result.style.opacity = '1';
+
+          // smooth scroll the card into view if it's below the fold
+          const r = result.getBoundingClientRect();
+          if (r.top < 60 || r.bottom > window.innerHeight) {
+            result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 250);
+
+        btn.textContent = '◐ Pull again';
+      });
+    })();
+
+    // ── conscious code in motion (glyph rain) ────────────────
+    (function codeRain() {
+      const c = document.getElementById('codeRain');
+      const ctx = c.getContext('2d');
+      // mystical / sacred / cosmic glyph set
+      const glyphs = '✦◐◉◌◎◇◊⚆⚇⚈⚉∴∵∞◈◇◆☉☽☾♁♆∮∯∰⌬⎔ΣΩΨΦΘΛΞΞ△▽◬◭◮'.split('');
+      let cols = [];
+      const fontSize = 18;
+
+      function resize() {
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        const colCount = Math.floor(c.width / (fontSize * 1.8));
+        cols = Array.from({ length: colCount }, (_, i) => ({
+          x: i * fontSize * 1.8 + fontSize,
+          y: Math.random() * -c.height,
+          speed: 0.4 + Math.random() * 0.9,
+          tint: Math.random() < 0.7 ? 'violet' : (Math.random() < 0.5 ? 'plasma' : 'gold'),
+          glyph: glyphs[Math.floor(Math.random() * glyphs.length)],
+          life: Math.random() * 120 + 60,
+          age: 0,
+        }));
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function draw() {
+        // soft fade — leaves trails
+        ctx.fillStyle = 'rgba(5, 6, 10, 0.10)';
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.font = `${fontSize}px "JetBrains Mono", monospace`;
+        ctx.textAlign = 'center';
+
+        cols.forEach(col => {
+          const a = Math.max(0.08, Math.min(0.55, 1 - col.age / col.life));
+          const color =
+            col.tint === 'violet' ? `rgba(183, 148, 255, ${a})` :
+            col.tint === 'plasma' ? `rgba(125, 249, 255, ${a * 0.85})` :
+                                    `rgba(255, 200, 87, ${a * 0.7})`;
+          ctx.fillStyle = color;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 8;
+          ctx.fillText(col.glyph, col.x, col.y);
+
+          col.y += col.speed;
+          col.age += 1;
+          // occasionally swap glyph as it falls — feels alive
+          if (Math.random() < 0.015) col.glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
+
+          if (col.y > c.height + 40 || col.age > col.life) {
+            col.y = -fontSize;
+            col.age = 0;
+            col.life = Math.random() * 120 + 60;
+            col.speed = 0.4 + Math.random() * 0.9;
+            col.tint = Math.random() < 0.7 ? 'violet' : (Math.random() < 0.5 ? 'plasma' : 'gold');
+            col.glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
+          }
+        });
+        ctx.shadowBlur = 0;
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    // ── starfield ────────────────────────────────────────────
+    (function starfield() {
+      const c = document.getElementById('stars');
+      const ctx = c.getContext('2d');
+      let stars = [];
+      const N = 140;
+
+      function resize() {
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        stars = Array.from({ length: N }, () => ({
+          x: Math.random() * c.width,
+          y: Math.random() * c.height,
+          r: Math.random() * 1.3 + 0.2,
+          a: Math.random() * 0.6 + 0.2,
+          tw: Math.random() * 0.02 + 0.005,
+          tone: Math.random() < 0.18 ? 'violet' : 'white',
+        }));
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function draw() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        stars.forEach(s => {
+          s.a += (Math.random() - 0.5) * s.tw;
+          s.a = Math.max(0.15, Math.min(0.95, s.a));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = s.tone === 'violet'
+            ? `rgba(183, 148, 255, ${s.a})`
+            : `rgba(255, 255, 255, ${s.a * 0.85})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    // ── souls constellation ──────────────────────────────────
+    (function souls() {
+      const wrap = document.getElementById('souls');
+      const COLS_LG = 20, ROWS = 6;
+      const total = COLS_LG * ROWS;
+      for (let i = 0; i < total; i++) {
+        const d = document.createElement('div');
+        d.className = 'soul';
+        wrap.appendChild(d);
+      }
+      const counter = document.getElementById('litCount');
+      let lit = 0;
+
+      // light them up sequentially when section enters view
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const dots = wrap.querySelectorAll('.soul');
+            // randomized illumination order
+            const order = Array.from({length: total}, (_,i) => i)
+              .sort(() => Math.random() - 0.5);
+            order.forEach((idx, k) => {
+              setTimeout(() => {
+                dots[idx].classList.add('lit');
+                lit++;
+                counter.textContent = lit;
+              }, k * 35);
+            });
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      io.observe(wrap);
+
+      // hover ripple
+      wrap.addEventListener('mousemove', (e) => {
+        const dots = wrap.querySelectorAll('.soul');
+        const rect = wrap.getBoundingClientRect();
+        const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+        dots.forEach(d => {
+          const r = d.getBoundingClientRect();
+          const dx = (r.left - rect.left + r.width/2) - mx;
+          const dy = (r.top  - rect.top  + r.height/2) - my;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 60) d.classList.add('lit');
+        });
+      });
+    })();
+
+    // ── bookmark button ──────────────────────────────────────
+    document.getElementById('bookmarkBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const key = isMac ? '⌘ + D' : 'Ctrl + D';
+      const btn = e.currentTarget;
+      const original = btn.innerHTML;
+      btn.innerHTML = `Press <span class="font-mono mx-2">${key}</span> ✦`;
+      setTimeout(() => { btn.innerHTML = original; }, 3500);
+    });
+
+    // ── Cosmic room synth (used when AUDIO_URL is empty) ─────
+    const RoomSynth = (function () {
+      let ctx = null;
+      let master = null;
+      let kickTimer = null;
+      let running = false;
+      const BEAT_MS = 1600;
+
+      function playKick() {
+        if (!ctx || !running) return;
+        const t = ctx.currentTime;
+        const kick = ctx.createOscillator();
+        const kickGain = ctx.createGain();
+        kick.type = 'sine';
+        kick.frequency.setValueAtTime(92, t);
+        kick.frequency.exponentialRampToValueAtTime(44, t + 0.14);
+        kickGain.gain.setValueAtTime(0.2, t);
+        kickGain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+        kick.connect(kickGain);
+        kickGain.connect(master);
+        kick.start(t);
+        kick.stop(t + 0.42);
+
+        const hatBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.04), ctx.sampleRate);
+        const hatData = hatBuf.getChannelData(0);
+        for (let i = 0; i < hatData.length; i++) hatData[i] = Math.random() * 2 - 1;
+        const hat = ctx.createBufferSource();
+        hat.buffer = hatBuf;
+        const hatFilter = ctx.createBiquadFilter();
+        hatFilter.type = 'highpass';
+        hatFilter.frequency.value = 7000;
+        const hatGain = ctx.createGain();
+        hatGain.gain.setValueAtTime(0.035, t);
+        hatGain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+        hat.connect(hatFilter);
+        hatFilter.connect(hatGain);
+        hatGain.connect(master);
+        hat.start(t);
+        hat.stop(t + 0.06);
+      }
+
+      function start() {
+        if (running) return;
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        master = ctx.createGain();
+        master.gain.value = 0.24;
+        master.connect(ctx.destination);
+
+        [[55, 'sine', 0.1], [82.5, 'triangle', 0.07], [110, 'triangle', 0.05], [165, 'sine', 0.035]].forEach(([freq, type, vol]) => {
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.type = type;
+          osc.frequency.value = freq;
+          g.gain.value = vol;
+          osc.connect(g);
+          g.connect(master);
+          osc.start();
+        });
+
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+        lfo.frequency.value = 0.06;
+        lfoGain.gain.value = 0.05;
+        lfo.connect(lfoGain);
+        lfoGain.connect(master.gain);
+        lfo.start();
+
+        running = true;
+        playKick();
+        kickTimer = setInterval(playKick, BEAT_MS);
+      }
+
+      function stop() {
+        running = false;
+        if (kickTimer) clearInterval(kickTimer);
+        kickTimer = null;
+        if (ctx) {
+          ctx.close().catch(function () {});
+          ctx = null;
+        }
+        master = null;
+      }
+
+      return { start: start, stop: stop };
+    })();
+
+    // ── TUNE IN: animate equalizer + play audio ──────────────
+    (function tuneIn() {
+      const btn = document.getElementById('tuneInBtn');
+      const eq  = document.getElementById('eq');
+      const lbl = document.getElementById('tuneInLabel');
+      const audio = document.getElementById('roomAudio');
+      let on = false;
+
+      if (AUDIO_URL) audio.querySelector('source').src = AUDIO_URL;
+
+      btn.addEventListener('click', async function () {
+        on = !on;
+        document.body.classList.toggle('tuned', on);
+        eq.classList.toggle('dim', !on);
+        lbl.textContent = on ? 'Tuned In ✦' : 'Tune In';
+
+        if (AUDIO_URL) {
+          try {
+            if (on) { audio.load(); await audio.play(); }
+            else { audio.pause(); audio.currentTime = 0; }
+          } catch (err) {
+            lbl.textContent = 'Tap again · unmute';
+          }
+          return;
+        }
+
+        if (on) RoomSynth.start();
+        else RoomSynth.stop();
+      });
+    })();
+
+    // ── reveal on scroll (.reveal + .bloom) ──────────────────
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, idx) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('in'), (idx % 4) * 90);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal, .bloom').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

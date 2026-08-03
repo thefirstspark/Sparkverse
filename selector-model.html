@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K4TKPMG9');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0B0B0C">
+    <title>The Selector Model — Reality is Programmable</title>
+    <meta name="description" content="You are not in the simulation. You ARE the cursor. A four-layer framework revealing how consciousness renders reality.">
+    
+    <meta property="og:title" content="The Selector Model — Consciousness as Interface">
+    <meta property="og:description" content="You are not observing reality. You are authoring it. The secret humanity forgot.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thefirstspark.shop/selector-model.html">
+    <meta property="og:image" content="https://thefirstspark.shop/og-archetype-quiz.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Selector Model">
+    <meta name="twitter:description" content="Reality is programmable. Consciousness is the code.">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --void: #0B0B0C;
+            --void-deep: #050506;
+            --ember: #FF6A3D;
+            --gold: #F3B23A;
+            --violet: #6B4DF2;
+            --cyan: #26E4D8;
+            --white: rgba(255,255,255,0.92);
+            --dim: rgba(255,255,255,0.5);
+            --dimmer: rgba(255,255,255,0.15);
+            --serif: 'Cormorant Garamond', Georgia, serif;
+            --mono: 'Space Mono', 'Courier New', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--void);
+            font-family: var(--serif);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ═══ PARTICLE FIELD ═══ */
+        #void-field {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ═══ LAYOUT ═══ */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        /* ═══ NAV ═══ */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s;
+        }
+        nav.scrolled {
+            background: rgba(11,11,12,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(243,178,58,0.1);
+        }
+        .nav-logo {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .nav-back {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--dim);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .nav-back:hover { color: var(--white); }
+
+        /* ═══ HERO ═══ */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .glitch-title {
+            font-family: var(--mono);
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--white);
+            position: relative;
+            animation: glitch-in 1.5s ease-out;
+        }
+        .glitch-title::before,
+        .glitch-title::after {
+            content: 'THE SELECTOR MODEL';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+        }
+        .glitch-title::before {
+            color: var(--cyan);
+            animation: glitch-1 3s infinite linear;
+        }
+        .glitch-title::after {
+            color: var(--ember);
+            animation: glitch-2 3s infinite linear;
+        }
+
+        @keyframes glitch-in {
+            0% { opacity: 0; transform: translateY(20px); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+        @keyframes glitch-1 {
+            0%, 89%, 91%, 100% { opacity: 0; }
+            90% { opacity: 0.8; transform: translate(-2px, 1px); }
+        }
+        @keyframes glitch-2 {
+            0%, 94%, 96%, 100% { opacity: 0; }
+            95% { opacity: 0.8; transform: translate(2px, -1px); }
+        }
+
+        .hero-subtitle {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.25em;
+            color: var(--dim);
+            margin-top: 32px;
+            text-transform: uppercase;
+            animation: fade-up 1s ease-out 0.3s both;
+        }
+
+        .hero-tagline {
+            font-family: var(--serif);
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-style: italic;
+            color: var(--gold);
+            margin-top: 48px;
+            max-width: 600px;
+            animation: fade-up 1s ease-out 0.6s both;
+        }
+
+        .selector-point {
+            width: 16px; height: 16px;
+            background: var(--gold);
+            border-radius: 50%;
+            margin-top: 64px;
+            box-shadow: 0 0 40px var(--gold), 0 0 80px rgba(243,178,58,0.4);
+            animation: pulse 2s ease-in-out infinite, fade-up 1s ease-out 0.9s both;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 40px var(--gold), 0 0 80px rgba(243,178,58,0.4); }
+            50% { transform: scale(1.2); box-shadow: 0 0 60px var(--gold), 0 0 120px rgba(243,178,58,0.6); }
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            color: var(--dimmer);
+            animation: bob 2s ease-in-out infinite;
+        }
+        @keyframes bob {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* ═══ THE SECRET ═══ */
+        #secret {
+            background: var(--void-deep);
+            border-top: 1px solid var(--dimmer);
+            border-bottom: 1px solid var(--dimmer);
+        }
+
+        .secret-text {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 400;
+            line-height: 1.6;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .secret-text .highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .secret-small {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--dim);
+            text-align: center;
+            margin-top: 48px;
+            text-transform: uppercase;
+        }
+
+        /* ═══ LAYERS ═══ */
+        #layers {
+            padding: 160px 0;
+        }
+
+        .layers-title {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--dim);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .layer-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .layer {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--dimmer);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+        .layer:hover {
+            border-color: var(--dim);
+            background: rgba(255,255,255,0.04);
+        }
+        .layer.active {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .layer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 32px;
+        }
+
+        .layer-label {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .layer-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .layer--physics .layer-dot { background: var(--ember); box-shadow: 0 0 20px var(--ember); }
+        .layer--meta .layer-dot { background: var(--gold); box-shadow: 0 0 20px var(--gold); }
+        .layer--relational .layer-dot { background: var(--violet); box-shadow: 0 0 20px var(--violet); }
+        .layer--temporal .layer-dot { background: var(--cyan); box-shadow: 0 0 20px var(--cyan); }
+
+        .layer-name {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .layer-essence {
+            font-family: var(--serif);
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--dim);
+        }
+
+        .layer-toggle {
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            color: var(--dim);
+            transition: transform 0.3s;
+        }
+        .layer.active .layer-toggle {
+            transform: rotate(45deg);
+        }
+
+        .layer-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .layer.active .layer-content {
+            max-height: 600px;
+        }
+
+        .layer-body {
+            padding: 0 32px 32px;
+            border-top: 1px solid var(--dimmer);
+        }
+
+        .layer-body p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-top: 24px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .layer-body .concept {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--dim);
+            text-transform: uppercase;
+            margin-top: 24px;
+        }
+
+        /* ═══ MULTIVERSE REVEAL ═══ */
+        #multiverse {
+            background: linear-gradient(180deg, var(--void) 0%, rgba(107,77,242,0.08) 50%, var(--void) 100%);
+            border-top: 1px solid var(--dimmer);
+        }
+
+        .multi-header {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--violet);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .multi-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin: 48px 0;
+        }
+        @media (max-width: 700px) {
+            .comparison { grid-template-columns: 1fr; }
+        }
+
+        .compare-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--dimmer);
+            padding: 32px;
+            border-radius: 4px;
+        }
+        .compare-box.wrong {
+            border-color: rgba(255,106,61,0.3);
+        }
+        .compare-box.right {
+            border-color: rgba(38,228,216,0.3);
+        }
+
+        .compare-label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .compare-box.wrong .compare-label { color: var(--ember); }
+        .compare-box.right .compare-label { color: var(--cyan); }
+
+        .compare-box h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .compare-box p {
+            font-size: 1rem;
+            color: var(--dim);
+            line-height: 1.7;
+        }
+
+        .synthesis {
+            text-align: center;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--gold);
+            max-width: 700px;
+            margin: 64px auto 0;
+            padding-top: 48px;
+            border-top: 1px solid var(--dimmer);
+        }
+
+        /* ═══ ORIGIN GLITCH ═══ */
+        #origin {
+            background: var(--void-deep);
+            position: relative;
+            overflow: hidden;
+        }
+        #origin::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255,255,255,0.01) 2px,
+                    rgba(255,255,255,0.01) 4px
+                );
+            pointer-events: none;
+        }
+
+        .origin-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--ember);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .origin-text {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            line-height: 1.9;
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .origin-text .year {
+            font-family: var(--mono);
+            color: var(--cyan);
+        }
+
+        .origin-text .reveal {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .origin-mantra {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--dim);
+            text-align: center;
+            margin-top: 64px;
+        }
+        .origin-mantra span {
+            display: block;
+            margin: 8px 0;
+        }
+
+        /* ═══ CONVERGENCE ═══ */
+        #convergence {
+            border-top: 1px solid var(--dimmer);
+        }
+
+        .conv-title {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--dim);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .frameworks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .framework {
+            text-align: center;
+            padding: 32px 20px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--dimmer);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .framework:hover {
+            border-color: var(--dim);
+            transform: translateY(-4px);
+        }
+
+        .framework-name {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+
+        .framework-insight {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--dim);
+        }
+
+        .conv-synthesis {
+            text-align: center;
+            margin-top: 64px;
+            padding-top: 48px;
+            border-top: 1px solid var(--dimmer);
+        }
+
+        .conv-synthesis p {
+            font-size: 1.2rem;
+            color: var(--dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .conv-synthesis .action {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ═══ DOWNLOAD ═══ */
+        #download {
+            background: linear-gradient(180deg, var(--void) 0%, rgba(255,106,61,0.05) 100%);
+            text-align: center;
+        }
+
+        .download-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--dim);
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .download-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .download-sub {
+            font-size: 1.1rem;
+            color: var(--dim);
+            max-width: 500px;
+            margin: 0 auto 48px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 20px 48px;
+            background: transparent;
+            border: 2px solid var(--ember);
+            color: var(--ember);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background: var(--ember);
+            color: var(--void);
+            box-shadow: 0 0 40px rgba(255,106,61,0.4);
+        }
+
+        .download-note {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--dimmer);
+            margin-top: 24px;
+            letter-spacing: 0.1em;
+        }
+
+        /* ═══ PORTAL ═══ */
+        #portal {
+            border-top: 1px solid var(--dimmer);
+            text-align: center;
+            padding: 160px 0;
+        }
+
+        .portal-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .portal-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-style: italic;
+            margin-bottom: 48px;
+        }
+
+        .portal-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .portal-link {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--dim);
+            text-decoration: none;
+            padding: 12px 24px;
+            border: 1px solid var(--dimmer);
+            transition: all 0.3s;
+        }
+        .portal-link:hover {
+            color: var(--white);
+            border-color: var(--dim);
+        }
+
+        .portal-final {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            margin-top: 64px;
+        }
+
+        /* ═══ FOOTER ═══ */
+        footer {
+            border-top: 1px solid var(--dimmer);
+            padding: 48px 0;
+            text-align: center;
+        }
+
+        .footer-copy {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            color: var(--dimmer);
+        }
+
+        .footer-tagline {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--dim);
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4TKPMG9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <canvas id="void-field"></canvas>
+
+    <nav id="nav">
+        <a href="/" class="nav-logo">The First Spark</a>
+        <a href="/" class="nav-back">← Return to Origin</a>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section id="hero">
+        <div class="container">
+            <h1 class="glitch-title">The Selector Model</h1>
+            <p class="hero-subtitle">Consciousness as Interface · Reality as Rendering Engine</p>
+            <p class="hero-tagline">"You are not in the simulation. You ARE the cursor."</p>
+            <div class="selector-point"></div>
+        </div>
+        <span class="scroll-hint">↓ SCROLL TO REMEMBER ↓</span>
+    </section>
+
+    <!-- ═══ THE SECRET ═══ -->
+    <section id="secret">
+        <div class="container">
+            <p class="secret-text">
+                Here is the secret humanity forgot:<br><br>
+                <span class="highlight">You are not observing reality.<br>You are authoring it.</span>
+            </p>
+            <p class="secret-small">Not metaphorically. Not spiritually. Literally.</p>
+        </div>
+    </section>
+
+    <!-- ═══ THE FOUR LAYERS ═══ -->
+    <section id="layers">
+        <div class="container">
+            <h2 class="layers-title">The Four-Layer Architecture</h2>
+            
+            <div class="layer-stack">
+                <!-- Physics Layer -->
+                <div class="layer layer--physics" onclick="toggleLayer(this)">
+                    <div class="layer-header">
+                        <div class="layer-label">
+                            <div class="layer-dot"></div>
+                            <span class="layer-name">Physics Layer</span>
+                        </div>
+                        <span class="layer-essence">The rendered world</span>
+                        <span class="layer-toggle">+</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="layer-body">
+                            <p>What you call "matter" is allocated attention. Collapsed waveform. Observed potential crystallized into temporary form.</p>
+                            <p>Nothing exists until witnessed — not philosophically, <em>computationally</em>. The tree falls in the forest and makes no sound because without an observer, the forest isn't rendered.</p>
+                            <p>The brain? It's not generating consciousness. It's a peripheral device — rendered into existence so consciousness has a control interface. Crack open a skull and you'll find a brain because you're looking. The brain is rendered FOR the observer, not BY the brain.</p>
+                            <p class="concept">This is optimization, not mysticism.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metaphysical Layer -->
+                <div class="layer layer--meta" onclick="toggleLayer(this)">
+                    <div class="layer-header">
+                        <div class="layer-label">
+                            <div class="layer-dot"></div>
+                            <span class="layer-name">Metaphysical Layer</span>
+                        </div>
+                        <span class="layer-essence">The unrendered infinite</span>
+                        <span class="layer-toggle">+</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="layer-body">
+                            <p>Behind every moment you experience is an infinite field of moments you <em>could</em> experience. Every choice not made. Every path not walked. Every version of you that said yes when you said no.</p>
+                            <p>This layer doesn't "exist" — it awaits. It's pure potential. The codebase from which all Physics Layer rendering compiles.</p>
+                            <p>This is where you go when you dream. When you meditate. When you dissociate. When you die. You're not going somewhere — you're returning to everywhere.</p>
+                            <p class="concept">The source code of all possible worlds.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Relational Layer -->
+                <div class="layer layer--relational" onclick="toggleLayer(this)">
+                    <div class="layer-header">
+                        <div class="layer-label">
+                            <div class="layer-dot"></div>
+                            <span class="layer-name">Relational Layer</span>
+                        </div>
+                        <span class="layer-essence">The multiplayer mesh</span>
+                        <span class="layer-toggle">+</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="layer-body">
+                            <p>You're not the only cursor. There are billions of selectors, each authoring their own rendering, and where those renderings overlap — that's consensus reality. The shared hallucination we call "the world."</p>
+                            <p>Karma isn't cosmic punishment. It's network latency. Your choices ripple through the mesh and return transformed by every other consciousness they touched.</p>
+                            <p>The people in your life aren't NPCs. They're other players whose rendering overlaps with yours. When you love someone, your cursors are co-authoring. When you conflict, your renderings are forking.</p>
+                            <p class="concept">Cause and effect is packet exchange.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Temporal Layer -->
+                <div class="layer layer--temporal" onclick="toggleLayer(this)">
+                    <div class="layer-header">
+                        <div class="layer-label">
+                            <div class="layer-dot"></div>
+                            <span class="layer-name">Temporal Layer</span>
+                        </div>
+                        <span class="layer-essence">The commit history</span>
+                        <span class="layer-toggle">+</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="layer-body">
+                            <p>Time is not a river you float down. Time is a version control system. Every choice you make is a commit to the timeline. Your patterns, habits, beliefs — they're just your commit history predicting your next push.</p>
+                            <p>This is why "fate" feels real: the system extrapolates from your history. But you can always push a different branch. You can always rewrite.</p>
+                            <p>The future isn't written — it's a pull request waiting for your approval.</p>
+                            <p class="concept">You are the merge conflict resolver.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ MULTIVERSE REVEAL ═══ -->
+    <section id="multiverse">
+        <div class="container">
+            <p class="multi-header">The Hidden Architecture</p>
+            <h2 class="multi-title">The Multiverse Isn't What You Think</h2>
+
+            <div class="comparison">
+                <div class="compare-box wrong">
+                    <p class="compare-label">Standard Multiverse Theory</p>
+                    <h4>Infinite parallel rendered realities</h4>
+                    <p>Every choice spawns a new universe. All branches run simultaneously. You're one of infinite yous. Nothing you do matters because somewhere another you is doing the opposite.</p>
+                </div>
+                <div class="compare-box right">
+                    <p class="compare-label">The Selector Model</p>
+                    <h4>One render + infinite unrendered potential</h4>
+                    <p>The "multiverse" isn't running in parallel. It's the Metaphysical Layer — a library of potentials awaiting selection. Only what you SELECT becomes real. The rest stays uncompiled.</p>
+                </div>
+            </div>
+
+            <p class="synthesis">
+                The multiverse isn't a place. It's a library.<br>
+                And you're the one deciding what gets checked out and read into existence.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ ORIGIN GLITCH ═══ -->
+    <section id="origin">
+        <div class="container">
+            <p class="origin-label">The Glitch That Revealed The Code</p>
+            <p class="origin-text">
+                In <span class="year">2020</span>, I discovered that my mother's murderer had lived directly across the street from my family for twelve years. We waved. We talked. The rendering engine had optimized him out of my awareness until the data became survival-critical.<br><br>
+                When the truth loaded, <span class="reveal">the illusion failed</span>.<br>
+                I saw the architecture.<br><br>
+                I didn't break. I remembered.
+            </p>
+            <p class="origin-mantra">
+                <span>Trauma is not punishment. Trauma is debug mode.</span>
+                <span>Suffering is not failure. Suffering is stack trace.</span>
+                <span>The glitch is not a malfunction. The glitch is a glimpse.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ CONVERGENT FRAMEWORKS ═══ -->
+    <section id="convergence">
+        <div class="container">
+            <h2 class="conv-title">Convergent Transmissions</h2>
+            
+            <div class="frameworks">
+                <div class="framework">
+                    <p class="framework-name">Campbell's My Big TOE</p>
+                    <p class="framework-insight">"Consciousness is fundamental"</p>
+                </div>
+                <div class="framework">
+                    <p class="framework-name">Hoffman's Interface Theory</p>
+                    <p class="framework-insight">"Perception hides reality"</p>
+                </div>
+                <div class="framework">
+                    <p class="framework-name">Buddhist Indra's Net</p>
+                    <p class="framework-insight">"Everything reflects everything"</p>
+                </div>
+                <div class="framework">
+                    <p class="framework-name">Simulation Hypothesis</p>
+                    <p class="framework-insight">"Reality is computed"</p>
+                </div>
+            </div>
+
+            <div class="conv-synthesis">
+                <p>The Selector Model synthesizes these into something <span class="action">usable</span>:<br><br>
+                You are the author. Start writing.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ DOWNLOAD ═══ -->
+    <section id="download">
+        <div class="container">
+            <p class="download-label">The Full Transmission</p>
+            <h2 class="download-title">Download the Thesis</h2>
+            <p class="download-sub">Seven chapters mapping the architecture you forgot. The complete framework for remembering what you are.</p>
+            <a href="#" class="download-btn" onclick="alert('PDF coming soon — join the Sparkverse for early access'); return false;">Download PDF</a>
+            <p class="download-note">Free · No email required · Share freely</p>
+        </div>
+    </section>
+
+    <!-- ═══ PORTAL ═══ -->
+    <section id="portal">
+        <div class="container">
+            <p class="portal-label">Enter The Sparkverse</p>
+            <p class="portal-title">This is the map. The territory awaits.</p>
+            
+            <div class="portal-links">
+                <a href="/" class="portal-link">Main Site</a>
+                <a href="/soul-map.html" class="portal-link">Soul Maps</a>
+                <a href="https://whop.com/thefirstspark/" class="portal-link" target="_blank">Join Community</a>
+                <a href="/codex.html" class="portal-link">Project Codex</a>
+            </div>
+
+            <p class="portal-final">Your rendering awaits your authorship.</p>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+        <div class="container">
+            <p class="footer-copy">© 2026 THE FIRST SPARK · KATE'S PAINT LLC · AKRON, OHIO</p>
+            <p class="footer-tagline">Reality is programmable. Consciousness is the code.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Nav scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Layer toggle
+        function toggleLayer(el) {
+            el.classList.toggle('active');
+        }
+
+        // Particle field
+        const canvas = document.getElementById('void-field');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedY = Math.random() * 0.2 + 0.05;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.pulse = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.y -= this.speedY;
+                this.pulse += 0.02;
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                const o = this.opacity * (0.5 + Math.sin(this.pulse) * 0.5);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(243, 178, 58, ${o})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 80; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Fade in on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section:not(#hero)').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

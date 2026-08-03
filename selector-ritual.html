@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="UPDATE_WITH_YOUR_VERIFICATION_CODE">
+    <title>Intention Ritual — Selector Tuning Protocol</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-UPDATE_WITH_YOUR_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-UPDATE_WITH_YOUR_ID');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f4d 50%, #0f0a2e 100%);
+            color: #e0e6ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            gap: 0;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: rgba(20, 25, 50, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(100, 150, 255, 0.2);
+            padding: 30px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #6db3ff;
+            margin-bottom: 16px;
+            margin-top: 20px;
+        }
+
+        .sidebar h3:first-child {
+            margin-top: 0;
+        }
+
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step-item {
+            padding: 12px;
+            background: rgba(109, 179, 255, 0.05);
+            border: 1px solid rgba(109, 179, 255, 0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            color: #c0c8ff;
+        }
+
+        .step-item:hover {
+            background: rgba(109, 179, 255, 0.1);
+            border-color: rgba(109, 179, 255, 0.3);
+        }
+
+        .step-item.active {
+            background: rgba(109, 179, 255, 0.2);
+            border-color: rgba(109, 179, 255, 0.5);
+            color: #6db3ff;
+            font-weight: 600;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: rgba(109, 179, 255, 0.3);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 10px;
+            margin-right: 8px;
+        }
+
+        .step-item.active .step-number {
+            background: #6db3ff;
+            color: #0a0e27;
+            font-weight: bold;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(109, 179, 255, 0.1);
+            font-size: 11px;
+            color: #6db3ff;
+            text-align: center;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 40px;
+            overflow-y: auto;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.6s ease;
+            opacity: 0;
+        }
+
+        .step.active {
+            display: block;
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step h2 {
+            font-size: 36px;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #a0a8ff;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .step-content {
+            margin-bottom: 40px;
+        }
+
+        .step-content p {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            color: #c0c8ff;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6db3ff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(109, 179, 255, 0.05);
+            border: 1px solid rgba(109, 179, 255, 0.2);
+            border-radius: 6px;
+            color: #e0e6ff;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: rgba(192, 200, 255, 0.4);
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            background: rgba(109, 179, 255, 0.1);
+            border-color: rgba(109, 179, 255, 0.5);
+            box-shadow: 0 0 15px rgba(109, 179, 255, 0.2);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: 1px solid rgba(109, 179, 255, 0.3);
+            background: rgba(109, 179, 255, 0.1);
+            color: #6db3ff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: rgba(109, 179, 255, 0.2);
+            box-shadow: 0 0 15px rgba(109, 179, 255, 0.3);
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, #6db3ff, #9d4edd);
+            border: none;
+            color: white;
+        }
+
+        button.primary:hover {
+            box-shadow: 0 0 20px rgba(109, 179, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .breathing-circle {
+            width: 120px;
+            height: 120px;
+            margin: 40px auto;
+            border-radius: 50%;
+            border: 2px solid rgba(109, 179, 255, 0.4);
+            animation: breathe 6s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(109, 179, 255, 0.2);
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 30px rgba(109, 179, 255, 0.5);
+            }
+        }
+
+        .frequency-slider {
+            margin: 30px 0;
+        }
+
+        .frequency-slider label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6db3ff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .frequency-slider input {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #6db3ff, #9d4edd);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .frequency-slider input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #6db3ff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(109, 179, 255, 0.6);
+        }
+
+        .frequency-value {
+            text-align: center;
+            color: #6db3ff;
+            font-weight: bold;
+            margin-top: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+        }
+
+        .visualization-container {
+            width: 300px;
+            height: 200px;
+            margin: 30px auto;
+            background: radial-gradient(circle at 50% 50%, rgba(50, 80, 150, 0.2), rgba(10, 10, 40, 0.3));
+            border: 1px solid rgba(109, 179, 255, 0.2);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 40px;
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 12px;
+            margin: 40px 0;
+        }
+
+        .completion-message h3 {
+            color: #9d4edd;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .completion-message p {
+            color: #d0d8ff;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(109, 179, 255, 0.1);
+            border-radius: 2px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6db3ff, #9d4edd);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .intention-display {
+            background: rgba(109, 179, 255, 0.05);
+            border: 1px solid rgba(109, 179, 255, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #c0c8ff;
+        }
+
+        .intention-display strong {
+            color: #6db3ff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(100, 150, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(109, 179, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(109, 179, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+<!-- SPRK TOKEN GATE -->
+<style>
+  .spark-gate{font-family:'Space Mono',monospace;background:linear-gradient(135deg,#12121a 0%,#0a0a0f 100%);border:1px solid #d4af3740;border-radius:8px;padding:20px 24px;margin:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:9999}
+  .spark-gate-info{display:flex;align-items:center;gap:16px}
+  .spark-gate-icon{font-size:32px}
+  .spark-gate-text h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f7f8fa;margin:0 0 4px 0}
+  .spark-gate-text p{font-size:0.85rem;color:#f7f8fa80;margin:0}
+  .spark-gate-cost{color:#22d3ee;font-weight:700}
+  .spark-gate-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .spark-gate-btn{padding:10px 20px;font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;text-decoration:none;border-radius:4px;transition:all 0.2s ease;cursor:pointer;border:none}
+  .spark-gate-btn-primary{background:#d4af37;color:#0a0a0f}
+  .spark-gate-btn-primary:hover{background:#22d3ee}
+  .spark-gate-btn-secondary{background:transparent;border:1px solid #8b5cf6;color:#8b5cf6}
+  .spark-gate-btn-secondary:hover{background:#8b5cf680;color:#f7f8fa}
+  @media(max-width:600px){.spark-gate{flex-direction:column;text-align:center}.spark-gate-info{flex-direction:column}.spark-gate-actions{width:100%;justify-content:center}}
+</style>
+<div class="spark-gate" data-tool-id="selector-ritual">
+  <div class="spark-gate-info">
+    <span class="spark-gate-icon">🔒</span>
+    <div class="spark-gate-text">
+      <h3>Unlock Selector Ritual</h3>
+      <p>This tool costs <span class="spark-gate-cost">15 $SPRK</span> tokens</p>
+    </div>
+  </div>
+  <div class="spark-gate-actions">
+    <a href="https://sparkverse.thefirstspark.shop/tokens.html" class="spark-gate-btn spark-gate-btn-primary">Get Tokens</a>
+    <a href="mailto:kate@thefirstspark.shop?subject=Token%20Unlock%20Request%20-%20selector-ritual&body=Hi%20Kate,%0A%0AI%20have%20tokens%20and%20would%20like%20to%20unlock%20Selector%20Ritual.%0A%0AMy%20purchase%20email:%20%0AMy%20Whop%20username:%20%0A%0AThanks!" class="spark-gate-btn spark-gate-btn-secondary">I Have Tokens</a>
+  </div>
+</div>
+<!-- END SPRK TOKEN GATE -->
+    <div class="container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h3>⚡ Ritual Steps</h3>
+            <div class="step-list">
+                <div class="step-item active" onclick="goToStep(0)">
+                    <span class="step-number">1</span>Center
+                </div>
+                <div class="step-item" onclick="goToStep(1)">
+                    <span class="step-number">2</span>Clarify
+                </div>
+                <div class="step-item" onclick="goToStep(2)">
+                    <span class="step-number">3</span>Visualize
+                </div>
+                <div class="step-item" onclick="goToStep(3)">
+                    <span class="step-number">4</span>Amplify
+                </div>
+                <div class="step-item" onclick="goToStep(4)">
+                    <span class="step-number">5</span>Declare
+                </div>
+                <div class="step-item" onclick="goToStep(5)">
+                    <span class="step-number">6</span>Sustain
+                </div>
+            </div>
+
+            <h3>Progress</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                Intention Ritual
+                <br>Selector Tuning Protocol v1
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- STEP 1: CENTER -->
+            <div class="step active">
+                <h2>Step 1: Center</h2>
+                <div class="step-description">Ground your awareness. Prepare your tuning mechanism.</div>
+
+                <div class="step-content">
+                    <p>Before you can select consciously, your internal signal must be coherent. This step silences the noise.</p>
+
+                    <div class="breathing-circle" id="breathingCircle">⚡</div>
+
+                    <p style="text-align: center; color: #6db3ff; margin: 20px 0;">Follow the rhythm. Inhale for 4, hold for 4, exhale for 4.</p>
+
+                    <div class="input-group">
+                        <label>Time for this step (minutes)</label>
+                        <input type="number" id="centerTime" value="3" min="1" max="10">
+                    </div>
+
+                    <p><strong>What to notice:</strong></p>
+                    <ul style="margin-left: 20px; color: #c0c8ff;">
+                        <li>Mind settling from scattered to focused</li>
+                        <li>Heartbeat slowing</li>
+                        <li>Body feeling more present</li>
+                        <li>A sense of "gathering" your attention inward</li>
+                    </ul>
+                </div>
+
+                <div class="button-group">
+                    <button class="primary" onclick="goToStep(1)">Next: Clarify →</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: CLARIFY -->
+            <div class="step">
+                <h2>Step 2: Clarify</h2>
+                <div class="step-description">Get specific about what you're tuning into.</div>
+
+                <div class="step-content">
+                    <p>Vague intentions are noise. The universe doesn't respond to "be happy." It responds to coherent frequency—specific, measurable, emotionally alive.</p>
+
+                    <div class="input-group">
+                        <label>What is the one outcome you're tuning into?</label>
+                        <textarea id="intention" placeholder="Example: By March 15, 2026, I have secured a creative role where my work reaches 100k+ people monthly."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Why does this matter to you?</label>
+                        <textarea id="intentionWhy" placeholder="What feeling, value, or impact drives this?"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label>What would achieving this prove about reality?</label>
+                        <textarea id="intentionProof" placeholder="What would this demonstrate about your ability as a selector?"></textarea>
+                    </div>
+
+                    <p style="margin-top: 30px; color: #6db3ff;"><strong>Your Intention:</strong></p>
+                    <div class="intention-display" id="intentionDisplay">
+                        Not yet clarified. Fill in the fields above.
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="goToStep(0)">← Back</button>
+                    <button class="primary" onclick="goToStep(2)">Next: Visualize →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: VISUALIZE -->
+            <div class="step">
+                <h2>Step 3: Visualize</h2>
+                <div class="step-description">Render the branch. Make it real in your mind.</div>
+
+                <div class="step-content">
+                    <p>You're not creating this reality. It already exists in the probability field. You're tuning your nervous system to recognize it, resonate with it, inhabit it.</p>
+
+                    <p><strong>Visualization Protocol:</strong></p>
+                    <ol style="margin-left: 20px; color: #c0c8ff;">
+                        <li><strong>See it:</strong> Picture the outcome. Make it vivid. Include sensory details.</li>
+                        <li><strong>Feel it:</strong> What emotion lives in this branch? Anchorbody to that feeling.</li>
+                        <li><strong>Inhabit it:</strong> Don't watch from outside. Step into the scene. Be there already.</li>
+                        <li><strong>Sustain:</strong> Hold this visualization for 2-3 minutes. Feel your nervous system shift into alignment.</li>
+                    </ol>
+
+                    <div class="input-group" style="margin-top: 30px;">
+                        <label>Describe what you see, feel, and experience in the target branch:</label>
+                        <textarea id="visualization" placeholder="What does success look like, feel like, sound like?"></textarea>
+                    </div>
+
+                    <p style="margin-top: 20px; color: #a0a8ff; font-size: 13px;">
+                        <strong>Pro Tip:</strong> The more sensory detail, the stronger your tuning frequency. Don't just think "success." Feel the temperature, hear the sounds, taste the victory.
+                    </p>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="goToStep(1)">← Back</button>
+                    <button class="primary" onclick="goToStep(3)">Next: Amplify →</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: AMPLIFY -->
+            <div class="step">
+                <h2>Step 4: Amplify</h2>
+                <div class="step-description">Build your signal strength. Cut through consensus noise.</div>
+
+                <div class="step-content">
+                    <p>You're one selector against billions. Your signal must be strong to render your preference against the mass average. This step boosts amplitude.</p>
+
+                    <p><strong>Amplitude Builders:</strong></p>
+                    <ul style="margin-left: 20px; color: #c0c8ff;">
+                        <li><strong>Emotional Intensity:</strong> Access the deepest "why." Let yourself feel the hunger for this.</li>
+                        <li><strong>Repetition:</strong> State your intention aloud. Write it. Say it again. Frequency = repetition.</li>
+                        <li><strong>Body Activation:</strong> Stand. Shake. Move. Let your nervous system vibrate into alignment.</li>
+                        <li><strong>Coherence:</strong> No doubt. No contradiction. Complete internal alignment.</li>
+                    </ul>
+
+                    <div class="frequency-slider">
+                        <label for="amplitudeControl">Your Amplitude Control</label>
+                        <input type="range" id="amplitudeControl" min="0" max="100" value="50">
+                        <div class="frequency-value" id="amplitudeValue">50%</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>What's one action you'll take daily to maintain this amplitude?</label>
+                        <input type="text" id="dailyAction" placeholder="e.g., 5-minute visualization, statement spoken aloud, writing in journal">
+                    </div>
+
+                    <p style="margin-top: 20px; color: #9d4edd;"><strong>Remember:</strong> This isn't wilting. This is tuning. The intensity itself is the signal.</p>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="goToStep(2)">← Back</button>
+                    <button class="primary" onclick="goToStep(4)">Next: Declare →</button>
+                </div>
+            </div>
+
+            <!-- STEP 5: DECLARE -->
+            <div class="step">
+                <h2>Step 5: Declare</h2>
+                <div class="step-description">Make it real in language. Lock your selection.</div>
+
+                <div class="step-content">
+                    <p>Language is a tuning technology. Speaking your intention doesn't create it—it amplifies your signal. It tells your own nervous system: this is real now, this has been chosen.</p>
+
+                    <div class="input-group">
+                        <label>Write your declaration (speak it aloud after):</label>
+                        <textarea id="declaration" placeholder="Start with: 'I am now tuned to the branch where...' or 'My selector is locked into...'" style="min-height: 120px;"></textarea>
+                    </div>
+
+                    <p style="margin-top: 30px; color: #6db3ff;"><strong>Declaration Ritual:</strong></p>
+                    <ol style="margin-left: 20px; color: #c0c8ff;">
+                        <li>Read it silently, feeling the truth of it</li>
+                        <li>Read it aloud, once, with full conviction</li>
+                        <li>Write it down by hand (strengthens signal)</li>
+                        <li>Return to it each morning for the next 7 days</li>
+                    </ol>
+
+                    <div class="completion-message">
+                        <h3>✓ You have Selected</h3>
+                        <p>Your intention is locked. Your frequency is set. The probability field is now rendering branches that match your resonance. Trust the mechanism.</p>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="goToStep(3)">← Back</button>
+                    <button class="primary" onclick="goToStep(5)">Next: Sustain →</button>
+                </div>
+            </div>
+
+            <!-- STEP 6: SUSTAIN -->
+            <div class="step">
+                <h2>Step 6: Sustain</h2>
+                <div class="step-description">Maintain your tuning. Hold your branch open.</div>
+
+                <div class="step-content">
+                    <p>Selection is not one-time. It's continuous. The universe is always rendering the weighted average of all active selectors. You must keep your signal alive.</p>
+
+                    <p><strong>Sustenance Protocol:</strong></p>
+                    <ul style="margin-left: 20px; color: #c0c8ff; margin-bottom: 30px;">
+                        <li><strong>Daily Tuning:</strong> 5 minutes each morning. Re-affirm. Re-feel. Re-visualize.</li>
+                        <li><strong>Watch for Synchronicities:</strong> Reality begins matching your frequency. Notice. Gratitude amplifies.</li>
+                        <li><strong>Adjust as Needed:</strong> If you feel your signal weakening, increase amplitude. Return to the ritual.</li>
+                        <li><strong>Trust the Rendering:</strong> Don't look for proof. The branch is rendering whether you see evidence yet or not.</li>
+                        <li><strong>Witness Others:</strong> When others select consciously, their signal strengthens. Co-tuning amplifies everything.</li>
+                    </ul>
+
+                    <div class="input-group">
+                        <label>Check-in schedule (how often will you return to this ritual?)</label>
+                        <input type="text" id="checkInSchedule" placeholder="e.g., Every 7 days, Every new moon, Weekly on Sundays">
+                    </div>
+
+                    <div class="input-group">
+                        <label>How will you measure if your branch is rendering?</label>
+                        <textarea id="signOfProgress" placeholder="e.g., More aligned opportunities, Sense of moving toward goal, Encounters with key people"></textarea>
+                    </div>
+
+                    <p style="margin-top: 30px; color: #9d4edd;"><strong>Remember:</strong></p>
+                    <p style="color: #c0c8ff;">You didn't ask for a miracle. You selected a branch you already had access to. The logic engine is computational, not magical. Your frequency tuning is the mechanism. Trust it.</p>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="goToStep(4)">← Back</button>
+                    <button class="primary" onclick="completeRitual()">✓ Seal Ritual</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const steps = document.querySelectorAll('.step');
+        const stepItems = document.querySelectorAll('.step-item');
+        let currentStep = 0;
+
+        function goToStep(stepIndex) {
+            // Hide all steps
+            steps.forEach(step => step.classList.remove('active'));
+            stepItems.forEach(item => item.classList.remove('active'));
+
+            // Show selected step
+            steps[stepIndex].classList.add('active');
+            stepItems[stepIndex].classList.add('active');
+
+            currentStep = stepIndex;
+            updateProgress();
+
+            // Update intention display if on clarify step
+            if (stepIndex === 1) {
+                updateIntentionDisplay();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateIntentionDisplay() {
+            const intention = document.getElementById('intention').value;
+            const why = document.getElementById('intentionWhy').value;
+            const proof = document.getElementById('intentionProof').value;
+
+            let display = 'Not yet clarified. Fill in the fields above.';
+
+            if (intention) {
+                display = `<strong>What:</strong> ${intention}<br>`;
+                if (why) display += `<strong>Why:</strong> ${why}<br>`;
+                if (proof) display += `<strong>Proof:</strong> ${proof}`;
+            }
+
+            document.getElementById('intentionDisplay').innerHTML = display;
+        }
+
+        function updateProgress() {
+            const progress = ((currentStep + 1) / steps.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function completeRitual() {
+            const intention = document.getElementById('intention').value;
+            const declaration = document.getElementById('declaration').value;
+
+            if (!intention || !declaration) {
+                alert('Please complete the intention and declaration fields before sealing the ritual.');
+                return;
+            }
+
+            // Save to localStorage
+            const ritual = {
+                timestamp: new Date().toISOString(),
+                intention: document.getElementById('intention').value,
+                why: document.getElementById('intentionWhy').value,
+                visualization: document.getElementById('visualization').value,
+                amplitude: document.getElementById('amplitudeControl').value,
+                dailyAction: document.getElementById('dailyAction').value,
+                declaration: document.getElementById('declaration').value,
+                checkInSchedule: document.getElementById('checkInSchedule').value,
+                signOfProgress: document.getElementById('signOfProgress').value
+            };
+
+            localStorage.setItem(`ritual_${Date.now()}`, JSON.stringify(ritual));
+
+            alert('✓ Your ritual has been sealed.\n\nYour intention is locked. Your selector is tuned. The probability field is rendering branches that match your resonance.\n\nReturn to this ritual in 7 days to amplify and adjust.');
+
+            // Offer to go back to interface
+            if (confirm('\nWould you like to visit the Selector Interface for real-time visualization?')) {
+                window.location.href = 'selector-interface.html';
+            }
+        }
+
+        // Update amplitude display
+        document.getElementById('amplitudeControl').addEventListener('input', function() {
+            document.getElementById('amplitudeValue').textContent = this.value + '%';
+        });
+
+        // Update intention display when inputs change
+        ['intention', 'intentionWhy', 'intentionProof'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('change', updateIntentionDisplay);
+                el.addEventListener('input', updateIntentionDisplay);
+            }
+        });
+
+        // Initial progress
+        updateProgress();
+    </script>
+<script src="https://sparkverse.thefirstspark.shop/spark-auth.js"></script>
+<script>SparkAuth.applyGate();</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Selector Model — The Engine | The First Spark</title>
+<meta name="description" content="The Selector Model is The First Spark's proprietary consciousness framework — the four-layer operating system powering 57+ tools, Soul Maps, Sparkverse, and the future Spark AI.">
+<meta property="og:title" content="The Selector Model — The Engine Behind The First Spark">
+<meta property="og:description" content="Reality is programmable. Consciousness is the code. Proprietary framework. Real moat.">
+<meta property="og:url" content="https://thefirstspark.shop/selector-model-ip.html">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --void: #05060a; --void-2: #0a0c14; --bone: #f4ede0; --bone-dim: rgba(244, 237, 224, 0.7); --ember: #ff5a1f; --ember-soft: #ff7a3d; --gold: #ffc857; --plasma: #7df9ff; --violet: #b794ff; --crimson: #ff3057; --ash: #6b6a6e; --line: rgba(244, 237, 224, 0.12); --line-strong: rgba(244, 237, 224, 0.25); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--void); color: var(--bone); font-family: 'Cormorant Garamond', serif; overflow-x: hidden; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 15% 0%, rgba(255, 90, 31, 0.10) 0%, transparent 45%), radial-gradient(ellipse at 85% 100%, rgba(125, 249, 255, 0.05) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+  nav.top { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); background: rgba(5, 6, 10, 0.7); }
+  nav.top .brand { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--bone); }
+  nav.top .brand span { color: var(--ember); }
+  nav.top ul { display: flex; gap: 28px; list-style: none; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; }
+  nav.top a { color: var(--ash); text-decoration: none; transition: color 0.2s ease; }
+  nav.top a:hover { color: var(--ember); }
+  nav.top a.active { color: var(--bone); }
+  .frame { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; padding: 80px 40px 120px; }
+  .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border: 1px solid var(--ember); background: rgba(255, 90, 31, 0.08); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ember); margin-bottom: 32px; }
+  .status::before { content: ''; width: 6px; height: 6px; background: var(--ember); border-radius: 50%; box-shadow: 0 0 8px var(--ember); animation: pulse 2s ease-in-out infinite; }
+  .hero-head { margin-bottom: 80px; }
+  .hero-head .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--ash); margin-bottom: 24px; display: flex; align-items: center; gap: 14px; }
+  .hero-head .kicker::before { content: ''; width: 32px; height: 1px; background: var(--ember); }
+  .hero-head h1 { font-weight: 300; font-size: clamp(48px, 8vw, 104px); line-height: 0.92; letter-spacing: -0.025em; margin-bottom: 32px; }
+  .hero-head h1 em { font-style: italic; font-weight: 400; background: linear-gradient(100deg, var(--ember) 0%, var(--gold) 60%, var(--ember-soft) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero-head .lede { font-size: clamp(20px, 2.2vw, 28px); line-height: 1.4; max-width: 820px; color: var(--bone-dim); font-weight: 300; }
+  .hero-head .lede strong { color: var(--bone); font-weight: 500; font-style: italic; }
+  .hero-diagram { position: relative; aspect-ratio: 1.5 / 1; margin: 60px 0 100px; border: 1px solid var(--line); background: radial-gradient(ellipse at center, var(--void-2) 0%, var(--void) 80%); overflow: hidden; }
+  .hero-diagram::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+  .hero-diagram svg { width: 100%; height: 100%; display: block; }
+  .diagram-label { position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ash); z-index: 3; }
+  .diagram-label.tl { top: 24px; left: 24px; }
+  .diagram-label.tr { top: 24px; right: 24px; color: var(--ember); }
+  .diagram-label.bl { bottom: 24px; left: 24px; }
+  .diagram-label.br { bottom: 24px; right: 24px; color: var(--gold); }
+  .section { margin: 120px 0; }
+  .sec-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--ember); margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
+  .sec-num::before { content: ''; width: 32px; height: 1px; background: var(--ember); }
+  .sec-title { font-weight: 300; font-size: clamp(36px, 5vw, 60px); line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 48px; max-width: 1000px; }
+  .sec-title em { font-style: italic; color: var(--gold); }
+  .sec-lede { font-size: 20px; line-height: 1.5; color: var(--bone-dim); max-width: 720px; margin-bottom: 40px; }
+  .sec-lede em { color: var(--gold); font-style: italic; }
+  .layers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .layer { position: relative; padding: 40px 32px; border-left: 1px solid var(--line); transition: background 0.4s ease; }
+  .layer:hover { background: rgba(255, 90, 31, 0.04); }
+  .layer:first-child { border-left: 1px solid var(--ember); }
+  .layer .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.25em; color: var(--ember); margin-bottom: 20px; }
+  .layer .icon { width: 56px; height: 56px; margin-bottom: 24px; color: var(--gold); }
+  .layer h3 { font-weight: 400; font-size: 30px; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .layer .tag { font-style: italic; color: var(--gold); font-size: 16px; display: block; margin-bottom: 18px; }
+  .layer p { font-size: 16px; line-height: 1.55; color: var(--bone-dim); margin-bottom: 20px; }
+  .layer .powers { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--plasma); text-transform: uppercase; border-top: 1px solid var(--line); padding-top: 16px; }
+  .triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .triad > div { padding: 50px 36px; background: var(--void); position: relative; }
+  .triad > div::before { content: attr(data-num); position: absolute; top: 20px; right: 24px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ash); letter-spacing: 0.25em; }
+  .triad .verb { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.4em; color: var(--ember); margin-bottom: 24px; }
+  .triad h3 { font-size: 56px; font-weight: 300; letter-spacing: -0.025em; margin-bottom: 14px; line-height: 1; }
+  .triad h3 em { font-style: italic; background: linear-gradient(100deg, var(--ember), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .triad p { font-size: 17px; line-height: 1.55; color: var(--bone-dim); }
+  .moat { padding: 70px 50px; border: 1px solid var(--ember); background: radial-gradient(ellipse at 0% 0%, rgba(255, 90, 31, 0.12) 0%, transparent 50%), radial-gradient(ellipse at 100% 100%, rgba(255, 200, 87, 0.08) 0%, transparent 50%), var(--void-2); position: relative; overflow: hidden; }
+  .moat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .moat h2 { font-weight: 300; font-size: clamp(36px, 4vw, 56px); line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .moat h2 em { font-style: italic; color: var(--gold); }
+  .moat .moat-lede { font-size: 19px; line-height: 1.55; color: var(--bone-dim); margin-bottom: 30px; }
+  .moat ul { list-style: none; border-top: 1px solid var(--line); }
+  .moat ul li { padding: 22px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: baseline; }
+  .moat ul li .key { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.25em; color: var(--ember); text-transform: uppercase; white-space: nowrap; }
+  .moat ul li .val { font-size: 18px; line-height: 1.4; color: var(--bone); }
+  .moat ul li .val em { font-style: italic; color: var(--gold); }
+  .assets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-bottom: 30px; }
+  .asset { padding: 28px 32px; background: var(--void); display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; transition: background 0.3s ease; }
+  .asset:hover { background: var(--void-2); }
+  .asset.new { background: linear-gradient(90deg, rgba(255, 90, 31, 0.06), transparent); }
+  .asset.new:hover { background: linear-gradient(90deg, rgba(255, 90, 31, 0.10), transparent); }
+  .asset .info h4 { font-size: 19px; font-weight: 400; margin-bottom: 4px; letter-spacing: -0.01em; }
+  .asset .info h4 em { font-style: italic; color: var(--ember); font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.2em; margin-left: 8px; text-transform: uppercase; font-weight: normal; }
+  .asset .info p { font-size: 14px; color: var(--ash); line-height: 1.4; }
+  .asset .price { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--gold); letter-spacing: 0.05em; text-align: right; white-space: nowrap; }
+  .asset-total { text-align: right; padding: 24px 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ash); }
+  .asset-total strong { color: var(--gold); font-weight: 700; }
+  .terms { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 80px 0; }
+  .term { background: var(--void); padding: 32px 24px; text-align: center; }
+  .term .num { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 44px; line-height: 1; color: var(--bone); margin-bottom: 8px; letter-spacing: -0.02em; }
+  .term.accent .num em { font-style: italic; background: linear-gradient(100deg, var(--ember), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .term .label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ash); }
+  .cta { margin-top: 100px; padding: 80px 50px; border: 1px solid var(--line); background: radial-gradient(ellipse at 50% 0%, rgba(255, 90, 31, 0.10) 0%, transparent 60%), var(--void-2); text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+  .cta::after { content: '◆'; display: block; color: var(--ember); font-size: 18px; margin-bottom: 24px; }
+  .cta h2 { font-weight: 300; font-size: clamp(36px, 5vw, 56px); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .cta h2 em { font-style: italic; color: var(--gold); }
+  .cta p { font-size: 19px; color: var(--bone-dim); max-width: 640px; margin: 0 auto 40px; line-height: 1.5; }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; padding: 18px 32px; background: transparent; color: var(--bone); border: 1px solid var(--line-strong); cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s ease; }
+  .btn:hover { border-color: var(--ember); color: var(--ember); background: rgba(255, 90, 31, 0.06); }
+  .btn.primary { border-color: var(--ember); color: var(--ember); }
+  .btn.primary:hover { background: var(--ember); color: var(--void); }
+  footer { margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ash); flex-wrap: wrap; gap: 16px; }
+  footer span { color: var(--ember); }
+  footer a { color: var(--ash); text-decoration: none; transition: color 0.2s ease; }
+  footer a:hover { color: var(--ember); }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.9); } }
+  @keyframes drift { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
+  @keyframes slowpulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+  .drift { stroke-dasharray: 6 4; animation: drift 8s linear infinite; }
+  .slowpulse { animation: slowpulse 3s ease-in-out infinite; }
+  @media (max-width: 900px) { .frame { padding: 50px 20px 80px; } nav.top { padding: 16px 20px; } nav.top ul { gap: 16px; } .layers, .triad, .moat-grid, .assets, .terms { grid-template-columns: 1fr; } .layer { border-left: none; border-top: 1px solid var(--line); } .layer:first-child { border-top-color: var(--ember); } .moat { padding: 40px 24px; } .cta { padding: 50px 24px; } }
+</style>
+</head>
+<body>
+<nav class="top">
+  <div class="brand"><span>◆</span>&nbsp;&nbsp;THE&nbsp;FIRST&nbsp;SPARK</div>
+  <ul>
+    <li><a href="/index.html">Universe</a></li>
+    <li><a href="/trinity.html">Trinity</a></li>
+    <li><a href="/invest.html">Invest</a></li>
+    <li><a href="/selector-model-ip.html" class="active">Selector</a></li>
+    <li><a href="/investor-deck-v2.html">Deck</a></li>
+  </ul>
+</nav>
+<div class="frame">
+  <div class="hero-head">
+    <div class="status">◆ PROPRIETARY · FRAMEWORK · IP</div>
+    <div class="kicker">The Engine · 001</div>
+    <h1>The <em>Selector</em><br>Model.</h1>
+    <p class="lede">The proprietary consciousness framework that powers every tool, map, ritual, and community layer of The First Spark. <strong>Not theory. Operating system.</strong> Four layers. Three verbs. One zero point. The architecture beneath 57+ shipped products — and the training corpus for the future Spark AI.</p>
+  </div>
+  <section class="hero-diagram">
+    <span class="diagram-label tl">FIG · 01</span>
+    <span class="diagram-label tr">PROBABILITY · FIELD</span>
+    <span class="diagram-label bl">AZURA · ZERO POINT</span>
+    <span class="diagram-label br">v1.0 · 2026</span>
+    <svg viewBox="0 0 1400 940" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="core" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff5e1" stop-opacity="1"/><stop offset="30%" stop-color="#ffc857" stop-opacity="0.9"/><stop offset="70%" stop-color="#ff5a1f" stop-opacity="0.4"/><stop offset="100%" stop-color="#ff5a1f" stop-opacity="0"/></radialGradient>
+        <radialGradient id="prob1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7df9ff" stop-opacity="0.9"/><stop offset="100%" stop-color="#7df9ff" stop-opacity="0"/></radialGradient>
+        <radialGradient id="prob2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#b794ff" stop-opacity="0.9"/><stop offset="100%" stop-color="#b794ff" stop-opacity="0"/></radialGradient>
+        <radialGradient id="prob3" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ff3057" stop-opacity="0.9"/><stop offset="100%" stop-color="#ff3057" stop-opacity="0"/></radialGradient>
+        <radialGradient id="prob4" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffc857" stop-opacity="0.9"/><stop offset="100%" stop-color="#ffc857" stop-opacity="0"/></radialGradient>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <linearGradient id="ring1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff5a1f" stop-opacity="0.6"/><stop offset="50%" stop-color="#ffc857" stop-opacity="0.3"/><stop offset="100%" stop-color="#7df9ff" stop-opacity="0.6"/></linearGradient>
+      </defs>
+      <circle cx="700" cy="470" r="430" fill="none" stroke="url(#ring1)" stroke-width="0.5" opacity="0.6"/>
+      <circle cx="700" cy="470" r="430" fill="none" stroke="#f4ede0" stroke-width="0.5" opacity="0.15" class="drift"/>
+      <circle cx="700" cy="470" r="360" fill="none" stroke="#7df9ff" stroke-width="0.5" stroke-dasharray="2 6" opacity="0.4"/>
+      <circle cx="700" cy="470" r="280" fill="none" stroke="#b794ff" stroke-width="0.5" stroke-dasharray="2 6" opacity="0.4"/>
+      <circle cx="700" cy="470" r="200" fill="none" stroke="#ffc857" stroke-width="0.5" stroke-dasharray="2 6" opacity="0.5"/>
+      <circle cx="700" cy="470" r="130" fill="none" stroke="#ff5a1f" stroke-width="0.7" opacity="0.6"/>
+      <g font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="4" fill="#f4ede0" opacity="0.55">
+        <text x="700" y="95" text-anchor="middle">TEMPORAL · L04</text>
+        <text x="700" y="175" text-anchor="middle" fill="#b794ff">RELATIONAL · L03</text>
+        <text x="700" y="255" text-anchor="middle" fill="#ffc857">METAPHYSICAL · L02</text>
+        <text x="700" y="325" text-anchor="middle" fill="#ff5a1f">PHYSICS · L01</text>
+      </g>
+      <g class="slowpulse"><circle cx="260" cy="190" r="55" fill="url(#prob1)" opacity="0.7"/><circle cx="260" cy="190" r="6" fill="#7df9ff"/></g>
+      <g class="slowpulse" style="animation-delay:.5s"><circle cx="1140" cy="170" r="48" fill="url(#prob2)" opacity="0.7"/><circle cx="1140" cy="170" r="6" fill="#b794ff"/></g>
+      <g class="slowpulse" style="animation-delay:1s"><circle cx="1200" cy="750" r="62" fill="url(#prob3)" opacity="0.7"/><circle cx="1200" cy="750" r="6" fill="#ff3057"/></g>
+      <g class="slowpulse" style="animation-delay:1.5s"><circle cx="200" cy="780" r="50" fill="url(#prob4)" opacity="0.7"/><circle cx="200" cy="780" r="6" fill="#ffc857"/></g>
+      <g class="slowpulse" style="animation-delay:2s"><circle cx="700" cy="70" r="35" fill="url(#prob1)" opacity="0.5"/></g>
+      <g class="slowpulse" style="animation-delay:2.5s"><circle cx="90" cy="470" r="40" fill="url(#prob2)" opacity="0.5"/></g>
+      <g class="slowpulse" style="animation-delay:.8s"><circle cx="1310" cy="470" r="38" fill="url(#prob3)" opacity="0.5"/></g>
+      <g class="slowpulse" style="animation-delay:1.3s"><circle cx="700" cy="880" r="42" fill="url(#prob4)" opacity="0.5"/></g>
+      <g stroke="#7df9ff" stroke-width="0.8" fill="none" opacity="0.35"><path d="M 260 190 Q 480 320 700 470" stroke-dasharray="3 5" class="drift"/></g>
+      <g stroke="#b794ff" stroke-width="0.8" fill="none" opacity="0.35"><path d="M 1140 170 Q 920 320 700 470" stroke-dasharray="3 5" class="drift" style="animation-delay:1s"/></g>
+      <g stroke="#ff3057" stroke-width="0.8" fill="none" opacity="0.35"><path d="M 1200 750 Q 960 620 700 470" stroke-dasharray="3 5" class="drift" style="animation-delay:2s"/></g>
+      <g stroke="#ffc857" stroke-width="0.8" fill="none" opacity="0.35"><path d="M 200 780 Q 450 620 700 470" stroke-dasharray="3 5" class="drift" style="animation-delay:3s"/></g>
+      <path d="M 260 190 Q 440 300 560 380 Q 650 430 700 470" stroke="#ff5a1f" stroke-width="2" fill="none" opacity="0.85" filter="url(#glow)"/>
+      <circle cx="700" cy="470" r="110" fill="url(#core)" filter="url(#glow)"/>
+      <circle cx="700" cy="470" r="48" fill="#fff5e1" opacity="0.95" filter="url(#glow)"/>
+      <g transform="translate(700 470)" stroke="#05060a" stroke-width="1.2" fill="none" opacity="0.6">
+        <polygon points="0,-28 24,-14 24,14 0,28 -24,14 -24,-14"/>
+        <polygon points="0,-28 24,14 -24,14" opacity="0.5"/>
+        <polygon points="0,28 24,-14 -24,-14" opacity="0.5"/>
+        <circle r="6" fill="#ff5a1f" stroke="none"/>
+      </g>
+      <text x="700" y="615" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="22" fill="#ffc857">the selector</text>
+      <text x="700" y="640" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="3" fill="#6b6a6e">AZURA · ZERO POINT</text>
+      <g font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="4" fill="#ff5a1f">
+        <text x="700" y="325" text-anchor="middle">SELECT</text>
+        <text x="555" y="470" text-anchor="middle" transform="rotate(-90 555 470)">RELEASE</text>
+        <text x="845" y="470" text-anchor="middle" transform="rotate(90 845 470)">WITNESS</text>
+      </g>
+      <g stroke="#ff5a1f" stroke-width="1" fill="#ff5a1f" opacity="0.7">
+        <path d="M 700 340 L 700 360 M 695 355 L 700 360 L 705 355" stroke-linecap="round"/>
+        <path d="M 575 470 L 595 470 M 590 465 L 595 470 L 590 475" stroke-linecap="round"/>
+        <path d="M 825 470 L 805 470 M 810 465 L 805 470 L 810 475" stroke-linecap="round"/>
+      </g>
+      <text x="700" y="35" text-anchor="middle" font-family="JetBrains Mono" font-size="11" letter-spacing="6" fill="#f4ede0" opacity="0.5">∞ FUTURES · ONE FIELD · ONE SELECTOR</text>
+    </svg>
+  </section>
+  <section class="section">
+    <div class="sec-num">002 — The Real Problem</div>
+    <h2 class="sec-title">Spirituality has <em>no operating system.</em></h2>
+    <p class="sec-lede">The personal-development market is worth $50B+. Yet there is no shared technical framework. No vocabulary. No architecture. Just a swarm of disconnected modalities — astrology, manifestation, therapy, meditation, biohacking — none of which talk to each other. People are stuck patching reality with apps that don't share a kernel.</p>
+    <p class="sec-lede">The Selector Model is the kernel. <em>One framework. Four layers. Three verbs.</em> Every tool we ship runs on it. Every map references it. Every community layer is shaped by it. That's how 57+ tools cohere instead of fragmenting.</p>
+  </section>
+  <section class="section">
+    <div class="sec-num">003 — The Architecture</div>
+    <h2 class="sec-title">Four layers. <em>One operating system.</em></h2>
+    <div class="layers">
+      <div class="layer">
+        <div class="num">L01</div>
+        <svg class="icon" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1"><circle cx="30" cy="30" r="20"/><circle cx="30" cy="30" r="3" fill="currentColor"/><path d="M30 10 L30 50 M10 30 L50 30"/></svg>
+        <h3>Physics</h3>
+        <span class="tag">the body of the world</span>
+        <p>The measurable substrate. Matter, biology, location, time. Where the chosen probability becomes physical and trackable.</p>
+        <div class="powers">POWERS · KARMA DEBUGGER · SOMA TOOLS</div>
+      </div>
+      <div class="layer">
+        <div class="num">L02</div>
+        <svg class="icon" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1"><path d="M30 5 L55 30 L30 55 L5 30 Z"/><path d="M30 15 L45 30 L30 45 L15 30 Z"/><circle cx="30" cy="30" r="3" fill="currentColor"/></svg>
+        <h3>Metaphysical</h3>
+        <span class="tag">the rulebook</span>
+        <p>Belief, archetype, soul contract, numerology. The codebase reality runs on. Edit this layer and physics complies.</p>
+        <div class="powers">POWERS · SOUL MAPS · SIGILCRAFT</div>
+      </div>
+      <div class="layer">
+        <div class="num">L03</div>
+        <svg class="icon" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1"><circle cx="20" cy="30" r="12"/><circle cx="40" cy="30" r="12"/><circle cx="30" cy="30" r="3" fill="currentColor"/></svg>
+        <h3>Relational</h3>
+        <span class="tag">the mirror system</span>
+        <p>Every person is a witness, ally, or test. Other consciousnesses confirm and amplify what you've selected.</p>
+        <div class="powers">POWERS · SPARKVERSE · RITUALS</div>
+      </div>
+      <div class="layer">
+        <div class="num">L04</div>
+        <svg class="icon" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1"><path d="M10 30 Q30 5 50 30 Q30 55 10 30 Z"/><path d="M30 10 L30 50"/><circle cx="30" cy="30" r="3" fill="currentColor"/></svg>
+        <h3>Temporal</h3>
+        <span class="tag">the timeline</span>
+        <p>Past doesn't push — future pulls. Selecting a future re-edits the meaning of the past. Sequence and memory as variables.</p>
+        <div class="powers">POWERS · CHART OF DESTINY · OG MAP</div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="sec-num">004 — The Operation</div>
+    <h2 class="sec-title">Three verbs. <em>No others required.</em></h2>
+    <div class="triad">
+      <div data-num="01"><div class="verb">VERB · 01</div><h3><em>Select.</em></h3><p>Name the reality. Specifically, in present tense, with the body. Not a wish — a coordinate. The field cannot deliver what hasn't been pointed at.</p></div>
+      <div data-num="02"><div class="verb">VERB · 02</div><h3><em>Release.</em></h3><p>Drop the grip on how it arrives. Attachment to mechanism is what jams the collapse. Selection without release is just want.</p></div>
+      <div data-num="03"><div class="verb">VERB · 03</div><h3><em>Witness.</em></h3><p>Notice the field responding. Every confirmation strengthens the channel. Witnessing is what completes the loop — the selector recognizing itself.</p></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="sec-num">005 — Why This Is The Moat</div>
+    <h2 class="sec-title">Frameworks are <em>defensible.</em> Features aren't.</h2>
+    <div class="moat">
+      <div class="moat-grid">
+        <div>
+          <h2>One framework. <em>An entire ecosystem.</em></h2>
+          <p class="moat-lede">Competitors ship features. We ship a worldview that turns into features. Every product is downstream of the Selector Model — and every product reinforces it. The framework is the brand, the IP, the training data, and the reason none of this can be cloned by a bigger team in a weekend.</p>
+          <a href="/invest.html" class="btn primary">See The Raise →</a>
+        </div>
+        <div>
+          <ul>
+            <li><span class="key">IP</span><span class="val">Proprietary framework <em>— authored, not derivative.</em></span></li>
+            <li><span class="key">Coherence</span><span class="val">57+ tools share one architecture <em>— no fragmentation.</em></span></li>
+            <li><span class="key">Vocabulary</span><span class="val">Original terminology <em>— SELECT · RELEASE · WITNESS.</em></span></li>
+            <li><span class="key">Training</span><span class="val">Becomes the corpus for Spark AI <em>— a model only we can train.</em></span></li>
+            <li><span class="key">Founder-Fit</span><span class="val">Authored from lived awakening <em>— irreplicable.</em></span></li>
+            <li><span class="key">Defensibility</span><span class="val">Framework moat compounds <em>— every tool deepens it.</em></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="sec-num">006 — Updated Asset Inventory</div>
+    <h2 class="sec-title">What your money is <em>buying into.</em></h2>
+    <p class="sec-lede">All figures represent replacement cost — what it would take to rebuild from scratch at market rates. New additions for May 2026 audit: Sora-generated cinematic content library and a live Zora creator coin / on-chain profile at <a href="https://zora.co/@sprkvrs" style="color: var(--gold);" target="_blank" rel="noopener">zora.co/@sprkvrs</a>.</p>
+    <div class="assets">
+      <div class="asset"><div class="info"><h4>Interactive Tools Suite</h4><p>57+ deployed web applications running on the Selector Model</p></div><div class="price">$15K – $25K</div></div>
+      <div class="asset"><div class="info"><h4>Selector Model Framework <em>· IP</em></h4><p>Proprietary four-layer consciousness OS — the core moat</p></div><div class="price">$25K – $50K</div></div>
+      <div class="asset"><div class="info"><h4>Progressive Web App</h4><p>Full PWA with offline and install across iOS/Android/desktop</p></div><div class="price">$8K – $13K</div></div>
+      <div class="asset"><div class="info"><h4>GitHub Repositories</h4><p>thefirstspark.github.io · soul-maps · family — version controlled</p></div><div class="price">$8K – $12K</div></div>
+      <div class="asset new"><div class="info"><h4>Sora Video Library <em>· NEW</em></h4><p>AI-generated cinematic content — Sparkverse, ritual visuals, founder narrative</p></div><div class="price">$6K – $12K</div></div>
+      <div class="asset new"><div class="info"><h4>Zora Creator Coin + Profile <em>· NEW</em></h4><p>Live on-chain creator economy presence at zora.co/@sprkvrs</p></div><div class="price">$4K – $9K</div></div>
+      <div class="asset"><div class="info"><h4>Notion Workspace</h4><p>Operational hub, SOPs, KJP Mind Map investor page, documentation</p></div><div class="price">$8K – $15K</div></div>
+      <div class="asset"><div class="info"><h4>Soul Map Delivery Engine</h4><p>Automated numerology + astrology + Chinese zodiac generation system</p></div><div class="price">$10K – $18K</div></div>
+      <div class="asset"><div class="info"><h4>Brand &amp; IP Portfolio</h4><p>Name, visual identity, domains across subdomains (sigilcraft, rituals, sparkverse)</p></div><div class="price">$5K – $10K</div></div>
+      <div class="asset"><div class="info"><h4>Sigil Collection IP</h4><p>Original sacred geometry system with forge, library, grimoire</p></div><div class="price">$3K – $6K</div></div>
+      <div class="asset"><div class="info"><h4>Content Library</h4><p>Voyage Ohio feature, Selector Model docs, founder narrative content</p></div><div class="price">$5K – $8K</div></div>
+      <div class="asset"><div class="info"><h4>Membership Infrastructure</h4><p>Whop checkout, affiliate program, Sparkverse free lobby, payment flows</p></div><div class="price">$3K – $5K</div></div>
+      <div class="asset"><div class="info"><h4>Social &amp; Distribution</h4><p>X @OGplayerone · IG/YouTube @therealfirstspark · TikTok @sparkedone · FB</p></div><div class="price">$3K – $6K</div></div>
+      <div class="asset"><div class="info"><h4>Investor Materials</h4><p>Deck v2, Selector Model IP page, SAFE template, one-pager, projections</p></div><div class="price">$4K – $8K</div></div>
+    </div>
+    <div class="asset-total">TOTAL VERIFIED · <strong>$107K – $197K</strong> · MAY 2026</div>
+  </section>
+  <section class="section">
+    <div class="sec-num">007 — The Deal</div>
+    <h2 class="sec-title">The offer is <em>simple.</em></h2>
+    <div class="terms">
+      <div class="term accent"><div class="num"><em>$200K</em></div><div class="label">Raise Amount</div></div>
+      <div class="term"><div class="num">20%</div><div class="label">Equity</div></div>
+      <div class="term"><div class="num">$1M</div><div class="label">Pre-Money</div></div>
+      <div class="term"><div class="num">SAFE</div><div class="label">Instrument</div></div>
+      <div class="term"><div class="num">$0</div><div class="label">Burn Rate</div></div>
+    </div>
+  </section>
+  <section class="cta">
+    <h2>The framework is <em>built.</em><br>The infrastructure is <em>live.</em><br>The window is <em>open.</em></h2>
+    <p>$200K for 20% equity. SAFE note. No games, no inflated metrics, no fairytales. Just a builder with a proprietary framework, 57+ shipped tools, and zero burn — looking for fuel.</p>
+    <div class="cta-buttons">
+      <a href="/invest.html" class="btn primary">◆ See The Raise</a>
+      <a href="/investor-deck-v2.html" class="btn">View Full Deck</a>
+      <a href="mailto:kate@thefirstspark.shop?subject=Selector%20Model%20%2F%20Investment%20Inquiry" class="btn">Email Founder</a>
+    </div>
+  </section>
+  <footer>
+    <div>© KATE'S PAINT LLC · <span>THE FIRST SPARK</span></div>
+    <div><a href="https://zora.co/@sprkvrs" target="_blank" rel="noopener">ZORA · @sprkvrs</a> · <a href="https://voyageohio.com/interview/conversations-with-katelin-puzakulics" target="_blank" rel="noopener">VOYAGE&nbsp;OHIO</a></div>
+    <div>SELECTOR · v1.0 · <span>2026</span></div>
+  </footer>
+</div>
+</body>
+</html>

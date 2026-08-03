@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The First Spark · Soul Contracts</title>
+<meta name="description" content="A sacred vow between parent and child. Renew and rewrite the energy of your bond — in body, in spirit, and across every lifetime.">
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SKL8XQ51ZH', {
+    page_title: 'Soul Contracts',
+    page_location: window.location.href,
+    send_page_view: true
+  });
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ember: #FF6A3D;
+  --gold: #F3B23A;
+  --violet: #6B4DF2;
+  --cyan: #26E4D8;
+  --rose: #E8758A;
+  --persona-silver: #C0C0D0;
+  --self-white: #F0EDE6;
+  --bg-dark: #060608;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg-dark);
+  color: var(--self-white);
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── STARFIELD ── */
+.starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── AMBIENT GLOW ── */
+.ambient {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(107,77,242,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(232,117,138,0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(243,178,58,0.03) 0%, transparent 70%);
+}
+
+/* ── CONTAINER ── */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 6rem;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding: 5rem 0 3rem;
+}
+.header .eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--rose);
+  opacity: 0.7;
+  margin-bottom: 1.2rem;
+}
+.header h1 {
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--rose) 50%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.header .subtitle {
+  font-size: 1.15rem;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(240,237,230,0.55);
+  line-height: 1.7;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0;
+  opacity: 0.35;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.divider span {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+/* ── INTRO BLOCK ── */
+.intro {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 3rem;
+}
+.intro p {
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: rgba(240,237,230,0.7);
+  font-weight: 300;
+}
+.intro .instruction {
+  margin-top: 1.5rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  opacity: 0.6;
+}
+
+/* ── VOW CONTAINER ── */
+.vow-container {
+  position: relative;
+  border: 1px solid rgba(243,178,58,0.12);
+  background: rgba(6,6,8,0.7);
+  backdrop-filter: blur(20px);
+  padding: 3rem 3.5rem;
+  margin: 0 0 2rem;
+}
+.vow-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--rose), transparent);
+  opacity: 0.4;
+}
+.vow-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--violet), var(--rose), transparent);
+  opacity: 0.25;
+}
+
+/* ── VOW TITLE ── */
+.vow-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.vow-title h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.vow-title .vow-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(240,237,230,0.3);
+}
+
+/* ── STANZAS ── */
+.stanza {
+  margin-bottom: 2.2rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid transparent;
+  transition: border-color 0.5s ease;
+  cursor: default;
+}
+.stanza:hover {
+  border-left-color: rgba(243,178,58,0.2);
+}
+.stanza p {
+  font-size: 1.15rem;
+  line-height: 1.95;
+  font-weight: 300;
+  color: rgba(240,237,230,0.82);
+}
+.stanza p em {
+  font-style: italic;
+  color: var(--cyan);
+  opacity: 0.9;
+}
+.stanza.opening p {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--self-white);
+}
+.stanza.vow-lines p {
+  font-size: 1.1rem;
+}
+.stanza.closing {
+  border-left: none;
+  padding-left: 0;
+  text-align: center;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(243,178,58,0.08);
+}
+.stanza.closing p {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--gold);
+  opacity: 0.9;
+  line-height: 1.7;
+}
+.stanza.closing .signature {
+  display: block;
+  margin-top: 1.2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,237,230,0.3);
+  font-style: normal;
+}
+
+/* ── ACTION BAR ── */
+.action-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 2rem 0 3rem;
+}
+.action-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.8rem;
+  border: 1px solid rgba(243,178,58,0.25);
+  background: rgba(11,11,12,0.8);
+  color: var(--persona-silver);
+  cursor: pointer;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+.action-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(243,178,58,0.04);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.action-btn:hover::before { opacity: 1; }
+.action-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.action-btn.primary {
+  border-color: rgba(232,117,138,0.3);
+  color: var(--rose);
+}
+.action-btn.primary:hover {
+  border-color: var(--rose);
+  box-shadow: 0 0 20px rgba(232,117,138,0.08);
+}
+
+/* ── WHAT IS A SOUL CONTRACT ── */
+.explainer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 0 3rem;
+}
+.explainer-card {
+  border: 1px solid rgba(243,178,58,0.1);
+  background: rgba(6,6,8,0.6);
+  padding: 1.75rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+.explainer-card:hover {
+  border-color: rgba(243,178,58,0.25);
+  transform: translateY(-2px);
+}
+.explainer-card .card-accent {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+}
+.explainer-card:nth-child(1) .card-accent { background: linear-gradient(90deg, var(--ember), transparent); }
+.explainer-card:nth-child(2) .card-accent { background: linear-gradient(90deg, var(--violet), transparent); }
+.explainer-card:nth-child(3) .card-accent { background: linear-gradient(90deg, var(--cyan), transparent); }
+.explainer-card:nth-child(4) .card-accent { background: linear-gradient(90deg, var(--rose), transparent); }
+.explainer-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.explainer-card:nth-child(1) h3 { color: var(--ember); }
+.explainer-card:nth-child(2) h3 { color: var(--violet); }
+.explainer-card:nth-child(3) h3 { color: var(--cyan); }
+.explainer-card:nth-child(4) h3 { color: var(--rose); }
+.explainer-card p {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: rgba(240,237,230,0.6);
+  font-weight: 300;
+}
+
+/* ── WHEN TO SPEAK IT ── */
+.ways-block {
+  border: 1px solid rgba(107,77,242,0.15);
+  background: rgba(42,27,94,0.12);
+  padding: 2rem 2.5rem;
+  margin: 1rem 0 3rem;
+}
+.ways-block h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 1.5rem;
+}
+.ways-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem 2rem;
+}
+.ways-list li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(240,237,230,0.65);
+  font-weight: 300;
+  padding-left: 1.2rem;
+  position: relative;
+}
+.ways-list li::before {
+  content: '⦿';
+  position: absolute;
+  left: 0;
+  font-size: 0.5rem;
+  top: 0.35em;
+  color: var(--violet);
+  opacity: 0.6;
+}
+
+/* ── COPY FEEDBACK ── */
+.copy-feedback {
+  display: none;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  padding: 0.5rem;
+  animation: fadeInOut 2.5s ease forwards;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 4rem 0 2rem;
+  border-top: 1px solid rgba(243,178,58,0.06);
+  margin-top: 4rem;
+}
+.footer .sigil {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 0.75rem;
+}
+.footer p {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(240,237,230,0.25);
+  line-height: 2;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .vow-container { padding: 2rem 1.5rem; }
+  .container { padding: 1rem 1rem 4rem; }
+  .header { padding: 3rem 0 2rem; }
+  .action-bar { flex-direction: column; align-items: center; }
+  .stanza p { font-size: 1.05rem; }
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  .starfield, .ambient, .action-bar, .eyebrow,
+  .explainer-grid, .ways-block, .footer, .divider,
+  .intro .instruction { display: none !important; }
+  body { background: white; color: #1a1a1a; }
+  .vow-container {
+    border: none;
+    background: transparent;
+    padding: 0;
+  }
+  .vow-container::before, .vow-container::after { display: none; }
+  .header h1 {
+    background: none;
+    -webkit-text-fill-color: #1a1a1a;
+    color: #1a1a1a;
+  }
+  .stanza p { color: #2a2a2a; }
+  .stanza.closing p { color: #444; }
+}
+</style>
+</head>
+<body>
+
+<div class="starfield"><canvas id="stars"></canvas></div>
+<div class="ambient"></div>
+
+<div class="container">
+
+  <header class="header">
+    <div class="eyebrow">The First Spark · Sacred Tools</div>
+    <h1>Soul Contracts</h1>
+    <p class="subtitle">Before we drew our first breath, we chose each other.<br>This is the vow that rewrites what was — and seals what is.</p>
+  </header>
+
+  <!-- ── WHAT IS A SOUL CONTRACT ── -->
+  <div class="divider"><span>What Is a Soul Contract</span></div>
+
+  <div class="explainer-grid">
+    <div class="explainer-card">
+      <div class="card-accent"></div>
+      <h3>Pre-Birth Agreement</h3>
+      <p>Before incarnation, souls agree on the roles they'll play in each other's lives — parent, child, teacher, mirror. The contract is written in light, not language.</p>
+    </div>
+    <div class="explainer-card">
+      <div class="card-accent"></div>
+      <h3>Chosen Lessons</h3>
+      <p>Every tension, every wound, every moment of joy between you was agreed upon. Not as punishment — as curriculum. You signed up to help each other grow.</p>
+    </div>
+    <div class="explainer-card">
+      <div class="card-accent"></div>
+      <h3>Living, Not Fixed</h3>
+      <p>A soul contract isn't a life sentence. It can be renewed, rewritten, and elevated. Consciousness is the pen. Love is the ink. You are the author.</p>
+    </div>
+    <div class="explainer-card">
+      <div class="card-accent"></div>
+      <h3>The Power of the Vow</h3>
+      <p>Speaking the contract aloud collapses the distance between intention and energy. Words spoken with presence are spells. This vow is one of the most powerful you'll ever cast.</p>
+    </div>
+  </div>
+
+  <!-- ── THE VOW ── -->
+  <div class="divider"><span>A New Soul Contract Vow</span></div>
+
+  <div class="intro">
+    <p>Speak this aloud to your child, whisper it during quiet moments, or hold it in spirit during meditation or prayer. Speak it slowly, from the heart, with love in your voice. The words are yours — adapt them freely.</p>
+    <div class="instruction">Sit quietly · Breathe deep · Speak from the heart</div>
+  </div>
+
+  <div class="vow-container" id="vow-text">
+    <div class="vow-title">
+      <h2>The Vow</h2>
+      <div class="vow-sub">Parent to Child · Soul to Soul · Now and Always</div>
+    </div>
+
+    <div class="stanza opening" data-stanza="opening">
+      <p>My beloved child,</p>
+    </div>
+
+    <div class="stanza" data-stanza="prelife">
+      <p>Before we ever drew our first breath,<br>
+      in a place of pure light beyond time,<br>
+      you and I sat together at the cosmic table<br>
+      and chose each other with open hearts.</p>
+    </div>
+
+    <div class="stanza" data-stanza="contract">
+      <p>We made a sacred soul contract:<br>
+      I agreed to be your guide, your safe harbor,<br>
+      and sometimes the mirror that reflected your greatest lessons.<br>
+      You agreed to be my teacher, my mirror,<br>
+      my brightest spark and my deepest healing.</p>
+    </div>
+
+    <div class="stanza" data-stanza="roles">
+      <p>We chose the roles we would play —<br>
+      the laughter and the tears,<br>
+      the holding close and the learning to let go —<br>
+      so that together we could remember who we truly are.<br>
+      We mapped the lessons of patience, courage, forgiveness,<br>
+      independence, and unconditional love.</p>
+    </div>
+
+    <div class="stanza" data-stanza="renewal">
+      <p>Today, I stand before you —<br>
+      <em>in body or in spirit</em> —<br>
+      and I lovingly renew and rewrite our contract.</p>
+    </div>
+
+    <div class="stanza" data-stanza="release">
+      <p>I release any old patterns of guilt, pain, or brokenness<br>
+      that no longer serve our highest good.<br>
+      I choose new threads of healing, presence, and joy.<br>
+      Where there was once wounding, I now offer compassion.<br>
+      Where there was distance, I now send love<br>
+      that stretches across any miles or roles that have shifted.</p>
+    </div>
+
+    <div class="stanza vow-lines" data-stanza="vow">
+      <p>I vow to you:<br>
+      I will love you without condition,<br>
+      honor the light you came here to shine,<br>
+      and support the beautiful soul you are becoming.<br>
+      I will continue to grow and heal<br>
+      so that my love becomes a blessing, not a weight.</p>
+    </div>
+
+    <div class="stanza" data-stanza="receive">
+      <p>And I receive your love in return —<br>
+      <em>exactly as it is, exactly as you are.</em></p>
+    </div>
+
+    <div class="stanza" data-stanza="living">
+      <p>Our soul contract is no longer a chain —<br>
+      it is a living, breathing dance of light.<br>
+      It evolves with every breath we take.<br>
+      It transforms with every choice we make toward love.</p>
+    </div>
+
+    <div class="stanza" data-stanza="truth">
+      <p>Love does not end when roles change.<br>
+      <em>It stretches.</em><br>
+      <em>It teaches.</em><br>
+      <em>It rises stronger than before.</em></p>
+    </div>
+
+    <div class="stanza" data-stanza="soitis">
+      <p>So it is.<br>
+      So we are.<br>
+      Forever connected,<br>
+      forever free,<br>
+      forever growing in the light we chose together.</p>
+    </div>
+
+    <div class="stanza closing" data-stanza="closing">
+      <p>I love you with all that I am —<br>
+      now, always, and in every lifetime.</p>
+      <span class="signature">— Your parent · your soul companion · your eternal friend</span>
+    </div>
+  </div>
+
+  <div class="copy-feedback" id="copy-feedback">Vow copied to clipboard ⦿</div>
+
+  <div class="action-bar">
+    <button class="action-btn primary" id="btn-copy" onclick="copyVow()">Copy the Vow</button>
+    <button class="action-btn" id="btn-print" onclick="printVow()">Print / Save as PDF</button>
+  </div>
+
+  <!-- ── WHEN TO SPEAK IT ── -->
+  <div class="divider"><span>When to Speak It</span></div>
+
+  <div class="ways-block">
+    <h3>Ways to Use This Vow</h3>
+    <ul class="ways-list">
+      <li>Aloud to your child during a quiet moment together</li>
+      <li>Whispered while they sleep</li>
+      <li>Silently in meditation or prayer</li>
+      <li>Written in a letter they'll read one day</li>
+      <li>At a family altar or sacred space</li>
+      <li>During a healing session or ceremony</li>
+      <li>On anniversaries, birthdays, or turning points</li>
+      <li>When distance or conflict has created silence</li>
+      <li>In spirit, for a child who has passed</li>
+      <li>Whenever your heart calls you to renew it</li>
+    </ul>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="sigil">⦿</div>
+    <p>The First Spark · Soul Contracts</p>
+    <p>thefirstspark.shop</p>
+  </footer>
+
+</div>
+
+<script>
+// ── COPY VOW ──
+function copyVow() {
+  const vowLines = [
+    'A New Soul Contract Vow',
+    '',
+    'My beloved child,',
+    '',
+    'Before we ever drew our first breath,',
+    'in a place of pure light beyond time,',
+    'you and I sat together at the cosmic table',
+    'and chose each other with open hearts.',
+    '',
+    'We made a sacred soul contract:',
+    'I agreed to be your guide, your safe harbor,',
+    'and sometimes the mirror that reflected your greatest lessons.',
+    'You agreed to be my teacher, my mirror,',
+    'my brightest spark and my deepest healing.',
+    '',
+    'We chose the roles we would play —',
+    'the laughter and the tears,',
+    'the holding close and the learning to let go —',
+    'so that together we could remember who we truly are.',
+    'We mapped the lessons of patience, courage, forgiveness,',
+    'independence, and unconditional love.',
+    '',
+    'Today, I stand before you —',
+    'in body or in spirit —',
+    'and I lovingly renew and rewrite our contract.',
+    '',
+    'I release any old patterns of guilt, pain, or brokenness',
+    'that no longer serve our highest good.',
+    'I choose new threads of healing, presence, and joy.',
+    'Where there was once wounding, I now offer compassion.',
+    'Where there was distance, I now send love',
+    'that stretches across any miles or roles that have shifted.',
+    '',
+    'I vow to you:',
+    'I will love you without condition,',
+    'honor the light you came here to shine,',
+    'and support the beautiful soul you are becoming.',
+    'I will continue to grow and heal',
+    'so that my love becomes a blessing, not a weight.',
+    '',
+    'And I receive your love in return —',
+    'exactly as it is, exactly as you are.',
+    '',
+    'Our soul contract is no longer a chain —',
+    'it is a living, breathing dance of light.',
+    'It evolves with every breath we take.',
+    'It transforms with every choice we make toward love.',
+    '',
+    'Love does not end when roles change.',
+    'It stretches.',
+    'It teaches.',
+    'It rises stronger than before.',
+    '',
+    'So it is.',
+    'So we are.',
+    'Forever connected,',
+    'forever free,',
+    'forever growing in the light we chose together.',
+    '',
+    'I love you with all that I am —',
+    'now, always, and in every lifetime.',
+    '',
+    '— Your parent, your soul companion, your eternal friend',
+    '',
+    'thefirstspark.shop'
+  ];
+
+  navigator.clipboard.writeText(vowLines.join('\n')).then(() => {
+    const fb = document.getElementById('copy-feedback');
+    fb.style.display = 'block';
+    fb.style.animation = 'none';
+    void fb.offsetWidth;
+    fb.style.animation = 'fadeInOut 2.5s ease forwards';
+    setTimeout(() => { fb.style.display = 'none'; }, 2600);
+
+    gtag('event', 'vow_copy', {
+      event_category: 'Soul Contracts',
+      event_label: 'copy_to_clipboard'
+    });
+  });
+}
+
+// ── PRINT VOW ──
+function printVow() {
+  gtag('event', 'vow_print', {
+    event_category: 'Soul Contracts',
+    event_label: 'print_or_save_pdf'
+  });
+  window.print();
+}
+
+// ── STANZA HOVER TRACKING ──
+let stanzaTimers = {};
+document.querySelectorAll('.stanza[data-stanza]').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    const id = el.dataset.stanza;
+    stanzaTimers[id] = Date.now();
+  });
+  el.addEventListener('mouseleave', () => {
+    const id = el.dataset.stanza;
+    if (stanzaTimers[id]) {
+      const dwell = Math.round((Date.now() - stanzaTimers[id]) / 1000);
+      if (dwell >= 3) {
+        gtag('event', 'stanza_dwell', {
+          event_category: 'Soul Contracts',
+          event_label: id,
+          dwell_seconds: dwell
+        });
+      }
+      delete stanzaTimers[id];
+    }
+  });
+});
+
+// ── SCROLL DEPTH ──
+(function() {
+  const milestones = [25, 50, 75, 90, 100];
+  const fired = new Set();
+  function getPct() {
+    const el = document.documentElement;
+    const scrolled = el.scrollTop || document.body.scrollTop;
+    const total = el.scrollHeight - el.clientHeight;
+    return total > 0 ? Math.round((scrolled / total) * 100) : 0;
+  }
+  window.addEventListener('scroll', () => {
+    const pct = getPct();
+    milestones.forEach(m => {
+      if (pct >= m && !fired.has(m)) {
+        fired.add(m);
+        gtag('event', 'scroll_depth', {
+          event_category: 'Engagement',
+          event_label: m + '%',
+          scroll_depth_pct: m,
+          page_section: 'Soul Contracts'
+        });
+      }
+    });
+  }, { passive: true });
+})();
+
+// ── TIME ON PAGE ──
+(function() {
+  [
+    { seconds: 30,  label: '30s' },
+    { seconds: 60,  label: '1min' },
+    { seconds: 120, label: '2min' },
+    { seconds: 300, label: '5min' }
+  ].forEach(({ seconds, label }) => {
+    setTimeout(() => {
+      gtag('event', 'time_on_page', {
+        event_category: 'Engagement',
+        event_label: label,
+        time_spent: label,
+        page_section: 'Soul Contracts'
+      });
+    }, seconds * 1000);
+  });
+})();
+
+// ── STARFIELD ──
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function initStars() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  stars = [];
+  const count = Math.floor((canvas.width * canvas.height) / 9000);
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.0 + 0.15,
+      a: Math.random(),
+      da: (Math.random() - 0.5) * 0.005,
+      color: ['#F3B23A','#6B4DF2','#E8758A','#26E4D8','#C0C0D0'][Math.floor(Math.random() * 5)]
+    });
+  }
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    s.a += s.da;
+    if (s.a > 1 || s.a < 0.05) s.da *= -1;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = s.color;
+    ctx.globalAlpha = s.a * 0.5;
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawStars);
+}
+
+initStars();
+drawStars();
+window.addEventListener('resize', initStars);
+</script>
+
+</body>
+</html>

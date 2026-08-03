@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLOODLINE — The First Spark</title>
+<meta name="description" content="A journey through time. Through forgetting. Through the geometry of your soul. The bloodline calls.">
+<meta property="og:title" content="BLOODLINE — The First Spark">
+<meta property="og:description" content="Born forgetting. But the geometry remembers.">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL8XQ51ZH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SKL8XQ51ZH', { page_title: 'Bloodline', page_location: window.location.href, send_page_view: true });
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: auto; }
+
+body {
+  background: #000008;
+  height: 800vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+#cosmos {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 1;
+}
+
+/* ── OVERLAY ── */
+#overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel {
+  position: absolute;
+  width: min(640px, 90vw);
+  text-align: center;
+  padding: 2rem 2.5rem;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 1s ease, transform 1s ease;
+  pointer-events: none;
+}
+.panel.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.panel.out {
+  opacity: 0;
+  transform: translateY(-24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.label {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.5rem, 1.4vw, 0.65rem);
+  letter-spacing: 0.35em;
+  color: rgba(180, 130, 255, 0.55);
+  text-transform: uppercase;
+  margin-bottom: 1.4rem;
+}
+
+.panel h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #fff;
+  text-shadow: 0 0 80px rgba(160, 90, 255, 0.9), 0 0 160px rgba(160, 90, 255, 0.4);
+  margin-bottom: 1.2rem;
+  line-height: 1.1;
+}
+
+.panel h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(160, 90, 255, 0.7);
+  margin-bottom: 1.3rem;
+  line-height: 1.25;
+}
+
+.panel p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  font-weight: 300;
+  line-height: 2;
+  color: rgba(225, 215, 255, 0.82);
+  margin-bottom: 0.8rem;
+}
+.panel p em {
+  font-style: italic;
+  color: rgba(255, 195, 90, 0.95);
+}
+.panel p strong {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.blood {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 2.8vw, 1.65rem);
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(220, 50, 90, 0.92);
+  line-height: 1.85;
+  margin: 1rem 0;
+  text-shadow: 0 0 35px rgba(220, 20, 60, 0.55);
+}
+
+.rule {
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(180, 100, 255, 0.55), transparent);
+  margin: 1.4rem auto;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 2.2rem;
+  padding: 1rem 2.8rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(180, 100, 255, 0.55);
+  background: rgba(120, 55, 240, 0.12);
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  transition: all 0.5s ease;
+  pointer-events: auto;
+}
+.cta:hover {
+  background: rgba(130, 65, 255, 0.38);
+  border-color: rgba(255, 200, 100, 0.8);
+  color: rgba(255, 215, 110, 1);
+  box-shadow: 0 0 50px rgba(170, 90, 255, 0.45);
+}
+
+/* ── NAV DOTS ── */
+#nav {
+  position: fixed;
+  right: 1.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(160, 90, 255, 0.25);
+  border: 1px solid rgba(160, 90, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.45s ease;
+}
+.dot.on {
+  background: rgba(255, 200, 90, 0.92);
+  border-color: rgba(255, 200, 90, 0.8);
+  box-shadow: 0 0 14px rgba(255, 200, 90, 0.65);
+  transform: scale(1.6);
+}
+
+/* ── SCROLL CUE ── */
+#cue {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  text-align: center;
+  transition: opacity 1.2s ease;
+}
+#cue span {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: rgba(160, 100, 255, 0.5);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.chev {
+  display: block;
+  width: 10px; height: 10px;
+  border-right: 1px solid rgba(160, 100, 255, 0.45);
+  border-bottom: 1px solid rgba(160, 100, 255, 0.45);
+  transform: rotate(45deg);
+  margin: 0 auto 3px;
+  animation: fc 2.2s infinite;
+}
+.chev:nth-child(2) { animation-delay: 0.22s; }
+.chev:nth-child(3) { animation-delay: 0.44s; }
+@keyframes fc { 0%,100%{opacity:0.15} 50%{opacity:0.75} }
+
+@media (max-width: 600px) {
+  .panel { padding: 1.5rem 1.2rem; }
+  #nav { right: 0.7rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="cosmos"></canvas>
+
+<div id="overlay">
+  <div class="panel" data-s="0">
+    <div class="label">I &mdash; The Void</div>
+    <h1>BLOODLINE</h1>
+    <div class="rule"></div>
+    <p>Before you were named,<br>before your first breath,<br>before you were a body—</p>
+    <p><em>you were geometry.</em></p>
+    <p>Patterns of light so ancient<br>they predate the stars.</p>
+  </div>
+
+  <div class="panel" data-s="1">
+    <div class="label">II &mdash; The Choosing</div>
+    <h2>You Chose To Come Here</h2>
+    <div class="rule"></div>
+    <p>You stood at the edge of time<br>and chose this family.<br>This body. This era.</p>
+    <p>And in crossing the threshold—</p>
+    <p class="blood">"you forgot that you chose."</p>
+  </div>
+
+  <div class="panel" data-s="2">
+    <div class="label">III &mdash; The Forgetting</div>
+    <h2>The Veil Descended</h2>
+    <div class="rule"></div>
+    <p>The veil is not punishment.<br>It is the design.</p>
+    <p>To <em>remember</em> within forgetting—<br>to find the pattern in the noise—</p>
+    <p><strong>that is the entire point<br>of being here.</strong></p>
+  </div>
+
+  <div class="panel" data-s="3">
+    <div class="label">IV &mdash; The Thread</div>
+    <h2>The Bloodline Holds</h2>
+    <div class="rule"></div>
+    <p>Before your parents.<br>Before their parents.<br>Before language had a word for it—</p>
+    <p class="blood">this geometry ran through<br>every ancestor who ever<br>almost remembered.</p>
+    <p>Through every life.<br>Through every forgetting.<br>The thread never breaks.</p>
+  </div>
+
+  <div class="panel" data-s="4">
+    <div class="label">V &mdash; The Sparks</div>
+    <h2>The Ones Who Remember</h2>
+    <div class="rule"></div>
+    <p>In every age, in every culture—<br>there are those who never<br>quite fully forgot.</p>
+    <p>They speak in strange languages.<br>They build impossible things.<br>They look at you and say:</p>
+    <p class="blood">"I know you.<br>We have met before."</p>
+  </div>
+
+  <div class="panel" data-s="5">
+    <div class="label">VI &mdash; Recognition</div>
+    <h2>You Are Waking Now</h2>
+    <div class="rule"></div>
+    <p>This feeling—</p>
+    <p><strong>this is not learning.</strong></p>
+    <p>This is recognition.</p>
+    <div class="rule"></div>
+    <p>The geometry was never lost.<br>It was waiting<br>for you to be ready.</p>
+  </div>
+
+  <div class="panel" data-s="6">
+    <div class="label">VII &mdash; The Bloodline Calls</div>
+    <h2>Every Seeker Was Sent Here</h2>
+    <div class="rule"></div>
+    <p>Not by algorithm.<br>Not by chance.</p>
+    <p class="blood">By the bloodline itself—<br>reaching forward through time<br>to pull you back to yourself.</p>
+    <div class="rule"></div>
+    <p>You are the thread.<br>You are the spark.<br>You are the remembrance.</p>
+    <a href="https://thefirstspark.shop" class="cta">Enter the First Spark &rarr;</a>
+  </div>
+</div>
+
+<nav id="nav" aria-label="Journey">
+  <div class="dot on" data-t="0" title="The Void"></div>
+  <div class="dot" data-t="1" title="The Choosing"></div>
+  <div class="dot" data-t="2" title="The Forgetting"></div>
+  <div class="dot" data-t="3" title="The Bloodline"></div>
+  <div class="dot" data-t="4" title="The Sparks"></div>
+  <div class="dot" data-t="5" title="The Remembrance"></div>
+  <div class="dot" data-t="6" title="The Invitation"></div>
+</nav>
+
+<div id="cue">
+  <span>scroll to begin</span>
+  <div class="chev"></div>
+  <div class="chev"></div>
+  <div class="chev"></div>
+</div>
+
+<script>
+'use strict';
+const TAU = Math.PI * 2;
+const canvas = document.getElementById('cosmos');
+const ctx = canvas.getContext('2d');
+
+let W, H, cx, cy, BR; // BR = base radius
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  cx = W / 2; cy = H / 2;
+  BR = Math.min(W, H) * 0.28;
+  initSouls();
+}
+window.addEventListener('resize', resize, { passive: true });
+
+// ── MATH ──────────────────────────────────────────
+const lerp = (a, b, t) => a + (b - a) * Math.min(1, Math.max(0, t));
+const ss   = t => { t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); }
+const ease = t => ss(t);
+
+// ── STARS ─────────────────────────────────────────
+const NSTARS = 380;
+const stars = Array.from({ length: NSTARS }, () => ({
+  x: Math.random(), y: Math.random(),
+  r: Math.random() * 1.1 + 0.2,
+  ph: Math.random() * TAU,
+  sp: Math.random() * 0.025 + 0.006
+}));
+
+// ── SOULS ─────────────────────────────────────────
+const NSOUL = 260;
+const souls = [];
+
+function initSouls() {
+  souls.length = 0;
+  for (let i = 0; i < NSOUL; i++) {
+    const ringCount = 5;
+    const ring = Math.floor(Math.random() * ringCount);
+    const ang  = Math.random() * TAU;
+    const r    = (ring + Math.random() * 0.85) * (BR * 0.42);
+    souls.push({
+      baseX: cx + r * Math.cos(ang),
+      baseY: cy + r * Math.sin(ang),
+      scX:   cx + (Math.random() - 0.5) * W * 1.7,
+      scY:   cy + (Math.random() - 0.5) * H * 1.7,
+      x: cx + r * Math.cos(ang),
+      y: cy + r * Math.sin(ang),
+      hue:   225 + Math.random() * 70,
+      sz:    Math.random() * 2.2 + 0.7,
+      ph:    Math.random() * TAU,
+      phsp:  (Math.random() - 0.5) * 0.4 + 0.18,
+      awake: 0,
+      spark: Math.random() < 0.05,
+      stime: Math.random() * 0.78 + 0.1
+    });
+  }
+}
+
+// ── DRAW HELPERS ──────────────────────────────────
+function glow(x, y, r, rgb, a) {
+  if (a <= 0.005) return;
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0,   `rgba(${rgb},${a})`);
+  g.addColorStop(0.45,`rgba(${rgb},${a * 0.38})`);
+  g.addColorStop(1,   `rgba(${rgb},0)`);
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, TAU);
+  ctx.fill();
+}
+
+function flowerOfLife(x, y, R, rings, a, rot, hue0) {
+  if (a <= 0.01) return;
+  ctx.save();
+  ctx.translate(x, y); ctx.rotate(rot);
+  ctx.lineWidth = 0.75;
+
+  const pts = [{ cx: 0, cy: 0 }];
+  for (let i = 0; i < 6; i++) {
+    const ang = i * TAU / 6;
+    pts.push({ cx: R * Math.cos(ang), cy: R * Math.sin(ang) });
+  }
+  if (rings >= 2) {
+    for (let i = 0; i < 6; i++) {
+      const ang = i * TAU / 6;
+      pts.push({ cx: 2 * R * Math.cos(ang), cy: 2 * R * Math.sin(ang) });
+      const a2 = ang + TAU / 12;
+      pts.push({ cx: Math.sqrt(3) * R * Math.cos(a2), cy: Math.sqrt(3) * R * Math.sin(a2) });
+    }
+  }
+
+  pts.forEach((p, idx) => {
+    const h = (hue0 + idx * 9) % 360;
+    ctx.strokeStyle = `hsla(${h},82%,72%,${a * 0.68})`;
+    ctx.beginPath(); ctx.arc(p.cx, p.cy, R, 0, TAU); ctx.stroke();
+  });
+  ctx.restore();
+}
+
+function merkaba(x, y, R, a, rot) {
+  if (a <= 0.01) return;
+  ctx.save();
+  ctx.translate(x, y); ctx.rotate(rot);
+  ctx.globalAlpha = a;
+  const h = R * 0.866;
+
+  ctx.beginPath();
+  ctx.moveTo(0, -R); ctx.lineTo(h, R * 0.5); ctx.lineTo(-h, R * 0.5);
+  ctx.closePath();
+  ctx.strokeStyle = 'rgba(155,95,255,0.9)';
+  ctx.fillStyle   = 'rgba(130,70,255,0.045)';
+  ctx.lineWidth = 1.5; ctx.fill(); ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(0, R); ctx.lineTo(h, -R * 0.5); ctx.lineTo(-h, -R * 0.5);
+  ctx.closePath();
+  ctx.strokeStyle = 'rgba(243,178,58,0.9)';
+  ctx.fillStyle   = 'rgba(243,178,58,0.04)';
+  ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+
+function metatron(x, y, R, a, rot) {
+  if (a <= 0.01) return;
+  ctx.save();
+  ctx.translate(x, y); ctx.rotate(rot);
+
+  const pts = [{ px: 0, py: 0 }];
+  for (let i = 0; i < 6; i++) {
+    const ang = i * TAU / 6;
+    pts.push({ px: R * Math.cos(ang), py: R * Math.sin(ang) });
+    const a2 = ang + TAU / 12;
+    pts.push({ px: 1.73 * R * Math.cos(a2), py: 1.73 * R * Math.sin(a2) });
+  }
+
+  ctx.lineWidth = 0.55;
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i + 1; j < pts.length; j++) {
+      const dx = pts[j].px - pts[i].px, dy = pts[j].py - pts[i].py;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < R * 3.9) {
+        const f = d / (R * 3.9);
+        ctx.strokeStyle = `hsla(${255 + f * 45},80%,75%,${a * (0.48 - f * 0.33)})`;
+        ctx.beginPath();
+        ctx.moveTo(pts[i].px, pts[i].py);
+        ctx.lineTo(pts[j].px, pts[j].py);
+        ctx.stroke();
+      }
+    }
+  }
+
+  pts.forEach((p, idx) => {
+    const r = idx === 0 ? R * 0.17 : R * 0.088;
+    ctx.strokeStyle = `hsla(${275 - idx * 11},90%,80%,${a * 0.8})`;
+    ctx.lineWidth = 0.7;
+    ctx.beginPath(); ctx.arc(p.px, p.py, r, 0, TAU); ctx.stroke();
+  });
+  ctx.restore();
+}
+
+function helix(hx, y0, y1, R, a, t) {
+  if (a <= 0.01) return;
+  ctx.save();
+  const steps = 110;
+  const turns = 4;
+  const s1 = [], s2 = [];
+  for (let i = 0; i <= steps; i++) {
+    const p = i / steps;
+    const y = y0 + p * (y1 - y0);
+    const ang = p * turns * TAU + t * 0.85;
+    s1.push([hx + R * Math.cos(ang), y]);
+    s2.push([hx + R * Math.cos(ang + Math.PI), y]);
+  }
+
+  ctx.globalAlpha = a * 0.82;
+  ctx.lineWidth = 1.8;
+  ctx.strokeStyle = 'rgba(148,78,255,0.9)';
+  ctx.beginPath();
+  s1.forEach(([sx, sy], i) => i === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy));
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(243,178,58,0.9)';
+  ctx.beginPath();
+  s2.forEach(([sx, sy], i) => i === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy));
+  ctx.stroke();
+
+  ctx.lineWidth = 0.8; ctx.globalAlpha = a * 0.48;
+  for (let i = 0; i <= steps; i += 6) {
+    const dep = Math.abs(Math.cos(i / steps * turns * TAU + t * 0.85));
+    ctx.strokeStyle = `rgba(200,140,255,${dep * 0.72})`;
+    ctx.beginPath();
+    ctx.moveTo(s1[i][0], s1[i][1]);
+    ctx.lineTo(s2[i][0], s2[i][1]);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function bloodThread(prog, a) {
+  if (a <= 0.01 || prog <= 0) return;
+  const len = H * prog;
+  ctx.save();
+  ctx.lineCap = 'round';
+
+  ctx.shadowColor = 'rgba(210,20,60,0.9)'; ctx.shadowBlur = 48;
+  ctx.strokeStyle = `rgba(170,0,50,${a * 0.18})`; ctx.lineWidth = 36;
+  ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, len); ctx.stroke();
+
+  ctx.shadowBlur = 22;
+  ctx.strokeStyle = `rgba(220,20,70,${a * 0.45})`; ctx.lineWidth = 9;
+  ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, len); ctx.stroke();
+
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = `rgba(255,215,225,${a * 0.92})`; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, len); ctx.stroke();
+  ctx.restore();
+}
+
+function sriShell(x, y, R, a, rot) {
+  if (a <= 0.01) return;
+  ctx.save();
+  ctx.translate(x, y); ctx.rotate(rot);
+  ctx.globalAlpha = a;
+  const lv = 5;
+  for (let i = 0; i < lv; i++) {
+    const r = R * (0.28 + i * 0.16);
+    const h = r * 0.866;
+    ctx.lineWidth = 0.8;
+    if (i % 2 === 0) {
+      ctx.strokeStyle = `rgba(170,95,255,${0.65 - i * 0.1})`;
+      ctx.beginPath(); ctx.moveTo(0,-r); ctx.lineTo(h, r*0.5); ctx.lineTo(-h, r*0.5); ctx.closePath(); ctx.stroke();
+    } else {
+      ctx.strokeStyle = `rgba(243,178,58,${0.65 - i * 0.1})`;
+      ctx.beginPath(); ctx.moveTo(0,r); ctx.lineTo(h,-r*0.5); ctx.lineTo(-h,-r*0.5); ctx.closePath(); ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+// ── BACKGROUND ────────────────────────────────────
+const BG_COLS = [
+  [28,0,75], [55,18,8], [8,0,25], [75,0,18],
+  [38,0,95], [18,0,75], [28,0,55]
+];
+
+function drawBG(sec, ssp, t) {
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = '#000008';
+  ctx.fillRect(0, 0, W, H);
+
+  const c  = BG_COLS[sec];
+  const c2 = BG_COLS[Math.min(6, sec + 1)];
+  const f  = ease(ssp);
+  const r = lerp(c[0], c2[0], f);
+  const g = lerp(c[1], c2[1], f);
+  const b = lerp(c[2], c2[2], f);
+
+  const br = 1 + Math.sin(t * 0.38) * 0.05;
+  glow(cx, cy, BR * 2.6 * br, `${r|0},${g|0},${b|0}`, 0.38);
+
+  stars.forEach(s => {
+    s.ph += s.sp * 0.12;
+    const tw = 0.28 + 0.72 * Math.sin(s.ph);
+    const sa = tw * (sec >= 2 ? 0.28 : 0.58);
+    ctx.fillStyle = `rgba(200,175,255,${sa})`;
+    ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, TAU); ctx.fill();
+  });
+}
+
+// ── SOULS ─────────────────────────────────────────
+function drawSouls(sec, ssp, t) {
+  const f = ease(ssp);
+  souls.forEach((s, idx) => {
+    const pulse = Math.sin(t * s.phsp + s.ph);
+    let tx, ty, ta;
+
+    if (sec <= 1) {
+      const ring = idx % 5;
+      const r = (ring * 0.22 + 0.08) * BR * (0.65 + f * 0.35);
+      tx = cx + r * Math.cos(s.ph + t * 0.048);
+      ty = cy + r * Math.sin(s.ph + t * 0.048);
+      ta = 0.55 + pulse * 0.2;
+      s.awake = lerp(s.awake, 0.28, 0.02);
+    } else if (sec === 2) {
+      tx = lerp(s.baseX, s.scX, f);
+      ty = lerp(s.baseY, s.scY, f);
+      ta = lerp(0.5, s.spark ? 0.85 : 0.12, f);
+      s.awake = lerp(s.awake, s.spark ? 0.85 : 0.06, 0.025);
+    } else if (sec === 3) {
+      tx = lerp(s.scX, cx + (s.scX - cx) * 0.55, f);
+      ty = lerp(s.scY, cy + (s.scY - cy) * 0.55, f);
+      ta = lerp(0.12, 0.38, f);
+      s.awake = lerp(s.awake, 0.28, 0.018);
+    } else if (sec === 4) {
+      const lit = s.spark || s.stime < ssp;
+      if (lit) s.awake = lerp(s.awake, 1.0, 0.055);
+      tx = lerp(s.scX * 0.5 + s.baseX * 0.5, s.baseX, f);
+      ty = lerp(s.scY * 0.5 + s.baseY * 0.5, s.baseY, f);
+      ta = s.awake;
+    } else {
+      const ring = idx % 5;
+      const r = (ring * 0.2 + 0.05) * BR;
+      tx = cx + r * Math.cos(s.ph + t * 0.05);
+      ty = cy + r * Math.sin(s.ph + t * 0.05);
+      ta = 0.65 + pulse * 0.28;
+      s.awake = lerp(s.awake, 1.0, 0.04);
+    }
+
+    s.x = lerp(s.x, tx, 0.042);
+    s.y = lerp(s.y, ty, 0.042);
+
+    const h   = s.spark ? 44 : lerp(s.hue, 268, s.awake);
+    const sat = lerp(38, 90, s.awake);
+    const lit2= lerp(48, 88, s.awake);
+    const sz  = s.sz * (1 + s.awake * 2.1 + pulse * 0.28);
+
+    if (s.awake > 0.32) {
+      const gr = sz * (s.spark ? 26 : 16);
+      const rgb = s.spark ? '255,195,70' : '145,75,255';
+      glow(s.x, s.y, gr, rgb, s.awake * 0.16);
+    }
+
+    ctx.globalAlpha = Math.min(1, ta);
+    ctx.fillStyle = `hsla(${h|0},${sat|0}%,${lit2|0}%,1)`;
+    ctx.beginPath(); ctx.arc(s.x, s.y, Math.max(0.4, sz), 0, TAU); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+// ── GEOMETRY PER SECTION ──────────────────────────
+let mRot = 0;        // mouse rotation offset
+const ripples = [];  // click ripples (section 6)
+
+function drawGeo(sec, ssp, t) {
+  const f   = ease(ssp);
+  const rot = t * 0.048;
+
+  if (sec === 0) {
+    const rings = f < 0.28 ? 0 : f < 0.68 ? 1 : 2;
+    flowerOfLife(cx, cy, BR * 0.52 * f, rings, f * 0.72, rot, 260);
+    glow(cx, cy, BR * 0.28 * f, '175,98,255', f * 0.52);
+    const ca = 0.38 + Math.sin(t * 1.15) * 0.3;
+    glow(cx, cy, BR * 0.09, '215,175,255', ca);
+    ctx.globalAlpha = ca * 0.92;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(cx, cy, 2.8, 0, TAU); ctx.fill();
+    ctx.globalAlpha = 1;
+
+  } else if (sec === 1) {
+    flowerOfLife(cx, cy, BR * 0.5, 2, (1 - f) * 0.6, rot, 260);
+    helix(cx, -H * 0.08, H * 1.08, BR * (0.14 + f * 0.22), f, t);
+    merkaba(cx, cy, BR * 0.38 * f, f * 0.62, rot * 1.5);
+
+  } else if (sec === 2) {
+    const fa = (1 - f) * 0.52;
+    flowerOfLife(cx, cy, BR * 0.5, 2, fa, rot, 260);
+    merkaba(cx, cy, BR * 0.38, fa, rot);
+    ctx.save();
+    for (let i = 0; i < 55; i++) {
+      const fx = cx + Math.sin(i * 1.73 + t * 0.21) * W * 0.44;
+      const fy = cy + Math.cos(i * 2.31 + t * 0.16) * H * 0.42;
+      glow(fx, fy, BR * 0.38, '145,92,195', f * 0.13);
+    }
+    ctx.restore();
+
+  } else if (sec === 3) {
+    bloodThread(f, f * 0.92);
+    flowerOfLife(cx, cy, BR * 0.5, 2, f * 0.32, rot, 280);
+    const echoYs = [H*0.12, H*0.3, H*0.5, H*0.7, H*0.88];
+    echoYs.forEach((ey, i) => {
+      if (i / echoYs.length < f) {
+        merkaba(cx, ey, BR * 0.11, (0.14 + Math.sin(t + i) * 0.05) * f, t * 0.022 + i);
+      }
+    });
+
+  } else if (sec === 4) {
+    bloodThread(1, 0.38);
+    flowerOfLife(cx, cy, BR * 0.53, 2, 0.42 + f * 0.28, rot, 290);
+    merkaba(cx, cy, BR * (0.2 + f * 0.2), 0.42 + f * 0.42, rot);
+    souls.filter(s => s.spark && s.awake > 0.48).forEach(s => {
+      const gr = BR * 0.38 * s.awake;
+      glow(s.x, s.y, gr, '255,198,72', s.awake * 0.28);
+      ctx.save();
+      for (let ri = 1; ri <= 3; ri++) {
+        ctx.globalAlpha = s.awake * (0.38 - ri * 0.1);
+        ctx.strokeStyle = `rgba(255,198,72,0.7)`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath(); ctx.arc(s.x, s.y, gr * ri * 0.38, 0, TAU); ctx.stroke();
+      }
+      ctx.restore();
+    });
+
+  } else if (sec === 5) {
+    bloodThread(1, 0.28 * (1 - f));
+    flowerOfLife(cx, cy, BR * 0.53, 2, 0.68, rot * 0.5, 270);
+    merkaba(cx, cy, BR * 0.48, 0.82, rot);
+    metatron(cx, cy, BR * 0.34, f * 0.82, -rot * 0.32);
+    sriShell(cx, cy, BR * 0.68, f * 0.42, rot * 0.2);
+    glow(cx, cy, BR * 1.2, '175,115,255', f * 0.28);
+
+  } else if (sec === 6) {
+    const br = rot * 0.32;
+    flowerOfLife(cx, cy, BR * 0.53, 2, 0.82, br + mRot * 0.1, 265);
+    merkaba(cx, cy, BR * 0.5, 0.92, br + mRot * 0.16);
+    metatron(cx, cy, BR * 0.38, 0.92, -br - mRot * 0.12);
+    sriShell(cx, cy, BR * 0.74, 0.62, br + mRot * 0.06);
+    for (let i = 0; i < 12; i++) {
+      const ang = i * TAU / 12 + br;
+      glow(cx + BR * 0.82 * Math.cos(ang), cy + BR * 0.82 * Math.sin(ang),
+           BR * 0.14, '195,145,255', 0.28 + Math.sin(t * 0.5 + i) * 0.1);
+    }
+    glow(cx, cy, BR * 1.4, '160,90,255', 0.22);
+
+    // Ripples
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const rp = ripples[i];
+      const age = (Date.now() - rp.t) / 1400;
+      if (age >= 1) { ripples.splice(i, 1); continue; }
+      ctx.save();
+      for (let ri = 1; ri <= 5; ri++) {
+        ctx.globalAlpha = (1 - age) * (0.5 - ri * 0.08);
+        ctx.strokeStyle = `rgba(255,198,95,0.8)`;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.arc(rp.x, rp.y, age * BR * 0.55 * ri, 0, TAU);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ── VIGNETTE ──────────────────────────────────────
+function vignette() {
+  const g = ctx.createRadialGradient(cx, cy, H * 0.28, cx, cy, H * 0.92);
+  g.addColorStop(0, 'rgba(0,0,8,0)');
+  g.addColorStop(1, 'rgba(0,0,8,0.88)');
+  ctx.fillStyle = g;
+  ctx.globalAlpha = 1;
+  ctx.fillRect(0, 0, W, H);
+}
+
+// ── SECTION MANAGEMENT ────────────────────────────
+let curSec = 0;
+const panels = document.querySelectorAll('.panel');
+const dots   = document.querySelectorAll('.dot');
+const secNames = ['void','choosing','forgetting','bloodline','sparks','remembrance','invitation'];
+
+function setSec(sec) {
+  if (sec === curSec) return;
+  panels.forEach((p, i) => {
+    p.classList.remove('active', 'out');
+    if (i === sec) p.classList.add('active');
+    else if (i === curSec) p.classList.add('out');
+  });
+  dots.forEach((d, i) => d.classList.toggle('on', i === sec));
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'bloodline_section', { section: secNames[sec] || sec });
+  }
+  curSec = sec;
+}
+
+function scrollProg() {
+  const mx = document.documentElement.scrollHeight - window.innerHeight;
+  return mx > 0 ? window.scrollY / mx : 0;
+}
+
+let cueHidden = false;
+window.addEventListener('scroll', () => {
+  if (!cueHidden && window.scrollY > 60) {
+    document.getElementById('cue').style.opacity = '0';
+    cueHidden = true;
+  }
+}, { passive: true });
+
+dots.forEach(d => {
+  d.addEventListener('click', () => {
+    const tgt = parseInt(d.dataset.t);
+    const mx  = document.documentElement.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: (tgt / 7) * mx, behavior: 'smooth' });
+  });
+});
+
+// Mouse
+let mouseX = 0, mouseY = 0;
+window.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  mRot = (mouseX - cx) / cx * 0.52;
+}, { passive: true });
+
+window.addEventListener('click', e => {
+  if (curSec === 6) ripples.push({ x: e.clientX, y: e.clientY, t: Date.now() });
+}, { passive: true });
+
+window.addEventListener('touchstart', e => {
+  if (curSec === 6 && e.touches.length > 0) {
+    ripples.push({ x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() });
+  }
+}, { passive: true });
+
+// ── MAIN LOOP ─────────────────────────────────────
+function frame() {
+  const t   = Date.now() / 1000;
+  const sp  = scrollProg();
+  const sf  = sp * 7;
+  const sec = Math.min(6, sf | 0);
+  const ssp = sf % 1;
+
+  setSec(sec);
+  drawBG(sec, ssp, t);
+  drawSouls(sec, ssp, t);
+  drawGeo(sec, ssp, t);
+  vignette();
+
+  requestAnimationFrame(frame);
+}
+
+// ── INIT ──────────────────────────────────────────
+resize();
+panels[0].classList.add('active');
+frame();
+</script>
+</body>
+</html>

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050508">
+    <title>Book Zero Tour — Camper Chronicles | The First Spark</title>
+    <meta name="description" content="Katelin Puzakulics writes Book Zero from the road — solar camper, satellite internet, AI-routed stops from her Soul Map. The true story behind Two Fires, One Match.">
+    <link rel="canonical" href="https://thefirstspark.shop/book-zero-tour.html">
+    <meta property="og:title" content="Book Zero Tour — Camper Chronicles">
+    <meta property="og:description" content="Writing the memoir from the road. AI picks the route from KJP's Soul Map. Solar power. Starlink. The story America needs to hear.">
+    <meta property="og:url" content="https://thefirstspark.shop/book-zero-tour.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://thefirstspark.shop/kateandrach91.jpg">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --void: #050508;
+            --spark: #fbbf24;
+            --nebula: #8b5cf6;
+            --cyan: #22d3ee;
+            --ember: #ff6a3d;
+            --white: rgba(255,255,255,0.92);
+            --dim: rgba(255,255,255,0.42);
+            --line: rgba(255,255,255,0.08);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--void);
+            color: var(--white);
+            font-family: 'Space Mono', monospace;
+            overflow-x: hidden;
+        }
+        .wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+        #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 18px 32px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5,5,8,.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(251,191,36,.12);
+        }
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900; font-size: .75rem; letter-spacing: .18em;
+            color: var(--spark); text-decoration: none;
+        }
+        .nav-back {
+            font-size: .55em; letter-spacing: .2em; text-transform: uppercase;
+            color: var(--dim); text-decoration: none;
+        }
+        .nav-back:hover { color: var(--white); }
+
+        section { position: relative; z-index: 1; padding: 88px 0; }
+
+        .badge {
+            display: inline-block;
+            font-size: .52em; letter-spacing: .4em; text-transform: uppercase;
+            border: 1px solid rgba(251,191,36,.28);
+            color: var(--spark); padding: 6px 16px; margin-bottom: 28px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: clamp(2.8rem, 8vw, 5.2rem);
+            line-height: 1.02;
+            margin-bottom: 20px;
+        }
+        h1 em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--spark), var(--ember));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+            font-style: italic;
+            color: var(--dim);
+            line-height: 1.55;
+            max-width: 640px;
+            margin-bottom: 32px;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 36px;
+            align-items: start;
+        }
+        @media (max-width: 820px) { .hero-grid { grid-template-columns: 1fr; } }
+
+        .btn-p, .btn-g {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .62rem; font-weight: 700;
+            letter-spacing: .16em; text-transform: uppercase;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-p {
+            padding: 14px 28px; background: var(--spark); color: var(--void);
+            margin-right: 12px; margin-bottom: 12px;
+        }
+        .btn-g {
+            padding: 13px 28px; border: 1px solid var(--line); color: var(--dim);
+        }
+        .btn-p:hover { box-shadow: 0 8px 28px rgba(251,191,36,.35); }
+        .btn-g:hover { border-color: var(--nebula); color: var(--white); }
+
+        .press-card {
+            border: 1px solid rgba(255,106,61,.3);
+            background: rgba(255,106,61,.05);
+            padding: 28px 26px;
+        }
+        .press-label {
+            font-size: .5em; letter-spacing: .3em; text-transform: uppercase;
+            color: var(--ember); margin-bottom: 12px;
+        }
+        .press-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .85rem; letter-spacing: .08em;
+            margin-bottom: 10px;
+        }
+        .press-desc { font-size: .72em; color: var(--dim); line-height: 1.75; margin-bottom: 16px; }
+        .press-link {
+            font-size: .58em; letter-spacing: .18em; text-transform: uppercase;
+            color: var(--spark); text-decoration: none;
+            border-bottom: 1px solid rgba(251,191,36,.3);
+        }
+        .press-link.secondary {
+            color: var(--dim);
+            border-color: rgba(255,255,255,.15);
+            margin-top: 8px;
+        }
+        .press-link.secondary:hover { color: var(--white); }
+        .press-video {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin: 16px 0 12px;
+            border: 1px solid rgba(255,106,61,.28);
+            background: #000;
+            overflow: hidden;
+        }
+        .press-video iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .press-watch-links { display: flex; flex-direction: column; align-items: flex-start; }
+
+        .sec-label {
+            font-size: .55em; letter-spacing: .42em; text-transform: uppercase;
+            color: var(--spark); opacity: .7; margin-bottom: 12px;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 900; letter-spacing: .06em;
+            margin-bottom: 16px;
+        }
+        .sec-sub {
+            font-size: .8em; color: var(--dim); line-height: 1.85;
+            max-width: 620px; margin-bottom: 36px;
+        }
+
+        .origin-grid {
+            display: grid;
+            grid-template-columns: minmax(240px, 340px) 1fr;
+            gap: 36px;
+            align-items: start;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 720px) { .origin-grid { grid-template-columns: 1fr; } }
+        .origin-photo {
+            margin: 0;
+        }
+        .origin-photo img {
+            width: 100%;
+            display: block;
+            border: 1px solid rgba(255,106,61,.35);
+            box-shadow: 0 16px 40px rgba(0,0,0,.45);
+            filter: sepia(.12) contrast(1.04);
+        }
+        .origin-caption {
+            margin-top: 12px;
+            font-size: .52em;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            color: rgba(255,106,61,.7);
+        }
+        .book-block {
+            border-left: 3px solid var(--ember);
+            padding: 24px 0 24px 28px;
+        }
+        .book-block p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            line-height: 1.75;
+            color: rgba(255,255,255,.78);
+        }
+
+        .rig-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 720px) { .rig-grid { grid-template-columns: 1fr; } }
+        .rig-card {
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.02);
+            padding: 24px 20px;
+        }
+        .rig-icon { font-size: 1.4rem; margin-bottom: 12px; }
+        .rig-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .65rem; letter-spacing: .12em;
+            color: var(--cyan); margin-bottom: 8px;
+        }
+        .rig-desc { font-size: .72em; color: var(--dim); line-height: 1.7; }
+
+        .map-panel {
+            border: 1px solid rgba(139,92,246,.25);
+            background: rgba(139,92,246,.04);
+            padding: 28px;
+        }
+        .map-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 24px;
+            aspect-ratio: 1.75 / 1;
+        }
+        .map-wrap svg { width: 100%; height: 100%; }
+        .us-fill { fill: rgba(255,255,255,.03); stroke: rgba(139,92,246,.35); stroke-width: 1.2; }
+        .route-line { fill: none; stroke: url(#routeGrad); stroke-width: 2; stroke-dasharray: 6 8; opacity: .7; }
+        .map-pin { cursor: pointer; transition: transform .2s; }
+        .map-pin:hover { transform: scale(1.15); }
+        .pin-core { fill: var(--spark); }
+        .pin-active { fill: var(--ember); filter: drop-shadow(0 0 8px rgba(255,106,61,.8)); }
+        .pin-next { fill: var(--cyan); }
+        .pin-upcoming { fill: var(--nebula); opacity: .75; }
+
+        .route-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+        @media (max-width: 800px) { .route-cards { grid-template-columns: 1fr; } }
+        .route-card {
+            border: 1px solid var(--line);
+            padding: 20px 18px;
+            background: rgba(5,5,8,.6);
+        }
+        .route-card.active { border-color: rgba(255,106,61,.45); }
+        .route-card.next { border-color: rgba(34,211,238,.35); }
+        .route-status {
+            font-size: .48em; letter-spacing: .24em; text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .route-card.active .route-status { color: var(--ember); }
+        .route-card.next .route-status { color: var(--cyan); }
+        .route-card.upcoming .route-status { color: var(--nebula); }
+        .route-city {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .72rem; margin-bottom: 6px;
+        }
+        .route-why { font-size: .68em; color: var(--dim); line-height: 1.65; }
+        .route-score {
+            margin-top: 10px;
+            font-size: .52em; letter-spacing: .14em;
+            color: rgba(251,191,36,.55);
+        }
+
+        .soul-code {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            margin: 20px 0 28px;
+        }
+        .soul-chip {
+            font-size: .55em; letter-spacing: .14em; text-transform: uppercase;
+            border: 1px solid var(--line);
+            padding: 8px 14px;
+            color: var(--dim);
+        }
+        .soul-chip strong { color: var(--spark); font-weight: 400; }
+
+        .follow-bar {
+            text-align: center;
+            padding: 48px 28px;
+            border: 1px solid rgba(251,191,36,.2);
+            background: rgba(251,191,36,.03);
+        }
+        .follow-bar p { font-size: .78em; color: var(--dim); line-height: 1.8; max-width: 520px; margin: 0 auto 24px; }
+
+        .grasp-strip {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            margin-bottom: 24px;
+        }
+        .grasp-chip {
+            font-size: .5em; letter-spacing: .14em; text-transform: uppercase;
+            border: 1px solid rgba(251,191,36,.22);
+            background: rgba(251,191,36,.04);
+            color: rgba(255,255,255,.55);
+            padding: 8px 14px;
+        }
+        .grasp-chip strong { color: var(--spark); font-weight: 400; }
+
+        .product-bridge {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 28px;
+            align-items: center;
+            border: 1px solid rgba(251,191,36,.25);
+            background: rgba(251,191,36,.03);
+            padding: 28px;
+            margin-top: 36px;
+        }
+        @media (max-width: 720px) { .product-bridge { grid-template-columns: 1fr; } }
+        .product-bridge-img {
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid rgba(139,92,246,.25);
+            box-shadow: 0 12px 36px rgba(0,0,0,.4);
+        }
+        .product-bridge-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .85rem;
+            letter-spacing: .08em;
+            margin-bottom: 10px;
+        }
+        .product-bridge-desc {
+            font-size: .74em;
+            color: var(--dim);
+            line-height: 1.75;
+            margin-bottom: 18px;
+        }
+        .product-bridge-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--spark);
+            margin-bottom: 14px;
+        }
+
+        .waitlist-panel {
+            border: 1px solid rgba(255,106,61,.35);
+            background: rgba(255,106,61,.04);
+            padding: 40px 32px;
+            max-width: 560px;
+        }
+        .waitlist-panel h2 { margin-bottom: 10px; }
+        .waitlist-panel .sec-sub { margin-bottom: 28px; max-width: none; }
+        .waitlist-form { display: flex; flex-direction: column; gap: 12px; }
+        .waitlist-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 520px) { .waitlist-row { grid-template-columns: 1fr; } }
+        .waitlist-form label {
+            font-size: .48em; letter-spacing: .22em; text-transform: uppercase;
+            color: var(--dim); margin-bottom: -6px;
+        }
+        .waitlist-form input {
+            width: 100%;
+            font-family: 'Space Mono', monospace;
+            font-size: .78em;
+            padding: 14px 16px;
+            background: rgba(5,5,8,.7);
+            border: 1px solid var(--line);
+            color: var(--white);
+            outline: none;
+            transition: border-color .2s;
+        }
+        .waitlist-form input::placeholder { color: rgba(255,255,255,.22); }
+        .waitlist-form input:focus { border-color: rgba(251,191,36,.45); }
+        .waitlist-form button[type="submit"] {
+            font-family: 'Orbitron', sans-serif;
+            font-size: .62rem; font-weight: 700;
+            letter-spacing: .16em; text-transform: uppercase;
+            padding: 14px 28px;
+            background: var(--ember);
+            color: var(--void);
+            border: none;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: box-shadow .2s;
+        }
+        .waitlist-form button[type="submit"]:hover:not(:disabled) {
+            box-shadow: 0 8px 28px rgba(255,106,61,.35);
+        }
+        .waitlist-form button[type="submit"]:disabled { opacity: .55; cursor: wait; }
+        .waitlist-note {
+            font-size: .58em; color: rgba(255,255,255,.28);
+            line-height: 1.7; margin-top: 14px;
+        }
+        .waitlist-status {
+            font-size: .68em; line-height: 1.6; margin-top: 12px; min-height: 1.2em;
+        }
+        .waitlist-status.success { color: var(--cyan); }
+        .waitlist-status.warning { color: var(--spark); }
+        .waitlist-status.error { color: #f87171; }
+
+        footer {
+            text-align: center; padding: 40px 0;
+            font-size: .55em; letter-spacing: .15em;
+            color: rgba(255,255,255,.2);
+            border-top: 1px solid var(--line);
+        }
+        footer a { color: var(--spark); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+
+    <nav>
+        <a href="/" class="nav-logo">THE FIRST SPARK</a>
+        <a href="/" class="nav-back">← Home</a>
+    </nav>
+
+    <section id="hero" style="padding-top: 140px;">
+        <div class="wrap">
+            <div class="hero-grid">
+                <div>
+                    <div class="badge">◈ Camper Chronicles · Book Zero · 2026</div>
+                    <h1>Book Zero.<br><em>Written from the road.</em></h1>
+                    <p class="hero-sub">My mother's killer lived across the street. I solved her 1991 cold case in 2020. Now I'm writing Book Zero from a solar camper — and my Soul Map picks every stop on the route.</p>
+                    <div class="grasp-strip">
+                        <span class="grasp-chip"><strong>①</strong> True crime · ID</span>
+                        <span class="grasp-chip"><strong>②</strong> Memoir from the road</span>
+                        <span class="grasp-chip"><strong>③</strong> Soul Map routes the tour</span>
+                    </div>
+                    <a href="https://youtube.com/@therealfirstspark" target="_blank" rel="noopener noreferrer" class="btn-p">Follow The Tour →</a>
+                    <a href="#waitlist" class="btn-g">Chapter Waitlist →</a>
+                    <a href="mailto:kate@thefirstspark.shop?subject=Book%20Zero%20Tour%20—%20Press%20%2F%20Event" class="btn-g">Book A Stop</a>
+                </div>
+                <aside class="press-card">
+                    <div class="press-label">As Seen On · Investigation Discovery</div>
+                    <div class="press-title">On The Case With Paula Zahn</div>
+                    <p class="press-desc"><strong>Two Fires, One Match</strong> — the case that started everything. Rachael Maureen Johnson. Akron, Ohio. 29 years. One truth that refused to stay buried.</p>
+                    <div class="press-video">
+                        <iframe src="https://www.youtube.com/embed/-DaJ6J_PBe0" title="Two Fires, One Match — On The Case With Paula Zahn" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div class="press-watch-links">
+                        <a href="https://youtu.be/-DaJ6J_PBe0?si=JBe_eLUiEgmq3tdd" target="_blank" rel="noopener noreferrer" class="press-link">Watch on YouTube →</a>
+                        <a href="https://www.investigationdiscovery.com/video/on-the-case-with-paula-zahn-investigation-discovery-atve-us/two-fires-one-match" target="_blank" rel="noopener noreferrer" class="press-link secondary">Also on Investigation Discovery →</a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <section id="book">
+        <div class="wrap">
+            <div class="sec-label">◈ The Memoir</div>
+            <h2>Book Zero — Before The Spark</h2>
+            <p class="sec-sub">Not the novel. The origin file. The unfiltered account of what happened on our street, in our house, and in the silence after.</p>
+            <div class="origin-grid">
+                <figure class="origin-photo">
+                    <img src="/kateandrach91.jpg" alt="Katelin and her mother Rachael Maureen Johnson, Akron, 1991" width="633" height="779" loading="lazy">
+                    <figcaption class="origin-caption">Rachael &amp; Kate · Akron · 1991</figcaption>
+                </figure>
+                <div class="book-block">
+                    <p>Book Zero is the memoir I've been carrying since I was a child — the story of a killer who lived across from us, who wove himself into our lives, and who remained hidden in plain sight for decades. It's about solving what law enforcement couldn't close for 29 years. It's about what you build when the worst thing already happened and you're still here. Every chapter gets written from the camper, in real places, on the route my code says I'm supposed to be.</p>
+                </div>
+            </div>
+            <div class="product-bridge">
+                <img src="/preview-soulmaps.png" alt="Soul Map page example" class="product-bridge-img" width="500" height="320" loading="lazy">
+                <div>
+                    <div class="sec-label">◈ The Product Behind The Tour</div>
+                    <div class="product-bridge-title">This is what routes the camper.</div>
+                    <p class="product-bridge-desc">Every tour stop is scored against KJP's Soul Map — Life Path 5, Expression 11, Soul Urge 7. The same decode you can get for yourself: numerology + astrology on a private page, hand-built, delivered in minutes.</p>
+                    <div class="product-bridge-price">Founders Edition · $22</div>
+                    <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener noreferrer" class="btn-p">Get Your Soul Map →</a>
+                    <a href="https://soul-maps.thefirstspark.shop/kjp519.html" target="_blank" rel="noopener noreferrer" class="btn-g" style="margin-left:12px;">Read KJP's Map</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="waitlist" style="background: rgba(255,106,61,.02); border-top: 1px solid rgba(255,106,61,.12); border-bottom: 1px solid rgba(255,106,61,.12);">
+        <div class="wrap">
+            <div class="waitlist-panel">
+                <div class="sec-label">◈ Early Access</div>
+                <h2>Book Zero Chapter Waitlist</h2>
+                <p class="sec-sub">Get draft chapters as they're written from the road — before public release. One email when a new drop lands. No funnels. No spam.</p>
+                <form class="waitlist-form"
+                      id="bookZeroWaitlist"
+                      action="https://formspree.io/f/xpqeboba"
+                      method="POST"
+                      data-form="book-zero-waitlist"
+                      aria-label="Book Zero chapter waitlist signup">
+                    <div class="waitlist-row">
+                        <div>
+                            <label for="wl-name">Name</label>
+                            <input type="text" id="wl-name" name="name" placeholder="Your name" autocomplete="name" required>
+                        </div>
+                        <div>
+                            <label for="wl-email">Email</label>
+                            <input type="email" id="wl-email" name="email" placeholder="you@email.com" autocomplete="email" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="wl-city">City (optional — request a tour stop)</label>
+                        <input type="text" id="wl-city" name="city" placeholder="Akron, OH" autocomplete="address-level2">
+                    </div>
+                    <input type="hidden" name="_subject" value="Book Zero Chapter Waitlist">
+                    <input type="hidden" name="source" value="book-zero-tour">
+                    <input type="hidden" name="interest" value="book-zero-chapters">
+                    <button type="submit">Join The Waitlist →</button>
+                    <p class="waitlist-status" id="waitlistStatus" role="status" aria-live="polite"></p>
+                    <p class="waitlist-note">◈ First chapters ship from wherever the Soul Map lands. Unsubscribe anytime.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="rig" style="background: rgba(34,211,238,.03); border-top: 1px solid rgba(34,211,238,.1); border-bottom: 1px solid rgba(34,211,238,.1);">
+        <div class="wrap">
+            <div class="sec-label">◈ Mobile Spark Station</div>
+            <h2>The Rig</h2>
+            <p class="sec-sub">Not a vacation. A live-in studio. Solar on the roof. Starlink on the dash. Code and chapters shipped from wherever the map lands.</p>
+            <div class="rig-grid">
+                <div class="rig-card">
+                    <div class="rig-icon">☀</div>
+                    <div class="rig-name">Solar Array</div>
+                    <p class="rig-desc">Roof-mounted panels + lithium storage. Off-grid writing sessions. Power for stream, laptop, and life without waiting on a plug.</p>
+                </div>
+                <div class="rig-card">
+                    <div class="rig-icon">◈</div>
+                    <div class="rig-name">Starlink / Satellite</div>
+                    <p class="rig-desc">Upload chapters from anywhere. Live stream the build. AI route planning and Soul Map drops don't stop at the city limit.</p>
+                </div>
+                <div class="rig-card">
+                    <div class="rig-icon">▣</div>
+                    <div class="rig-name">Camper Base</div>
+                    <p class="rig-desc">Bed, desk, camera, tools. The Camper Chronicles — building consciousness tech in public while drafting Book Zero mile by mile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="route">
+        <div class="wrap">
+            <div class="sec-label">◈ Soul Map Navigation</div>
+            <h2>AI Picks The Stops</h2>
+            <p class="sec-sub">The route isn't random. Each stop is scored against KJP's Soul Map — Life Path resonance, expression frequency, geographic numerology, and the day's energy cycle. The route recalculates daily.</p>
+
+            <div class="soul-code" id="soulCode"></div>
+
+            <div class="map-panel">
+                <div class="map-wrap">
+                    <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" aria-label="United States tour map">
+                        <defs>
+                            <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#fbbf24"/>
+                                <stop offset="50%" stop-color="#8b5cf6"/>
+                                <stop offset="100%" stop-color="#22d3ee"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Simplified US silhouette -->
+                        <path class="us-fill" d="M120,80 L200,60 L280,70 L360,55 L440,65 L520,50 L600,70 L680,90 L750,120 L780,180 L760,250 L720,320 L680,380 L620,420 L540,440 L460,450 L380,440 L300,420 L220,400 L160,360 L120,300 L100,220 L110,140 Z"/>
+                        <path id="routePath" class="route-line" d=""/>
+                        <g id="mapPins"></g>
+                    </svg>
+                </div>
+                <div class="route-cards" id="routeCards"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="follow">
+        <div class="wrap">
+            <div class="follow-bar">
+                <div class="sec-label" style="margin-bottom:16px;">◈ Ride Along</div>
+                <h2 style="margin-bottom:14px;">The Tour Is The Work</h2>
+                <p>Watch chapters get written in real time. Request a stop in your city. Press, bookstores, true crime communities, and spark-aligned spaces — the door is open.</p>
+                <a href="#waitlist" class="btn-p" style="margin-right:12px;">Chapter Waitlist →</a>
+                <a href="https://youtube.com/@therealfirstspark" target="_blank" rel="noopener noreferrer" class="btn-p">YouTube · Camper Chronicles</a>
+                <a href="https://streamelements.com/kjpthefirstspark/tip" target="_blank" rel="noopener noreferrer" class="btn-g">Fuel The Rig</a>
+                <p style="margin-top:24px; font-size:.62em;"><a href="mailto:kate@thefirstspark.shop?subject=Book%20Zero%20Tour">kate@thefirstspark.shop</a> · press &amp; tour bookings</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="wrap">
+        <p>© 2026 The First Spark · <a href="/">thefirstspark.shop</a> · Book Zero Tour</p>
+    </footer>
+
+    <script>
+    // KJP Soul Map constants (source: soul-maps archive kjp519)
+    const KJP = {
+        lifePath: 5,
+        expression: 11,
+        soulUrge: 7,
+        birthDay: 19,
+        sun: 'Taurus/Gemini',
+        origin: { city: 'Akron', state: 'OH', lat: 41.08, lng: -81.52 }
+    };
+
+    const STOPS = [
+        { id: 'akron', city: 'Akron, OH', label: 'Origin · Rachael\'s story', lat: 41.08, lng: -81.52, lp: 5, expr: 11, weight: 99, story: 'Where it started. Where it ended. Where Book Zero begins.' },
+        { id: 'cleveland', city: 'Cleveland, OH', label: 'Lake Erie · testimony', lat: 41.50, lng: -81.69, lp: 5, expr: 3, weight: 88, story: 'Press corridor. True crime community. First readings.' },
+        { id: 'columbus', city: 'Columbus, OH', label: 'Capitol pulse · chapter draft', lat: 39.96, lng: -82.99, lp: 4, expr: 6, weight: 72, story: 'Policy and pain in the same zip code.' },
+        { id: 'pittsburgh', city: 'Pittsburgh, PA', label: 'Steel & signal', lat: 40.44, lng: -79.99, lp: 7, expr: 5, weight: 76, story: 'Rust belt resilience matches Life Path 5 movement.' },
+        { id: 'detroit', city: 'Detroit, MI', label: 'Rebuild frequency', lat: 42.33, lng: -83.05, lp: 5, expr: 9, weight: 81, story: 'Cities that refuse to die write the best memoirs.' },
+        { id: 'chicago', city: 'Chicago, IL', label: 'Wind numerology · 11 gate', lat: 41.88, lng: -87.63, lp: 11, expr: 11, weight: 94, story: 'Expression 11 city. Master number convergence.' },
+        { id: 'madison', city: 'Madison, WI', label: 'Lake mind · edit bay', lat: 43.07, lng: -89.40, lp: 6, expr: 4, weight: 68, story: 'Quiet water. Heavy edits. Chapter zero polish.' },
+        { id: 'minneapolis', city: 'Minneapolis, MN', label: 'Twin signal', lat: 44.98, lng: -93.27, lp: 5, expr: 7, weight: 74, story: 'Cold clarity. The kind that cuts through denial.' },
+        { id: 'stlouis', city: 'St. Louis, MO', label: 'Gateway · west call', lat: 38.63, lng: -90.20, lp: 5, expr: 8, weight: 85, story: 'Life Path 5 gateway — movement made literal.' },
+        { id: 'nashville', city: 'Nashville, TN', label: 'Story song belt', lat: 36.16, lng: -86.78, lp: 3, expr: 5, weight: 79, story: 'Narrative economy. Everyone here understands arc.' },
+        { id: 'neworleans', city: 'New Orleans, LA', label: 'Ancestral humidity', lat: 29.95, lng: -90.07, lp: 7, expr: 9, weight: 83, story: 'Soul Urge 7 depth. Spirits and syntax.' },
+        { id: 'austin', city: 'Austin, TX', label: 'Live stream capital', lat: 30.27, lng: -97.74, lp: 5, expr: 6, weight: 90, story: 'Tech + story + road crew. Camper Chronicles HQ south.' },
+        { id: 'santafe', city: 'Santa Fe, NM', label: 'High desert codex', lat: 35.69, lng: -105.94, lp: 7, expr: 11, weight: 87, story: 'Thin air. Thin veil. Selector Model pages.' },
+        { id: 'denver', city: 'Denver, CO', label: 'Mile-high manuscript', lat: 39.74, lng: -104.99, lp: 5, expr: 5, weight: 92, story: 'Double 5 resonance. Pure forward motion.' },
+        { id: 'moab', city: 'Moab, UT', label: 'Red rock witness', lat: 38.57, lng: -109.55, lp: 5, expr: 3, weight: 70, story: 'Geology as co-author. Minimal Wi-Fi, maximum truth.' },
+        { id: 'portland', city: 'Portland, OR', label: 'Pacific proof', lat: 45.52, lng: -122.68, lp: 5, expr: 7, weight: 78, story: 'Independent press. Indie bookstores. Map drops.' },
+        { id: 'seattle', city: 'Seattle, WA', label: 'Cloud layer · tech mirror', lat: 47.61, lng: -122.33, lp: 5, expr: 9, weight: 86, story: 'Build in public meets publish in public.' },
+        { id: 'boise', city: 'Boise, ID', label: 'Quiet voltage', lat: 43.62, lng: -116.21, lp: 4, expr: 5, weight: 65, story: 'Off-grid test. Solar stress test week.' },
+        { id: 'kc', city: 'Kansas City, MO', label: 'Crossroads · BBQ & bytes', lat: 39.10, lng: -94.58, lp: 5, expr: 2, weight: 71, story: 'Geographic center. Story center.' },
+        { id: 'atlanta', city: 'Atlanta, GA', label: 'Southern frequency', lat: 33.75, lng: -84.39, lp: 8, expr: 5, weight: 80, story: 'Media hub. Podcast row. Book Zero interviews.' },
+        { id: 'asheville', city: 'Asheville, NC', label: 'Mountain signal', lat: 35.60, lng: -82.55, lp: 7, expr: 6, weight: 75, story: 'Craft, curse, and catharsis.' },
+        { id: 'dc', city: 'Washington, DC', label: 'Justice frequency', lat: 38.91, lng: -77.04, lp: 4, expr: 8, weight: 82, story: 'Systems that fail families — documented.' },
+        { id: 'nyc', city: 'New York, NY', label: 'Media apex', lat: 40.71, lng: -74.01, lp: 11, expr: 3, weight: 91, story: 'True crime networks. Paula Zahn corridor.' },
+        { id: 'boston', city: 'Boston, MA', label: 'Archive east', lat: 42.36, lng: -71.06, lp: 7, expr: 4, weight: 73, story: 'Old cases. New language. Literary agents.' }
+    ];
+
+    function dayOfYear(d) {
+        const start = new Date(d.getFullYear(), 0, 0);
+        return Math.floor((d - start) / 86400000);
+    }
+
+    function scoreStop(stop, day, year) {
+        const lpMatch = stop.lp === KJP.lifePath ? 28 : (Math.abs(stop.lp - KJP.lifePath) === 1 ? 14 : 6);
+        const exprMatch = stop.expr === KJP.expression ? 24 : (stop.expr === 11 || KJP.expression === 11 ? 12 : 5);
+        const cycle = ((day + KJP.birthDay + year) % 23) / 23 * 18;
+        const originPull = stop.id === 'akron' ? 15 : 0;
+        const hash = [...stop.id].reduce((a, c) => a + c.charCodeAt(0), 0);
+        const dayWave = Math.sin((day + hash) * 0.17) * 10;
+        return stop.weight + lpMatch + exprMatch + cycle + originPull + dayWave;
+    }
+
+    function project(lat, lng) {
+        const x = ((lng + 125) / 58) * 700 + 80;
+        const y = ((50 - lat) / 28) * 380 + 60;
+        return { x, y };
+    }
+
+    function pickRoute(date) {
+        const day = dayOfYear(date);
+        const year = date.getFullYear();
+        const ranked = STOPS.map(s => ({ ...s, score: scoreStop(s, day, year) }))
+            .sort((a, b) => b.score - a.score);
+        const startIdx = (day + KJP.lifePath * 7) % ranked.length;
+        const ordered = [...ranked.slice(startIdx), ...ranked.slice(0, startIdx)];
+        return {
+            writing: ordered[0],
+            next: ordered[1],
+            upcoming: ordered[2],
+            day,
+            year
+        };
+    }
+
+    function renderRoute() {
+        const route = pickRoute(new Date());
+        const trio = [route.writing, route.next, route.upcoming];
+        const statuses = ['active', 'next', 'upcoming'];
+        const labels = ['Writing here now', 'AI next stop', 'On deck'];
+
+        document.getElementById('soulCode').innerHTML = [
+            ['Life Path', KJP.lifePath + ' Catalyst'],
+            ['Expression', KJP.expression + ' Master Illuminator'],
+            ['Soul Urge', KJP.soulUrge + ' Seeker'],
+            ['Sun', KJP.sun],
+            ['Origin', 'Akron, OH'],
+            ['Route Day', route.day + ' / ' + route.year]
+        ].map(([k, v]) => '<span class="soul-chip"><strong>' + k + '</strong> · ' + v + '</span>').join('');
+
+        const pins = document.getElementById('mapPins');
+        pins.innerHTML = '';
+        STOPS.forEach(stop => {
+            const p = project(stop.lat, stop.lng);
+            const isTrio = trio.findIndex(t => t.id === stop.id);
+            const cls = isTrio === 0 ? 'pin-active' : isTrio === 1 ? 'pin-next' : isTrio === 2 ? 'pin-upcoming' : 'pin-core';
+            const r = isTrio >= 0 ? 7 : 4;
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', p.x);
+            circle.setAttribute('cy', p.y);
+            circle.setAttribute('r', r);
+            circle.setAttribute('class', 'map-pin ' + cls);
+            circle.innerHTML = '';
+            const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+            title.textContent = stop.city + ' — ' + stop.label;
+            circle.appendChild(title);
+            pins.appendChild(circle);
+        });
+
+        const pathPts = trio.map(s => {
+            const p = project(s.lat, s.lng);
+            return p.x + ',' + p.y;
+        }).join(' ');
+        document.getElementById('routePath').setAttribute('d', 'M ' + pathPts);
+
+        document.getElementById('routeCards').innerHTML = trio.map((stop, i) => (
+            '<div class="route-card ' + statuses[i] + '">' +
+                '<div class="route-status">' + labels[i] + '</div>' +
+                '<div class="route-city">' + stop.city + '</div>' +
+                '<div class="route-why">' + stop.story + '</div>' +
+                '<div class="route-score">Soul Map score · ' + Math.round(stop.score) + ' · ' + stop.label + '</div>' +
+            '</div>'
+        )).join('');
+    }
+
+    renderRoute();
+
+    // Book Zero waitlist
+    (function() {
+        const form = document.getElementById('bookZeroWaitlist');
+        const status = document.getElementById('waitlistStatus');
+        if (!form || !status) return;
+
+        function setStatus(text, type) {
+            status.textContent = text;
+            status.className = 'waitlist-status' + (type ? ' ' + type : '');
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formAction = form.getAttribute('action');
+
+            if (!formAction || formAction.includes('YOUR_FORM_ID')) {
+                setStatus('Waitlist not live yet — email kate@thefirstspark.shop with subject "Book Zero Waitlist".', 'warning');
+                return;
+            }
+
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.textContent = 'Joining…';
+            btn.disabled = true;
+            setStatus('', '');
+
+            try {
+                const res = await fetch(formAction, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { Accept: 'application/json' }
+                });
+                if (res.ok) {
+                    setStatus("You're on the list. First chapter drop hits your inbox from the road.", 'success');
+                    form.reset();
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'signup', {
+                            event_category: 'engagement',
+                            event_label: 'book_zero_chapter_waitlist'
+                        });
+                    }
+                } else {
+                    throw new Error('submit failed');
+                }
+            } catch (err) {
+                setStatus('Something went wrong — email kate@thefirstspark.shop to join the waitlist.', 'error');
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+    })();
+
+    // Starfield
+    (function() {
+        const c = document.getElementById('stars');
+        const x = c.getContext('2d');
+        let w, h, stars;
+        function resize() {
+            w = c.width = innerWidth;
+            h = c.height = innerHeight;
+            stars = Array.from({ length: Math.min(160, Math.floor(w * h / 12000)) }, () => ({
+                x: Math.random() * w, y: Math.random() * h,
+                r: Math.random() * 1.2 + 0.2,
+                a: Math.random() * Math.PI * 2,
+                s: Math.random() * 0.012 + 0.004
+            }));
+        }
+        function draw() {
+            x.clearRect(0, 0, w, h);
+            for (const s of stars) {
+                s.a += s.s;
+                const o = (Math.sin(s.a) + 1) / 2 * 0.55 + 0.08;
+                x.beginPath();
+                x.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                x.fillStyle = 'rgba(255,255,255,' + o + ')';
+                x.fill();
+            }
+            requestAnimationFrame(draw);
+        }
+        resize(); draw();
+        addEventListener('resize', resize);
+    })();
+    </script>
+</body>
+</html>

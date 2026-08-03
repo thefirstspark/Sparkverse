@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<!--
+  SOUL MAPS — Simple Landing Page
+  ─────────────────────────────────
+  Replace soul-maps-sales.html with this file when ready.
+
+  CUSTOMIZE (search CONFIG below):
+  - price / launchPrice / promoCode
+  - checkoutUrl (Whop link)
+  - freeToolUrl (free Soul Code generator)
+
+  DEPLOY: Same folder as preview-soulmaps.png (thefirstspark-website/)
+-->
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Your Soul Map | The First Spark</title>
+  <meta name="description" content="Your personal Soul Map — numerology + astrology decoded into clear next steps. Live URL in about 5 minutes." />
+  <link rel="canonical" href="https://thefirstspark.shop/soul-maps-landing.html" />
+  <meta property="og:title" content="Get Your Soul Map | The First Spark" />
+  <meta property="og:description" content="Stop guessing. Get your Life Path, Expression, Soul Urge, and Sun Sign decoded into one practical map." />
+  <meta property="og:image" content="https://thefirstspark.shop/preview-soulmaps.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thefirstspark.shop/soul-maps-landing.html" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Soul Map — Founders Edition",
+    "description": "Personalized Soul Map: Life Path, Expression, Soul Urge, Personality, natal astrology, and Chinese zodiac on a private page you keep forever.",
+    "image": [
+      "https://thefirstspark.shop/preview-soulmaps.png",
+      "https://thefirstspark.shop/og-home.png"
+    ],
+    "brand": {
+      "@type": "Brand",
+      "name": "The First Spark"
+    },
+    "sku": "soul-map-founders",
+    "offers": {
+      "@type": "Offer",
+      "price": "22.00",
+      "priceCurrency": "USD",
+      "url": "https://whop.com/checkout/plan_anQKP3Pzf1cGm",
+      "availability": "https://schema.org/InStock",
+      "priceValidUntil": "2027-12-31"
+    }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Playfair Display', 'Georgia', 'serif'],
+          },
+          colors: {
+            night: '#08081a',
+            gold: '#e8b84b',
+            violet: '#8b6fd4',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { background: #08081a; }
+    .hero-glow {
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -10%, rgba(139, 111, 212, 0.18), transparent),
+        radial-gradient(ellipse 40% 30% at 90% 20%, rgba(232, 184, 75, 0.08), transparent),
+        #08081a;
+    }
+  </style>
+</head>
+<body class="text-zinc-300 antialiased">
+
+  <!-- ========== CONFIG — edit here ========== -->
+  <script>
+    const CONFIG = {
+      price: 22,
+      checkoutUrl: 'https://whop.com/checkout/plan_anQKP3Pzf1cGm',
+      freeToolUrl: 'soul-map.html',
+      delivery: 'Live URL in about 5 minutes',
+    };
+  </script>
+
+  <!-- Sticky buy bar -->
+  <div class="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-night/95 backdrop-blur-md px-4 py-3 md:hidden">
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <p class="text-sm font-semibold text-white">Soul Map</p>
+        <p class="text-xs text-gold" id="sticky-price">$22</p>
+      </div>
+      <a id="sticky-cta" href="#" class="shrink-0 rounded-lg bg-gold px-5 py-2.5 text-sm font-bold text-night">
+        Get Mine →
+      </a>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="mx-auto flex max-w-3xl items-center justify-between px-5 py-5">
+    <a href="/" class="text-sm font-medium text-zinc-500 hover:text-zinc-300">The First Spark</a>
+    <div class="flex items-center gap-4">
+      <a href="what-is-a-soul-map.html" class="text-xs text-zinc-500 hover:text-zinc-300">What is it?</a>
+      <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer" class="text-xs text-zinc-500 hover:text-zinc-300">Freq Match</a>
+      <a id="nav-cta" href="#" class="hidden rounded-lg bg-gold/10 px-4 py-2 text-sm font-semibold text-gold ring-1 ring-gold/30 md:inline-block">
+        Get My Soul Map
+      </a>
+    </div>
+  </nav>
+
+  <!-- ① HERO — one message, one button -->
+  <header class="hero-glow px-5 pb-16 pt-8 md:pb-24 md:pt-12">
+    <div class="mx-auto max-w-3xl text-center">
+
+      <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-violet">Personal Soul Map</p>
+
+      <h1 class="font-display text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
+        Your numbers.<br><span class="text-gold">Decoded.</span>
+      </h1>
+
+      <p class="mx-auto mt-5 max-w-md text-base text-zinc-400 md:text-lg">
+        Life Path · Expression · Soul Urge · Astrology — one private page.
+      </p>
+
+      <!-- Price block -->
+      <div class="mx-auto mt-8 inline-flex flex-col items-center rounded-2xl border border-white/10 bg-white/5 px-8 py-5">
+        <div class="flex items-baseline gap-2">
+          <span class="font-display text-5xl font-bold text-gold" id="hero-price">$22</span>
+        </div>
+        <p class="mt-1 text-sm text-zinc-400">One-time payment · No subscription</p>
+      </div>
+
+      <a
+        id="hero-cta"
+        href="#"
+        class="mt-6 inline-flex w-full max-w-sm items-center justify-center rounded-xl bg-gold px-8 py-4 text-base font-bold text-night shadow-lg shadow-gold/20 transition hover:bg-amber-400 md:w-auto"
+      >
+        Get My Soul Map →
+      </a>
+
+      <p class="mt-4 text-xs text-zinc-500" id="delivery-note">Live URL in about 5 minutes · Birth date + full name required</p>
+
+      <p class="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs">
+        <a href="what-is-a-soul-map.html" class="text-zinc-500 underline decoration-zinc-700 underline-offset-2 hover:text-zinc-300">Full explanation →</a>
+        <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer" class="text-zinc-500 underline decoration-zinc-700 underline-offset-2 hover:text-zinc-300">Use Freq Match →</a>
+        <a id="free-link" href="#" class="text-zinc-500 underline decoration-zinc-700 underline-offset-2 hover:text-zinc-300">Free Soul Code →</a>
+      </p>
+    </div>
+  </header>
+
+  <!-- Preview image -->
+  <section class="px-5 pb-16">
+    <div class="mx-auto max-w-2xl">
+      <img
+        src="preview-soulmaps.png"
+        alt="Preview of a Soul Map"
+        class="w-full rounded-2xl border border-white/10 shadow-2xl shadow-violet/10"
+        loading="lazy"
+      />
+      <p class="mt-3 text-center text-xs text-zinc-600">Example Soul Map — yours is built from your birth details</p>
+    </div>
+  </section>
+
+  <!-- ② WHAT YOU GET — 3 bullets, not 4 cards -->
+  <section class="border-t border-white/5 px-5 py-16">
+    <div class="mx-auto max-w-2xl">
+      <h2 class="font-display text-2xl font-bold text-white md:text-3xl">What's inside</h2>
+      <ul class="mt-8 space-y-5">
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet/20 text-sm font-bold text-violet">1</span>
+          <div>
+            <p class="font-semibold text-white">Your full Soul Code</p>
+            <p class="mt-0.5 text-sm text-zinc-400">Life Path, Expression, Soul Urge, Personality, and Sun Sign — calculated from your birth date and name.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet/20 text-sm font-bold text-violet">2</span>
+          <div>
+            <p class="font-semibold text-white">Plain-English interpretation</p>
+            <p class="mt-0.5 text-sm text-zinc-400">Not a vague reading. Specific guidance on your gifts, friction points, and what to do this week.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet/20 text-sm font-bold text-violet">3</span>
+          <div>
+            <p class="font-semibold text-white">Yours to keep</p>
+            <p class="mt-0.5 text-sm text-zinc-400">A private page you can revisit anytime. One-time payment — no subscription.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ③ HOW IT WORKS — 3 steps -->
+  <section class="border-t border-white/5 bg-white/[0.02] px-5 py-16">
+    <div class="mx-auto max-w-2xl">
+      <h2 class="font-display text-2xl font-bold text-white md:text-3xl">How it works</h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-xl border border-white/8 bg-night p-5 text-center">
+          <p class="text-2xl">①</p>
+          <p class="mt-2 text-sm font-semibold text-white">Checkout</p>
+          <p class="mt-1 text-xs text-zinc-500">Pay once on Whop. No subscription.</p>
+        </div>
+        <div class="rounded-xl border border-white/8 bg-night p-5 text-center">
+          <p class="text-2xl">②</p>
+          <p class="mt-2 text-sm font-semibold text-white">Submit details</p>
+          <p class="mt-1 text-xs text-zinc-500">Birth date + full birth name. Takes 2 minutes.</p>
+        </div>
+        <div class="rounded-xl border border-white/8 bg-night p-5 text-center">
+          <p class="text-2xl">③</p>
+          <p class="mt-2 text-sm font-semibold text-white">Get your map</p>
+          <p class="mt-1 text-xs text-zinc-500">Live URL in about 5 minutes. Yours to keep forever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ ONE TESTIMONIAL -->
+  <section class="border-t border-white/5 px-5 py-16">
+    <div class="mx-auto max-w-xl text-center">
+      <p class="text-base italic leading-relaxed text-zinc-300">
+        "I expected a vibe reading. I got a clear blueprint for why I make decisions the way I do. Changed two offers in my business within 24 hours."
+      </p>
+      <p class="mt-3 text-xs uppercase tracking-wider text-zinc-500">— Founder, wellness brand</p>
+    </div>
+  </section>
+
+  <!-- ⑤ FAQ — 3 questions only -->
+  <section class="border-t border-white/5 px-5 py-16 pb-28 md:pb-16">
+    <div class="mx-auto max-w-2xl">
+      <h2 class="font-display text-2xl font-bold text-white">Quick answers</h2>
+      <div class="mt-6 space-y-3">
+        <details class="group rounded-xl border border-white/8 bg-white/[0.03]">
+          <summary class="cursor-pointer px-5 py-4 font-medium text-white">What do I need to provide?</summary>
+          <p class="border-t border-white/5 px-5 py-4 text-sm text-zinc-400">Your birth date and full birth name (as on your birth certificate). That's it.</p>
+        </details>
+        <details class="group rounded-xl border border-white/8 bg-white/[0.03]">
+          <summary class="cursor-pointer px-5 py-4 font-medium text-white">How is this different from the free Soul Code?</summary>
+          <p class="border-t border-white/5 px-5 py-4 text-sm text-zinc-400">The free tool gives your numbers. The Soul Map gives the full interpretation — what they mean and what to do with them.</p>
+        </details>
+        <details class="group rounded-xl border border-white/8 bg-white/[0.03]">
+          <summary class="cursor-pointer px-5 py-4 font-medium text-white">Can I buy this as a gift?</summary>
+          <p class="border-t border-white/5 px-5 py-4 text-sm text-zinc-400">Yes. Purchase and submit their birth details instead of yours.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ FINAL CTA -->
+  <section class="border-t border-white/5 bg-gradient-to-b from-violet/10 to-night px-5 py-20">
+    <div class="mx-auto max-w-xl text-center">
+      <h2 class="font-display text-3xl font-bold text-white">Ready?</h2>
+      <p class="mt-3 text-zinc-400">One payment. No subscription. Live URL in about 5 minutes.</p>
+      <a
+        id="final-cta"
+        href="#"
+        class="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-gold px-8 py-4 text-base font-bold text-night shadow-lg shadow-gold/20 transition hover:bg-amber-400 sm:w-auto"
+      >
+        Get My Soul Map — <span id="final-price">$22</span> →
+      </a>
+      <p class="mt-4 text-xs text-zinc-500">One-time payment · No subscription</p>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/5 px-5 py-8 text-center text-xs text-zinc-600">
+    <p>The First Spark · Soul Maps</p>
+    <p class="mt-2 space-x-3">
+      <a href="what-is-a-soul-map.html" class="text-zinc-500 hover:text-zinc-300">What is a Soul Map</a>
+      <a href="https://frequency.thefirstspark.shop" target="_blank" rel="noopener noreferrer" class="text-zinc-500 hover:text-zinc-300">Freq Match</a>
+      <a href="/" class="text-zinc-500 hover:text-zinc-300">Home</a>
+    </p>
+    <p class="mt-2">For self-reflection. Not financial or medical advice.</p>
+  </footer>
+
+  <script>
+    (function init() {
+      const fmt = (n) => '$' + n;
+
+      // Apply config to all CTAs and price displays
+      document.getElementById('hero-price').textContent = fmt(CONFIG.price);
+      document.getElementById('final-price').textContent = fmt(CONFIG.price);
+      document.getElementById('sticky-price').textContent = fmt(CONFIG.price);
+      document.getElementById('delivery-note').textContent =
+        CONFIG.delivery + ' · Birth date + full name required';
+
+      ['hero-cta', 'nav-cta', 'sticky-cta', 'final-cta'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.href = CONFIG.checkoutUrl;
+          el.target = '_blank';
+          el.rel = 'noopener noreferrer';
+        }
+      });
+
+      document.getElementById('free-link').href = CONFIG.freeToolUrl;
+    })();
+  </script>
+</body>
+</html>

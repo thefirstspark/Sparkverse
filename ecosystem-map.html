@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The First Spark — Ecosystem & Revenue Map</title>
+<meta name="description" content="A consciousness technology platform with multiple revenue streams, proprietary IP, and an AI-first roadmap.">
+<meta property="og:title" content="The First Spark — Ecosystem & Revenue Architecture">
+<meta property="og:description" content="Soul Maps, Obitura, Sparkverse, Selector Model IP — the full revenue map.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thefirstspark.shop/ecosystem-map.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@OGplayerone">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --void:#05060a;--bone:#e8e4d8;--gold:#d4a843;--cyan:#22d3ee;
+  --violet:#8b5cf6;--ember:#ff6a3d;--green:#34d399;--rose:#f472b6;
+  --muted:#9a978c;--dim:rgba(232,228,216,.08);
+}
+body{background:var(--void);color:var(--bone);font-family:'Cormorant Garamond',Georgia,serif;line-height:1.7;overflow-x:hidden}
+.mono{font-family:'Space Mono','Courier New',monospace}
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.stars span{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 3s infinite}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.7}}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.hero{text-align:center;padding:4rem 0 3rem}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:300;letter-spacing:.04em;color:var(--gold)}
+.hero .sub{font-size:1.1rem;color:var(--muted);margin-top:.5rem}
+.hero .tagline{font-size:1.25rem;color:var(--bone);margin-top:1.5rem;font-style:italic}
+.section{margin:3rem 0}
+.section h2{font-size:1.8rem;color:var(--gold);margin-bottom:1.5rem;border-bottom:1px solid rgba(212,168,67,.2);padding-bottom:.5rem}
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.rev-card{background:rgba(232,228,216,.04);border:1px solid rgba(232,228,216,.1);padding:1.5rem;position:relative;transition:border-color .3s}
+.rev-card:hover{border-color:var(--gold)}
+.rev-card .status{position:absolute;top:1rem;right:1rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .6rem;border-radius:2px}
+.rev-card .status.live{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.rev-card .status.building{background:rgba(139,92,246,.15);color:var(--violet);border:1px solid rgba(139,92,246,.3)}
+.rev-card .status.planned{background:rgba(255,106,61,.12);color:var(--ember);border:1px solid rgba(255,106,61,.3)}
+.rev-card h3{font-size:1.3rem;margin-bottom:.5rem;color:var(--bone)}
+.rev-card .price{color:var(--cyan);font-weight:600;margin-bottom:.5rem}
+.rev-card p{font-size:.95rem;color:var(--muted);line-height:1.6}
+.sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.sub-card{background:var(--dim);border:1px solid rgba(232,228,216,.08);padding:1.25rem;font-size:.9rem}
+.sub-card .url{color:var(--cyan);font-size:.8rem;letter-spacing:.05em}
+.sub-card .desc{color:var(--muted);margin-top:.4rem}
+.ip-list{list-style:none;padding:0}
+.ip-list li{padding:.8rem 0;border-bottom:1px solid rgba(232,228,216,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.ip-list .name{color:var(--bone);font-size:1.05rem}
+.ip-list .tag{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.15rem .5rem;border-radius:2px;background:rgba(212,168,67,.12);color:var(--gold);border:1px solid rgba(212,168,67,.25)}
+.roadmap{position:relative;padding-left:2rem}
+.roadmap::before{content:'';position:absolute;left:.5rem;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),var(--violet),var(--cyan))}
+.roadmap .phase{position:relative;margin-bottom:2rem;padding-left:1.5rem}
+.roadmap .phase::before{content:'';position:absolute;left:-1.55rem;top:.5rem;width:10px;height:10px;border-radius:50%;border:2px solid var(--gold);background:var(--void)}
+.roadmap .phase h3{color:var(--bone);font-size:1.15rem;margin-bottom:.3rem}
+.roadmap .phase .timeline{font-size:.75rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.roadmap .phase p{font-size:.95rem;color:var(--muted)}
+.traction-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;text-align:center}
+.traction-card{background:var(--dim);border:1px solid rgba(232,228,216,.08);padding:1.5rem 1rem}
+.traction-card .num{font-size:2rem;color:var(--gold);font-weight:300}
+.traction-card .label{font-size:.75rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem}
+.cta-band{text-align:center;padding:3rem 0;margin-top:2rem;border-top:1px solid rgba(212,168,67,.15)}
+.cta-band h2{font-size:1.6rem;color:var(--gold);margin-bottom:.5rem}
+.cta-band p{color:var(--muted);margin-bottom:1.5rem}
+.cta-band a{display:inline-block;padding:.8rem 2rem;background:var(--gold);color:var(--void);text-decoration:none;font-weight:600;letter-spacing:.08em;transition:background .3s;margin:.3rem}
+.cta-band a:hover{background:#e8bc5a}
+footer{text-align:center;padding:2rem 0;font-size:.8rem;color:var(--muted)}
+footer a{color:var(--gold);text-decoration:none}
+@media(max-width:640px){.page{padding:1.5rem 1rem}.hero h1{font-size:2rem}.rev-grid,.sub-grid{grid-template-columns:1fr}.traction-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="page">
+<div class="hero">
+  <h1>The First Spark</h1>
+  <p class="sub mono" style="font-size:.85rem;letter-spacing:.15em">ECOSYSTEM & REVENUE ARCHITECTURE</p>
+  <p class="tagline">Reality is programmable. Consciousness is the code.</p>
+  <p style="font-size:.85rem;color:var(--muted);margin-top:.5rem">Kate's Paint LLC &middot; Akron, Ohio &middot; Founded 2024</p>
+</div>
+<div class="section">
+  <h2>Traction</h2>
+  <div class="traction-grid">
+    <div class="traction-card"><div class="num">115+</div><div class="label">Soul Maps Delivered</div></div>
+    <div class="traction-card"><div class="num">90+</div><div class="label">Live Builds Deployed</div></div>
+    <div class="traction-card"><div class="num">17</div><div class="label">Sparkverse Members</div></div>
+    <div class="traction-card"><div class="num">1</div><div class="label">Published Thesis (CC BY-NC 4.0)</div></div>
+    <div class="traction-card"><div class="num">1</div><div class="label">Press Feature (Voyage Ohio)</div></div>
+    <div class="traction-card"><div class="num">75K</div><div class="label">Words — Novel Complete</div></div>
+  </div>
+</div>
+<div class="section">
+  <h2>Revenue Streams</h2>
+  <div class="rev-grid">
+    <div class="rev-card"><span class="status live mono">Live</span><h3>Soul Maps</h3><p class="price mono">$22 per map</p><p>Personalized numerology + astrology readings generated as custom HTML pages. Automated pipeline: Whop checkout, serverless webhook, numerology engine, GitHub deploy, email delivery via Resend. 35% affiliate program active.</p></div>
+    <div class="rev-card"><span class="status live mono">Live</span><h3>Sparkverse Membership</h3><p class="price mono">Free + Paid tiers</p><p>Community platform on Whop. Sparked Access (free) + Players Lounge (paid). Onboarding sequences, Notion hub, tiered content access. 17 free members, paid conversion funnel active.</p></div>
+    <div class="rev-card"><span class="status live mono">Live</span><h3>Obitura</h3><p class="price mono">B2B white-label</p><p>AI obituary generation service targeting funeral homes. Hosted on Netlify at obitura.com. B2B and direct-to-consumer pipeline.</p></div>
+    <div class="rev-card"><span class="status building mono">Building</span><h3>Soul Map Upsells</h3><p class="price mono">$5 - $55</p><p>Compatibility Overlays ($11), Soul Codes ($5-$11), Family Constellations ($33), Squad Sync ($55), Yearly Updates ($7/yr), Transit Alerts ($3/mo), Personal Sigils ($11).</p></div>
+    <div class="rev-card"><span class="status building mono">Building</span><h3>Digital Art & Downloads</h3><p class="price mono">$7 - $15</p><p>Soul Spark wallpaper packs, sigil downloads, print-ready art. Digital delivery via Whop. Zero fulfillment cost.</p></div>
+    <div class="rev-card"><span class="status planned mono">Planned</span><h3>Spark AI Agent</h3><p class="price mono">Subscription</p><p>Fine-tuned model on Selector Model corpus. LangGraph/n8n orchestration, Pinecone vector memory. Conversational consciousness tool that generates maps, holds context, and routes to products.</p></div>
+    <div class="rev-card"><span class="status planned mono">Planned</span><h3>Licensing & Publishing</h3><p class="price mono">Royalties + Licensing</p><p>Book Zero memoir, Sparkverse novel (75K words complete), Selector Model framework licensing. IP moat deepens with each publication.</p></div>
+  </div>
+</div>
+<div class="section">
+  <h2>Digital Infrastructure</h2>
+  <div class="sub-grid">
+    <div class="sub-card"><div class="url mono">thefirstspark.shop</div><div class="desc">Main site — 90+ pages, GitHub Pages + Fastly CDN</div></div>
+    <div class="sub-card"><div class="url mono">soul-maps.thefirstspark.shop</div><div class="desc">Soul Maps storefront + delivery — 115+ maps live</div></div>
+    <div class="sub-card"><div class="url mono">sparkverse.thefirstspark.shop</div><div class="desc">Sparkverse community hub — solar system nav</div></div>
+    <div class="sub-card"><div class="url mono">sigilcraft.thefirstspark.shop</div><div class="desc">Sigil tools — Forge, Soul Sigil, Daily, Grimoire, Library</div></div>
+    <div class="sub-card"><div class="url mono">rituals.thefirstspark.shop</div><div class="desc">Interactive ceremonies — Ritual of TFS</div></div>
+    <div class="sub-card"><div class="url mono">obitura.com</div><div class="desc">AI obituary service — Netlify hosted</div></div>
+    <div class="sub-card"><div class="url mono">thefirstspark.shop/press-start</div><div class="desc">Accountability app — daily tracking</div></div>
+    <div class="sub-card"><div class="url mono">whop.com/the-first-spark-soul-maps</div><div class="desc">Whop storefront — checkout + affiliates (35%)</div></div>
+  </div>
+</div>
+<div class="section">
+  <h2>Intellectual Property</h2>
+  <ul class="ip-list">
+    <li><span class="name">The Selector Model — Published Thesis</span><span class="tag mono">CC BY-NC 4.0 - Apr 2025</span></li>
+    <li><span class="name">Soul Map Numerology Engine</span><span class="tag mono">Proprietary Algorithm</span></li>
+    <li><span class="name">KJP Core Code (SELECT / RELEASE / WITNESS)</span><span class="tag mono">Original Framework</span></li>
+    <li><span class="name">Five-Track Mind Framework</span><span class="tag mono">Original Framework</span></li>
+    <li><span class="name">Quantum Signature System</span><span class="tag mono">Original System</span></li>
+    <li><span class="name">The First Spark: Genesis of the Sparkverse (Novel)</span><span class="tag mono">75K Words - Complete</span></li>
+    <li><span class="name">Book Zero (Memoir)</span><span class="tag mono">In Progress</span></li>
+    <li><span class="name">Selector Model Training Data (JSONL Corpus)</span><span class="tag mono">Fine-Tune Ready</span></li>
+    <li><span class="name">90+ Interactive HTML Tools & Experiences</span><span class="tag mono">Deployed - Portfolio</span></li>
+  </ul>
+</div>
+<div class="section">
+  <h2>Roadmap</h2>
+  <div class="roadmap">
+    <div class="phase"><h3>Phase 1 — Revenue Engine</h3><p class="timeline mono">Now - Q3 2026</p><p>Scale Soul Maps to 50+ paid/month via affiliate network + paid ads. Launch upsell ladder. Activate weekly email funnel via Resend. Convert free Sparkverse members to paid tier.</p></div>
+    <div class="phase"><h3>Phase 2 — AI Agent (Spark)</h3><p class="timeline mono">Q3 - Q4 2026</p><p>Fine-tune on Selector Model corpus (JSONL pairs). LangGraph/n8n orchestration layer. Pinecone/Weaviate vector memory. Agent generates maps, holds conversations, routes to products.</p></div>
+    <div class="phase"><h3>Phase 3 — Publishing & Licensing</h3><p class="timeline mono">Q4 2026 - 2027</p><p>Book Zero launch. Selector Model licensing to practitioners/coaches. Sparkverse novel distribution. IP moat compounds.</p></div>
+    <div class="phase"><h3>Phase 4 — Physical & Scale</h3><p class="timeline mono">2027+</p><p>Mobile Spark Station (Class C RV studio). Earthship community (Hocking Hills, OH). Retreat programming. Brand partnerships.</p></div>
+  </div>
+</div>
+<div class="section">
+  <h2>Founder</h2>
+  <p style="font-size:1.05rem;max-width:700px">Katelin Jill Puzakulics — University of Akron business graduate, solo founder, mother of two. The First Spark emerged from a 2020 awakening experience and the resolution of her mother Rachael's cold case (conviction 2023). She went from idea to 115+ automated soul maps, a published thesis, a 75K-word novel, and 90+ deployed builds — solo, while raising two kids.</p>
+</div>
+<div class="cta-band">
+  <h2>See the Engine</h2>
+  <p>Explore the Selector Model IP, the live products, and the build velocity.</p>
+  <a href="selector-model-ip.html" class="mono">SELECTOR MODEL IP</a>
+  <a href="theraise.html" class="mono">THE RAISE</a>
+</div>
+<footer>
+  <p>The First Spark &middot; Kate's Paint LLC &middot; Akron, Ohio</p>
+  <p style="margin-top:.3rem"><a href="https://thefirstspark.shop">thefirstspark.shop</a> &middot; <a href="mailto:kate@thefirstspark.shop">kate@thefirstspark.shop</a></p>
+  <p style="margin-top:.3rem;font-size:.7rem">X <a href="https://x.com/OGplayerone">@OGplayerone</a> &middot; IG/YT <a href="https://instagram.com/therealfirstspark">@therealfirstspark</a> &middot; TikTok <a href="https://tiktok.com/@sparkedone">@sparkedone</a></p>
+</footer>
+</div>
+<script>
+(function(){var s=document.getElementById('stars');var h='';for(var i=0;i<120;i++){var x=Math.random()*100;var y=Math.random()*100;var d=Math.random()*4;var sz=Math.random()*1.5+.5;h+='<span style="left:'+x+'%;top:'+y+'%;width:'+sz+'px;height:'+sz+'px;animation-delay:'+d.toFixed(1)+'s"></span>';}s.innerHTML=h;})();
+</script>
+</body>
+</html>
