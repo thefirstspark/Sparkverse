@@ -390,6 +390,33 @@
     font-size: 18px;
     cursor: pointer;
   }
+  #detail-panel .detail-link {
+    display: none;
+    margin-top: 16px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--void);
+    background: linear-gradient(135deg, var(--spark-gold), var(--spark-amber));
+    padding: 10px 24px;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(240,192,64,0.25);
+    transition: box-shadow 0.3s, transform 0.2s;
+  }
+  #detail-panel .detail-link:hover {
+    box-shadow: 0 0 50px rgba(240,192,64,0.45);
+    transform: translateY(-1px);
+  }
+  #detail-panel .detail-link.visible { display: inline-block; }
+
+  .node-link-mark {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-left: 6px;
+  }
 
   /* Entrance animation */
   .node {
@@ -407,7 +434,7 @@
 <div id="hud">
   <div>
     <div class="hud-title">✦ The Sparkverse</div>
-    <div class="hud-subtitle">Ecosystem Map v1.0 — Drag to pan · Scroll to zoom</div>
+    <div class="hud-subtitle">Ecosystem Map v1.1 — Drag to pan · Scroll to zoom · Click a node to explore &amp; launch</div>
   </div>
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--spark-gold)"></div>Core</div>
@@ -439,6 +466,7 @@
   <button class="detail-close" onclick="closeDetail()">✕</button>
   <div class="detail-title" id="detail-title"></div>
   <div class="detail-body" id="detail-body"></div>
+  <a class="detail-link" id="detail-link" href="#">Launch →</a>
 </div>
 
 <script>
@@ -449,7 +477,8 @@ const nodes = [
     label: 'The First Spark',
     desc: 'Consciousness technology platform. Reality is programmable — and this is the IDE.',
     tag: 'thefirstspark.shop',
-    detail: 'The central hub of the Sparkverse. A platform hosting 50+ interactive consciousness tools — soul mapping generators, sigil creators, reality programming interfaces. Operating under Kate\'s Paint LLC as DBA. Philosophy: reciprocity, not extraction.'
+    detail: 'The central hub of the Sparkverse. A platform hosting 50+ interactive consciousness tools — soul mapping generators, sigil creators, reality programming interfaces. Operating under Kate\'s Paint LLC as DBA. Philosophy: reciprocity, not extraction.',
+    url: 'index.html', urlLabel: 'Enter the Sparkverse →'
   },
 
   // === PRODUCTS (Amber) ===
@@ -459,7 +488,26 @@ const nodes = [
     desc: 'Soul mappers, sigil generators, reality programming interfaces',
     tag: 'live · html tools',
     detail: 'The beating heart of the platform — over 50 handcrafted interactive HTML tools for consciousness exploration. Each tool is a portal: soul mapping generators, sigil creators, sacred geometry builders, and reality programming interfaces. All self-built, all unique.',
+    url: 'tools.html', urlLabel: 'Open the Tools Galaxy →',
     connects: ['core']
+  },
+  {
+    id: 'sigilforge', type: 'product', x: 2850, y: 950,
+    label: 'Sigil Forge',
+    desc: 'Pro sigil creation app — craft, charge, and collect your sigils',
+    tag: 'live · $11/mo',
+    detail: 'The flagship subscription app. A professional sigil creation studio where you craft, charge, and collect personal sigils. Live at sigilcraft.thefirstspark.shop — $11/month, powered by Whop and Supabase.',
+    url: 'https://sigilcraft.thefirstspark.shop/forge/', urlLabel: 'Launch Sigil Forge →',
+    connects: ['core', 'tools', 'whop']
+  },
+  {
+    id: 'soulmaps', type: 'product', x: 2800, y: 1450,
+    label: 'Soul Maps',
+    desc: 'Personalized soul map artifacts — your consciousness, rendered',
+    tag: 'live · custom orders',
+    detail: 'Personalized soul map artifacts, generated and delivered automatically. Each map renders your unique patterns into a shareable cosmic artifact. Live at soul-maps.thefirstspark.shop with automated fulfillment.',
+    url: 'https://soul-maps.thefirstspark.shop/', urlLabel: 'Explore Soul Maps →',
+    connects: ['core', 'tools']
   },
   {
     id: 'obitura', type: 'product', x: 2400, y: 1400,
@@ -470,11 +518,21 @@ const nodes = [
     connects: ['core']
   },
   {
+    id: 'oracle', type: 'product', x: 2750, y: 1750,
+    label: 'The Oracle',
+    desc: 'Free consciousness guidance — ask, and the pattern answers',
+    tag: 'live · free',
+    detail: 'Free pattern-recognition and consciousness guidance. Ask the Oracle a question and receive spiritual insight, consciousness navigation, and transformation guidance. The open front door of the Sparkverse.',
+    url: 'oracle.html', urlLabel: 'Ask the Oracle →',
+    connects: ['tools', 'community']
+  },
+  {
     id: 'bookzero', type: 'product', x: 2350, y: 1700,
     label: 'Book Zero',
     desc: 'Memoir — from personal alchemy to building consciousness tech',
     tag: 'in progress',
     detail: 'The origin story. A memoir documenting the journey from childhood trauma, spiritual awakening on a pool raft, to building consciousness technology. Not just a book — it\'s the source code of the Sparkverse narrative.',
+    url: 'signal.html', urlLabel: 'Read Book 0.1 →',
     connects: ['core', 'founder']
   },
 
@@ -501,6 +559,7 @@ const nodes = [
     desc: 'TikTok, Sora videos, ritual guides, consciousness frameworks',
     tag: 'multi-platform',
     detail: 'The storytelling arm. TikTok content, Sora-generated videos, ritual guides, sacred geometry tutorials, and consciousness framework documentation. Every piece of content is a portal into the Sparkverse.',
+    url: 'news.html', urlLabel: 'Read the Newsfeed →',
     connects: ['core', 'community']
   },
 
@@ -511,6 +570,7 @@ const nodes = [
     desc: 'Free tier → $33/mo Players Lounge → $519 OG Spark Lifetime',
     tag: 'monetization',
     detail: 'Three-tier membership structure on Whop. Free tier for discovery, $33/month Players Lounge for active practitioners, and $519 lifetime OG Spark for founding members. Built on reciprocity — value first, extraction never.',
+    url: 'https://whop.com/discover/sparkverse-511c/', urlLabel: 'Join on Whop →',
     connects: ['core', 'tools']
   },
   {
@@ -527,6 +587,7 @@ const nodes = [
     desc: 'SAFE agreement · $2M cap · 20% discount',
     tag: 'seeking',
     detail: 'Actively seeking $200K in seed funding via SAFE agreement with $2M valuation cap and 20% discount. Raised from an initial $40K ask after expanding the vision. Investor materials, pitch decks, and financial projections ready.',
+    url: 'theraise.html', urlLabel: 'View the Raise →',
     connects: ['core', 'sparkai', 'sparkstation']
   },
 
@@ -537,6 +598,7 @@ const nodes = [
     desc: 'Converted van — traveling consciousness work, pop-up experiences',
     tag: 'future',
     detail: 'A converted van that brings the Sparkverse into physical space. Traveling consciousness work, pop-up experiences, community gatherings. The Sparkverse goes mobile — meeting people where they are.',
+    url: 'spark-station.html', urlLabel: 'See the Vision →',
     connects: ['core']
   },
   {
@@ -553,6 +615,7 @@ const nodes = [
     desc: 'Anti-extraction platform model — consciousness as operating system',
     tag: 'core philosophy',
     detail: 'The philosophical backbone: reciprocity, not extraction. Reality is programmable code. Consciousness is an operating system. Sacred geometry, sigil magic, simulation theory — woven into a framework that treats users as co-creators, not products.',
+    url: 'render-engine.html', urlLabel: 'Enter the Render Engine →',
     connects: ['core', 'earthship']
   },
 
@@ -563,6 +626,7 @@ const nodes = [
     desc: 'Players, practitioners, seekers — the living network',
     tag: 'growing',
     detail: 'The people who make the Sparkverse real. A growing community of consciousness explorers, spiritual practitioners, and reality programmers. Connected through Whop, social media, and shared practice.',
+    url: 'players.html', urlLabel: 'Enter the Players Lounge →',
     connects: ['core', 'whop']
   },
   {
@@ -571,6 +635,7 @@ const nodes = [
     desc: 'TikTok, video content, ritual broadcasts',
     tag: 'active',
     detail: 'The Sparkverse\'s public face. TikTok content, Sora-generated videos, live ritual broadcasts. Each post is an invitation into consciousness exploration — breadcrumbs leading deeper into the Sparkverse.',
+    url: 'links.html', urlLabel: 'All Signal Links →',
     connects: ['community', 'content']
   },
 
@@ -581,6 +646,7 @@ const nodes = [
     desc: 'Founder & CEO — painter, programmer, consciousness architect',
     tag: 'the spark',
     detail: 'Self-taught programmer. Single mother. Painter-turned-entrepreneur. The awakening came on a pool raft, Summer 2025: "Reality is programmable." Everything since has been building the tools to prove it.',
+    url: 'origin.html', urlLabel: 'Read the Origin Story →',
     connects: ['core']
   }
 ];
@@ -608,7 +674,7 @@ nodes.forEach((n, i) => {
   el.style.animationDelay = (i * 0.06) + 's';
   el.innerHTML = `
     <div class="node-inner">
-      <div class="node-label">${n.label}</div>
+      <div class="node-label">${n.label}${n.url ? '<span class="node-link-mark">↗</span>' : ''}</div>
       <div class="node-desc">${n.desc}</div>
       <div class="node-tag">${n.tag}</div>
     </div>
@@ -728,6 +794,15 @@ function showDetail(n) {
   document.getElementById('detail-title').textContent = n.label;
   document.getElementById('detail-title').style.color = colors[n.type];
   document.getElementById('detail-body').textContent = n.detail;
+  const link = document.getElementById('detail-link');
+  if (n.url) {
+    link.href = n.url;
+    link.textContent = n.urlLabel || 'Launch →';
+    link.target = n.url.startsWith('http') ? '_blank' : '_self';
+    link.classList.add('visible');
+  } else {
+    link.classList.remove('visible');
+  }
   document.getElementById('detail-panel').classList.add('visible');
 }
 function closeDetail() {
