@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Spark | The First Spark</title>
+    <meta name="description" content="The members gate. Log in with Whop and see what's waiting for you inside the Sparkverse.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✧</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #050508;
+            --deep: #0a0a10;
+            --cosmic: #0d0d18;
+            --nebula: #12121f;
+            --stardust: #1a1a2e;
+            --silver: #8892a8;
+            --pearl: #c4c9d4;
+            --white: #f0f2f8;
+            --spark-gold: #d4af37;
+            --spark-bright: #f4d03f;
+            --spark-glow: rgba(212, 175, 55, 0.15);
+            --purple-deep: #4a1c6b;
+            --purple-glow: rgba(138, 43, 226, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--void);
+            color: var(--pearl);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           STARFIELD BACKGROUND
+        ═══════════════════════════════════════════════════════════════ */
+        .starfield {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .stars, .stars2 {
+            position: absolute;
+            inset: 0;
+            background-repeat: repeat;
+        }
+
+        .stars {
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, white, transparent),
+                radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 160px 120px, white, transparent),
+                radial-gradient(1px 1px at 220px 150px, white, transparent),
+                radial-gradient(1.5px 1.5px at 280px 180px, rgba(212,175,55,0.8), transparent);
+            background-size: 300px 200px;
+            animation: drift 120s linear infinite;
+        }
+
+        .stars2 {
+            background-image:
+                radial-gradient(1px 1px at 10px 10px, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 70px 50px, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 150px 30px, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 180px 130px, rgba(255,255,255,0.4), transparent);
+            background-size: 200px 150px;
+            animation: drift 180s linear infinite reverse;
+            opacity: 0.7;
+        }
+
+        @keyframes drift {
+            from { transform: translateY(0); }
+            to { transform: translateY(-200px); }
+        }
+
+        .nebula-overlay {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(74, 28, 107, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(138, 43, 226, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           LAYOUT + NAV
+        ═══════════════════════════════════════════════════════════════ */
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(5, 5, 8, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .nav-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.15em;
+            color: var(--white);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .logo-spark { color: var(--spark-gold); }
+
+        .back-link {
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            color: var(--silver);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .back-link:hover { color: var(--spark-gold); }
+
+        /* ═══════════════════════════════════════════════════════════════
+           BUTTONS
+        ═══════════════════════════════════════════════════════════════ */
+        .btn {
+            display: inline-block;
+            padding: 15px 36px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--spark-gold), #b8952c);
+            color: var(--void);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--spark-bright), var(--spark-gold));
+            box-shadow: 0 0 40px var(--spark-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--pearl);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--spark-gold);
+            color: var(--spark-gold);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           STATES
+        ═══════════════════════════════════════════════════════════════ */
+        .state { display: none; }
+        .state.active { display: block; }
+
+        /* --- Loading --- */
+        .loading-wrap {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .loading-symbol {
+            font-size: 42px;
+            color: var(--spark-gold);
+            animation: pulse-spin 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-spin {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            50% { transform: scale(1.15) rotate(180deg); opacity: 1; }
+            100% { transform: scale(1) rotate(360deg); opacity: 0.7; }
+        }
+
+        .loading-text {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--silver);
+        }
+
+        /* --- Gate (logged out) --- */
+        .gate {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+        }
+
+        .gate-symbol {
+            font-size: 52px;
+            color: var(--spark-gold);
+            text-shadow: 0 0 40px var(--spark-glow);
+            margin-bottom: 20px;
+        }
+
+        .gate-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--spark-gold);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 8px 20px;
+            border-radius: 2px;
+            margin-bottom: 28px;
+        }
+
+        .gate h1 {
+            font-family: 'Cinzel', serif;
+            font-weight: 500;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            color: var(--white);
+            line-height: 1.25;
+            margin-bottom: 20px;
+        }
+
+        .gate h1 .highlight {
+            display: block;
+            color: var(--spark-gold);
+        }
+
+        .gate-sub {
+            max-width: 520px;
+            margin: 0 auto 40px;
+            font-weight: 300;
+            font-size: 1.02rem;
+            color: var(--silver);
+        }
+
+        .gate-ctas {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .gate-footnote {
+            margin-top: 28px;
+            font-size: 0.78rem;
+            color: var(--silver);
+        }
+
+        .gate-footnote a {
+            color: var(--spark-gold);
+            text-decoration: none;
+        }
+
+        .gate-footnote a:hover { text-decoration: underline; }
+
+        /* --- Member view (logged in) --- */
+        .member {
+            padding: 140px 0 80px;
+        }
+
+        .member-welcome {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .member-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--spark-gold);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            background: rgba(212, 175, 55, 0.06);
+            padding: 8px 18px;
+            border-radius: 2px;
+            margin-bottom: 24px;
+        }
+
+        .member-badge .dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #86efac;
+            box-shadow: 0 0 8px rgba(134, 239, 172, 0.8);
+        }
+
+        .member-welcome h1 {
+            font-family: 'Cinzel', serif;
+            font-weight: 500;
+            font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+            color: var(--white);
+            line-height: 1.25;
+        }
+
+        .member-welcome h1 .name { color: var(--spark-gold); }
+
+        .member-welcome p {
+            max-width: 540px;
+            margin: 16px auto 0;
+            font-weight: 300;
+            color: var(--silver);
+        }
+
+        .logout-link {
+            background: none;
+            border: none;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--silver);
+            cursor: pointer;
+            margin-top: 18px;
+            transition: color 0.2s ease;
+        }
+
+        .logout-link:hover { color: #fca5a5; }
+
+        /* --- The Deal --- */
+        .section-label {
+            text-align: center;
+            font-size: 0.72rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--spark-gold);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-weight: 500;
+            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+            color: var(--white);
+            margin-bottom: 40px;
+        }
+
+        .deal-card {
+            position: relative;
+            background: linear-gradient(160deg, var(--nebula) 0%, var(--deep) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            border-radius: 6px;
+            padding: 48px 40px;
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 24px;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.08);
+        }
+
+        .deal-card::before {
+            content: 'MEMBERS ONLY';
+            position: absolute;
+            top: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--spark-gold);
+            color: var(--void);
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            padding: 4px 14px;
+            border-radius: 2px;
+        }
+
+        .deal-icon { font-size: 40px; margin-bottom: 16px; }
+
+        .deal-card h3 {
+            font-family: 'Cinzel', serif;
+            font-weight: 500;
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .deal-price {
+            font-family: 'Cinzel', serif;
+            font-size: 2.4rem;
+            color: var(--spark-gold);
+            margin: 12px 0 4px;
+        }
+
+        .deal-price-note {
+            font-size: 0.78rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-bottom: 20px;
+        }
+
+        .deal-card p.deal-desc {
+            font-weight: 300;
+            color: var(--pearl);
+            max-width: 460px;
+            margin: 0 auto 30px;
+        }
+
+        /* --- Secondary offers --- */
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 640px;
+            margin: 0 auto 70px;
+        }
+
+        .offer-card {
+            background: rgba(18, 18, 31, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 28px 24px;
+            text-align: center;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .offer-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .offer-card .offer-icon { font-size: 28px; margin-bottom: 10px; }
+
+        .offer-card h4 {
+            font-family: 'Cinzel', serif;
+            font-weight: 500;
+            font-size: 1.05rem;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+
+        .offer-card .offer-price {
+            color: var(--spark-gold);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .offer-card p {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--silver);
+            margin-bottom: 16px;
+        }
+
+        .offer-link {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--spark-gold);
+            text-decoration: none;
+        }
+
+        .offer-link:hover { text-decoration: underline; }
+
+        /* --- Member tools quick grid --- */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            display: block;
+            background: rgba(13, 13, 24, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            padding: 20px 18px;
+            text-decoration: none;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .tool-card:hover {
+            border-color: rgba(212, 175, 55, 0.35);
+            background: rgba(26, 26, 46, 0.7);
+        }
+
+        .tool-card .tool-icon { font-size: 22px; margin-bottom: 8px; }
+
+        .tool-card h5 {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .tool-card p {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: var(--silver);
+            line-height: 1.5;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 50px 24px 40px;
+            font-size: 0.75rem;
+            color: var(--silver);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+        }
+
+        footer a { color: var(--spark-gold); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .gate { padding-top: 100px; }
+            .deal-card { padding: 40px 22px; }
+            .nav-inner { padding: 14px 16px; }
+            .btn { padding: 13px 26px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="starfield">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+    </div>
+    <div class="nebula-overlay"></div>
+
+    <div class="content">
+        <nav>
+            <div class="nav-inner">
+                <a href="thefirstspark-landing.html" class="logo">
+                    <span class="logo-spark">✧</span> THE FIRST SPARK
+                </a>
+                <a href="thefirstspark-landing.html" class="back-link">← Back to the Landing</a>
+            </div>
+        </nav>
+
+        <!-- ═══════════ STATE: LOADING ═══════════ -->
+        <div class="state active" id="state-loading">
+            <div class="loading-wrap">
+                <div class="loading-symbol">✧</div>
+                <div class="loading-text">Checking your spark…</div>
+            </div>
+        </div>
+
+        <!-- ═══════════ STATE: LOGGED OUT (THE GATE) ═══════════ -->
+        <div class="state" id="state-gate">
+            <section class="gate">
+                <div>
+                    <div class="gate-symbol">✧</div>
+                    <span class="gate-tag">Members Gate</span>
+                    <h1>
+                        This Door Only Opens
+                        <span class="highlight">For Players</span>
+                    </h1>
+                    <p class="gate-sub">
+                        Log in with your Whop account to step inside. Members see the deal —
+                        the one we don't post on the main page.
+                    </p>
+                    <div class="gate-ctas">
+                        <button class="btn btn-primary" id="login-btn">Login with Whop</button>
+                        <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Join Free First</a>
+                    </div>
+                    <p class="gate-footnote">
+                        No account yet? The <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener noreferrer">SparkVerse Lobby</a> is free — join, then come back and log in.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- ═══════════ STATE: LOGGED IN (THE DEAL) ═══════════ -->
+        <div class="state" id="state-member">
+            <div class="member container">
+
+                <div class="member-welcome">
+                    <div class="member-badge" id="member-badge">
+                        <span class="dot"></span>
+                        <span id="badge-text">Signed In</span>
+                    </div>
+                    <h1>Welcome back, <span class="name" id="member-name">Player</span></h1>
+                    <p>You made it through the gate. Here's what's waiting on the other side.</p>
+                    <button class="logout-link" id="logout-btn">Log out</button>
+                </div>
+
+                <!-- ═══ THE DEAL — edit this card to change the featured member offer ═══ -->
+                <p class="section-label">The Deal</p>
+                <h2 class="section-title">Members See This First</h2>
+
+                <div class="deal-card">
+                    <div class="deal-icon">🃏</div>
+                    <h3>The Players Lounge</h3>
+                    <div class="deal-price">$33<span style="font-size:1rem;color:var(--silver);">/mo</span></div>
+                    <div class="deal-price-note">Full membership · Cancel anytime</div>
+                    <p class="deal-desc">
+                        Every tool unlocked. Monthly live sessions. First look at every new drop
+                        before it hits the public site. This is the whole Sparkverse, all in.
+                    </p>
+                    <a href="https://whop.com/sparkverse-511c/the-players-lounge/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Claim Your Seat</a>
+                </div>
+
+                <div class="offers-grid">
+                    <div class="offer-card">
+                        <div class="offer-icon">🗺️</div>
+                        <h4>Personal Soul Map</h4>
+                        <div class="offer-price">$22 · one time</div>
+                        <p>Your consciousness, mapped. Hand-built for you, delivered as a digital artifact.</p>
+                        <a href="https://whop.com/checkout/plan_anQKP3Pzf1cGm" target="_blank" rel="noopener noreferrer" class="offer-link">Get Yours →</a>
+                    </div>
+                    <div class="offer-card">
+                        <div class="offer-icon">🌌</div>
+                        <h4>The SparkVerse Lobby</h4>
+                        <div class="offer-price">Free</div>
+                        <p>The community hangout. If you're not in yet, this is the zero-cost way through the door.</p>
+                        <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener noreferrer" class="offer-link">Enter Free →</a>
+                    </div>
+                </div>
+
+                <!-- ═══ Member quick links ═══ -->
+                <p class="section-label">Your Toolkit</p>
+                <h2 class="section-title">Jump Back In</h2>
+
+                <div class="tools-grid">
+                    <a href="tools.html" class="tool-card">
+                        <div class="tool-icon">🛠️</div>
+                        <h5>All Tools</h5>
+                        <p>The full arsenal, one page.</p>
+                    </a>
+                    <a href="daily-reset.html" class="tool-card">
+                        <div class="tool-icon">🌅</div>
+                        <h5>Daily Reset</h5>
+                        <p>5-minute morning calibration.</p>
+                    </a>
+                    <a href="pause-chamber.html" class="tool-card">
+                        <div class="tool-icon">🫁</div>
+                        <h5>Pause Chamber</h5>
+                        <p>60-second emergency reset.</p>
+                    </a>
+                    <a href="journal.html" class="tool-card">
+                        <div class="tool-icon">📓</div>
+                        <h5>Journal</h5>
+                        <p>Log the run. Track the game.</p>
+                    </a>
+                    <a href="oracle.html" class="tool-card">
+                        <div class="tool-icon">🔮</div>
+                        <h5>The Oracle</h5>
+                        <p>Ask. Draw. Decode.</p>
+                    </a>
+                    <a href="sigil.html" class="tool-card">
+                        <div class="tool-icon">✴️</div>
+                        <h5>Sigil Forge</h5>
+                        <p>Turn intention into symbol.</p>
+                    </a>
+                    <a href="soul-map.html" class="tool-card">
+                        <div class="tool-icon">🗺️</div>
+                        <h5>Soul Map</h5>
+                        <p>See the shape of your psyche.</p>
+                    </a>
+                    <a href="spark-station.html" class="tool-card">
+                        <div class="tool-icon">⚡</div>
+                        <h5>Spark Station</h5>
+                        <p>Power up. Play on.</p>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <footer>
+            <span class="logo-spark">✧</span> The First Spark ·
+            <a href="thefirstspark-landing.html">Landing</a> ·
+            <a href="tools.html">Tools</a> ·
+            <a href="https://whop.com/discover/sparkverse-511c/" target="_blank" rel="noopener noreferrer">Shop</a>
+        </footer>
+    </div>
+
+    <script src="spark-auth.js"></script>
+    <script>
+        (function() {
+            'use strict';
+
+            const states = {
+                loading: document.getElementById('state-loading'),
+                gate: document.getElementById('state-gate'),
+                member: document.getElementById('state-member')
+            };
+
+            function show(name) {
+                Object.keys(states).forEach(function(key) {
+                    states[key].classList.toggle('active', key === name);
+                });
+                window.scrollTo(0, 0);
+            }
+
+            function showMember() {
+                const user = SparkAuth.getUser();
+                const nameEl = document.getElementById('member-name');
+                if (user && (user.name || user.email)) {
+                    nameEl.textContent = user.name || user.email.split('@')[0];
+                }
+
+                const badgeText = document.getElementById('badge-text');
+                badgeText.textContent = SparkAuth.hasAccess()
+                    ? 'Member Verified'
+                    : 'Signed In';
+
+                show('member');
+            }
+
+            async function init() {
+                document.getElementById('login-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    SparkAuth.login();
+                });
+
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    SparkAuth.logout();
+                });
+
+                // Expired token but refresh available? Try a silent refresh first.
+                const hasToken = !!localStorage.getItem('spark_auth_access_token');
+                if (hasToken && SparkAuth.isTokenExpired()) {
+                    const refreshed = await SparkAuth.refreshToken();
+                    if (refreshed) {
+                        await SparkAuth.verifyAccess();
+                    }
+                }
+
+                if (SparkAuth.isLoggedIn()) {
+                    showMember();
+                    // Re-verify access in the background so the badge stays honest.
+                    SparkAuth.verifyAccess().then(function() {
+                        document.getElementById('badge-text').textContent =
+                            SparkAuth.hasAccess() ? 'Member Verified' : 'Signed In';
+                    }).catch(function() { /* keep whatever we showed */ });
+                } else {
+                    show('gate');
+                }
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
