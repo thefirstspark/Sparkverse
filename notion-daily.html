@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Dashboard</title>
+  <style>
+    :root{
+      --bg:#0b0f1a;
+      --panel:#111a2e;
+      --panel2:#0e1628;
+      --text:#eaf0ff;
+      --muted:#a7b3d6;
+      --accent:#8b5cf6;
+      --accent2:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background: radial-gradient(1000px 600px at 20% 0%, rgba(139,92,246,.25), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      padding:24px;
+    }
+    .wrap{max-width:980px;margin:0 auto}
+    header{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+      margin-bottom:18px;
+    }
+    h1{font-size:22px;letter-spacing:.2px;margin:0}
+    .sub{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.35}
+    .row{display:grid;grid-template-columns: 1.3fr .7fr;gap:14px}
+    @media (max-width: 860px){.row{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card h2{font-size:13px;margin:0;color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+    .card .body{padding:14px}
+    .card .body + .body{border-top:1px solid var(--border)}
+
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      background: rgba(139,92,246,.12);
+      border:1px solid rgba(139,92,246,.35);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+    }
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width: 520px){.grid2{grid-template-columns:1fr}}
+
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input[type="text"], textarea{
+      width:100%;
+      background: rgba(14,22,40,.75);
+      border:1px solid var(--border);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+      font-size:14px;
+    }
+    textarea{min-height:92px;resize:vertical;line-height:1.35}
+    input:focus, textarea:focus{border-color:rgba(139,92,246,.65); box-shadow: 0 0 0 3px rgba(139,92,246,.18)}
+
+    .btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    button{
+      cursor:pointer;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:600;
+      font-size:13px;
+    }
+    button:hover{background: rgba(255,255,255,.10)}
+    .primary{background: rgba(139,92,246,.18);border-color: rgba(139,92,246,.50)}
+    .primary:hover{background: rgba(139,92,246,.25)}
+    .end{background: rgba(239,68,68,.16);border-color: rgba(239,68,68,.55)}
+    .end:hover{background: rgba(239,68,68,.22)}
+    .ghost{background: transparent}
+
+    .kpi{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px
+    }
+    .tile{
+      padding:12px;
+      border-radius:14px;
+      background: rgba(14,22,40,.55);
+      border:1px solid var(--border);
+    }
+    .tile .big{font-size:18px;font-weight:800;letter-spacing:.2px}
+    .tile .small{font-size:12px;color:var(--muted);margin-top:4px}
+
+    .recap{
+      font-family: var(--mono);
+      font-size:12px;
+      background: rgba(0,0,0,.25);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      white-space:pre-wrap;
+      line-height:1.45;
+    }
+
+    .status{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .hr{height:1px;background:var(--border);margin:12px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Daily Dashboard</h1>
+        <div class="sub">A one-page control panel for today’s move. End Day compiles meaning into a recap.</div>
+        <div style="margin-top:10px" class="pill" id="dayPill">Loading day…</div>
+      </div>
+      <div class="btns">
+        <button class="ghost" id="newDayBtn" title="Start a fresh day (keeps history)">New Day</button>
+        <button class="primary" id="saveBtn" title="Save without ending">Save</button>
+        <button class="end" id="endBtn" title="End the day and generate recap">End Day</button>
+      </div>
+    </header>
+
+    <div class="row">
+      <div class="card">
+        <div class="body">
+          <h2>Today’s Inputs</h2>
+          <div class="hr"></div>
+          <div class="grid2">
+            <div>
+              <label for="intent">Intention (what you’re playing for)</label>
+              <input id="intent" type="text" placeholder="e.g., Choose the next move without overthinking" />
+            </div>
+            <div>
+              <label for="nextMove">Next Move (single actionable step)</label>
+              <input id="nextMove" type="text" placeholder="e.g., Write the hook + post it" />
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="top3">Top 3 (one per line)</label>
+            <textarea id="top3" placeholder="1) …\n2) …\n3) …"></textarea>
+          </div>
+
+          <div style="margin-top:10px" class="grid2">
+            <div>
+              <label for="wins">Wins (what worked)</label>
+              <textarea id="wins" placeholder="Bullets welcome."></textarea>
+            </div>
+            <div>
+              <label for="glitches">Glitches (what snagged you)</label>
+              <textarea id="glitches" placeholder="Name it plainly."></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="witness">Witness note (one honest paragraph)</label>
+            <textarea id="witness" placeholder="What did you notice about yourself today?"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="body">
+          <h2>Status</h2>
+          <div class="hr"></div>
+          <div class="kpi">
+            <div class="tile">
+              <div class="big" id="streak">0</div>
+              <div class="small">Day streak (ended days)</div>
+            </div>
+            <div class="tile">
+              <div class="big" id="endedCount">0</div>
+              <div class="small">Total days ended</div>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="status">
+            <div id="saveStatus">Not saved yet.</div>
+            <div id="endedFlag">Open</div>
+          </div>
+        </div>
+
+        <div class="body">
+          <h2>End-of-day Recap</h2>
+          <div class="hr"></div>
+          <div class="recap" id="recap">Press “End Day” to compile your recap.</div>
+          <div style="margin-top:10px" class="btns">
+            <button id="copyBtn" title="Copy recap to clipboard">Copy Recap</button>
+            <button id="downloadBtn" title="Download recap as a .txt file">Download</button>
+            <button class="ghost" id="historyBtn" title="Toggle history">History</button>
+          </div>
+          <div id="history" style="display:none;margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const KEY = "spark_daily_dashboard_v1";
+
+  function todayKey(d = new Date()){
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    const dd = String(d.getDate()).padStart(2,"0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function loadState(){
+    try{
+      return JSON.parse(localStorage.getItem(KEY)) || { days: {}, meta: { endedCount: 0, streak: 0, lastEnded: null } };
+    }catch(e){
+      return { days: {}, meta: { endedCount: 0, streak: 0, lastEnded: null } };
+    }
+  }
+
+  function saveState(state){
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
+
+  function ensureDay(state, key){
+    if(!state.days[key]){
+      state.days[key] = {
+        key,
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        endedAt: null,
+        intent: "",
+        nextMove: "",
+        top3: "",
+        wins: "",
+        glitches: "",
+        witness: "",
+        recap: ""
+      };
+    }
+    return state.days[key];
+  }
+
+  function setStatus(text){
+    $("saveStatus").textContent = text;
+  }
+
+  function renderMeta(state){
+    $("endedCount").textContent = String(state.meta.endedCount || 0);
+    $("streak").textContent = String(state.meta.streak || 0);
+  }
+
+  function compileRecap(day){
+    const lines = [];
+    lines.push(`# Daily Recap — ${day.key}`);
+    lines.push("");
+    if(day.intent?.trim()) lines.push(`Intent: ${day.intent.trim()}`);
+    if(day.nextMove?.trim()) lines.push(`Next Move: ${day.nextMove.trim()}`);
+    lines.push("");
+
+    if(day.top3?.trim()){
+      lines.push("Top 3:");
+      day.top3.split("\n").map(s=>s.trim()).filter(Boolean).forEach((t,i)=>{
+        lines.push(`- ${t.replace(/^\d+\)\s*/, "")}`);
+      });
+      lines.push("");
+    }
+
+    if(day.wins?.trim()){
+      lines.push("Wins:");
+      day.wins.split("\n").map(s=>s.trim()).filter(Boolean).forEach(t=>lines.push(`- ${t}`));
+      lines.push("");
+    }
+
+    if(day.glitches?.trim()){
+      lines.push("Glitches:");
+      day.glitches.split("\n").map(s=>s.trim()).filter(Boolean).forEach(t=>lines.push(`- ${t}`));
+      lines.push("");
+    }
+
+    if(day.witness?.trim()){
+      lines.push("Witness:");
+      lines.push(day.witness.trim());
+      lines.push("");
+    }
+
+    lines.push("Meaning is compiled, not found.");
+    return lines.join("\n");
+  }
+
+  function setInputs(day){
+    $("intent").value = day.intent || "";
+    $("nextMove").value = day.nextMove || "";
+    $("top3").value = day.top3 || "";
+    $("wins").value = day.wins || "";
+    $("glitches").value = day.glitches || "";
+    $("witness").value = day.witness || "";
+    $("recap").textContent = day.recap || "Press “End Day” to compile your recap.";
+
+    const ended = Boolean(day.endedAt);
+    $("endedFlag").textContent = ended ? "Ended" : "Open";
+    $("endBtn").disabled = ended;
+    $("endBtn").style.opacity = ended ? .55 : 1;
+  }
+
+  function readInputs(day){
+    day.intent = $("intent").value;
+    day.nextMove = $("nextMove").value;
+    day.top3 = $("top3").value;
+    day.wins = $("wins").value;
+    day.glitches = $("glitches").value;
+    day.witness = $("witness").value;
+    day.updatedAt = new Date().toISOString();
+  }
+
+  function updatePill(day){
+    const ended = day.endedAt ? " • ended" : "";
+    $("dayPill").textContent = `Today: ${day.key}${ended}`;
+  }
+
+  function renderHistory(state){
+    const keys = Object.keys(state.days).sort().reverse();
+    const wrap = $("history");
+    wrap.innerHTML = "";
+
+    const html = keys.slice(0, 30).map(k => {
+      const d = state.days[k];
+      const tag = d.endedAt ? "Ended" : "Open";
+      const preview = (d.recap || "").slice(0, 140).replace(/</g,"&lt;");
+      return `
+        <div style="padding:10px;border:1px solid var(--border);border-radius:12px;background:rgba(14,22,40,.45);margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+            <div style="font-weight:800">${k}</div>
+            <div style="color:var(--muted);font-size:12px">${tag}</div>
+          </div>
+          <div style="margin-top:6px;color:var(--muted);font-size:12px;line-height:1.35">${preview || "(no recap yet)"}</div>
+          <div class="btns" style="margin-top:10px">
+            <button data-load="${k}">Load</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    wrap.innerHTML = html || `<div style="color:var(--muted);font-size:12px">No history yet.</div>`;
+
+    wrap.querySelectorAll("button[data-load]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-load");
+        const state2 = loadState();
+        const day2 = ensureDay(state2, key);
+        currentKey = key;
+        setInputs(day2);
+        updatePill(day2);
+        setStatus(`Loaded ${key}.`);
+      });
+    });
+  }
+
+  function incrementStreak(meta, endedKey){
+    // streak logic: if lastEnded was yesterday, streak+1; else 1
+    const last = meta.lastEnded;
+    const endedDate = new Date(endedKey + "T00:00:00");
+    const prevDate = new Date(endedDate);
+    prevDate.setDate(prevDate.getDate() - 1);
+    const prevKey = todayKey(prevDate);
+
+    if(last === prevKey){
+      meta.streak = (meta.streak || 0) + 1;
+    }else{
+      meta.streak = 1;
+    }
+    meta.lastEnded = endedKey;
+  }
+
+  let state = loadState();
+  let currentKey = todayKey();
+  let day = ensureDay(state, currentKey);
+
+  function save(openEndedOk = true){
+    state = loadState();
+    day = ensureDay(state, currentKey);
+    readInputs(day);
+    if(!openEndedOk && day.endedAt) return;
+    saveState(state);
+    setStatus(`Saved ${new Date().toLocaleTimeString()}.`);
+  }
+
+  function endDay(){
+    state = loadState();
+    day = ensureDay(state, currentKey);
+    if(day.endedAt) return;
+
+    readInputs(day);
+    day.endedAt = new Date().toISOString();
+    day.recap = compileRecap(day);
+
+    state.meta.endedCount = (state.meta.endedCount || 0) + 1;
+    incrementStreak(state.meta, day.key);
+
+    saveState(state);
+    setInputs(day);
+    renderMeta(state);
+    updatePill(day);
+    setStatus("Day ended. Recap compiled.");
+    renderHistory(state);
+  }
+
+  function newDay(){
+    // Move to today's actual key (or a fresh one if already exists and ended):
+    state = loadState();
+    const tk = todayKey();
+    let k = tk;
+
+    // If today already ended, create a "today+" key (rare but useful)
+    if(state.days[tk]?.endedAt){
+      let n = 2;
+      while(state.days[`${tk} (${n})`]) n++;
+      k = `${tk} (${n})`;
+    }
+
+    currentKey = k;
+    const day2 = ensureDay(state, currentKey);
+    saveState(state);
+    setInputs(day2);
+    updatePill(day2);
+    setStatus(`New day opened: ${currentKey}.`);
+  }
+
+  function copyRecap(){
+    const text = $("recap").textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      setStatus("Recap copied to clipboard.");
+    }).catch(() => {
+      setStatus("Copy failed (browser permissions). Try selecting + copying manually.");
+    });
+  }
+
+  function downloadRecap(){
+    const text = $("recap").textContent;
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `daily-recap-${currentKey}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    setStatus("Recap downloaded.");
+  }
+
+  // Wire up
+  $("saveBtn").addEventListener("click", () => save(true));
+  $("endBtn").addEventListener("click", endDay);
+  $("newDayBtn").addEventListener("click", newDay);
+  $("copyBtn").addEventListener("click", copyRecap);
+  $("downloadBtn").addEventListener("click", downloadRecap);
+  $("historyBtn").addEventListener("click", () => {
+    const el = $("history");
+    const next = el.style.display === "none" ? "block" : "none";
+    el.style.display = next;
+    if(next === "block") renderHistory(loadState());
+  });
+
+  // Autosave lightly
+  let t = null;
+  ["intent","nextMove","top3","wins","glitches","witness"].forEach(id => {
+    $(id).addEventListener("input", () => {
+      clearTimeout(t);
+      t = setTimeout(() => save(true), 800);
+    });
+  });
+
+  // Init render
+  setInputs(day);
+  renderMeta(state);
+  updatePill(day);
+  renderHistory(state);
+  setStatus("Ready.");
+</script>
+</body>
+</html>l
