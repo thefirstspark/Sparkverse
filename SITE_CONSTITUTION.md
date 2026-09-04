@@ -12,7 +12,7 @@ One rulebook for every web property. Any agent or person touching a TFS repo rea
 | frequency.thefirstspark.shop | frequency-match | main | GitHub Pages | Soul Card Collider (single page) | Rarely |
 | rituals.thefirstspark.shop | rituals | main | GitHub Pages | Grimoire | Rarely |
 | family.thefirstspark.shop | family | main | GitHub Pages | PIN-gated family resonance | Rarely |
-| sparkverse.thefirstspark.shop | Sparkverse | main | GitHub Pages | **Frozen.** Legacy lore + duplicate tools | **No new pages. Fix links only.** |
+| sparkverse.thefirstspark.shop | Sparkverse | main | GitHub Pages | **The doorway.** Pipeline entry point into the universe; hubs, lore, tool mirrors | Doorway/hub content yes. New *tools* are built on thefirstspark.shop and linked from here. |
 | links.thefirstspark.shop | bio-link (private) | master | Vercel | Link-in-bio, newsletter, email API, library | App code + library only |
 | katelins-oracle.vercel.app | none (CLI deploy from C:/tmp/oracle-deploy) | – | Vercel | Kate's private oracle | Private |
 
@@ -47,7 +47,7 @@ Live Whop plan IDs are listed in `audit.py` → `LIVE_PLANS`. A checkout link to
 
 1. **No page ships without a home.** Every new page gets (a) a link from a hub page (index, tools.html, ecosystem.html, or the relevant product index) and (b) a row in the Notion inventory. No exceptions, including "I'll link it later."
 2. **One page per job.** Before creating a page, search the inventory. If a page with the same purpose exists, edit it. Never create `-v2`, `-new`, `-FIXED`, or `copy` variants alongside the original.
-3. **New tools live on thefirstspark.shop.** Sparkverse is frozen. Product subdomains hold only their product's pages.
+3. **New tools live on thefirstspark.shop.** Sparkverse is the doorway, not a second workshop: keep it alive, keep its hubs linking into the main site and product subdomains, but build new tools on thefirstspark.shop and link to them from Sparkverse. Product subdomains hold only their product's pages.
 4. **Retire, don't delete.** To remove a page: copy to `_REMOVED_PAGES/<repo>/`, add a REMOVED.md line, `git rm`, remove from sitemap.xml, set the Notion row to Retire. Old URL returns 404. No redirect stubs except when collapsing duplicates of a linked page.
 5. **Prices and plans.** All Soul Maps are $22 one-time. Checkout links only from the LIVE_PLANS list. When a plan changes in Whop, update LIVE_PLANS and grep every repo the same day.
 6. **Color Codex.** A soul map's own badge is the source of truth for its tier and color. Archive and index cards must match the map, never the other way round.
