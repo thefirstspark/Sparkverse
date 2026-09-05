@@ -27,7 +27,6 @@
     { "id": "the-playground", "title": "The Playground", "url": "the-playground.html", "zone": "playground", "tier": "public" },
     { "id": "playground", "title": "Playground", "url": "playground.html", "zone": "playground", "tier": "public" },
     { "id": "consciousness-canvas", "title": "Consciousness Canvas", "url": "consciousness_canvas.html", "zone": "playground", "tier": "public" },
-    { "id": "spark-battle-arena", "title": "Spark Battle Arena", "url": "spark-battle-arena.html", "zone": "playground", "tier": "player" },
     { "id": "render-engine", "title": "Render Engine", "url": "https://thefirstspark.shop/render-engine.html", "zone": "playground", "tier": "lobby" },
     { "id": "stardust-letter", "title": "Stardust Letter", "url": "stardust.html", "zone": "playground", "tier": "public" },
     { "id": "zone-codex", "title": "Zone Codex", "url": "https://thefirstspark.shop/zone-codex.html", "zone": "playground", "tier": "lobby" },
