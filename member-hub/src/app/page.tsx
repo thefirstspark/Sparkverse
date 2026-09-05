@@ -1,103 +1,103 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, BookOpen, FolderOpen, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { SiteHeader } from "@/components/site-header";
+import { getSession } from "@/lib/session";
+import { TIERS } from "@/lib/tiers";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getSession();
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+      <SiteHeader />
+      <main className="mx-auto max-w-5xl px-4">
+        <section className="flex flex-col items-center gap-6 py-24 text-center">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-amber-400">
+            The First Spark
+          </p>
+          <h1 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
+            The members-only side of the Sparkverse
+          </h1>
+          <p className="max-w-xl text-lg text-muted-foreground">
+            Exclusive posts, downloadable resources, and early access to new
+            tools — gated by tier, open to everyone who joins.
+          </p>
+          <div className="flex gap-3">
+            {session ? (
+              <Button size="lg" render={<Link href="/dashboard" />}>
+                Go to your dashboard <ArrowRight className="size-4" />
+              </Button>
+            ) : (
+              <>
+                <Button size="lg" render={<Link href="/sign-up" />}>
+                  Join free <ArrowRight className="size-4" />
+                </Button>
+                <Button variant="outline" size="lg" render={<Link href="/sign-in" />}>
+                  Sign in
+                </Button>
+              </>
+            )}
+          </div>
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        <section className="grid gap-4 pb-16 sm:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <BookOpen className="size-6 text-amber-400" />
+              <CardTitle>Member posts</CardTitle>
+              <CardDescription>
+                Long-form writing and updates that never hit the public site.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <FolderOpen className="size-6 text-amber-400" />
+              <CardTitle>Resource vault</CardTitle>
+              <CardDescription>
+                Templates, files, and links collected in one place.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <ShieldCheck className="size-6 text-amber-400" />
+              <CardTitle>Tiered access</CardTitle>
+              <CardDescription>
+                Free gets you in the door. Pro and Lifetime unlock the vault.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </section>
+
+        <section className="pb-24">
+          <h2 className="mb-6 text-center text-2xl font-semibold tracking-tight">
+            Membership tiers
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {TIERS.map((tier) => (
+              <Card key={tier.id} className={tier.id === "PRO" ? "border-amber-400/50" : undefined}>
+                <CardHeader>
+                  <CardTitle className="flex items-baseline justify-between">
+                    {tier.name}
+                    <span className="text-sm font-normal text-muted-foreground">
+                      {tier.price}
+                    </span>
+                  </CardTitle>
+                  <CardDescription>{tier.blurb}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </>
   );
 }
