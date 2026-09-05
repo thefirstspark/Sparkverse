@@ -1,0 +1,359 @@
+:root {
+  --void: #050508;
+  --void-2: #0a0a12;
+  /* Color Codex (SPARK-CANON DL-005) — not the old 4-color quiz */
+  --ember: #ff6a3d;
+  --gold: #d4af37;
+  --cyan: #22d3ee;
+  --violet: #8b5cf6;
+  --rose: #f43f5e;
+  --bone: rgba(255, 255, 255, 0.92);
+  --dim: rgba(255, 255, 255, 0.48);
+  --line: rgba(255, 255, 255, 0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body.lobby-body {
+  background: var(--void);
+  color: var(--bone);
+  font-family: "Space Mono", ui-monospace, monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.deep-space {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(212, 175, 55, 0.16), transparent 42%),
+    radial-gradient(ellipse at 12% 80%, rgba(139, 92, 246, 0.12), transparent 40%),
+    radial-gradient(ellipse at 88% 70%, rgba(34, 211, 238, 0.08), transparent 38%),
+    linear-gradient(180deg, #050508, #0a0a12 55%, #050510);
+}
+
+.lobby-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+}
+
+.logo {
+  font-family: Orbitron, sans-serif;
+  font-weight: 900;
+  font-size: 1.15rem;
+  letter-spacing: 0.22em;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--ember), var(--gold), var(--cyan), var(--violet));
+  background-size: 220% 220%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gs 10s ease infinite;
+}
+
+@keyframes gs {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.signin-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: Orbitron, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: linear-gradient(135deg, var(--gold), var(--ember));
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 1.05rem;
+  cursor: pointer;
+}
+
+.signin-btn:hover { box-shadow: 0 6px 18px rgba(212, 175, 55, 0.35); }
+
+.lobby-main {
+  position: relative;
+  z-index: 10;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 6.25rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 1.5rem 0 2.5rem;
+}
+
+.lobby-wheel {
+  max-width: 340px;
+  margin: 0 auto 1.1rem;
+}
+.lobby-wheel svg { width: 100%; height: auto; display: block; }
+.lobby-wheel a.cw-slice path { transition: filter 0.2s; }
+.lobby-wheel a.cw-slice:hover path { filter: brightness(1.12); }
+
+.core-sun {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 1.6rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--gold), var(--ember), #8c2f1b);
+  box-shadow: 0 0 50px rgba(212, 175, 55, 0.55), 0 0 110px rgba(255, 106, 61, 0.28);
+  animation: sunPulse 4s ease-in-out infinite;
+}
+
+@keyframes sunPulse {
+  0%, 100% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.5), 0 0 100px rgba(255, 106, 61, 0.22); }
+  50% { box-shadow: 0 0 70px rgba(212, 175, 55, 0.7), 0 0 140px rgba(255, 106, 61, 0.28); }
+}
+
+.hero h1 {
+  font-family: Orbitron, sans-serif;
+  font-size: clamp(2.2rem, 8vw, 4.4rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+}
+
+.hero .lede {
+  margin-top: 0.85rem;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.4rem;
+  border-radius: 0.85rem;
+  font-family: Orbitron, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--ember));
+  color: var(--void);
+  border: none;
+}
+
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212, 175, 55, 0.32); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--bone);
+}
+
+.btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.btn-full { width: 100%; }
+
+.gates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin: 0.5rem 0 2.5rem;
+}
+
+.gate {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 1.25rem 1.15rem 1.15rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  min-height: 148px;
+}
+
+.gate:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.05); }
+
+.gate h2 {
+  font-family: Orbitron, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  margin-bottom: 0.45rem;
+}
+
+.gate p { font-size: 0.82rem; color: var(--dim); line-height: 1.55; }
+
+.gate-studio { border-color: rgba(249, 115, 22, 0.45); }
+.gate-workshop { border-color: rgba(34, 211, 211, 0.45); }
+.gate-commons { border-color: rgba(139, 92, 246, 0.45); }
+.gate-treasury { border-color: rgba(212, 175, 55, 0.45); }
+
+.section-title {
+  font-family: Orbitron, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 0.9rem;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  padding: 1.4rem 1.25rem;
+  margin-bottom: 1.1rem;
+  background: rgba(12, 12, 20, 0.55);
+}
+
+.panel h2 {
+  font-family: Orbitron, sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.45rem;
+}
+
+.panel p { color: var(--dim); font-size: 0.88rem; line-height: 1.65; margin-bottom: 1rem; }
+
+.quiet {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--dim);
+  text-align: center;
+}
+
+.quiet a { color: var(--gold); }
+
+.lobby-footer {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 1.25rem 6.5rem;
+  font-size: 0.72rem;
+  color: var(--dim);
+  line-height: 1.7;
+}
+
+.lobby-footer a { color: var(--cyan); }
+
+.lobby-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.55rem 0.35rem calc(0.55rem + env(safe-area-inset-bottom));
+  background: rgba(5, 5, 8, 0.94);
+  border-top: 1px solid var(--line);
+}
+
+.lobby-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28rem;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  min-width: 56px;
+}
+
+.lobby-nav .nav-item.active,
+.lobby-nav .nav-item:hover { color: var(--bone); }
+
+.lobby-nav .nav-icon { font-size: 1.15rem; }
+
+.room-kicker {
+  font-family: Orbitron, sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+.room-hero h1 {
+  font-family: Orbitron, sans-serif;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.room-hero p { color: var(--dim); max-width: 36rem; line-height: 1.65; margin-bottom: 1.6rem; }
+
+.leaf-list { display: flex; flex-direction: column; gap: 0.7rem; }
+
+.leaf {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--line);
+  border-radius: 0.95rem;
+  padding: 1rem 1.05rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.leaf:hover { border-color: var(--cyan); }
+
+.leaf h3 {
+  font-family: Orbitron, sans-serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.28rem;
+}
+
+.leaf p { font-size: 0.78rem; color: var(--dim); line-height: 1.5; }
+
+.leaf.primary { border-color: rgba(212, 175, 55, 0.5); }
+
+.planet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+@media (max-width: 700px) {
+  .gates, .planet-grid { grid-template-columns: 1fr; }
+  .core-sun { width: 72px; height: 72px; }
+  .lobby-wheel { max-width: 280px; }
+  .lobby-header { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .core-sun, .logo { animation: none; }
+  .gate:hover, .btn-primary:hover { transform: none; }
+}
+
+.signin-btn:focus-visible,
+.btn:focus-visible,
+.gate:focus-visible,
+.leaf:focus-visible,
+.logo:focus-visible,
+.lobby-nav a:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}

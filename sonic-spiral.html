@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07070d">
+<meta name="robots" content="index, follow">
+<title>SPARKVERSE · Sonic Spiral</title>
+<meta name="description" content="Twelve archetypes on a living wheel. Each one has its own mark, realm, and sonic signature.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#07070d; --deep:#0c0c18;
+  --bone:#ECE7DA; --dim:#8b8ba3; --faint:#5a5a70;
+  --select:#19D3E0; --release:#FF4D8D; --witness:#A855F7;
+  --ignition:#FF5A36; --expansion:#34C46A; --ascension:#F5C518;
+  --gold:#F3B23A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--void);color:var(--bone);min-height:100%;}
+html.gated,html.gated body{overflow:hidden;height:100%;}
+body{
+  font-family:'Space Mono',ui-monospace,monospace;
+  background:
+    radial-gradient(ellipse at 50% 28%, #16122e 0%, var(--deep) 42%, var(--void) 100%);
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg, rgba(243,178,58,.018) 0 1px, transparent 1px 5px);
+}
+.wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:22px 16px 48px}
+.kicker{text-align:center;letter-spacing:.42em;font-size:10px;color:var(--gold);text-transform:uppercase}
+h1{font-family:Cinzel,Georgia,serif;font-weight:400;text-align:center;font-size:clamp(28px,6vw,42px);letter-spacing:.18em;margin:8px 0 4px;color:#fff}
+.lede{text-align:center;color:var(--dim);font-size:12px;line-height:1.7;max-width:520px;margin:0 auto 10px}
+#stage{width:min(92vw,620px);margin:0 auto;aspect-ratio:1;position:relative}
+#wheel{width:100%;height:100%;display:block;filter:drop-shadow(0 0 28px rgba(168,85,247,.12))}
+.wedge{cursor:pointer;transition:opacity .25s}
+.wedge:hover{opacity:1}
+.wedge:focus{outline:none}
+.wedge:focus-visible path.face{stroke:#fff;stroke-width:2.4}
+#hud{text-align:center;margin-top:8px;min-height:132px}
+.aname{font-family:Cinzel,Georgia,serif;font-size:clamp(22px,5vw,32px);letter-spacing:.12em;color:#fff}
+.meta{margin-top:6px;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.fn{margin:10px auto 0;max-width:460px;font-family:Cinzel,Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:#d7d3c8}
+.marks{display:flex;justify-content:center;gap:7px;margin-top:14px;flex-wrap:wrap}
+.mark{
+  width:28px;height:28px;border-radius:50%;border:1px solid #2a2a44;
+  background:transparent;color:var(--bone);cursor:pointer;
+  display:grid;place-items:center;font-size:11px;padding:0;
+}
+.mark:hover,.mark:focus-visible{border-color:#fff;outline:none}
+.mark.on{border-color:currentColor;box-shadow:0 0 12px currentColor}
+.mark.heard{background:currentColor}
+.mark.heard svg{color:#07070d}
+.row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+button.act{
+  font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--bone);background:rgba(255,255,255,.03);border:1px solid #2a2a44;
+  padding:11px 16px;cursor:pointer;border-radius:2px;
+}
+button.act:hover,button.act:focus-visible{border-color:var(--gold);color:#fff;outline:none}
+button.act[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+.progress{margin-top:16px;text-align:center;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.progress.whole{color:var(--gold)}
+.keys{margin-top:8px;text-align:center;font-size:10px;color:#4d4d63;letter-spacing:.08em;line-height:1.7}
+#gate{
+  position:fixed;inset:0;z-index:20;display:grid;place-items:center;
+  background:radial-gradient(ellipse at 50% 40%, #16122e, #07070d 70%);
+  padding:24px;
+}
+#gate.out{opacity:0;pointer-events:none;transition:opacity .7s}
+.gate-card{text-align:center;max-width:460px}
+.gate-card h2{font-family:Cinzel,Georgia,serif;font-weight:400;font-size:clamp(26px,7vw,38px);letter-spacing:.16em;color:#fff;margin:10px 0 14px}
+.gate-card p{color:var(--dim);font-size:13px;line-height:1.75;margin-bottom:10px}
+#enter{
+  margin-top:18px;font-family:inherit;letter-spacing:.28em;text-transform:uppercase;
+  font-size:12px;color:#07070d;background:var(--gold);border:0;padding:14px 28px;cursor:pointer;
+}
+#enter:hover,#enter:focus-visible{filter:brightness(1.08);outline:2px solid #fff;outline-offset:3px}
+.hint{margin-top:14px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+@media (prefers-reduced-motion:reduce){
+  #wheel, .wedge, #gate{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="gate-card">
+    <div class="kicker"><a href="studio.html" style="color:inherit;text-decoration:none">Studio</a> · Sparkverse</div>
+    <h2>Sonic Spiral</h2>
+    <p>Twelve archetypes sit on a living wheel. Each one has its own mark, realm, and sonic signature — Phoenix rises, Trickster wobbles, Cipher rings in overtones.</p>
+    <p>That first tap unlocks sound. Progress is remembered on this device. When every tone has been heard, the spiral is whole.</p>
+    <button id="enter" type="button">Enter the wheel</button>
+    <div class="hint">Click · arrows · space · P play · A walk · M mute · R reset</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="kicker"><a href="studio.html" style="color:inherit;text-decoration:none">Studio</a> · Sparkverse</div>
+  <h1>Sonic Spiral</h1>
+  <p class="lede">Click a wedge, or the marks under the name. Play tone to hear it again. Walk spiral to move through all twelve.</p>
+  <div id="stage"><svg id="wheel" viewBox="0 0 640 640" role="img" aria-label="Twelve archetype wheel"></svg></div>
+  <div id="hud"></div>
+  <div class="row">
+    <button class="act" id="play" type="button">Play tone</button>
+    <button class="act" id="walk" type="button" aria-pressed="false">Walk spiral</button>
+    <button class="act" id="mute" type="button" aria-pressed="false">Mute</button>
+    <button class="act" id="reset" type="button">Reset</button>
+  </div>
+  <div class="progress" id="progress"></div>
+  <div class="keys">Arrows / space to step · P play · A walk · M mute · R reset</div>
+</div>
+
+<script>
+"use strict";
+const VERB={SELECT:'#19D3E0',RELEASE:'#FF4D8D',WITNESS:'#A855F7'};
+const REALM={Ignition:'#FF5A36',Expansion:'#34C46A',Ascension:'#F5C518'};
+const A=[
+  {id:0,n:1, name:'Ember',          realm:'Ignition',  verb:'SELECT',  quad:'Physics',      sonic:'first heat — a pulse that catches', fn:'The first heat. Proof that something can start from nothing.'},
+  {id:1,n:2, name:'Fracture',       realm:'Ignition',  verb:'RELEASE', quad:'Temporal',     sonic:'the assigned line splits', fn:'Breaks the assigned timeline. The rupture is the doorway.'},
+  {id:2,n:3, name:'Wanderer',       realm:'Ignition',  verb:'WITNESS', quad:'Temporal',     sonic:'a tone that will not sit still', fn:'Leaves in order to see. Returns with maps.'},
+  {id:3,n:4, name:'Maker',          realm:'Expansion', verb:'SELECT',  quad:'Physics',      sonic:'intervals stacked by hand', fn:'Converts intention into object. Closes the gap by hand.'},
+  {id:4,n:5, name:'Cipher',         realm:'Expansion', verb:'WITNESS', quad:'Metaphysical', sonic:'crystal — overtones, not melody', fn:'Reads the layer underneath. Sees system, not symptom.'},
+  {id:5,n:6, name:'Catalyst',       realm:'Expansion', verb:'RELEASE', quad:'Relational',   sonic:'the room rises with it', fn:'Rooms change on entry. Presence raises the temperature.'},
+  {id:6,n:7, name:'Mirror',         realm:'Expansion', verb:'WITNESS', quad:'Relational',   sonic:'the same note, returned', fn:'People meet themselves in you, at full resolution.'},
+  {id:7,n:8, name:'Conduit',        realm:'Ascension', verb:'SELECT',  quad:'Metaphysical', sonic:'two close pitches, a current', fn:'Things move through. Not the source — the channel with a gate.'},
+  {id:8,n:9, name:'Sovereign',      realm:'Ascension', verb:'SELECT',  quad:'Physics',      sonic:'a fifth that holds ground', fn:'Holds ground. Decides, and the decision holds.'},
+  {id:9,n:10,name:'Oracle',         realm:'Ascension', verb:'WITNESS', quad:'Temporal',     sonic:'a bell that sees the branch', fn:'Sees the branch before it splits. Pattern run forward.'},
+  {id:10,n:11,name:'Trickster Nova',realm:'Ascension', verb:'RELEASE', quad:'Relational',   sonic:'wobble — the frame will not stay', fn:'Breaks the frame with a joke. Laughter as demolition.'},
+  {id:11,n:12,name:'Phoenix Node',  realm:'Ascension', verb:'WITNESS', quad:'Metaphysical', sonic:'rises. dies. rises.', fn:'Died and returned inside one lifetime. Carries the map.'}
+];
+
+const KEY='sonic-spiral-heard';
+let heard=new Set();
+try{ JSON.parse(localStorage.getItem(KEY)||'[]').forEach(n=>heard.add(n)); }catch(e){}
+let sel=0, ctx=null, master=null, muted=false, walking=false, walkTimer=null, voices=[];
+
+function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+function unlock(){
+  if(!ctx){
+    ctx=new (window.AudioContext||window.webkitAudioContext)();
+    master=ctx.createGain();
+    master.gain.value=muted?0:0.22;
+    master.connect(ctx.destination);
+  }
+  if(ctx.state==='suspended') ctx.resume();
+}
+function stopVoices(){
+  const t=ctx?ctx.currentTime:0;
+  voices.splice(0).forEach(n=>{ try{ n.gain.setTargetAtTime(0,t,0.04); n.stop&&n.stop(t+0.2);}catch(e){} });
+}
+function env(g, t, a, hold, r, peak){
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(peak, t+a);
+  g.gain.setValueAtTime(peak, t+a+hold);
+  g.gain.exponentialRampToValueAtTime(0.0008, t+a+hold+r);
+}
+function osc(type, freq, t, dur, peak, dest){
+  const o=ctx.createOscillator(); const g=ctx.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq,t);
+  env(g,t,0.03,Math.max(0.05,dur-0.22),0.18,peak);
+  o.connect(g); g.connect(dest||master);
+  o.start(t); o.stop(t+dur+0.05);
+  voices.push(o); return o;
+}
+function noise(t, dur, peak, dest){
+  const n=ctx.createBufferSource();
+  const b=ctx.createBuffer(1, ctx.sampleRate*dur, ctx.sampleRate);
+  const d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+  n.buffer=b;
+  const g=ctx.createGain(); env(g,t,0.01,dur*0.2,dur*0.6,peak);
+  const f=ctx.createBiquadFilter(); f.type='highpass'; f.frequency.value=1200;
+  n.connect(f); f.connect(g); g.connect(dest||master);
+  n.start(t); n.stop(t+dur); voices.push(n);
+}
+
+function playId(i){
+  if(!ctx) return;
+  stopVoices();
+  const t=ctx.currentTime, a=A[i];
+  const v=VERB[a.verb];
+  void v;
+  switch(a.n){
+    case 1: osc('sawtooth',110,t,1.3,.18); noise(t,.35,.08); break;
+    case 2: { const o=osc('square',196,t,1.1,.12); o.frequency.exponentialRampToValueAtTime(98,t+.9); osc('square',207,t,.4,.08); break; }
+    case 3: { const o=osc('sine',174,t,1.8,.2); o.frequency.setValueAtTime(174,t); o.frequency.linearRampToValueAtTime(196,t+.9); o.frequency.linearRampToValueAtTime(164,t+1.8); break; }
+    case 4: osc('triangle',130,t,1.6,.16); osc('triangle',196,t+.18,1.4,.12); osc('triangle',261,t+.36,1.2,.1); break;
+    case 5: osc('sine',523,t,2,.1); osc('sine',1046.5,t,2,.06); osc('sine',1571,t,2,.04); osc('sine',2217,t,2,.03); break;
+    case 6: { const o=osc('sawtooth',220,t,1.4,.14); o.frequency.exponentialRampToValueAtTime(392,t+1.2); noise(t,.5,.05); break; }
+    case 7: osc('sine',329.6,t,1.5,.16); { const o=osc('sine',329.6,t+.22,1.3,.12); o.detune.setValueAtTime(-8,t+.22); break; }
+    case 8: osc('sine',146.8,t,1.8,.14); osc('sine',147.6,t,1.8,.14); break;
+    case 9: osc('sine',65.4,t,2.1,.18); osc('sine',98.0,t,2.1,.12); break;
+    case 10:{
+      const car=ctx.createOscillator(), mod=ctx.createOscillator(), mg=ctx.createGain(), g=ctx.createGain();
+      car.frequency.value=440; mod.frequency.value=880; mg.gain.value=220;
+      mod.connect(mg); mg.connect(car.frequency);
+      env(g,t,.01,.3,1.4,.16); car.connect(g); g.connect(master);
+      car.start(t); mod.start(t); car.stop(t+1.8); mod.stop(t+1.8);
+      voices.push(car,mod); break;
+    }
+    case 11:{
+      const o=osc('triangle',311,t,1.6,.16);
+      const l=ctx.createOscillator(), lg=ctx.createGain();
+      l.frequency.value=6.2; lg.gain.value=28;
+      l.connect(lg); lg.connect(o.frequency);
+      l.start(t); l.stop(t+1.6); voices.push(l);
+      o.frequency.setValueAtTime(311,t+.7); o.frequency.setValueAtTime(349,t+.78); o.frequency.setValueAtTime(293,t+.9);
+      break;
+    }
+    case 12:{
+      const o=osc('sine',196,t,2.2,.16);
+      o.frequency.setValueAtTime(196,t);
+      o.frequency.exponentialRampToValueAtTime(784,t+1.7);
+      osc('sine',392,t+.9,1.3,.08);
+      break;
+    }
+  }
+  heard.add(a.n); save(); render();
+}
+
+const CX=320, CY=320, R0=78, R1=268;
+function polar(deg,r){ const a=(deg-90)*Math.PI/180; return [CX+r*Math.cos(a), CY+r*Math.sin(a)]; }
+function wedgePath(i){
+  const a0=i*30, a1=a0+30;
+  const [x0,y0]=polar(a0,R1), [x1,y1]=polar(a1,R1);
+  const [ix0,iy0]=polar(a0,R0), [ix1,iy1]=polar(a1,R0);
+  return `M ${ix0.toFixed(1)} ${iy0.toFixed(1)} L ${x0.toFixed(1)} ${y0.toFixed(1)} A ${R1} ${R1} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)} L ${ix1.toFixed(1)} ${iy1.toFixed(1)} A ${R0} ${R0} 0 0 0 ${ix0.toFixed(1)} ${iy0.toFixed(1)} Z`;
+}
+function glyph(q,x,y,c){
+  const s=5;
+  if(q==='Physics') return `<rect x="${x-s}" y="${y-s}" width="${2*s}" height="${2*s}" fill="${c}"/>`;
+  if(q==='Metaphysical') return `<rect x="${x-s}" y="${y-s}" width="${2*s}" height="${2*s}" fill="${c}" transform="rotate(45 ${x} ${y})"/>`;
+  if(q==='Relational') return `<circle cx="${x}" cy="${y}" r="${s}" fill="${c}"/>`;
+  return `<polygon points="${x},${y-s-1} ${x+s},${y+s} ${x-s},${y+s}" fill="${c}"/>`;
+}
+
+function drawWheel(){
+  const svg=document.getElementById('wheel');
+  const whole=heard.size===12;
+  let s=`<defs>
+    <filter id="g"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>`;
+  A.forEach((a,i)=>{
+    const vc=VERB[a.verb], rc=REALM[a.realm];
+    const on=sel===i, h=heard.has(a.n);
+    const op=on?0.92:(h?0.62:0.32);
+    const [mx,my]=polar(i*30+15,(R0+R1)/2);
+    s+=`<g class="wedge" tabindex="0" data-i="${i}" role="button" aria-label="${a.name}">
+      <path class="face" d="${wedgePath(i)}" fill="${vc}" fill-opacity="${op}" stroke="${on?rc:'#1a1a2e'}" stroke-width="${on?2.6:1}"/>
+      ${glyph(a.quad,mx,my,on||h?'#07070d':vc)}
+    </g>`;
+  });
+  s+=`<circle cx="${CX}" cy="${CY}" r="${R0-6}" fill="#07070d" stroke="${whole?REALM.Ascension:'#2a2a44'}" stroke-width="${whole?2.4:1}"/>`;
+  const frac=heard.size/12, spiral=[];
+  for(let k=0;k<=64;k++){
+    const u=k/64*frac, ang=u*360*1.15, r=28+u*210;
+    const [x,y]=polar(ang,r); spiral.push(`${k?'L':'M'} ${x.toFixed(1)} ${y.toFixed(1)}`);
+  }
+  if(heard.size) s+=`<path d="${spiral.join(' ')}" fill="none" stroke="${REALM.Ascension}" stroke-width="1.6" opacity=".85" filter="url(#g)"/>`;
+  s+=`<text x="${CX}" y="${CY-4}" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-size="13" fill="#fff" letter-spacing="3">${whole?'WHOLE':(heard.size+'/12')}</text>`;
+  s+=`<text x="${CX}" y="${CY+14}" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="#5a5a70" letter-spacing="2">${whole?'THE SPIRAL':'HEARD'}</text>`;
+  svg.innerHTML=s;
+  svg.querySelectorAll('.wedge').forEach(g=>{
+    const i=+g.dataset.i;
+    g.addEventListener('click',()=>select(i,true));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(i,true);} });
+  });
+}
+
+function hud(){
+  const a=A[sel], vc=VERB[a.verb], rc=REALM[a.realm];
+  const marks=A.map((x,i)=>`<button type="button" class="mark${i===sel?' on':''}${heard.has(x.n)?' heard':''}" data-i="${i}" style="color:${VERB[x.verb]}" aria-label="${x.name}" title="${x.name}">
+    <svg width="10" height="10" viewBox="0 0 10 10">${glyph(x.quad,5,5,'currentColor')}</svg>
+  </button>`).join('');
+  document.getElementById('hud').innerHTML=`
+    <div class="aname" style="color:${rc}">${a.name}</div>
+    <div class="meta"><span style="color:${rc}">${a.realm}</span> · <span style="color:${vc}">${a.verb}</span> · ${a.quad}</div>
+    <div class="fn">${a.fn}</div>
+    <div class="meta" style="margin-top:8px;color:${vc}">${a.sonic}</div>
+    <div class="marks">${marks}</div>`;
+  document.querySelectorAll('.mark').forEach(b=>b.addEventListener('click',()=>select(+b.dataset.i,true)));
+  const p=document.getElementById('progress');
+  p.textContent = heard.size===12 ? 'The spiral is whole.' : `${heard.size} of 12 tones heard · remembered on this device`;
+  p.classList.toggle('whole', heard.size===12);
+}
+function render(){ drawWheel(); hud(); document.getElementById('mute').setAttribute('aria-pressed', muted?'true':'false'); document.getElementById('walk').setAttribute('aria-pressed', walking?'true':'false'); }
+
+function select(i, play){
+  sel=(i+12)%12;
+  if(play){ unlock(); playId(sel); }
+  else render();
+}
+function step(d){ select(sel+d, true); }
+function toggleMute(){
+  muted=!muted;
+  if(master) master.gain.setTargetAtTime(muted?0:0.22, ctx.currentTime, 0.05);
+  render();
+}
+function stopWalk(){ walking=false; clearTimeout(walkTimer); render(); }
+function walk(){
+  if(walking){ stopWalk(); return; }
+  unlock(); walking=true; render();
+  let i=0;
+  const tick=()=>{
+    if(!walking) return;
+    select(i,true);
+    i++;
+    if(i>=12){ walking=false; render(); return; }
+    walkTimer=setTimeout(tick, 1600);
+  };
+  tick();
+}
+function resetAll(){
+  stopWalk(); stopVoices(); heard=new Set(); save(); sel=0; render();
+}
+
+document.documentElement.classList.add('gated');
+document.getElementById('enter').addEventListener('click',()=>{
+  unlock();
+  document.getElementById('gate').classList.add('out');
+  document.documentElement.classList.remove('gated');
+  render();
+});
+document.getElementById('play').addEventListener('click',()=>{ unlock(); playId(sel); });
+document.getElementById('walk').addEventListener('click',walk);
+document.getElementById('mute').addEventListener('click',()=>{ unlock(); toggleMute(); });
+document.getElementById('reset').addEventListener('click',resetAll);
+window.addEventListener('keydown',e=>{
+  if(e.target && /input|textarea/i.test(e.target.tagName)) return;
+  const k=e.key.toLowerCase();
+  if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); if(document.getElementById('gate').classList.contains('out')) step(1); }
+  else if(e.key==='ArrowLeft'){ e.preventDefault(); step(-1); }
+  else if(k==='p'){ unlock(); playId(sel); }
+  else if(k==='a') walk();
+  else if(k==='m'){ unlock(); toggleMute(); }
+  else if(k==='r') resetAll();
+});
+render();
+</script>
+</body>
+</html>

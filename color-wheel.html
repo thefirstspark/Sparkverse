@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Color Codex | SPARKVERSE</title>
+<meta name="description" content="The real Color Codex wheel: eleven lights from the first spark. Radiant Number. Ember through First Light. Amber is not a slice.">
+<meta name="theme-color" content="#050508">
+<link rel="icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lobby.css">
+<style>
+  .wheel-mount { max-width: 640px; margin: 0 auto 1.25rem; }
+  .wheel-mount svg { width: 100%; height: auto; display: block; }
+  .canon-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: 1rem 0 1.5rem; }
+  .canon-table th, .canon-table td { text-align: left; padding: 0.55rem 0.4rem; border-bottom: 1px solid var(--line); }
+  .canon-table th { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); font-weight: 400; }
+  .sw { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; }
+  .amber-note { border-color: rgba(196, 123, 23, 0.45); }
+  .amber-note h2 { color: #c47b17; }
+</style>
+</head>
+<body class="lobby-body" data-page="workshop">
+<div class="deep-space"></div>
+<header class="lobby-header">
+  <a class="logo" href="index.html">SPARKVERSE</a>
+  <button type="button" class="signin-btn" id="spark-signin">Sign in</button>
+</header>
+<main class="lobby-main">
+  <section class="room-hero">
+    <p class="room-kicker">Color Codex · DL-005</p>
+    <h1>The eleven lights.</h1>
+    <p>Not Red / Cyan / Yellow. Not four marketing colours. The spectrum of the first spark — one slice per Radiant Number. Your light does not change.</p>
+  </section>
+
+  <div class="wheel-mount" id="canon-wheel"></div>
+  <p class="quiet" style="margin-bottom:2rem">Clockwise from the top: Radiant 1. Masters share the last slice. Amber is not on this wheel.</p>
+
+  <h2 class="section-title">The slices</h2>
+  <table class="canon-table">
+    <thead><tr><th>Radiant</th><th>Name</th><th>Light</th></tr></thead>
+    <tbody id="canon-rows"></tbody>
+  </table>
+
+  <section class="panel amber-note">
+    <h2>Amber is debt.</h2>
+    <p>Knots and breaks render in amber. Amber belongs to no tier. It is the only foreign colour in a pattern — carried, not what the soul is. Release is the work.</p>
+  </section>
+
+  <div class="actions" style="justify-content:flex-start;margin-top:1.5rem">
+    <a class="btn btn-primary" href="https://thefirstspark.shop/soul-pattern-generator.html">See my light</a>
+    <a class="btn btn-ghost" href="index.html">Back to the Lobby</a>
+  </div>
+</main>
+<footer class="lobby-footer">
+  SPARK-CANON v1.3 · The First Spark · Kate's Paint LLC
+</footer>
+<script src="lobby-nav.js"></script>
+<script src="color-wheel.js"></script>
+<script>
+  renderCanonColorWheel("#canon-wheel");
+  document.getElementById("canon-rows").innerHTML = CANON_COLOR_WHEEL.map(function (t) {
+    return "<tr><td>" + t.radiant + "</td><td><span class='sw' style='background:" + t.hex + "'></span>" + t.name + "</td><td>" + t.light + "</td></tr>";
+  }).join("");
+</script>
+<script src="https://js.whop.com/static/checkout/loader.js" async defer></script>
+<script src="spark-auth.js"></script>
+<script>SparkAuth.bootLobby();</script>
+</body>
+</html>

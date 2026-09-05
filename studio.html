@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio | SPARKVERSE</title>
+<meta name="description" content="Sparkverse Studio — Sonic Spiral and Spark Station. Music, live, the making.">
+<meta name="theme-color" content="#050508">
+<link rel="icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lobby.css">
+</head>
+<body class="lobby-body" data-page="studio">
+<div class="deep-space"></div>
+<header class="lobby-header">
+  <a class="logo" href="index.html">SPARKVERSE</a>
+  <button type="button" class="signin-btn" id="spark-signin">Sign in</button>
+</header>
+<main class="lobby-main">
+  <section class="room-hero">
+    <p class="room-kicker">Studio</p>
+    <h1>Sound. Live. Make.</h1>
+    <p>Music and the rolling studio. Two doors. Nothing else on this floor.</p>
+  </section>
+  <div class="leaf-list">
+    <a class="leaf primary" href="sonic-spiral.html">
+      <h3>Sonic Spiral</h3>
+      <p>Twelve archetypes on a living wheel. Each one has a mark, a realm, and a tone.</p>
+    </a>
+    <a class="leaf" href="spark-station.html">
+      <h3>Spark Station</h3>
+      <p>The mobile studio. Live, watch, and the road mission.</p>
+    </a>
+  </div>
+</main>
+<footer class="lobby-footer">
+  <a href="index.html">Back to the Lobby</a>
+</footer>
+<script src="lobby-nav.js"></script>
+<script src="https://js.whop.com/static/checkout/loader.js" async defer></script>
+<script src="spark-auth.js"></script>
+<script>SparkAuth.bootLobby();</script>
+</body>
+</html>

@@ -1,49 +1,67 @@
 /**
- * SparkAuth - Whop OAuth + PKCE Authentication for SparkVerse
+ * SparkAuth — Whop sign-in, tiers, on-page checkout, tool gating.
  *
- * Shared auth module for all SparkVerse tool pages.
- * Include this script on any page that needs authentication gating.
- *
- * Usage:
+ * Include on any Sparkverse page:
  *   <script src="spark-auth.js"></script>
- *   <script>SparkAuth.applyGate();</script>
+ *   <script>SparkAuth.protect();</script>
  *
- * The page should have a `.spark-gate` div. If none exists, no gating is applied.
+ * protect() reads tools-catalog.json and gates this page to its tier.
+ * applyGate({ minTier: 'player' }) forces a tier without the catalog.
+ * bootLobby() is for the galaxy home (sign-in + paywall + catalog clicks).
  */
-
-const SparkAuth = (function() {
+const SparkAuth = (function () {
     'use strict';
 
-    // ========================================
-    // Configuration
-    // ========================================
     const CLIENT_ID = 'app_4AA9dex5xqN39E';
-    const COMPANY_ID = 'biz_UFWoRUc3NZyLmq';
+    const COMPANY_ID = 'biz_0xcayhWXVnKO9y';
     const REDIRECT_URI = 'https://sparkverse.thefirstspark.shop/auth-callback.html';
     const AUTHORIZE_URL = 'https://api.whop.com/oauth/authorize';
     const TOKEN_URL = 'https://api.whop.com/oauth/token';
     const USERINFO_URL = 'https://api.whop.com/oauth/userinfo';
     const ACCESS_URL_BASE = 'https://api.whop.com/api/v1/users/';
-    const WHOP_PURCHASE_URL = 'https://whop.com/sparkverse-0d79/';
-
-    // Token lifetime: 1 hour (in milliseconds)
+    const SITE_ORIGIN = 'https://sparkverse.thefirstspark.shop';
     const TOKEN_LIFETIME_MS = 60 * 60 * 1000;
-
-    // localStorage key prefix
     const KEY_PREFIX = 'spark_auth_';
+    const CHECKOUT_LOADER = 'https://js.whop.com/static/checkout/loader.js';
 
-    // ========================================
-    // PKCE Helpers (RFC 7636)
-    // ========================================
+    const PRODUCTS = {
+        lobby: 'prod_sKMBjlUWsXQpn',
+        player: 'prod_XgwlNB1M2gU9n',
+        og: 'prod_UdVZpwarKmx81'
+    };
 
-    /**
-     * Generate a cryptographically random code verifier.
-     * Must be 43-128 characters from the set [A-Za-z0-9-._~].
-     * @returns {string} The code verifier string
-     */
+    const PLANS = {
+        lobby: 'plan_dBFxXLnwQoj1l',
+        player: 'plan_okFWwlpgnc2bQ'
+    };
+
+    const TIER_RANK = { none: 0, public: 0, shop: 0, lobby: 1, player: 2, og: 3 };
+
+    const TIER_META = {
+        lobby: {
+            title: 'Join the Sparkverse Lobby',
+            blurb: 'Free. Creates your Whop account so you can use the tools.',
+            planId: PLANS.lobby,
+            cta: 'Join free'
+        },
+        player: {
+            title: 'Enter the Players Lounge',
+            blurb: '$33/month · first 3 days free. Unlocks player-only tools.',
+            planId: PLANS.player,
+            cta: 'Become a Player'
+        }
+    };
+
+    let catalogCache = null;
+    let pendingToolUrl = null;
+
+    window.sparkWhopCheckoutComplete = function (planId, receiptId) {
+        onCheckoutComplete(planId, receiptId);
+    };
+
     function generateCodeVerifier() {
         const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-        const length = 64; // Good balance of security and compatibility
+        const length = 64;
         const randomValues = crypto.getRandomValues(new Uint8Array(length));
         let verifier = '';
         for (let i = 0; i < length; i++) {
@@ -52,66 +70,53 @@ const SparkAuth = (function() {
         return verifier;
     }
 
-    /**
-     * Generate the S256 code challenge from a code verifier.
-     * code_challenge = base64url(sha256(code_verifier))
-     * @param {string} verifier - The code verifier
-     * @returns {Promise<string>} The base64url-encoded SHA-256 hash
-     */
     async function generateCodeChallenge(verifier) {
         const encoder = new TextEncoder();
         const data = encoder.encode(verifier);
         const digest = await crypto.subtle.digest('SHA-256', data);
-
-        // Convert ArrayBuffer to base64url string
         const bytes = new Uint8Array(digest);
         let binary = '';
         for (let i = 0; i < bytes.length; i++) {
             binary += String.fromCharCode(bytes[i]);
         }
-        // Standard base64 then convert to base64url
-        return btoa(binary)
-            .replace(/\+/g, '-')
-            .replace(/\//g, '_')
-            .replace(/=+$/, '');
+        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
 
-    /**
-     * Generate a random state parameter for CSRF protection.
-     * @returns {string} A random hex string
-     */
     function generateState() {
         const randomBytes = crypto.getRandomValues(new Uint8Array(16));
-        return Array.from(randomBytes)
-            .map(function(b) { return b.toString(16).padStart(2, '0'); })
-            .join('');
+        return Array.from(randomBytes).map(function (b) {
+            return b.toString(16).padStart(2, '0');
+        }).join('');
     }
 
-    // ========================================
-    // Core Auth Functions
-    // ========================================
+    function setKey(name, value) {
+        localStorage.setItem(KEY_PREFIX + name, value);
+    }
 
-    /**
-     * Initiate the Whop OAuth login flow.
-     * Stores PKCE verifier, state, and return URL in sessionStorage,
-     * then redirects to Whop's authorize endpoint.
-     */
+    function getKey(name) {
+        return localStorage.getItem(KEY_PREFIX + name);
+    }
+
+    function assetUrl(file) {
+        const scripts = document.getElementsByTagName('script');
+        for (let i = 0; i < scripts.length; i++) {
+            const src = scripts[i].src || '';
+            if (src.indexOf('spark-auth.js') !== -1) {
+                return src.replace(/spark-auth\.js.*$/, file);
+            }
+        }
+        return file;
+    }
+
     async function login() {
         try {
-            // Store the current page URL so we can return after auth
             sessionStorage.setItem('spark_auth_return_to', window.location.href);
-
-            // Generate PKCE code verifier and challenge
             const codeVerifier = generateCodeVerifier();
             sessionStorage.setItem('spark_auth_code_verifier', codeVerifier);
-
             const codeChallenge = await generateCodeChallenge(codeVerifier);
-
-            // Generate random state for CSRF protection
             const state = generateState();
             sessionStorage.setItem('spark_auth_state', state);
 
-            // Build the authorization URL
             const params = new URLSearchParams({
                 client_id: CLIENT_ID,
                 redirect_uri: REDIRECT_URI,
@@ -121,128 +126,107 @@ const SparkAuth = (function() {
                 code_challenge: codeChallenge,
                 code_challenge_method: 'S256'
             });
-
-            const authorizeUrl = AUTHORIZE_URL + '?' + params.toString();
-
-            // Redirect to Whop
-            window.location.href = authorizeUrl;
+            window.location.href = AUTHORIZE_URL + '?' + params.toString();
         } catch (err) {
             console.error('[SparkAuth] Login error:', err);
-            alert('Could not start login. Please check your browser supports modern security features and try again.');
+            alert('Could not start login. Please try again in a modern browser.');
         }
     }
 
-    /**
-     * Log out the current user.
-     * Clears all spark_auth_* keys from localStorage and reloads the page.
-     */
     function logout() {
-        // Clear all spark_auth_ keys from localStorage
         const keysToRemove = [];
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key && key.startsWith(KEY_PREFIX)) {
-                keysToRemove.push(key);
-            }
+            if (key && key.startsWith(KEY_PREFIX)) keysToRemove.push(key);
         }
-        keysToRemove.forEach(function(key) {
+        keysToRemove.forEach(function (key) {
             localStorage.removeItem(key);
         });
-
-        // Also clear any sessionStorage auth keys
         sessionStorage.removeItem('spark_auth_state');
         sessionStorage.removeItem('spark_auth_code_verifier');
         sessionStorage.removeItem('spark_auth_return_to');
-
-        // Reload to reset the page state
         window.location.reload();
     }
 
-    /**
-     * Check if the user is currently logged in.
-     * A user is considered logged in if they have a non-expired access token.
-     * @returns {boolean}
-     */
+    function isTokenExpired() {
+        const timestamp = getKey('timestamp');
+        if (!timestamp) return true;
+        return Date.now() - parseInt(timestamp, 10) >= TOKEN_LIFETIME_MS;
+    }
+
     function isLoggedIn() {
-        const token = localStorage.getItem(KEY_PREFIX + 'access_token');
+        const token = getKey('access_token');
         if (!token) return false;
         return !isTokenExpired();
     }
 
-    /**
-     * Check if the logged-in user has access to SparkVerse products.
-     * @returns {boolean}
-     */
-    function hasAccess() {
-        return localStorage.getItem(KEY_PREFIX + 'has_access') === 'true';
-    }
-
-    /**
-     * Get the current user's info.
-     * @returns {{name: string, email: string, id: string} | null}
-     */
     function getUser() {
-        const id = localStorage.getItem(KEY_PREFIX + 'user_id');
+        const id = getKey('user_id');
         if (!id) return null;
         return {
-            name: localStorage.getItem(KEY_PREFIX + 'user_name') || '',
-            email: localStorage.getItem(KEY_PREFIX + 'user_email') || '',
+            name: getKey('user_name') || '',
+            email: getKey('user_email') || '',
             id: id
         };
     }
 
-    /**
-     * Check if the stored access token has expired.
-     * Tokens are considered valid for TOKEN_LIFETIME_MS (1 hour).
-     * @returns {boolean} True if expired or no timestamp exists
-     */
-    function isTokenExpired() {
-        const timestamp = localStorage.getItem(KEY_PREFIX + 'timestamp');
-        if (!timestamp) return true;
-        const elapsed = Date.now() - parseInt(timestamp, 10);
-        return elapsed >= TOKEN_LIFETIME_MS;
+    function readFlags() {
+        return {
+            lobby: getKey('lobby') === 'true',
+            player: getKey('player') === 'true',
+            og: getKey('og') === 'true'
+        };
     }
 
-    /**
-     * Refresh the access token using the stored refresh token.
-     * Updates localStorage with the new tokens and timestamp.
-     * @returns {Promise<boolean>} True if refresh succeeded
-     */
-    async function refreshToken() {
-        const refresh = localStorage.getItem(KEY_PREFIX + 'refresh_token');
-        if (!refresh) {
-            console.warn('[SparkAuth] No refresh token available.');
-            return false;
-        }
+    function getTier() {
+        const flags = readFlags();
+        if (flags.og) return 'og';
+        if (flags.player) return 'player';
+        if (flags.lobby) return 'lobby';
+        return 'none';
+    }
 
+    function hasAccess() {
+        return TIER_RANK[getTier()] >= TIER_RANK.lobby;
+    }
+
+    function hasMinTier(minTier) {
+        const need = TIER_RANK[minTier] || 0;
+        if (need <= 0) return true;
+        return TIER_RANK[getTier()] >= need;
+    }
+
+    function persistFlags(flags) {
+        setKey('lobby', flags.lobby ? 'true' : 'false');
+        setKey('player', flags.player ? 'true' : 'false');
+        setKey('og', flags.og ? 'true' : 'false');
+        const tier = flags.og ? 'og' : flags.player ? 'player' : flags.lobby ? 'lobby' : 'none';
+        setKey('tier', tier);
+        setKey('has_access', tier === 'none' ? 'false' : 'true');
+        return tier;
+    }
+
+    async function refreshToken() {
+        const refresh = getKey('refresh_token');
+        if (!refresh) return false;
         try {
             const body = new URLSearchParams({
                 grant_type: 'refresh_token',
                 refresh_token: refresh,
                 client_id: CLIENT_ID
             });
-
             const response = await fetch(TOKEN_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: body.toString()
             });
-
-            if (!response.ok) {
-                console.error('[SparkAuth] Token refresh failed:', response.status);
-                return false;
-            }
-
+            if (!response.ok) return false;
             const data = await response.json();
-
             if (data.access_token) {
-                localStorage.setItem(KEY_PREFIX + 'access_token', data.access_token);
-                localStorage.setItem(KEY_PREFIX + 'timestamp', Date.now().toString());
+                setKey('access_token', data.access_token);
+                setKey('timestamp', Date.now().toString());
             }
-            if (data.refresh_token) {
-                localStorage.setItem(KEY_PREFIX + 'refresh_token', data.refresh_token);
-            }
-
+            if (data.refresh_token) setKey('refresh_token', data.refresh_token);
             return true;
         } catch (err) {
             console.error('[SparkAuth] Token refresh error:', err);
@@ -250,308 +234,686 @@ const SparkAuth = (function() {
         }
     }
 
-    /**
-     * Re-verify the user's access by calling the Whop access endpoint.
-     * Updates the has_access value in localStorage.
-     * @returns {Promise<boolean>} True if user has access
-     */
-    async function verifyAccess() {
-        const token = localStorage.getItem(KEY_PREFIX + 'access_token');
-        const userId = localStorage.getItem(KEY_PREFIX + 'user_id');
+    async function checkProductAccess(token, userId, productId) {
+        const urls = [
+            ACCESS_URL_BASE + encodeURIComponent(userId) + '/access/' + encodeURIComponent(productId),
+            'https://api.whop.com/api/v2/access/' + encodeURIComponent(productId),
+            'https://api.whop.com/v5/users/' + encodeURIComponent(userId) + '/access/' + encodeURIComponent(productId)
+        ];
+        for (let i = 0; i < urls.length; i++) {
+            try {
+                const response = await fetch(urls[i], {
+                    method: 'GET',
+                    headers: { Authorization: 'Bearer ' + token }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.has_access !== undefined) return !!data.has_access;
+                    if (data.valid !== undefined) return !!data.valid;
+                    if (data.access === false) return false;
+                    return true;
+                }
+            } catch (err) {
+                console.warn('[SparkAuth] Access check failed for', productId, err);
+            }
+        }
+        return false;
+    }
 
+    async function verifyAccess() {
+        let token = getKey('access_token');
+        const userId = getKey('user_id');
         if (!token || !userId) return false;
 
-        // If token is expired, try to refresh first
         if (isTokenExpired()) {
             const refreshed = await refreshToken();
             if (!refreshed) return false;
+            token = getKey('access_token');
         }
 
-        const currentToken = localStorage.getItem(KEY_PREFIX + 'access_token');
+        const [lobby, player, og, company] = await Promise.all([
+            checkProductAccess(token, userId, PRODUCTS.lobby),
+            checkProductAccess(token, userId, PRODUCTS.player),
+            checkProductAccess(token, userId, PRODUCTS.og),
+            checkProductAccess(token, userId, COMPANY_ID)
+        ]);
 
-        try {
-            const response = await fetch(
-                ACCESS_URL_BASE + encodeURIComponent(userId) + '/access/' + COMPANY_ID,
-                {
-                    method: 'GET',
-                    headers: { 'Authorization': 'Bearer ' + currentToken }
-                }
-            );
+        const flags = {
+            lobby: lobby || (company && !player && !og),
+            player: player,
+            og: og
+        };
+        if (player || og) flags.lobby = true;
+        persistFlags(flags);
+        return flags.lobby || flags.player || flags.og;
+    }
 
-            if (response.ok) {
-                const data = await response.json();
-                const access = data.has_access !== undefined ? !!data.has_access : true;
-                localStorage.setItem(KEY_PREFIX + 'has_access', access ? 'true' : 'false');
-                return access;
-            } else {
-                localStorage.setItem(KEY_PREFIX + 'has_access', 'false');
-                return false;
+    function grantOptimistic(planId) {
+        const flags = readFlags();
+        if (planId === PLANS.lobby) flags.lobby = true;
+        if (planId === PLANS.player) {
+            flags.player = true;
+            flags.lobby = true;
+        }
+        persistFlags(flags);
+    }
+
+    async function onCheckoutComplete(planId, receiptId) {
+        console.log('[SparkAuth] Checkout complete', planId, receiptId);
+        grantOptimistic(planId);
+        closePaywall();
+        updateChrome();
+
+        if (isLoggedIn()) {
+            for (let i = 0; i < 5; i++) {
+                await new Promise(function (r) { setTimeout(r, 900 * (i + 1)); });
+                await verifyAccess();
+                if (hasMinTier(planId === PLANS.player ? 'player' : 'lobby')) break;
             }
+            updateChrome();
+            if (pendingToolUrl && hasMinTier(planId === PLANS.player ? 'player' : 'lobby')) {
+                const next = pendingToolUrl;
+                pendingToolUrl = null;
+                window.location.href = next;
+                return;
+            }
+            hideInjectedGate();
+            return;
+        }
+
+        login();
+    }
+
+    function handleJoinReturn() {
+        const params = new URLSearchParams(window.location.search);
+        const joined = params.get('joined');
+        const status = params.get('status');
+        if (status === 'success' || joined === 'lobby' || joined === 'player') {
+            if (joined === 'player' || params.get('plan_id') === PLANS.player) {
+                grantOptimistic(PLANS.player);
+            } else {
+                grantOptimistic(PLANS.lobby);
+            }
+            if (!isLoggedIn()) {
+                login();
+                return true;
+            }
+            verifyAccess().then(function () {
+                updateChrome();
+                hideInjectedGate();
+            });
+            return true;
+        }
+        return false;
+    }
+
+    async function loadCatalog() {
+        if (catalogCache) return catalogCache;
+        try {
+            const res = await fetch(assetUrl('tools-catalog.json'), { cache: 'no-store' });
+            if (!res.ok) return null;
+            catalogCache = await res.json();
+            return catalogCache;
         } catch (err) {
-            console.error('[SparkAuth] Access verification error:', err);
-            return false;
+            console.warn('[SparkAuth] Catalog load failed', err);
+            return null;
         }
     }
 
-    // ========================================
-    // UI: Floating User Badge
-    // ========================================
+    function currentPageTool(catalog) {
+        if (!catalog || !catalog.tools) return null;
+        const path = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+        const href = window.location.href;
+        for (let i = 0; i < catalog.tools.length; i++) {
+            const tool = catalog.tools[i];
+            const url = (tool.url || '').toLowerCase();
+            if (!url || url.indexOf('http') === 0) continue;
+            const file = url.split('/').pop();
+            if (file === path || href.indexOf(url) !== -1) return tool;
+        }
+        return null;
+    }
 
-    /**
-     * Inject the CSS for the floating user badge.
-     * Called once when the badge is first created.
-     */
-    function injectBadgeStyles() {
-        if (document.getElementById('spark-auth-badge-styles')) return;
-
+    function injectPaywallStyles() {
+        if (document.getElementById('spark-auth-ui-styles')) return;
         const style = document.createElement('style');
-        style.id = 'spark-auth-badge-styles';
+        style.id = 'spark-auth-ui-styles';
         style.textContent = [
-            '.spark-user-badge {',
-            '  position: fixed;',
-            '  top: 12px;',
-            '  right: 12px;',
-            '  z-index: 99999;',
-            '  display: flex;',
-            '  align-items: center;',
-            '  gap: 10px;',
-            '  background: linear-gradient(135deg, #12121a 0%, #0a0a0f 100%);',
-            '  border: 1px solid rgba(212, 175, 55, 0.25);',
-            '  border-radius: 6px;',
-            '  padding: 8px 14px;',
-            '  font-family: "Space Mono", monospace;',
-            '  font-size: 0.72rem;',
-            '  color: rgba(255, 255, 255, 0.8);',
-            '  backdrop-filter: blur(10px);',
-            '  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);',
-            '  transition: opacity 0.3s ease;',
-            '}',
-            '.spark-user-badge:hover {',
-            '  border-color: rgba(212, 175, 55, 0.5);',
-            '}',
-            '.spark-user-badge-name {',
-            '  color: #d4af37;',
-            '  font-weight: 700;',
-            '  max-width: 120px;',
-            '  overflow: hidden;',
-            '  text-overflow: ellipsis;',
-            '  white-space: nowrap;',
-            '}',
-            '.spark-user-badge-dot {',
-            '  width: 6px;',
-            '  height: 6px;',
-            '  border-radius: 50%;',
-            '  background: #86efac;',
-            '  flex-shrink: 0;',
-            '}',
-            '.spark-user-badge-logout {',
-            '  background: none;',
-            '  border: 1px solid rgba(255, 255, 255, 0.15);',
-            '  color: rgba(255, 255, 255, 0.5);',
-            '  font-family: "Space Mono", monospace;',
-            '  font-size: 0.65rem;',
-            '  padding: 3px 8px;',
-            '  border-radius: 3px;',
-            '  cursor: pointer;',
-            '  transition: all 0.2s ease;',
-            '  text-transform: uppercase;',
-            '  letter-spacing: 0.05em;',
-            '}',
-            '.spark-user-badge-logout:hover {',
-            '  border-color: rgba(220, 38, 38, 0.5);',
-            '  color: #fca5a5;',
-            '}',
-            '@media (max-width: 480px) {',
-            '  .spark-user-badge {',
-            '    top: 8px;',
-            '    right: 8px;',
-            '    padding: 6px 10px;',
-            '    font-size: 0.65rem;',
-            '  }',
-            '  .spark-user-badge-name {',
-            '    max-width: 80px;',
-            '  }',
-            '}'
+            '.spark-paywall{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;padding:1.25rem;background:rgba(5,5,8,.92);backdrop-filter:blur(12px)}',
+            '.spark-paywall.open{display:flex}',
+            '.spark-paywall-card{width:min(520px,100%);max-height:92vh;overflow:auto;background:linear-gradient(165deg,#12121c,#07070d);border:1px solid rgba(251,191,36,.28);border-radius:1.1rem;padding:1.4rem 1.3rem 1.1rem;box-shadow:0 0 60px rgba(139,92,246,.22)}',
+            '.spark-paywall-kicker{font-family:Orbitron,sans-serif;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#22d3ee;margin-bottom:.45rem}',
+            '.spark-paywall-card h2{font-family:Orbitron,sans-serif;font-size:1.15rem;letter-spacing:.06em;margin:0 0 .5rem;color:#fff}',
+            '.spark-paywall-card p{color:rgba(255,255,255,.62);font-size:.86rem;line-height:1.55;margin:0 0 1rem}',
+            '.spark-paywall-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem}',
+            '.spark-paywall-btn{flex:1;min-width:140px;padding:.75rem 1rem;border-radius:.7rem;font-family:Orbitron,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:none}',
+            '.spark-paywall-btn.primary{background:linear-gradient(135deg,#fbbf24,#f97316,#ec4899);color:#050508}',
+            '.spark-paywall-btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff}',
+            '.spark-paywall-close{position:absolute;top:.7rem;right:.85rem;background:none;border:none;color:rgba(255,255,255,.45);font-size:1.2rem;cursor:pointer}',
+            '.spark-checkout-slot{min-height:120px}',
+            '.spark-checkout-slot iframe,.whop-checkout-wrapper iframe{width:100%!important}',
+            '.spark-gate-overlay{position:fixed;inset:0;z-index:99990;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:rgba(5,5,8,.88);backdrop-filter:blur(10px)}',
+            '.spark-signin-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:Orbitron,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#050508;background:linear-gradient(135deg,#fbbf24,#f97316);border:none;border-radius:2rem;padding:.5rem 1rem;cursor:pointer}',
+            '.spark-signin-btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25)}',
+            '.spark-user-badge{position:fixed;top:12px;right:12px;z-index:99999;display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#12121a,#0a0a0f);border:1px solid rgba(212,175,55,.25);border-radius:6px;padding:8px 14px;font-family:"Space Mono",monospace;font-size:.72rem;color:rgba(255,255,255,.8);backdrop-filter:blur(10px)}',
+            '.spark-user-badge-name{color:#d4af37;font-weight:700;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+            '.spark-user-badge-tier{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:#22d3ee}',
+            '.spark-user-badge-dot{width:6px;height:6px;border-radius:50%;background:#86efac;flex-shrink:0}',
+            '.spark-user-badge-logout{background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);font-family:"Space Mono",monospace;font-size:.65rem;padding:3px 8px;border-radius:3px;cursor:pointer;text-transform:uppercase}',
+            '.tool-tag.locked,.tool-card.locked{opacity:.85}',
+            '.tool-tag .tier-pip,.tool-badge.extra{margin-left:.35rem;font-size:.58rem;letter-spacing:.08em}'
         ].join('\n');
-
         document.head.appendChild(style);
     }
 
-    /**
-     * Create and append the floating user badge to the page.
-     * Shows the user's name, a green "online" dot, and a logout button.
-     * @param {string} name - The user's display name
-     */
+    function ensureCheckoutLoader() {
+        if (document.querySelector('script[src*="checkout/loader.js"]')) return;
+        const s = document.createElement('script');
+        s.src = CHECKOUT_LOADER;
+        s.async = true;
+        s.defer = true;
+        document.head.appendChild(s);
+    }
+
+    function mountCheckout(slot, planId) {
+        slot.innerHTML = '';
+        const el = document.createElement('div');
+        el.setAttribute('data-whop-checkout-plan-id', planId);
+        el.setAttribute('data-whop-checkout-theme', 'dark');
+        el.setAttribute('data-whop-checkout-theme-accent-color', 'gold');
+        el.setAttribute('data-whop-checkout-skip-redirect', 'true');
+        el.setAttribute('data-whop-checkout-on-complete', 'sparkWhopCheckoutComplete');
+        el.setAttribute(
+            'data-whop-checkout-return-url',
+            SITE_ORIGIN + '/?joined=' + (planId === PLANS.player ? 'player' : 'lobby') + '&status=success'
+        );
+        el.setAttribute('data-whop-checkout-style-container-padding-x', '0');
+        el.style.maxWidth = '440px';
+        el.style.margin = '0 auto';
+        slot.appendChild(el);
+        ensureCheckoutLoader();
+    }
+
+    function paywallRoot() {
+        return document.getElementById('spark-paywall');
+    }
+
+    function ensurePaywall() {
+        injectPaywallStyles();
+        if (paywallRoot()) return paywallRoot();
+        const wrap = document.createElement('div');
+        wrap.id = 'spark-paywall';
+        wrap.className = 'spark-paywall';
+        wrap.innerHTML = [
+            '<div class="spark-paywall-card" style="position:relative">',
+            '  <button type="button" class="spark-paywall-close" data-spark-close aria-label="Close">✕</button>',
+            '  <div class="spark-paywall-kicker" data-spark-kicker>SPARKVERSE</div>',
+            '  <h2 data-spark-title>Sign in to use the tools</h2>',
+            '  <p data-spark-blurb>Join free on this page, or sign in if you already have Whop access.</p>',
+            '  <div class="spark-paywall-actions">',
+            '    <button type="button" class="spark-paywall-btn primary" data-spark-login>Sign in with Whop</button>',
+            '    <button type="button" class="spark-paywall-btn ghost" data-spark-close>Not now</button>',
+            '  </div>',
+            '  <div class="spark-checkout-slot" data-spark-checkout></div>',
+            '</div>'
+        ].join('');
+        wrap.addEventListener('click', function (e) {
+            if (e.target === wrap || e.target.getAttribute('data-spark-close') !== null) closePaywall();
+        });
+        wrap.querySelector('[data-spark-login]').addEventListener('click', function () {
+            login();
+        });
+        document.body.appendChild(wrap);
+        return wrap;
+    }
+
+    function openPaywall(opts) {
+        opts = opts || {};
+        const minTier = opts.minTier === 'og' ? 'player' : (opts.minTier || 'lobby');
+        const meta = TIER_META[minTier] || TIER_META.lobby;
+        pendingToolUrl = opts.url || pendingToolUrl;
+        const root = ensurePaywall();
+        root.querySelector('[data-spark-kicker]').textContent = minTier === 'player' ? 'PLAYERS ONLY' : 'FREE LOBBY';
+        root.querySelector('[data-spark-title]').textContent = opts.title || meta.title;
+        root.querySelector('[data-spark-blurb]').textContent = opts.blurb || meta.blurb;
+        const loginBtn = root.querySelector('[data-spark-login]');
+        loginBtn.textContent = isLoggedIn() ? 'Refresh access' : 'Sign in with Whop';
+        loginBtn.onclick = function () {
+            if (isLoggedIn()) {
+                verifyAccess().then(function () {
+                    updateChrome();
+                    if (hasMinTier(minTier)) {
+                        closePaywall();
+                        if (pendingToolUrl) window.location.href = pendingToolUrl;
+                    }
+                });
+            } else {
+                login();
+            }
+        };
+        mountCheckout(root.querySelector('[data-spark-checkout]'), meta.planId);
+        root.classList.add('open');
+    }
+
+    function closePaywall() {
+        const root = paywallRoot();
+        if (root) root.classList.remove('open');
+    }
+
+    function hideInjectedGate() {
+        const gate = document.getElementById('spark-injected-gate');
+        if (gate) gate.style.display = 'none';
+        const legacy = document.querySelector('.spark-gate');
+        if (legacy) legacy.style.display = 'none';
+    }
+
+    function showInjectedGate(minTier) {
+        injectPaywallStyles();
+        let gate = document.getElementById('spark-injected-gate');
+        if (!gate) {
+            gate = document.createElement('div');
+            gate.id = 'spark-injected-gate';
+            gate.className = 'spark-gate-overlay';
+            document.body.appendChild(gate);
+        }
+        const meta = TIER_META[minTier] || TIER_META.lobby;
+        const logged = isLoggedIn();
+        gate.style.display = 'flex';
+        gate.innerHTML = [
+            '<div class="spark-paywall-card">',
+            '  <div class="spark-paywall-kicker">' + (minTier === 'player' ? 'PLAYERS ONLY' : 'LOBBY ACCESS') + '</div>',
+            '  <h2>' + meta.title + '</h2>',
+            '  <p>' + (logged ? 'You\'re signed in, but this tool needs ' + (minTier === 'player' ? 'Players Lounge' : 'Lobby') + ' access. Join on this page.' : meta.blurb) + '</p>',
+            '  <div class="spark-paywall-actions">',
+            logged ? '' : '<button type="button" class="spark-paywall-btn ghost" id="spark-gate-login">Sign in with Whop</button>',
+            '    <button type="button" class="spark-paywall-btn primary" id="spark-gate-join">' + meta.cta + '</button>',
+            '  </div>',
+            '  <p style="font-size:.72rem;opacity:.5;margin:0"><a href="index.html" style="color:#22d3ee">← Back to the galaxy</a></p>',
+            '</div>'
+        ].join('');
+        const join = document.getElementById('spark-gate-join');
+        if (join) join.addEventListener('click', function () { openPaywall({ minTier: minTier }); });
+        const loginBtn = document.getElementById('spark-gate-login');
+        if (loginBtn) loginBtn.addEventListener('click', login);
+    }
+
     function createUserBadge(name) {
-        // Remove existing badge if any
         const existing = document.getElementById('spark-user-badge');
         if (existing) existing.remove();
-
-        injectBadgeStyles();
-
+        injectPaywallStyles();
         const badge = document.createElement('div');
         badge.className = 'spark-user-badge';
         badge.id = 'spark-user-badge';
 
         const dot = document.createElement('span');
         dot.className = 'spark-user-badge-dot';
-
         const nameEl = document.createElement('span');
         nameEl.className = 'spark-user-badge-name';
-        nameEl.textContent = name || 'Spark User';
-
+        nameEl.textContent = name || 'Spark';
+        const tierEl = document.createElement('span');
+        tierEl.className = 'spark-user-badge-tier';
+        const tier = getTier();
+        tierEl.textContent = tier === 'none' ? 'guest' : tier;
         const logoutBtn = document.createElement('button');
         logoutBtn.className = 'spark-user-badge-logout';
         logoutBtn.textContent = 'Logout';
-        logoutBtn.addEventListener('click', function(e) {
+        logoutBtn.addEventListener('click', function (e) {
             e.preventDefault();
-            e.stopPropagation();
             logout();
         });
-
         badge.appendChild(dot);
         badge.appendChild(nameEl);
+        badge.appendChild(tierEl);
         badge.appendChild(logoutBtn);
-
-        document.body.appendChild(badge);
+        const headerActions = document.querySelector('.header-actions');
+        if (headerActions) {
+            badge.style.position = 'static';
+            headerActions.appendChild(badge);
+        } else {
+            document.body.appendChild(badge);
+        }
     }
 
-    // ========================================
-    // Gate Logic
-    // ========================================
+    function updateChrome() {
+        const headerBtn = document.getElementById('spark-signin');
+        if (isLoggedIn()) {
+            const user = getUser();
+            if (user) createUserBadge(user.name);
+            if (headerBtn) headerBtn.style.display = 'none';
+        } else if (headerBtn) {
+            headerBtn.style.display = '';
+            const existing = document.getElementById('spark-user-badge');
+            if (existing) existing.remove();
+        }
+    }
 
-    /**
-     * Apply the authentication/access gate to the current page.
-     *
-     * Looks for a `.spark-gate` div on the page:
-     * - If none exists, the page is considered free (no gating).
-     * - If user has access: hides the gate div, shows a welcome badge.
-     * - If user is logged in but no access: shows "Get Access" button.
-     * - If user is not logged in: shows "Login with Whop" button.
-     *
-     * This is the main entry point that tool pages should call.
-     */
-    async function applyGate() {
-        const gateEl = document.querySelector('.spark-gate');
+    async function applyGate(opts) {
+        opts = opts || {};
+        const minTier = opts.minTier || 'lobby';
+        if (TIER_RANK[minTier] <= 0) {
+            if (isLoggedIn()) {
+                const user = getUser();
+                if (user) createUserBadge(user.name);
+            }
+            return true;
+        }
 
-        // No gate div = free page, nothing to do
-        if (!gateEl) {
-            // Still show user badge if logged in (even on free pages)
+        if (getKey('access_token') && isTokenExpired()) {
+            const refreshed = await refreshToken();
+            if (!refreshed) {
+                logout();
+                return false;
+            }
+            await verifyAccess();
+        } else if (isLoggedIn() && getKey('tier') == null) {
+            await verifyAccess();
+        }
+
+        if (hasMinTier(minTier)) {
+            hideInjectedGate();
+            const gateEl = document.querySelector('.spark-gate');
+            if (gateEl) gateEl.style.display = 'none';
+            updateChrome();
+            return true;
+        }
+
+        showInjectedGate(minTier);
+        updateChrome();
+        return false;
+    }
+
+    async function protect() {
+        handleJoinReturn();
+        const catalog = await loadCatalog();
+        const tool = currentPageTool(catalog);
+        const minTier = (tool && tool.tier) || 'public';
+        if (minTier === 'public' || minTier === 'shop') {
+            updateChrome();
             if (isLoggedIn()) {
                 const user = getUser();
                 if (user) createUserBadge(user.name);
             }
             return;
         }
+        await applyGate({ minTier: minTier });
+    }
 
-        // If token is expired but we have a refresh token, try to refresh silently
-        if (localStorage.getItem(KEY_PREFIX + 'access_token') && isTokenExpired()) {
-            const refreshed = await refreshToken();
-            if (!refreshed) {
-                // Refresh failed - clear stale auth data
-                logout(); // This will reload, so the code below won't run
-                return;
-            }
-            // After refresh, re-verify access
-            await verifyAccess();
+    function canEnter(tool) {
+        const tier = (tool && tool.tier) || 'public';
+        if (tier === 'public' || tier === 'shop') return true;
+        return hasMinTier(tier);
+    }
+
+    function enterTool(tool, ev) {
+        if (!tool) return;
+        if (canEnter(tool)) {
+            if (ev && ev.preventDefault) ev.preventDefault();
+            window.location.href = tool.url;
+            return;
+        }
+        if (ev && ev.preventDefault) ev.preventDefault();
+        openPaywall({
+            minTier: tool.tier,
+            url: tool.url,
+            title: tool.tier === 'player' ? 'Players only — ' + tool.title : 'Join to use ' + tool.title
+        });
+    }
+
+    function renderToolTag(tool) {
+        const a = document.createElement('a');
+        a.className = 'tool-tag' + (canEnter(tool) ? '' : ' locked');
+        a.href = tool.url;
+        a.dataset.toolId = tool.id;
+        a.dataset.tier = tool.tier;
+        a.textContent = tool.title;
+        if (tool.tier === 'player' || tool.tier === 'lobby') {
+            const pip = document.createElement('span');
+            pip.className = 'tier-pip';
+            pip.textContent = canEnter(tool) ? '' : (tool.tier === 'player' ? ' · Players' : ' · Lobby');
+            a.appendChild(pip);
+        }
+        a.addEventListener('click', function (e) {
+            enterTool(tool, e);
+        });
+        return a;
+    }
+
+    async function decorateLobby() {
+        const catalog = await loadCatalog();
+        if (!catalog) return;
+        const toolsByZone = {};
+        catalog.tools.forEach(function (t) {
+            if (!toolsByZone[t.zone]) toolsByZone[t.zone] = [];
+            toolsByZone[t.zone].push(t);
+        });
+
+        const originalOpen = window.openModal;
+        if (typeof originalOpen === 'function') {
+            window.openModal = function (id) {
+                originalOpen(id);
+                const toolsEl = document.getElementById('modalTools');
+                if (!toolsEl) return;
+                const zoneTools = toolsByZone[id] || [];
+                if (!zoneTools.length) return;
+                toolsEl.innerHTML = '';
+                zoneTools.forEach(function (tool) {
+                    toolsEl.appendChild(renderToolTag(tool));
+                });
+            };
         }
 
-        if (isLoggedIn() && hasAccess()) {
-            // ---- User is logged in AND has access ----
-            // Hide the gate entirely
-            gateEl.style.display = 'none';
-
-            // Show user badge
-            const user = getUser();
-            if (user) createUserBadge(user.name);
-
-        } else if (isLoggedIn() && !hasAccess()) {
-            // ---- User is logged in but does NOT have access ----
-            // Replace gate content with "Get Access" message
-            const user = getUser();
-            if (user) createUserBadge(user.name);
-
-            const actionsEl = gateEl.querySelector('.spark-gate-actions');
-            if (actionsEl) {
-                actionsEl.innerHTML = '';
-
-                const getAccessBtn = document.createElement('a');
-                getAccessBtn.href = WHOP_PURCHASE_URL;
-                getAccessBtn.target = '_blank';
-                getAccessBtn.rel = 'noopener noreferrer';
-                getAccessBtn.className = 'spark-gate-btn spark-gate-btn-primary';
-                getAccessBtn.textContent = 'Get Access on Whop';
-
-                actionsEl.appendChild(getAccessBtn);
-            }
-
-            // Update the gate text
-            const textEl = gateEl.querySelector('.spark-gate-text');
-            if (textEl) {
-                const p = textEl.querySelector('p');
-                if (p) {
-                    p.innerHTML = 'You\'re logged in but don\'t have access yet. <br>Get a SparkVerse membership to unlock all tools.';
+        const originalLand = window.landOnPlanet;
+        if (typeof originalLand === 'function') {
+            window.landOnPlanet = function (id) {
+                const zoneTools = toolsByZone[id] || [];
+                const first = zoneTools[0];
+                if (first && !canEnter(first) && first.tier !== 'public' && first.tier !== 'shop') {
+                    enterTool(first);
+                    return;
                 }
-            }
-
-            // Update the icon
-            const iconEl = gateEl.querySelector('.spark-gate-icon');
-            if (iconEl) {
-                iconEl.textContent = '\u26A0\uFE0F'; // Warning sign
-            }
-
-        } else {
-            // ---- User is NOT logged in ----
-            // Replace the "I Have Tokens" button with "Login with Whop"
-            const actionsEl = gateEl.querySelector('.spark-gate-actions');
-            if (actionsEl) {
-                // Find the secondary button ("I Have Tokens") and replace it
-                const secondaryBtn = actionsEl.querySelector('.spark-gate-btn-secondary');
-                if (secondaryBtn) {
-                    const loginBtn = document.createElement('button');
-                    loginBtn.className = 'spark-gate-btn spark-gate-btn-secondary';
-                    loginBtn.textContent = 'Login with Whop';
-                    loginBtn.style.cursor = 'pointer';
-                    loginBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        login();
-                    });
-                    secondaryBtn.replaceWith(loginBtn);
-                }
-            }
+                originalLand(id);
+            };
         }
     }
 
-    // ========================================
-    // Public API
-    // ========================================
+    async function bootLobby() {
+        injectPaywallStyles();
+        ensureCheckoutLoader();
+        handleJoinReturn();
+
+        const signin = document.getElementById('spark-signin');
+        if (signin) {
+            signin.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (isLoggedIn()) {
+                    verifyAccess().then(updateChrome);
+                } else {
+                    openPaywall({ minTier: 'lobby', title: 'Sign in to the Sparkverse' });
+                }
+            });
+        }
+
+        const profileNav = document.querySelector('[data-spark-profile]');
+        if (profileNav) {
+            profileNav.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!isLoggedIn()) {
+                    openPaywall({ minTier: 'lobby' });
+                    return;
+                }
+                if (!hasMinTier('player')) {
+                    openPaywall({ minTier: 'player', title: 'Upgrade to Players' });
+                }
+            });
+        }
+
+        if (getKey('access_token')) {
+            if (isTokenExpired()) await refreshToken();
+            if (isLoggedIn()) await verifyAccess();
+        }
+        updateChrome();
+        await decorateLobby();
+    }
+
+    async function handleCallback(ui) {
+        ui = ui || {};
+        function setStatus(msg) { if (ui.setStatus) ui.setStatus(msg); }
+        function showError(msg) { if (ui.showError) ui.showError(msg); }
+        function showSuccess(name) { if (ui.showSuccess) ui.showSuccess(name); }
+
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const state = params.get('state');
+            const error = params.get('error');
+            const errorDescription = params.get('error_description');
+
+            if (error) {
+                showError('OAuth error: ' + (errorDescription || error));
+                return;
+            }
+            if (!code) {
+                showError('No authorization code received. Please try logging in again.');
+                return;
+            }
+            if (!state) {
+                showError('No state parameter received. Please try logging in again.');
+                return;
+            }
+
+            const storedState = sessionStorage.getItem('spark_auth_state');
+            if (!storedState || storedState !== state) {
+                showError('Security check failed: state mismatch. Please try logging in again.');
+                return;
+            }
+
+            const codeVerifier = sessionStorage.getItem('spark_auth_code_verifier');
+            if (!codeVerifier) {
+                showError('PKCE verification data missing. Please try logging in again.');
+                return;
+            }
+
+            setStatus('Exchanging authorization code...');
+            const tokenBody = new URLSearchParams({
+                grant_type: 'authorization_code',
+                code: code,
+                redirect_uri: REDIRECT_URI,
+                client_id: CLIENT_ID,
+                code_verifier: codeVerifier
+            });
+            const tokenResponse = await fetch(TOKEN_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: tokenBody.toString()
+            });
+            if (!tokenResponse.ok) {
+                showError('Failed to exchange authorization code. Please try logging in again.');
+                return;
+            }
+            const tokenData = await tokenResponse.json();
+            const accessToken = tokenData.access_token;
+            const refresh = tokenData.refresh_token;
+            if (!accessToken) {
+                showError('No access token received from Whop.');
+                return;
+            }
+
+            setStatus('Retrieving your profile...');
+            let userName = '';
+            let userEmail = '';
+            let userId = '';
+            const userResponse = await fetch(USERINFO_URL, {
+                method: 'GET',
+                headers: { Authorization: 'Bearer ' + accessToken }
+            });
+            if (userResponse.ok) {
+                const userData = await userResponse.json();
+                userName = userData.name || userData.username || '';
+                userEmail = userData.email || '';
+                userId = userData.sub || userData.id || '';
+            }
+
+            setKey('access_token', accessToken);
+            if (refresh) setKey('refresh_token', refresh);
+            setKey('user_name', userName);
+            setKey('user_email', userEmail);
+            setKey('user_id', userId);
+            setKey('timestamp', Date.now().toString());
+
+            setStatus('Checking Lobby and Players access...');
+            await verifyAccess();
+
+            sessionStorage.removeItem('spark_auth_state');
+            sessionStorage.removeItem('spark_auth_code_verifier');
+            showSuccess(userName);
+
+            const returnTo = sessionStorage.getItem('spark_auth_return_to') || '/';
+            sessionStorage.removeItem('spark_auth_return_to');
+            setTimeout(function () {
+                window.location.href = returnTo;
+            }, 1200);
+        } catch (err) {
+            console.error('[SparkAuth Callback]', err);
+            showError('An unexpected error occurred: ' + err.message);
+        }
+    }
+
+    function renderToolsGrid(container, filterTier) {
+        return loadCatalog().then(function (catalog) {
+            if (!catalog || !container) return;
+            container.innerHTML = '';
+            catalog.tools.forEach(function (tool) {
+                if (filterTier && filterTier !== 'all' && tool.tier !== filterTier) return;
+                const card = document.createElement('div');
+                card.className = 'tool-card ' + tool.tier + (canEnter(tool) ? '' : ' locked');
+                card.dataset.tier = tool.tier;
+                const badge = document.createElement('span');
+                badge.className = 'tool-badge ' + tool.tier;
+                badge.textContent = (TIER_META[tool.tier] && TIER_META[tool.tier].cta) ? tool.tier.toUpperCase() : tool.tier.toUpperCase();
+                const h3 = document.createElement('h3');
+                h3.textContent = tool.title;
+                const p = document.createElement('p');
+                p.textContent = tool.blurb || '';
+                const btn = document.createElement('button');
+                btn.className = 'tool-btn ' + tool.tier;
+                btn.textContent = canEnter(tool) ? 'Enter' : (tool.tier === 'player' ? 'Unlock as Player' : 'Join Lobby');
+                btn.addEventListener('click', function () { enterTool(tool); });
+                card.appendChild(badge);
+                card.appendChild(h3);
+                if (tool.blurb) card.appendChild(p);
+                card.appendChild(btn);
+                container.appendChild(card);
+            });
+        });
+    }
 
     return {
-        // Config (read-only references)
         CLIENT_ID: CLIENT_ID,
         COMPANY_ID: COMPANY_ID,
         REDIRECT_URI: REDIRECT_URI,
-
-        // PKCE helpers
+        PRODUCTS: PRODUCTS,
+        PLANS: PLANS,
         generateCodeVerifier: generateCodeVerifier,
         generateCodeChallenge: generateCodeChallenge,
-
-        // Auth flow
         login: login,
         logout: logout,
-
-        // State checks
         isLoggedIn: isLoggedIn,
         hasAccess: hasAccess,
+        hasMinTier: hasMinTier,
+        getTier: getTier,
         getUser: getUser,
         isTokenExpired: isTokenExpired,
-
-        // Async operations
         refreshToken: refreshToken,
         verifyAccess: verifyAccess,
-
-        // Gate application (main entry point)
-        applyGate: applyGate
+        applyGate: applyGate,
+        protect: protect,
+        bootLobby: bootLobby,
+        openPaywall: openPaywall,
+        closePaywall: closePaywall,
+        handleCallback: handleCallback,
+        loadCatalog: loadCatalog,
+        enterTool: enterTool,
+        renderToolsGrid: renderToolsGrid,
+        onCheckoutComplete: onCheckoutComplete
     };
-
 })();

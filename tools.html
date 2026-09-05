@@ -200,81 +200,25 @@
 
         <div class="filter-tabs">
             <div class="filter-tab active" onclick="filterTools('all')">All Tools</div>
-            <div class="filter-tab" onclick="filterTools('free')">Free</div>
+            <div class="filter-tab" onclick="filterTools('lobby')">Lobby</div>
             <div class="filter-tab" onclick="filterTools('player')">Players</div>
             <div class="filter-tab" onclick="filterTools('shop')">Shop</div>
         </div>
 
-        <div class="tools-grid" id="toolsGrid">
-            <!-- Player Tools -->
-            <div class="tool-card player" data-tier="player">
-                <span class="tool-badge player">PLAYERS</span>
-                <h3>The Player's Guide to Self</h3>
-                <p>Comprehensive guide to self-discovery and personal mastery. Navigate your inner universe with cosmic wisdom.</p>
-                <button class="tool-btn player" onclick="window.location.href='https://thefirstspark.shop/players_guide_to_survival.html'">Access Guide</button>
-            </div>
-
-            <div class="tool-card player" data-tier="player">
-                <span class="tool-badge player">PLAYERS</span>
-                <h3>The Five Paths Explorer</h3>
-                <p>Explore the five fundamental paths of transformation and growth. Interactive journey through cosmic principles.</p>
-                <button class="tool-btn player" onclick="window.location.href='https://thefirstspark.shop/five-paths-explorer.html'">Begin Journey</button>
-            </div>
-
-            <!-- Shop Tools & Services -->
-            <div class="tool-card shop" data-tier="shop">
-                <span class="tool-badge shop">SHOP</span>
-                <h3>Spark Sigil Commission</h3>
-                <p>Custom sigil creation designed specifically for you. Harness cosmic energy through personalized sacred geometry.</p>
-                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/sparkverse-511c/spark-sigil-commission/'">Commission Now</button>
-            </div>
-
-            <div class="tool-card shop" data-tier="shop">
-                <span class="tool-badge shop">SHOP</span>
-                <h3>SigilCraft: The Art of Symbols</h3>
-                <p>Master the ancient art of sigil creation. Learn to craft your own powerful symbols and sacred designs.</p>
-                <button class="tool-btn shop" onclick="window.location.href='https://sigilcraft.thefirstspark.shop/'">Learn More</button>
-            </div>
-
-            <div class="tool-card shop" data-tier="shop">
-                <span class="tool-badge shop">SHOP</span>
-                <h3>Soul Mapping Session</h3>
-                <p>Get your personal soul map. Your full numerological blueprint with astrology and Chinese zodiac. $22 · 12 months of updates.</p>
-                <button class="tool-btn shop" onclick="window.location.href='https://whop.com/checkout/plan_anQKP3Pzf1cGm'">Book Session</button>
-            </div>
-
-            <!-- Membership Upgrades -->
-            <div class="tool-card player" data-tier="player">
-                <span class="tool-badge player">PLAYERS</span>
-                <h3>Join Players Lounge</h3>
-                <p>Unlock exclusive access to premium tools, priority support, and the Players community for $33/month.</p>
-                <button class="tool-btn player" onclick="window.location.href='https://whop.com/sparkverse-511c/the-players-lounge/'">Become a Player</button>
-            </div>
-
-            <div class="tool-card free" data-tier="free">
-                <span class="tool-badge free">FREE</span>
-                <h3>The Sparkverse Lobby</h3>
-                <p>Start your journey in the Sparkverse. Free access to the community and foundational tools.</p>
-                <button class="tool-btn free" onclick="window.location.href='https://whop.com/sparkverse-511c/the-sparkverse-lobby/'">Join Free</button>
-            </div>
-        </div>
+        <div class="tools-grid" id="toolsGrid"></div>
     </div>
 
+    <script src="https://js.whop.com/static/checkout/loader.js" async defer></script>
+    <script src="spark-auth.js"></script>
     <script>
+        SparkAuth.protect();
+        SparkAuth.renderToolsGrid(document.getElementById('toolsGrid'), 'all');
+
         function filterTools(tier) {
-            const cards = document.querySelectorAll('.tool-card');
             const tabs = document.querySelectorAll('.filter-tab');
-
             tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-
-            cards.forEach(card => {
-                if (tier === 'all' || card.dataset.tier === tier) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            if (event && event.target) event.target.classList.add('active');
+            SparkAuth.renderToolsGrid(document.getElementById('toolsGrid'), tier);
         }
     </script>
 </body>

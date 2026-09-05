@@ -603,10 +603,10 @@
                     </p>
                     <div class="gate-ctas">
                         <button class="btn btn-primary" id="login-btn">Login with Whop</button>
-                        <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Join Free First</a>
+                        <button type="button" class="btn btn-ghost" id="join-lobby-btn">Join free on this page</button>
                     </div>
                     <p class="gate-footnote">
-                        No account yet? The <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener noreferrer">SparkVerse Lobby</a> is free — join, then come back and log in.
+                        No account yet? Join the Sparkverse Lobby free right here, then sign in with that same Whop login.
                     </p>
                 </div>
             </section>
@@ -639,7 +639,7 @@
                         Every tool unlocked. Monthly live sessions. First look at every new drop
                         before it hits the public site. This is the whole Sparkverse, all in.
                     </p>
-                    <a href="https://whop.com/sparkverse-511c/the-players-lounge/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Claim Your Seat</a>
+                    <button type="button" class="btn btn-primary" id="claim-player-btn">Claim Your Seat</button>
                 </div>
 
                 <div class="offers-grid">
@@ -655,7 +655,7 @@
                         <h4>The SparkVerse Lobby</h4>
                         <div class="offer-price">Free</div>
                         <p>The community hangout. If you're not in yet, this is the zero-cost way through the door.</p>
-                        <a href="https://whop.com/sparkverse-511c/the-sparkverse-lobby/" target="_blank" rel="noopener noreferrer" class="offer-link">Enter Free →</a>
+                        <a href="index.html" class="offer-link">Enter the galaxy →</a>
                     </div>
                 </div>
 
@@ -755,6 +755,18 @@
                     e.preventDefault();
                     SparkAuth.login();
                 });
+                var joinLobby = document.getElementById('join-lobby-btn');
+                if (joinLobby) {
+                    joinLobby.addEventListener('click', function() {
+                        SparkAuth.openPaywall({ minTier: 'lobby' });
+                    });
+                }
+                var claimPlayer = document.getElementById('claim-player-btn');
+                if (claimPlayer) {
+                    claimPlayer.addEventListener('click', function() {
+                        SparkAuth.openPaywall({ minTier: 'player' });
+                    });
+                }
 
                 document.getElementById('logout-btn').addEventListener('click', function(e) {
                     e.preventDefault();
