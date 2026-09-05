@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Color Codex | SPARKVERSE</title>
-<meta name="description" content="The real Color Codex wheel: eleven lights from the first spark. Radiant Number. Ember through First Light. Amber is not a slice.">
+<meta name="description" content="The real Color Codex wheel: nine lights from the first spark. Radiant Number. Ember through Pearl Gate. Masters are a tint, amber is debt.">
 <meta name="theme-color" content="#050508">
 <link rel="icon" href="favicon.ico">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -28,13 +28,13 @@
 </header>
 <main class="lobby-main">
   <section class="room-hero">
-    <p class="room-kicker">Color Codex · DL-005</p>
-    <h1>The eleven lights.</h1>
-    <p>Not Red / Cyan / Yellow. Not four marketing colours. The spectrum of the first spark — one slice per Radiant Number. Your light does not change.</p>
+    <p class="room-kicker">Color Codex · DL-005 · DL-014</p>
+    <h1>The nine lights.</h1>
+    <p>Not Red / Cyan / Yellow. Not four marketing colours. The spectrum of the first spark — one slice per Radiant Number, 1 through 9. Your light does not change.</p>
   </section>
 
   <div class="wheel-mount" id="canon-wheel"></div>
-  <p class="quiet" style="margin-bottom:2rem">Clockwise from the top: Radiant 1. Masters share the last slice. Amber is not on this wheel.</p>
+  <p class="quiet" style="margin-bottom:2rem">Clockwise from the top: Radiant 1. Masters are not a slice — they wear their reduced light, tinted. Amber is not on this wheel.</p>
 
   <h2 class="section-title">The slices</h2>
   <table class="canon-table">
@@ -42,9 +42,19 @@
     <tbody id="canon-rows"></tbody>
   </table>
 
+  <h2 class="section-title">The masters</h2>
+  <section class="panel">
+    <p>A master number is more of a number, not a different colour. 11 is 2 amplified, 22 is 4 amplified, 33 is 6 amplified. A master Radiant reduces for its light and wears that light pulled toward white — <strong>Moonsilvered</strong> — with the master ring on the pattern. Bright is who you are. Tint is the master. Shade is debt.</p>
+    <table class="canon-table" style="margin-bottom:0">
+      <thead><tr><th>Master</th><th>Reduces to</th><th>Light</th></tr></thead>
+      <tbody id="master-rows"></tbody>
+    </table>
+  </section>
+
   <section class="panel amber-note">
     <h2>Amber is debt.</h2>
-    <p>Knots and breaks render in amber. Amber belongs to no tier. It is the only foreign colour in a pattern — carried, not what the soul is. Release is the work.</p>
+    <p>Knots and breaks render in amber, pulled toward black. Amber belongs to no tier. It is the only foreign colour in a pattern — carried, not what the soul is. Release is the work.</p>
+    <p class="quiet" style="margin:.6rem 0 0">Ratified 2026-09-05 (DL-014).</p>
   </section>
 
   <div class="actions" style="justify-content:flex-start;margin-top:1.5rem">
@@ -61,6 +71,9 @@
   renderCanonColorWheel("#canon-wheel");
   document.getElementById("canon-rows").innerHTML = CANON_COLOR_WHEEL.map(function (t) {
     return "<tr><td>" + t.radiant + "</td><td><span class='sw' style='background:" + t.hex + "'></span>" + t.name + "</td><td>" + t.light + "</td></tr>";
+  }).join("");
+  document.getElementById("master-rows").innerHTML = CANON_MASTERS.map(function (m) {
+    return "<tr><td>" + m.master + "</td><td>" + m.reduces + " · " + m.name + "</td><td><span class='sw' style='background:" + m.hex + ";box-shadow:0 0 0 2px " + m.base.hex + "'></span>" + m.light + "</td></tr>";
   }).join("");
 </script>
 <script src="https://js.whop.com/static/checkout/loader.js" async defer></script>
