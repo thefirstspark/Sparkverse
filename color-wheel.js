@@ -44,7 +44,7 @@
     }
     function f(n) { return n.toFixed(1); }
     var href = opts.href || "color-wheel.html";
-    var s = '<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Color Codex: nine lights of the first spark">';
+    var s = '<svg viewBox="0 0 800 ' + (compact ? 800 : 860) + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Color Codex: nine lights of the first spark">';
     s += '<circle cx="' + CX + '" cy="' + CY + '" r="' + (R1 + 8) + '" fill="none" stroke="rgba(212,175,55,.28)" stroke-width="1"/>';
     TIERS.forEach(function (t, i) {
       var a0 = i * step, a1 = (i + 1) * step, am = (a0 + a1) / 2;
@@ -70,7 +70,7 @@
     s += '<text x="' + CX + '" y="' + (CY + 14) + '" text-anchor="middle" font-family="Space Mono,monospace" font-size="11" fill="rgba(255,255,255,.5)">Road + Vessel</text>';
     if (!compact) {
       /* Master legend: three tinted swatches under the wheel. */
-      var ly = CY + R1 + 62, sw = 14, gap = 176, x0 = CX - gap;
+      var ly = CY + R1 + 100, sw = 14, gap = 176, x0 = CX - gap;
       s += '<text x="' + CX + '" y="' + (ly - 22) + '" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="10" letter-spacing="3" fill="#d4af37">MASTERS \u00b7 MOONSILVERED</text>';
       MASTERS.forEach(function (m, i) {
         var x = x0 + i * gap;
