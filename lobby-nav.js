@@ -1,7 +1,7 @@
 (function () {
   var page = document.body.getAttribute("data-page") || "lobby";
   var items = [
-    { id: "lobby", href: "index.html", icon: "◉", label: "Lobby" },
+    { id: "lobby", href: "lobby.html", icon: "◉", label: "Lobby" },
     { id: "studio", href: "studio.html", icon: "♫", label: "Studio" },
     { id: "workshop", href: "workshop.html", icon: "⚒", label: "Workshop" },
     { id: "commons", href: "commons.html", icon: "◎", label: "Commons" },
