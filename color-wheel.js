@@ -1,6 +1,7 @@
 /* The real Color Codex wheel — SPARK-CANON v1.3 DL-005 + DL-014 (2026-09-05).
    Nine slices, Radiant 1–9. Masters (11/22/33) are a tint of their reduced light
-   ("Moonsilvered"), not a slice. Amber is debt, not a slice. */
+   ("Moonsilvered"), not a slice. Debt is shade, never a hue and never a slice (DL-015, 2026-09-11):
+   amber was a tier colour (Gold Vein) so it could not mark debt. */
 (function () {
   var TIERS = [
     { radiant: "1", name: "Ember", light: "deep red", hex: "#E8593C", dark: false },
