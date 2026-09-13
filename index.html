@@ -19,7 +19,7 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .github-link{display:inline-flex;align-items:center;gap:.5rem;font-family:Orbitron,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ghost-white);text-decoration:none;border:1px solid rgba(255,255,255,.2);border-radius:2rem;padding:.5rem 1rem;transition:all .2s}
 .github-link:hover{border-color:var(--nebula-purple);color:#fff;background:rgba(139,92,246,.15);box-shadow:0 0 16px rgba(139,92,246,.25)}
 .github-link svg{width:16px;height:16px;fill:currentColor}
-.signin-btn{display:inline-flex;align-items:center;font-family:Orbitron,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--void);background:linear-gradient(135deg,var(--spark-gold),var(--blood-orange));border:none;border-radius:2rem;padding:.5rem 1.05rem;cursor:pointer}
+.signin-btn{display:inline-flex;align-items:center;white-space:nowrap;font-family:Orbitron,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--void);background:linear-gradient(135deg,var(--spark-gold),var(--blood-orange));border:none;border-radius:2rem;padding:.5rem 1.05rem;cursor:pointer}
 .signin-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(251,191,36,.35)}
 .tool-tag.locked{opacity:.75;border-style:dashed}
 .galaxy-container{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 2rem 2rem}
@@ -27,6 +27,9 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .galaxy-title h1{font-family:Orbitron,sans-serif;font-size:clamp(2.5rem,10vw,5rem);font-weight:900;letter-spacing:.35em;margin-bottom:.5rem;text-shadow:0 0 30px rgba(139,92,246,.5)}
 .galaxy-subtitle{font-size:.95rem;letter-spacing:.35em;text-transform:uppercase;background:linear-gradient(90deg,var(--cosmic-cyan),var(--nebula-purple),var(--hot-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .solar-system{position:relative;width:min(900px,90vw);height:min(900px,90vw);margin:2rem auto}
+@media(min-width:769px) and (max-height:1000px){.solar-system{transform:scale(.8);margin:-5rem auto -6rem}}
+@media(min-width:769px) and (max-height:860px){.galaxy-container{padding-top:5rem}.galaxy-title{margin-bottom:0}.solar-system{transform:scale(.62);margin:-10rem auto -11rem}}
+@media(min-width:769px) and (max-height:740px){.solar-system{transform:scale(.52);margin:-13rem auto -14rem}}
 .orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none}
 .orbit-1{width:280px;height:280px;border:1px solid rgba(139,92,246,.2)}
 .orbit-2{width:440px;height:440px;border:1px solid rgba(236,72,153,.15)}
@@ -98,7 +101,8 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:.35rem;color:var(--dim);text-decoration:none;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
 .nav-item.active,.nav-item:hover{color:var(--ghost-white)}
 .nav-icon{font-size:1.3rem}
-@media(max-width:768px){.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.planet-playground{width:40px;height:40px;top:calc(50% - 130px);left:calc(50% + 95px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{letter-spacing:.2em}.bottom-nav{gap:1.5rem}.modal-content{padding:1.5rem}}
+@media(max-width:768px){.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.planet-playground{width:40px;height:40px;top:calc(50% - 130px);left:calc(50% + 95px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{font-size:clamp(1.7rem,8vw,3.5rem);letter-spacing:.18em;margin-right:-.18em}.galaxy-subtitle{font-size:.8rem;letter-spacing:.25em}.galaxy-container{padding:5.5rem 1rem 6rem}.header-actions{gap:.5rem}.github-link{padding:.45rem .8rem}.bottom-nav{gap:1.5rem}.modal-content{padding:1.5rem}}
+@media(max-width:430px){.galaxy-container{overflow:hidden}.solar-system{transform:scale(.78);transform-origin:center}.logo{font-size:1rem;letter-spacing:.1em}.github-link{padding:.45rem .65rem;font-size:.62rem}.signin-btn{padding:.5rem .85rem;font-size:.62rem}}
 </style>
 </head>
 <body>
