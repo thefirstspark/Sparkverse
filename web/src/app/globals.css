@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --void: #050508;
+  --cyan: #22d3ee;
+  --nebula: #8b5cf6;
+  --spark: #fbbf24;
+  --hot-pink: #ec4899;
+  --blood-orange: #f97316;
+  --acid-green: #84cc16;
+  --ghost-white: rgba(255, 255, 255, 0.9);
+  --dim: rgba(255, 255, 255, 0.45);
+  --background: var(--void);
+  --foreground: var(--ghost-white);
+}
+
+@theme inline {
+  --color-void: var(--void);
+  --color-cyan: var(--cyan);
+  --color-nebula: var(--nebula);
+  --color-spark: var(--spark);
+  --color-hot-pink: var(--hot-pink);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-ui);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-ui);
+  --radius-card: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--void);
+  color: var(--ghost-white);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ui), ui-monospace, monospace;
+}
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--hot-pink),
+    var(--nebula),
+    var(--cyan),
+    var(--acid-green),
+    var(--spark),
+    var(--blood-orange),
+    var(--hot-pink)
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gs 8s ease infinite;
+}
+
+@keyframes gs {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.grid-overlay {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.sv-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-text {
+    animation: none;
+  }
+}
