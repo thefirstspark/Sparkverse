@@ -32,6 +32,20 @@ export default function TreasuryPage() {
           </Card>
         ))}
       </div>
+      <p className="mt-8 text-sm text-white/45">
+        Need a key?{" "}
+        <a href="/gate" className="text-cyan-300">
+          Open the gate
+        </a>
+        {" · "}
+        <a href="/vault" className="text-cyan-300">
+          Vault
+        </a>
+        {" · "}
+        <a href="/dashboard" className="text-cyan-300">
+          Dashboard
+        </a>
+      </p>
     </div>
   );
 }

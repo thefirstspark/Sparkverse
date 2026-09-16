@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { PlanetModal } from "@/components/galaxy/PlanetModal";
 import { getPlanet, ORBIT_PLANETS, type Planet } from "@/lib/planets";
 import styles from "./solar-system.module.css";
 
 export function SolarSystem() {
   const [open, setOpen] = useState<Planet | null>(null);
+  const close = useCallback(() => setOpen(null), []);
 
   return (
     <div className={styles.galaxy}>
@@ -46,7 +47,7 @@ export function SolarSystem() {
           </button>
         ))}
       </div>
-      <PlanetModal planet={open} onClose={() => setOpen(null)} />
+      <PlanetModal planet={open} onClose={close} />
     </div>
   );
 }

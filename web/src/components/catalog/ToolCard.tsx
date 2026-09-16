@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { StatusBadge } from "@/components/catalog/StatusBadge";
-import { isExternalTool, toolHref } from "@/lib/catalog";
+import { toolHref } from "@/lib/catalog";
 import { ZONE_LABELS } from "@/lib/planets";
 import type { CatalogTool } from "@/types/catalog";
 
 export function ToolCard({ tool }: { tool: CatalogTool }) {
   const href = toolHref(tool);
-  const external = isExternalTool(tool);
+  const external = href.startsWith("http");
 
   return (
     <Link

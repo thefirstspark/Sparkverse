@@ -2,7 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { toolsByZone, toolHref, isExternalTool } from "@/lib/catalog";
+import { useCallback } from "react";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
+import { toolsByZone, toolHref } from "@/lib/catalog";
 import type { Planet } from "@/lib/planets";
 
 export function PlanetModal({
@@ -13,6 +15,8 @@ export function PlanetModal({
   onClose: () => void;
 }) {
   const tools = planet ? toolsByZone(planet.id) : [];
+  const close = useCallback(() => onClose(), [onClose]);
+  const panelRef = useDialogFocus(Boolean(planet), close);
 
   return (
     <AnimatePresence>
@@ -22,21 +26,25 @@ export function PlanetModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
+          onClick={close}
         >
           <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="planet-title"
-            className="sv-card relative max-h-[90vh] w-full max-w-[620px] overflow-y-auto p-8"
+            className="w-full max-w-[620px]"
             initial={{ scale: 0.92 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.92 }}
             onClick={(e) => e.stopPropagation()}
           >
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="planet-title"
+            className="sv-card relative max-h-[90vh] w-full overflow-y-auto p-8"
+          >
             <button
               type="button"
-              onClick={onClose}
+              onClick={close}
               className="absolute top-4 right-4 text-white/45 hover:text-hot-pink"
               aria-label="Close"
             >
@@ -64,7 +72,7 @@ export function PlanetModal({
             <div className="mb-6 flex flex-wrap gap-2">
               {tools.map((tool) => {
                 const href = toolHref(tool);
-                const external = isExternalTool(tool);
+                const external = href.startsWith("http");
                 return (
                   <Link
                     key={tool.id}
@@ -81,7 +89,7 @@ export function PlanetModal({
             <div className="flex gap-4">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={close}
                 className="flex-1 rounded-xl border border-white/20 py-3 font-[family-name:var(--font-display)] text-xs font-bold tracking-[0.15em] uppercase"
               >
                 Orbit
@@ -93,6 +101,7 @@ export function PlanetModal({
                 {planet.action}
               </Link>
             </div>
+          </div>
           </motion.div>
         </motion.div>
       ) : null}

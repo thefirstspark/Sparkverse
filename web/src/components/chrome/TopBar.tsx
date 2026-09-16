@@ -34,12 +34,20 @@ export function TopBar() {
           className="h-10 w-full rounded-2xl border border-white/10 bg-white/5 px-4 font-mono text-sm text-white placeholder:text-white/35 focus:border-cyan-400/60 focus:outline-none"
         />
       </form>
-      <Link
-        href="/login"
-        className="ml-auto inline-flex h-10 items-center rounded-full bg-gradient-to-br from-[#fbbf24] to-[#f97316] px-4 font-[family-name:var(--font-display)] text-[0.68rem] font-bold tracking-[0.16em] text-[#050508] uppercase"
-      >
-        Sign in
-      </Link>
+      <div className="ml-auto flex items-center gap-2">
+        <Link
+          href="/dashboard"
+          className="hidden h-10 items-center px-2 font-mono text-[0.62rem] tracking-[0.14em] text-white/55 uppercase no-underline hover:text-white sm:inline-flex"
+        >
+          You
+        </Link>
+        <Link
+          href="/login"
+          className="inline-flex h-10 items-center rounded-full bg-gradient-to-br from-[#fbbf24] to-[#f97316] px-4 font-[family-name:var(--font-display)] text-[0.68rem] font-bold tracking-[0.16em] text-[#050508] uppercase"
+        >
+          Sign in
+        </Link>
+      </div>
     </header>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FilterBar } from "@/components/catalog/FilterBar";
 import { ToolCard } from "@/components/catalog/ToolCard";
 import { searchTools } from "@/lib/catalog";
@@ -10,6 +10,10 @@ export function CatalogBrowser({ initialQuery = "" }: { initialQuery?: string })
   const [query, setQuery] = useState(initialQuery);
   const [zone, setZone] = useState<ToolZone | "all">("all");
   const [tier, setTier] = useState<ToolTier | "all">("all");
+
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
 
   const tools = useMemo(() => {
     return searchTools(query).filter((tool) => {

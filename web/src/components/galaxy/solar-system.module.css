@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 1rem 1.5rem 2rem;
+  overflow-x: hidden;
 }
 
 .title {
@@ -322,8 +323,10 @@
 
 @media (max-width: 768px) {
   .solarSystem {
-    width: 100vw;
-    height: 100vw;
+    width: min(100%, 100vw);
+    height: min(100vw, 100%);
+    max-width: 100%;
+    overflow: hidden;
   }
   .orbit1 {
     width: 180px;
@@ -338,8 +341,8 @@
     height: 380px;
   }
   .orbit4 {
-    width: 480px;
-    height: 480px;
+    width: min(480px, 92%);
+    height: min(480px, 92%);
   }
   .sun {
     width: 90px;

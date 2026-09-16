@@ -1,4 +1,4 @@
-// Keep web/data/tools-catalog.json in sync with /tools-catalog.json (Pages source of truth).
+// Generated from repo-root tools-catalog.json by `npm run sync-catalog`.
 import raw from "../../data/tools-catalog.json";
 import type { CatalogTool, ToolTier, ToolsCatalog, ToolZone } from "@/types/catalog";
 import { TOOL_TIERS, TOOL_ZONES } from "@/types/catalog";
@@ -39,12 +39,21 @@ export function searchTools(query: string): CatalogTool[] {
 }
 
 export function toolHref(tool: CatalogTool): string {
-  if (tool.url.startsWith("http://") || tool.url.startsWith("https://")) {
-    return tool.url;
-  }
+  if (tool.id === "soul-map") return "/vault";
+  if (isExternalTool(tool)) return tool.url;
   return `/engine/${tool.id}`;
 }
 
 export function isExternalTool(tool: CatalogTool): boolean {
   return tool.url.startsWith("http://") || tool.url.startsWith("https://");
+}
+
+export function originUrl(tool: CatalogTool): string {
+  if (tool.id === "soul-map") return "https://thefirstspark.shop/map.html";
+  if (isExternalTool(tool)) return tool.url;
+  const base = (process.env.NEXT_PUBLIC_LEGACY_ORIGIN ?? "https://sparkverse.thefirstspark.shop").replace(
+    /\/$/,
+    "",
+  );
+  return `${base}/${tool.url.replace(/^\//, "")}`;
 }

@@ -7,7 +7,7 @@
     "shop": { "label": "Shop", "blurb": "One-time products" }
   },
   "tools": [
-    { "id": "soul-map", "title": "Soul Map", "url": "soul-map.html", "zone": "core", "tier": "shop", "blurb": "Your numerological blueprint" },
+    { "id": "soul-map", "title": "Soul Map", "url": "https://thefirstspark.shop/map.html", "zone": "core", "tier": "shop", "blurb": "Your numerological blueprint" },
     { "id": "ecosystem-map", "title": "Ecosystem Map", "url": "sparkverse-map.html", "zone": "core", "tier": "public" },
     { "id": "origin", "title": "Origin", "url": "https://thefirstspark.shop/origin.html", "zone": "core", "tier": "public" },
     { "id": "timeline", "title": "Timeline", "url": "timeline.html", "zone": "core", "tier": "lobby" },

@@ -24,4 +24,8 @@ export const PLANS = {
   },
 } as const;
 
-export const LEGACY_ORIGIN = "https://sparkverse.thefirstspark.shop";
+export const LEGACY_ORIGIN =
+  process.env.NEXT_PUBLIC_LEGACY_ORIGIN ?? "https://sparkverse.thefirstspark.shop";
+
+export const SOUL_MAP_PREVIEW = "https://thefirstspark.shop/soul-pattern-generator.html";
+export const COLOR_WHEEL = `${LEGACY_ORIGIN}/color-wheel.html`;

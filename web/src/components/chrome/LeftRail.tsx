@@ -20,6 +20,7 @@ export function LeftRail() {
             key={item.href}
             href={item.href}
             title={item.label}
+            aria-current={active ? "page" : undefined}
             className={`flex h-16 w-16 flex-col items-center justify-center gap-1 text-[0.55rem] tracking-[0.12em] uppercase ${
               active ? "text-white" : "text-white/45 hover:text-white"
             }`}

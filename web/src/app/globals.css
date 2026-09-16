@@ -38,6 +38,7 @@ body {
   background: var(--void);
   color: var(--ghost-white);
   color-scheme: dark;
+  overflow-x: hidden;
 }
 
 body {
