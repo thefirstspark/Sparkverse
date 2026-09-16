@@ -2,221 +2,787 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>The First Spark | Katelin</title>
-    <meta name="description" content="Consciousness technology for the awakening generation.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Katelin | The First Spark</title>
+    <meta name="description" content="Katelin's card. Founder of The First Spark. Reality is programmable.">
+    <meta name="theme-color" content="#050508">
+    <meta property="og:title" content="Katelin | The First Spark">
+    <meta property="og:description" content="Reality is programmable. Tools for the awakening generation.">
+    <meta property="og:url" content="https://sparkverse.thefirstspark.shop/card.html">
+    <meta property="og:type" content="profile">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✧</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --void: #050508;
+            --ink: #0b0616;
+            --bone: #fffdf5;
+            --spark: #fbbf24;
+            --cyan: #22d3ee;
+            --nebula: #8b5cf6;
+            --pink: #ec4899;
+            --text: #eef0f7;
+            --mute: #8b90a8;
+            --rx: 0deg;
+            --ry: 0deg;
+            --mx: 50%;
+            --my: 50%;
+            --foil: 0.08;
+            --glare: 0;
+            --radius: 20px;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
-        
+
+        html, body { height: 100%; }
+
         body {
-            font-family: 'Raleway', sans-serif;
-            background: linear-gradient(145deg, #050508 0%, #0a0a15 50%, #0d0d1a 100%);
-            color: #f0f2f8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            font-family: 'Space Mono', ui-monospace, monospace;
+            background: var(--void);
+            color: var(--text);
             min-height: 100dvh;
-            padding: 20px;
+            display: grid;
+            place-items: center;
+            padding: 24px 16px;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
+
+        #stars {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+        }
+
+        /* ---------- Card geometry: real trading-card ratio, 2.5 x 3.5 ---------- */
+        .stage {
+            position: relative;
+            z-index: 1;
+            perspective: 1200px;
+            width: min(372px, 92vw);
+            aspect-ratio: 5 / 7;
+            max-height: 90dvh;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(var(--rx)) rotateY(var(--ry));
+            transition: transform 120ms linear;
+            will-change: transform;
+        }
+
+        .scene.settling { transition: transform 700ms cubic-bezier(.2,.8,.2,1); }
 
         .card {
-            width: 100%;
-            max-width: 380px;
-            background: linear-gradient(165deg, rgba(20,20,30,0.95) 0%, rgba(10,10,18,0.98) 100%);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 24px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 
-                0 25px 50px rgba(0,0,0,0.5),
-                0 0 100px rgba(212, 175, 55, 0.05),
-                inset 0 1px 0 rgba(255,255,255,0.05);
             position: relative;
-            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 780ms cubic-bezier(.6,-0.1,.3,1.1);
+            cursor: pointer;
+            outline: none;
+            border-radius: var(--radius);
         }
 
-        .card::before {
+        .card.flipped { transform: rotateY(180deg); }
+
+        .card:focus-visible .face { box-shadow: 0 0 0 3px var(--cyan), 0 40px 80px rgba(0,0,0,.65); }
+
+        /* ---------- Metallic frame + dark inner ---------- */
+        .face {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+            padding: 9px;
+            background:
+                linear-gradient(155deg, #fff1b8 0%, #e2b33a 14%, #8a6417 32%, #fbbf24 50%, #6d4d0f 68%, #f4d275 86%, #a87c1e 100%);
+            box-shadow:
+                0 40px 80px rgba(0,0,0,.65),
+                0 0 90px rgba(139,92,246,.14);
+            transform: translateZ(0.5px);
+        }
+
+        .face.back { transform: rotateY(180deg) translateZ(0.5px); }
+
+        .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: calc(var(--radius) - 7px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 16px 16px 14px;
+            background:
+                radial-gradient(120% 80% at 100% 0%, rgba(139,92,246,.30), transparent 55%),
+                radial-gradient(90% 60% at 0% 100%, rgba(34,211,238,.16), transparent 55%),
+                repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 26px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 1px, transparent 1px 26px),
+                linear-gradient(160deg, #0f0a20 0%, var(--void) 60%, #06040f 100%);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), inset 0 20px 40px rgba(0,0,0,.45);
+        }
+
+        /* ---------- Front: top bar ---------- */
+        .topbar {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(26px, 7.6vw, 31px);
+            letter-spacing: .03em;
+            line-height: 1;
+            background: linear-gradient(180deg, #fff7d6 0%, var(--spark) 55%, #b8862a 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 2px 0 rgba(0,0,0,.7));
+        }
+
+        .rank {
+            font-size: 11px;
+            color: var(--spark);
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .rank b { font-weight: 400; color: var(--text); }
+
+        /* ---------- Front: the art window (QR is the artwork) ---------- */
+        .window {
+            position: relative;
+            margin-top: 12px;
+            flex: 1 1 auto;
+            min-height: 0;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background:
+                radial-gradient(60% 55% at 50% 50%, rgba(251,191,36,.20), transparent 70%),
+                radial-gradient(70% 60% at 20% 20%, rgba(236,72,153,.30), transparent 60%),
+                radial-gradient(70% 60% at 80% 80%, rgba(34,211,238,.32), transparent 60%),
+                radial-gradient(90% 90% at 50% 100%, rgba(139,92,246,.5), transparent 65%),
+                #0a0718;
+            box-shadow: inset 0 0 0 1px rgba(251,191,36,.35), inset 0 0 60px rgba(0,0,0,.6);
+        }
+
+        .window::before {
+            /* orbit ring around the artwork */
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
-            pointer-events: none;
+            width: 122%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.10);
+            box-shadow: 0 0 0 26px rgba(255,255,255,.025), 0 0 0 60px rgba(255,255,255,.015);
         }
 
-        .spark-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: block;
-            animation: glow 3s ease-in-out infinite;
+        .window::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(1px 1px at 12% 22%, #fff 99%, transparent),
+                radial-gradient(1px 1px at 82% 14%, #fff 99%, transparent),
+                radial-gradient(1.5px 1.5px at 90% 70%, var(--cyan) 99%, transparent),
+                radial-gradient(1px 1px at 8% 78%, #fff 99%, transparent),
+                radial-gradient(1.5px 1.5px at 30% 90%, var(--spark) 99%, transparent),
+                radial-gradient(1px 1px at 68% 88%, #fff 99%, transparent),
+                radial-gradient(1px 1px at 55% 6%, #fff 99%, transparent);
+            opacity: .8;
         }
 
-        @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3)); }
-            50% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
-        }
-
-        .name {
-            font-family: 'Cinzel', serif;
-            font-size: 1.6rem;
-            font-weight: 400;
-            letter-spacing: 4px;
-            color: #d4af37;
-            margin-bottom: 5px;
-        }
-
-        .title {
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #8892a8;
-            margin-bottom: 25px;
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            font-weight: 300;
-            color: #c4c9d4;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .tagline span {
-            color: #d4af37;
-        }
-
-        .qr-section {
-            background: #ffffff;
+        .qr-panel {
+            position: relative;
+            z-index: 2;
+            width: min(190px, 56vw);
+            aspect-ratio: 1;
+            padding: 10px;
             border-radius: 16px;
-            padding: 15px;
-            margin: 25px auto;
-            width: fit-content;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: linear-gradient(160deg, #ffffff 0%, var(--bone) 100%);
+            box-shadow:
+                0 18px 40px rgba(0,0,0,.6),
+                0 0 0 1px rgba(251,191,36,.5),
+                0 0 50px rgba(251,191,36,.18);
         }
 
-        .qr-section img {
+        .qr-panel canvas, .qr-panel img {
             display: block;
-            width: 140px;
-            height: 140px;
-        }
-
-        .scan-label {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #8892a8;
-            margin-top: 20px;
-            margin-bottom: 25px;
-        }
-
-        .url {
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            color: #d4af37;
-            margin-bottom: 25px;
-        }
-
-        .links {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .link-btn {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #d4af37;
-            padding: 12px 20px;
+            width: 100%;
+            height: 100%;
             border-radius: 8px;
-            text-decoration: none;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
         }
 
-        .link-btn:hover, .link-btn:active {
-            background: rgba(212, 175, 55, 0.2);
-            transform: scale(1.02);
+        .qr-panel img { display: none; }
+        .qr-panel.fallback canvas { display: none; }
+        .qr-panel.fallback img { display: block; }
+
+        .scanline {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 80px;
+            top: -80px;
+            pointer-events: none;
+            z-index: 3;
+            background: linear-gradient(180deg, rgba(34,211,238,0), rgba(34,211,238,.35) 60%, rgba(255,255,255,.75) 100%);
+            mix-blend-mode: screen;
+            opacity: 0;
         }
 
-        .link-btn.primary {
-            background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
-            color: #050508;
-            border: none;
-            font-weight: 500;
+        .stage.booted .scanline { animation: sweep 1100ms cubic-bezier(.3,.7,.3,1) 150ms 1 both; }
+
+        @keyframes sweep {
+            0%   { top: -80px; opacity: 1; }
+            85%  { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
         }
 
-        .contact-row {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+        /* ---------- Front: type line, ability, footer ---------- */
+        .typeline {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 10.5px;
+            color: var(--mute);
+            line-height: 1.4;
         }
 
-        .contact-link {
+        .ability {
+            margin-top: 10px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.035);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .ability strong { color: var(--cyan); font-weight: 700; }
+
+        .footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 10.5px;
+            color: var(--mute);
+            line-height: 1.4;
+        }
+
+        .footer .edition { color: var(--spark); }
+
+        /* ---------- Back ---------- */
+        .back .inner { align-items: center; text-align: center; justify-content: space-between; padding-top: 22px; }
+
+        .glyph {
             display: block;
-            color: #8892a8;
+            color: var(--spark);
+            font-size: 40px;
+            line-height: 1;
+            text-shadow: 0 0 22px rgba(251,191,36,.6);
+        }
+
+        .lead {
+            margin-top: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .lead em { font-style: normal; color: var(--cyan); }
+
+        .hint {
+            font-size: 10.5px;
+            color: var(--mute);
+            line-height: 1.5;
+        }
+
+        .actions {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: grid;
+            gap: 9px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 11px;
+            border: 1px solid rgba(255,255,255,.14);
+            background: rgba(255,255,255,.05);
+            color: var(--text);
+            font: inherit;
+            font-size: 13px;
             text-decoration: none;
-            font-size: 0.85rem;
-            padding: 8px 0;
-            transition: color 0.3s;
+            cursor: pointer;
+            transition: transform 120ms ease, background 200ms ease, border-color 200ms ease;
         }
 
-        .contact-link:hover, .contact-link:active {
-            color: #d4af37;
+        .btn:hover, .btn:focus-visible { background: rgba(255,255,255,.10); border-color: rgba(34,211,238,.6); outline: none; }
+        .btn:active { transform: scale(.985); }
+
+        .btn.primary {
+            background: linear-gradient(135deg, #ffd977 0%, var(--spark) 55%, #d69a1c 100%);
+            color: var(--ink);
+            border-color: transparent;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(251,191,36,.28);
         }
 
-        .footer-tag {
-            margin-top: 25px;
-            font-size: 0.65rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.2);
+        .btn.primary:hover, .btn.primary:focus-visible { background: linear-gradient(135deg, #ffe49a 0%, #ffca47 55%, #e0a425 100%); }
+
+        .btn.quiet { color: var(--mute); background: transparent; border-color: rgba(255,255,255,.08); }
+
+        /* ---------- Holographic foil + glare, over everything ---------- */
+        .foil {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 4;
+            opacity: var(--foil);
+            mix-blend-mode: color-dodge;
+            background:
+                repeating-linear-gradient(115deg, transparent 0 5px, rgba(255,255,255,.10) 5px 6px),
+                conic-gradient(from 0deg at var(--mx) var(--my), var(--spark), var(--cyan), var(--nebula), var(--pink), var(--spark));
+            background-blend-mode: overlay;
+            filter: saturate(1.4);
+            transition: opacity 400ms ease;
+        }
+
+        .glare {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 4;
+            opacity: var(--glare);
+            background: radial-gradient(farthest-corner circle at var(--mx) var(--my), rgba(255,255,255,.45) 0%, rgba(255,255,255,.08) 22%, rgba(255,255,255,0) 55%);
+            mix-blend-mode: screen;
+            transition: opacity 400ms ease;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 28px;
+            transform: translate(-50%, 20px);
+            z-index: 5;
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: rgba(11,6,22,.92);
+            border: 1px solid rgba(34,211,238,.5);
+            color: var(--text);
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 250ms ease, transform 250ms ease;
+        }
+
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        /* Boot: one orchestrated reveal on load. */
+        .stage.boot .scene { opacity: 0; transform: translateY(24px) scale(.94); }
+        .stage.booted .scene {
+            opacity: 1;
+            transform: rotateX(var(--rx)) rotateY(var(--ry));
+            transition: opacity 500ms ease, transform 900ms cubic-bezier(.2,.9,.2,1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scene, .card, .stage.booted .scene { transition: none !important; }
+            .stage.boot .scene { opacity: 1; transform: none; }
+            .stage.booted .scanline { animation: none; }
+            .glyph { text-shadow: none; }
+        }
+
+        @media (max-height: 600px) {
+            .inner { padding: 12px 12px 10px; }
+            .ability { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <span class="spark-icon">✧</span>
-        
-        <h1 class="name">KATELIN</h1>
-        <p class="title">Founder · The First Spark</p>
-        
-        <p class="tagline"><span>Reality is programmable.</span><br>Tools for the awakening generation.</p>
+    <canvas id="stars" aria-hidden="true"></canvas>
 
-        <div class="qr-section">
-            <!-- QR Code pointing to links.thefirstspark.shop -->
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://links.thefirstspark.shop&bgcolor=ffffff&color=050508&format=svg" alt="Scan to visit">
+    <main class="stage boot" id="stage">
+        <div class="scene" id="scene">
+            <div class="card" id="card" role="button" tabindex="0" aria-pressed="false" aria-label="Katelin's card. Front side shows a QR code to her bio. Press to flip for contact options.">
+
+                <section class="face front" aria-label="Front">
+                    <div class="inner">
+                        <div class="topbar">
+                            <h1>KATELIN</h1>
+                            <span class="rank">✧ <b>Founder</b></span>
+                        </div>
+                        <div class="window">
+                            <div class="qr-panel" id="qrPanel">
+                                <canvas id="qr" width="360" height="360" role="img" aria-label="QR code for links.thefirstspark.shop"></canvas>
+                                <img id="qrFallback" alt="QR code for links.thefirstspark.shop" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://links.thefirstspark.shop&bgcolor=fffdf5&color=0b0616&format=svg" loading="lazy">
+                            </div>
+                            <div class="scanline" aria-hidden="true"></div>
+                        </div>
+                        <div class="typeline">
+                            <span>The First Spark</span>
+                            <span>Consciousness technology</span>
+                        </div>
+                        <p class="ability"><strong>Reality is programmable.</strong> Tools for the awakening generation.</p>
+                        <div class="footer">
+                            <span class="edition">1 of 1. First edition.</span>
+                            <span>Scan for bio. Tap to flip.</span>
+                        </div>
+                    </div>
+                    <div class="foil" aria-hidden="true"></div>
+                    <div class="glare" aria-hidden="true"></div>
+                </section>
+
+                <section class="face back" aria-label="Back">
+                    <div class="inner">
+                        <header>
+                            <span class="glyph" aria-hidden="true">✧</span>
+                            <p class="lead">Let's build something<br><em>that shouldn't be possible.</em></p>
+                        </header>
+                        <nav class="actions" aria-label="Contact Katelin">
+                            <a class="btn primary" id="saveContact" href="#" download="katelin-the-first-spark.vcf">Save contact</a>
+                            <a class="btn" href="https://links.thefirstspark.shop">Bio</a>
+                            <a class="btn" href="tel:+12343033967">Call (234) 303-3967</a>
+                            <a class="btn" href="mailto:kate@thefirstspark.shop">kate@thefirstspark.shop</a>
+                            <button class="btn quiet" id="share" type="button">Share this card</button>
+                        </nav>
+                        <p class="hint">Tap anywhere else to flip back</p>
+                    </div>
+                    <div class="foil" aria-hidden="true"></div>
+                    <div class="glare" aria-hidden="true"></div>
+                </section>
+
+            </div>
         </div>
-        
-        <p class="scan-label">Scan · Tap · Explore</p>
-        
-        <p class="url">links.thefirstspark.shop</p>
+    </main>
 
-        <div class="links">
-            <a href="https://links.thefirstspark.shop" class="link-btn primary">All My Links</a>
-        </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-        <div class="contact-row">
-            <a href="tel:+12343033967" class="contact-link">📞 (234) 303-3967</a>
-            <a href="mailto:kate@thefirstspark.shop" class="contact-link">✉️ kate@thefirstspark.shop</a>
-        </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" onerror="document.getElementById('qrPanel').classList.add('fallback')"></script>
+    <script>
+    (function () {
+        'use strict';
 
-        <p class="footer-tag">Consciousness Technology</p>
-    </div>
+        var CARD_URL = 'https://sparkverse.thefirstspark.shop/card.html';
+        var LINKS_URL = 'https://links.thefirstspark.shop';
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        var root = document.documentElement;
+        var stage = document.getElementById('stage');
+        var scene = document.getElementById('scene');
+        var card = document.getElementById('card');
+        var toastEl = document.getElementById('toast');
+
+        /* ---------- Starfield ---------- */
+        var stars = document.getElementById('stars');
+        var sctx = stars.getContext('2d');
+        var field = [];
+        var tiltX = 0, tiltY = 0;
+
+        function sizeStars() {
+            var dpr = Math.min(window.devicePixelRatio || 1, 2);
+            stars.width = Math.floor(innerWidth * dpr);
+            stars.height = Math.floor(innerHeight * dpr);
+            sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            field = [];
+            var n = Math.floor((innerWidth * innerHeight) / 5200);
+            for (var i = 0; i < n; i++) {
+                field.push({
+                    x: Math.random() * innerWidth,
+                    y: Math.random() * innerHeight,
+                    z: Math.random(),
+                    tw: Math.random() * Math.PI * 2,
+                    c: Math.random() < .08 ? '#22d3ee' : (Math.random() < .06 ? '#fbbf24' : '#ffffff')
+                });
+            }
+        }
+
+        function drawStars(t) {
+            sctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (var i = 0; i < field.length; i++) {
+                var s = field[i];
+                var px = s.x + tiltY * 18 * (s.z + .2);
+                var py = s.y - tiltX * 18 * (s.z + .2);
+                var a = reduceMotion ? .7 : (.45 + .55 * Math.abs(Math.sin(t / 1400 + s.tw)));
+                sctx.globalAlpha = a * (0.35 + s.z * .65);
+                sctx.fillStyle = s.c;
+                sctx.fillRect(px, py, s.z > .85 ? 2 : 1, s.z > .85 ? 2 : 1);
+            }
+            sctx.globalAlpha = 1;
+        }
+
+        sizeStars();
+        addEventListener('resize', sizeStars);
+        (function loop(t) { drawStars(t || 0); requestAnimationFrame(loop); })(0);
+
+        /* ---------- Tilt + foil ---------- */
+        function setTilt(nx, ny) {
+            /* nx, ny in -1..1 */
+            nx = Math.max(-1, Math.min(1, nx));
+            ny = Math.max(-1, Math.min(1, ny));
+            tiltX = ny; tiltY = nx;
+            root.style.setProperty('--ry', (nx * 14).toFixed(2) + 'deg');
+            root.style.setProperty('--rx', (-ny * 14).toFixed(2) + 'deg');
+            root.style.setProperty('--mx', (50 + nx * 45).toFixed(1) + '%');
+            root.style.setProperty('--my', (50 + ny * 45).toFixed(1) + '%');
+            var strength = Math.min(1, Math.hypot(nx, ny));
+            root.style.setProperty('--foil', (0.08 + strength * .38).toFixed(3));
+            root.style.setProperty('--glare', (0.15 + strength * .55).toFixed(3));
+        }
+
+        function resetTilt() {
+            scene.classList.add('settling');
+            setTilt(0, 0);
+            root.style.setProperty('--foil', '0.08');
+            root.style.setProperty('--glare', '0');
+            setTimeout(function () { scene.classList.remove('settling'); }, 720);
+        }
+
+        var pointerActive = false;
+        function onPointer(e) {
+            var r = stage.getBoundingClientRect();
+            var nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+            var ny = ((e.clientY - r.top) / r.height) * 2 - 1;
+            /* Mirror the horizontal axis when the back is showing so the light still follows the pointer. */
+            if (card.classList.contains('flipped')) nx = -nx;
+            pointerActive = true;
+            setTilt(nx, ny);
+        }
+
+        if (!reduceMotion) {
+            stage.addEventListener('pointermove', onPointer);
+            stage.addEventListener('pointerleave', function () { pointerActive = false; resetTilt(); });
+            stage.addEventListener('pointerup', function () { pointerActive = false; });
+        }
+
+        /* Gyroscope on phones. iOS asks for permission on a user gesture. */
+        var gyroOn = false;
+        function onOrientation(e) {
+            if (pointerActive || e.gamma == null) return;
+            var g = e.gamma;          /* left-right, -90..90 */
+            var b = e.beta - 45;      /* front-back, resting phone ~45 */
+            var nx = g / 30;
+            var ny = b / 30;
+            if (card.classList.contains('flipped')) nx = -nx;
+            setTilt(nx, ny);
+        }
+
+        function enableGyro() {
+            if (gyroOn || reduceMotion || !('DeviceOrientationEvent' in window)) return;
+            var D = window.DeviceOrientationEvent;
+            if (typeof D.requestPermission === 'function') {
+                D.requestPermission().then(function (state) {
+                    if (state === 'granted') { gyroOn = true; addEventListener('deviceorientation', onOrientation); }
+                }).catch(function () {});
+            } else {
+                gyroOn = true;
+                addEventListener('deviceorientation', onOrientation);
+            }
+        }
+
+        if (matchMedia('(pointer: coarse)').matches) {
+            /* Try immediately (Android), and again on first touch (iOS needs the gesture). */
+            enableGyro();
+            addEventListener('touchend', function once() { enableGyro(); removeEventListener('touchend', once); });
+        }
+
+        /* ---------- Flip ---------- */
+        function flip() {
+            var isFlipped = card.classList.toggle('flipped');
+            card.setAttribute('aria-pressed', String(isFlipped));
+            if (navigator.vibrate) navigator.vibrate(8);
+        }
+
+        card.addEventListener('click', function (e) {
+            if (e.target.closest('a, button')) return;
+            flip();
+        });
+
+        card.addEventListener('keydown', function (e) {
+            if (e.target !== card) return;
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+        });
+
+        /* Deep link straight to the contact side: card.html#contact */
+        if (location.hash === '#contact') { card.classList.add('flipped'); card.setAttribute('aria-pressed', 'true'); }
+
+        /* ---------- Toast ---------- */
+        var toastTimer;
+        function toast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2200);
+        }
+
+        /* ---------- vCard ---------- */
+        var vcard = [
+            'BEGIN:VCARD',
+            'VERSION:3.0',
+            'N:Puzakulics;Katelin;;;',
+            'FN:Katelin Puzakulics',
+            'ORG:The First Spark',
+            'TITLE:Founder',
+            'TEL;TYPE=CELL,VOICE:+12343033967',
+            'EMAIL;TYPE=INTERNET,PREF:kate@thefirstspark.shop',
+            'URL:' + LINKS_URL,
+            'URL;TYPE=card:' + CARD_URL,
+            'NOTE:Reality is programmable. Tools for the awakening generation.',
+            'END:VCARD'
+        ].join('\r\n');
+
+        var saveBtn = document.getElementById('saveContact');
+        var vcfBlob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+        saveBtn.href = URL.createObjectURL(vcfBlob);
+        saveBtn.addEventListener('click', function () { toast('Contact card downloading'); });
+
+        /* ---------- Share ---------- */
+        document.getElementById('share').addEventListener('click', function () {
+            var data = { title: 'Katelin | The First Spark', text: 'Reality is programmable.', url: CARD_URL };
+            if (navigator.share) {
+                navigator.share(data).catch(function () {});
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(CARD_URL).then(function () { toast('Card link copied'); });
+            } else {
+                prompt('Copy this link', CARD_URL);
+            }
+        });
+
+        /* ---------- QR (custom-drawn, draws itself in on boot) ---------- */
+        var panel = document.getElementById('qrPanel');
+        var qrCanvas = document.getElementById('qr');
+
+        function renderQR() {
+            if (typeof qrcode !== 'function') { panel.classList.add('fallback'); return; }
+            var qr;
+            try {
+                qr = qrcode(0, 'H');
+                qr.addData(LINKS_URL);
+                qr.make();
+            } catch (err) { panel.classList.add('fallback'); return; }
+
+            var n = qr.getModuleCount();
+            var size = qrCanvas.width;            /* drawn at 2x for crispness */
+            var quiet = 2;                        /* modules of quiet zone */
+            var cell = size / (n + quiet * 2);
+            var ctx = qrCanvas.getContext('2d');
+            var cx = (n - 1) / 2, cy = (n - 1) / 2;
+            var maxDist = Math.hypot(cx, cy);
+            /* Center knockout for the ✧ logo: about 13% of width, safe under level H. */
+            var logoModules = Math.floor(n * 0.13);
+            var lo = Math.floor((n - logoModules) / 2), hi = lo + logoModules;
+
+            function inFinder(r, c) {
+                return (r < 7 && c < 7) || (r < 7 && c >= n - 7) || (r >= n - 7 && c < 7);
+            }
+
+            function roundRect(x, y, w, h, rad) {
+                ctx.beginPath();
+                ctx.moveTo(x + rad, y);
+                ctx.arcTo(x + w, y, x + w, y + h, rad);
+                ctx.arcTo(x + w, y + h, x, y + h, rad);
+                ctx.arcTo(x, y + h, x, y, rad);
+                ctx.arcTo(x, y, x + w, y, rad);
+                ctx.closePath();
+            }
+
+            function drawFinder(r0, c0) {
+                var x = (c0 + quiet) * cell, y = (r0 + quiet) * cell;
+                ctx.fillStyle = '#0b0616';
+                roundRect(x, y, cell * 7, cell * 7, cell * 2.2); ctx.fill();
+                ctx.fillStyle = '#fffdf5';
+                roundRect(x + cell, y + cell, cell * 5, cell * 5, cell * 1.6); ctx.fill();
+                ctx.fillStyle = '#0b0616';
+                roundRect(x + cell * 2, y + cell * 2, cell * 3, cell * 3, cell * 1.0); ctx.fill();
+            }
+
+            function drawFrame(progress) {
+                ctx.clearRect(0, 0, size, size);
+                ctx.fillStyle = '#fffdf5';
+                ctx.fillRect(0, 0, size, size);
+                var reach = progress * (maxDist + 4);
+                ctx.fillStyle = '#0b0616';
+                for (var r = 0; r < n; r++) {
+                    for (var c = 0; c < n; c++) {
+                        if (!qr.isDark(r, c) || inFinder(r, c)) continue;
+                        if (r >= lo && r < hi && c >= lo && c < hi) continue;
+                        var d = Math.hypot(r - cx, c - cy);
+                        if (d > reach) continue;
+                        var pop = Math.min(1, (reach - d) / 3);
+                        var s = cell * (0.55 + 0.32 * pop);
+                        var x = (c + quiet) * cell + (cell - s) / 2;
+                        var y = (r + quiet) * cell + (cell - s) / 2;
+                        roundRect(x, y, s, s, s * 0.32);
+                        ctx.fill();
+                    }
+                }
+                if (progress > 0.5) {
+                    drawFinder(0, 0); drawFinder(0, n - 7); drawFinder(n - 7, 0);
+                }
+                if (progress >= 1) {
+                    /* Spark core */
+                    var px = (lo + quiet) * cell, pw = logoModules * cell;
+                    ctx.fillStyle = '#fffdf5';
+                    roundRect(px - cell * .5, px - cell * .5, pw + cell, pw + cell, cell); ctx.fill();
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.font = '700 ' + (pw * 1.15) + 'px "Space Mono", monospace';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('✧', px + pw / 2, px + pw / 2 + pw * 0.06);
+                }
+            }
+
+            if (reduceMotion) { drawFrame(1); return; }
+            var start = null, dur = 950, delay = 350;
+            function step(ts) {
+                if (start === null) start = ts;
+                var t = Math.max(0, (ts - start - delay) / dur);
+                var eased = t >= 1 ? 1 : 1 - Math.pow(1 - t, 3);
+                drawFrame(eased);
+                if (t < 1) requestAnimationFrame(step); else drawFrame(1);
+            }
+            requestAnimationFrame(step);
+        }
+
+        /* ---------- Boot ---------- */
+        function boot() {
+            renderQR();
+            requestAnimationFrame(function () {
+                stage.classList.remove('boot');
+                stage.classList.add('booted');
+            });
+        }
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(boot, boot);
+        } else {
+            boot();
+        }
+    })();
+    </script>
 </body>
 </html>
