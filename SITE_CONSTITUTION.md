@@ -29,7 +29,7 @@ Not sites: `initiation-engine` (hidden Whop app, not deployed), `soul-map-server
 
 | Thing | Canonical |
 |---|---|
-| Buy a Soul Map ($22) | `https://thefirstspark.shop/map.html` → checkout `https://whop.com/checkout/plan_anQKP3Pzf1cGm` |
+| Buy a Soul Map ($22) | `https://thefirstspark.shop/map.html` → checkout `https://thefirstspark.shop/soul-map-checkout.html` (PayPal direct since 2026-09-17; Whop `plan_anQKP3Pzf1cGm` no longer linked for Soul Maps) |
 | Free Soul Map preview | `https://thefirstspark.shop/soul-pattern-generator.html` (never soul-map.html) |
 | Players Lounge ($33/mo, 3-day trial) | `https://thefirstspark.shop/playerslounge/` → checkout `https://whop.com/checkout/plan_okFWwlpgnc2bQ` |
 | Players Lounge member home | Whop hub `https://whop.com/sparkverse-511c/the-players-lounge/` → Notion Players Hub `3cf5e039120f81fd805af5b50c03a182` |
