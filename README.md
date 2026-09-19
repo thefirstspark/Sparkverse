@@ -2,6 +2,18 @@
 
 A responsive solar system navigation portal for The First Spark consciousness technology platform.
 
+## Sparkverse OS (Next.js)
+
+Phase 1 of the future OS lives in [`web/`](web/). Existing HTML at the repo root is untouched so GitHub Pages (`sparkverse.thefirstspark.shop`) keeps working.
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+See [`web/README.md`](web/README.md) for the folder tree, rewrites, and catalog notes.
+
 ## Features
 
 - **Solar System Navigation**: Interactive orbiting planets with smooth hover effects
