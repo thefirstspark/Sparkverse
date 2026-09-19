@@ -31,9 +31,9 @@ Not sites: `initiation-engine` (hidden Whop app, not deployed), `soul-map-server
 |---|---|
 | Buy a Soul Map ($22) | `https://thefirstspark.shop/map.html` → checkout `https://thefirstspark.shop/soul-map-checkout.html` (PayPal direct since 2026-09-17; Whop `plan_anQKP3Pzf1cGm` no longer linked for Soul Maps) |
 | Free Soul Map preview | `https://thefirstspark.shop/soul-pattern-generator.html` (never soul-map.html) |
-| Players Lounge ($33/mo, 3-day trial) | `https://thefirstspark.shop/playerslounge/` → checkout `https://whop.com/checkout/plan_okFWwlpgnc2bQ` |
-| Players Lounge member home | Whop hub `https://whop.com/sparkverse-511c/the-players-lounge/` → Notion Players Hub `3cf5e039120f81fd805af5b50c03a182` |
-| Free community | `https://whop.com/sparkverse-511c/spark-access/` (the old `spark-acces/` route is dead) |
+| Players Lounge ($11/mo or $99/yr) | `https://thefirstspark.shop/playerslounge/` → PayPal Subscriptions on-page (since 2026-09-18; Whop `plan_okFWwlpgnc2bQ` retired) |
+| Players Lounge member home | Notion "The Player Lounge" `https://app.notion.com/p/thefirstspark/The-Player-Lounge-6d05e039120f8322b47b0135d97f7a4d` (link sent by the engine on activation; `tfs_members` is the roster) |
+| Free community | Notion "Sparked Access (home)" `https://app.notion.com/p/thefirstspark/Sparked-Access-home-cf65e039120f827cbf4f810fb6da848f` + Discord `https://discord.gg/s9zajfnE7` (Whop Lobby retired 2026-09-18) |
 | Storefront | `https://thefirstspark.shop/shop.html` (direct checkout links, not Whop's store page) |
 | Ecosystem explainer | `https://thefirstspark.shop/ecosystem.html` |
 | Email signup | POST `https://links.thefirstspark.shop/api/subscribe` (Supabase + Resend) |
