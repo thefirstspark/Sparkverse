@@ -21,7 +21,7 @@ export const PLANETS: Planet[] = [
     description:
       "The central hub. Soul maps, origin stories, sovereignty dashboards, and the timeline of your evolution across dimensions.",
     action: "ENTER CORE",
-    enterHref: "/engine/soul-map",
+    enterHref: "/vault",
     cssName: "sun",
     icon: "radial-gradient(circle at 30% 30%, #fff, #fbbf24, #f97316, #ec4899, #7c2d12)",
   },

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { PLANS } from "@/lib/plans";
-import { firstParam } from "@/lib/search-params";
+import { firstParam, safeReturnPath } from "@/lib/search-params";
 
 export default async function GatePage({
   searchParams,
@@ -10,7 +10,7 @@ export default async function GatePage({
 }) {
   const next = firstParam((await searchParams).next);
   const plans = [PLANS.lobby, PLANS.player, PLANS.soulMap];
-  const back = next.startsWith("/") ? next : "/";
+  const back = safeReturnPath(next);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
@@ -24,7 +24,9 @@ export default async function GatePage({
         Server entitlements are not in this pass. These are the live Whop plans. After you join, the
         engine still opens the live HTML tool until auth is wired.
       </p>
-      {next ? <p className="mb-6 font-mono text-xs text-white/40">Return path: {next}</p> : null}
+      {next && back === next ? (
+        <p className="mb-6 font-mono text-xs text-white/40">Return path: {back}</p>
+      ) : null}
       <div className="grid gap-4 md:grid-cols-3">
         {plans.map((plan) => (
           <Card key={plan.planId} className="flex flex-col">
