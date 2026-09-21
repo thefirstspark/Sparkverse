@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
       { source: "/treasury.html", destination: "/treasury" },
       { source: "/commons.html", destination: "/codex" },
       { source: "/galaxy.html", destination: "/" },
+      { source: "/index.html", destination: "/" },
+      { source: "/you.html", destination: "/dashboard" },
       { source: "/soul-map.html", destination: "/vault" },
       { source: "/auth-callback.html", destination: "/login" },
     ];

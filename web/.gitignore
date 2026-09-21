@@ -34,6 +34,21 @@ yarn-error.log*
 # vercel
 .vercel
 
+# generated GitHub Pages copies (copy-legacy.mjs)
+/public/*.html
+/public/*.js
+/public/*.css
+/public/*.json
+/public/*.png
+/public/*.jpg
+/public/*.jpeg
+/public/*.avif
+/public/*.ico
+/public/*.xml
+/public/*.txt
+/public/assets/
+/public/mythos/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

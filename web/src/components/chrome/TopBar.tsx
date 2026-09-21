@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { SignOutButton, usePlayer } from "@/components/chrome/PlayerGate";
 
 export function TopBar() {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const player = usePlayer();
 
   function onSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,14 +41,9 @@ export function TopBar() {
           href="/dashboard"
           className="hidden h-10 items-center px-2 font-mono text-[0.62rem] tracking-[0.14em] text-white/55 uppercase no-underline hover:text-white sm:inline-flex"
         >
-          You
+          {player.name || player.email?.split("@")[0] || "You"}
         </Link>
-        <Link
-          href="/login"
-          className="inline-flex h-10 items-center rounded-full bg-gradient-to-br from-[#fbbf24] to-[#f97316] px-4 font-[family-name:var(--font-display)] text-[0.68rem] font-bold tracking-[0.16em] text-[#050508] uppercase"
-        >
-          Sign in
-        </Link>
+        <SignOutButton />
       </div>
     </header>
   );

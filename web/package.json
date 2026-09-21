@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "sync-catalog": "node scripts/sync-catalog.mjs",
-    "predev": "node scripts/sync-catalog.mjs",
-    "prebuild": "node scripts/sync-catalog.mjs",
+    "copy-legacy": "node scripts/copy-legacy.mjs",
+    "predev": "node scripts/sync-catalog.mjs && node scripts/copy-legacy.mjs",
+    "prebuild": "node scripts/sync-catalog.mjs && node scripts/copy-legacy.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

@@ -1,5 +1,6 @@
 import { LeftRail } from "@/components/chrome/LeftRail";
 import { MobileTabBar } from "@/components/chrome/MobileTabBar";
+import { PlayerGate } from "@/components/chrome/PlayerGate";
 import { TopBar } from "@/components/chrome/TopBar";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -13,12 +14,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             "radial-gradient(ellipse at 10% 20%, rgba(139,92,246,.15), transparent 50%), radial-gradient(ellipse at 90% 80%, rgba(236,72,153,.12), transparent 45%), linear-gradient(180deg, #050508, #0a0a12 50%, #050510)",
         }}
       />
-      <TopBar />
-      <LeftRail />
-      <main className="relative z-10 min-h-dvh pt-16 pb-16 md:pr-0 md:pb-0 md:pl-16">
-        {children}
-      </main>
-      <MobileTabBar />
+      <PlayerGate>
+        <TopBar />
+        <LeftRail />
+        <main className="relative z-10 min-h-dvh pt-16 pb-16 md:pr-0 md:pb-0 md:pl-16">
+          {children}
+        </main>
+        <MobileTabBar />
+      </PlayerGate>
     </div>
   );
 }
