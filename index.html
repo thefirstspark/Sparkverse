@@ -26,6 +26,28 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .galaxy-title{text-align:center;margin-bottom:1rem}
 .galaxy-title h1{font-family:Orbitron,sans-serif;font-size:clamp(2.5rem,10vw,5rem);font-weight:900;letter-spacing:.35em;margin-bottom:.5rem;text-shadow:0 0 30px rgba(139,92,246,.5)}
 .galaxy-subtitle{font-size:.95rem;letter-spacing:.35em;text-transform:uppercase;background:linear-gradient(90deg,var(--cosmic-cyan),var(--nebula-purple),var(--hot-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.signin-btn.ghost{background:transparent;color:var(--ghost-white);border:1px solid rgba(255,255,255,.25)}
+.player-who{font-family:Orbitron,sans-serif;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--spark-gold)}
+.planet-legend{position:relative;z-index:10;display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;max-width:820px;margin:0 auto 1.5rem;padding:0 1rem;list-style:none}
+.planet-legend button{cursor:pointer;font-family:Orbitron,sans-serif;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ghost-white);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:2rem;padding:.45rem .8rem}
+.planet-legend button span{display:block;font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.02em;text-transform:none;color:var(--dim);margin-top:.12rem}
+.planet-legend button:hover{border-color:var(--spark-gold)}
+.player-gate{display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;padding:22px;background:rgba(5,5,8,.92)}
+.player-gate.open{display:flex}
+.player-gate-card{width:100%;max-width:440px;background:#101018;border:1px solid rgba(232,228,216,.12);border-radius:16px;padding:28px 24px}
+.player-gate .tag{font-family:Orbitron,sans-serif;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--spark-gold);margin-bottom:12px}
+.player-gate h2{font-family:Orbitron,sans-serif;font-size:1.35rem;margin-bottom:10px}
+.player-gate p{color:var(--dim);font-size:.86rem;line-height:1.6;margin-bottom:18px}
+.player-gate label{display:block;font-size:.7rem;margin-bottom:6px}
+.player-gate input{width:100%;background:#0b0b12;border:1px solid rgba(232,228,216,.12);border-radius:8px;color:var(--ghost-white);font-family:inherit;font-size:.9rem;padding:13px 14px;margin-bottom:12px}
+.player-gate input:focus{border-color:var(--spark-gold);outline:none}
+.player-gate .go{width:100%;cursor:pointer;font-family:Orbitron,sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#08080d;background:var(--spark-gold);border:0;border-radius:6px;padding:16px}
+.player-gate .go:disabled{opacity:.6}
+.player-gate .msg{font-size:.72rem;color:var(--dim);margin-top:10px;min-height:1em}
+.player-gate .msg.bad{color:#f87171}
+.player-gate .fine{font-size:.66rem;color:var(--dim);margin-top:14px}
+.player-gate .fine a{color:var(--spark-gold)}
+body.locked .solar-system,body.locked .planet-legend,body.locked .galaxy-title{filter:blur(7px);pointer-events:none}
 .solar-system{position:relative;width:min(900px,90vw);height:min(900px,90vw);margin:2rem auto}
 @media(min-width:769px) and (max-height:1150px){.galaxy-title{margin-bottom:0}.solar-system{transform:scale(.85);margin:-2rem auto 0}}
 @media(min-width:769px) and (max-height:1000px){.galaxy-container{padding-top:5rem}.galaxy-title{margin-bottom:0}.solar-system{transform:scale(.72);margin:-9rem auto -6rem}}
@@ -43,9 +65,13 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .planet{position:absolute;border-radius:50%;cursor:pointer;transition:transform .3s;z-index:15}
 .planet:hover{transform:scale(1.22);z-index:25}
 .planet-body{width:100%;height:100%;border-radius:50%;position:absolute;top:0;left:0}
-.planet-info{position:absolute;bottom:-38px;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;opacity:0;transition:opacity .3s}
-.planet:hover .planet-info{opacity:1}
-.planet-name{font-family:Orbitron,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.12em}
+.planet-info{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;opacity:1;pointer-events:none;z-index:16;text-shadow:0 0 12px #050508,0 1px 0 #050508}
+.planet-info.label-s{bottom:-46px}
+.planet-info.label-n{bottom:auto;top:-46px}
+.planet-info.label-e{left:calc(100% + 10px);transform:none;bottom:50%;margin-bottom:-1.1em;text-align:left}
+.planet-info.label-w{left:auto;right:calc(100% + 10px);transform:none;bottom:50%;margin-bottom:-1.1em;text-align:right}
+.planet-name{font-family:Orbitron,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em}
+.planet-job{display:block;font-size:.58rem;letter-spacing:.04em;color:var(--ghost-white);opacity:.75;margin-top:2px}
 .planet-lumina{width:55px;height:55px;top:calc(50% - 167px);left:calc(50% - 27px)}
 .planet-lumina .planet-body{background:radial-gradient(circle at 25% 25%,#fff,var(--cosmic-cyan),#0d9488);box-shadow:0 0 30px var(--cosmic-cyan)}
 .planet-lumina .planet-name{color:var(--cosmic-cyan)}
@@ -102,11 +128,27 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:.35rem;color:var(--dim);text-decoration:none;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
 .nav-item.active,.nav-item:hover{color:var(--ghost-white)}
 .nav-icon{font-size:1.3rem}
-@media(max-width:768px){.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.planet-playground{width:40px;height:40px;top:calc(50% - 130px);left:calc(50% + 95px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{font-size:clamp(1.7rem,8vw,3.5rem);letter-spacing:.18em;margin-right:-.18em}.galaxy-subtitle{font-size:.8rem;letter-spacing:.25em}.galaxy-container{padding:5.5rem 1rem 6rem}.header-actions{gap:.5rem}.github-link{padding:.45rem .8rem}.bottom-nav{gap:1.5rem}.modal-content{padding:1.5rem}}
+@media(max-width:768px){.planet-info{display:none}.planet-legend button{flex:1 1 40%}.solar-system{width:100vw;height:100vw}.orbit-1{width:180px;height:180px}.orbit-2{width:280px;height:280px}.orbit-3{width:380px;height:380px}.orbit-4{width:480px;height:480px}.sun{width:90px;height:90px}.planet-lumina{width:38px;height:38px;top:calc(50% - 109px)}.planet-nexus{width:48px;height:48px;top:calc(50% + 110px);left:calc(50% - 80px)}.planet-void{width:42px;height:42px;top:calc(50% - 55px);left:calc(50% + 160px)}.planet-forge{width:52px;height:52px;top:calc(50% + 25px);left:calc(50% - 200px)}.planet-archive{width:34px;height:34px;top:calc(50% - 155px);left:calc(50% - 110px)}.planet-echo{width:30px;height:30px;top:calc(50% + 190px);left:calc(50% + 70px)}.planet-genesis{width:36px;height:36px;top:calc(50% + 60px);left:calc(50% + 150px)}.planet-playground{width:40px;height:40px;top:calc(50% - 130px);left:calc(50% + 95px)}.header{padding:1rem}.logo{font-size:1.1rem}.galaxy-title h1{font-size:clamp(1.7rem,8vw,3.5rem);letter-spacing:.18em;margin-right:-.18em}.galaxy-subtitle{font-size:.8rem;letter-spacing:.25em}.galaxy-container{padding:5.5rem 1rem 6rem}.header-actions{gap:.5rem}.github-link{padding:.45rem .8rem}.bottom-nav{gap:1.5rem}.modal-content{padding:1.5rem}}
 @media(max-width:430px){.galaxy-container{overflow:hidden}.solar-system{transform:scale(.78);transform-origin:center}.logo{font-size:1rem;letter-spacing:.1em}.github-link{padding:.45rem .65rem;font-size:.62rem}.signin-btn{padding:.5rem .85rem;font-size:.62rem}}
 </style>
 </head>
 <body>
+<div class="player-gate" id="playerGate" role="dialog" aria-modal="true" aria-labelledby="playerGateTitle">
+  <div class="player-gate-card">
+    <div class="tag">◆ Players</div>
+    <h2 id="playerGateTitle">Enter the Sparkverse.</h2>
+    <p>Same email you used to join. No password. Your planets open when it lands.</p>
+    <form id="playerForm" novalidate>
+      <label for="playerName">First name <span style="opacity:.5">optional</span></label>
+      <input type="text" id="playerName" maxlength="60" autocomplete="given-name" placeholder="Player One">
+      <label for="playerEmail">Email</label>
+      <input type="email" id="playerEmail" maxlength="254" autocomplete="email" required placeholder="you@example.com">
+      <button type="submit" class="go" id="playerGo">Open my planets</button>
+      <div class="msg" id="playerMsg" role="status"></div>
+    </form>
+    <p class="fine">New here? <a href="https://thefirstspark.shop/join.html">Join free first</a>. Lost a purchase? <a href="https://thefirstspark.shop/hub.html">The Hub</a>.</p>
+  </div>
+</div>
 <div class="cosmic-bg"><div class="deep-space"></div></div>
 <header class="header">
   <a class="logo gradient-text" href="index.html" style="text-decoration:none">SPARKVERSE</a>
@@ -115,26 +157,39 @@ body{background:var(--void);min-height:100vh;font-family:'Space Mono',monospace;
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
       GitHub
     </a>
-    <button type="button" class="signin-btn" id="spark-signin">Sign in</button>
+    <span class="player-who" id="spark-player-who" hidden></span>
+    <button type="button" class="signin-btn ghost" id="spark-player-out" hidden>Sign out</button>
+    <button type="button" class="signin-btn" id="spark-player-login">Enter</button>
   </div>
 </header>
 <main class="galaxy-container">
   <div class="galaxy-title">
     <h1 class="gradient-text">SPARKVERSE</h1>
-    <p class="galaxy-subtitle">The world map</p>
+    <p class="galaxy-subtitle">The world. Every planet is a room.</p>
   </div>
   <div class="solar-system">
     <div class="orbit orbit-1"></div><div class="orbit orbit-2"></div><div class="orbit orbit-3"></div><div class="orbit orbit-4"></div>
-    <div class="sun" onclick="openModal('core')"><span class="sun-label">CORE<br>SPARK</span></div>
-    <div class="planet planet-lumina" onclick="openModal('lumina')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">LUMINA</div></div></div>
-    <div class="planet planet-playground" onclick="openModal('playground')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">PLAYGROUND</div></div></div>
-    <div class="planet planet-nexus" onclick="openModal('nexus')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">NEXUS</div></div></div>
-    <div class="planet planet-void" onclick="openModal('void')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">VOID STATION</div></div></div>
-    <div class="planet planet-forge" onclick="openModal('forge')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">THE FORGE</div></div></div>
-    <div class="planet planet-archive" onclick="openModal('archive')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">DNA CHAMBER</div></div></div>
-    <div class="planet planet-echo" onclick="openModal('echo')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">ECHO CHAMBER</div></div></div>
-    <div class="planet planet-genesis" onclick="openModal('genesis')"><div class="planet-body"></div><div class="planet-info"><div class="planet-name">GENESIS</div></div></div>
+    <div class="sun" onclick="openModal('core')" role="button" tabindex="0" aria-label="Core Spark, you, maps, origin"><span class="sun-label">CORE<br>SPARK</span></div>
+    <div class="planet planet-lumina" onclick="openModal('lumina')" role="button" tabindex="0" aria-label="Lumina, daily practice"><div class="planet-body"></div><div class="planet-info label-n"><div class="planet-name">LUMINA</div><span class="planet-job">daily practice</span></div></div>
+    <div class="planet planet-playground" onclick="openModal('playground')" role="button" tabindex="0" aria-label="Playground, play"><div class="planet-body"></div><div class="planet-info label-e"><div class="planet-name">PLAYGROUND</div><span class="planet-job">play</span></div></div>
+    <div class="planet planet-nexus" onclick="openModal('nexus')" role="button" tabindex="0" aria-label="Nexus, tools"><div class="planet-body"></div><div class="planet-info label-s"><div class="planet-name">NEXUS</div><span class="planet-job">tools</span></div></div>
+    <div class="planet planet-void" onclick="openModal('void')" role="button" tabindex="0" aria-label="Void Station, shadow work"><div class="planet-body"></div><div class="planet-info label-e"><div class="planet-name">VOID STATION</div><span class="planet-job">shadow work</span></div></div>
+    <div class="planet planet-forge" onclick="openModal('forge')" role="button" tabindex="0" aria-label="The Forge, make"><div class="planet-body"></div><div class="planet-info label-w"><div class="planet-name">THE FORGE</div><span class="planet-job">make</span></div></div>
+    <div class="planet planet-archive" onclick="openModal('archive')" role="button" tabindex="0" aria-label="DNA Chamber, lineage"><div class="planet-body"></div><div class="planet-info label-n"><div class="planet-name">DNA CHAMBER</div><span class="planet-job">lineage</span></div></div>
+    <div class="planet planet-echo" onclick="openModal('echo')" role="button" tabindex="0" aria-label="Echo Chamber, people"><div class="planet-body"></div><div class="planet-info label-s"><div class="planet-name">ECHO CHAMBER</div><span class="planet-job">people</span></div></div>
+    <div class="planet planet-genesis" onclick="openModal('genesis')" role="button" tabindex="0" aria-label="Genesis, your artifacts"><div class="planet-body"></div><div class="planet-info label-s"><div class="planet-name">GENESIS</div><span class="planet-job">your artifacts</span></div></div>
   </div>
+  <ul class="planet-legend" aria-label="Planets">
+    <li><button type="button" onclick="openModal('core')">Core Spark <span>you · maps</span></button></li>
+    <li><button type="button" onclick="openModal('lumina')">Lumina <span>daily practice</span></button></li>
+    <li><button type="button" onclick="openModal('playground')">Playground <span>play</span></button></li>
+    <li><button type="button" onclick="openModal('nexus')">Nexus <span>tools</span></button></li>
+    <li><button type="button" onclick="openModal('void')">Void Station <span>shadow work</span></button></li>
+    <li><button type="button" onclick="openModal('forge')">The Forge <span>make</span></button></li>
+    <li><button type="button" onclick="openModal('archive')">DNA Chamber <span>lineage</span></button></li>
+    <li><button type="button" onclick="openModal('echo')">Echo Chamber <span>people</span></button></li>
+    <li><button type="button" onclick="openModal('genesis')">Genesis <span>your artifacts</span></button></li>
+  </ul>
 </main>
 <nav class="bottom-nav">
   <a href="index.html" class="nav-item active"><span class="nav-icon">◎</span><span>Galaxy</span></a>
@@ -362,6 +417,98 @@ document.getElementById('planetModal').addEventListener('click', e => {
 </script>
 <script src="https://js.whop.com/static/checkout/loader.js" async defer></script>
 <script src="spark-auth.js"></script>
-<script>SparkAuth.bootLobby();</script>
+<script>
+(function () {
+  var API = 'https://links.thefirstspark.shop/api/subscribe';
+  var COOKIE = 'tfs-email';
+  var gate = document.getElementById('playerGate');
+  var form = document.getElementById('playerForm');
+  var emailEl = document.getElementById('playerEmail');
+  var nameEl = document.getElementById('playerName');
+  var go = document.getElementById('playerGo');
+  var msg = document.getElementById('playerMsg');
+  var who = document.getElementById('spark-player-who');
+  var loginBtn = document.getElementById('spark-player-login');
+  var outBtn = document.getElementById('spark-player-out');
+
+  function readCookie() {
+    var m = document.cookie.match(/(?:^|; )tfs-email=([^;]*)/);
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function writeSession(em, nm) {
+    try { localStorage.setItem('tfs-email', em); if (nm) localStorage.setItem('tfs-name', nm); } catch (_) {}
+    document.cookie = COOKIE + '=' + encodeURIComponent(em) + '; domain=.thefirstspark.shop; path=/; max-age=31536000; secure; samesite=lax';
+  }
+  function clearSession() {
+    try { localStorage.removeItem('tfs-email'); localStorage.removeItem('tfs-name'); } catch (_) {}
+    document.cookie = COOKIE + '=; domain=.thefirstspark.shop; path=/; max-age=0; secure; samesite=lax';
+  }
+  function currentEmail() {
+    try { var ls = localStorage.getItem('tfs-email'); if (ls) return ls; } catch (_) {}
+    return readCookie();
+  }
+  function currentName() {
+    try { return localStorage.getItem('tfs-name') || ''; } catch (_) { return ''; }
+  }
+  function signedIn() { return !!currentEmail(); }
+
+  function paint() {
+    var inWorld = signedIn();
+    document.body.classList.toggle('locked', !inWorld);
+    gate.classList.toggle('open', !inWorld);
+    if (inWorld) {
+      var n = currentName();
+      who.hidden = false;
+      who.textContent = n ? n : currentEmail().split('@')[0];
+      loginBtn.hidden = true;
+      outBtn.hidden = false;
+    } else {
+      who.hidden = true;
+      loginBtn.hidden = false;
+      outBtn.hidden = true;
+      try { var saved = currentEmail(); if (saved) emailEl.value = saved; } catch (_) {}
+    }
+  }
+
+  loginBtn.addEventListener('click', function () { gate.classList.add('open'); });
+  outBtn.addEventListener('click', function () { clearSession(); paint(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var em = emailEl.value.trim().toLowerCase();
+    var nm = nameEl.value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(em)) {
+      msg.textContent = 'Enter a valid email first.';
+      msg.className = 'msg bad';
+      emailEl.focus();
+      return;
+    }
+    go.disabled = true;
+    msg.textContent = 'Opening your planets…';
+    msg.className = 'msg';
+    fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: em, name: nm || undefined, source: 'sparkverse', want_email: false })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d || !d.ok) throw new Error('failed');
+      writeSession(em, nm);
+      paint();
+    }).catch(function () {
+      msg.textContent = 'That did not go through. Try again, or email kate@thefirstspark.shop.';
+      msg.className = 'msg bad';
+      go.disabled = false;
+    });
+  });
+
+  var _open = window.openModal;
+  window.openModal = function (id) {
+    if (!signedIn()) { gate.classList.add('open'); return; }
+    _open(id);
+  };
+
+  paint();
+})();
+</script>
+<script>if (window.SparkAuth) SparkAuth.bootLobby();</script>
 </body>
 </html>
