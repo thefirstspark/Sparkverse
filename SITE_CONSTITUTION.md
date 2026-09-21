@@ -33,12 +33,12 @@ Not sites: `initiation-engine` (hidden Whop app, not deployed), `soul-map-server
 | Free Soul Map preview | `https://thefirstspark.shop/soul-pattern-generator.html` (never soul-map.html) |
 | Players Lounge ($11/mo or $99/yr) | `https://thefirstspark.shop/playerslounge/` → PayPal Subscriptions on-page (since 2026-09-18; Whop `plan_okFWwlpgnc2bQ` retired) |
 | Players Lounge member home | Notion "The Player Lounge" `https://app.notion.com/p/thefirstspark/The-Player-Lounge-6d05e039120f8322b47b0135d97f7a4d` (link sent by the engine on activation; `tfs_members` is the roster) |
-| Free community | door = `https://thefirstspark.shop/join.html` (email gate → list, source `join-free`) → opens Notion "Sparked Access (home)" `https://app.notion.com/p/thefirstspark/Sparked-Access-home-cf65e039120f827cbf4f810fb6da848f` + Discord `https://discord.gg/s9zajfnE7`. Never link the Notion page directly from a public page. |
+| Free community | door = `https://thefirstspark.shop/join.html` (email gate → list, source `join-free`) → opens Notion "Sparked Access (home)" `https://app.notion.com/p/thefirstspark/Sparked-Access-home-cf65e039120f827cbf4f810fb6da848f` + Discord `https://discord.gg/sAysXgrqcX`. Never link the Notion page directly from a public page. |
 | Storefront | `https://thefirstspark.shop/shop.html` (direct checkout links, not Whop's store page) |
 | Ecosystem explainer | `https://thefirstspark.shop/ecosystem.html` |
 | Email signup | POST `https://links.thefirstspark.shop/api/subscribe` (Supabase + Resend) |
 | Member portal (Notion) | ✨ THE SPARK HUB — Member Portal `3f5ca51f53d04b0c80cc5f06cd781ae1` |
-| Discord | `https://discord.gg/wyNBWUca` |
+| Discord | `https://discord.gg/sAysXgrqcX` |
 | Contact | `kate@thefirstspark.shop` |
 
 Live Whop plan IDs are listed in `audit.py` → `LIVE_PLANS`. A checkout link to any other plan is a bug.
