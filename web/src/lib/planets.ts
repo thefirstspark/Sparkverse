@@ -5,6 +5,7 @@ export type PlanetId = ToolZone;
 export type Planet = {
   id: PlanetId;
   name: string;
+  job: string;
   subtitle: string;
   description: string;
   action: string;
@@ -17,17 +18,19 @@ export const PLANETS: Planet[] = [
   {
     id: "core",
     name: "CORE SPARK",
+    job: "you · maps",
     subtitle: "The Origin Point",
     description:
       "The central hub. Soul maps, origin stories, sovereignty dashboards, and the timeline of your evolution across dimensions.",
     action: "ENTER CORE",
-    enterHref: "/vault",
+    enterHref: "/dashboard",
     cssName: "sun",
     icon: "radial-gradient(circle at 30% 30%, #fff, #fbbf24, #f97316, #ec4899, #7c2d12)",
   },
   {
     id: "lumina",
     name: "LUMINA",
+    job: "daily practice",
     subtitle: "Beginner Consciousness",
     description:
       "The gateway zone. Foundational practices, daily resets, energy check-ins — where awakening begins.",
@@ -39,6 +42,7 @@ export const PLANETS: Planet[] = [
   {
     id: "playground",
     name: "PLAYGROUND",
+    job: "play",
     subtitle: "Experiment · Glitch · Play",
     description:
       "The free experimental zone. No rules, no hierarchy — just consciousness toys, canvases, arenas, and wild prototypes. Get lost here on purpose.",
@@ -50,6 +54,7 @@ export const PLANETS: Planet[] = [
   {
     id: "nexus",
     name: "NEXUS",
+    job: "tools",
     subtitle: "Interactive Tools Hub",
     description:
       "The workshop. Sigils, oracles, numerology, karma, patterns, archetypes — every instrument that transforms energy into clarity.",
@@ -61,6 +66,7 @@ export const PLANETS: Planet[] = [
   {
     id: "void",
     name: "VOID STATION",
+    job: "shadow work",
     subtitle: "Shadow Work & Deep Processing",
     description:
       "High intensity. Shadow integration, collapse and reset, digital wards, equilibrium — the work that happens in the dark.",
@@ -72,6 +78,7 @@ export const PLANETS: Planet[] = [
   {
     id: "forge",
     name: "THE FORGE",
+    job: "make",
     subtitle: "Reality Creation Tools",
     description:
       "Where intention becomes form. Protocols, planners, render engines, manifestation compilers — the heat that shapes reality.",
@@ -83,6 +90,7 @@ export const PLANETS: Planet[] = [
   {
     id: "archive",
     name: "DNA CHAMBER",
+    job: "lineage",
     subtitle: "The Lineage Layer",
     description:
       "Four living strands. Ancestral fire, selector choice, forge, orbit. Lineage work, origin keys, and the algorithmic soul.",
@@ -94,6 +102,7 @@ export const PLANETS: Planet[] = [
   {
     id: "echo",
     name: "ECHO CHAMBER",
+    job: "people",
     subtitle: "Community & Signal",
     description:
       "The signal zone. Players, walls, graffiti, members — amplify presence and connect with the living network.",
@@ -105,6 +114,7 @@ export const PLANETS: Planet[] = [
   {
     id: "genesis",
     name: "GENESIS",
+    job: "your artifacts",
     subtitle: "Soul Artifacts",
     description:
       "Where soul maps become permanent. Cards, drop artifacts, reincarnation paths — receipts that live in the Sparkverse.",

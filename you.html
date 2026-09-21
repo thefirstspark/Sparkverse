@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You | SPARKVERSE</title>
+<meta name="description" content="Your Sparkverse home. What you have, how to open it, where the planets are.">
+<meta name="theme-color" content="#050508">
+<link rel="icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lobby.css">
+<style>
+  .you-grid { display: grid; gap: 0.85rem; }
+  @media (min-width: 700px) { .you-grid { grid-template-columns: 1fr 1fr; } }
+  .you-grid .leaf.wide { grid-column: 1 / -1; }
+  .how { color: var(--dim); font-size: 0.86rem; line-height: 1.65; margin: 0.4rem 0 0; }
+  .how b { color: var(--bone); font-weight: 400; }
+</style>
+</head>
+<body class="lobby-body" data-page="you">
+<div class="deep-space"></div>
+<header class="lobby-header">
+  <a class="logo" href="index.html">SPARKVERSE</a>
+  <a class="signin-btn" href="index.html">Galaxy</a>
+</header>
+<main class="lobby-main">
+  <section class="room-hero">
+    <p class="room-kicker">You</p>
+    <h1>Your stuff. The planets. Help.</h1>
+    <p>This is the player home. Galaxy is the world. This page is what you own and how to open it.</p>
+  </section>
+
+  <div class="you-grid">
+    <a class="leaf primary wide" href="index.html">
+      <h3>Galaxy · the planets</h3>
+      <p>Core Spark, Lumina, Playground, Nexus, Void, Forge, DNA, Echo, Genesis. Each one is labeled. Click a planet to go in.</p>
+    </a>
+    <a class="leaf" href="workshop.html">
+      <h3>Workshop</h3>
+      <p>Tools you can hold. Playground, Color Codex, maps.</p>
+    </a>
+    <a class="leaf" href="https://thefirstspark.shop/soul-pattern-generator.html">
+      <h3>Weave your pattern</h3>
+      <p>Name and birth date. Free. No extra account.</p>
+    </a>
+  </div>
+
+  <p class="section-title" style="margin-top:2rem">If you paid</p>
+  <div class="panel" id="map">
+    <h2>Soul Map · $22 once</h2>
+    <p>A private page written about you. Not an app. We emailed the link from kate@thefirstspark.shop.</p>
+    <p class="how"><b>Open it:</b> that email. Bookmark the page.<br><b>Lost it:</b> archive, look for your initials (like KJP51988).</p>
+    <a class="btn btn-primary" href="https://soul-maps.thefirstspark.shop/archive.html">Find my map</a>
+    <a class="btn btn-ghost" href="https://thefirstspark.shop/what-is-a-soul-map.html">What's inside</a>
+  </div>
+  <div class="panel" id="lounge">
+    <h2>Players Lounge · $11 / month</h2>
+    <p>A private room. After PayPal we email the door. That link is the Lounge.</p>
+    <p class="how"><b>Open it:</b> inbox, subject about the Lounge.<br><b>Cancel:</b> in PayPal, not here.</p>
+    <a class="btn btn-primary" href="https://thefirstspark.shop/playerslounge/">Lounge · billing</a>
+  </div>
+  <div class="panel" id="shop">
+    <h2>Anything else from the shop</h2>
+    <p>Books, Pattern Key, Sigilcraft, protocols. Files land in the email you used at checkout. Keep the receipt.</p>
+    <a class="btn btn-ghost" href="https://thefirstspark.shop/shop.html">Open the shop</a>
+  </div>
+
+  <p class="section-title">Talk</p>
+  <div class="panel">
+    <h2>Discord · optional</h2>
+    <p>Group chat. You may need a free Discord account the first time. That is a different website. It is normal.</p>
+    <a class="btn btn-primary" href="https://discord.gg/sAysXgrqcX">Open Discord</a>
+  </div>
+
+  <p class="section-title">Help</p>
+  <div class="panel">
+    <h2>Write Kate</h2>
+    <p>Say what you bought (or that you joined free) and the email you used. <a href="mailto:kate@thefirstspark.shop" style="color:var(--gold)">kate@thefirstspark.shop</a></p>
+  </div>
+</main>
+<script src="lobby-nav.js"></script>
+</body>
+</html>

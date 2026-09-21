@@ -21,8 +21,8 @@ export default async function GatePage({
         GATE
       </h1>
       <p className="mb-8 max-w-2xl text-sm leading-relaxed text-white/55">
-        Server entitlements are not in this pass. These are the live Whop plans. After you join, the
-        engine still opens the live HTML tool until auth is wired.
+        Join free with email, or buy a Soul Map / Lounge. After you enter, the live galaxy is the
+        world until this app is hosted.
       </p>
       {next && back === next ? (
         <p className="mb-6 font-mono text-xs text-white/40">Return path: {back}</p>

@@ -5,7 +5,7 @@
     { id: "studio", href: "studio.html", icon: "♫", label: "Studio" },
     { id: "workshop", href: "workshop.html", icon: "⚒", label: "Workshop" },
     { id: "commons", href: "commons.html", icon: "◎", label: "Commons" },
-    { id: "treasury", href: "treasury.html", icon: "◈", label: "Treasury" }
+    { id: "you", href: "you.html", icon: "◈", label: "You" }
   ];
   var nav = document.createElement("nav");
   nav.className = "lobby-nav";

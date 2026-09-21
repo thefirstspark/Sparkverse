@@ -13,7 +13,7 @@ export function SolarSystem() {
     <div className={styles.galaxy}>
       <div className={styles.title}>
         <h1 className="gradient-text">SPARKVERSE</h1>
-        <p className={styles.subtitle}>The world map</p>
+        <p className={styles.subtitle}>The world. Every planet is a room.</p>
       </div>
       <div className={styles.solarSystem} role="group" aria-label="Sparkverse solar system">
         <div className={`${styles.orbit} ${styles.orbit1}`} />
@@ -38,15 +38,30 @@ export function SolarSystem() {
             type="button"
             className={`${styles.planet} ${styles[planet.cssName as keyof typeof styles]}`}
             onClick={() => setOpen(planet)}
-            aria-label={`Open ${planet.name}`}
+            aria-label={`Open ${planet.name}, ${planet.job}`}
           >
             <span className={styles.planetBody} />
             <span className={styles.planetInfo}>
               <span className={styles.planetName}>{planet.name}</span>
+              <span className={styles.planetJob}>{planet.job}</span>
             </span>
           </button>
         ))}
       </div>
+      <ul className={styles.legend} aria-label="Planets">
+        <li>
+          <button type="button" onClick={() => setOpen(getPlanet("core") ?? null)}>
+            Core Spark <span>you · maps</span>
+          </button>
+        </li>
+        {ORBIT_PLANETS.map((planet) => (
+          <li key={planet.id}>
+            <button type="button" onClick={() => setOpen(planet)}>
+              {planet.name} <span>{planet.job}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
       <PlanetModal planet={open} onClose={close} />
     </div>
   );

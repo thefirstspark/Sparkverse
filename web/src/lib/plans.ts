@@ -1,26 +1,26 @@
 export const PLANS = {
   lobby: {
-    name: "Lobby",
+    name: "Free membership",
     price: "Free",
-    planId: "plan_dBFxXLnwQoj1l",
-    href: "https://whop.com/sparkverse-511c/spark-access/",
-    blurb: "Free Sparkverse join. Creates a Whop account so you can use lobby tools.",
+    planId: "join-free",
+    href: "https://thefirstspark.shop/join.html",
+    blurb: "One email. Then the labeled galaxy. No Whop account.",
   },
   player: {
     name: "Players Lounge",
-    price: "$33/mo",
-    planId: "plan_okFWwlpgnc2bQ",
-    href: "https://whop.com/checkout/plan_okFWwlpgnc2bQ",
+    price: "$11/mo",
+    planId: "paypal-lounge",
+    href: "https://thefirstspark.shop/playerslounge/",
     canonical: "https://thefirstspark.shop/playerslounge/",
-    blurb: "3-day trial. Unlocks player-only tools.",
+    blurb: "$11/month or $99/year. PayPal. Cancel any time.",
   },
   soulMap: {
     name: "Soul Map",
     price: "$22",
-    planId: "plan_anQKP3Pzf1cGm",
-    href: "https://whop.com/checkout/plan_anQKP3Pzf1cGm",
+    planId: "paypal-soul-map",
+    href: "https://thefirstspark.shop/soul-map-checkout.html",
     canonical: "https://thefirstspark.shop/map.html",
-    blurb: "One-time numerological blueprint.",
+    blurb: "One-time. A private page about you.",
   },
 } as const;
 
