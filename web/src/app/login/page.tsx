@@ -10,8 +10,7 @@ export default function LoginPage() {
         ENTER THE SPARKVERSE
       </h1>
       <p className="mb-8 text-sm leading-relaxed text-white/55">
-        Same email you used to join. No password. The live galaxy is the door until this app is
-        hosted.
+        Same email you used to join. No password. The labeled galaxy is the door.
       </p>
       <a
         href="https://sparkverse.thefirstspark.shop/"

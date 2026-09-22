@@ -1,13 +1,14 @@
 /**
- * SparkAuth — Whop sign-in, tiers, on-page checkout, tool gating.
+ * SparkAuth — email session, Lounge PayPal, tool gating.
  *
  * Include on any Sparkverse page:
  *   <script src="spark-auth.js"></script>
  *   <script>SparkAuth.protect();</script>
  *
+ * Lobby access is the same tfs-email session as the OS PlayerGate.
+ * Players Lounge is PayPal at thefirstspark.shop/playerslounge/ — not Whop.
  * protect() reads tools-catalog.json and gates this page to its tier.
- * applyGate({ minTier: 'player' }) forces a tier without the catalog.
- * bootLobby() is for the galaxy home (sign-in + paywall + catalog clicks).
+ * bootLobby() is for leftover HTML hubs (sign-in + catalog clicks).
  */
 const SparkAuth = (function () {
     'use strict';
@@ -20,6 +21,9 @@ const SparkAuth = (function () {
     const USERINFO_URL = 'https://api.whop.com/oauth/userinfo';
     const ACCESS_URL_BASE = 'https://api.whop.com/api/v1/users/';
     const SITE_ORIGIN = 'https://sparkverse.thefirstspark.shop';
+    const JOIN_API = 'https://links.thefirstspark.shop/api/subscribe';
+    const LOUNGE_URL = 'https://thefirstspark.shop/playerslounge/';
+    const JOIN_URL = 'https://thefirstspark.shop/join.html';
     const TOKEN_LIFETIME_MS = 60 * 60 * 1000;
     const KEY_PREFIX = 'spark_auth_';
     const CHECKOUT_LOADER = 'https://js.whop.com/static/checkout/loader.js';
@@ -39,16 +43,16 @@ const SparkAuth = (function () {
 
     const TIER_META = {
         lobby: {
-            title: 'Join the Sparkverse Lobby',
-            blurb: 'Free. Creates your Whop account so you can use the tools.',
+            title: 'Enter the Sparkverse',
+            blurb: 'Same email you used to join. No Whop account.',
             planId: PLANS.lobby,
-            cta: 'Join free'
+            cta: 'Open with email'
         },
         player: {
             title: 'Enter the Players Lounge',
-            blurb: '$33/month · first 3 days free. Unlocks player-only tools.',
+            blurb: '$11/month or $99/year. PayPal. Cancel any time.',
             planId: PLANS.player,
-            cta: 'Become a Player'
+            cta: 'Open Players Lounge'
         }
     };
 
@@ -97,6 +101,40 @@ const SparkAuth = (function () {
         return localStorage.getItem(KEY_PREFIX + name);
     }
 
+    function readEmailCookie() {
+        const m = document.cookie.match(/(?:^|; )tfs-email=([^;]*)/);
+        return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function emailSession() {
+        try {
+            const ls = localStorage.getItem('tfs-email');
+            if (ls) return ls;
+        } catch (err) { /* ignore */ }
+        return readEmailCookie();
+    }
+
+    function emailName() {
+        try {
+            return localStorage.getItem('tfs-name') || '';
+        } catch (err) {
+            return '';
+        }
+    }
+
+    function writeEmailSession(email, name) {
+        try {
+            localStorage.setItem('tfs-email', email);
+            if (name) localStorage.setItem('tfs-name', name);
+        } catch (err) { /* ignore */ }
+        document.cookie = 'tfs-email=' + encodeURIComponent(email) + '; domain=.thefirstspark.shop; path=/; max-age=31536000; secure; samesite=lax';
+        setKey('lobby', 'true');
+        setKey('has_access', 'true');
+        setKey('user_email', email);
+        if (name) setKey('user_name', name);
+        if (!getKey('tier') || getKey('tier') === 'none') setKey('tier', 'lobby');
+    }
+
     function assetUrl(file) {
         const scripts = document.getElementsByTagName('script');
         for (let i = 0; i < scripts.length; i++) {
@@ -109,28 +147,15 @@ const SparkAuth = (function () {
     }
 
     async function login() {
-        try {
-            sessionStorage.setItem('spark_auth_return_to', window.location.href);
-            const codeVerifier = generateCodeVerifier();
-            sessionStorage.setItem('spark_auth_code_verifier', codeVerifier);
-            const codeChallenge = await generateCodeChallenge(codeVerifier);
-            const state = generateState();
-            sessionStorage.setItem('spark_auth_state', state);
-
-            const params = new URLSearchParams({
-                client_id: CLIENT_ID,
-                redirect_uri: REDIRECT_URI,
-                response_type: 'code',
-                scope: 'openid profile email',
-                state: state,
-                code_challenge: codeChallenge,
-                code_challenge_method: 'S256'
-            });
-            window.location.href = AUTHORIZE_URL + '?' + params.toString();
-        } catch (err) {
-            console.error('[SparkAuth] Login error:', err);
-            alert('Could not start login. Please try again in a modern browser.');
+        sessionStorage.setItem('spark_auth_return_to', window.location.href);
+        if (emailSession()) {
+            writeEmailSession(emailSession(), emailName());
+            hideInjectedGate();
+            closePaywall();
+            updateChrome();
+            return;
         }
+        openPaywall({ minTier: 'lobby', title: 'Enter the Sparkverse' });
     }
 
     function logout() {
@@ -142,6 +167,11 @@ const SparkAuth = (function () {
         keysToRemove.forEach(function (key) {
             localStorage.removeItem(key);
         });
+        try {
+            localStorage.removeItem('tfs-email');
+            localStorage.removeItem('tfs-name');
+        } catch (err) { /* ignore */ }
+        document.cookie = 'tfs-email=; domain=.thefirstspark.shop; path=/; max-age=0; secure; samesite=lax';
         sessionStorage.removeItem('spark_auth_state');
         sessionStorage.removeItem('spark_auth_code_verifier');
         sessionStorage.removeItem('spark_auth_return_to');
@@ -155,18 +185,20 @@ const SparkAuth = (function () {
     }
 
     function isLoggedIn() {
+        if (emailSession()) return true;
         const token = getKey('access_token');
         if (!token) return false;
         return !isTokenExpired();
     }
 
     function getUser() {
+        const email = emailSession();
         const id = getKey('user_id');
-        if (!id) return null;
+        if (!id && !email) return null;
         return {
-            name: getKey('user_name') || '',
-            email: getKey('user_email') || '',
-            id: id
+            name: getKey('user_name') || emailName() || '',
+            email: getKey('user_email') || email || '',
+            id: id || email
         };
     }
 
@@ -182,17 +214,19 @@ const SparkAuth = (function () {
         const flags = readFlags();
         if (flags.og) return 'og';
         if (flags.player) return 'player';
-        if (flags.lobby) return 'lobby';
+        if (flags.lobby || emailSession()) return 'lobby';
         return 'none';
     }
 
     function hasAccess() {
+        if (emailSession()) return true;
         return TIER_RANK[getTier()] >= TIER_RANK.lobby;
     }
 
     function hasMinTier(minTier) {
         const need = TIER_RANK[minTier] || 0;
         if (need <= 0) return true;
+        if (need <= TIER_RANK.lobby && emailSession()) return true;
         return TIER_RANK[getTier()] >= need;
     }
 
@@ -407,31 +441,61 @@ const SparkAuth = (function () {
     }
 
     function ensureCheckoutLoader() {
-        if (document.querySelector('script[src*="checkout/loader.js"]')) return;
-        const s = document.createElement('script');
-        s.src = CHECKOUT_LOADER;
-        s.async = true;
-        s.defer = true;
-        document.head.appendChild(s);
+        return;
+    }
+
+    function mountEmailForm(slot) {
+        slot.innerHTML = [
+            '<form data-spark-email-form>',
+            '  <label style="display:block;font-size:.72rem;color:rgba(255,255,255,.7);margin:0 0 .35rem">First name <span style="opacity:.5">optional</span></label>',
+            '  <input name="name" autocomplete="given-name" placeholder="Player One" style="width:100%;margin:0 0 .7rem;padding:.7rem .85rem;border-radius:.55rem;border:1px solid rgba(255,255,255,.12);background:#0b0b12;color:#fff;font-family:inherit">',
+            '  <label style="display:block;font-size:.72rem;color:rgba(255,255,255,.7);margin:0 0 .35rem">Email</label>',
+            '  <input name="email" type="email" required autocomplete="email" placeholder="you@example.com" style="width:100%;margin:0 0 .7rem;padding:.7rem .85rem;border-radius:.55rem;border:1px solid rgba(255,255,255,.12);background:#0b0b12;color:#fff;font-family:inherit">',
+            '  <button type="submit" class="spark-paywall-btn primary" style="width:100%">Open my planets</button>',
+            '  <p data-spark-email-msg style="min-height:1rem;font-size:.72rem;color:rgba(255,255,255,.45);margin:.55rem 0 0"></p>',
+            '  <p style="font-size:.66rem;color:rgba(255,255,255,.45);margin:.4rem 0 0">New here? <a href="' + JOIN_URL + '" style="color:#fbbf24">Join free first</a>.</p>',
+            '</form>'
+        ].join('');
+        const form = slot.querySelector('[data-spark-email-form]');
+        const msg = slot.querySelector('[data-spark-email-msg]');
+        form.addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            const em = (form.email.value || '').trim().toLowerCase();
+            const name = (form.name.value || '').trim();
+            if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(em)) {
+                msg.style.color = '#f87171';
+                msg.textContent = 'Enter a valid email first.';
+                return;
+            }
+            msg.style.color = 'rgba(255,255,255,.45)';
+            msg.textContent = 'Opening your planets…';
+            fetch(JOIN_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: em, name: name || undefined, source: 'sparkverse', want_email: false })
+            }).then(function (res) { return res.json(); }).then(function (data) {
+                if (!data || !data.ok) throw new Error('failed');
+                writeEmailSession(em, name);
+                hideInjectedGate();
+                closePaywall();
+                updateChrome();
+                const next = sessionStorage.getItem('spark_auth_return_to') || pendingToolUrl;
+                pendingToolUrl = null;
+                if (next && next !== window.location.href) window.location.href = next;
+            }).catch(function () {
+                msg.style.color = '#f87171';
+                msg.textContent = 'That did not go through. Try again, or email kate@thefirstspark.shop.';
+            });
+        });
     }
 
     function mountCheckout(slot, planId) {
         slot.innerHTML = '';
-        const el = document.createElement('div');
-        el.setAttribute('data-whop-checkout-plan-id', planId);
-        el.setAttribute('data-whop-checkout-theme', 'dark');
-        el.setAttribute('data-whop-checkout-theme-accent-color', 'gold');
-        el.setAttribute('data-whop-checkout-skip-redirect', 'true');
-        el.setAttribute('data-whop-checkout-on-complete', 'sparkWhopCheckoutComplete');
-        el.setAttribute(
-            'data-whop-checkout-return-url',
-            SITE_ORIGIN + '/?joined=' + (planId === PLANS.player ? 'player' : 'lobby') + '&status=success'
-        );
-        el.setAttribute('data-whop-checkout-style-container-padding-x', '0');
-        el.style.maxWidth = '440px';
-        el.style.margin = '0 auto';
-        slot.appendChild(el);
-        ensureCheckoutLoader();
+        if (planId === PLANS.player) {
+            slot.innerHTML = '<a class="spark-paywall-btn primary" style="display:flex;justify-content:center;text-decoration:none" href="' + LOUNGE_URL + '">Open Players Lounge · $11/mo</a>';
+            return;
+        }
+        mountEmailForm(slot);
     }
 
     function paywallRoot() {
@@ -449,9 +513,8 @@ const SparkAuth = (function () {
             '  <button type="button" class="spark-paywall-close" data-spark-close aria-label="Close">✕</button>',
             '  <div class="spark-paywall-kicker" data-spark-kicker>SPARKVERSE</div>',
             '  <h2 data-spark-title>Sign in to use the tools</h2>',
-            '  <p data-spark-blurb>Join free on this page, or sign in if you already have Whop access.</p>',
+            '  <p data-spark-blurb>Same email you used to join. No Whop account.</p>',
             '  <div class="spark-paywall-actions">',
-            '    <button type="button" class="spark-paywall-btn primary" data-spark-login>Sign in with Whop</button>',
             '    <button type="button" class="spark-paywall-btn ghost" data-spark-close>Not now</button>',
             '  </div>',
             '  <div class="spark-checkout-slot" data-spark-checkout></div>',
@@ -459,9 +522,6 @@ const SparkAuth = (function () {
         ].join('');
         wrap.addEventListener('click', function (e) {
             if (e.target === wrap || e.target.getAttribute('data-spark-close') !== null) closePaywall();
-        });
-        wrap.querySelector('[data-spark-login]').addEventListener('click', function () {
-            login();
         });
         document.body.appendChild(wrap);
         return wrap;
@@ -476,21 +536,6 @@ const SparkAuth = (function () {
         root.querySelector('[data-spark-kicker]').textContent = minTier === 'player' ? 'PLAYERS ONLY' : 'FREE LOBBY';
         root.querySelector('[data-spark-title]').textContent = opts.title || meta.title;
         root.querySelector('[data-spark-blurb]').textContent = opts.blurb || meta.blurb;
-        const loginBtn = root.querySelector('[data-spark-login]');
-        loginBtn.textContent = isLoggedIn() ? 'Refresh access' : 'Sign in with Whop';
-        loginBtn.onclick = function () {
-            if (isLoggedIn()) {
-                verifyAccess().then(function () {
-                    updateChrome();
-                    if (hasMinTier(minTier)) {
-                        closePaywall();
-                        if (pendingToolUrl) window.location.href = pendingToolUrl;
-                    }
-                });
-            } else {
-                login();
-            }
-        };
         mountCheckout(root.querySelector('[data-spark-checkout]'), meta.planId);
         root.classList.add('open');
     }
@@ -523,18 +568,23 @@ const SparkAuth = (function () {
             '<div class="spark-paywall-card">',
             '  <div class="spark-paywall-kicker">' + (minTier === 'player' ? 'PLAYERS ONLY' : 'LOBBY ACCESS') + '</div>',
             '  <h2>' + meta.title + '</h2>',
-            '  <p>' + (logged ? 'You\'re signed in, but this tool needs ' + (minTier === 'player' ? 'Players Lounge' : 'Lobby') + ' access. Join on this page.' : meta.blurb) + '</p>',
+            '  <p>' + (logged ? 'You\'re signed in, but this tool needs ' + (minTier === 'player' ? 'Players Lounge' : 'Lobby') + ' access.' : meta.blurb) + '</p>',
             '  <div class="spark-paywall-actions">',
-            logged ? '' : '<button type="button" class="spark-paywall-btn ghost" id="spark-gate-login">Sign in with Whop</button>',
             '    <button type="button" class="spark-paywall-btn primary" id="spark-gate-join">' + meta.cta + '</button>',
             '  </div>',
+            '  <div class="spark-checkout-slot" data-spark-gate-slot></div>',
             '  <p style="font-size:.72rem;opacity:.5;margin:0"><a href="index.html" style="color:#22d3ee">← Back to the galaxy</a></p>',
             '</div>'
         ].join('');
         const join = document.getElementById('spark-gate-join');
-        if (join) join.addEventListener('click', function () { openPaywall({ minTier: minTier }); });
-        const loginBtn = document.getElementById('spark-gate-login');
-        if (loginBtn) loginBtn.addEventListener('click', login);
+        const slot = gate.querySelector('[data-spark-gate-slot]');
+        if (minTier === 'player') {
+            if (join) join.addEventListener('click', function () { window.location.href = LOUNGE_URL; });
+            if (slot) slot.innerHTML = '<a class="spark-paywall-btn primary" style="display:flex;justify-content:center;text-decoration:none" href="' + LOUNGE_URL + '">Open Players Lounge · $11/mo</a>';
+        } else {
+            if (join) join.addEventListener('click', function () { openPaywall({ minTier: minTier }); });
+            if (slot) mountEmailForm(slot);
+        }
     }
 
     function createUserBadge(name) {
@@ -601,10 +651,12 @@ const SparkAuth = (function () {
         if (getKey('access_token') && isTokenExpired()) {
             const refreshed = await refreshToken();
             if (!refreshed) {
-                logout();
-                return false;
+                ['access_token', 'refresh_token', 'timestamp'].forEach(function (k) {
+                    localStorage.removeItem(KEY_PREFIX + k);
+                });
+            } else {
+                await verifyAccess();
             }
-            await verifyAccess();
         } else if (isLoggedIn() && getKey('tier') == null) {
             await verifyAccess();
         }
@@ -718,7 +770,6 @@ const SparkAuth = (function () {
 
     async function bootLobby() {
         injectPaywallStyles();
-        ensureCheckoutLoader();
         handleJoinReturn();
 
         const signin = document.getElementById('spark-signin');
