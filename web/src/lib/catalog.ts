@@ -40,12 +40,25 @@ export function searchTools(query: string): CatalogTool[] {
 
 export function toolHref(tool: CatalogTool): string {
   if (tool.id === "soul-map") return "/vault";
-  if (isExternalTool(tool)) return tool.url;
-  return `/engine/${tool.id}`;
+  if (isFirstPartyTool(tool)) return `/engine/${tool.id}`;
+  return tool.url;
 }
 
 export function isExternalTool(tool: CatalogTool): boolean {
   return tool.url.startsWith("http://") || tool.url.startsWith("https://");
+}
+
+// thefirstspark.shop and its subdomains are ours: they load in the engine frame,
+// in the same tab. Only genuinely third-party links get target="_blank".
+const FIRST_PARTY_HOST = /(^|\.)thefirstspark\.shop$/i;
+
+export function isFirstPartyTool(tool: CatalogTool): boolean {
+  if (!isExternalTool(tool)) return true;
+  try {
+    return FIRST_PARTY_HOST.test(new URL(tool.url).hostname);
+  } catch {
+    return false;
+  }
 }
 
 export function originUrl(tool: CatalogTool): string {
